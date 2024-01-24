@@ -1,3 +1,12 @@
+.sidenav-background {
+    height: calc(100vh - 64px);
+    background-color: #691C32;
+    opacity: 0.9;
+    color: white;
+    border-top-right-radius: 35px;
+    border-bottom-right-radius: 35px;
+}
+
 .sidenav-header {
     padding-top: 24px;
     text-align: center;

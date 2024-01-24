@@ -1,6 +1,8 @@
 mat-toolbar {
     position: relative;
     z-index: 5;
+    background-color: #691C32;
+    opacity: 0.9;
 }
 
 .content {
@@ -9,4 +11,9 @@ mat-toolbar {
 
 mat-sidenav-container {
     height: calc(100vh - 64px);
+    background-color: white;
+}
+
+mat-sidenav {
+    border-right:0px;
 }

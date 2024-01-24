@@ -1,27 +1,29 @@
-<div class="sidenav-header flex flex-col justify-center items-center">
-    <img [width]="profilePicSize()" [height]="profilePicSize()" src="/assets/images/logo-sat.png" />
-    <div class="header-text mt-6" [class.hide-header-text]="collapsed">
-        <h1>AKAMBA</h1>
-        <h1>Tu espacio de administración</h1>
+<div class="sidenav-background">
+    <div class="sidenav-header flex flex-col justify-center items-center">
+        <img [width]="profilePicSize()" [height]="profilePicSize()" src="/assets/images/logo-sat.png" />
+        <div class="header-text mt-6" [class.hide-header-text]="collapsed">
+            <h1>AKAMBA</h1>
+            <h1>Tu espacio de administración</h1>
+        </div>
     </div>
-</div>
-<div class="mt-6">
-    <mat-nav-list>
-        @for (item of menuItems(); track item.label) {
-            <a 
-                mat-list-item 
-                [routerLink]="item.route"
-                routerLinkActive
-                #rla="routerLinkActive"
-                [activated]="rla.isActive"
-                >
-                <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-                @if ( !collapsed ) {
-                    <span matListItemTitle>{{ item.label }}</span>
-                }
-            </a>
-        }
-    </mat-nav-list>
+    <div class="mt-6">
+        <mat-nav-list>
+            @for (item of menuItems(); track item.label) {
+                <a 
+                    mat-list-item 
+                    [routerLink]="item.route"
+                    routerLinkActive
+                    #rla="routerLinkActive"
+                    [activated]="rla.isActive"
+                    >
+                    <mat-icon matListItemIcon class="text-white">{{ item.icon }}</mat-icon>
+                    @if ( !collapsed ) {
+                        <span matListItemTitle class="text-white">{{ item.label }}</span>
+                    }
+                </a>
+            }   
+        </mat-nav-list>
+    </div>
 </div>
 
 <!-- *ngFor="let item of menuItems()" -->
