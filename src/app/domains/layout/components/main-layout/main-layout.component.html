@@ -1,16 +1,16 @@
 <mat-toolbar class="mat-elevation-z3">
-    <button mat-icon-button>
+    <button mat-icon-button (click)="collapsed.set(!collapsed())">
         <mat-icon>menu</mat-icon>
     </button>
 </mat-toolbar>
 <mat-sidenav-container>
-    <mat-sidenav opened mode="side" [style.width]="'250px'">
+    <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
         <app-custom-sidenav>
-            
+
         </app-custom-sidenav>
     </mat-sidenav>
-    <mat-sidenav-content class="content">
+    <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
         <!-- Aquí van las rutas, el router-outlet -->
-        Allo Monde!
+        Allô le monde!
     </mat-sidenav-content>
 </mat-sidenav-container>

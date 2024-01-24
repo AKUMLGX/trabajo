@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule  } from '@angular/material/icon';
@@ -19,5 +19,9 @@ import { CustomSidenavComponent } from './custom-sidenav/custom-sidenav.componen
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent {
+
+  collapsed = signal(false);
+
+  sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px');
 
 }
