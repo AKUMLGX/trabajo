@@ -1,6 +1,6 @@
 <div class="sidenav-header">
-    <img width="100" height="100" src="/assets/images/logo-sat.png" />
-    <div class="header-text">
+    <img [width]="profilePicSize()" [height]="profilePicSize()" src="/assets/images/logo-sat.png" />
+    <div class="header-text" [class.hide-header-text]="collapsed">
         <h2>Your channel</h2>
         <p>Luis Alejandro</p>
     </div>
@@ -9,7 +9,9 @@
     @for (item of menuItems(); track item.label) {
         <a mat-list-item>
             <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-            <span matListItemTitle>{{ item.label }}</span>
+            @if ( !collapsed ) {
+                <span matListItemTitle>{{ item.label }}</span>
+            }
         </a>
     }
 </mat-nav-list>
