@@ -5,6 +5,7 @@
     color: white;
     border-top-right-radius: 35px;
     border-bottom-right-radius: 35px;
+    overflow: hidden;
 }
 
 .sidenav-header {
