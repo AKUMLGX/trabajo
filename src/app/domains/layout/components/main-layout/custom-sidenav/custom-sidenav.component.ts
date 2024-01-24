@@ -2,6 +2,7 @@ import { Component, Input, computed, signal } from '@angular/core';
 import { MenuItem } from '../../../models/menu-items.model';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-custom-sidenav',
@@ -9,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     MatListModule,
     MatIconModule,
+    RouterLink,
+    RouterModule
   ],
   templateUrl: './custom-sidenav.component.html',
   styleUrl: './custom-sidenav.component.css'
@@ -25,22 +28,22 @@ export class CustomSidenavComponent {
     {
       icon: 'dashboard',
       label: 'Tablero',
-      route: 'dashboard',
+      route: '/layout/dashboard',
     },
     {
       icon: 'video_library',
       label: 'Contenido',
-      route: 'content',
+      route: '/layout/content',
     },
     {
       icon: 'analytics',
       label: 'Analítica',
-      route: 'analytics',
+      route: '/layout/analytics',
     },
     {
       icon: 'comment',
       label: 'Comentarios',
-      route: 'comments',
+      route: '/layout/comments',
     },
   ]); 
 

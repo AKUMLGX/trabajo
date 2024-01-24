@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule  } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CustomSidenavComponent } from './custom-sidenav/custom-sidenav.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
@@ -13,7 +14,8 @@ import { CustomSidenavComponent } from './custom-sidenav/custom-sidenav.componen
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    CustomSidenavComponent,  
+    CustomSidenavComponent, 
+    RouterModule, 
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
