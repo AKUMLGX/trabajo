@@ -1,15 +1,25 @@
 <div class="sidenav-background">
     <div class="sidenav-header flex flex-col justify-center items-center">
-        <div class="w-32 h-32 bg-white flex justify-center items-center rounded-lg">
-            <img 
-                [width]="profilePicSize()" 
-                [height]="profilePicSize()" 
-                src="/assets/images/logo-sat.png" 
-            />
-        </div>
+        @if(collapsed) {
+            <div class="w-12 h-12 mt-8 flex justify-center items-center bg-white rounded-lg">
+                <img 
+                    [width]="profilePicSize()" 
+                    [height]="profilePicSize()" 
+                    src="/assets/images/avatar.png" 
+                />
+            </div>
+        } @else {
+            <div class="w-32 h-32 bg-white flex justify-center items-center rounded-lg">
+                <img 
+                    [width]="profilePicSize()" 
+                    [height]="profilePicSize()" 
+                    src="/assets/images/logo-sat.png" 
+                />
+            </div>
+        }
         <div class="header-text mt-6" [class.hide-header-text]="collapsed">
             <h1>AKAMBA</h1>
-            <h1>Tu espacio de administración</h1>
+            <h1 class="mt-2">Tu espacio de administración</h1>
         </div>
     </div>
     <div class="mt-6">

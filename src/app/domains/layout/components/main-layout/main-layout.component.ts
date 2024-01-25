@@ -24,6 +24,6 @@ export class MainLayoutComponent {
 
   collapsed = signal(false);
 
-  sidenavWidth = computed(() => this.collapsed() ? '65px' : '280px');
+  sidenavWidth = computed(() => this.collapsed() ? '65px' : '270px');
 
 }

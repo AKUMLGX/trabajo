@@ -47,6 +47,6 @@ export class CustomSidenavComponent {
     },
   ]); 
 
-  profilePicSize = computed(() => this.collapsed ? '32' : '100');
+  profilePicSize = computed(() => this.collapsed ? '10' : '100');
 
 }
