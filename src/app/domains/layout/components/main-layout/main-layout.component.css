@@ -3,6 +3,9 @@ mat-toolbar {
     z-index: 5;
     background-color: #691C32;
     opacity: 0.9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .content {

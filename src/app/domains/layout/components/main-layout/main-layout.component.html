@@ -1,7 +1,19 @@
 <mat-toolbar class="mat-elevation-z3">
-    <button mat-icon-button class="text-white" (click)="collapsed.set(!collapsed())">
-        <mat-icon>menu</mat-icon>
-    </button>
+    <div class="flex">
+        <button mat-icon-button class="text-white" (click)="collapsed.set(!collapsed())">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <button mat-icon-button class="text-white">
+            <mat-icon>person</mat-icon>
+        </button>
+        <button mat-icon-button class="text-white">
+            <mat-icon>pageview</mat-icon>
+        </button>
+    </div>
+    <div class="hidden text-white lg:block">
+        AKAMBA / Tablero / Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    </div>
+    <app-navbar-content></app-navbar-content>
 </mat-toolbar>
 <mat-sidenav-container>
     <mat-sidenav opened mode="side" class="mat-sidenav" [style.width]="sidenavWidth()">
