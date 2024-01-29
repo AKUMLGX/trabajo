@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 
 import { LoginPageComponent } from './domains/auth/pages/login-page/login-page.component';
-import { DashboardPageComponent } from './domains/dashboard/pages/dashboard-page/dashboard-page.component';
 import { MainLayoutComponent } from './domains/layout/components/main-layout/main-layout.component';
-import { ContentPageComponent } from './domains/content/pages/content-page/content-page.component';
-import { CommentsPageComponent } from './domains/comments/pages/comments-page/comments-page.component';
-import { AnalyticsPageComponent } from './domains/analytics/pages/analytics-page/analytics-page.component';
+import { CapturePageComponent } from './domains/capture/pages/capture-page/capture-page.component';
+import { ConsultPageComponent } from './domains/consult/pages/consult-page/consult-page.component';
+import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tracking-page.component';
+import { ReportsPageComponent } from './domains/reports/pages/reports-page/reports-page.component';
 
 export const routes: Routes = [
     {
@@ -17,20 +17,20 @@ export const routes: Routes = [
         component: MainLayoutComponent,
         children: [
             {
-                path: 'dashboard',
-                component: DashboardPageComponent
+                path: 'capture',
+                component: CapturePageComponent
             },
             {
-                path: 'content',
-                component: ContentPageComponent
+                path: 'consult',
+                component: ConsultPageComponent
             },
             {
-                path: 'comments',
-                component: CommentsPageComponent
+                path: 'tracking',
+                component: TrackingPageComponent
             },
             {
-                path: 'analytics',
-                component: AnalyticsPageComponent
+                path: 'reports',
+                component: ReportsPageComponent
             },
         ]
     },
