@@ -2,5 +2,9 @@
     <!-- <h1>Bandeja de captura</h1>
     <h1>Este es el punto de partida</h1>
     <h1>Aquí va el componente de Bienvenida (landing starting point)</h1> -->
-    <app-stepper-base></app-stepper-base>
+    @if (isStepperInitialized) {
+        <app-stepper-base></app-stepper-base>
+    } @else {
+        <app-capture-landing-page (startStepper)="startStepperFromChild($event)" />
+    }
 </div>
