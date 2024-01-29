@@ -1,23 +1,25 @@
-<div class="bg-[#D9BCA3]/30 h-full w-full flex flex-col justify-around items-center">
+<div class="h-full w-full flex flex-col justify-around items-center">
     <div class="mt-10">
-        <img
+        <div class="w-60 h-60 bg-white rounded-full flex justify-center items-center">
+            <img
             src="assets/images/capture_init.png"
             alt="Imagen de inicio de captura"
-            width="160"
+            width="150"
         />
+        </div>
     </div>
     <div class="flex flex-col justify-center items-center">
-        <div class="mb-4 text-[#2F722F]">
-            Bienvenido a la bandeja de captura
+        <div class="mb-4 text-[#2F722F] text-2xl">
+            ¡Bienvenido a la bandeja de captura!
         </div>
-        <div class="mb-4 text-[#2F722F]">
-            Antes de continuar asegurate de tener a la mano los siguientes documentos: 
+        <div class="mb-4 text-[#2F722F] text-2xl">
+            Antes de continuar asegúrate de tener a la mano los siguientes documentos: 
         </div>
-        <div class="mb-4 text-[#2F722F]">
-            Documento A & Documento B
+        <div class="mb-4 text-[#2F722F] text-2xl">
+            Documento A, Documento B & Documento C
         </div>
         <div>
-            <button (click)="startStepperHandler()">
+            <button class="button" style="vertical-align:middle" (click)="startStepperHandler()">
                 <span>Iniciar captura </span>
             </button>
         </div>
