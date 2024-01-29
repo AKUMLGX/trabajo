@@ -17,14 +17,14 @@ export class NavbarContentInfoComponent {
       (event:any)=>{
         if(event instanceof NavigationEnd){
           this.path = event.url;
-          if(this.path === '/layout/dashboard'){
-            this.path = 'Tablero';
-          } else if(this.path === '/layout/content') {
-            this.path = 'Contenido';
-          } else if(this.path === '/layout/analytics') {
-            this.path = 'Analítica';
-          } else if(this.path === '/layout/comments') {
-            this.path = 'Comentarios'
+          if(this.path === '/layout/capture'){
+            this.path = 'Bandeja de captura';
+          } else if(this.path === '/layout/consult') {
+            this.path = 'Bandeja de consulta';
+          } else if(this.path === '/layout/tracking') {
+            this.path = 'Bandeja de seguimiento';
+          } else if(this.path === '/layout/reports') {
+            this.path = 'Bandeja de reportes'
           }
         }
       }

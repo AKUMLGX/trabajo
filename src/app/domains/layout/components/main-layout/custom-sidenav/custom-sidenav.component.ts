@@ -26,24 +26,24 @@ export class CustomSidenavComponent {
 
   menuItems = signal<MenuItem[]>([
     {
-      icon: 'dashboard',
-      label: 'Tablero',
-      route: '/layout/dashboard',
+      icon: 'dvr',
+      label: 'Bandeja de captura',
+      route: '/layout/capture',
     },
     {
-      icon: 'video_library',
-      label: 'Contenido',
-      route: '/layout/content',
+      icon: 'dashboard',
+      label: 'Bandeja de consulta',
+      route: '/layout/consult',
     },
     {
       icon: 'analytics',
-      label: 'Analítica',
-      route: '/layout/analytics',
+      label: 'Bandeja de seguimiento',
+      route: '/layout/tracking',
     },
     {
-      icon: 'comment',
-      label: 'Comentarios',
-      route: '/layout/comments',
+      icon: 'folder',
+      label: 'Bandeja de reportes',
+      route: '/layout/reports',
     },
   ]); 
 
