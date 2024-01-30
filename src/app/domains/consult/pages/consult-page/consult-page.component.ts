@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { InitTemplateComponent } from '../../../shared/constants/init-template/init-template.component';
 
+
 @Component({
   selector: 'app-consult-page',
   standalone: true,
@@ -11,3 +12,4 @@ import { InitTemplateComponent } from '../../../shared/constants/init-template/i
 export class ConsultPageComponent {
 
 }
+ 
