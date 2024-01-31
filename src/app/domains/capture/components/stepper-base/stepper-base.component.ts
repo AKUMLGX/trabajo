@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatStepperModule } from '@angular/material/stepper';
-import { DropdownComponent } from '../dropdown/dropdown.component';
+import { DropdownComponent } from './dropdown/dropdown.component';
 
 @Component({
   selector: 'app-stepper-base',
