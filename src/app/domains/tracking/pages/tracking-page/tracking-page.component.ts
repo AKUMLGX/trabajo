@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { InitTemplateComponent } from '../../../shared/constants/init-template/init-template.component';
-import { TrakingFormComponent } from '../../components/traking-form/traking-form.component';
+import { TrackingFormComponent } from '../../components/tracking-form/tracking-form.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-tracking-page',
   standalone: true,
-  imports: [InitTemplateComponent, TrakingFormComponent],
+  imports: [InitTemplateComponent, TrackingFormComponent],
   templateUrl: './tracking-page.component.html',
   styleUrl: './tracking-page.component.css'
 })
