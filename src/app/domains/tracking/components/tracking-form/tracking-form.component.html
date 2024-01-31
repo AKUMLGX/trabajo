@@ -5,7 +5,7 @@
             <div class="rounded-t bg-white mb-0 px-6 py-6">
             </div>
             <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <form>
+                <form [formGroup]="consultForm" (ngSubmit)="onSave()">
                     <div class="flex flex-wrap">
                         <div class="w-full lg:w-6/12 px-4">
                             <div class="relative w-full mb-3">
@@ -15,7 +15,7 @@
                                 </label>
                                 <input type="text" placeholder="Folio interno"
                                     class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    value="">
+                                    formControlName="folioInterno" value="">
                             </div>
                         </div>
                         <div class="w-full lg:w-6/12 px-4">
@@ -26,7 +26,7 @@
                                 </label>
                                 <input type="text" placeholder="Carpeta de investigación"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    value="">
+                                    formControlName="carpetaInvertigacion" value="">
                             </div>
                         </div>
                         <div class="w-full lg:w-6/12 px-4">
@@ -37,7 +37,7 @@
                                 </label>
                                 <input type="text" placeholder="Oficio"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    value="">
+                                    formControlName="oficio" value="">
                             </div>
                         </div>
                         <div class="w-full lg:w-6/12 px-4">
@@ -48,7 +48,7 @@
                                 </label>
                                 <input type="text" placeholder="Autoridad remitente"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    value="">
+                                    formControlName="autoridadRemitente" value="">
                             </div>
                         </div>
                         <div class="w-full lg:w-6/12 px-4">
@@ -59,14 +59,14 @@
                                 </label>
                                 <input type="text" placeholder="Persona relacionada"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    value="">
+                                    formControlName="personaRelaciona" value="">
                             </div>
                         </div>
                     </div>
                     <br>
                     <button
                         class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                        type="button">
+                        type="submit">
                         Buscar
                     </button>
                 </form>
@@ -74,6 +74,3 @@
         </div>
     </div>
 </section>
-
-
-
