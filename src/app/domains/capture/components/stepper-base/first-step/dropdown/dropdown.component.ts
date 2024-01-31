@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 export class DropdownComponent {
 
   isDropdownActive = false;
+  isItemActive = false;
   selectedOption: any;
 
   asuntos = [

@@ -1,7 +1,7 @@
 <div id="container">
     <div id="button" (click)="isDropdownActive = true">
         <div style="display: flex; width: 100%; justify-content: space-between;">
-            {{ selectedOption?.name  || "Lista de asuntos" }}
+            {{ selectedOption?.name  || "Para continuar elija un asunto de la lista" }}
             @if (selectedOption) {
                 <span (click)="selectedOption = undefined;
                     $event.stopImmediatePropagation()">
@@ -10,7 +10,7 @@
             }
         </div>
 
-        <div id="dropdown" [ngClass]="{ active: isDropdownActive }">
+        <div id="dropdown" [ngClass]="{ active: isItemActive }">
             <ul>
                 @for (asunto of asuntos; track asunto.value) {
                     <li>

@@ -7,7 +7,7 @@
 
     #button {
         border: 1px solid #CCC; 
-        background-color: #691C32; 
+        background-color: #2F722F; 
         padding: 17px 20px;
         display: inline-block;
         border-radius: 4px;
@@ -18,7 +18,8 @@
         color: white;
     
         #dropdown {
-            display: none;
+            display: block;
+            /* formerly: display: none; and again discomment the #dropdown.active class */
             position: absolute;
             width: 400px;
             min-height: 100px;
@@ -47,13 +48,17 @@
                         background-color: #f3f3f3;
                         color: black;
                     }
+                    a:active{
+                        background-color: #f3f3f3;
+                        color: black;
+                    }
                 }
             }
         }
     
-        #dropdown.active {
+        /* #dropdown.active {
             display: block;
-        }
+        } */
     }
 }
 
