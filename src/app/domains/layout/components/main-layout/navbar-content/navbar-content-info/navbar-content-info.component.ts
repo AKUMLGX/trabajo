@@ -19,8 +19,8 @@ export class NavbarContentInfoComponent {
           this.path = event.url;
           if(this.path === '/layout/capture'){
             this.path = 'Bandeja de captura';
-          } else if(this.path === '/layout/consult') {
-            this.path = 'Bandeja de consulta';
+          } else if(this.path === '/layout/assistance') {
+            this.path = 'Bandeja de atención';
           } else if(this.path === '/layout/tracking') {
             this.path = 'Bandeja de seguimiento';
           } else if(this.path === '/layout/reports') {

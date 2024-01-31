@@ -3,9 +3,9 @@ import { Routes } from '@angular/router';
 import { LoginPageComponent } from './domains/auth/pages/login-page/login-page.component';
 import { MainLayoutComponent } from './domains/layout/components/main-layout/main-layout.component';
 import { CapturePageComponent } from './domains/capture/pages/capture-page/capture-page.component';
-import { ConsultPageComponent } from './domains/consult/pages/consult-page/consult-page.component';
 import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tracking-page.component';
 import { ReportsPageComponent } from './domains/reports/pages/reports-page/reports-page.component';
+import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
 
 export const routes: Routes = [
     {
@@ -21,8 +21,8 @@ export const routes: Routes = [
                 component: CapturePageComponent
             },
             {
-                path: 'consult',
-                component: ConsultPageComponent
+                path: 'assistance',
+                component: AssistancePageComponent
             },
             {
                 path: 'tracking',
