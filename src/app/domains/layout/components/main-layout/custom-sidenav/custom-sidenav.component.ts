@@ -32,8 +32,8 @@ export class CustomSidenavComponent {
     },
     {
       icon: 'dashboard',
-      label: 'Bandeja de consulta',
-      route: '/layout/consult',
+      label: 'Bandeja de atención',
+      route: '/layout/assistance',
     },
     {
       icon: 'analytics',
