@@ -11,4 +11,5 @@ import { TrackingTableComponent } from '../../components/tracking-table/tracking
   templateUrl: './tracking-page.component.html',
   styleUrl: './tracking-page.component.css'
 })
+
 export class TrackingPageComponent {}

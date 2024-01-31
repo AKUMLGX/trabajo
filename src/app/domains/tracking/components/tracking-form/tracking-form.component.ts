@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './tracking-form.component.css'
 })
 export class TrackingFormComponent {
-  
+
   public consultForm: FormGroup = this.fb.group({
     folioInterno: [''],
     carpetaInvertigacion: [''],
@@ -23,6 +23,5 @@ export class TrackingFormComponent {
   constructor(private fb: FormBuilder) { }
 
   onSave():void {
-    console.log("El valor del formulario " + this.consultForm.value);
   }
 }
