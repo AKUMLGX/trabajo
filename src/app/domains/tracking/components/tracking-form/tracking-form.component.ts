@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { AsuntoNuevoService } from '../../../services/asunto-nuevo.service';
 
 @Component({
   selector: 'app-tracking-form',
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './tracking-form.component.html',
-  styleUrl: './tracking-form.component.css'
+  styleUrl: './tracking-form.component.css',
 })
 export class TrackingFormComponent {
-
   public consultForm: FormGroup = this.fb.group({
     folioInterno: [''],
     carpetaInvertigacion: [''],
@@ -20,8 +19,12 @@ export class TrackingFormComponent {
     personaRelaciona: [''],
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private asuntoNuevoService: AsuntoNuevoService
+  ) {}
 
-  onSave():void {
+  onSave(): void {
+    this.asuntoNuevoService.filterDocuments();
   }
 }
