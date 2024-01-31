@@ -1,11 +1,11 @@
 <div class="h-full w-full text-3xl border-2 rounded-lg border-[#691C32] bg-[#D9BCA3]/30">
     <!-- <h1>Bandeja de captura</h1>
     <h1>Este es el punto de partida</h1>
-    <app-capture-landing-page (startStepper)="startStepperFromChild($event)" />
+    <app-init-template></app-init-template>
     <h1>Aquí va el componente de Bienvenida (landing starting point)</h1> -->
     @if (isStepperInitialized) {
         <app-stepper-base></app-stepper-base>
     } @else {
-        <app-init-template></app-init-template>
+        <app-capture-landing-page (startStepper)="startStepperFromChild($event)" />
     }
 </div>
