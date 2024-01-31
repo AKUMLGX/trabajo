@@ -1,12 +1,24 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dropdown',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.css'
 })
 export class DropdownComponent {
+
+  isDropdownActive = false;
+  selectedOption: any;
+
+  asuntos = [
+    { name: 'Civil', value: 'option-1' },
+    { name: 'Penal', value: 'option-2' },
+    { name: 'Concurso mercantil', value: 'option-3' },
+    { name: 'EUACAPE', value: 'option-4' },
+    { name: 'Generalidades', value: 'option-5' },
+];
 
 }

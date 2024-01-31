@@ -1,50 +1,59 @@
 #container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     width: 100vw;
-    height: 100vh;
-}
+    height: 50vh;
 
-#button {
-    border: 1px solid #CCC; 
-    background-color: transparent; 
-    padding: 8px 10px;
-    display: inline-block;
-    border-radius: 4px;
-    box-shadow: 5px 5px 5px #CCC;
-    cursor: pointer;
-    position: relative;
-}
-
-#dropdown {
-    position: absolute;
-    width: 500px;
-    min-height: 100px;
-    max-height: 400px;
-    overflow: auto;
-    box-shadow: 5px 5px 4px #CCC;
-    background-color: #CCC;
-    border-radius: 10px;
-    top: 145%;
-    left: 0;
-    border: 1px solid #CCC;
-    ul {
-        list-style: none;
-        margin: 0px;
-        display: flex;
-        flex-direction: column;
-        padding: 0px;
-
-        a{
-            text-decoration: none;
-            color: #000000;
-            padding: 15px 30px;
-            display: block;
-            border-bottom: 1px solid #CCC;
-            &:hover{
-                background-color: #f3f3f3;
+    #button {
+        border: 1px solid #CCC; 
+        background-color: #691C32; 
+        padding: 17px 20px;
+        display: inline-block;
+        border-radius: 4px;
+        box-shadow: 5px 5px 5px #CCC;
+        cursor: pointer;
+        position: relative;
+        min-width: 400px;
+        color: white;
+    
+        #dropdown {
+            display: none;
+            position: absolute;
+            width: 400px;
+            min-height: 100px;
+            max-height: 400px;
+            box-shadow: 5px 5px 4px #CCC;
+            background-color: #691C32;
+            border-radius: 15px;
+            top: 105%;
+            left: 0;
+            border: 1px solid #CCC;
+            overflow: auto;
+            ul {
+                list-style: none;
+                margin: 0px;
+                display: flex;
+                flex-direction: column;
+                padding: 0px;
+        
+                a{
+                    text-decoration: none;
+                    color: white;
+                    padding: 15px 30px;
+                    display: block;
+                    border-bottom: 1px solid #CCC;
+                    &:hover{
+                        background-color: #f3f3f3;
+                        color: black;
+                    }
+                }
             }
+        }
+    
+        #dropdown.active {
+            display: block;
         }
     }
 }
+

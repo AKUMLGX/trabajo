@@ -1,13 +1,27 @@
 <div id="container">
-    <div id="button">
-        Options
-        <div id="dropdown">
+    <div id="button" (click)="isDropdownActive = true">
+        <div style="display: flex; width: 100%; justify-content: space-between;">
+            {{ selectedOption?.name  || "Lista de asuntos" }}
+            @if (selectedOption) {
+                <span (click)="selectedOption = undefined;
+                    $event.stopImmediatePropagation()">
+                    x
+                </span>
+            }
+        </div>
+
+        <div id="dropdown" [ngClass]="{ active: isDropdownActive }">
             <ul>
-                <li><a href="#">Option 1</a></li>
-                <li><a href="#">Option 2</a></li>
-                <li><a href="#">Option 3</a></li>
-                <li><a href="#">Option 4</a></li>
-                <li><a href="#">Option 5</a></li>
+                @for (asunto of asuntos; track asunto.value) {
+                    <li>
+                        <a (click)="selectedOption = asunto; 
+                        isDropdownActive = false;
+                        $event.stopImmediatePropagation()"
+                        >
+                            {{ asunto.name }}
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
     </div>
