@@ -18,5 +18,9 @@ mat-sidenav-container {
 }
 
 mat-sidenav {
-    border-right:0px;
+    border-right: 0px;
+}
+
+mat-sidenav-content {
+    overflow: hidden;
 }

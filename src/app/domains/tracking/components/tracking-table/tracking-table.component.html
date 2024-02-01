@@ -1,9 +1,22 @@
-<!-- <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8">
+<!--<div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8">
     <div
         class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
         <table class="min-w-full">
             <thead>
                 <tr>
+                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4  tracking-wider">ID
+                    </th>
+                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 tracking-wider">
+                        FOLIO INTERNO</th>
+                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 tracking-wider">
+                        CARPETA DE INVESTIGACIÓN</th>
+                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 tracking-wider">
+                        OFICIO</th>
+                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 tracking-wider">
+                        AUTORIDAD REMITENTE</th>
+                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 tracking-wider">
+                        PERSONA RELACIONADA</th>
+                    <th class="px-6 py-3 border-b-2 border-gray-300"></th>
                     <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4  tracking-wider">ID
                     </th>
                     <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 tracking-wider">
@@ -47,36 +60,6 @@
                         <button
                             class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
                     </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="flex items-center">
-                            <div>
-                                <div class="text-sm leading-5 text-wine">#1</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="text-sm leading-5 text-wine">1233443453</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
-                        sdsd</td>
-                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
-                        sadasd3453</td>
-                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
-                        <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                            <span aria-hidden class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
-                            <span class="relative text-xs">Inactivo</span>
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
-                        asdasfdsggdsf</td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
-                        <button
-                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
-                    </td>
-                </tr>
-                <tr>
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                         <div class="flex items-center">
                             <div>
@@ -131,6 +114,87 @@
                         <button
                             class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
                     </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
                 </tr>
                 <tr>
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
@@ -148,9 +212,35 @@
                     <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
                         sadasd3453</td>
                     <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
-                        <span class="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
-                            <span aria-hidden class="absolute inset-0 bg-orange-200 opacity-50 rounded-full"></span>
-                            <span class="relative text-xs">Cerrado</span>
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
@@ -161,6 +251,250 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm leading-5 text-wine">#1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <div class="text-sm leading-5 text-wine">1233443453</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sdsd</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        sadasd3453</td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b text-wine border-gray-500 text-sm leading-5">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                            <span class="relative text-xs">Activo</span>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-wine text-sm leading-5">
+                        asdasfdsggdsf</td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                        <button
+                            class="px-5 py-2 border-wine border text-winerounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Visualizar</button>
+                    </td>
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                         <div class="flex items-center">
                             <div>
@@ -251,7 +585,7 @@
         class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
         @if (documents.length > 0) {
         <table class="min-w-full editor_listing_table">
-            <thead>
+            <thead class="flex w-full">
                 <tr>
                     <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4  tracking-wider">
                         {{"ID Asunto historico"}}
@@ -383,7 +717,8 @@
                 </tr>
             </thead>
 
-            <tbody class="bg-white">
+            <tbody class="bg-white overflow-y-scroll items-center justify-between w-full flex flex-col"
+                style="height: 30vh;">
                 @for (document of documents; track $index) {
                 <tr>
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
