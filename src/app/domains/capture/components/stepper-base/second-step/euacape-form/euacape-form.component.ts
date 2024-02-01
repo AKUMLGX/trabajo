@@ -18,11 +18,22 @@ export class EuacapeFormComponent {
   ) {}
 
   public euacapeForm: FormGroup = this.fb.group({
+    administracion: [''],
+    fechaRecepcion: [''],
+    documentosEscaneados: [''],
+    atencion: [''],
+    descripcion: [''],
+    tipoRespuesta: [''],
+    autoridadSolicitante: [''],
+    turnoJefatura: [''],
+    respuesta: [''],
+    acuse: [''],
     folioInterno: [''],
-    carpetaInvertigacion: [''],
-    oficio: [''],
-    autoridadRemitente: [''],
-    personaRelaciona: [''],
+    carpetaInvestigacion: [''],
+    personaRelacionada: [''],
+    folioScanner: [''],
+    tipoAsunto: [''],
+    plazoAtencion: [''],
   });
 
   onSave(): void {
