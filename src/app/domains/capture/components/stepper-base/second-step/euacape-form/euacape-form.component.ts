@@ -3,11 +3,22 @@ import { FormBuilder,
   FormGroup, 
   Validators, 
   ReactiveFormsModule } from '@angular/forms';
+import { TipoRespuestaSelectComponent } from './tipo-respuesta-select/tipo-respuesta-select.component';
+
+import { AtencionSelectComponent } from './atencion-select/atencion-select.component';
+import { RespuestaSelectComponent } from './respuesta-select/respuesta-select.component';
+import { AcuseSelectComponent } from './acuse-select/acuse-select.component';
 
 @Component({
   selector: 'app-euacape-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule, 
+    AtencionSelectComponent, 
+    TipoRespuestaSelectComponent,
+    RespuestaSelectComponent,
+    AcuseSelectComponent,
+  ],
   templateUrl: './euacape-form.component.html',
   styleUrl: './euacape-form.component.css'
 })
@@ -21,13 +32,9 @@ export class EuacapeFormComponent {
     administracion: [''],
     fechaRecepcion: [''],
     documentosEscaneados: [''],
-    atencion: [''],
     descripcion: [''],
-    tipoRespuesta: [''],
     autoridadSolicitante: [''],
     turnoJefatura: [''],
-    respuesta: [''],
-    acuse: [''],
     folioInterno: [''],
     carpetaInvestigacion: [''],
     personaRelacionada: [''],

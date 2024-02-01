@@ -42,33 +42,11 @@
                             <div class="relative w-full mb-3">
                                 <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                     htmlfor="grid-password">
-                                    Atención
-                                </label>
-                                <input type="text" placeholder="Atención"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    formControlName="atencion" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
                                     Descripción
                                 </label>
                                 <input type="text" placeholder="Descripción"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
                                     formControlName="descripcion" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Tipo de respuesta
-                                </label>
-                                <input type="text" placeholder="Tipo de respuesta"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="tipoRespuesta" value="">
                             </div>
                         </div>
                         <div class="w-full lg:w-6/12 px-4">
@@ -91,28 +69,6 @@
                                 <input type="text" placeholder="Turno jefatura"
                                     class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                                     formControlName="turnoJefatura" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Respuesta
-                                </label>
-                                <input type="text" placeholder="Respuesta"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="respuesta" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Acuse
-                                </label>
-                                <input type="text" placeholder="Acuse"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="acuse" value="">
                             </div>
                         </div>
                         <div class="w-full lg:w-6/12 px-4">
@@ -181,13 +137,49 @@
                                     formControlName="plazoAtencion" value="">
                             </div>
                         </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Atención
+                                </label>
+                                <app-atencion-select /> 
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Tipo de respuesta
+                                </label>
+                                <app-tipo-respuesta-select />
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Acuse
+                                </label>
+                                <app-acuse-select />
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Respuesta
+                                </label>
+                                <app-respuesta-select />
+                            </div>
+                        </div>
                     </div>
                     <br>
-                    <button
+                    <!-- <button
                         class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                         type="submit">
                         Siguiente
-                    </button>
+                    </button> -->
                 </form>
             </div>
         </div>
