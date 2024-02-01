@@ -17,10 +17,10 @@ export class AsuntoHistoricoService {
   filterDocuments(): void {
     console.log("Buscando documentos");
     this.httpClient.get(environment.baseUrl + 'asunto_historico/?folio_interno=Folio%20EUACAPE%20&carpeta_investigacion=Carpeta%20Investigacion%20')
-    .subscribe(resp => {
-      console.log(resp);
-    });
-    this.documentsUpdated.emit(this._documents);
+      /*.subscribe(resp => {
+        console.log(resp);
+      });
+    this.documentsUpdated.emit(this._documents);*/
   }
 
 
