@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AsuntoNuevoService } from '../../../services/asunto-nuevo.service';
+import { Component } from '@angular/core';
+import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
+import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
 
 @Component({
   selector: 'app-tracking-table',
@@ -8,12 +9,15 @@ import { AsuntoNuevoService } from '../../../services/asunto-nuevo.service';
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
-export class TrackingTableComponent{
-  constructor(private asuntoNuevoService: AsuntoNuevoService) {}
+export class TrackingTableComponent {
+
+  public documents: AsuntoHistorico[] = [];
+  constructor(private asuntoNuevoService: AsuntoHistoricoService) { }
 
   ngOnInit() {
     this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
-      console.log("Se obtienen documentos " + documents);
+      this.documents = documents;
     });
   }
+
 }
