@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AsuntoNuevoService } from '../../../services/asunto-nuevo.service';
+import { Component } from '@angular/core';
+import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
 
 @Component({
   selector: 'app-tracking-table',
@@ -9,7 +9,7 @@ import { AsuntoNuevoService } from '../../../services/asunto-nuevo.service';
   styleUrl: './tracking-table.component.css',
 })
 export class TrackingTableComponent{
-  constructor(private asuntoNuevoService: AsuntoNuevoService) {}
+  constructor(private asuntoNuevoService: AsuntoHistoricoService) {}
 
   ngOnInit() {
     this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {

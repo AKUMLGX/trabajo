@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AsuntoNuevoService } from '../../../services/asunto-nuevo.service';
+import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
 
 @Component({
   selector: 'app-tracking-form',
@@ -21,7 +21,7 @@ export class TrackingFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private asuntoNuevoService: AsuntoNuevoService
+    private asuntoNuevoService: AsuntoHistoricoService
   ) {}
 
   onSave(): void {
