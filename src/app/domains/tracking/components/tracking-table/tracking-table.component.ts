@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
 import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
 
@@ -12,11 +12,28 @@ import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
 export class TrackingTableComponent {
 
   public documents: AsuntoHistorico[] = [];
+  public pages: AsuntoHistorico[][] = [];
+  
+  @Input({ required: false }) pageSelected!: number;
+
+  private _elementsByPage = 5;
+
   constructor(private asuntoNuevoService: AsuntoHistoricoService) { }
 
   ngOnInit() {
     this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
-      this.documents = documents; 
+      this.documents = documents;
+      let index = 0;
+      let page: AsuntoHistorico[] = [];
+      this.documents.forEach((document) => {
+        page.push(document);
+        index += 1;
+        if (index === this._elementsByPage) {
+          this.pages.push(page);
+          index = 0;
+          page = [];
+        }
+      });
     });
   }
 
