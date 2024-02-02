@@ -22,7 +22,7 @@ export class TrackingFormComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoNuevoService: AsuntoHistoricoService
-  ) {}
+  ) { }
 
   onSave(): void {
     this.asuntoNuevoService.filterDocuments();

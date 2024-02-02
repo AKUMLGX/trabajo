@@ -16,8 +16,12 @@ export class TrackingTableComponent {
 
   ngOnInit() {
     this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
-      this.documents = documents;
+      this.documents = documents; 
     });
   }
 
+  scrollToTable(): void {
+    const element = document.querySelector("#sectionTable");
+    if (element != null) element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
 }

@@ -22,5 +22,5 @@ mat-sidenav {
 }
 
 mat-sidenav-content {
-    overflow: hidden;
+    overflow-x: hidden;
 }
