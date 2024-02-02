@@ -25,6 +25,8 @@ export class TrackingTableComponent {
       this.documents = documents;
       let index = 0;
       let page: AsuntoHistorico[] = [];
+      this.pages = [];
+      this.pageSelected = 0;
       this.documents.forEach((document) => {
         page.push(document);
         index += 1;
