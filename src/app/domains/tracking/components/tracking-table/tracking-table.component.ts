@@ -10,7 +10,6 @@ import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
   styleUrl: './tracking-table.component.css',
 })
 export class TrackingTableComponent {
-
   public documents: AsuntoHistorico[] = [];
   public pages: AsuntoHistorico[][] = [];
 
@@ -18,7 +17,9 @@ export class TrackingTableComponent {
 
   private _elementsByPage: number = 5;
 
-  constructor(private asuntoNuevoService: AsuntoHistoricoService) { }
+  public flag = false;
+
+  constructor(private asuntoNuevoService: AsuntoHistoricoService) {}
 
   ngOnInit() {
     this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
@@ -36,12 +37,20 @@ export class TrackingTableComponent {
           page = [];
         }
       });
+      this.flag = false;
     });
   }
 
   scrollToTable(): void {
-    const element = document.querySelector("#sectionTable");
-    if (element != null) element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    const element = document.querySelector('#sectionTable');
+    if (element != null) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      });
+      this.flag = true;
+    }
   }
 
   updatePageSelected(page: number) {
