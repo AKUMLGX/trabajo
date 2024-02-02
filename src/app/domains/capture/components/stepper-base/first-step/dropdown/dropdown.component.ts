@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -21,5 +21,11 @@ export class DropdownComponent {
     { name: 'EUACAPE', value: 'option-4' },
     { name: 'Generalidades', value: 'option-5' },
 ];
+
+  @Output() selectionEmitter = new EventEmitter;
+
+  selectedOptionHandler(){
+    this.selectionEmitter.emit(this.selectedOption);
+  }
 
 }

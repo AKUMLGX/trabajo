@@ -4,7 +4,7 @@
             {{ selectedOption?.name  || "Para continuar elija un asunto de la lista" }}
             @if (selectedOption) {
                 <span (click)="selectedOption = undefined;
-                    $event.stopImmediatePropagation()">
+                    selectedOptionHandler()">
                     x
                 </span>
             }
@@ -15,8 +15,7 @@
                 @for (asunto of asuntos; track asunto.value) {
                     <li>
                         <a (click)="selectedOption = asunto; 
-                        isDropdownActive = false;
-                        $event.stopImmediatePropagation()"
+                        selectedOptionHandler()"
                         >
                             {{ asunto.name }}
                         </a>
