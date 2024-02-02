@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
 import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
 
@@ -13,10 +13,10 @@ export class TrackingTableComponent {
 
   public documents: AsuntoHistorico[] = [];
   public pages: AsuntoHistorico[][] = [];
-  
-  @Input({ required: false }) pageSelected!: number;
 
-  private _elementsByPage = 5;
+  public pageSelected: number = 0;
+
+  private _elementsByPage: number = 5;
 
   constructor(private asuntoNuevoService: AsuntoHistoricoService) { }
 
@@ -40,5 +40,18 @@ export class TrackingTableComponent {
   scrollToTable(): void {
     const element = document.querySelector("#sectionTable");
     if (element != null) element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
+
+  updatePageSelected(page: number) {
+    this.pageSelected = page;
+    console.log(this.pages[this.pageSelected]);
+  }
+
+  previousPage() {
+    this.pageSelected -= 1;
+  }
+
+  nextPage() {
+    this.pageSelected += 1;
   }
 }
