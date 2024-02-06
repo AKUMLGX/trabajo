@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FirstStepComponent } from './first-step/first-step.component';
 import { SecondStepComponent } from './second-step/second-step.component';
+import { ThirdStepComponent } from './third-step/third-step.component';
+import { FourthStepComponent } from './fourth-step/fourth-step.component';
+import { FifthStepComponent } from './fifth-step/fifth-step.component';
 
 @Component({
   selector: 'app-stepper-base',
@@ -10,6 +13,9 @@ import { SecondStepComponent } from './second-step/second-step.component';
     MatStepperModule,
     FirstStepComponent,
     SecondStepComponent,
+    ThirdStepComponent,
+    FourthStepComponent,
+    FifthStepComponent
   ],
   templateUrl: './stepper-base.component.html',
   styleUrl: './stepper-base.component.css'
