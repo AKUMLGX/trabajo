@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DropdownComponent } from '../first-step/dropdown/dropdown.component';
+import { DropdownComponent } from './dropdown/dropdown.component';
 import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
