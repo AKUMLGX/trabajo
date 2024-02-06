@@ -44,10 +44,12 @@
                                     htmlfor="grid-password">
                                     Atención
                                 </label>
-                                <select id="atencion" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                    <option selected>Atención</option>
-                                    <option value="">Requerimiento</option>
-                                    <option value="">Respuesta</option>
+                                <select id="atencion"
+                                        formControlName="atencion"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled >Elija una atención</option>
+                                    <option value="Requerimiento">Requerimiento</option>
+                                    <option value="Respuesta">Respuesta</option>
                                 </select> 
                             </div> 
                         </div>
@@ -68,11 +70,13 @@
                                     htmlfor="grid-password">
                                     Tipo de respuesta
                                 </label>
-                                <select id="tipoRespuesta" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                    <option selected>Tipo de respuesta</option>
-                                    <option value="">Total</option>
-                                    <option value="">Parcial</option>
-                                    <option value="">En trámite</option>
+                                <select id="tipoRespuesta" 
+                                        formControlName="tipoRespuesta"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
+                                    <option value="Total">Total</option>
+                                    <option value="Parcial">Parcial</option>
+                                    <option value="En trámite">En trámite</option>
                                 </select> 
                             </div> 
                         </div>
@@ -104,10 +108,12 @@
                                     htmlfor="grid-password">
                                     Respuesta
                                 </label>
-                                <select id="respuesta" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                    <option selected>Respuesta</option>
-                                    <option value="">Verdadero</option>
-                                    <option value="">Falso</option>
+                                <select id="respuesta" 
+                                        formControlName="respuesta"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled>Elija una respuesta</option>
+                                    <option value="Verdadero">Verdadero</option>
+                                    <option value="Falso">Falso</option>
                                 </select> 
                             </div> 
                         </div>
@@ -117,10 +123,12 @@
                                     htmlfor="grid-password">
                                     Acuse
                                 </label>
-                                <select id="acuse" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                    <option selected>Acuse</option>
-                                    <option value="">Verdadero</option>
-                                    <option value="">Falso</option>
+                                <select id="acuse" 
+                                        formControlName="acuse"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled>Elija un acuse</option>
+                                    <option value="Verdadero">Verdadero</option>
+                                    <option value="Falso">Falso</option>
                                 </select> 
                             </div> 
                         </div>
@@ -192,11 +200,12 @@
                         </div>
                     </div>
                     <br>
-                    <!-- <button
+                    <button
                         class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                        type="submit">
+                        type="submit"
+                        >
                         Siguiente
-                    </button> -->
+                    </button>
                 </form>
             </div>
         </div>
