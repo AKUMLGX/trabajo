@@ -13,3 +13,10 @@ export interface Oauth2Code {
     scope: string,
 }
 
+export interface SessionInfo {
+    rfc: string;
+    nombre: string;
+    roles: string;
+    token: string;
+}
+
