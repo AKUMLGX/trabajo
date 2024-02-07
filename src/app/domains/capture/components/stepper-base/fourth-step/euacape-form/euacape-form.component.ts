@@ -47,7 +47,10 @@ export class EuacapeFormComponent {
   }
 
   openCustomModal() {
-    this.modalService.openCustomDialog()
+    this.modalService.openCustomDialog({
+      title: 'Title for cutom dialog',
+      content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
+    });
   }
 
 }
