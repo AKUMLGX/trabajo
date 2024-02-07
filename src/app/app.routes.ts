@@ -8,34 +8,35 @@ import { ReportsPageComponent } from './domains/reports/pages/reports-page/repor
 import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
 
 export const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginPageComponent
-    },
-    {
-        path: 'site/rep',
-        component: MainLayoutComponent,
-        children: [
-            {
-                path: 'capture',
-                component: CapturePageComponent
-            },
-            {
-                path: 'assistance',
-                component: AssistancePageComponent
-            },
-            {
-                path: 'consulta',
-                component: TrackingPageComponent
-            },
-            {
-                path: 'reports',
-                component: ReportsPageComponent
-            },
-        ]
-    },
-    // {
-    //     path: '**',
-    //     component: MainLayoutComponent
-    // },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: 'login',
+    component: LoginPageComponent,
+  },
+  {
+    path: 'site/rep/consulta',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: 'capture',
+        component: CapturePageComponent,
+      },
+      {
+        path: 'assistance',
+        component: AssistancePageComponent,
+      },
+      {
+        path: 'tracking',
+        component: TrackingPageComponent,
+      },
+      {
+        path: 'reports',
+        component: ReportsPageComponent,
+      },
+    ],
+  },
+  // {
+  //     path: '**',
+  //     component: MainLayoutComponent
+  // },
 ];
