@@ -1,18 +1,24 @@
 <div style="padding: 0.5em" class="text-xl">
     <mat-vertical-stepper [labelPosition]="'bottom'">
 
-        <mat-step label="Elección de asunto">
+        <mat-step label="Búsqueda">
             <app-first-step />
         </mat-step>
 
-        <mat-step label="Llenado de formulario">
+        <mat-step label="Elección de asunto">
             <app-second-step />
         </mat-step>
 
+        <mat-step label="Folio interno">
+            <app-third-step />
+        </mat-step>
+
+        <mat-step label="Llenado de formulario">
+            <app-fourth-step />
+        </mat-step>
+
         <mat-step label="Verificación de información">
-            <div>
-                <h1>Content for step 3</h1>
-            </div>
+            <app-fifth-step />
         </mat-step>
 
     </mat-vertical-stepper>
