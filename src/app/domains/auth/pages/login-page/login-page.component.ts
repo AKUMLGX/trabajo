@@ -13,9 +13,7 @@ export class LoginPageComponent {
   constructor(private oauth2Service: Oauth2Service) {}
 
   login():void {
-    console.log("hola");
-    let oauthParametersEndpoint = this.oauth2Service.do_oauth();
-    
+    this.oauth2Service.do_oauth();
   }
 
 }

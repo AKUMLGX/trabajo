@@ -21,7 +21,8 @@ export class AsuntoHistoricoService {
       .subscribe(data => {
         this.documentList = data;
         this.documentsUpdated.emit(this.documentList);
-      });   
+      });
+      
   }
 
 
