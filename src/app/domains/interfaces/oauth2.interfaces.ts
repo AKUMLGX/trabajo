@@ -18,5 +18,6 @@ export interface SessionInfo {
     nombre: string;
     roles: string;
     token: string;
+    exp: number;
 }
 

@@ -6,6 +6,7 @@ import { CapturePageComponent } from './domains/capture/pages/capture-page/captu
 import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tracking-page.component';
 import { ReportsPageComponent } from './domains/reports/pages/reports-page/reports-page.component';
 import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
+import { loginGuard } from './domains/guards/login.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,18 +21,22 @@ export const routes: Routes = [
       {
         path: 'capture',
         component: CapturePageComponent,
+        canActivate: [loginGuard],
       },
       {
         path: 'assistance',
         component: AssistancePageComponent,
+        canActivate: [loginGuard],
       },
       {
         path: 'tracking',
         component: TrackingPageComponent,
+        canActivate: [loginGuard],
       },
       {
         path: 'reports',
         component: ReportsPageComponent,
+        canActivate: [loginGuard],
       },
     ],
   },

@@ -28,22 +28,22 @@ export class CustomSidenavComponent {
     {
       icon: 'dvr',
       label: 'Bandeja de captura',
-      route: '/layout/capture',
+      route: '/site/rep/consulta/capture',
     },
     {
       icon: 'dashboard',
       label: 'Bandeja de atención',
-      route: '/layout/assistance',
+      route: '/site/rep/consulta/assistance',
     },
     {
       icon: 'analytics',
       label: 'Bandeja de seguimiento',
-      route: '/layout/tracking',
+      route: '/site/rep/consulta/tracking',
     },
     {
       icon: 'folder',
       label: 'Bandeja de reportes',
-      route: '/layout/reports',
+      route: '/site/rep/consulta/reports',
     },
   ]); 
 
