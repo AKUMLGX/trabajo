@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Oauth2 } from '../interfaces/oauth2.interface';
+import { Oauth2Code, Oauth2Params } from '../interfaces/oauth2.interfaces';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -10,17 +10,17 @@ import { Router } from '@angular/router';
 export class Oauth2Service {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
-  login(): void {
+  getToken(oauth2Code: Oauth2Code): void {
     this.httpClient
-      .get(environment.baseUrl + environment.tokenValidationEndpoint)
+      .post(environment.baseUrl + environment.tokenValidationEndpoint, oauth2Code)
       .subscribe((data) => {
-        //console.log("Se obtiene lo siguiente " + data);
+        console.log("Se obtiene lo siguiente " + data);
       });
   }
 
   do_oauth(): void {
     this.httpClient
-      .get<Oauth2>(environment.baseUrl + environment.oauthParametersEndpoint)
+      .get<Oauth2Params>(environment.baseUrl + environment.oauthParametersEndpoint)
       .subscribe((data) => {
         let target_url =
           data.authentication_url +

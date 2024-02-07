@@ -1,4 +1,4 @@
-export interface Oauth2 {
+export interface Oauth2Params {
     authentication_url: string;
     response_type:      string;
     resource_server:    string;
@@ -7,3 +7,9 @@ export interface Oauth2 {
     redirect_uri:       string;
     scope:              string;
 }
+
+export interface Oauth2Code {
+    code: string,
+    scope: string,
+}
+
