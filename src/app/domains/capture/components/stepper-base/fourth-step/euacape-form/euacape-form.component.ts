@@ -1,23 +1,16 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FormBuilder, 
   FormGroup, 
   Validators, 
   ReactiveFormsModule } from '@angular/forms';
-import { TipoRespuestaSelectComponent } from './tipo-respuesta-select/tipo-respuesta-select.component';
-
-import { AtencionSelectComponent } from './atencion-select/atencion-select.component';
-import { RespuestaSelectComponent } from './respuesta-select/respuesta-select.component';
-import { AcuseSelectComponent } from './acuse-select/acuse-select.component';
 
 @Component({
   selector: 'app-euacape-form',
   standalone: true,
   imports: [
-    ReactiveFormsModule, 
-    AtencionSelectComponent, 
-    TipoRespuestaSelectComponent,
-    RespuestaSelectComponent,
-    AcuseSelectComponent,
+    ReactiveFormsModule,
+    FormsModule, 
   ],
   templateUrl: './euacape-form.component.html',
   styleUrl: './euacape-form.component.css'
@@ -32,9 +25,13 @@ export class EuacapeFormComponent {
     administracion: [''],
     fechaRecepcion: [''],
     documentosEscaneados: [''],
+    atencion: [null],
     descripcion: [''],
+    tipoRespuesta: [null],
     autoridadSolicitante: [''],
     turnoJefatura: [''],
+    respuesta: [null],
+    acuse: [null],
     folioInterno: [''],
     carpetaInvestigacion: [''],
     personaRelacionada: [''],
@@ -44,7 +41,7 @@ export class EuacapeFormComponent {
   });
 
   onSave(): void {
-    console.log("Hello world");
+    console.log(this.euacapeForm.value);
   }
 
 }
