@@ -23,7 +23,16 @@ export class EuacapeFormComponent {
     private modalService: ModalService,
   ) {}
 
-  public euacapeForm: FormGroup = this.fb.group({
+  isEuacapeSecondPartEnabled: boolean = false;
+
+  public firstEuacapeForm: FormGroup = this.fb.group({
+    oficio: [''],
+    turnoJefatura: [''],
+    folioInterno: [''],
+    folioScanner: [''],
+  });
+
+  public secondEuacapeForm: FormGroup = this.fb.group({
     administracion: [''],
     fechaRecepcion: [''],
     documentosEscaneados: [''],
@@ -31,19 +40,17 @@ export class EuacapeFormComponent {
     descripcion: [''],
     tipoRespuesta: [null],
     autoridadSolicitante: [''],
-    turnoJefatura: [''],
     respuesta: [null],
     acuse: [null],
-    folioInterno: [''],
     carpetaInvestigacion: [''],
     personaRelacionada: [''],
-    folioScanner: [''],
     tipoAsunto: [''],
     plazoAtencion: [''],
   });
 
   onSave(): void {
-    console.log(this.euacapeForm.value);
+    console.log(this.firstEuacapeForm.value);
+    console.log(this.secondEuacapeForm.value);
   }
 
   openCustomModal() {
