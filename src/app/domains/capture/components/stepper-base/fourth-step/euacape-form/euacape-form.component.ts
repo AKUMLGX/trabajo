@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ModalService } from '../../../../../shared/services/modal.service';
 import { FormBuilder, 
   FormGroup, 
   Validators, 
@@ -19,6 +20,7 @@ export class EuacapeFormComponent {
 
   constructor(
     private fb: FormBuilder,
+    private modalService: ModalService,
   ) {}
 
   public euacapeForm: FormGroup = this.fb.group({
@@ -42,6 +44,10 @@ export class EuacapeFormComponent {
 
   onSave(): void {
     console.log(this.euacapeForm.value);
+  }
+
+  openCustomModal() {
+    this.modalService.openCustomDialog()
   }
 
 }
