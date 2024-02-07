@@ -1,3 +1,3 @@
 export const environment = {
-    baseUrl: 'http://localhost:9080/akamba/api/v1/',
+    baseUrl: 'http://localhost:8000/akamba/api/v1/',
 };

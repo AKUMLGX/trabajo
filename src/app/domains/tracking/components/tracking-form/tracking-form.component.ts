@@ -17,6 +17,7 @@ export class TrackingFormComponent {
     oficio: [''],
     autoridadRemitente: [''],
     personaRelaciona: [''],
+    alcande: ['']
   });
 
   constructor(

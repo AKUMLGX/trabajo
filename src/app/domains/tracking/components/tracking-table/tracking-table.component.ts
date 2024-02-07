@@ -17,12 +17,13 @@ export class TrackingTableComponent {
 
   private _elementsByPage: number = 5;
 
-  public flag = false;
+  public newTableIsRendered = false;
 
   constructor(private asuntoNuevoService: AsuntoHistoricoService) {}
 
   ngOnInit() {
     this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
+      this.newTableIsRendered = false;
       this.documents = documents;
       let index = 0;
       let page: AsuntoHistorico[] = [];
@@ -37,25 +38,28 @@ export class TrackingTableComponent {
           page = [];
         }
       });
-      this.flag = false;
     });
   }
 
   scrollToTable(): void {
-    const element = document.querySelector('#sectionTable');
-    if (element != null) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest',
-      });
-      this.flag = true;
+    const element = document.getElementById('sectionTable');
+    if (element !== null && !this.newTableIsRendered) {
+      const checkEvery = 100;
+      setTimeout(() => {
+        if (window.scrollY !== element.offsetTop) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+          });
+        }
+      }, checkEvery);
+      this.newTableIsRendered = true;
     }
   }
 
   updatePageSelected(page: number) {
     this.pageSelected = page;
-    console.log(this.pages[this.pageSelected]);
   }
 
   previousPage() {
