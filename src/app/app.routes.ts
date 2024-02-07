@@ -13,7 +13,7 @@ export const routes: Routes = [
         component: LoginPageComponent
     },
     {
-        path: 'layout',
+        path: 'site/rep',
         component: MainLayoutComponent,
         children: [
             {
@@ -25,7 +25,7 @@ export const routes: Routes = [
                 component: AssistancePageComponent
             },
             {
-                path: 'tracking',
+                path: 'consulta',
                 component: TrackingPageComponent
             },
             {
