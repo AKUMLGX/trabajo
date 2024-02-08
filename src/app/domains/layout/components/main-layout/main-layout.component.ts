@@ -9,6 +9,7 @@ import { NavbarContentInfoComponent } from './navbar-content/navbar-content-info
 import { RouterModule } from '@angular/router';
 import { Oauth2Service } from '../../../services/ouath2.service';
 import { Oauth2Code } from '../../../interfaces/oauth2.interfaces';
+import { LoadAnimationComponent } from '../../../components/load-animation/load-animation.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -21,6 +22,7 @@ import { Oauth2Code } from '../../../interfaces/oauth2.interfaces';
     CustomSidenavComponent,
     NavbarContentComponent,
     NavbarContentInfoComponent,
+    LoadAnimationComponent,
     RouterModule,
   ],
   templateUrl: './main-layout.component.html',
