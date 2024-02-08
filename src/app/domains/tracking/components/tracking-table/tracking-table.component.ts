@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
 import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tracking-table',
@@ -56,6 +57,13 @@ export class TrackingTableComponent {
       }, checkEvery);
       this.newTableIsRendered = true;
     }
+  }
+
+  openPdfViewer() {
+    console.log("hola");
+    let router = inject(Router);
+    router.navigate(['/pdfViewer']);
+
   }
 
   updatePageSelected(page: number) {

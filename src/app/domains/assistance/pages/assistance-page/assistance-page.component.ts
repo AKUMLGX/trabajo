@@ -6,7 +6,7 @@ import { InitTemplateComponent } from '../../../shared/constants/init-template/i
   standalone: true,
   imports: [InitTemplateComponent],
   templateUrl: './assistance-page.component.html',
-  styleUrl: './assistance-page.component.css'
+  styleUrl: './assistance-page.component.css',
 })
 export class AssistancePageComponent {
 

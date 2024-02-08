@@ -1,0 +1,30 @@
+import { Component } from '@angular/core';
+import { FileService } from '../../services/file.service';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
+@Component({
+  selector: 'app-pdf-viewer',
+  standalone: true,
+  imports: [PdfViewerModule],
+  templateUrl: './pdf-viewer.component.html',
+  styleUrl: './pdf-viewer.component.css',
+})
+export class PdfViewerComponent {
+  pdfUrl: string = "";
+
+  constructor(private fileService: FileService) {}
+
+  ngOnInit(): void {
+    this.fileService.getFile();
+    let file = this.fileService.file;
+    const byteCharacters = atob(file);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    var blobURL = URL.createObjectURL(blob);
+    this.pdfUrl = blobURL;
+  }
+}
