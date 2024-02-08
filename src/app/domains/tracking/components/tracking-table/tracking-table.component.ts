@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
 import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
+import { FileService } from '../../../services/file.service';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [],
+  imports: [PdfViewerModule],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
@@ -20,7 +22,7 @@ export class TrackingTableComponent {
 
   public newTableIsRendered = false;
 
-  constructor(private asuntoNuevoService: AsuntoHistoricoService) {}
+  constructor(private asuntoNuevoService: AsuntoHistoricoService, private router: Router) {}
 
   ngOnInit() {
     this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
@@ -60,9 +62,7 @@ export class TrackingTableComponent {
   }
 
   openPdfViewer() {
-    console.log("hola");
-    let router = inject(Router);
-    router.navigate(['/pdfViewer']);
+    this.router.navigate(['/site/rep/consulta/pdfViewer']);
 
   }
 

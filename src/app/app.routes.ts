@@ -7,7 +7,7 @@ import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tr
 import { ReportsPageComponent } from './domains/reports/pages/reports-page/reports-page.component';
 import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
 import { loginGuard } from './domains/guards/login.guard';
-import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { PdfViewerComponent } from './domains/components/pdf-viewer/pdf-viewer.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

@@ -3,6 +3,7 @@ import { MenuItem } from '../../../models/menu-items.model';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterModule } from '@angular/router';
+import { LogoutService } from '../../../../services/logout.service';
 
 @Component({
   selector: 'app-custom-sidenav',
@@ -16,6 +17,8 @@ export class CustomSidenavComponent {
   // @Input() set collapsed(val: boolean) {
   //   this.sideNavCollapsed.set(val);
   // }
+
+  constructor(private logoutService: LogoutService) {}
   @Input() collapsed: boolean = false;
 
   menuItems = signal<MenuItem[]>([
@@ -44,7 +47,6 @@ export class CustomSidenavComponent {
   profilePicSize = computed(() => (this.collapsed ? '10' : '100'));
 
   logout() {
-    localStorage.clear();
-    window.location.href = 'https://auth.uat.cloudb.sat.gob.mx/nidp/app/logout';
+    this.logoutService.logout();
   }
 }

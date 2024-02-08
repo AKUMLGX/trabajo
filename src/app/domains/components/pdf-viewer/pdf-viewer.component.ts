@@ -10,21 +10,23 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
   styleUrl: './pdf-viewer.component.css',
 })
 export class PdfViewerComponent {
-  pdfUrl: string = "";
+  pdfUrl: string = '';
 
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService) {
+    this.fileService.getFile();
+  }
 
   ngOnInit(): void {
-    this.fileService.getFile();
-    let file = this.fileService.file;
-    const byteCharacters = atob(file);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    var blobURL = URL.createObjectURL(blob);
-    this.pdfUrl = blobURL;
+    this.fileService.fileUpdated.subscribe((file) => {
+      const byteCharacters = atob(file);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      var blobURL = URL.createObjectURL(blob);
+      this.pdfUrl = blobURL;
+    });
   }
 }
