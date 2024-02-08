@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../shared/services/modal.service';
 import { FormBuilder, 
@@ -23,7 +23,7 @@ export class EuacapeFormComponent {
     private modalService: ModalService,
   ) {}
 
-  isEuacapeSecondPartEnabled: boolean = false;
+  @Input({required: true}) isEuacapeSecondPartEnabled!: boolean;
 
   public firstEuacapeForm: FormGroup = this.fb.group({
     oficio: [''],
