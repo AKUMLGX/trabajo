@@ -16,7 +16,6 @@ export class AsuntoHistoricoService {
 
 
   filterDocuments(): void {
-    console.log("Buscando documentos");
     this.httpClient.get<AsuntoHistorico[]>(environment.baseUrl + 'asunto_historico/?folio_interno=Folio%20EUACAPE%20&carpeta_investigacion=Carpeta%20Investigacion%20')
       .subscribe(data => {
         this.documentList = data;

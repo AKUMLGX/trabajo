@@ -12,6 +12,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 export class LoadAnimationComponent {
   isLoading$ = this.loadAnimationService.isLoading$;
   constructor(private loadAnimationService: LoadAnimationService) {}
+  
 
 
 }

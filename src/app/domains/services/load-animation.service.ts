@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/internal/Subject';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LoadAnimationService {
-  isLoading$ = new Subject<boolean>();
+  isLoading$ = new BehaviorSubject<boolean>(false);
   count = 0;
 
   show(): void {
