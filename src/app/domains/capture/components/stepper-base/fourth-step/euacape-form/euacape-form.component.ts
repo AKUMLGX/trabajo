@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../shared/services/modal.service';
 import { FormBuilder, 
@@ -63,6 +63,12 @@ export class EuacapeFormComponent {
       title: 'Title for cutom dialog',
       content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
     });
+  }
+
+  openCustomModalWithTemplate(template: TemplateRef<any>){
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    })
   }
 
 }
