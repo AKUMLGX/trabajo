@@ -40,36 +40,19 @@ export class MainLayoutComponent {
   }
 
   getToken(): void {
-    if (!this.checkTokenExist()) {
-      let parts = window.location.href.split('&');
-      let oauth2Code: Oauth2Code = { code: '', scope: '' };
-      parts.forEach((part) => {
-        let keyValue = part.split('=');
-        if (
-          keyValue.length === 2 &&
-          keyValue[0].substring(keyValue[0].length - 4) == 'code'
-        ) {
-          oauth2Code.code = decodeURIComponent(keyValue[1]);
-        } else if (keyValue.length === 2 && keyValue[0] == 'scope') {
-          oauth2Code.scope = keyValue[1];
-        }
-      });
-      this.oauth2Service.getToken(oauth2Code);
-    }
-  }
-
-  //Está función no es necesaria, solo es para que al desarrollar no nos saque cada vez que actualizamos
-  //el código.
-  checkTokenExist() {
-    let sessionInfo = localStorage.getItem('sessionInfo');
-    if (sessionInfo !== null) {
-      let parse = JSON.parse(sessionInfo);
-      let expiryDate = new Date(parse.exp * 1000);
-      let currentDate = new Date(Date.now());
-      if (expiryDate > currentDate) {
-        return true;
+    let parts = window.location.href.split('&');
+    let oauth2Code: Oauth2Code = { code: '', scope: '' };
+    parts.forEach((part) => {
+      let keyValue = part.split('=');
+      if (
+        keyValue.length === 2 &&
+        keyValue[0].substring(keyValue[0].length - 4) == 'code'
+      ) {
+        oauth2Code.code = decodeURIComponent(keyValue[1]);
+      } else if (keyValue.length === 2 && keyValue[0] == 'scope') {
+        oauth2Code.scope = keyValue[1];
       }
-    }
-    return false;
+    });
+    this.oauth2Service.getToken(oauth2Code);
   }
 }

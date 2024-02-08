@@ -7,17 +7,11 @@ import { RouterLink, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-custom-sidenav',
   standalone: true,
-  imports: [
-    MatListModule,
-    MatIconModule,
-    RouterLink,
-    RouterModule
-  ],
+  imports: [MatListModule, MatIconModule, RouterLink, RouterModule],
   templateUrl: './custom-sidenav.component.html',
-  styleUrl: './custom-sidenav.component.css'
+  styleUrl: './custom-sidenav.component.css',
 })
 export class CustomSidenavComponent {
-
   // sideNavCollapsed = signal(false);
   // @Input() set collapsed(val: boolean) {
   //   this.sideNavCollapsed.set(val);
@@ -45,8 +39,12 @@ export class CustomSidenavComponent {
       label: 'Bandeja de reportes',
       route: '/site/rep/consulta/reports',
     },
-  ]); 
+  ]);
 
-  profilePicSize = computed(() => this.collapsed ? '10' : '100');
+  profilePicSize = computed(() => (this.collapsed ? '10' : '100'));
 
+  logout() {
+    localStorage.clear();
+    window.location.href = 'https://auth.uat.cloudb.sat.gob.mx/nidp/app/logout';
+  }
 }
