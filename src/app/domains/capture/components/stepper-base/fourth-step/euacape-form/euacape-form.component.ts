@@ -5,6 +5,7 @@ import { FormBuilder,
   FormGroup, 
   Validators, 
   ReactiveFormsModule } from '@angular/forms';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-euacape-form',
@@ -12,6 +13,7 @@ import { FormBuilder,
   imports: [
     ReactiveFormsModule,
     FormsModule, 
+    MatStepperModule,
   ],
   templateUrl: './euacape-form.component.html',
   styleUrl: './euacape-form.component.css'
@@ -48,8 +50,11 @@ export class EuacapeFormComponent {
     plazoAtencion: [''],
   });
 
-  onSave(): void {
+  saveFirstEuacapeForm(): void{
     console.log(this.firstEuacapeForm.value);
+  }
+
+  saveSecondEuacapeForm(): void {
     console.log(this.secondEuacapeForm.value);
   }
 

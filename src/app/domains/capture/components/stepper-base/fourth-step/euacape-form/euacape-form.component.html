@@ -4,7 +4,7 @@
             <div
                 class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
                 <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
-                    <form [formGroup]="secondEuacapeForm" (ngSubmit)="onSave()">
+                    <form [formGroup]="secondEuacapeForm" (ngSubmit)="saveSecondEuacapeForm()">
                         <div class="flex flex-wrap">
                             <div class="w-full lg:w-6/12 px-4">
                                 <div class="relative w-full mb-3">
@@ -169,14 +169,13 @@
                         </div>
                         <br>
                         <button
+                            (click)="openCustomModal()"
                             class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="submit"
                             >
                             Siguiente
                         </button>
-                        <button (click)="openCustomModal()">
-                            Open Dialog
-                        </button>
+                        
                     </form>
                 </div>
             </div>
@@ -188,7 +187,7 @@
             <div
                 class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
                 <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
-                    <form [formGroup]="firstEuacapeForm" (ngSubmit)="onSave()">
+                    <form [formGroup]="firstEuacapeForm" (ngSubmit)="saveFirstEuacapeForm()">
                         <div class="flex flex-wrap">
                             <div class="w-full lg:w-6/12 px-4">
                                 <div class="relative w-full mb-3">
@@ -237,13 +236,11 @@
                         </div>
                         <br>
                         <button
+                            matStepperNext
                             class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="submit"
                             >
-                            Siguiente
-                        </button>
-                        <button (click)="openCustomModal()">
-                            Open Dialog
+                            Continuar
                         </button>
                     </form>
                 </div>
