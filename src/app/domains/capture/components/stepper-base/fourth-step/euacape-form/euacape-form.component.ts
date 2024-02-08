@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../shared/services/modal.service';
 import { FormBuilder, 
@@ -8,26 +8,13 @@ import { FormBuilder,
 import { MatStepperModule } from '@angular/material/stepper';
 import {MatTableModule} from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 
-export interface PeriodicElement {
+export interface EuacapeTableBeforeSubmit {
   name: string;
   position: number;
-  weight: number;
-  symbol: string;
+  answer: string | null;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
 
 @Component({
   selector: 'app-euacape-form',
@@ -38,6 +25,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     MatStepperModule,
     MatTableModule,
     MatDialogModule,
+    CommonModule,
   ],
   templateUrl: './euacape-form.component.html',
   styleUrl: './euacape-form.component.css'
@@ -47,9 +35,14 @@ export class EuacapeFormComponent {
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
-  ) {}
+  ) {
+
+  }
 
   @Input({required: true}) isEuacapeSecondPartEnabled!: boolean;
+
+  
+  OFICIO = '';
 
   public firstEuacapeForm: FormGroup = this.fb.group({
     oficio: [''],
@@ -76,6 +69,8 @@ export class EuacapeFormComponent {
 
   saveFirstEuacapeForm(): void{
     console.log(this.firstEuacapeForm.value);
+    console.log(this.OFICIO);
+    alert(`Input field value ${this.OFICIO}`);
   }
 
   saveSecondEuacapeForm(): void {
@@ -95,7 +90,27 @@ export class EuacapeFormComponent {
     })
   }
 
-  displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-weight', 'demo-symbol'];
-  dataSource = ELEMENT_DATA;
+  ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
+    {position: 1, name: 'Oficio', answer: this.OFICIO},
+    {position: 2, name: 'Administración', answer: ''},
+    {position: 3, name: 'Fecha de recepción', answer: ''},
+    {position: 4, name: 'Documentos escaneados', answer: ''},
+    {position: 5, name: 'Atención', answer: ''},
+    {position: 6, name: 'Descripción', answer: ''},
+    {position: 7, name: 'Tipo de respuesta', answer: ''},
+    {position: 8, name: 'Autoridad solicitante', answer: ''},
+    {position: 9, name: 'Turno jefatura', answer: ''},
+    {position: 10, name: 'Respuesta', answer: ''},
+    {position: 11, name: ' Acuse', answer: ''},
+    {position: 12, name: 'Folio interno', answer: ''},
+    {position: 13, name: 'Carpeta de investigación', answer: ''},
+    {position: 14, name: 'Persona relacionada', answer: ''},
+    {position: 15, name: 'Folio scanner', answer: ''},
+    {position: 16, name: 'Tipo asunto', answer: ''},
+    {position: 17, name: 'Plazo de atención', answer: ''},
+  ];
+
+  displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
+  dataSource = this.ELEMENT_DATA;
 
 }
