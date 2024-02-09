@@ -39,14 +39,11 @@ export class EuacapeFormComponent {
 
   @Input({required: true}) isEuacapeSecondPartEnabled!: boolean;
 
-  public firstEuacapeForm: FormGroup = this.fb.group({
+  public euacapeForm: FormGroup = this.fb.group({
     oficio: [''],
     turnoJefatura: [''],
     folioInterno: [''],
     folioScanner: [''],
-  });
-
-  public secondEuacapeForm: FormGroup = this.fb.group({
     administracion: [''],
     fechaRecepcion: [''],
     documentosEscaneados: [''],
@@ -62,16 +59,10 @@ export class EuacapeFormComponent {
     plazoAtencion: [''],
   });
 
-  saveFirstEuacapeForm(): void{
-    console.log(this.firstEuacapeForm.value);
-    //console.log(this.OFICIO);
-  }
-
-  saveSecondEuacapeForm(): void {
-    console.log(this.secondEuacapeForm.value);
+  saveEuacapeForm(): void {
+    console.log(this.euacapeForm.value);
     //this.OFICIO = this.secondEuacapeForm.value
-    this.OFICIO = this.secondEuacapeForm.value.administracion;
-    console.log('voila')
+    this.OFICIO = this.euacapeForm.value.administracion;
     console.log(this.OFICIO);
   }
 
@@ -86,6 +77,10 @@ export class EuacapeFormComponent {
     this.modalService.openCustomDialogWithTemplate({
       template
     })
+  }
+
+  saveFirstEuacapePart(){
+    
   }
 
 }
