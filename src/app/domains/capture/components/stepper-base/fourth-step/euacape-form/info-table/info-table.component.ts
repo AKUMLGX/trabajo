@@ -20,6 +20,8 @@ export class InfoTableComponent {
 
   @Input({required: true}) OFICIO!: string;
 
+  oficio = this.OFICIO;
+
   constructor(){
     
     console.log(this.OFICIO);

@@ -28,7 +28,7 @@ import { InfoTableComponent } from './info-table/info-table.component';
 })
 export class EuacapeFormComponent {
 
-  OFICIO: any;
+  OFICIO = '';
 
   constructor(
     private fb: FormBuilder,
@@ -64,12 +64,15 @@ export class EuacapeFormComponent {
 
   saveFirstEuacapeForm(): void{
     console.log(this.firstEuacapeForm.value);
-    //this.OFICIO = this.firstEuacapeForm.value.oficio;
+    //console.log(this.OFICIO);
   }
 
   saveSecondEuacapeForm(): void {
     console.log(this.secondEuacapeForm.value);
-    this.OFICIO = this.secondEuacapeForm.value
+    //this.OFICIO = this.secondEuacapeForm.value
+    this.OFICIO = this.secondEuacapeForm.value.administracion;
+    console.log('voila')
+    console.log(this.OFICIO);
   }
 
   openCustomModal() {
