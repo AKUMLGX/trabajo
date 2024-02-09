@@ -1,6 +1,7 @@
 export const environment = {
-  baseUrl: 'http://localhost:8080/akamba/api/v1/',
+  baseUrl: 'http://127.0.0.1:8090/akamba/api/v1/',
   oauthParametersEndpoint: 'login/get_oauth_parameters',
   tokenValidationEndpoint: 'login/token_validation',
-  getPdfEndpoint: 'http://localhost:8080/getPdf'
+  asuntoHistoricoEndpoint: 'asunto_historico/',
+  getPdfEndpoint: 'http://127.0.0.1:8090/getPdf',
 };

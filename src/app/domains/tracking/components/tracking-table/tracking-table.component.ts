@@ -4,11 +4,12 @@ import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
 import { FileService } from '../../../services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [PdfViewerModule],
+  imports: [PdfViewerModule, MatIcon],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
@@ -41,6 +42,7 @@ export class TrackingTableComponent {
           page = [];
         }
       });
+      console.log(documents);
     });
   }
 

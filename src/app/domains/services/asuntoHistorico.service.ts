@@ -2,28 +2,39 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { AsuntoHistorico } from '../interfaces/asuntos.interfaces';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AsuntoHistoricoService {
-
   public documentList: AsuntoHistorico[] = [];
 
   documentsUpdated: EventEmitter<AsuntoHistorico[]> = new EventEmitter();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
-
-  filterDocuments(): void {
-    this.httpClient.get<AsuntoHistorico[]>(environment.baseUrl + 'asunto_historico/?folio_interno=Folio%20EUACAPE%20&carpeta_investigacion=Carpeta%20Investigacion%20')
-      .subscribe(data => {
-        this.documentList = data;
-        this.documentsUpdated.emit(this.documentList);
-      });
-      
+  filterDocuments(consultForm: FormGroup): void {
+    let folioInterno = consultForm.get('folioInterno')?.value;
+    let carpetaInvertigacion = consultForm.get('carpetaInvertigacion')?.value;
+    let oficio = consultForm.get('oficio')?.value;
+    let autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
+    let personaRelaciona = consultForm.get('personaRelaciona')?.value;
+    let url = environment.baseUrl + 
+      environment.asuntoHistoricoEndpoint +
+      '?folio_interno=' +
+      folioInterno +
+      '&carpeta_investigacion=' +
+      carpetaInvertigacion +
+      '&oficio=' +
+      oficio +
+      '&autoridad_remitente=' +
+      autoridadRemitente +
+      '&persona_relacionada=' +
+      personaRelaciona;
+    this.httpClient.get<AsuntoHistorico[]>(url).subscribe((data) => {
+      this.documentList = data;
+      this.documentsUpdated.emit(this.documentList);
+    });
   }
-
-
 }
-

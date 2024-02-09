@@ -13,12 +13,12 @@
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
-                  {{ "ID Asunto historico" }}
+                  {{ "PDF" }}
                 </th>
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
-                  {{ "Documento" }}
+                  {{ "ID Asunto historico" }}
                 </th>
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
@@ -229,15 +229,25 @@
               @for (document of pages[pageSelected]; track $index) {
               <tr>
                 <td
+                  class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5"
+                >
+                  <div>
+                    <button
+                      mat-button
+                      (click)="openPdfViewer()"
+                      class="text-wine leading-5"
+                    >
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                  </div>
+                </td>
+                <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
                     {{ documents[$index].id_asunto_historico }}
                   </div>
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
-                  <button (click)="openPdfViewer()" class="px-5 py-2 border-wine border text-wine rounded transition duration-300 hover:bg-wine hover:text-white focus:outline-none">Ver Documento</button>
-              </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >

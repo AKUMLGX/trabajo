@@ -1,8 +1,21 @@
-
-<div class="flex justify-center items-center mt-4">
-<pdf-viewer [src]="pdfUrl"
-              [render-text]="true"
-              [original-size]="false"
-              style="width: 80%; height: 90vh"
-  ></pdf-viewer>
-</div>
+<div class="flex justify-center items-center text-3xl mt-2">Visualizador</div>
+<section class="py-1 bg-white">
+  <div class="w-full lg:w-12/12 mx-auto mt-2 border-2 rounded-lg border-[#691C32] ">
+    <div
+      class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0"
+    >
+      <div
+        class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8"
+      >
+        <div class="flex justify-center items-center mt-4">
+          <pdf-viewer
+            [src]="pdfUrl"
+            [render-text]="true"
+            [original-size]="false"
+            style="width: 80%; height: 80vh"
+          ></pdf-viewer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

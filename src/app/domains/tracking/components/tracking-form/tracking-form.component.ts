@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
 
@@ -12,12 +12,12 @@ import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.servic
 })
 export class TrackingFormComponent {
   public consultForm: FormGroup = this.fb.group({
-    folioInterno: [''],
-    carpetaInvertigacion: [''],
-    oficio: [''],
-    autoridadRemitente: [''],
-    personaRelaciona: [''],
-    alcande: ['']
+    folioInterno: new FormControl(''),
+    carpetaInvertigacion: new FormControl(''),
+    oficio: new FormControl(''),
+    autoridadRemitente: new FormControl(''),
+    personaRelaciona: new FormControl(''),
+    alcance: new FormControl('')
   });
 
   constructor(
@@ -26,6 +26,6 @@ export class TrackingFormComponent {
   ) { }
 
   onSave(): void {
-    this.asuntoNuevoService.filterDocuments();
+    this.asuntoNuevoService.filterDocuments(this.consultForm);
   }
 }
