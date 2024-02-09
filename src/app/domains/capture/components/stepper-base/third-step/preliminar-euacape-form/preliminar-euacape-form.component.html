@@ -1,0 +1,68 @@
+<section class=" py-1 bg-white">
+    <div class="w-full lg:w-12/12 mx-auto mt-2">
+        <div
+            class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
+            <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
+                <form [formGroup]="preliminarEuacapeForm" (ngSubmit)="savePreliminarEuacapeForm()">
+                    <div class="flex flex-wrap">
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Oficio
+                                </label>
+                                <input 
+                                    type="text" placeholder="Oficio"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="oficio" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Turno jefatura
+                                </label>
+                                <input type="text" placeholder="Turno jefatura"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="turnoJefatura" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Folio interno
+                                </label>
+                                <input type="text" placeholder="Folio interno"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="folioInterno" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Folio scanner
+                                </label>
+                                <input type="text" placeholder=" Folio scanner"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="folioScanner" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button
+                                matStepperNext
+                                class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                >
+                                Enviar
+                            </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
