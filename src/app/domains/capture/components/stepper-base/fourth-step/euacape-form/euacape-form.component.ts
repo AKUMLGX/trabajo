@@ -9,12 +9,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import {MatTableModule} from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-
-export interface EuacapeTableBeforeSubmit {
-  name: string;
-  position: number;
-  answer: string | null;
-}
+import { InfoTableComponent } from './info-table/info-table.component';
 
 @Component({
   selector: 'app-euacape-form',
@@ -26,11 +21,14 @@ export interface EuacapeTableBeforeSubmit {
     MatTableModule,
     MatDialogModule,
     CommonModule,
+    InfoTableComponent
   ],
   templateUrl: './euacape-form.component.html',
   styleUrl: './euacape-form.component.css'
 })
 export class EuacapeFormComponent {
+
+  OFICIO: any;
 
   constructor(
     private fb: FormBuilder,
@@ -40,9 +38,6 @@ export class EuacapeFormComponent {
   }
 
   @Input({required: true}) isEuacapeSecondPartEnabled!: boolean;
-
-  
-  OFICIO = '';
 
   public firstEuacapeForm: FormGroup = this.fb.group({
     oficio: [''],
@@ -69,12 +64,12 @@ export class EuacapeFormComponent {
 
   saveFirstEuacapeForm(): void{
     console.log(this.firstEuacapeForm.value);
-    console.log(this.OFICIO);
-    alert(`Input field value ${this.OFICIO}`);
+    //this.OFICIO = this.firstEuacapeForm.value.oficio;
   }
 
   saveSecondEuacapeForm(): void {
     console.log(this.secondEuacapeForm.value);
+    this.OFICIO = this.secondEuacapeForm.value
   }
 
   openCustomModal() {
@@ -89,28 +84,5 @@ export class EuacapeFormComponent {
       template
     })
   }
-
-  ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
-    {position: 1, name: 'Oficio', answer: this.OFICIO},
-    {position: 2, name: 'Administración', answer: ''},
-    {position: 3, name: 'Fecha de recepción', answer: ''},
-    {position: 4, name: 'Documentos escaneados', answer: ''},
-    {position: 5, name: 'Atención', answer: ''},
-    {position: 6, name: 'Descripción', answer: ''},
-    {position: 7, name: 'Tipo de respuesta', answer: ''},
-    {position: 8, name: 'Autoridad solicitante', answer: ''},
-    {position: 9, name: 'Turno jefatura', answer: ''},
-    {position: 10, name: 'Respuesta', answer: ''},
-    {position: 11, name: ' Acuse', answer: ''},
-    {position: 12, name: 'Folio interno', answer: ''},
-    {position: 13, name: 'Carpeta de investigación', answer: ''},
-    {position: 14, name: 'Persona relacionada', answer: ''},
-    {position: 15, name: 'Folio scanner', answer: ''},
-    {position: 16, name: 'Tipo asunto', answer: ''},
-    {position: 17, name: 'Plazo de atención', answer: ''},
-  ];
-
-  displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
-  dataSource = this.ELEMENT_DATA;
 
 }

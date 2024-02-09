@@ -250,40 +250,6 @@
 }
 
 <ng-template #template1>
-    <div>
-        <h2 mat-dialog-title>
-            <h1>
-                ¿Está seguro que desea enviar la siguiente información?
-            </h1>
-        </h2>
-        <mat-dialog-content>
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
-                <!-- Position Column -->
-                <ng-container matColumnDef="demo-position">
-                  <th mat-header-cell *matHeaderCellDef> No. </th>
-                  <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                </ng-container>
-              
-                <!-- Name Column -->
-                <ng-container matColumnDef="demo-name">
-                  <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-              
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="demo-answer">
-                  <th mat-header-cell *matHeaderCellDef> Respuesta </th>
-                  <td mat-cell *matCellDef="let element"> {{element.answer}} </td>
-                </ng-container>
-              
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
-        </mat-dialog-content>
-        <mat-dialog-actions>
-            <button mat-button mat-dialog-close>Close</button>
-        </mat-dialog-actions>
-    </div>
-    
+    <app-info-table [OFICIO]="OFICIO" />
 </ng-template>
 
