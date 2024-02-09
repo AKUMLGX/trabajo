@@ -6,6 +6,7 @@ import { CapturePageComponent } from './domains/capture/pages/capture-page/captu
 import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tracking-page.component';
 import { ReportsPageComponent } from './domains/reports/pages/reports-page/reports-page.component';
 import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
+import { TramitePageComponent } from './domains/assistance/pages/tramite-page/tramite-page.component';
 
 export const routes: Routes = [
     {
@@ -22,7 +23,11 @@ export const routes: Routes = [
             },
             {
                 path: 'assistance',
-                component: AssistancePageComponent
+                component: AssistancePageComponent,
+            },
+            {
+              path: "tramite-card",
+              component: TramitePageComponent,
             },
             {
                 path: 'tracking',
