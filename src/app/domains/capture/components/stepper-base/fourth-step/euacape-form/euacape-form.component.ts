@@ -28,7 +28,7 @@ import { InfoTableComponent } from './info-table/info-table.component';
 })
 export class EuacapeFormComponent {
 
-  OFICIO: any;
+  OFICIO = '';
 
   constructor(
     private fb: FormBuilder,
@@ -39,14 +39,11 @@ export class EuacapeFormComponent {
 
   @Input({required: true}) isEuacapeSecondPartEnabled!: boolean;
 
-  public firstEuacapeForm: FormGroup = this.fb.group({
+  public euacapeForm: FormGroup = this.fb.group({
     oficio: [''],
     turnoJefatura: [''],
     folioInterno: [''],
     folioScanner: [''],
-  });
-
-  public secondEuacapeForm: FormGroup = this.fb.group({
     administracion: [''],
     fechaRecepcion: [''],
     documentosEscaneados: [''],
@@ -62,14 +59,11 @@ export class EuacapeFormComponent {
     plazoAtencion: [''],
   });
 
-  saveFirstEuacapeForm(): void{
-    console.log(this.firstEuacapeForm.value);
-    //this.OFICIO = this.firstEuacapeForm.value.oficio;
-  }
-
-  saveSecondEuacapeForm(): void {
-    console.log(this.secondEuacapeForm.value);
-    this.OFICIO = this.secondEuacapeForm.value
+  saveEuacapeForm(): void {
+    console.log(this.euacapeForm.value);
+    //this.OFICIO = this.secondEuacapeForm.value
+    this.OFICIO = this.euacapeForm.value.administracion;
+    console.log(this.OFICIO);
   }
 
   openCustomModal() {
@@ -83,6 +77,10 @@ export class EuacapeFormComponent {
     this.modalService.openCustomDialogWithTemplate({
       template
     })
+  }
+
+  saveFirstEuacapePart(){
+    
   }
 
 }

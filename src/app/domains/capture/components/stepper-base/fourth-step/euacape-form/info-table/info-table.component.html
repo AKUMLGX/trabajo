@@ -5,7 +5,99 @@
             </h1>
         </h2>
         <mat-dialog-content>
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+          <table>
+            <tr>
+              <th>No.</th>
+              <th>Nombre</th>
+              <th>Respuesta</th>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Oficio</td>
+              <td>{{ OFICIO }}</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Administración</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Fecha de recepción</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Documentos escaneados</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Atención</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Descripción</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Tipo de respuesta</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Autoridad solicitante</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Turno jefatura</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Respuesta</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>Acuse</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Folio interno</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>Carpeta de investigación</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>Persona relacionada</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>Folio scanner</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>Tipo asunto</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td>Plazo de atención</td>
+              <td></td>
+            </tr>
+          </table>
+            <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
 
                 <ng-container matColumnDef="demo-position">
                   <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -18,13 +110,14 @@
                 </ng-container>
             
                 <ng-container matColumnDef="demo-answer">
-                  <th mat-header-cell *matHeaderCellDef> Respuesta </th>
+                  <th mat-header-cell *matHeaderCellDef> {{ OFICIO }} </th>
                   <td mat-cell *matCellDef="let element"> {{element.answer}} </td>
                 </ng-container>
               
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
+              </table> -->
+
         </mat-dialog-content>
         <mat-dialog-actions>
             <button mat-button mat-dialog-close>Close</button>
