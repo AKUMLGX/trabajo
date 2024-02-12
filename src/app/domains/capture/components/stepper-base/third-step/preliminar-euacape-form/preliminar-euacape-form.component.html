@@ -53,16 +53,25 @@
                     </div>
                     <br>
                     <button
-                                matStepperNext
-                                class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                                >
-                                Enviar
-                            </button>
+                        matStepperNext
+                        class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                        >
+                        Continuar
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 </section>
+
+<ng-template>
+    <app-euacape-form 
+        [OFICIO]="OFICIO" 
+        [TURNOJEFATURA]="TURNOJEFATURA"
+        [FOLIOINT]="FOLIOINT"
+        [FOLIOSCAN]="FOLIOSCAN"
+        />
+</ng-template>
 
 
 

@@ -1,0 +1,187 @@
+<section class=" py-1 bg-white">
+    <div class="w-full lg:w-12/12 mx-auto mt-2">
+        <div
+            class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
+            <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
+                <form [formGroup]="euacapeForm" (ngSubmit)="saveEuacapeForm()">
+                    <div class="flex flex-wrap">
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Administración
+                                </label>
+                                <input type="text" placeholder="Administración"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="administracion" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Fecha de recepción
+                                </label>
+                                <input type="text" placeholder="Fecha de recepción"
+                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="fechaRecepcion" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Documentos escaneados
+                                </label>
+                                <input type="text" placeholder="Documentos escaneados"
+                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
+                                    formControlName="documentosEscaneados" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Atención
+                                </label>
+                                <select id="atencion"
+                                        formControlName="atencion"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled >Elija una atención</option>
+                                    <option value="Requerimiento">Requerimiento</option>
+                                    <option value="Respuesta">Respuesta</option>
+                                </select> 
+                            </div> 
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Descripción
+                                </label>
+                                <input type="text" placeholder="Descripción"
+                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
+                                    formControlName="descripcion" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Tipo de respuesta
+                                </label>
+                                <select id="tipoRespuesta" 
+                                        formControlName="tipoRespuesta"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
+                                    <option value="Total">Total</option>
+                                    <option value="Parcial">Parcial</option>
+                                    <option value="En trámite">En trámite</option>
+                                </select> 
+                            </div> 
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Autoridad solicitante
+                                </label>
+                                <input type="text" placeholder="Autoridad solicitante"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="autoridadSolicitante" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Respuesta
+                                </label>
+                                <select id="respuesta" 
+                                        formControlName="respuesta"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled>Elija una respuesta</option>
+                                    <option value="Verdadero">Verdadero</option>
+                                    <option value="Falso">Falso</option>
+                                </select> 
+                            </div> 
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Acuse
+                                </label>
+                                <select id="acuse" 
+                                        formControlName="acuse"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="null" disabled>Elija un acuse</option>
+                                    <option value="Verdadero">Verdadero</option>
+                                    <option value="Falso">Falso</option>
+                                </select> 
+                            </div> 
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Carpeta de investigación
+                                </label>
+                                <input type="text" placeholder="Carpeta de investigación"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="carpetaInvestigacion" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Persona relacionada
+                                </label>
+                                <input type="text" placeholder="Persona relacionada"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="personaRelacionada" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Tipo asunto
+                                </label>
+                                <input type="text" placeholder="Tipo asunto"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="tipoAsunto" value="">
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlfor="grid-password">
+                                    Plazo de atención
+                                </label>
+                                <input type="text" placeholder="Plazo de atención"
+                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                                    formControlName="plazoAtencion" value="">
+                            </div>
+                        </div>      
+                    </div>
+                    <br>
+                    <button
+                        (click)="openCustomModalWithTemplate(template1)"
+                        class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                        type="submit"
+                        >
+                        Enviar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<ng-template #template1>
+    <app-info-table 
+        
+    /> 
+</ng-template>

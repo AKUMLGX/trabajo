@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
+import { PreliminarEuacapeService } from '../../../../../../../shared/services/preliminar-euacape.service';
 
 export interface EuacapeTableBeforeSubmit {
   name: string;
   position: number;
   answer: string | null;
 }
-
 
 @Component({
   selector: 'app-info-table',
@@ -18,18 +18,24 @@ export interface EuacapeTableBeforeSubmit {
 })
 export class InfoTableComponent {
 
-  @Input({required: true}) OFICIO!: string;
-
-  oficio = this.OFICIO;
-
-  constructor(){
-    
-    console.log(this.OFICIO);
+  constructor(
+    private preliminarEuacapeService: PreliminarEuacapeService,
+  ){
 
   }
 
+  OFICIO = this.preliminarEuacapeService.OFICIO;
+  TURNOJEFATURA = this.preliminarEuacapeService.TURNOJEFATURA;
+  FOLIOINTERNO = this.preliminarEuacapeService.FOLIOINT;
+  FOLIOSCANNER = this.preliminarEuacapeService.FOLIOSCAN;
+
+    // @Input({required: true}) OFICIO!: string;
+    // @Input({required: true}) TURNOJEFATURA!: string;
+    // @Input({required: true}) FOLIOINT!: string;
+    // @Input({required: true}) FOLIOSCAN!: string;
+
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
-    {position: 1, name: 'Oficio', answer: this.OFICIO},
+    {position: 1, name: 'Oficio', answer: ''},
     {position: 2, name: 'Administración', answer: ''},
     {position: 3, name: 'Fecha de recepción', answer: ''},
     {position: 4, name: 'Documentos escaneados', answer: ''},
@@ -39,7 +45,7 @@ export class InfoTableComponent {
     {position: 8, name: 'Autoridad solicitante', answer: ''},
     {position: 9, name: 'Turno jefatura', answer: ''},
     {position: 10, name: 'Respuesta', answer: ''},
-    {position: 11, name: 'Acuse', answer: ''},
+    {position: 11, name: ' Acuse', answer: ''},
     {position: 12, name: 'Folio interno', answer: ''},
     {position: 13, name: 'Carpeta de investigación', answer: ''},
     {position: 14, name: 'Persona relacionada', answer: ''},
