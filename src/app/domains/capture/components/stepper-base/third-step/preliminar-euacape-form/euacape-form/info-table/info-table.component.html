@@ -1,7 +1,7 @@
 <div>
     <h2 mat-dialog-title>
         <h1>
-            ¿Está seguro que desea enviar la siguiente información?
+            Se enviará la siguiente información
         </h1>
     </h2>
     <mat-dialog-content>
@@ -112,4 +112,18 @@
     <mat-dialog-actions>
         <button mat-button mat-dialog-close>Close</button>
     </mat-dialog-actions>
+    <button (click)="confirmData(
+      FOLIOINTERNO(), 
+      FOLIOSCANNER(), 
+      OFICIO(), 
+      DOCSSCAN, 
+      PERSONAREL, 
+      DESCRIPCION, 
+      FECHAREC, 
+      AUTORIDADSOLIC, 
+      PLAZOATENCION, 
+      ADMON
+    )" >
+      Confirmar
+    </button>
 </div>

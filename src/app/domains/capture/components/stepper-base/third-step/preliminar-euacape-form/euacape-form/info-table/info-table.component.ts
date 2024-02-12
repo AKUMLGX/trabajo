@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
 import { PreliminarEuacapeService } from '../../../../../../../shared/services/preliminar-euacape.service';
+import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 
 export interface EuacapeTableBeforeSubmit {
   name: string;
@@ -38,7 +39,10 @@ export class InfoTableComponent {
   TURNOJEFATURA = this.preliminarEuacapeService.TURNOJEFATURA;
   FOLIOINTERNO = this.preliminarEuacapeService.FOLIOINT;
   FOLIOSCANNER = this.preliminarEuacapeService.FOLIOSCAN;
-    
+
+  //infoObject: {};
+  euacapeFnStructure: EuacapeApertura[] = [];
+
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: ''},
     {position: 2, name: 'Administración', answer: ''},
@@ -59,5 +63,34 @@ export class InfoTableComponent {
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
   dataSource = this.ELEMENT_DATA;
+
+  confirmData(
+    folioInterno: string,
+    folioScanner: string,
+    oficio: string,
+    documentoEscaneado: string,
+    personaRelacionada: string,
+    descripcion: string,
+    fechaRecepcion: string,
+    autoridadSolicitante: string,
+    plazoAtencion: string,
+    administracion: string,
+  ){
+    this.euacapeFnStructure = [
+      {
+        folio_interno: folioInterno,
+        folio_scanner: folioScanner,
+        oficio: oficio,
+        documento_escaneado: documentoEscaneado,
+        persona_relacionada: personaRelacionada,
+        descripcion: descripcion,
+        fecha_recepcion: fechaRecepcion,
+        autoridad_solicitante: autoridadSolicitante,
+        plazo_atencion: plazoAtencion,
+        administracion: administracion,
+      }
+    ]
+    console.log(this.euacapeFnStructure);
+  }
 
 }
