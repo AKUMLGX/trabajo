@@ -29,8 +29,6 @@ export class InfoTableComponent {
   @Input({required: true}) DESCRIPCION!: string;
   @Input({required: true}) TIPORES!: string;
   @Input({required: true}) AUTORIDADSOLIC!: string;
-  @Input({required: true}) RES!: string;
-  @Input({required: true}) ACUSE!: string;
   @Input({required: true}) CARPETAINV!: string;
   @Input({required: true}) PERSONAREL!: string;
   @Input({required: true}) TIPOASUNTO!: string;
@@ -51,14 +49,12 @@ export class InfoTableComponent {
     {position: 7, name: 'Tipo de respuesta', answer: ''},
     {position: 8, name: 'Autoridad solicitante', answer: ''},
     {position: 9, name: 'Turno jefatura', answer: ''},
-    {position: 10, name: 'Respuesta', answer: ''},
-    {position: 11, name: ' Acuse', answer: ''},
-    {position: 12, name: 'Folio interno', answer: ''},
-    {position: 13, name: 'Carpeta de investigación', answer: ''},
-    {position: 14, name: 'Persona relacionada', answer: ''},
-    {position: 15, name: 'Folio scanner', answer: ''},
-    {position: 16, name: 'Tipo asunto', answer: ''},
-    {position: 17, name: 'Plazo de atención', answer: ''},
+    {position: 10, name: 'Folio interno', answer: ''},
+    {position: 11, name: 'Carpeta de investigación', answer: ''},
+    {position: 12, name: 'Persona relacionada', answer: ''},
+    {position: 13, name: 'Folio scanner', answer: ''},
+    {position: 14, name: 'Tipo asunto', answer: ''},
+    {position: 15, name: 'Plazo de atención', answer: ''},
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];

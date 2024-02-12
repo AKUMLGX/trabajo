@@ -33,6 +33,8 @@ export class EuacapeFormComponent {
     private modalService: ModalService,
     ){}
 
+    isApertura: boolean = true;
+
     ADMON = '';
     FECHAREC = '';
     DOCSSCAN = '';
@@ -40,8 +42,6 @@ export class EuacapeFormComponent {
     DESCRIPCION = '';
     TIPORES = '';
     AUTORIDADSOLIC = '';
-    RES = '';
-    ACUSE = '';
     CARPETAINV = '';
     PERSONAREL = '';
     TIPOASUNTO = '';
@@ -55,8 +55,6 @@ export class EuacapeFormComponent {
       descripcion: [''],
       tipoRespuesta: [null],
       autoridadSolicitante: [''],
-      respuesta: [null],
-      acuse: [null],
       carpetaInvestigacion: [''],
       personaRelacionada: [''],
       tipoAsunto: [''],
@@ -75,8 +73,6 @@ export class EuacapeFormComponent {
       this.DESCRIPCION = this.euacapeForm.value.descripcion;
       this.TIPORES = this.euacapeForm.value.tipoRespuesta;
       this.AUTORIDADSOLIC = this.euacapeForm.value.autoridadSolicitante;
-      this.RES = this.euacapeForm.value.respuesta;
-      this.ACUSE = this.euacapeForm.value.acuse;
       this.CARPETAINV = this.euacapeForm.value.carpetaInvestigacion;
       this.PERSONAREL = this.euacapeForm.value.personaRelacionada;
       this.TIPOASUNTO = this.euacapeForm.value.tipoAsunto;

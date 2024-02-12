@@ -70,16 +70,26 @@
                                     htmlfor="grid-password">
                                     Tipo de respuesta
                                 </label>
-                                <select id="tipoRespuesta" 
-                                        formControlName="tipoRespuesta"
-                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                    <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
-                                    <option value="Total">Total</option>
-                                    <option value="Parcial">Parcial</option>
+                                @if(isApertura){
+                                    <div class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150">
+                                        <div>
+                                            En trámite
+                                        </div>                                        
+                                    </div>
+                                } @else {
+                                    <select 
+                                            id="tipoRespuesta" 
+                                            formControlName="tipoRespuesta"
+                                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
+                                        <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
+                                        <option value="Total">Total</option>
+                                        <option value="Parcial">Parcial</option>
                                     <option value="En trámite">En trámite</option>
-                                </select> 
+                                    </select> 
+                                }
                             </div> 
                         </div>
+                        
                         <div class="w-full lg:w-6/12 px-4">
                             <div class="relative w-full mb-3">
                                 <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -90,36 +100,6 @@
                                     class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                                     formControlName="autoridadSolicitante" value="">
                             </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Respuesta
-                                </label>
-                                <select id="respuesta" 
-                                        formControlName="respuesta"
-                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                    <option [ngValue]="null" disabled>Elija una respuesta</option>
-                                    <option value="Verdadero">Verdadero</option>
-                                    <option value="Falso">Falso</option>
-                                </select> 
-                            </div> 
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Acuse
-                                </label>
-                                <select id="acuse" 
-                                        formControlName="acuse"
-                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                    <option [ngValue]="null" disabled>Elija un acuse</option>
-                                    <option value="Verdadero">Verdadero</option>
-                                    <option value="Falso">Falso</option>
-                                </select> 
-                            </div> 
                         </div>
                         <div class="w-full lg:w-6/12 px-4">
                             <div class="relative w-full mb-3">
@@ -189,8 +169,6 @@
         [DESCRIPCION]="DESCRIPCION"
         [TIPORES]="TIPORES"
         [AUTORIDADSOLIC]="AUTORIDADSOLIC"
-        [RES]="RES"
-        [ACUSE]="ACUSE"
         [CARPETAINV]="CARPETAINV"
         [PERSONAREL]="PERSONAREL"
         [TIPOASUNTO]="TIPOASUNTO"
