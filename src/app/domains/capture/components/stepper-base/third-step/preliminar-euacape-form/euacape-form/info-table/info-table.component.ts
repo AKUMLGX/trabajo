@@ -20,20 +20,27 @@ export class InfoTableComponent {
 
   constructor(
     private preliminarEuacapeService: PreliminarEuacapeService,
-  ){
+  ){ }
 
-  }
+  @Input({required: true}) ADMON!: string;
+  @Input({required: true}) FECHAREC!: string;
+  @Input({required: true}) DOCSSCAN!: string;
+  @Input({required: true}) ATENCION!: string;
+  @Input({required: true}) DESCRIPCION!: string;
+  @Input({required: true}) TIPORES!: string;
+  @Input({required: true}) AUTORIDADSOLIC!: string;
+  @Input({required: true}) RES!: string;
+  @Input({required: true}) ACUSE!: string;
+  @Input({required: true}) CARPETAINV!: string;
+  @Input({required: true}) PERSONAREL!: string;
+  @Input({required: true}) TIPOASUNTO!: string;
+  @Input({required: true}) PLAZOATENCION!: string;
 
   OFICIO = this.preliminarEuacapeService.OFICIO;
   TURNOJEFATURA = this.preliminarEuacapeService.TURNOJEFATURA;
   FOLIOINTERNO = this.preliminarEuacapeService.FOLIOINT;
   FOLIOSCANNER = this.preliminarEuacapeService.FOLIOSCAN;
-
-    // @Input({required: true}) OFICIO!: string;
-    // @Input({required: true}) TURNOJEFATURA!: string;
-    // @Input({required: true}) FOLIOINT!: string;
-    // @Input({required: true}) FOLIOSCAN!: string;
-
+    
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: ''},
     {position: 2, name: 'Administración', answer: ''},

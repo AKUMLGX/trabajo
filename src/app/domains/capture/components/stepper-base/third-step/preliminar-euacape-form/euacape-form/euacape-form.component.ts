@@ -33,10 +33,19 @@ export class EuacapeFormComponent {
     private modalService: ModalService,
     ){}
 
-    @Input() OFICIO: string = '';
-    @Input() TURNOJEFATURA: string = '';
-    @Input() FOLIOINT: string = '';
-    @Input() FOLIOSCAN: string = '';
+    ADMON = '';
+    FECHAREC = '';
+    DOCSSCAN = '';
+    ATENCION = '';
+    DESCRIPCION = '';
+    TIPORES = '';
+    AUTORIDADSOLIC = '';
+    RES = '';
+    ACUSE = '';
+    CARPETAINV = '';
+    PERSONAREL = '';
+    TIPOASUNTO = '';
+    PLAZOATENCION = '';
 
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [''],
@@ -59,6 +68,19 @@ export class EuacapeFormComponent {
       //this.OFICIO = this.secondEuacapeForm.value
       //this.OFICIO = this.euacapeForm.value.administracion;
       //console.log(this.OFICIO);
+      this.ADMON = this.euacapeForm.value.administracion;
+      this.FECHAREC = this.euacapeForm.value.fechaRecepcion;
+      this.DOCSSCAN = this.euacapeForm.value.documentosEscaneados;
+      this.ATENCION = this.euacapeForm.value.atencion;
+      this.DESCRIPCION = this.euacapeForm.value.descripcion;
+      this.TIPORES = this.euacapeForm.value.tipoRespuesta;
+      this.AUTORIDADSOLIC = this.euacapeForm.value.autoridadSolicitante;
+      this.RES = this.euacapeForm.value.respuesta;
+      this.ACUSE = this.euacapeForm.value.acuse;
+      this.CARPETAINV = this.euacapeForm.value.carpetaInvestigacion;
+      this.PERSONAREL = this.euacapeForm.value.personaRelacionada;
+      this.TIPOASUNTO = this.euacapeForm.value.tipoAsunto;
+      this.PLAZOATENCION = this.euacapeForm.value.plazoAtencion;
     }
   
     openCustomModal() {

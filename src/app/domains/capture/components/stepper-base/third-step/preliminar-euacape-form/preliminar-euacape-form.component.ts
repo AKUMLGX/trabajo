@@ -27,14 +27,7 @@ export class PreliminarEuacapeFormComponent {
   constructor(
     private fb: FormBuilder,
     private preliminarEuacapeService : PreliminarEuacapeService,
-    ){
-    
-  }
-
-  OFICIO = '';
-  TURNOJEFATURA = '';
-  FOLIOINT = '';
-  FOLIOSCAN = '';
+    ){ }
 
   public preliminarEuacapeForm: FormGroup = this.fb.group({
     oficio: [''],
@@ -45,10 +38,6 @@ export class PreliminarEuacapeFormComponent {
 
   savePreliminarEuacapeForm(): void {
     console.log(this.preliminarEuacapeForm.value);
-    // this.OFICIO = this.preliminarEuacapeForm.value.oficio;
-    // this.TURNOJEFATURA = this.preliminarEuacapeForm.value.turnoJefatura;
-    // this.FOLIOINT = this.preliminarEuacapeForm.value.folioInterno;
-    // this.FOLIOSCAN = this.preliminarEuacapeForm.value.folioScanner;
     this.preliminarEuacapeService.updateOficio(this.preliminarEuacapeForm.value.oficio);
     this.preliminarEuacapeService.updateTurnoJefatura(this.preliminarEuacapeForm.value.turnoJefatura);
     this.preliminarEuacapeService.updateFolioInterno(this.preliminarEuacapeForm.value.folioInterno);
