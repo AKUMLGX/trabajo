@@ -33,7 +33,7 @@ export class EuacapeFormComponent {
     private modalService: ModalService,
     ){}
 
-    isApertura: boolean = true;
+    isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
 
     ADMON = '';
     FECHAREC = '';
@@ -69,9 +69,9 @@ export class EuacapeFormComponent {
       this.ADMON = this.euacapeForm.value.administracion;
       this.FECHAREC = this.euacapeForm.value.fechaRecepcion;
       this.DOCSSCAN = this.euacapeForm.value.documentosEscaneados;
-      this.ATENCION = this.euacapeForm.value.atencion;
+      this.ATENCION = this.isApertura ? 'Requerimiento' : this.euacapeForm.value.atencion;
       this.DESCRIPCION = this.euacapeForm.value.descripcion;
-      this.TIPORES = this.euacapeForm.value.tipoRespuesta;
+      this.TIPORES = this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta;
       this.AUTORIDADSOLIC = this.euacapeForm.value.autoridadSolicitante;
       this.CARPETAINV = this.euacapeForm.value.carpetaInvestigacion;
       this.PERSONAREL = this.euacapeForm.value.personaRelacionada;
