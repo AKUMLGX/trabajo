@@ -5,155 +5,127 @@
             <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
                 <form [formGroup]="euacapeForm" (ngSubmit)="saveEuacapeForm()">
                     <div class="flex flex-wrap">
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
                                     Administración
-                                </label>
-                                <input type="text" placeholder="Administración"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="administracion" value="">
-                            </div>
+                            </label>
+                            <input type="text" placeholder="Administración"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="administracion" value="">
                         </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
                                     Fecha de recepción
-                                </label>
-                                <input type="text" placeholder="Fecha de recepción"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="fechaRecepcion" value="">
-                            </div>
+                            </label>
+                            <input type="text" placeholder="Fecha de recepción"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="fechaRecepcion" value="">
                         </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
                                     Documentos escaneados
-                                </label>
-                                <input type="text" placeholder="Documentos escaneados"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    formControlName="documentosEscaneados" value="">
-                            </div>
+                            </label>
+                            <input type="text" placeholder="Documentos escaneados"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="documentosEscaneados" value="">
                         </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
                                     Atención
-                                </label>
-                                @if(isApertura){
-                                    <div class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150">
-                                        <div>
-                                            Requerimiento
-                                        </div>                                        
-                                    </div>
-                                } @else {
-                                    <select id="atencion"
-                                            formControlName="atencion"
-                                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                        <option [ngValue]="null" disabled >Elija una atención</option>
-                                        <option value="Requerimiento">Requerimiento</option>
-                                        <option value="Respuesta">Respuesta</option>
-                                    </select>     
-                                } 
-                            </div> 
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Descripción
-                                </label>
-                                <input type="text" placeholder="Descripción"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    formControlName="descripcion" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Tipo de respuesta
-                                </label>
-                                @if(isApertura){
-                                    <div class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150">
-                                        <div>
-                                            En trámite
-                                        </div>                                        
-                                    </div>
-                                } @else {
-                                    <select 
-                                            id="tipoRespuesta" 
-                                            formControlName="tipoRespuesta"
-                                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150">
-                                        <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
-                                        <option value="Total">Total</option>
-                                        <option value="Parcial">Parcial</option>
-                                    <option value="En trámite">En trámite</option>
-                                    </select> 
-                                }
-                            </div> 
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Autoridad solicitante
-                                </label>
-                                <input type="text" placeholder="Autoridad solicitante"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="autoridadSolicitante" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Carpeta de investigación
-                                </label>
-                                <input type="text" placeholder="Carpeta de investigación"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="carpetaInvestigacion" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Persona relacionada
-                                </label>
-                                <input type="text" placeholder="Persona relacionada"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="personaRelacionada" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Tipo asunto
-                                </label>
-                                <div class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150">
-                                    <div>
-                                        EUACAPE
-                                    </div>                                        
+                            </label>
+                            @if(isApertura){
+                                <div class="input-field placeholder-blueGray-300">
+                                    Requerimiento                                     
                                 </div>
-                            </div>
+                            } @else {
+                                <select id="atencion"
+                                        formControlName="atencion"
+                                        class="input-field">
+                                    <option [ngValue]="null" disabled >Elija una atención</option>
+                                    <option value="Requerimiento">Requerimiento</option>
+                                    <option value="Respuesta">Respuesta</option>
+                                </select>     
+                            }      
                         </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                    Descripción
+                            </label>
+                            <input type="text" placeholder="Descripción"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="descripcion" value="">
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                    Tipo de respuesta
+                            </label>
+                            @if(isApertura){
+                                <div class="input-field placeholder-blueGray-300">
+                                    En trámite                                      
+                                </div>
+                            } @else {
+                                <select 
+                                        id="tipoRespuesta" 
+                                        formControlName="tipoRespuesta"
+                                        class="input-field">
+                                    <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
+                                    <option value="Total">Total</option>
+                                    <option value="Parcial">Parcial</option>
+                                    <option value="En trámite">En trámite</option>
+                                </select> 
+                            } 
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                    Autoridad solicitante
+                            </label>
+                            <input type="text" placeholder="Autoridad solicitante"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="autoridadSolicitante" value="">
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                    Carpeta de investigación
+                            </label>
+                            <input type="text" placeholder="Carpeta de investigación"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="carpetaInvestigacion" value="">
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                    Persona relacionada
+                            </label>
+                            <input type="text" placeholder="Persona relacionada"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="personaRelacionada" value="">
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                    Tipo asunto
+                            </label>
+                                <div class="input-field placeholder-blueGray-300">
+                                    EUACAPE                                     
+                                </div>
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
                                     Plazo de atención
-                                </label>
-                                <input type="text" placeholder="Plazo de atención"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="plazoAtencion" value="">
-                            </div>
-                        </div>      
+                            </label>
+                            <input type="text" placeholder="Plazo de atención"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="plazoAtencion" value="">
+                        </div>     
                     </div>
                     <br>
                     <button
