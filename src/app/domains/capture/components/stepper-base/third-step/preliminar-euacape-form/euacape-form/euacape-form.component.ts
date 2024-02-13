@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, signal } from '@angular/core';
+import { Component, Input, Signal, TemplateRef, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../../shared/services/modal.service';
 import { FormBuilder, 
@@ -10,6 +10,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { InfoTableComponent } from './info-table/info-table.component';
+import { AsuntoChoiceService } from '../../../../../../shared/services/asunto-choice.service';
 
 @Component({
   selector: 'app-euacape-form',
@@ -31,6 +32,7 @@ export class EuacapeFormComponent {
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
+    private asuntoChoiceService: AsuntoChoiceService,
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
@@ -57,7 +59,6 @@ export class EuacapeFormComponent {
       autoridadSolicitante: [''],
       carpetaInvestigacion: [''],
       personaRelacionada: [''],
-      tipoAsunto: [''],
       plazoAtencion: [''],
     });
 
@@ -75,7 +76,7 @@ export class EuacapeFormComponent {
       this.AUTORIDADSOLIC = this.euacapeForm.value.autoridadSolicitante;
       this.CARPETAINV = this.euacapeForm.value.carpetaInvestigacion;
       this.PERSONAREL = this.euacapeForm.value.personaRelacionada;
-      this.TIPOASUNTO = this.euacapeForm.value.tipoAsunto;
+      this.TIPOASUNTO = this.asuntoChoiceService.asuntoUserChoice();
       this.PLAZOATENCION = this.euacapeForm.value.plazoAtencion;
     }
   
