@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
 import { PreliminarEuacapeService } from '../../../../../../../shared/services/preliminar-euacape.service';
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
+import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 
 export interface EuacapeTableBeforeSubmit {
   name: string;
@@ -21,6 +22,7 @@ export class InfoTableComponent {
 
   constructor(
     private preliminarEuacapeService: PreliminarEuacapeService,
+    private euacapeAperturaService: EuacapeAperturaService,
   ){ }
 
   @Input({required: true}) ADMON!: string;
@@ -41,7 +43,7 @@ export class InfoTableComponent {
   FOLIOSCANNER = this.preliminarEuacapeService.FOLIOSCAN;
 
   //infoObject: {};
-  euacapeFnStructure: EuacapeApertura[] = [];
+  euacapeForm = signal<EuacapeApertura[]>([]);
 
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: ''},
@@ -76,7 +78,7 @@ export class InfoTableComponent {
     plazoAtencion: string,
     administracion: string,
   ){
-    this.euacapeFnStructure = [
+    this.euacapeForm.update(prevState => [...prevState,
       {
         folio_interno: folioInterno,
         folio_scanner: folioScanner,
@@ -89,8 +91,9 @@ export class InfoTableComponent {
         plazo_atencion: plazoAtencion,
         administracion: administracion,
       }
-    ]
-    console.log(this.euacapeFnStructure);
+    ]);
+    console.log(this.euacapeForm());
+    //this.euacapeAperturaService.insertEuacapeForm(this.euacapeForm());
   }
 
 }

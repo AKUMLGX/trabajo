@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { AsuntoChoiceService } from '../../../../shared/services/asunto-choice.service';
 
 @Component({
   selector: 'app-second-step',
@@ -13,6 +14,12 @@ import { MatStepperModule } from '@angular/material/stepper';
   styleUrl: './second-step.component.css'
 })
 export class SecondStepComponent {
+
+  constructor(
+    private asuntoChoiceService: AsuntoChoiceService,
+  ){
+
+  }
 
   selectedOption: any;
 
@@ -32,7 +39,8 @@ export class SecondStepComponent {
   }
 
   proceedToStepTwoHandler(){
-    
+    console.log(this.selectedOption.name)
+    this.asuntoChoiceService.choiceFromDropdown(this.selectedOption.name);
   }
 
 }
