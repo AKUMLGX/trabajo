@@ -10,7 +10,6 @@ import {MatTableModule} from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { InfoTableComponent } from './info-table/info-table.component';
-import { AsuntoChoiceService } from '../../../../../../shared/services/asunto-choice.service';
 
 @Component({
   selector: 'app-euacape-form',
@@ -32,7 +31,6 @@ export class EuacapeFormComponent {
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
-    private asuntoChoiceService: AsuntoChoiceService,
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
@@ -44,9 +42,8 @@ export class EuacapeFormComponent {
     DESCRIPCION = '';
     TIPORES = '';
     AUTORIDADSOLIC = '';
-    CARPETAINV = '';
+    CARPETAINV = null;
     PERSONAREL = '';
-    TIPOASUNTO = '';
     PLAZOATENCION = '';
 
     public euacapeForm: FormGroup = this.fb.group({
@@ -76,16 +73,15 @@ export class EuacapeFormComponent {
       this.AUTORIDADSOLIC = this.euacapeForm.value.autoridadSolicitante;
       this.CARPETAINV = this.euacapeForm.value.carpetaInvestigacion;
       this.PERSONAREL = this.euacapeForm.value.personaRelacionada;
-      this.TIPOASUNTO = this.asuntoChoiceService.asuntoUserChoice();
       this.PLAZOATENCION = this.euacapeForm.value.plazoAtencion;
     }
   
-    openCustomModal() {
-      this.modalService.openCustomDialog({
-        title: 'Title for cutom dialog',
-        content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
-      });
-    }
+    // openCustomModal() {
+    //   this.modalService.openCustomDialog({
+    //     title: 'Title for cutom dialog',
+    //     content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
+    //   });
+    // }
   
     openCustomModalWithTemplate(template: TemplateRef<any>){
       this.modalService.openCustomDialogWithTemplate({

@@ -3,7 +3,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
 import { PreliminarEuacapeService } from '../../../../../../../shared/services/preliminar-euacape.service';
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
-import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 
 export interface EuacapeTableBeforeSubmit {
   name: string;
@@ -22,7 +21,6 @@ export class InfoTableComponent {
 
   constructor(
     private preliminarEuacapeService: PreliminarEuacapeService,
-    private euacapeAperturaService: EuacapeAperturaService,
   ){ }
 
   @Input({required: true}) ADMON!: string;
@@ -34,7 +32,6 @@ export class InfoTableComponent {
   @Input({required: true}) AUTORIDADSOLIC!: string;
   @Input({required: true}) CARPETAINV!: string | null;
   @Input({required: true}) PERSONAREL!: string;
-  @Input({required: true}) TIPOASUNTO!: string;
   @Input({required: true}) PLAZOATENCION!: string;
 
   OFICIO = this.preliminarEuacapeService.OFICIO;

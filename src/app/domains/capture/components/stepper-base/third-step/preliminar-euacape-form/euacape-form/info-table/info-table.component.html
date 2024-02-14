@@ -54,35 +54,35 @@
         <tr>
           <td>9</td>
           <td>Turno jefatura</td>
-          <td>{{TURNOJEFATURA()}}</td>
+          <td>{{ (TURNOJEFATURA() !== null) ? TURNOJEFATURA() : '---' }}</td>
         </tr>
         <tr>
-          <td>12</td>
+          <td>10</td>
           <td>Folio interno</td>
           <td>{{FOLIOINTERNO()}}</td>
         </tr>
         <tr>
-          <td>13</td>
+          <td>11</td>
           <td>Carpeta de investigación</td>
-          <td>{{CARPETAINV}}</td>
+          <td>{{ (CARPETAINV !== null) ? CARPETAINV : '---' }}</td>
         </tr>
         <tr>
-          <td>14</td>
+          <td>12</td>
           <td>Persona relacionada</td>
           <td>{{PERSONAREL}}</td>
         </tr>
         <tr>
-          <td>15</td>
+          <td>13</td>
           <td>Folio scanner</td>
           <td>{{FOLIOSCANNER()}}</td>
         </tr>
         <tr>
-          <td>16</td>
+          <td>14</td>
           <td>Tipo asunto</td>
-          <td>{{TIPOASUNTO}}</td>
+          <td>EUACAPE</td>
         </tr>
         <tr>
-          <td>17</td>
+          <td>15</td>
           <td>Plazo de atención</td>
           <td>{{PLAZOATENCION}}</td>
         </tr>
