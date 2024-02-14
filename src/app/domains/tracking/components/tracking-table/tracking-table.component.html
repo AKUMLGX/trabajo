@@ -1,5 +1,6 @@
 @if (documents.length > 0) {
 <div class="flex justify-center items-center text-xl mt-2">Resultados</div>
+{{ tipoBusqueda }}
 <section class="py-1 bg-blueGray-50" id="sectionTable">
   <div class="w-full lg:w-12/12 mx-auto mt-2">
     <div
@@ -14,11 +15,6 @@
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "PDF" }}
-                </th>
-                <th
-                  class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                >
-                  {{ "ID Asunto historico" }}
                 </th>
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
@@ -45,21 +41,27 @@
                 >
                   {{ "Volante" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Descargo" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Tipo de Asunto" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Autor" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -75,42 +77,59 @@
                 >
                   {{ "Folio" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Administración" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Folio Jupiter" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Orden" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Fecha Recepción" }}
                 </th>
+                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
+                >
+                  {{ "Fecha Atención" }}
+                </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Documento Escaneado" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Atención" }}
                 </th>
-
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Descripción" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -121,6 +140,13 @@
                 >
                   {{ "Areas Pendientes" }}
                 </th>
+                } @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
+                >
+                  {{ "Area Pendiente" }}
+                </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -142,6 +168,8 @@
                 >
                   {{ "Plazo de Atención" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -182,12 +210,14 @@
                 >
                   {{ "Tipo" }}
                 </th>
-
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Unidad Administrativa de Autoridad" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -198,11 +228,14 @@
                 >
                   {{ "Fecha de Oficio" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Respuesta" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -223,6 +256,7 @@
                 >
                   {{ "Base de Captura de Administración" }}
                 </th>
+                }
               </tr>
             </thead>
             <tbody>
@@ -239,13 +273,6 @@
                     >
                       <mat-icon>remove_red_eye</mat-icon>
                     </button>
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].id_asunto_historico }}
                   </div>
                 </td>
                 <td
@@ -283,6 +310,8 @@
                     {{ documents[$index].volante }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -290,6 +319,7 @@
                     {{ documents[$index].descargo }}
                   </div>
                 </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -297,6 +327,8 @@
                     {{ documents[$index].tipo_asunto }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -304,6 +336,7 @@
                     {{ documents[$index].autor }}
                   </div>
                 </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -325,6 +358,8 @@
                     {{ documents[$index].folio }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -332,6 +367,7 @@
                     {{ documents[$index].administracion }}
                   </div>
                 </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -339,6 +375,8 @@
                     {{ documents[$index].folio_jupiter }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -346,6 +384,7 @@
                     {{ documents[$index].orden }}
                   </div>
                 </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -360,6 +399,8 @@
                     {{ documents[$index].documento_escaneado }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -367,6 +408,7 @@
                     {{ documents[$index].atencion }}
                   </div>
                 </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -374,6 +416,8 @@
                     {{ documents[$index].descripcion }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -388,6 +432,15 @@
                     {{ documents[$index].areas_pendientes }}
                   </div>
                 </td>
+                } @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ documents[$index].area_pendiente }}
+                  </div>
+                </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -416,6 +469,8 @@
                     {{ documents[$index].plazo_atencion }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -472,6 +527,7 @@
                     {{ documents[$index].tipo }}
                   </div>
                 </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -479,6 +535,8 @@
                     {{ documents[$index].unidad_administrativa_autoridad }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -493,6 +551,7 @@
                     {{ documents[$index].fecha_oficio }}
                   </div>
                 </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -500,6 +559,8 @@
                     {{ documents[$index].respuesta }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -528,6 +589,7 @@
                     {{ documents[$index].base_captura_administracion }}
                   </div>
                 </td>
+                }
               </tr>
               }
             </tbody>

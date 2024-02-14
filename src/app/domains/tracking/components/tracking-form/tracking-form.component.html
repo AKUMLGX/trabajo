@@ -68,10 +68,10 @@
                                     htmlfor="grid-password">
                                     Registros
                                 </label>
-                                <select id="small" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150">
-                                    <option value="">Nuevos</option>
-                                    <option value="">Historicos</option>
-                                    <option value="">Todos</option>
+                                <select id="small" formControlName="tipoBusqueda" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150">
+                                    <option [ngValue]="">Nuevos</option>
+                                    <option [ngValue]="">Historicos</option>
+                                    <option [ngValue]="">Todos</option>
                                   </select>
                             </div>
                         </div>

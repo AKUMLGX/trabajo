@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
+import { AsuntoService } from '../../../services/asunto.service';
 
 @Component({
   selector: 'app-tracking-form',
@@ -17,15 +17,15 @@ export class TrackingFormComponent {
     oficio: new FormControl(''),
     autoridadRemitente: new FormControl(''),
     personaRelaciona: new FormControl(''),
-    alcance: new FormControl('')
+    tipoBusqueda: new FormControl('Nuevos')
   });
 
   constructor(
     private fb: FormBuilder,
-    private asuntoNuevoService: AsuntoHistoricoService
+    private asuntoService: AsuntoService
   ) { }
 
   onSave(): void {
-    this.asuntoNuevoService.filterDocuments(this.consultForm);
+    this.asuntoService.filterDocuments(this.consultForm);
   }
 }

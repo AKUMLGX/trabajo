@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
-import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
-import { FileService } from '../../../services/file.service';
+import { Component } from '@angular/core';
+import { AsuntoService } from '../../../services/asunto.service';
+import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
@@ -14,29 +13,30 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './tracking-table.component.css',
 })
 export class TrackingTableComponent {
-  public documents: AsuntoHistorico[] = [];
-  public pages: AsuntoHistorico[][] = [];
+  public documents: Asunto[] = [];
+  public pages: Asunto[][] = [];
 
   public pageSelected: number = 0;
 
   private _elementsByPage: number = 5;
 
+  public tipoBusqueda = '';
+
   public newTableIsRendered = false;
 
-  constructor(private asuntoNuevoService: AsuntoHistoricoService, private router: Router) {}
+  constructor(private asuntoService: AsuntoService, private router: Router) {}
 
   ngOnInit() {
-    this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
+    this.asuntoService.documentsUpdated.subscribe((documents) => {
+      this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
       this.documents = documents;
       let index = 0;
-      let page: AsuntoHistorico[] = [];
+      let page: Asunto[] = [];
       this.pages = [];
       this.pageSelected = 0;
       this.documents.forEach((document) => {
-        console.log(document);
         page.push(document);
-        console.log(page);
         index += 1;
         if (index === this._elementsByPage) {
           this.pages.push(page);
@@ -45,7 +45,6 @@ export class TrackingTableComponent {
         }
       });
       if (this.pages.length === 0 && page.length !== 0) this.pages.push(page);
-      console.log(this.pages);
     });
   }
 
@@ -68,7 +67,6 @@ export class TrackingTableComponent {
 
   openPdfViewer() {
     this.router.navigate(['/site/rep/consulta/pdfViewer']);
-
   }
 
   updatePageSelected(page: number) {
