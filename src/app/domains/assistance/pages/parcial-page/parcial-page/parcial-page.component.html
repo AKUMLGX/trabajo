@@ -1,0 +1,87 @@
+<div class="h-full w-full text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto">
+  <div class=" py-1 bg-blueGray-50 ">
+    <div class="w-full lg:w-12/12  mx-auto mt-2">
+      <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
+        <div class="flex justify-end">
+          <button [routerLink]="['/layout/assistance']" class= " hover:bg-gray-600 rounded-lg active:bg-gray-400 focus:outline-none focus:ring "><mat-icon>close</mat-icon> </button>
+
+        </div>
+        <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Parcial</div>
+
+        <div class="flex justify-center items-center h-screen mb-12">
+          <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="py-6 px-4">
+              <div class="text-center font-bold text-xl mb-8"> Filtro de status Parcial </div>
+               <div class=" overflow-x-auto ">
+                <table class=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 table-auto">
+                  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                          <th scope="col" class="px-6 py-3">
+                              Tipo de documento
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Tipo de respuesta
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Documento
+                          </th>
+                          <th scope="col" class="px-6 py-3">
+                              Atención
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            EUACAPE/01
+                          </th>
+                          <td class="px-6 py-4">
+                            Requerimineto
+                          </td>
+                          <td class="px-6 py-4">
+                            Documento
+                          </td>
+                          <td class="px-6 py-4">
+                            Requerimineto
+                          </td>
+
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            EUACAPE/02
+                          </th>
+                          <td class="px-6 py-4">
+                            Requerimineto
+                          </td>
+                          <td class="px-6 py-4">
+                            Documento
+                          </td>
+                          <td class="px-6 py-4">
+                            Requerimineto
+                          </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            EUACAPE/03
+                          </th>
+                          <td class="px-6 py-4">
+                            Requerimineto
+                          </td>
+                          <td class="px-6 py-4">
+                            Documento
+                          </td>
+                          <td class="px-6 py-4">
+                            Requerimineto
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
