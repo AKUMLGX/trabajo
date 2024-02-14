@@ -42,8 +42,18 @@ export class InfoTableComponent {
   FOLIOINTERNO = this.preliminarEuacapeService.FOLIOINT;
   FOLIOSCANNER = this.preliminarEuacapeService.FOLIOSCAN;
 
-  //infoObject: {};
-  euacapeForm = signal<EuacapeApertura[]>([]);
+  euacapeFormObject = signal<EuacapeApertura>({
+    folio_interno:         '',
+    folio_scanner:         '',
+    oficio:                '',
+    documento_escaneado:   '',
+    persona_relacionada:   '',
+    descripcion:           '',
+    fecha_recepcion:       '',
+    autoridad_solicitante: '',
+    plazo_atencion:        '',
+    administracion:        '',
+  });
 
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: ''},
@@ -78,8 +88,7 @@ export class InfoTableComponent {
     plazoAtencion: string,
     administracion: string,
   ){
-    this.euacapeForm.update(prevState => [...prevState,
-      {
+    this.euacapeFormObject.set({
         folio_interno: folioInterno,
         folio_scanner: folioScanner,
         oficio: oficio,
@@ -90,10 +99,10 @@ export class InfoTableComponent {
         autoridad_solicitante: autoridadSolicitante,
         plazo_atencion: plazoAtencion,
         administracion: administracion,
-      }
-    ]);
-    console.log(this.euacapeForm());
-    //this.euacapeAperturaService.insertEuacapeForm(this.euacapeForm());
+  });
+    //const euacapeFormObject = {...this.euacapeForm};
+    console.log(this.euacapeFormObject());
+    //this.euacapeAperturaService.insertEuacapeForm(this.euacapeFormObject());
   }
 
 }

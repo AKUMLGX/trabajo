@@ -12,7 +12,7 @@ export class EuacapeAperturaService {
     private http: HttpClient,
   ) { }
 
-  insertEuacapeForm(euacapeForm: EuacapeApertura[]) {
+  insertEuacapeForm(euacapeForm: EuacapeApertura) {
     const headers = new HttpHeaders({'myHeader': 'myheader'});
     this.http.post<EuacapeAperturaResponse>(
       'http://localhost:8080/akamba/api/v1/asunto/nuevo/euacape/apertura/',
