@@ -19,22 +19,20 @@ export class AsuntoHistoricoService {
     let carpetaInvertigacion = consultForm.get('carpetaInvertigacion')?.value;
     let oficio = consultForm.get('oficio')?.value;
     let autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
-    let personaRelaciona = consultForm.get('personaRelaciona')?.value;
-    let url = environment.baseUrl + 
-      environment.asuntoHistoricoEndpoint +
-      '?folio_interno=' +
-      folioInterno +
-      '&carpeta_investigacion=' +
-      carpetaInvertigacion +
-      '&oficio=' +
-      oficio +
-      '&autoridad_remitente=' +
-      autoridadRemitente +
-      '&persona_relacionada=' +
-      personaRelaciona;
-    this.httpClient.get<AsuntoHistorico[]>(url).subscribe((data) => {
-      this.documentList = data;
-      this.documentsUpdated.emit(this.documentList);
-    });
+    let personaRelacionada = consultForm.get('personaRelaciona')?.value;
+    let params = {
+      folio_interno: folioInterno,
+      carpeta_investigacion: carpetaInvertigacion,
+      oficio: oficio,
+      autoridad_remitente: autoridadRemitente,
+      personaRelaciona: personaRelacionada,
+    };
+    let url = environment.baseUrl + environment.asuntoHistoricoEndpoint;
+    this.httpClient
+      .get<AsuntoHistorico[]>(url, { params: params })
+      .subscribe((data) => {
+        this.documentList = data;
+        this.documentsUpdated.emit(this.documentList);
+      });
   }
 }
