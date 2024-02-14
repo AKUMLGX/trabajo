@@ -34,7 +34,9 @@ export class TrackingTableComponent {
       this.pages = [];
       this.pageSelected = 0;
       this.documents.forEach((document) => {
+        console.log(document);
         page.push(document);
+        console.log(page);
         index += 1;
         if (index === this._elementsByPage) {
           this.pages.push(page);
@@ -42,7 +44,8 @@ export class TrackingTableComponent {
           page = [];
         }
       });
-      console.log(documents);
+      if (this.pages.length === 0 && page.length !== 0) this.pages.push(page);
+      console.log(this.pages);
     });
   }
 
