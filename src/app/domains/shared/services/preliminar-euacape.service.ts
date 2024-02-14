@@ -8,7 +8,7 @@ export class PreliminarEuacapeService {
   constructor() { }
 
   OFICIO = signal('');
-  TURNOJEFATURA = signal('');
+  TURNOJEFATURA = signal<null | string>(null);
   FOLIOINT = signal('');
   FOLIOSCAN = signal('');
 

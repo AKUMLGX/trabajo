@@ -32,7 +32,7 @@ export class InfoTableComponent {
   @Input({required: true}) DESCRIPCION!: string;
   @Input({required: true}) TIPORES!: string;
   @Input({required: true}) AUTORIDADSOLIC!: string;
-  @Input({required: true}) CARPETAINV!: string;
+  @Input({required: true}) CARPETAINV!: string | null;
   @Input({required: true}) PERSONAREL!: string;
   @Input({required: true}) TIPOASUNTO!: string;
   @Input({required: true}) PLAZOATENCION!: string;
@@ -53,6 +53,8 @@ export class InfoTableComponent {
     autoridad_solicitante: '',
     plazo_atencion:        '',
     administracion:        '',
+    turno_jefatura:        null,
+    carpeta_investigacion: null,
   });
 
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
@@ -87,6 +89,8 @@ export class InfoTableComponent {
     autoridadSolicitante: string,
     plazoAtencion: string,
     administracion: string,
+    carpetaInvestigacion: string | null,
+    turnoJefatura: string | null,
   ){
     this.euacapeFormObject.set({
         folio_interno: folioInterno,
@@ -99,6 +103,8 @@ export class InfoTableComponent {
         autoridad_solicitante: autoridadSolicitante,
         plazo_atencion: plazoAtencion,
         administracion: administracion,
+        carpeta_investigacion: carpetaInvestigacion,
+        turno_jefatura: turnoJefatura,
   });
     //const euacapeFormObject = {...this.euacapeForm};
     console.log(this.euacapeFormObject());

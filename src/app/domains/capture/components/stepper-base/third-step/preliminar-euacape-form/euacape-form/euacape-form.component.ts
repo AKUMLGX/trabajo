@@ -57,7 +57,7 @@ export class EuacapeFormComponent {
       descripcion: [''],
       tipoRespuesta: [null],
       autoridadSolicitante: [''],
-      carpetaInvestigacion: [''],
+      carpetaInvestigacion: [null],
       personaRelacionada: [''],
       plazoAtencion: [''],
     });
