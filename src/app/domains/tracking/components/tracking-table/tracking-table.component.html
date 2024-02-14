@@ -1,6 +1,5 @@
 @if (documents.length > 0) {
 <div class="flex justify-center items-center text-xl mt-2">Resultados</div>
-{{ tipoBusqueda }}
 <section class="py-1 bg-blueGray-50" id="sectionTable">
   <div class="w-full lg:w-12/12 mx-auto mt-2">
     <div
@@ -392,6 +391,16 @@
                     {{ documents[$index].fecha_recepcion }}
                   </div>
                 </td>
+                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos")
+                {
+                  <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ documents[$index].fecha_atencion }}
+                  </div>
+                </td>
+                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
