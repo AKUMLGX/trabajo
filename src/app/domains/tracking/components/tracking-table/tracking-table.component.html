@@ -613,7 +613,10 @@
                 *ngFor="
                   let document of documents
                     | paginate
-                      : { itemsPerPage: itemsPerPage, currentPage: pageSelected }
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: pageSelected
+                        }
                 "
               ></li>
             </ul>

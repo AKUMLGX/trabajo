@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AsuntoService } from '../../../services/asunto.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tracking-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIcon],
   templateUrl: './tracking-form.component.html',
   styleUrl: './tracking-form.component.css',
 })

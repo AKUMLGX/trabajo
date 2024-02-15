@@ -1,89 +1,156 @@
-<section class=" py-1 bg-blueGray-50 ">
-    <div class="w-full lg:w-12/12  mx-auto mt-2">
-        <div
-            class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0 ">
-            <div class="rounded-t bg-white mb-0 px-6 py-6">
+<section class="py-1 bg-blueGray-50">
+  <div class="w-full lg:w-12/12 mx-auto mt-2">
+    <div
+      class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0"
+    >
+      <div class="rounded-t bg-white mb-0 px-6 py-6"></div>
+      <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+        <form [formGroup]="consultForm" (ngSubmit)="onSave()">
+          <div class="flex flex-wrap">
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlfor="grid-password"
+                >
+                  Folio interno
+                  <span title="Clave interna asignada al asunto para su seguimiento interno."
+                    ><mat-icon class="icon-display"
+                      >help_outline</mat-icon
+                    ></span
+                  >
+                </label>
+                <input
+                  type="text"
+                  placeholder="Folio interno"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  formControlName="folioInterno"
+                  value=""
+                />
+              </div>
             </div>
-            <div class="flex-auto px-4 lg:px-10 py-10 pt-0 ">
-                <form [formGroup]="consultForm" (ngSubmit)="onSave()">
-                    <div class="flex flex-wrap">
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Folio interno
-                                </label>
-                                <input type="text" placeholder="Folio interno"
-                                    class="border-0  px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="folioInterno" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Carpeta de investigación
-                                </label>
-                                <input type="text" placeholder="Carpeta de investigación"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                                    formControlName="carpetaInvertigacion" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Oficio
-                                </label>
-                                <input type="text" placeholder="Oficio"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    formControlName="oficio" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Autoridad remitente
-                                </label>
-                                <input type="text" placeholder="Autoridad remitente"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    formControlName="autoridadRemitente" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Persona relacionada
-                                </label>
-                                <input type="text" placeholder="Persona relacionada"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150"
-                                    formControlName="personaRelacionada" value="">
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlfor="grid-password">
-                                    Registros
-                                </label>
-                                <select id="small" formControlName="tipoBusqueda" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine  w-full ease-linear transition-all duration-150">
-                                    <option [ngValue]="">Nuevos</option>
-                                    <option [ngValue]="">Historicos</option>
-                                    <option [ngValue]="">Todos</option>
-                                  </select>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <button
-                        class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                        type="submit">
-                        Buscar
-                    </button>
-                </form>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlfor="grid-password"
+                >
+                  Carpeta de investigación
+                  <span title="Número de la carpeta de investigación asociada al asunto. "
+                    ><mat-icon class="icon-display"
+                      >help_outline</mat-icon
+                    ></span
+                  >
+                </label>
+                <input
+                  type="text"
+                  placeholder="Carpeta de investigación"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  formControlName="carpetaInvertigacion"
+                  value=""
+                />
+              </div>
             </div>
-        </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlfor="grid-password"
+                >
+                  Oficio
+                  <span title="Número de oficio asignado al documento."
+                    ><mat-icon class="icon-display"
+                      >help_outline</mat-icon
+                    ></span
+                  >
+                </label>
+                <input
+                  type="text"
+                  placeholder="Oficio"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  formControlName="oficio"
+                  value=""
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlfor="grid-password"
+                >
+                  Autoridad remitente
+                  <span title="Autoridad que remite el asunto o documento."
+                    ><mat-icon class="icon-display"
+                      >help_outline</mat-icon
+                    ></span
+                  >
+                </label>
+                <input
+                  type="text"
+                  placeholder="Autoridad remitente"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  formControlName="autoridadRemitente"
+                  value=""
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlfor="grid-password"
+                >
+                  Persona relacionada
+                  <span title="Nombre de la persona vinculada al asunto."
+                    ><mat-icon class="icon-display"
+                      >help_outline</mat-icon
+                    ></span
+                  >
+                </label>
+                <input
+                  type="text"
+                  placeholder="Persona relacionada"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  formControlName="personaRelacionada"
+                  value=""
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlfor="grid-password"
+                >
+                  Registros
+                  <span title="Tipo de busqueda."
+                    ><mat-icon class="icon-display"
+                      >help_outline</mat-icon
+                    ></span
+                  >
+                </label>
+                <select
+                  id="small"
+                  formControlName="tipoBusqueda"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                >
+                  <option [ngValue]="">Nuevos</option>
+                  <option [ngValue]="">Historicos</option>
+                  <option [ngValue]="">Todos</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button
+            class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+            type="submit"
+          >
+            Buscar
+          </button>
+        </form>
+      </div>
     </div>
+  </div>
 </section>
