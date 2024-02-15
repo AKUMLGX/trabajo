@@ -3,6 +3,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
 import { PreliminarEuacapeService } from '../../../../../../../shared/services/preliminar-euacape.service';
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
+import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 
 export interface EuacapeTableBeforeSubmit {
   name: string;
@@ -21,11 +22,12 @@ export class InfoTableComponent {
 
   constructor(
     private preliminarEuacapeService: PreliminarEuacapeService,
+    private euacapeAperturaService: EuacapeAperturaService,
   ){ }
 
   @Input({required: true}) ADMON!: string;
   @Input({required: true}) FECHAREC!: string;
-  @Input({required: true}) DOCSSCAN!: string;
+  @Input({required: true}) DOCSCAN!: string;
   @Input({required: true}) ATENCION!: string;
   @Input({required: true}) DESCRIPCION!: string;
   @Input({required: true}) TIPORES!: string;
@@ -88,7 +90,7 @@ export class InfoTableComponent {
     administracion: string,
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
-  ){
+  ) {
     this.euacapeFormObject.set({
         folio_interno: folioInterno,
         folio_scanner: folioScanner,
@@ -105,7 +107,9 @@ export class InfoTableComponent {
   });
     //const euacapeFormObject = {...this.euacapeForm};
     console.log(this.euacapeFormObject());
-    //this.euacapeAperturaService.insertEuacapeForm(this.euacapeFormObject());
+    this.euacapeAperturaService.insertEuacapeForm(
+      this.euacapeFormObject()
+    )
   }
 
 }

@@ -37,7 +37,7 @@ export class EuacapeFormComponent {
 
     ADMON = '';
     FECHAREC = '';
-    DOCSSCAN = '';
+    DOCSCAN = '';
     ATENCION = '';
     DESCRIPCION = '';
     TIPORES = '';
@@ -49,7 +49,7 @@ export class EuacapeFormComponent {
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [''],
       fechaRecepcion: [''],
-      documentosEscaneados: [''],
+      documentoEscaneado: [''],
       atencion: [null],
       descripcion: [''],
       tipoRespuesta: [null],
@@ -66,7 +66,7 @@ export class EuacapeFormComponent {
       //console.log(this.OFICIO);
       this.ADMON = this.euacapeForm.value.administracion;
       this.FECHAREC = this.euacapeForm.value.fechaRecepcion;
-      this.DOCSSCAN = this.euacapeForm.value.documentosEscaneados;
+      this.DOCSCAN = this.euacapeForm.value.documentosEscaneados;
       this.ATENCION = this.isApertura ? 'Requerimiento' : this.euacapeForm.value.atencion;
       this.DESCRIPCION = this.euacapeForm.value.descripcion;
       this.TIPORES = this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta;
