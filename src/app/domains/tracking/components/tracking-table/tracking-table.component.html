@@ -259,7 +259,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (document of pages[pageSelected]; track $index) {
+              @for (document of pages[pageSelected - 1]; track $index) {
               <tr>
                 <td
                   class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5"
@@ -278,35 +278,35 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio_interno }}
+                    {{ document.folio_interno }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].carpeta_investigacion }}
+                    {{ document.carpeta_investigacion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].persona_relacionada }}
+                    {{ document.persona_relacionada }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio_scanner }}
+                    {{ document.folio_scanner }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].volante }}
+                    {{ document.volante }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -315,7 +315,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].descargo }}
+                    {{ document.descargo }}
                   </div>
                 </td>
                 }
@@ -323,7 +323,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].tipo_asunto }}
+                    {{ document.tipo_asunto }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -332,7 +332,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].autor }}
+                    {{ document.autor }}
                   </div>
                 </td>
                 }
@@ -340,21 +340,21 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].oficio }}
+                    {{ document.oficio }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].autoridad_remitente }}
+                    {{ document.autoridad_remitente }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio }}
+                    {{ document.folio }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -363,7 +363,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].administracion }}
+                    {{ document.administracion }}
                   </div>
                 </td>
                 }
@@ -371,7 +371,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio_jupiter }}
+                    {{ document.folio_jupiter }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -380,7 +380,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].orden }}
+                    {{ document.orden }}
                   </div>
                 </td>
                 }
@@ -388,16 +388,15 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_recepcion }}
+                    {{ document.fecha_recepcion }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos")
-                {
-                  <td
+                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_atencion }}
+                    {{ document.fecha_atencion }}
                   </div>
                 </td>
                 }
@@ -405,7 +404,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].documento_escaneado }}
+                    {{ document.documento_escaneado }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -414,7 +413,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].atencion }}
+                    {{ document.atencion }}
                   </div>
                 </td>
                 }
@@ -422,7 +421,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].descripcion }}
+                    {{ document.descripcion }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -431,14 +430,14 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].tipo_respuesta }}
+                    {{ document.tipo_respuesta }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].areas_pendientes }}
+                    {{ document.areas_pendientes }}
                   </div>
                 </td>
                 } @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
@@ -446,7 +445,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].area_pendiente }}
+                    {{ document.area_pendiente }}
                   </div>
                 </td>
                 }
@@ -454,28 +453,28 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].autoridad_solicitante }}
+                    {{ document.autoridad_solicitante }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].turno_jefatura }}
+                    {{ document.turno_jefatura }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].correo_electronico }}
+                    {{ document.correo_electronico }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].plazo_atencion }}
+                    {{ document.plazo_atencion }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -484,56 +483,56 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].jefatura }}
+                    {{ document.jefatura }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].que_solicita }}
+                    {{ document.que_solicita }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_numero_oficio_atencion }}
+                    {{ document.fecha_numero_oficio_atencion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].asuntos_enviados_correo_mara }}
+                    {{ document.asuntos_enviados_correo_mara }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].atentas_notas_respuestas }}
+                    {{ document.atentas_notas_respuestas }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_turnado }}
+                    {{ document.fecha_turnado }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].hora_recepcion }}
+                    {{ document.hora_recepcion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].tipo }}
+                    {{ document.tipo }}
                   </div>
                 </td>
                 }
@@ -541,7 +540,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].unidad_administrativa_autoridad }}
+                    {{ document.unidad_administrativa_autoridad }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -550,14 +549,14 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_descargo }}
+                    {{ document.fecha_descargo }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_oficio }}
+                    {{ document.fecha_oficio }}
                   </div>
                 </td>
                 }
@@ -565,7 +564,7 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].respuesta }}
+                    {{ document.respuesta }}
                   </div>
                 </td>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
@@ -574,28 +573,28 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].reporte }}
+                    {{ document.reporte }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].acuse }}
+                    {{ document.acuse }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].piezas_fgr_administracion }}
+                    {{ document.piezas_fgr_administracion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].base_captura_administracion }}
+                    {{ document.base_captura_administracion }}
                   </div>
                 </td>
                 }
@@ -609,7 +608,23 @@
         >
           <div>
             @if (pages.length > 0) {
-            <nav class="relative z-0 inline-flex shadow-sm">
+            <ul>
+              <li
+                *ngFor="
+                  let document of documents
+                    | paginate
+                      : { itemsPerPage: itemsPerPage, currentPage: pageSelected }
+                "
+              ></li>
+            </ul>
+            <div class="has-text-centered">
+              <pagination-controls
+                (pageChange)="pageSelected = $event"
+                [nextLabel]="labels.nextLabel"
+                [previousLabel]="labels.previousLabel"
+              ></pagination-controls>
+            </div>
+            <!--<nav class="relative z-0 inline-flex shadow-sm">
               <button
                 (click)="previousPage()"
                 class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
@@ -651,12 +666,12 @@
                   />
                 </svg>
               </button>
-            </nav>
+            </nav>-->
             }
           </div>
         </div>
         <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
-          <p class="text-sm leading-5 text-wine">
+          <!--<p class="text-sm leading-5 text-wine">
             Mostrando
             <span class="font-medium">{{ pageSelected * 5 + 1 }}</span>
             a
@@ -668,7 +683,7 @@
             de
             <span class="font-medium">{{ documents.length }}</span>
             resultados
-          </p>
+          </p>-->
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export class TrackingFormComponent {
     carpetaInvertigacion: new FormControl(''),
     oficio: new FormControl(''),
     autoridadRemitente: new FormControl(''),
-    personaRelaciona: new FormControl(''),
+    personaRelacionada: new FormControl(''),
     tipoBusqueda: new FormControl('Nuevos')
   });
 

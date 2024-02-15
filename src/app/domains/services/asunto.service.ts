@@ -22,9 +22,8 @@ export class AsuntoService {
     let carpetaInvertigacion = consultForm.get('carpetaInvertigacion')?.value;
     let oficio = consultForm.get('oficio')?.value;
     let autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
-    let personaRelacionada = consultForm.get('personaRelaciona')?.value;
+    let personaRelacionada = consultForm.get('personaRelacionada')?.value;
     let url = environment.baseUrl;
-    console.log(this.tipoBusqueda);
     switch (this.tipoBusqueda) {
       case 'Nuevos': {
         url += environment.asuntoNuevoEndpoint;
@@ -43,7 +42,7 @@ export class AsuntoService {
       carpeta_investigacion: carpetaInvertigacion,
       oficio: oficio,
       autoridad_remitente: autoridadRemitente,
-      personaRelaciona: personaRelacionada,
+      persona_relacionada: personaRelacionada,
     };
     this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
       this.documentList = data;

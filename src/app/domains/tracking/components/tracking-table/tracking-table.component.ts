@@ -1,28 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [PdfViewerModule, MatIcon],
+  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
 export class TrackingTableComponent {
+  
   public documents: Asunto[] = [];
   public pages: Asunto[][] = [];
 
-  public pageSelected: number = 0;
+  public pageSelected: number = 1;
 
-  private _elementsByPage: number = 5;
+  public itemsPerPage: number = 5;
 
-  public tipoBusqueda = '';
+  public tipoBusqueda: string = '';
 
-  public newTableIsRendered = false;
+  public newTableIsRendered: boolean = false;
+
+  public labels = {
+    previousLabel: 'Anterior',
+    nextLabel: 'Siguiente',
+};
+
 
   constructor(private asuntoService: AsuntoService, private router: Router) {}
 
@@ -34,17 +43,17 @@ export class TrackingTableComponent {
       let index = 0;
       let page: Asunto[] = [];
       this.pages = [];
-      this.pageSelected = 0;
+      this.pageSelected = 1;
       this.documents.forEach((document) => {
         page.push(document);
         index += 1;
-        if (index === this._elementsByPage) {
+        if (index === this.itemsPerPage) {
           this.pages.push(page);
           index = 0;
           page = [];
         }
       });
-      if (this.pages.length === 0 && page.length !== 0) this.pages.push(page);
+      if (page.length !== 0) this.pages.push(page);
     });
   }
 
@@ -69,10 +78,6 @@ export class TrackingTableComponent {
     this.router.navigate(['/site/rep/consulta/pdfViewer']);
   }
 
-  updatePageSelected(page: number) {
-    this.pageSelected = page;
-  }
-
   previousPage() {
     this.pageSelected -= 1;
   }
@@ -81,3 +86,7 @@ export class TrackingTableComponent {
     this.pageSelected += 1;
   }
 }
+function BooleanArray(arg0: number): never[] {
+  throw new Error('Function not implemented.');
+}
+
