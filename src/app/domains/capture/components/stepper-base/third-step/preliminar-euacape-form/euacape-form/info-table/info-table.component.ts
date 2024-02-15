@@ -60,7 +60,7 @@ export class InfoTableComponent {
     {position: 1, name: 'Oficio', answer: ''},
     {position: 2, name: 'Administración', answer: ''},
     {position: 3, name: 'Fecha de recepción', answer: ''},
-    {position: 4, name: 'Documentos escaneados', answer: ''},
+    {position: 4, name: 'Documento escaneado', answer: ''},
     {position: 5, name: 'Atención', answer: ''},
     {position: 6, name: 'Descripción', answer: ''},
     {position: 7, name: 'Tipo de respuesta', answer: ''},

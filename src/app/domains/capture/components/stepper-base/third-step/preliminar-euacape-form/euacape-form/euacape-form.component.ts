@@ -66,7 +66,7 @@ export class EuacapeFormComponent {
       //console.log(this.OFICIO);
       this.ADMON = this.euacapeForm.value.administracion;
       this.FECHAREC = this.euacapeForm.value.fechaRecepcion;
-      this.DOCSCAN = this.euacapeForm.value.documentosEscaneados;
+      this.DOCSCAN = this.euacapeForm.value.documentoEscaneado;
       this.ATENCION = this.isApertura ? 'Requerimiento' : this.euacapeForm.value.atencion;
       this.DESCRIPCION = this.euacapeForm.value.descripcion;
       this.TIPORES = this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta;
