@@ -10,7 +10,6 @@ import {MatTableModule} from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { InfoTableComponent } from './info-table/info-table.component';
-import { AsuntoChoiceService } from '../../../../../../shared/services/asunto-choice.service';
 
 @Component({
   selector: 'app-euacape-form',
@@ -32,32 +31,30 @@ export class EuacapeFormComponent {
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
-    private asuntoChoiceService: AsuntoChoiceService,
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
 
     ADMON = '';
     FECHAREC = '';
-    DOCSSCAN = '';
+    DOCSCAN = '';
     ATENCION = '';
     DESCRIPCION = '';
     TIPORES = '';
     AUTORIDADSOLIC = '';
-    CARPETAINV = '';
+    CARPETAINV = null;
     PERSONAREL = '';
-    TIPOASUNTO = '';
     PLAZOATENCION = '';
 
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [''],
       fechaRecepcion: [''],
-      documentosEscaneados: [''],
+      documentoEscaneado: [''],
       atencion: [null],
       descripcion: [''],
       tipoRespuesta: [null],
       autoridadSolicitante: [''],
-      carpetaInvestigacion: [''],
+      carpetaInvestigacion: [null],
       personaRelacionada: [''],
       plazoAtencion: [''],
     });
@@ -69,23 +66,22 @@ export class EuacapeFormComponent {
       //console.log(this.OFICIO);
       this.ADMON = this.euacapeForm.value.administracion;
       this.FECHAREC = this.euacapeForm.value.fechaRecepcion;
-      this.DOCSSCAN = this.euacapeForm.value.documentosEscaneados;
+      this.DOCSCAN = this.euacapeForm.value.documentosEscaneados;
       this.ATENCION = this.isApertura ? 'Requerimiento' : this.euacapeForm.value.atencion;
       this.DESCRIPCION = this.euacapeForm.value.descripcion;
       this.TIPORES = this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta;
       this.AUTORIDADSOLIC = this.euacapeForm.value.autoridadSolicitante;
       this.CARPETAINV = this.euacapeForm.value.carpetaInvestigacion;
       this.PERSONAREL = this.euacapeForm.value.personaRelacionada;
-      this.TIPOASUNTO = this.asuntoChoiceService.asuntoUserChoice();
       this.PLAZOATENCION = this.euacapeForm.value.plazoAtencion;
     }
   
-    openCustomModal() {
-      this.modalService.openCustomDialog({
-        title: 'Title for cutom dialog',
-        content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
-      });
-    }
+    // openCustomModal() {
+    //   this.modalService.openCustomDialog({
+    //     title: 'Title for cutom dialog',
+    //     content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
+    //   });
+    // }
   
     openCustomModalWithTemplate(template: TemplateRef<any>){
       this.modalService.openCustomDialogWithTemplate({

@@ -12,8 +12,8 @@ export class EuacapeAperturaService {
     private http: HttpClient,
   ) { }
 
-  insertEuacapeForm(euacapeForm: EuacapeApertura[]) {
-    const headers = new HttpHeaders({'myHeader': 'myheader'});
+  insertEuacapeForm(euacapeForm: EuacapeApertura) {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     this.http.post<EuacapeAperturaResponse>(
       'http://localhost:8080/akamba/api/v1/asunto/nuevo/euacape/apertura/',
         euacapeForm, {headers: headers})

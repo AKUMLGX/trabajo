@@ -27,14 +27,13 @@ export class InfoTableComponent {
 
   @Input({required: true}) ADMON!: string;
   @Input({required: true}) FECHAREC!: string;
-  @Input({required: true}) DOCSSCAN!: string;
+  @Input({required: true}) DOCSCAN!: string;
   @Input({required: true}) ATENCION!: string;
   @Input({required: true}) DESCRIPCION!: string;
   @Input({required: true}) TIPORES!: string;
   @Input({required: true}) AUTORIDADSOLIC!: string;
-  @Input({required: true}) CARPETAINV!: string;
+  @Input({required: true}) CARPETAINV!: string | null;
   @Input({required: true}) PERSONAREL!: string;
-  @Input({required: true}) TIPOASUNTO!: string;
   @Input({required: true}) PLAZOATENCION!: string;
 
   OFICIO = this.preliminarEuacapeService.OFICIO;
@@ -42,8 +41,20 @@ export class InfoTableComponent {
   FOLIOINTERNO = this.preliminarEuacapeService.FOLIOINT;
   FOLIOSCANNER = this.preliminarEuacapeService.FOLIOSCAN;
 
-  //infoObject: {};
-  euacapeForm = signal<EuacapeApertura[]>([]);
+  euacapeFormObject = signal<EuacapeApertura>({
+    folio_interno:         '',
+    folio_scanner:         '',
+    oficio:                '',
+    documento_escaneado:   '',
+    persona_relacionada:   '',
+    descripcion:           '',
+    fecha_recepcion:       '',
+    autoridad_solicitante: '',
+    plazo_atencion:        '',
+    administracion:        '',
+    turno_jefatura:        null,
+    carpeta_investigacion: null,
+  });
 
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: ''},
@@ -77,9 +88,10 @@ export class InfoTableComponent {
     autoridadSolicitante: string,
     plazoAtencion: string,
     administracion: string,
-  ){
-    this.euacapeForm.update(prevState => [...prevState,
-      {
+    carpetaInvestigacion: string | null,
+    turnoJefatura: string | null,
+  ) {
+    this.euacapeFormObject.set({
         folio_interno: folioInterno,
         folio_scanner: folioScanner,
         oficio: oficio,
@@ -90,10 +102,14 @@ export class InfoTableComponent {
         autoridad_solicitante: autoridadSolicitante,
         plazo_atencion: plazoAtencion,
         administracion: administracion,
-      }
-    ]);
-    console.log(this.euacapeForm());
-    //this.euacapeAperturaService.insertEuacapeForm(this.euacapeForm());
+        carpeta_investigacion: carpetaInvestigacion,
+        turno_jefatura: turnoJefatura,
+  });
+    //const euacapeFormObject = {...this.euacapeForm};
+    console.log(this.euacapeFormObject());
+    this.euacapeAperturaService.insertEuacapeForm(
+      this.euacapeFormObject()
+    )
   }
 
 }

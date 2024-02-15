@@ -9,4 +9,6 @@ export interface EuacapeApertura {
     autoridad_solicitante: string;
     plazo_atencion:        string;
     administracion:        string;
+    turno_jefatura:        string | null;
+    carpeta_investigacion: string | null;
 }
