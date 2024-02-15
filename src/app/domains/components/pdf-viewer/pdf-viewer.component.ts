@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
+
 @Component({
   selector: 'app-pdf-viewer',
   standalone: true,

@@ -23,6 +23,7 @@
     "angular-paginator": "^11.0.0",
     "angular-svg-icon": "^17.0.0",
     "ng2-pdf-viewer": "^10.0.0",
+    "ngx-extended-pdf-viewer": "^19.2.1",
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
