@@ -3,6 +3,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import {MatDialog} from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
+import { CardsgraphicComponent } from '../dashbord-graphic/Pie-chart/cardsgraphic.component';
+import { GraphicAdministracionComponent } from '../dashbord-graphic/vertical-graph/graphic-administracion.component';
 
 
 
@@ -11,7 +13,10 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-cards',
   standalone: true,
-  imports: [MatIconModule,MatCardModule,RouterModule],
+  imports: [MatIconModule,
+    MatCardModule,
+    RouterModule,CardsgraphicComponent,
+    GraphicAdministracionComponent],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.css'
 })
