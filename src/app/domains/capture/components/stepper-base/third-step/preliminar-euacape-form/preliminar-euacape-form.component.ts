@@ -30,10 +30,10 @@ export class PreliminarEuacapeFormComponent {
     ){ }
 
   public preliminarEuacapeForm: FormGroup = this.fb.group({
-    oficio: [''],
+    oficio: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null],
-    folioInterno: [''],
-    folioScanner: [''],
+    folioInterno: ['', [Validators.required, Validators.maxLength(255)]],
+    folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
   savePreliminarEuacapeForm(): void {
