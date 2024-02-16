@@ -76,8 +76,8 @@ export class EuacapeFormComponent {
       this.PLAZOATENCION = this.euacapeForm.value.plazoAtencion;
     }
   
-    // openCustomModal() {
-    //   this.modalService.openCustomDialog({
+    //openCustomModal() {
+    //  this.modalService.openCustomDialog({
     //     title: 'Title for cutom dialog',
     //     content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
     //   });
@@ -88,5 +88,4 @@ export class EuacapeFormComponent {
         template
       })
     }
-
 }

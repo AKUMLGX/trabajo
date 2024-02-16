@@ -31,7 +31,7 @@ export class PreliminarEuacapeFormComponent {
 
   public preliminarEuacapeForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
-    turnoJefatura: [null],
+    turnoJefatura: [null, [Validators.maxLength(255)]],
     folioInterno: ['', [Validators.required, Validators.maxLength(255)]],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
