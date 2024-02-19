@@ -49,13 +49,13 @@ export class EuacapeFormComponent {
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [''],
       fechaRecepcion: [''],
-      documentoEscaneado: [''],
+      documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
       atencion: [null],
-      descripcion: [''],
+      descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
       tipoRespuesta: [null],
-      autoridadSolicitante: [''],
-      carpetaInvestigacion: [null],
-      personaRelacionada: [''],
+      autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
+      carpetaInvestigacion: [null, [Validators.maxLength(255)]],
+      personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       plazoAtencion: [''],
     });
 

@@ -12,7 +12,8 @@
                             </label>
                             <input type="text" placeholder="Administración"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="administracion" value="">
+                                formControlName="administracion" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -30,7 +31,20 @@
                             </label>
                             <input type="text" placeholder="Documentos escaneados"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="documentoEscaneado" value="">
+                                formControlName="documentoEscaneado" value=""
+                            >
+                            @if (euacapeForm.controls['documentoEscaneado'].invalid && (euacapeForm.controls['documentoEscaneado'].dirty || euacapeForm.controls['documentoEscaneado'].touched)) {
+                                @if(euacapeForm.get('documentoEscaneado')?.errors?.['required']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span>Requerido</span>
+                                    </div>
+                                }
+                            } 
+                            @if (euacapeForm.get('documentoEscaneado')?.errors?.['maxlength']) {
+                                <div class="text-sm text-wine mt-1.5">
+                                    <span >Máximo 255 caracteres</span>
+                                </div> 
+                            }
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -58,7 +72,20 @@
                             </label>
                             <input type="text" placeholder="Descripción"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="descripcion" value="">
+                                formControlName="descripcion" value=""
+                            >
+                            @if (euacapeForm.controls['descripcion'].invalid && (euacapeForm.controls['descripcion'].dirty || euacapeForm.controls['descripcion'].touched)) {
+                                @if(euacapeForm.get('descripcion')?.errors?.['required']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span>Requerido</span>
+                                    </div>
+                                }
+                            } 
+                            @if (euacapeForm.get('descripcion')?.errors?.['maxlength']) {
+                                <div class="text-sm text-wine mt-1.5">
+                                    <span >Máximo 1000 caracteres</span>
+                                </div> 
+                            }
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -88,7 +115,20 @@
                             </label>
                             <input type="text" placeholder="Autoridad solicitante"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="autoridadSolicitante" value="">
+                                formControlName="autoridadSolicitante" value=""
+                            >
+                            @if (euacapeForm.controls['autoridadSolicitante'].invalid && (euacapeForm.controls['autoridadSolicitante'].dirty || euacapeForm.controls['autoridadSolicitante'].touched)) {
+                                @if(euacapeForm.get('autoridadSolicitante')?.errors?.['required']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span>Requerido</span>
+                                    </div>
+                                }
+                            } 
+                            @if (euacapeForm.get('autoridadSolicitante')?.errors?.['maxlength']) {
+                                <div class="text-sm text-wine mt-1.5">
+                                    <span >Máximo 255 caracteres</span>
+                                </div> 
+                            }
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -97,7 +137,13 @@
                             </label>
                             <input type="text" placeholder="Carpeta de investigación"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="carpetaInvestigacion" value="">
+                                formControlName="carpetaInvestigacion" value=""
+                            >
+                            @if (euacapeForm.get('carpetaInvestigacion')?.errors?.['maxlength']) {
+                                <div class="text-sm text-wine mt-1.5">
+                                     <span >Máximo 255 caracteres</span>
+                                </div> 
+                             }
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -106,7 +152,20 @@
                             </label>
                             <input type="text" placeholder="Persona relacionada"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="personaRelacionada" value="">
+                                formControlName="personaRelacionada" value=""
+                            >
+                            @if (euacapeForm.controls['personaRelacionada'].invalid && (euacapeForm.controls['personaRelacionada'].dirty || euacapeForm.controls['personaRelacionada'].touched)) {
+                                @if(euacapeForm.get('personaRelacionada')?.errors?.['required']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span>Requerido</span>
+                                    </div>
+                                }
+                            } 
+                            @if (euacapeForm.get('personaRelacionada')?.errors?.['maxlength']) {
+                                <div class="text-sm text-wine mt-1.5">
+                                    <span >Máximo 255 caracteres</span>
+                                </div> 
+                            }
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
