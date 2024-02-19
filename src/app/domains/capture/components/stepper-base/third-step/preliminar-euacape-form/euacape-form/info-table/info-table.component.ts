@@ -26,7 +26,7 @@ export class InfoTableComponent {
   ){ }
 
   @Input({required: true}) ADMON!: string;
-  @Input({required: true}) FECHAREC!: string;
+  @Input({required: true}) FECHAREC!: Date | null;
   @Input({required: true}) DOCSCAN!: string;
   @Input({required: true}) ATENCION!: string;
   @Input({required: true}) DESCRIPCION!: string;
@@ -107,9 +107,9 @@ export class InfoTableComponent {
   });
     //const euacapeFormObject = {...this.euacapeForm};
     console.log(this.euacapeFormObject());
-    this.euacapeAperturaService.insertEuacapeForm(
-      this.euacapeFormObject()
-    )
+    //this.euacapeAperturaService.insertEuacapeForm(
+    //  this.euacapeFormObject()
+    //);
   }
 
 }

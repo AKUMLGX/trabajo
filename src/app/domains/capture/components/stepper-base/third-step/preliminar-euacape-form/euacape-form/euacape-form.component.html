@@ -33,9 +33,17 @@
                                 htmlfor="grid-password">
                                     Fecha de recepción
                             </label>
-                            <input type="text" placeholder="Fecha de recepción"
+                            <input type="date" placeholder="dd-MM-yyyy"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="fechaRecepcion" value="">
+                                formControlName="fechaRecepcion" value=""
+                            >
+                            @if (euacapeForm.controls['fechaRecepcion'].invalid && (euacapeForm.controls['fechaRecepcion'].dirty || euacapeForm.controls['fechaRecepcion'].touched)) {
+                                @if(euacapeForm.get('fechaRecepcion')?.errors?.['required']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span>Requerido</span>
+                                    </div>
+                                }
+                            } 
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"

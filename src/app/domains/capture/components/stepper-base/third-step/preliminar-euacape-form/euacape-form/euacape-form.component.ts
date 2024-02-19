@@ -36,7 +36,7 @@ export class EuacapeFormComponent {
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
 
     ADMON = '';
-    FECHAREC = '';
+    FECHAREC = null;
     DOCSCAN = '';
     ATENCION = '';
     DESCRIPCION = '';
@@ -48,7 +48,7 @@ export class EuacapeFormComponent {
 
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [null, [Validators.required]],
-      fechaRecepcion: [''],
+      fechaRecepcion: [null, [Validators.required]],
       documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
       atencion: [null],
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
