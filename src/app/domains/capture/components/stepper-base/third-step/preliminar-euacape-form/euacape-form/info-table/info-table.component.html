@@ -84,7 +84,7 @@
         <tr>
           <td>15</td>
           <td>Plazo de atención</td>
-          <td>{{PLAZOATENCION}}</td>
+          <td>{{ ( PLAZOATENCION !== null ) ? PLAZOATENCION : '---' }}</td>
         </tr>
       </table>
         <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">

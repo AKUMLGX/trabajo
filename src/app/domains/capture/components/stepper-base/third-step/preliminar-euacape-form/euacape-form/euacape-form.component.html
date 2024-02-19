@@ -10,10 +10,23 @@
                                 htmlfor="grid-password">
                                     Administración
                             </label>
-                            <input type="text" placeholder="Administración"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="administracion" value=""
-                            >
+                            <select id="administracion"
+                                    formControlName="administracion"
+                                    class="input-field">
+                                <option [ngValue]="null" disabled >Elija una administración</option>
+                                <option value="A_1">A_1</option>
+                                <option value="A_2">A_2</option>
+                                <option value="A_3">A_3</option>
+                                <option value="A_4">A_4</option>
+                                <option value="A_5">A_5</option>
+                            </select>
+                            @if (euacapeForm.controls['administracion'].invalid && (euacapeForm.controls['administracion'].dirty || euacapeForm.controls['administracion'].touched)) {
+                                @if(euacapeForm.get('administracion')?.errors?.['required']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span>Requerido</span>
+                                    </div>
+                                }
+                            }  
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -181,9 +194,10 @@
                                 htmlfor="grid-password">
                                     Plazo de atención
                             </label>
-                            <input type="text" placeholder="Plazo de atención"
+                            <input type="number" min="1" placeholder="Plazo de atención"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="plazoAtencion" value="">
+                                formControlName="plazoAtencion" value=""
+                            >
                         </div>     
                     </div>
                     <br>

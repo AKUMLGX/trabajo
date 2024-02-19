@@ -34,7 +34,7 @@ export class InfoTableComponent {
   @Input({required: true}) AUTORIDADSOLIC!: string;
   @Input({required: true}) CARPETAINV!: string | null;
   @Input({required: true}) PERSONAREL!: string;
-  @Input({required: true}) PLAZOATENCION!: string;
+  @Input({required: true}) PLAZOATENCION!: number | null;
 
   OFICIO = this.preliminarEuacapeService.OFICIO;
   TURNOJEFATURA = this.preliminarEuacapeService.TURNOJEFATURA;
@@ -50,7 +50,7 @@ export class InfoTableComponent {
     descripcion:           '',
     fecha_recepcion:       '',
     autoridad_solicitante: '',
-    plazo_atencion:        '',
+    plazo_atencion:        null,
     administracion:        '',
     turno_jefatura:        null,
     carpeta_investigacion: null,
@@ -86,7 +86,7 @@ export class InfoTableComponent {
     descripcion: string,
     fechaRecepcion: string,
     autoridadSolicitante: string,
-    plazoAtencion: string,
+    plazoAtencion: number | null,
     administracion: string,
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,

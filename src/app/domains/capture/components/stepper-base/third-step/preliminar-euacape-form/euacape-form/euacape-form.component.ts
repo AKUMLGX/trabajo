@@ -44,10 +44,10 @@ export class EuacapeFormComponent {
     AUTORIDADSOLIC = '';
     CARPETAINV = null;
     PERSONAREL = '';
-    PLAZOATENCION = '';
+    PLAZOATENCION = null;
 
     public euacapeForm: FormGroup = this.fb.group({
-      administracion: [''],
+      administracion: [null, [Validators.required]],
       fechaRecepcion: [''],
       documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
       atencion: [null],
@@ -56,7 +56,7 @@ export class EuacapeFormComponent {
       autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
       carpetaInvestigacion: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
-      plazoAtencion: [''],
+      plazoAtencion: [null, [Validators.min(1)]],
     });
 
     saveEuacapeForm(): void {
