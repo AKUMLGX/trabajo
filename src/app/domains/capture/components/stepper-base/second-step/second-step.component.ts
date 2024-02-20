@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-second-step',
@@ -8,6 +9,7 @@ import { MatStepperModule } from '@angular/material/stepper';
   imports: [
     DropdownComponent,
     MatStepperModule,
+    CommonModule,
   ],
   templateUrl: './second-step.component.html',
   styleUrl: './second-step.component.css'

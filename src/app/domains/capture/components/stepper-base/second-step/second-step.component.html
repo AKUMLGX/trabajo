@@ -1,12 +1,10 @@
 <div class="w-full h-full flex flex-col justify-center items-center bg-[#D9BCA3]/30 rounded-xl border-2 border-[#691C32] p-4">
     <app-dropdown (selectionEmitter)="retrieveSelectionFromDropdown($event)" />
-    @if (enabledButton) {
-        <button matStepperNext class="button mt-8" style="vertical-align:middle" (click)="proceedToStepTwoHandler()">
-            <span>Siguiente</span>
-        </button>
-    } @else {
-        <button disabled class="bg-[#2F722F]/30 mt-8 text-2xl text-white w-40 h-16 p-4 rounded">
-            Siguiente
-        </button>
-    }
+    <button matStepperNext
+            [disabled]="!enabledButton" 
+            class="mt-8"
+            [ngClass]=" enabledButton ? 'next-button' : 'next-button-disabled' "
+            (click)="proceedToStepTwoHandler()">
+        <span>Siguiente</span>
+    </button>
 </div>
