@@ -90,9 +90,9 @@
                     </div>
                     <br>
                     <button
-                        [disabled]="!preliminarEuacapeForm.valid"
+                        [disabled]="!this.preliminarEuacapeForm.valid"
                         matStepperNext
-                        [ngClass]=" !preliminarEuacapeForm.valid ? 'next-button-disabled' : 'next-button' "
+                        [ngClass]=" !this.preliminarEuacapeForm.valid ? 'next-button-disabled' : 'next-button' "
                     >
                         Continuar
                     </button>
