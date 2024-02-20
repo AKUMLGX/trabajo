@@ -1,8 +1,8 @@
 <div style="padding: 0.5em" class="text-xl">
     <mat-vertical-stepper linear [labelPosition]="'bottom'">
 
-        <mat-step label="Búsqueda" [editable]="false">
-            <app-first-step />
+        <mat-step label="Búsqueda" [completed]="status.firstStepButtonStatus" [editable]="false">
+            <app-first-step #status/>
         </mat-step>
 
         <mat-step label="Elección de asunto" [editable]="false">
