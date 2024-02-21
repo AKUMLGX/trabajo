@@ -23,8 +23,8 @@
         </tr>
         <tr>
           <td>3</td>
-          <td>Fecha de recepción</td>
-          <td>{{FECHAREC}}</td>
+          <td>Fecha de recepción (yyyy-MM-dd)</td>
+          <td>{{ FECHAREC }}</td>
         </tr>
         <tr>
           <td>4</td>
@@ -84,7 +84,7 @@
         <tr>
           <td>15</td>
           <td>Plazo de atención</td>
-          <td>{{PLAZOATENCION}}</td>
+          <td>{{ ( PLAZOATENCION !== null ) ? PLAZOATENCION : '---' }}</td>
         </tr>
       </table>
         <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
@@ -119,7 +119,7 @@
       DOCSCAN, 
       PERSONAREL, 
       DESCRIPCION, 
-      FECHAREC, 
+      FECHAREC!.toString(), 
       AUTORIDADSOLIC, 
       PLAZOATENCION, 
       ADMON,

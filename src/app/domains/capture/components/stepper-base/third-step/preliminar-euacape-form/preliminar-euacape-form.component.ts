@@ -36,6 +36,8 @@ export class PreliminarEuacapeFormComponent {
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
+  isPreliminarEuacapeFormValid = !this.preliminarEuacapeForm.valid;
+
   savePreliminarEuacapeForm(): void {
     console.log(this.preliminarEuacapeForm.value);
     this.preliminarEuacapeService.updateOficio(this.preliminarEuacapeForm.value.oficio);

@@ -1,16 +1,20 @@
 <div style="padding: 0.5em" class="text-xl">
-    <mat-vertical-stepper [labelPosition]="'bottom'">
+    <mat-vertical-stepper linear [labelPosition]="'bottom'">
 
-        <mat-step label="Búsqueda">
-            <app-first-step />
+        <mat-step label="Búsqueda" [completed]="status.firstStepButtonStatus" [editable]="false">
+            <app-first-step #status/>
         </mat-step>
 
-        <mat-step label="Elección de asunto">
+        <mat-step label="Elección de asunto" [editable]="false">
             <app-second-step />
         </mat-step>
 
-        <mat-step label="Folio">
-            <app-third-step />
+        <mat-step label="Folio" 
+            [completed]="child.preliminarEuacapeForm.valid" 
+            [editable]="false">
+                <div class="third-step-wrapper">
+                    <app-preliminar-euacape-form #child />
+                </div>
         </mat-step>
 
         <mat-step label="Llenado de formulario">

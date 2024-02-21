@@ -1,39 +1,7 @@
-.button {
-    display: inline-block;
-    border-radius: 8px;
-    background-color: #2F722F;
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 24px;
-    padding: 16px;
-    width: 260px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 5px;
+  .big-next-button {
+    @apply bg-[#2F722F] text-white active:bg-pink-600 font-bold uppercase text-base px-8 py-4 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
   }
-  
-  .button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-  }
-  
-  .button span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-  }
-  
-  .button:hover span {
-    padding-right: 25px;
-  }
-  
-  .button:hover span:after {
-    opacity: 1;
-    right: 0;
+
+  .big-next-button-disabled {
+    @apply bg-[#2F722F]/40 text-white font-bold uppercase text-base px-8 py-4 rounded shadow outline-none mr-1
   }

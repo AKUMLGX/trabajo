@@ -1,3 +1,10 @@
 <div class="w-full h-full bg-white rounded-xl border-2 border-[#691C32] p-4">
     <app-search-bar />
+    <button matStepperNext
+            disabled
+            class="base-next-button mt-8"
+            (click)="triggerSecondStep()"
+            >
+        <span>Siguiente</span>
+    </button>
 </div>

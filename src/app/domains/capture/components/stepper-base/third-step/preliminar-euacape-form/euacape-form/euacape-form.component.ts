@@ -36,7 +36,7 @@ export class EuacapeFormComponent {
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
 
     ADMON = '';
-    FECHAREC = '';
+    FECHAREC = null;
     DOCSCAN = '';
     ATENCION = '';
     DESCRIPCION = '';
@@ -44,19 +44,19 @@ export class EuacapeFormComponent {
     AUTORIDADSOLIC = '';
     CARPETAINV = null;
     PERSONAREL = '';
-    PLAZOATENCION = '';
+    PLAZOATENCION = null;
 
     public euacapeForm: FormGroup = this.fb.group({
-      administracion: [''],
-      fechaRecepcion: [''],
-      documentoEscaneado: [''],
+      administracion: [null, [Validators.required]],
+      fechaRecepcion: [null, [Validators.required]],
+      documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
       atencion: [null],
-      descripcion: [''],
+      descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
       tipoRespuesta: [null],
-      autoridadSolicitante: [''],
-      carpetaInvestigacion: [null],
-      personaRelacionada: [''],
-      plazoAtencion: [''],
+      autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
+      carpetaInvestigacion: [null, [Validators.maxLength(255)]],
+      personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
+      plazoAtencion: [null, [Validators.min(1)]],
     });
 
     saveEuacapeForm(): void {

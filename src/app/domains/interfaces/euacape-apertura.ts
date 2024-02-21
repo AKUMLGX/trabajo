@@ -7,7 +7,7 @@ export interface EuacapeApertura {
     descripcion:           string;
     fecha_recepcion:       string;
     autoridad_solicitante: string;
-    plazo_atencion:        string;
+    plazo_atencion:        number | null;
     administracion:        string;
     turno_jefatura:        string | null;
     carpeta_investigacion: string | null;
