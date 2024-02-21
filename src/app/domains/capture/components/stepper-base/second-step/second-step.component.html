@@ -1,10 +1,20 @@
 <div class="w-full h-full flex flex-col justify-center items-center bg-[#D9BCA3]/30 rounded-xl border-2 border-[#691C32] p-4">
     <app-dropdown (selectionEmitter)="retrieveSelectionFromDropdown($event)" />
-    <button matStepperNext
+    <button 
             [disabled]="!enabledButton" 
             class="mt-8"
             [ngClass]=" enabledButton ? 'big-next-button' : 'big-next-button-disabled' "
-            (click)="proceedToStepTwoHandler()">
+            (click)="openCustomModalWithTemplate(templateForSecondStep)">
         <span>Siguiente</span>
     </button>
 </div>
+
+<ng-template #templateForSecondStep>
+    <h2 mat-dialog-title>Alo</h2>
+    <mat-dialog-content>le Monde entier!</mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close (click)="modalCancelButton()">Cancelar</button>
+        <button matStepperNext mat-dialog-close mat-button >Continuar</button>
+    </mat-dialog-actions>
+</ng-template>
+
