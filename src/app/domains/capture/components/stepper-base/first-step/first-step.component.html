@@ -1,7 +1,15 @@
-<div class="w-full h-full bg-white rounded-xl border-2 border-[#691C32] p-4">
+<div class="w-full h-full bg-[#D9BCA3]/30 rounded-xl border-2 border-[#691C32] p-4">
+    <div class="text-base mt-2 ml-2">
+        Para comenzar da clic en el icono de lupa e ingresa alguno de los siguientes documentos: 
+    </div>
+    <ol type=”A” class="text-base mt-2 mb-4 ml-2">
+        <li>✔ Folio interno</li>
+        <li>✔ Oficio</li>
+        <li>✔ Persona relacionada</li>
+        <li>✔ Carpeta de investigación</li>
+      </ol>
     <app-search-bar />
     <button matStepperNext
-            disabled
             class="base-next-button mt-8"
             (click)="triggerSecondStep()"
             >

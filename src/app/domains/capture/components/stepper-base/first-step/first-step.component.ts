@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -18,8 +18,20 @@ export class FirstStepComponent {
 
   firstStepButtonStatus: boolean = false;
 
+  @Output() firstStepButtonStatusEmitter = new EventEmitter();
+
+  ngOnInit() {
+    setTimeout(() => {
+      console.log(this.firstStepButtonStatus);
+      this.firstStepButtonStatus = true;
+      console.log(this.firstStepButtonStatus);
+    }, 6000);
+    
+  }
+
   triggerSecondStep() {
-    this.firstStepButtonStatus = true;
+    console.log(this.firstStepButtonStatus);
+    this.firstStepButtonStatusEmitter.emit(this.firstStepButtonStatus);
   }
 
 }

@@ -1,19 +1,23 @@
 <div style="padding: 0.5em" class="text-xl">
     <mat-vertical-stepper linear [labelPosition]="'bottom'">
 
-        <mat-step label="Búsqueda" [completed]="status.firstStepButtonStatus" [editable]="false">
-            <app-first-step #status/>
+        <mat-step label="Búsqueda" 
+                [completed]="firstStepButtonStatus" 
+                [editable]="false">
+            <app-first-step (firstStepButtonStatusEmitter)="buttonStatusFromFirstStepChild($event)" />
         </mat-step>
 
-        <mat-step label="Elección de asunto" [editable]="false">
-            <app-second-step />
+        <mat-step label="Elección de asunto" 
+                [completed]="secondStepChild.isSecondStepPressed"
+                [editable]="false">
+            <app-second-step #secondStepChild />
         </mat-step>
 
         <mat-step label="Folio" 
-            [completed]="child.preliminarEuacapeForm.valid" 
-            [editable]="false">
+            [completed]="thirdStepchild.preliminarEuacapeForm.valid" 
+            [editable]="true">
                 <div class="third-step-wrapper">
-                    <app-preliminar-euacape-form #child />
+                    <app-preliminar-euacape-form #thirdStepchild />
                 </div>
         </mat-step>
 
