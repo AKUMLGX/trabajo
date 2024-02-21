@@ -22,4 +22,10 @@ import { PreliminarEuacapeFormComponent } from './third-step/preliminar-euacape-
 })
 export class StepperBaseComponent {
 
+  firstStepButtonStatus = false;
+
+  buttonStatusFromChild(event: boolean) {
+    this.firstStepButtonStatus = event;
+  }
+
 }
