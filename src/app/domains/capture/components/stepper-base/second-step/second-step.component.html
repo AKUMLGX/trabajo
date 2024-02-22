@@ -10,11 +10,28 @@
 </div>
 
 <ng-template #templateForSecondStep>
-    <h2 mat-dialog-title>Alo</h2>
-    <mat-dialog-content>le Monde entier!</mat-dialog-content>
-    <mat-dialog-actions>
-        <button mat-button mat-dialog-close (click)="modalCancelButton()">Cancelar</button>
-        <button matStepperNext mat-dialog-close mat-button >Continuar</button>
-    </mat-dialog-actions>
+    <div class="bg-[#D9BCA3]/30">
+        <h2 mat-dialog-title>Ha elegido el asunto: {{ selectedOption.name }}</h2>
+        <mat-dialog-content>Proceda con el llenado del formulario</mat-dialog-content>
+        <div class="flex justify-center items-center">
+            <mat-dialog-actions>
+                <button
+                    class="modal-right-button mr-10"
+                    mat-button mat-dialog-close 
+                    (click)="modalCancelButton()"
+                >
+                    Cancelar
+                </button>
+                <button
+                    class="modal-left-button ml-10"
+                    matStepperNext 
+                    mat-dialog-close 
+                    mat-button 
+                >
+                    Continuar
+                </button>
+            </mat-dialog-actions>
+        </div>
+    </div>
 </ng-template>
 

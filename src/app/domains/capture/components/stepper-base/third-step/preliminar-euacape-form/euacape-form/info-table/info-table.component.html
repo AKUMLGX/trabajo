@@ -1,7 +1,7 @@
-<div>
+<div class="bg-[#D9BCA3]/30">
     <h2 mat-dialog-title>
         <h1>
-            Se enviará la siguiente información
+            Se enviará la siguiente información:
         </h1>
     </h2>
     <mat-dialog-content>
@@ -109,23 +109,33 @@
           </table> -->
 
     </mat-dialog-content>
-    <mat-dialog-actions>
-        <button mat-button mat-dialog-close>Close</button>
-    </mat-dialog-actions>
-    <button (click)="confirmData(
-      FOLIOINTERNO(), 
-      FOLIOSCANNER(),
-      OFICIO(), 
-      DOCSCAN, 
-      PERSONAREL, 
-      DESCRIPCION, 
-      FECHAREC!.toString(), 
-      AUTORIDADSOLIC, 
-      PLAZOATENCION, 
-      ADMON,
-      CARPETAINV,
-      TURNOJEFATURA()
-    )" >
-      Confirmar
-    </button>
+    <div class="flex justify-center items-center">
+      <mat-dialog-actions>
+        <button 
+          class="modal-left-button mr-10"
+          mat-button 
+          mat-dialog-close
+          >
+          Cancelar
+        </button>
+        <button (click)="confirmData(
+          FOLIOINTERNO(), 
+          FOLIOSCANNER(),
+          OFICIO(), 
+          DOCSCAN, 
+          PERSONAREL, 
+          DESCRIPCION, 
+          FECHAREC!.toString(), 
+          AUTORIDADSOLIC, 
+          PLAZOATENCION, 
+          ADMON,
+          CARPETAINV,
+          TURNOJEFATURA()
+          )"
+          class="modal-right-button ml-10" 
+        >
+          Confirmar
+        </button>
+    </mat-dialog-actions> 
+    </div>   
 </div>
