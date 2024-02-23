@@ -23,9 +23,9 @@ import { CdkStepper } from '@angular/cdk/stepper';
 })
 export class StepperBaseComponent {
 
-  
-
   firstStepButtonStatus = false;
+
+  dropdownChoice: string = '';
 
   buttonStatusFromFirstStepChild(event: boolean) {
     this.firstStepButtonStatus = event;
@@ -35,5 +35,10 @@ export class StepperBaseComponent {
   //  console.log(event);
   //  this.secondStepButtonStatus = event;
   //}
+
+  retrieveSelectionFromSecondStep(event:string){
+    console.log(event);
+    this.dropdownChoice = event;
+  }
 
 }

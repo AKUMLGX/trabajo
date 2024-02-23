@@ -10,20 +10,43 @@
         <mat-step label="Elección de asunto" 
                 [completed]="secondStepChild.isSecondStepPressed"
                 [editable]="false">
-            <app-second-step #secondStepChild />
+            <app-second-step #secondStepChild (selectedOptionEmitter)="retrieveSelectionFromSecondStep($event)" />
         </mat-step>
 
-        <mat-step label="Folio" 
-            [completed]="thirdStepchild.preliminarEuacapeForm.valid" 
-            [editable]="true">
-                <div class="third-step-wrapper">
-                    <app-preliminar-euacape-form #thirdStepchild />
-                </div>
-        </mat-step>
+        <div>
+            @switch (dropdownChoice) {
+                @case ('Civil') {
+                  <span>Case 0 logic and implementation</span>
+                }
+                @case ('Penal') {
+                  <span>Case 1logic and implementation</span>
+                }
+               @case ('Concurso mercantil') {
+                  <span>Case 2logic and implementation</span>
+                }
+                @case ('EUACAPE') {
+                    <mat-step label="Folio" 
+                        [completed]="thirdStepChild.preliminarEuacapeForm.valid" 
+                        [editable]="true">
+                            <div class="third-step-wrapper">
+                                <app-preliminar-euacape-form #thirdStepChild />
+                            </div>
+                    </mat-step>
 
-        <mat-step label="Llenado de formulario">
-            <app-fourth-step />
-        </mat-step>
-
+                    <mat-step label="Llenado de formulario">
+                        <app-fourth-step />
+                    </mat-step>
+                     
+                }
+                @case ('Generalidades') {
+                    <span>Case 4logic and implementation</span>
+                }
+                @default {
+                  <span>Default case (Not 0 or 1 or 2)</span>
+                }
+            }
+        </div>
     </mat-vertical-stepper>
 </div>
+
+
