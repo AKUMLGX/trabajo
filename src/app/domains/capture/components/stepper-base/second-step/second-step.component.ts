@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Output, TemplateRef } from '@angular/core';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { CommonModule } from '@angular/common';
@@ -29,6 +29,8 @@ export class SecondStepComponent {
 
   isSecondStepPressed: boolean = false;
 
+  @Output() selectedOptionEmitter = new EventEmitter();
+
   retrieveSelectionFromDropdown(event:any){
     this.selectedOption = event;
     //console.log("Estoy -*recibiendo o nelson");
@@ -50,6 +52,7 @@ export class SecondStepComponent {
        template
      });
      this.isSecondStepPressed = true;
+     this.selectedOptionEmitter.emit(this.selectedOption.name);
    }
 
    modalCancelButton(){
