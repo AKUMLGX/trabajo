@@ -25,7 +25,12 @@ export class GraficaAtencionService {
     },
   ];
 
+  // private data
+
   get graphicData() {
     return this.data
   }
+  // get graphicDataVertical(){
+
+  // }
 }

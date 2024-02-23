@@ -1,0 +1,15 @@
+<div class="flex justify-end items-center mb-4">
+  <input class="mr-2" type="date" [(ngModel)]="fechaSelecionada"(change)="actualizarSemaforo()">
+</div>
+<div id="box">
+  <div class="light red" [ngClass]="{'checked': lights.rojo}"></div>
+  <div class="light yellow" [ngClass]="{'checked': lights.amarillo}"></div>
+  <div class="light green" [ngClass]="{'checked': lights.verde}"></div>
+</div>
+
+
+
+
+
+
+
