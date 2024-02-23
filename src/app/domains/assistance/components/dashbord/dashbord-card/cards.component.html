@@ -1,4 +1,4 @@
-<div class="h-screen  text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto">
+<div class="h-auto   text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
   <div class="flex justify-center items-center text-3xl mt-10 ">Atención de Requerimientos. </div>
   <div class=" flex  items-center justify-center mt-16">
     <div class="flex gap-2">
@@ -13,7 +13,7 @@
             <mat-icon>restore_page</mat-icon>
           </div>
           <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none  " [routerLink]="['/layout/tramite-card']"
+          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none  " [routerLink]="['/layout/assistance/tramite-card']"
             routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
         </div>
       </div>
@@ -52,8 +52,26 @@
   <div class="flex justify-center items-end ">
     <div class="flex w-1/2 p-4">
       <div class="w-full ">
-        <div class="bg-white shadow-md rounded-lg p-4">
-          <h2 class="text-lg font-semibold mb-2 text-center">Semáforo</h2>
+        <div class="bg-white shadow-md rounded-lg p-4 ">
+          <!-- <h2 class="text-lg font-semibold mb-2 text-center">Semáforo</h2> -->
+              <div class="flex">
+                <div class="w-1/2 h-full">
+                  <app-traffic-lights-atencion/>
+                </div>
+                <div class="w-1/2">
+                    <!-- <div class=" flex justify-center items-center flex-col gap-12">
+                      <div class="bg-[#D9BCA3]/30  shadow-md rounded-lg p-4 ">
+                            <p class="text-sm  mb-2" >Mayor a 15 dias </p>
+                      </div>
+                      <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
+                            <p class="text-sm">De 5 a 15 dias</p>
+                      </div>
+                      <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
+                            <p class="text-sm"> primeros 4 dias</p>
+                      </div>
+                    </div> -->
+                </div>
+              </div>
         </div>
       </div>
     </div>

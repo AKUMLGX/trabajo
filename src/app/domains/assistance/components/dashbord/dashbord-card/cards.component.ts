@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { CardsgraphicComponent } from '../dashbord-graphic/Pie-chart/cardsgraphic.component';
 import { GraphicAdministracionComponent } from '../dashbord-graphic/vertical-graph/graphic-administracion.component';
+import { TrafficLightsAtencionComponent } from '../TrafficLights/traffic-lights-atencion/traffic-lights-atencion.component';
 
 
 
@@ -16,11 +17,14 @@ import { GraphicAdministracionComponent } from '../dashbord-graphic/vertical-gra
   imports: [MatIconModule,
     MatCardModule,
     RouterModule,CardsgraphicComponent,
-    GraphicAdministracionComponent],
+    GraphicAdministracionComponent,TrafficLightsAtencionComponent],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.css'
 })
 export class CardsComponent {
+
+
+
 
 
 }

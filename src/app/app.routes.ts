@@ -26,11 +26,14 @@ export const routes: Routes = [
             {
                 path: 'assistance',
                 component: AssistancePageComponent,
+                children:[
+                  {path:"tramite-card" , component:TramitePageComponent}
+                ]
             },
-            {
-              path: "tramite-card",
-              component: TramitePageComponent,
-            },
+            // {
+            //   path: "tramite-card",
+            //   component: TramitePageComponent,
+            // },
             {
               path: "parcial-card",
               component: ParcialPageComponent,
