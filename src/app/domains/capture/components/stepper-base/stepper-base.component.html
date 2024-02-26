@@ -16,7 +16,11 @@
         <div>
             @switch (dropdownChoice) {
                 @case ('Civil') {
-                  <span>Case 0 logic and implementation</span>
+                  <mat-step label="Formulario Civil">
+                    <div class="third-step-wrapper">
+                        <app-civil-form />
+                    </div>
+                  </mat-step>
                 }
                 @case ('Penal') {
                   <span>Case 1logic and implementation</span>
@@ -25,7 +29,7 @@
                   <span>Case 2logic and implementation</span>
                 }
                 @case ('EUACAPE') {
-                    <mat-step label="Folio" 
+                    <mat-step label="Formulario EUACAPE (parte I)" 
                         [completed]="thirdStepChild.preliminarEuacapeForm.valid" 
                         [editable]="true">
                             <div class="third-step-wrapper">
@@ -33,7 +37,7 @@
                             </div>
                     </mat-step>
 
-                    <mat-step label="Llenado de formulario">
+                    <mat-step label="Formulario EUACAPE (parte II)">
                         <app-fourth-step />
                     </mat-step>
                      

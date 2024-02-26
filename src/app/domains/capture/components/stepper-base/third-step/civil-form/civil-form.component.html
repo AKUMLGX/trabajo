@@ -1,0 +1,78 @@
+<section class=" py-1 bg-white">
+    <div class="w-full lg:w-12/12 mx-auto mt-2">
+        <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
+            <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
+                <form [formGroup]="civilForm" (ngSubmit)="saveCivilForm()">
+                    <div class="flex flex-wrap">
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Administración"
+                                formControlName="administracion"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Tipo Asunto"
+                                formControlName="tipoAsunto"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Oficio"
+                                formControlName="oficio"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Autoridad Remitente"
+                                formControlName="autoridadRemitente"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Folio"
+                                formControlName="folio"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Folio Júpiter"
+                                formControlName="folioJupiter"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Folio Euacape"
+                                formControlName="folioEuacape"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Carpeta de Investigacion"
+                                formControlName="carpetaInvestigacion"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Persona relacionada"
+                                formControlName="personaRelacionada"
+                            />
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                label="Angular React"
+                                formControlName="myIdentificadorChaval"
+                            />
+                        </div>
+                    </div>
+                    <br>
+                    <button
+                        class="next-button"
+                    >
+                        Continuar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

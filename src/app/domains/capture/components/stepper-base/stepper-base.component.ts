@@ -5,6 +5,7 @@ import { SecondStepComponent } from './second-step/second-step.component';
 import { ThirdStepComponent } from './third-step/third-step.component';
 import { FourthStepComponent } from './fourth-step/fourth-step.component';
 import { PreliminarEuacapeFormComponent } from './third-step/preliminar-euacape-form/preliminar-euacape-form.component';
+import { CivilFormComponent } from './third-step/civil-form/civil-form.component';
 import { CdkStepper } from '@angular/cdk/stepper';
 
 @Component({
@@ -17,6 +18,7 @@ import { CdkStepper } from '@angular/cdk/stepper';
     ThirdStepComponent,
     FourthStepComponent,
     PreliminarEuacapeFormComponent,
+    CivilFormComponent,
   ],
   templateUrl: './stepper-base.component.html',
   styleUrl: './stepper-base.component.css'
