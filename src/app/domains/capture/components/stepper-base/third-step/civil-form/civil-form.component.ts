@@ -4,6 +4,7 @@ import { FormBuilder,
   FormGroup, 
   Validators, 
   ReactiveFormsModule } from '@angular/forms';
+import { CivilIndividualFieldComponent } from './civil-individual-field/civil-individual-field.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { FormBuilder,
   imports: [
     FormsModule,
     ReactiveFormsModule,
-
+    CivilIndividualFieldComponent,
   ],
   templateUrl: './civil-form.component.html',
   styleUrl: './civil-form.component.css'
@@ -33,6 +34,7 @@ export class CivilFormComponent {
     folioEuacape: ['',],
     carpetaInvestigacion: ['',],
     personaRelacionada: ['',],
+    myIdentificadorChaval: ['',],
   });
 
   saveCivilForm(): void {
