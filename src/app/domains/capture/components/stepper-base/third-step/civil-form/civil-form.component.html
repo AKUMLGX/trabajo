@@ -1,49 +1,98 @@
 <section class=" py-1 bg-white">
     <div class="w-full lg:w-12/12 mx-auto mt-2">
-        <div
-            class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
+        <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
             <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
                 <form [formGroup]="civilForm" (ngSubmit)="saveCivilForm()">
                     <div class="flex flex-wrap">
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Oficio
+                                Administración
                             </label>
                             <input 
-                                type="text" placeholder="Oficio"
+                                type="text" placeholder="Administración"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="administracion" value=""
+                            >
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Tipo Asunto
+                            </label>
+                            <input type="text" placeholder="Tipo Asunto"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="tipoAsunto" value=""
+                            >
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Oficio
+                            </label>
+                            <input type="text" placeholder="Oficio"
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="oficio" value=""
-                            >
-                        </div>
-                        <div class="wrapping-individual-container">
-                            <label class="label-field text-blueGray-600"
-                                htmlfor="grid-password">
-                                    Turno jefatura
-                            </label>
-                            <input type="text" placeholder="Turno jefatura"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="turnoJefatura" value=""
-                            >
-                        </div>
-                        <div class="wrapping-individual-container">
-                            <label class="label-field text-blueGray-600"
-                                htmlfor="grid-password">
-                                    Folio interno
-                            </label>
-                            <input type="text" placeholder="Folio interno"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="folioInterno" value=""
                             >   
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Folio scanner
+                                Autoridad Remitente
                             </label>
-                            <input type="text" placeholder=" Folio scanner"
+                            <input type="text" placeholder="Autoridad Remitente"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="folioScanner" value=""
+                                formControlName="autoridadRemitente" value=""
+                            >
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Folio
+                            </label>
+                            <input type="text" placeholder="Folio"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="folio" value=""
+                            >
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Folio Júpiter
+                            </label>
+                            <input type="text" placeholder="Folio Júpiter"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="folioJupiter" value=""
+                            >
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Folio Euacape
+                            </label>
+                            <input type="text" placeholder="Folio Euacape"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="folioEuacape" value=""
+                            >
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Carpeta de Investigacion
+                            </label>
+                            <input type="text" placeholder="Carpeta de Investigacion"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="carpetaInvestigacion" value=""
+                            >
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Persona relacionada
+                            </label>
+                            <input type="text" placeholder="Persona relacionada"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="personaRelacionada" value=""
                             >
                         </div>
                     </div>

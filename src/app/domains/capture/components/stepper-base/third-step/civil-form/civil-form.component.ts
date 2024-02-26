@@ -24,10 +24,15 @@ export class CivilFormComponent {
     ){ }
 
   public civilForm: FormGroup = this.fb.group({
-    oficio: ['', ],
-    turnoJefatura: [null,],
-    folioInterno: ['',],
-    folioScanner: ['',],
+    administracion: ['', ],
+    tipoAsunto: [null,],
+    oficio: ['',],
+    autoridadRemitente: ['',],
+    folio: ['',],
+    folioJupiter: ['',],
+    folioEuacape: ['',],
+    carpetaInvestigacion: ['',],
+    personaRelacionada: ['',],
   });
 
   saveCivilForm(): void {
