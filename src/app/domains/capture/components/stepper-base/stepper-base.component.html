@@ -30,7 +30,11 @@
                     </mat-step>
                 }
                 @case ('Concurso mercantil') {
-                  <span>Case 2logic and implementation</span>
+                    <mat-step label="Formulario Concurso mercantil">
+                        <div class="third-step-wrapper">
+                            <app-concurso-mercantil-form />
+                        </div>
+                    </mat-step>
                 }
                 @case ('EUACAPE') {
                     <mat-step label="Formulario EUACAPE (parte I)" 
@@ -47,10 +51,11 @@
                      
                 }
                 @case ('Generalidades') {
-                    <span>Case 4logic and implementation</span>
-                }
-                @default {
-                  <span>Default case (Not 0 or 1 or 2)</span>
+                    <mat-step label="Formulario Concurso mercantil">
+                        <div class="third-step-wrapper">
+                            <app-generalidades-form />
+                        </div>
+                    </mat-step>
                 }
             }
         </div>
