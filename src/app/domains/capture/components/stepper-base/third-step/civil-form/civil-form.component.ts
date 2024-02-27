@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { FormBuilder, 
+import { AbstractControl, FormsModule } from '@angular/forms';
+import { FormBuilder,
+  FormControl, 
   FormGroup, 
   Validators, 
   ReactiveFormsModule } from '@angular/forms';
@@ -34,11 +35,15 @@ export class CivilFormComponent {
     folioEuacape: ['',],
     carpetaInvestigacion: ['',],
     personaRelacionada: ['',],
-    myIdentificadorChaval: ['',],
+    
   });
 
   saveCivilForm(): void {
     console.log(this.civilForm.value);
+    console.log(this.civilForm.value.folioJupiter);
   }
+
+  public asFormControl = (formControl: AbstractControl): FormControl =>
+    formControl as FormControl;
 
 }

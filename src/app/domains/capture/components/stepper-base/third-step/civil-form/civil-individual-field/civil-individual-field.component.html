@@ -1,9 +1,11 @@
 <label class="label-field text-blueGray-600"
-    htmlfor="grid-password">
+    htmlfor="grid-password" for="{{ formControlName }}">
     {{ label }}
 </label>
 <input 
-    type="text" placeholder="{{ label }}"
+    type="text" [placeholder]="label"
     class="input-field placeholder-blueGray-300"
-    formControlName="{{ formControlName }}" value=""
+    [id]="formControlName" 
+    (ngModelChange)="onChange($event)"
+    value=""
 >

@@ -6,62 +6,56 @@
                     <div class="flex flex-wrap">
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Administración"
-                                formControlName="administracion"
+                                [label]="'Administración'"
+                                [formControlName]="'administracion'"
+                            ></app-civil-individual-field>
+                        </div>
+                        <div class="wrapping-individual-container">
+                            <app-civil-individual-field
+                                [label]="'Tipo de Asunto'"
+                                [formControlName]="'tipoAsunto'"
                             />
                         </div>
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Tipo Asunto"
-                                formControlName="tipoAsunto"
+                                [label]="'Oficio'"
+                                [formControlName]="'oficio'"
                             />
                         </div>
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Oficio"
-                                formControlName="oficio"
+                                [label]="'Autoridad remitente'"
+                                [formControlName]="'autoridadRemitente'"
                             />
                         </div>
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Autoridad Remitente"
-                                formControlName="autoridadRemitente"
+                                [label]="'Folio'"
+                                [formControlName]="'folio'"
                             />
                         </div>
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Folio"
-                                formControlName="folio"
+                                [label]="'Folio Júpiter'"
+                                [formControlName]="'folioJupiter'"
                             />
                         </div>
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Folio Júpiter"
-                                formControlName="folioJupiter"
+                                [label]="'Folio Euacape'"
+                                [formControlName]="'folioEuacape'"
                             />
                         </div>
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Folio Euacape"
-                                formControlName="folioEuacape"
+                                [label]="'Carpeta de Investigacion'"
+                                [formControlName]="'carpetaInvestigacion'"
                             />
                         </div>
                         <div class="wrapping-individual-container">
                             <app-civil-individual-field
-                                label="Carpeta de Investigacion"
-                                formControlName="carpetaInvestigacion"
-                            />
-                        </div>
-                        <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                label="Persona relacionada"
-                                formControlName="personaRelacionada"
-                            />
-                        </div>
-                        <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                label="Angular React"
-                                formControlName="myIdentificadorChaval"
+                                [label]="'Persona relacionada'"
+                                [formControlName]="'personaRelacionada'"
                             />
                         </div>
                     </div>
