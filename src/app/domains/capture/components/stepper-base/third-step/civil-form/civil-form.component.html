@@ -5,58 +5,95 @@
                 <form [formGroup]="civilForm" (ngSubmit)="saveCivilForm()">
                     <div class="flex flex-wrap">
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Administración'"
-                                [formControlName]="'administracion'"
-                            ></app-civil-individual-field>
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Administración
+                            </label>
+                            <input 
+                                type="text" placeholder="Administración"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="administracion" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Tipo de Asunto'"
-                                [formControlName]="'tipoAsunto'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Tipo Asunto
+                            </label>
+                            <input type="text" placeholder="Tipo Asunto"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="tipoAsunto" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Oficio'"
-                                [formControlName]="'oficio'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Oficio
+                            </label>
+                            <input type="text" placeholder="Oficio"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="oficio" value=""
+                            >   
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Autoridad remitente'"
-                                [formControlName]="'autoridadRemitente'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Autoridad Remitente
+                            </label>
+                            <input type="text" placeholder="Autoridad Remitente"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="autoridadRemitente" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Folio'"
-                                [formControlName]="'folio'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Folio
+                            </label>
+                            <input type="text" placeholder="Folio"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="folio" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Folio Júpiter'"
-                                [formControlName]="'folioJupiter'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Folio Júpiter
+                            </label>
+                            <input type="text" placeholder="Folio Júpiter"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="folioJupiter" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Folio Euacape'"
-                                [formControlName]="'folioEuacape'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Folio Euacape
+                            </label>
+                            <input type="text" placeholder="Folio Euacape"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="folioEuacape" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Carpeta de Investigacion'"
-                                [formControlName]="'carpetaInvestigacion'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Carpeta de Investigacion
+                            </label>
+                            <input type="text" placeholder="Carpeta de Investigacion"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="carpetaInvestigacion" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
-                            <app-civil-individual-field
-                                [label]="'Persona relacionada'"
-                                [formControlName]="'personaRelacionada'"
-                            />
+                            <label class="label-field text-blueGray-600"
+                                htmlfor="grid-password">
+                                Persona relacionada
+                            </label>
+                            <input type="text" placeholder="Persona relacionada"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="personaRelacionada" value=""
+                            >
                         </div>
                     </div>
                     <br>
