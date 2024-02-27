@@ -23,9 +23,13 @@
                   </mat-step>
                 }
                 @case ('Penal') {
-                  <span>Case 1logic and implementation</span>
+                    <mat-step label="Formulario Penal">
+                        <div class="third-step-wrapper">
+                            <app-penal-form />
+                        </div>
+                    </mat-step>
                 }
-               @case ('Concurso mercantil') {
+                @case ('Concurso mercantil') {
                   <span>Case 2logic and implementation</span>
                 }
                 @case ('EUACAPE') {
