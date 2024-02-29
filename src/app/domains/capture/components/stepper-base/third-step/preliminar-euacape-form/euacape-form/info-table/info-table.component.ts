@@ -1,7 +1,7 @@
 import { Component, Input, signal } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatTableModule} from '@angular/material/table';
-import { PreliminarEuacapeService } from '../../../../../../../shared/services/preliminar-euacape.service';
+import { MatTableModule } from '@angular/material/table';
+import { CollectEuacapeInfoService } from '../../../../../../../shared/services/collect-euacape-info.service';
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 
@@ -21,7 +21,7 @@ export interface EuacapeTableBeforeSubmit {
 export class InfoTableComponent {
 
   constructor(
-    private preliminarEuacapeService: PreliminarEuacapeService,
+    private collectEuacapeInfoService: CollectEuacapeInfoService,
     private euacapeAperturaService: EuacapeAperturaService,
   ){ }
 
@@ -36,10 +36,10 @@ export class InfoTableComponent {
   @Input({required: true}) PERSONAREL!: string;
   @Input({required: true}) PLAZOATENCION!: number | null;
 
-  OFICIO = this.preliminarEuacapeService.OFICIO;
-  TURNOJEFATURA = this.preliminarEuacapeService.TURNOJEFATURA;
-  FOLIOINTERNO = this.preliminarEuacapeService.FOLIOINT;
-  FOLIOSCANNER = this.preliminarEuacapeService.FOLIOSCAN;
+  OFICIO = this.collectEuacapeInfoService.OFICIO;
+  TURNOJEFATURA = this.collectEuacapeInfoService.TURNOJEFATURA;
+  FOLIOINTERNO = this.collectEuacapeInfoService.FOLIOINT;
+  FOLIOSCANNER = this.collectEuacapeInfoService.FOLIOSCAN;
 
   euacapeFormObject = signal<EuacapeApertura>({
     folio_interno:         '',
@@ -58,8 +58,8 @@ export class InfoTableComponent {
 
   ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: ''},
-    {position: 2, name: 'Administración', answer: ''},
-    {position: 3, name: 'Fecha de recepción', answer: ''},
+    {position: 2, name: 'Administración', answer: this.ADMON},
+    {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: ''},
     {position: 4, name: 'Documento escaneado', answer: ''},
     {position: 5, name: 'Atención', answer: ''},
     {position: 6, name: 'Descripción', answer: ''},
@@ -69,7 +69,7 @@ export class InfoTableComponent {
     {position: 10, name: 'Folio interno', answer: ''},
     {position: 11, name: 'Carpeta de investigación', answer: ''},
     {position: 12, name: 'Persona relacionada', answer: ''},
-    {position: 13, name: 'Folio scanner', answer: ''},
+    {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
     {position: 14, name: 'Tipo asunto', answer: ''},
     {position: 15, name: 'Plazo de atención', answer: ''},
   ];

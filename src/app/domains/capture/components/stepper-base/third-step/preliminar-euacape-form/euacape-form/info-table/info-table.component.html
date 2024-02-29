@@ -12,78 +12,78 @@
           <th>Respuesta</th>
         </tr>
         <tr>
-          <td>1</td>
-          <td>Oficio</td>
+          <td>{{ ELEMENT_DATA[0].position }}</td>
+          <td> {{ ELEMENT_DATA[0].name }} </td>
           <td>{{OFICIO()}}</td>
         </tr>
         <tr>
-          <td>2</td>
-          <td>Administración</td>
-          <td>{{ADMON}}</td>
+          <td>{{ ELEMENT_DATA[1].position }}</td>
+          <td>{{ ELEMENT_DATA[1].name }}</td>
+          <td>{{ ELEMENT_DATA[1].answer }}</td>
         </tr>
         <tr>
-          <td>3</td>
-          <td>Fecha de recepción (yyyy-MM-dd)</td>
+          <td>{{ ELEMENT_DATA[2].position }}</td>
+          <td>{{ ELEMENT_DATA[2].name }}</td>
           <td>{{ FECHAREC }}</td>
         </tr>
         <tr>
-          <td>4</td>
-          <td>Documentos escaneados</td>
+          <td>{{ ELEMENT_DATA[3].position }}</td>
+          <td>{{ ELEMENT_DATA[3].name }}</td>
           <td>{{DOCSCAN}}</td>
         </tr>
         <tr>
-          <td>5</td>
-          <td>Atención</td>
+          <td>{{ ELEMENT_DATA[4].position }}</td>
+          <td>{{ ELEMENT_DATA[4].name }}</td>
           <td>{{ATENCION}}</td>
         </tr>
         <tr>
-          <td>6</td>
-          <td>Descripción</td>
+          <td>{{ ELEMENT_DATA[5].position }}</td>
+          <td>{{ ELEMENT_DATA[5].name }}</td>
           <td>{{DESCRIPCION}}</td>
         </tr>
         <tr>
-          <td>7</td>
-          <td>Tipo de respuesta</td>
+          <td>{{ ELEMENT_DATA[6].position }}</td>
+          <td>{{ ELEMENT_DATA[6].name }}</td>
           <td>{{TIPORES}}</td>
         </tr>
         <tr>
-          <td>8</td>
-          <td>Autoridad solicitante</td>
+          <td>{{ ELEMENT_DATA[7].position }}</td>
+          <td>{{ ELEMENT_DATA[7].name }}</td>
           <td>{{AUTORIDADSOLIC}}</td>
         </tr>
         <tr>
-          <td>9</td>
-          <td>Turno jefatura</td>
+          <td>{{ ELEMENT_DATA[8].position }}</td>
+          <td>{{ ELEMENT_DATA[8].name }}</td>
           <td>{{ (TURNOJEFATURA() !== null) ? TURNOJEFATURA() : '---' }}</td>
         </tr>
         <tr>
-          <td>10</td>
-          <td>Folio interno</td>
+          <td>{{ ELEMENT_DATA[9].position }}</td>
+          <td>{{ ELEMENT_DATA[9].name }}</td>
           <td>{{FOLIOINTERNO()}}</td>
         </tr>
         <tr>
-          <td>11</td>
-          <td>Carpeta de investigación</td>
+          <td>{{ ELEMENT_DATA[10].position }}</td>
+          <td>{{ ELEMENT_DATA[10].name }}</td>
           <td>{{ (CARPETAINV !== null) ? CARPETAINV : '---' }}</td>
         </tr>
         <tr>
-          <td>12</td>
-          <td>Persona relacionada</td>
+          <td>{{ ELEMENT_DATA[11].position }}</td>
+          <td>{{ ELEMENT_DATA[11].name }}</td>
           <td>{{PERSONAREL}}</td>
         </tr>
         <tr>
-          <td>13</td>
-          <td>Folio scanner</td>
-          <td>{{FOLIOSCANNER()}}</td>
+          <td>{{ ELEMENT_DATA[12].position }}</td>
+          <td>{{ ELEMENT_DATA[12].name }}</td>
+          <td>{{ ELEMENT_DATA[12].answer }}</td>
         </tr>
         <tr>
-          <td>14</td>
-          <td>Tipo asunto</td>
+          <td>{{ ELEMENT_DATA[13].position }}</td>
+          <td>{{ ELEMENT_DATA[13].name }}</td>
           <td>EUACAPE</td>
         </tr>
         <tr>
-          <td>15</td>
-          <td>Plazo de atención</td>
+          <td>{{ ELEMENT_DATA[14].position }}</td>
+          <td>{{ ELEMENT_DATA[14].name }}</td>
           <td>{{ ( PLAZOATENCION !== null ) ? PLAZOATENCION : '---' }}</td>
         </tr>
       </table>
