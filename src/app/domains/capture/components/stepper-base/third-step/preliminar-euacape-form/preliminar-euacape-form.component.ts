@@ -7,7 +7,7 @@ import { FormBuilder,
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { EuacapeFormComponent } from './euacape-form/euacape-form.component';
-import { PreliminarEuacapeService } from '../../../../../shared/services/preliminar-euacape.service';
+import { CollectEuacapeInfoService } from '../../../../../shared/services/collect-euacape-info.service';
 
 @Component({
   selector: 'app-preliminar-euacape-form',
@@ -26,7 +26,7 @@ export class PreliminarEuacapeFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private preliminarEuacapeService : PreliminarEuacapeService,
+    private collectEuacapeInfoService : CollectEuacapeInfoService,
     ){ }
 
   public preliminarEuacapeForm: FormGroup = this.fb.group({
@@ -40,10 +40,10 @@ export class PreliminarEuacapeFormComponent {
 
   savePreliminarEuacapeForm(): void {
     console.log(this.preliminarEuacapeForm.value);
-    this.preliminarEuacapeService.updateOficio(this.preliminarEuacapeForm.value.oficio);
-    this.preliminarEuacapeService.updateTurnoJefatura(this.preliminarEuacapeForm.value.turnoJefatura);
-    this.preliminarEuacapeService.updateFolioInterno(this.preliminarEuacapeForm.value.folioInterno);
-    this.preliminarEuacapeService.updateFolioScanner(this.preliminarEuacapeForm.value.folioScanner);
+    this.collectEuacapeInfoService.updateOficio(this.preliminarEuacapeForm.value.oficio);
+    this.collectEuacapeInfoService.updateTurnoJefatura(this.preliminarEuacapeForm.value.turnoJefatura);
+    this.collectEuacapeInfoService.updateFolioInterno(this.preliminarEuacapeForm.value.folioInterno);
+    this.collectEuacapeInfoService.updateFolioScanner(this.preliminarEuacapeForm.value.folioScanner);
   }
 
 }
