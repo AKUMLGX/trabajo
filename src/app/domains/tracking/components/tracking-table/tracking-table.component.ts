@@ -25,6 +25,8 @@ export class TrackingTableComponent {
 
   public tipoBusqueda: string = '';
 
+  public openPdf: boolean = false;
+
   public newTableIsRendered: boolean = false;
 
   public labels = {
@@ -36,6 +38,7 @@ export class TrackingTableComponent {
   constructor(private asuntoService: AsuntoService, private router: Router) {}
 
   ngOnInit() {
+    this.openPdf = false;
     this.asuntoService.documentsUpdated.subscribe((documents) => {
       this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
@@ -75,7 +78,8 @@ export class TrackingTableComponent {
   }
 
   openPdfViewer() {
-    this.router.navigate(['/site/rep/consulta/pdfViewer']);
+    this.openPdf = true;
+    this.router.navigate(['/site/rep/consulta/tracking/pdfViewer']);
   }
 
   previousPage() {

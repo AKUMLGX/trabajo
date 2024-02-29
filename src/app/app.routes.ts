@@ -18,32 +18,30 @@ export const routes: Routes = [
   {
     path: 'site/rep/consulta',
     component: MainLayoutComponent,
+    canActivate: [loginGuard],
     children: [
       {
         path: 'capture',
         component: CapturePageComponent,
-        canActivate: [loginGuard],
       },
       {
         path: 'assistance',
         component: AssistancePageComponent,
-        canActivate: [loginGuard],
       },
       {
         path: 'tracking',
         component: TrackingPageComponent,
-        canActivate: [loginGuard],
+        children: [
+          {
+            path: 'pdfViewer',
+            component: PdfViewerComponent
+          }
+        ],
       },
       {
         path: 'reports',
         component: ReportsPageComponent,
-        canActivate: [loginGuard],
       },
-      {
-        path: 'pdfViewer',
-        component: PdfViewerComponent,
-        canActivate: [loginGuard],
-      }
     ],
   },
   // {
