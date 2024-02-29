@@ -14,62 +14,62 @@
         <tr>
           <td>{{ ELEMENT_DATA[0].position }}</td>
           <td> {{ ELEMENT_DATA[0].name }} </td>
-          <td>{{OFICIO()}}</td>
+          <td>{{ ELEMENT_DATA[0].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[1].position }}</td>
           <td>{{ ELEMENT_DATA[1].name }}</td>
-          <td>{{ ELEMENT_DATA[1].answer }}</td>
+          <td>{{ ADMINISTRACION() }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[2].position }}</td>
           <td>{{ ELEMENT_DATA[2].name }}</td>
-          <td>{{ FECHAREC }}</td>
+          <td>{{ FECHARECEPCION() }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[3].position }}</td>
           <td>{{ ELEMENT_DATA[3].name }}</td>
-          <td>{{DOCSCAN}}</td>
+          <td>{{ ELEMENT_DATA[3].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[4].position }}</td>
           <td>{{ ELEMENT_DATA[4].name }}</td>
-          <td>{{ATENCION}}</td>
+          <td>{{ ELEMENT_DATA[4].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[5].position }}</td>
           <td>{{ ELEMENT_DATA[5].name }}</td>
-          <td>{{DESCRIPCION}}</td>
+          <td>{{ ELEMENT_DATA[5].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[6].position }}</td>
           <td>{{ ELEMENT_DATA[6].name }}</td>
-          <td>{{TIPORES}}</td>
+          <td>{{ ELEMENT_DATA[6].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[7].position }}</td>
           <td>{{ ELEMENT_DATA[7].name }}</td>
-          <td>{{AUTORIDADSOLIC}}</td>
+          <td>{{ ELEMENT_DATA[7].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[8].position }}</td>
           <td>{{ ELEMENT_DATA[8].name }}</td>
-          <td>{{ (TURNOJEFATURA() !== null) ? TURNOJEFATURA() : '---' }}</td>
+          <td>{{ ELEMENT_DATA[8].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[9].position }}</td>
           <td>{{ ELEMENT_DATA[9].name }}</td>
-          <td>{{FOLIOINTERNO()}}</td>
+          <td>{{ ELEMENT_DATA[9].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[10].position }}</td>
           <td>{{ ELEMENT_DATA[10].name }}</td>
-          <td>{{ (CARPETAINV !== null) ? CARPETAINV : '---' }}</td>
+          <td>{{ ELEMENT_DATA[10].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[11].position }}</td>
           <td>{{ ELEMENT_DATA[11].name }}</td>
-          <td>{{PERSONAREL}}</td>
+          <td>{{ ELEMENT_DATA[11].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[12].position }}</td>
@@ -79,12 +79,12 @@
         <tr>
           <td>{{ ELEMENT_DATA[13].position }}</td>
           <td>{{ ELEMENT_DATA[13].name }}</td>
-          <td>EUACAPE</td>
+          <td>{{ ELEMENT_DATA[13].answer }}</td>
         </tr>
         <tr>
           <td>{{ ELEMENT_DATA[14].position }}</td>
           <td>{{ ELEMENT_DATA[14].name }}</td>
-          <td>{{ ( PLAZOATENCION !== null ) ? PLAZOATENCION : '---' }}</td>
+          <td>{{ ELEMENT_DATA[14].answer }}</td>
         </tr>
       </table>
         <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
@@ -122,14 +122,14 @@
           FOLIOINTERNO(), 
           FOLIOSCANNER(),
           OFICIO(), 
-          DOCSCAN, 
-          PERSONAREL, 
-          DESCRIPCION, 
-          FECHAREC!.toString(), 
-          AUTORIDADSOLIC, 
-          PLAZOATENCION, 
-          ADMON,
-          CARPETAINV,
+          DOCUMENTOESCANEADO(), 
+          PERSONARELACIONADA(), 
+          DESCRIPCION(), 
+          FECHARECEPCION()!.toString(), 
+          AUTORIDADSOLICITANTE(), 
+          PLAZOATENCION(), 
+          ADMINISTRACION(),
+          CARPETAINVESTIGACION(),
           TURNOJEFATURA()
           )"
           class="modal-right-button ml-10" 
