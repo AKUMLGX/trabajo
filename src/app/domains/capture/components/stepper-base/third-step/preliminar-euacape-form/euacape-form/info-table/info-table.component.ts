@@ -56,7 +56,7 @@ export class InfoTableComponent {
     carpeta_investigacion: null,
   });
 
-  ELEMENT_DATA: EuacapeTableBeforeSubmit[] = [
+  EUACAPE_DATA: EuacapeTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: this.OFICIO()},
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
@@ -75,7 +75,7 @@ export class InfoTableComponent {
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
-  dataSource = this.ELEMENT_DATA;
+  dataSource = this.EUACAPE_DATA;
 
   confirmData(
     folioInterno: string,

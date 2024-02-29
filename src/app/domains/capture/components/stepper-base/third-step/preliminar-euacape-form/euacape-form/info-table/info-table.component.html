@@ -1,8 +1,6 @@
 <div class="bg-[#D9BCA3]/30">
     <h2 mat-dialog-title>
-        <h1>
-            Se enviará la siguiente información:
-        </h1>
+      Se enviará la siguiente información:
     </h2>
     <mat-dialog-content>
       <table>
@@ -11,103 +9,14 @@
           <th>Nombre</th>
           <th>Respuesta</th>
         </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[0].position }}</td>
-          <td> {{ ELEMENT_DATA[0].name }} </td>
-          <td>{{ ELEMENT_DATA[0].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[1].position }}</td>
-          <td>{{ ELEMENT_DATA[1].name }}</td>
-          <td>{{ ADMINISTRACION() }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[2].position }}</td>
-          <td>{{ ELEMENT_DATA[2].name }}</td>
-          <td>{{ FECHARECEPCION() }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[3].position }}</td>
-          <td>{{ ELEMENT_DATA[3].name }}</td>
-          <td>{{ ELEMENT_DATA[3].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[4].position }}</td>
-          <td>{{ ELEMENT_DATA[4].name }}</td>
-          <td>{{ ELEMENT_DATA[4].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[5].position }}</td>
-          <td>{{ ELEMENT_DATA[5].name }}</td>
-          <td>{{ ELEMENT_DATA[5].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[6].position }}</td>
-          <td>{{ ELEMENT_DATA[6].name }}</td>
-          <td>{{ ELEMENT_DATA[6].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[7].position }}</td>
-          <td>{{ ELEMENT_DATA[7].name }}</td>
-          <td>{{ ELEMENT_DATA[7].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[8].position }}</td>
-          <td>{{ ELEMENT_DATA[8].name }}</td>
-          <td>{{ ELEMENT_DATA[8].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[9].position }}</td>
-          <td>{{ ELEMENT_DATA[9].name }}</td>
-          <td>{{ ELEMENT_DATA[9].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[10].position }}</td>
-          <td>{{ ELEMENT_DATA[10].name }}</td>
-          <td>{{ ELEMENT_DATA[10].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[11].position }}</td>
-          <td>{{ ELEMENT_DATA[11].name }}</td>
-          <td>{{ ELEMENT_DATA[11].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[12].position }}</td>
-          <td>{{ ELEMENT_DATA[12].name }}</td>
-          <td>{{ ELEMENT_DATA[12].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[13].position }}</td>
-          <td>{{ ELEMENT_DATA[13].name }}</td>
-          <td>{{ ELEMENT_DATA[13].answer }}</td>
-        </tr>
-        <tr>
-          <td>{{ ELEMENT_DATA[14].position }}</td>
-          <td>{{ ELEMENT_DATA[14].name }}</td>
-          <td>{{ ELEMENT_DATA[14].answer }}</td>
-        </tr>
+        @for (row of EUACAPE_DATA; track row.position) {
+          <tr>
+            <td>{{ row.position }}</td>
+            <td> {{ row.name }} </td>
+            <td>{{ row.answer }}</td>
+          </tr>
+        }
       </table>
-        <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
-
-            <ng-container matColumnDef="demo-position">
-              <th mat-header-cell *matHeaderCellDef> No. </th>
-              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-            </ng-container>
-          
-            <ng-container matColumnDef="demo-name">
-              <th mat-header-cell *matHeaderCellDef> Nombre </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-        
-            <ng-container matColumnDef="demo-answer">
-              <th mat-header-cell *matHeaderCellDef> {{ OFICIO }} </th>
-              <td mat-cell *matCellDef="let element"> {{element.answer}} </td>
-            </ng-container>
-          
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table> -->
-
     </mat-dialog-content>
     <div class="flex justify-center items-center">
       <mat-dialog-actions>
@@ -115,7 +24,7 @@
           class="modal-left-button mr-10"
           mat-button 
           mat-dialog-close
-          >
+        >
           Cancelar
         </button>
         <button (click)="confirmData(
