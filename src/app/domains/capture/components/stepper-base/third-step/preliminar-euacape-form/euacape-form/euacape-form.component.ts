@@ -41,12 +41,13 @@ export class EuacapeFormComponent {
       administracion: [null, [Validators.required]],
       fechaRecepcion: [null, [Validators.required]],
       documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-      atencion: [null],
+      atencion: [{value: 'Requerimiento', disabled: true},],
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-      tipoRespuesta: [null],
+      tipoRespuesta: [{value: 'En trámite', disabled: true},],
       autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
       carpetaInvestigacion: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
+      tipoAsunto: [{value: 'EUACAPE', disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
     });
 
@@ -63,6 +64,10 @@ export class EuacapeFormComponent {
     //     content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
     //   });
     // }
+
+    getToday(): string {
+      return new Date().toISOString().split('T')[0]
+    }
   
     openCustomModalWithTemplate(template: TemplateRef<any>){
       this.collectEuacapeInfoService.updateAdministracion(this.euacapeForm.value.administracion);

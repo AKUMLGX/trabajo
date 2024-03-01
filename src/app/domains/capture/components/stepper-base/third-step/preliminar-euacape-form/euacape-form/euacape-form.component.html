@@ -14,11 +14,11 @@
                                     formControlName="administracion"
                                     class="input-field">
                                 <option [ngValue]="null" disabled >Elija una administración</option>
-                                <option value="A_1">A_1</option>
-                                <option value="A_2">A_2</option>
-                                <option value="A_3">A_3</option>
-                                <option value="A_4">A_4</option>
-                                <option value="A_5">A_5</option>
+                                <option value="A_1">a_1</option>
+                                <option value="A_2">a_2</option>
+                                <option value="A_3">a_3</option>
+                                <option value="A_4">a_4</option>
+                                <option value="A_5">a_5</option>
                             </select>
                             @if (euacapeForm.controls['administracion'].invalid && (euacapeForm.controls['administracion'].dirty || euacapeForm.controls['administracion'].touched)) {
                                 @if(euacapeForm.get('administracion')?.errors?.['required']) {
@@ -36,6 +36,8 @@
                             <input type="date" placeholder="dd-MM-yyyy"
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="fechaRecepcion" value=""
+                                [max]="getToday()"
+                                lang="es-MX"
                             >
                             @if (euacapeForm.controls['fechaRecepcion'].invalid && (euacapeForm.controls['fechaRecepcion'].dirty || euacapeForm.controls['fechaRecepcion'].touched)) {
                                 @if(euacapeForm.get('fechaRecepcion')?.errors?.['required']) {
@@ -73,9 +75,10 @@
                                     Atención
                             </label>
                             @if(isApertura){
-                                <div class="input-field placeholder-blueGray-300">
-                                    Requerimiento                                     
-                                </div>
+                                <input type="text" placeholder="Atención"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="atencion" value=""
+                                >
                             } @else {
                                 <select id="atencion"
                                         formControlName="atencion"
@@ -114,9 +117,10 @@
                                     Tipo de respuesta
                             </label>
                             @if(isApertura){
-                                <div class="input-field placeholder-blueGray-300">
-                                    En trámite                                      
-                                </div>
+                                <input type="text" placeholder="Tipo de respuesta"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="tipoRespuesta" value=""
+                                >
                             } @else {
                                 <select 
                                         id="tipoRespuesta" 
@@ -193,9 +197,10 @@
                                 htmlfor="grid-password">
                                     Tipo asunto
                             </label>
-                                <div class="input-field placeholder-blueGray-300">
-                                    EUACAPE                                     
-                                </div>
+                            <input type="text" placeholder="Tipo asunto"
+                                class="disabled-input-field placeholder-blueGray-300"
+                                formControlName="tipoAsunto" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -206,6 +211,11 @@
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="plazoAtencion" value=""
                             >
+                            @if (euacapeForm.get('plazoAtencion')?.errors?.['min']) {
+                                <div class="text-sm text-wine mt-1.5">
+                                    <span >No ingresar números negativos</span>
+                                </div> 
+                            }
                         </div>     
                     </div>
                     <br>
