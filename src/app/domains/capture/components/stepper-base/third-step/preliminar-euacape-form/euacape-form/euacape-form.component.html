@@ -75,9 +75,10 @@
                                     Atención
                             </label>
                             @if(isApertura){
-                                <div class="input-field placeholder-blueGray-300">
-                                    Requerimiento                                     
-                                </div>
+                                <input type="text" placeholder="Atención"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="atencion" value=""
+                                >
                             } @else {
                                 <select id="atencion"
                                         formControlName="atencion"
@@ -116,9 +117,10 @@
                                     Tipo de respuesta
                             </label>
                             @if(isApertura){
-                                <div class="input-field placeholder-blueGray-300">
-                                    En trámite                                      
-                                </div>
+                                <input type="text" placeholder="Tipo de respuesta"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="tipoRespuesta" value=""
+                                >
                             } @else {
                                 <select 
                                         id="tipoRespuesta" 
@@ -195,9 +197,10 @@
                                 htmlfor="grid-password">
                                     Tipo asunto
                             </label>
-                                <div class="input-field placeholder-blueGray-300">
-                                    EUACAPE                                     
-                                </div>
+                            <input type="text" placeholder="Tipo asunto"
+                                class="disabled-input-field placeholder-blueGray-300"
+                                formControlName="tipoAsunto" value=""
+                            >
                         </div>
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
