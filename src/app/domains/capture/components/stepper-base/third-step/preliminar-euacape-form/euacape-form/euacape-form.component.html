@@ -36,6 +36,8 @@
                             <input type="date" placeholder="dd-MM-yyyy"
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="fechaRecepcion" value=""
+                                [max]="getToday()"
+                                lang="es-MX"
                             >
                             @if (euacapeForm.controls['fechaRecepcion'].invalid && (euacapeForm.controls['fechaRecepcion'].dirty || euacapeForm.controls['fechaRecepcion'].touched)) {
                                 @if(euacapeForm.get('fechaRecepcion')?.errors?.['required']) {

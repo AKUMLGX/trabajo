@@ -63,6 +63,10 @@ export class EuacapeFormComponent {
     //     content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
     //   });
     // }
+
+    getToday(): string {
+      return new Date().toISOString().split('T')[0]
+    }
   
     openCustomModalWithTemplate(template: TemplateRef<any>){
       this.collectEuacapeInfoService.updateAdministracion(this.euacapeForm.value.administracion);
