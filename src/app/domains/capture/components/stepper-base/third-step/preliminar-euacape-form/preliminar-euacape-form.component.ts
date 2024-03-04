@@ -6,6 +6,7 @@ import { FormBuilder,
   ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
 import { EuacapeFormComponent } from './euacape-form/euacape-form.component';
 import { CollectEuacapeInfoService } from '../../../../../shared/services/collect-euacape-info.service';
 
@@ -17,6 +18,7 @@ import { CollectEuacapeInfoService } from '../../../../../shared/services/collec
     FormsModule,
     MatStepperModule,
     CommonModule,
+    MatIconModule,
     EuacapeFormComponent,
   ],
   templateUrl: './preliminar-euacape-form.component.html',
