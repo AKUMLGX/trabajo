@@ -42,10 +42,12 @@ export class PreliminarEuacapeFormComponent {
 
   savePreliminarEuacapeForm(): void {
     console.log(this.preliminarEuacapeForm.value);
-    this.collectEuacapeInfoService.updateOficio(this.preliminarEuacapeForm.value.oficio);
-    this.collectEuacapeInfoService.updateTurnoJefatura(this.preliminarEuacapeForm.value.turnoJefatura);
-    this.collectEuacapeInfoService.updateFolioInterno(this.preliminarEuacapeForm.value.folioInterno);
-    this.collectEuacapeInfoService.updateFolioScanner(this.preliminarEuacapeForm.value.folioScanner);
+    this.collectEuacapeInfoService.updatePreliminarEuacapeForm(
+      this.preliminarEuacapeForm.value.oficio,
+      this.preliminarEuacapeForm.value.turnoJefatura,
+      this.preliminarEuacapeForm.value.folioInterno,
+      this.preliminarEuacapeForm.value.folioScanner
+    );
   }
 
 }

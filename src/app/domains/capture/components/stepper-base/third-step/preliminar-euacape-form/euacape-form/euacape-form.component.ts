@@ -6,7 +6,7 @@ import { FormBuilder,
   Validators, 
   ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -72,16 +72,18 @@ export class EuacapeFormComponent {
     }
   
     openCustomModalWithTemplate(template: TemplateRef<any>){
-      this.collectEuacapeInfoService.updateAdministracion(this.euacapeForm.value.administracion);
-      this.collectEuacapeInfoService.updateFechaRecepcion(this.euacapeForm.value.fechaRecepcion);
-      this.collectEuacapeInfoService.updateDocumentoEscaneado(this.euacapeForm.value.documentoEscaneado);
-      this.collectEuacapeInfoService.updateAtencion(this.isApertura ? 'Requerimiento' : this.euacapeForm.value.atencion);
-      this.collectEuacapeInfoService.updateDescripcion(this.euacapeForm.value.descripcion);
-      this.collectEuacapeInfoService.updateTipoRespuesta(this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta);
-      this.collectEuacapeInfoService.updateAutoridadSolicitante(this.euacapeForm.value.autoridadSolicitante);
-      this.collectEuacapeInfoService.updateCarpetaInvestigacion(this.euacapeForm.value.carpetaInvestigacion);
-      this.collectEuacapeInfoService.updatePersonaRelacionada(this.euacapeForm.value.personaRelacionada);
-      this.collectEuacapeInfoService.updatePlazoAtencion(this.euacapeForm.value.plazoAtencion);
+      this.collectEuacapeInfoService.updateEuacapeForm(
+        this.euacapeForm.value.administracion,
+        this.euacapeForm.value.fechaRecepcion,
+        this.euacapeForm.value.documentoEscaneado,
+        this.isApertura ? 'Requerimiento' : this.euacapeForm.value.atencion,
+        this.euacapeForm.value.descripcion,
+        this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta,
+        this.euacapeForm.value.autoridadSolicitante,
+        this.euacapeForm.value.carpetaInvestigacion,
+        this.euacapeForm.value.personaRelacionada,
+        this.euacapeForm.value.plazoAtencion,
+      );
       this.modalService.openCustomDialogWithTemplate({
         template
       })
