@@ -9,6 +9,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import {MatTableModule} from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { InfoTableComponent } from './info-table/info-table.component';
 import { CollectEuacapeInfoService } from '../../../../../../shared/services/collect-euacape-info.service';
 
@@ -22,6 +23,7 @@ import { CollectEuacapeInfoService } from '../../../../../../shared/services/col
     MatTableModule,
     MatDialogModule,
     CommonModule,
+    MatIconModule,
     InfoTableComponent,
   ],
   templateUrl: './euacape-form.component.html',
