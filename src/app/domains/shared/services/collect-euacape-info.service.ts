@@ -14,19 +14,15 @@ export class CollectEuacapeInfoService {
   FOLIOINT = signal('');
   FOLIOSCAN = signal('');
 
-  updateOficio(oficioEntry: string){
-      this.OFICIO.set(oficioEntry);
-  }
-  
-  updateTurnoJefatura(tJefaturaEntry: string){
+  updatePreliminarEuacapeForm(
+    oficioEntry: string,
+    tJefaturaEntry: string,
+    folioInt: string,
+    folioScan: string
+  ){
+    this.OFICIO.set(oficioEntry);
     this.TURNOJEFATURA.set(tJefaturaEntry);
-  }
-
-  updateFolioInterno(folioInt: string){
     this.FOLIOINT.set(folioInt);
-  }
-
-  updateFolioScanner(folioScan: string){
     this.FOLIOSCAN.set(folioScan);
   }
 
@@ -43,44 +39,27 @@ export class CollectEuacapeInfoService {
   PERSONAREL = signal('');
   PLAZOATENCION = signal<null | number>(null);
 
-  updateAdministracion(admon: string) {
+  updateEuacapeForm(
+    admon: string,
+    fechaRec: null | Date,
+    docScan:string,
+    atencion: string,
+    descripcion: string,
+    tipoRes: string,
+    autoridadSol: string,
+    carpetaInv: string | null,
+    persRel: string,
+    plazoAt: number | null,
+  ){
     this.ADMON.set(admon);
-  }
-
-  updateFechaRecepcion(fechaRec: null | Date ) {
     this.FECHAREC.set(fechaRec);
-  }
-
-  updateDocumentoEscaneado(docScan:string) {
     this.DOCSCAN.set(docScan);
-  }
-
-  updateAtencion(atencion: string) {
     this.ATENCION.set(atencion);
-  }
-
-  updateDescripcion(descripcion: string) {
     this.DESCRIPCION.set(descripcion);
-  }
-
-  updateTipoRespuesta(tipoRes: string) {
     this.TIPORES.set(tipoRes);
-  }
-
-  updateAutoridadSolicitante(autoridadSol: string) {
     this.AUTORIDADSOLIC.set(autoridadSol);
-  }
-
-  updateCarpetaInvestigacion(carpetaInv: string | null) {
     this.CARPETAINV.set(carpetaInv);
-  }
-
-  updatePersonaRelacionada(persRel: string) {
     this.PERSONAREL.set(persRel);
-  }
-
-  updatePlazoAtencion(plazoAt: number | null) {
     this.PLAZOATENCION.set(plazoAt);
   }
-
 }
