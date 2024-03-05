@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EuacapeFormComponent } from '../third-step/preliminar-euacape-form/euacape-form/euacape-form.component';
+import { EuacapeFormComponent } from '../third-step/preliminar-form/euacape-form/euacape-form.component';
 
 @Component({
   selector: 'app-fourth-step',

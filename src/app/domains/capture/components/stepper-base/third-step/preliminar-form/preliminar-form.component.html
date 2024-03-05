@@ -3,14 +3,14 @@
         <div
             class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
             <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
-                <form [formGroup]="preliminarEuacapeForm" (ngSubmit)="savePreliminarEuacapeForm()">
+                <form [formGroup]="preliminarForm" (ngSubmit)="savePreliminarEuacapeForm()">
                     <div class="flex flex-wrap">
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                     Folio interno
-                                    @if (preliminarEuacapeForm.controls['folioInterno'].invalid && (preliminarEuacapeForm.controls['folioInterno'].dirty || preliminarEuacapeForm.controls['folioInterno'].touched)) {
-                                        @if(preliminarEuacapeForm.get('folioInterno')?.errors?.['required']) {
+                                    @if (preliminarForm.controls['folioInterno'].invalid && (preliminarForm.controls['folioInterno'].dirty || preliminarForm.controls['folioInterno'].touched)) {
+                                        @if(preliminarForm.get('folioInterno')?.errors?.['required']) {
                                             <div class="text-wine ml-1">
                                                 <span>*</span>
                                             </div>
@@ -21,7 +21,7 @@
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="folioInterno" value=""
                             > 
-                            @if (preliminarEuacapeForm.get('folioInterno')?.errors?.['maxlength']) {
+                            @if (preliminarForm.get('folioInterno')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div>
@@ -31,8 +31,8 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                 Oficio  
-                                @if (preliminarEuacapeForm.controls['oficio'].invalid && (preliminarEuacapeForm.controls['oficio'].dirty || preliminarEuacapeForm.controls['oficio'].touched)) {
-                                    @if(preliminarEuacapeForm.get('oficio')?.errors?.['required']) {
+                                @if (preliminarForm.controls['oficio'].invalid && (preliminarForm.controls['oficio'].dirty || preliminarForm.controls['oficio'].touched)) {
+                                    @if(preliminarForm.get('oficio')?.errors?.['required']) {
                                         <div class="text-wine ml-1">
                                             <span>*</span>
                                         </div>
@@ -44,7 +44,7 @@
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="oficio" value=""
                             >
-                            @if (preliminarEuacapeForm.get('oficio')?.errors?.['maxlength']) {
+                            @if (preliminarForm.get('oficio')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div> 
@@ -54,8 +54,8 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                     Folio scanner
-                                    @if (preliminarEuacapeForm.controls['folioScanner'].invalid && (preliminarEuacapeForm.controls['folioScanner'].dirty || preliminarEuacapeForm.controls['folioScanner'].touched)) {
-                                        @if(preliminarEuacapeForm.get('folioScanner')?.errors?.['required']) {
+                                    @if (preliminarForm.controls['folioScanner'].invalid && (preliminarForm.controls['folioScanner'].dirty || preliminarForm.controls['folioScanner'].touched)) {
+                                        @if(preliminarForm.get('folioScanner')?.errors?.['required']) {
                                             <div class="text-wine ml-1">
                                                 <span>*</span>
                                             </div>
@@ -66,7 +66,7 @@
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="folioScanner" value=""
                             >
-                            @if (preliminarEuacapeForm.get('folioScanner')?.errors?.['maxlength']) {
+                            @if (preliminarForm.get('folioScanner')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div>   
@@ -82,7 +82,7 @@
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="turnoJefatura" value=""
                             >
-                            @if (preliminarEuacapeForm.get('turnoJefatura')?.errors?.['maxlength']) {
+                            @if (preliminarForm.get('turnoJefatura')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div> 
@@ -93,22 +93,22 @@
                     <br>
                     <div class="flex justify-between items-center">
                         <button
-                            [disabled]="!this.preliminarEuacapeForm.valid"
+                            [disabled]="!this.preliminarForm.valid"
                             matStepperNext
-                            [ngClass]=" !this.preliminarEuacapeForm.valid ? 'next-button-disabled' : 'next-button' "
+                            [ngClass]=" !this.preliminarForm.valid ? 'next-button-disabled' : 'next-button' "
                         >
                             Continuar
                         </button>
                         <div class="bg-white border-2 rounded border-wine">
                             @if (
-                                    (preliminarEuacapeForm.controls['oficio'].invalid && (preliminarEuacapeForm.controls['oficio'].dirty || preliminarEuacapeForm.controls['oficio'].touched))
-                                ||  (preliminarEuacapeForm.controls['folioInterno'].invalid && (preliminarEuacapeForm.controls['folioInterno'].dirty || preliminarEuacapeForm.controls['folioInterno'].touched))
-                                ||  (preliminarEuacapeForm.controls['folioScanner'].invalid && (preliminarEuacapeForm.controls['folioScanner'].dirty || preliminarEuacapeForm.controls['folioScanner'].touched))  
+                                    (preliminarForm.controls['oficio'].invalid && (preliminarForm.controls['oficio'].dirty || preliminarForm.controls['oficio'].touched))
+                                ||  (preliminarForm.controls['folioInterno'].invalid && (preliminarForm.controls['folioInterno'].dirty || preliminarForm.controls['folioInterno'].touched))
+                                ||  (preliminarForm.controls['folioScanner'].invalid && (preliminarForm.controls['folioScanner'].dirty || preliminarForm.controls['folioScanner'].touched))  
                             ) {
                                 @if (
-                                        (preliminarEuacapeForm.get('oficio')?.errors?.['required'])
-                                    ||  (preliminarEuacapeForm.get('folioInterno')?.errors?.['required'])
-                                    ||  (preliminarEuacapeForm.get('folioScanner')?.errors?.['required'])
+                                        (preliminarForm.get('oficio')?.errors?.['required'])
+                                    ||  (preliminarForm.get('folioInterno')?.errors?.['required'])
+                                    ||  (preliminarForm.get('folioScanner')?.errors?.['required'])
                                 ) {
                                     <div class="text-wine text-base p-3 flex gap-3">
                                         <span>REQUERIDO</span>

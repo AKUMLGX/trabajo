@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, 
   FormGroup, 
@@ -11,7 +11,7 @@ import { EuacapeFormComponent } from './euacape-form/euacape-form.component';
 import { CollectEuacapeInfoService } from '../../../../../shared/services/collect-euacape-info.service';
 
 @Component({
-  selector: 'app-preliminar-euacape-form',
+  selector: 'app-preliminar-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -21,32 +21,32 @@ import { CollectEuacapeInfoService } from '../../../../../shared/services/collec
     MatIconModule,
     EuacapeFormComponent,
   ],
-  templateUrl: './preliminar-euacape-form.component.html',
-  styleUrl: './preliminar-euacape-form.component.css'
+  templateUrl: './preliminar-form.component.html',
+  styleUrl: './preliminar-form.component.css'
 })
-export class PreliminarEuacapeFormComponent {
+export class PreliminarFormComponent {
 
   constructor(
     private fb: FormBuilder,
     private collectEuacapeInfoService : CollectEuacapeInfoService,
     ){ }
 
-  public preliminarEuacapeForm: FormGroup = this.fb.group({
+  public preliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
     folioInterno: ['', [Validators.required, Validators.maxLength(255)]],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
-  isPreliminarEuacapeFormValid = !this.preliminarEuacapeForm.valid;
+  isPreliminarEuacapeFormValid = !this.preliminarForm.valid;
 
   savePreliminarEuacapeForm(): void {
-    console.log(this.preliminarEuacapeForm.value);
+    console.log(this.preliminarForm.value);
     this.collectEuacapeInfoService.updatePreliminarEuacapeForm(
-      this.preliminarEuacapeForm.value.oficio,
-      this.preliminarEuacapeForm.value.turnoJefatura,
-      this.preliminarEuacapeForm.value.folioInterno,
-      this.preliminarEuacapeForm.value.folioScanner
+      this.preliminarForm.value.oficio,
+      this.preliminarForm.value.turnoJefatura,
+      this.preliminarForm.value.folioInterno,
+      this.preliminarForm.value.folioScanner
     );
   }
 

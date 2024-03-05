@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { PreliminarEuacapeFormComponent } from './preliminar-euacape-form/preliminar-euacape-form.component';
+import { PreliminarFormComponent } from './preliminar-form/preliminar-form.component';
 
 
 @Component({
   selector: 'app-third-step',
   standalone: true,
-  imports: [ PreliminarEuacapeFormComponent],
+  imports: [ PreliminarFormComponent],
   templateUrl: './third-step.component.html',
   styleUrl: './third-step.component.css'
 })
