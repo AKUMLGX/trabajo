@@ -1,5 +1,5 @@
 export interface Ligths{
-  rojo:    boolean;
-  amarillo:boolean;
-  verde:   boolean;
+  rojo:    number;
+  amarillo:number;
+  verde:   number;
 }

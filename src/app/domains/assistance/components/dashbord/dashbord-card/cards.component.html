@@ -1,18 +1,18 @@
 <div class="h-auto   text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
-  <div class="flex justify-center items-center text-3xl mt-10 ">Atención de Requerimientos. </div>
+  <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Atención de Requerimientos. </div>
   <div class=" flex  items-center justify-center mt-16">
     <div class="flex gap-2">
       <!-- En tramite -->
       <div class="bg-white shadow-md rounded-lg p-4 flex  flex-row items-center justify-between ">
         <div class="flex-1">
-          <h2 class="text-lg font-semibold mb-2"> En trámite: </h2>
-          <h2 class="text-lg text-center font-light mr-2"> 250 </h2>
+          <h2 class="text-lg font-semibold mb-2 font-montserrat"> En trámite: </h2>
+          <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 250 </h2>
         </div>
         <div class="flex flex-col items-center justify-center">
           <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
             <mat-icon>restore_page</mat-icon>
           </div>
-          <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
+          <button type="button"   (click)="ocultarPadre()" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
           hover:bg-rojo-Akamba focus:ring-4 focus:outline-none  " [routerLink]="['/layout/assistance/tramite-card']"
             routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
         </div>
@@ -20,61 +20,72 @@
       <!-- Parcial -->
       <div class="bg-white shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
         <div class="flex-1 ">
-          <h2 class="text-lg font-semibold mb-2"> Parcial: </h2>
-          <h2 class="text-lg text-center font-light mr-2 "> 120 </h2>
+          <h2 class="text-lg font-semibold mb-2 font-montserrat"> Parcial: </h2>
+          <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 120 </h2>
         </div>
         <div class="flex flex-col items-center justify-center">
           <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
             <mat-icon>incomplete_circle</mat-icon>
           </div>
           <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none  " [routerLink]="['/layout/parcial-card']"
+          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat " [routerLink]="['/layout/parcial-card']"
             routerLinkActive="active"> Ver detalles. <mat-icon>info</mat-icon></button>
         </div>
       </div>
       <!-- Finalizado -->
       <div class="bg-white shadow-md rounded p-4 flex flex-row items-center justify-between">
         <div class="flex-1">
-          <h2 class="text-lg font-semibold mb-2"> Finalizado: </h2>
-          <h2 class="text-lg text-center font-light mr-2"> 360 </h2>
+          <h2 class="text-lg font-semibold mb-2 font-montserrat"> Finalizado: </h2>
+          <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 360 </h2>
         </div>
         <div class="flex flex-col items-center justify-center">
           <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2  ">
             <mat-icon>done</mat-icon>
           </div>
           <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-         hover:bg-rojo-Akamba focus:ring-4 focus:outline-none " [routerLink]="['/layout/finalizado-card']"
+         hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat " [routerLink]="['/layout/finalizado-card']"
             routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
         </div>
       </div>
     </div>
   </div>
   <div class="flex justify-center items-end ">
-    <div class="flex w-1/2 p-4">
-      <div class="w-full ">
-        <div class="bg-white shadow-md rounded-lg p-4 ">
-          <!-- <h2 class="text-lg font-semibold mb-2 text-center">Semáforo</h2> -->
-              <div class="flex">
-                <div class="w-1/2 h-full">
-                  <app-traffic-lights-atencion/>
+
+      <div class="flex w-auto p-4">
+        <div class="w-full ">
+          <div class="bg-white shadow-md rounded-lg p-4 ">
+             <h2 class="text-lg font-semibold mb-2 text-center font-montserrat  ">Gráfico de Calor</h2>
+                <div class="flex">
+                  <div class="w-1/2">
+                    <div class="flex justify-center w-full">
+                      <div class="flex flex-col items-center justify-center ">
+                        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
+                          <mat-icon>traffic</mat-icon>
+                        </div>
+                        <button   type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
+                        hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat  "  [routerLink]="['/layout/semaforo']"
+                          routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-1/2">
+                      <!-- <div class=" flex justify-center items-center flex-col gap-12">
+                        <div class="bg-[#D9BCA3]/30  shadow-md rounded-lg p-4 ">
+                              <p class="text-sm  mb-2" >Mayor a 15 dias </p>
+                        </div>
+                        <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
+                              <p class="text-sm">De 5 a 15 dias</p>
+                        </div>
+                        <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
+                              <p class="text-sm"> primeros 4 dias</p>
+                        </div>
+                      </div> -->
+                  </div>
                 </div>
-                <div class="w-1/2">
-                    <!-- <div class=" flex justify-center items-center flex-col gap-12">
-                      <div class="bg-[#D9BCA3]/30  shadow-md rounded-lg p-4 ">
-                            <p class="text-sm  mb-2" >Mayor a 15 dias </p>
-                      </div>
-                      <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
-                            <p class="text-sm">De 5 a 15 dias</p>
-                      </div>
-                      <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
-                            <p class="text-sm"> primeros 4 dias</p>
-                      </div>
-                    </div> -->
-                </div>
-              </div>
+          </div>
         </div>
       </div>
-    </div>
+
     <div class="flex w-1/2  p-4">
       <div class="w-full ">
         <div class="bg-white shadow-md rounded-lg p-4">

@@ -9,51 +9,58 @@ import { AssistancePageComponent } from './domains/assistance/pages/assistance-p
 import { TramitePageComponent } from './domains/assistance/pages/tramite-page/tramite-page.component';
 import { ParcialPageComponent } from './domains/assistance/pages/parcial-page/parcial-page/parcial-page.component';
 import { FinalizadoComponent } from './domains/assistance/pages/finalizado-page/finalizado/finalizado-page.component';
+import { TrafficLightsAtencionComponent } from './domains/assistance/components/dashbord/TrafficLights/traffic-lights-atencion/traffic-lights-atencion.component';
 
 export const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginPageComponent
-    },
-    {
-        path: 'layout',
-        component: MainLayoutComponent,
+  {
+    path: 'login',
+    component: LoginPageComponent
+  },
+  {
+    path: 'layout',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: 'capture',
+        component: CapturePageComponent
+      },
+      {
+        path: 'assistance',
+        component: AssistancePageComponent,
         children: [
-            {
-                path: 'capture',
-                component: CapturePageComponent
-            },
-            {
-                path: 'assistance',
-                component: AssistancePageComponent,
-                children:[
-                  {path:"tramite-card" , component:TramitePageComponent}
-                ]
-            },
-            // {
-            //   path: "tramite-card",
-            //   component: TramitePageComponent,
-            // },
-            {
-              path: "parcial-card",
-              component: ParcialPageComponent,
-            },
-            {
-              path: "finalizado-card",
-              component: FinalizadoComponent,
-            },
-            {
-                path: 'tracking',
-                component: TrackingPageComponent
-            },
-            {
-                path: 'reports',
-                component: ReportsPageComponent
-            },
+          { path: "tramite-card", component: TramitePageComponent },
+          //  {path:"semaforo",component:TrafficLightsAtencionComponent},
+
         ]
-    },
-    // {
-    //     path: '**',
-    //     component: MainLayoutComponent
-    // },
+      },
+      // {
+      //   path: "tramite-card",
+      //   component: TramitePageComponent,
+      // },
+      {
+        path: "semaforo",
+        component: TrafficLightsAtencionComponent
+      },
+      {
+        path: "parcial-card",
+        component: ParcialPageComponent,
+      },
+      {
+        path: "finalizado-card",
+        component: FinalizadoComponent,
+      },
+      {
+        path: 'tracking',
+        component: TrackingPageComponent
+      },
+      {
+        path: 'reports',
+        component: ReportsPageComponent
+      },
+    ]
+  },
+  // {
+  //     path: '**',
+  //     component: MainLayoutComponent
+  // },
 ];
