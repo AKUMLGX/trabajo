@@ -1,0 +1,18 @@
+
+
+.green {
+  background-color: #ADFF8E;
+ }
+
+ .yellow {
+  background-color: #FFF772;
+ }
+
+ .red {
+  background-color: #FF0000;
+ }
+ #circle {
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+}

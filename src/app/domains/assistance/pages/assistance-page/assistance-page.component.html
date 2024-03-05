@@ -1,14 +1,22 @@
 
-<!-- <app-init-template></app-init-template> -->
+<!-- <div class="flex justify-center items-center text-3xl mt-2">Bandeja de atención</div>
+<app-init-template></app-init-template> -->
 
 
-<!-- <div class="flex justify-center items-center text-3xl mt-2">Bandeja de atención</div> -->
 
-<div>
+<!-- <div>
   @if (true) {
     <app-cards></app-cards>
   }
 <router-outlet/>
 </div>
+ -->
+
+ @if (mostrarPadre) {
+   <app-cards (oucultar)="ocultarPadre()" ></app-cards>
+
+  }
 
 
+
+  <router-outlet/>
