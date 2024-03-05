@@ -16,14 +16,30 @@
         <div>
             @switch (dropdownChoice) {
                 @case ('Civil') {
-                  <mat-step label="Formulario Civil">
-                    <div class="third-step-wrapper">
-                        <app-civil-form />
-                    </div>
-                  </mat-step>
+                    <mat-step label="Formulario Civil (parte I)" 
+                        [completed]="thirdStepChild.preliminarForm.valid" 
+                        [editable]="true">
+                            <div class="third-step-wrapper">
+                                <app-preliminar-form #thirdStepChild />
+                            </div>
+                    </mat-step>
+
+                    <mat-step label="Formulario Civil (parte II)">
+                        <div class="third-step-wrapper">
+                            <app-civil-form />
+                        </div>
+                    </mat-step>
                 }
                 @case ('Penal') {
-                    <mat-step label="Formulario Penal">
+                    <mat-step label="Formulario Penal (parte I)" 
+                        [completed]="thirdStepChild.preliminarForm.valid" 
+                        [editable]="true">
+                            <div class="third-step-wrapper">
+                                <app-preliminar-form #thirdStepChild />
+                            </div>
+                    </mat-step>
+
+                    <mat-step label="Formulario Penal (parte II)">
                         <div class="third-step-wrapper">
                             <app-penal-form />
                         </div>
@@ -48,7 +64,6 @@
                     <mat-step label="Formulario EUACAPE (parte II)">
                         <app-fourth-step />
                     </mat-step>
-                     
                 }
                 @case ('Generalidades') {
                     <mat-step label="Formulario Generalidades">
