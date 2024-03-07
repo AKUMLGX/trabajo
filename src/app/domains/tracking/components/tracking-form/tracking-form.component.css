@@ -1,0 +1,8 @@
+.icon-display {
+    transform: scale(0.6);
+    color: theme('colors.wine');
+ }
+
+ .icon-display:hover {
+    cursor: pointer;
+ }

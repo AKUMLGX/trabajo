@@ -1,3 +1,4 @@
+<app-load-animation></app-load-animation>
 <mat-toolbar class="mat-elevation-z3">
     <div class="flex">
         <button mat-icon-button class="text-white" (click)="collapsed.set(!collapsed())">
@@ -18,7 +19,6 @@
         <app-custom-sidenav [collapsed]="collapsed()" />
     </mat-sidenav>
     <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
-        <!-- Allô le monde! -->
         <router-outlet />
     </mat-sidenav-content>
 </mat-sidenav-container>

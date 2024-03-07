@@ -38,6 +38,18 @@
                     }
                 </a>
             }   
+            <a 
+            mat-list-item
+            (click)="logout()" 
+            routerLinkActive
+            #rla="routerLinkActive"
+            [activated]="rla.isActive"
+            >
+            <mat-icon matListItemIcon class="text-white">{{ "power_settings_new" }}</mat-icon>
+            @if ( !collapsed ) {
+                <span matListItemTitle class="text-white">{{ "Cerrar sesión" }}</span>
+            }
+        </a>
         </mat-nav-list>
     </div>
 </div>

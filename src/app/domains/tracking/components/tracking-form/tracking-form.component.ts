@@ -1,31 +1,32 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
+import { AsuntoService } from '../../../services/asunto.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tracking-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIcon],
   templateUrl: './tracking-form.component.html',
   styleUrl: './tracking-form.component.css',
 })
 export class TrackingFormComponent {
   public consultForm: FormGroup = this.fb.group({
-    folioInterno: [''],
-    carpetaInvertigacion: [''],
-    oficio: [''],
-    autoridadRemitente: [''],
-    personaRelaciona: [''],
-    alcande: ['']
+    folioInterno: new FormControl(''),
+    carpetaInvertigacion: new FormControl(''),
+    oficio: new FormControl(''),
+    autoridadRemitente: new FormControl(''),
+    personaRelacionada: new FormControl(''),
+    tipoBusqueda: new FormControl('Nuevos')
   });
 
   constructor(
     private fb: FormBuilder,
-    private asuntoNuevoService: AsuntoHistoricoService
+    private asuntoService: AsuntoService
   ) { }
 
   onSave(): void {
-    this.asuntoNuevoService.filterDocuments();
+    this.asuntoService.filterDocuments(this.consultForm);
   }
 }
