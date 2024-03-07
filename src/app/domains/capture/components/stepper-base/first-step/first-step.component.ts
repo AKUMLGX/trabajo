@@ -25,7 +25,7 @@ export class FirstStepComponent {
       console.log(this.firstStepButtonStatus);
       this.firstStepButtonStatus = true;
       console.log(this.firstStepButtonStatus);
-    }, 6000);
+    }, 1000);
     
   }
 

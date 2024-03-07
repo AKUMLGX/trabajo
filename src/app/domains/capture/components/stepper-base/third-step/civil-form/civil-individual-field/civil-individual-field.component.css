@@ -1,7 +1,0 @@
-.label-field {
-    @apply block uppercase text-xs font-bold mb-2;
-}
-
-.input-field {
-    @apply border-0 px-3 py-3 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
-}
