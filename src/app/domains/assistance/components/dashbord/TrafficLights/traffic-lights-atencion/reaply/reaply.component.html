@@ -1,0 +1,227 @@
+<div class=" py-1 bg-blueGray-50 ">
+  <div class="w-auto lg:w-12/12  h-auto mx-auto mt-2">
+    <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
+      <div class="flex justify-end">
+      </div>
+      <!-- <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Gafico de Calor de Folios.</div> -->
+      <div class="flex justify-center items-center h-full mb-14">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden ">
+          <div class="py-6 px-4">
+            <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Respuesta  del Folio:
+             <span>{{datosFolio.folio_interno}}</span> </div>
+            <div class=" overflow-x-auto ">
+              <table class=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 table-auto">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Oficio
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Turno Jefatura
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Folio Interno
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Folio Scanner
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Administración
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Documento Escaneado
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Descripción
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Autoridad Solicitante
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Persona Relacionada
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Plazo de Atención
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      fecha de Recepción
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Atención
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Tipo de Respuesta
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Carpeta de investigación
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-montserrat">
+                      Tipo Asunto
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <td class="font-montserrat text-center">{{datosFolio.oficio}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.turno_Jefatura}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.folio_interno}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.folio_scanner}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.administracion}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.documento_escaneado}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.descripcion}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.autoridad_solicitante}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.persona_relacionada}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.plazo_atencion}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.fecha_recepcion}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.atencion}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.tipo_repusta}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.caprte_investigacion}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.tipo_asunto}}</td>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Formulario de Respuesta.</div>
+      <div class="flex-auto px-4 lg:px-10 py-10 bg-[#F9F8F8]/45 rounded-lg pt-8">
+        <form [formGroup]="reaplyForm"  (ngSubmit)="sendReaply()">
+          <div class="flex flex-wrap">
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Oficio
+                @if (reaplyForm.controls['oficio'].invalid && (reaplyForm.controls['oficio'].dirty || reaplyForm.controls['oficio'].touched)){
+                  @if (reaplyForm.get('oficio')?.errors?.['required']) {
+                    <div class="text-wine ml-1">
+                      <span>*</span>
+                  </div>
+                  }
+                }
+              </label>
+              <input type="text" placeholder="Oficio" class="input-field placeholder-blueGray-300"
+                formControlName="oficio" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Fecha de Atención
+                @if (reaplyForm.controls['fechaAtencion'].invalid && (reaplyForm.controls['fechaAtencion'].dirty || reaplyForm.controls['fechaAtencion'].touched)){
+                  @if (reaplyForm.get('fechaAtencion')?.errors?.['required']) {
+                    <div class="text-wine ml-1">
+                      <span>*</span>
+                  </div>
+                  }
+                }
+              </label>
+              <input type="date" placeholder="dd-MM-yyyy" class="input-field placeholder-blueGray-300"
+                formControlName="fechaAtencion" value="" lang="es-MX">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Documento escaneado
+                @if (reaplyForm.controls['documentoescaneado'].invalid && (reaplyForm.controls['documentoescaneado'].dirty || reaplyForm.controls['fechaAtencion'].touched)){
+                  @if (reaplyForm.get('documentoescaneado')?.errors?.['required']) {
+                    <div class="text-wine ml-1">
+                      <span>*</span>
+                  </div>
+                  }
+                }
+              </label>
+
+              <input class="input-field placeholder-blueGray-300" formControlName="documentoescaneado" type="file"
+              accept="image/*,.pdf,.doc"
+              multiple>
+
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field text-blueGray-600" htmlfor="grid-password">
+                Atención
+
+              </label>
+              <input type="text" placeholder="Atención" class="input-field placeholder-blueGray-300"
+                formControlName="atencion" value="">
+
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Descripción
+                @if (reaplyForm.controls['descripcion'].invalid && (reaplyForm.controls['descripcion'].dirty || reaplyForm.controls['descripcion'].touched)) {
+                  @if(reaplyForm.get('descripcion')?.errors?.['required']) {
+                      <div class="text-wine ml-1">
+                          <span>*</span>
+                      </div>
+                  }
+              }
+
+              </label>
+              <input type="text" placeholder="Descripción" class="input-field placeholder-blueGray-300"
+                formControlName="descripcion" value="">
+                @if (reaplyForm.get('descripcion')?.errors?.['maxlength']) {
+                  <div class="text-sm text-wine mt-1.5">
+                      <span >Máximo 1000 caracteres</span>
+                  </div>
+              }
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Tipo de Respuesta
+              </label>
+              <select  id="tiporespuesta" formControlName="tiporespuesta" class="input-field">
+                <option [ngValue]="null" disabled  >Elija una opción</option>
+                <option value="parcial">Parcial</option>
+                <option value="finalizado">Finalizado</option>
+              </select>
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Folio Scanner
+              </label>
+              <input type="text" placeholder="Folio Scanner" class="input-field placeholder-blueGray-300"
+                formControlName="folioscanner" value="">
+
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Folio Interno
+              </label>
+              <input type="text" placeholder=" Folio Interno" class="input-field placeholder-blueGray-300"
+                formControlName="foliointerno" value="" >
+
+            </div>
+            <br>
+            <div class="flex justify-between items-center">
+              <button
+              [disabled]="!reaplyForm.valid"
+              [ngClass]=" !reaplyForm.valid ? 'next-button-disabled' : 'next-button' "
+              >
+                Enviar
+              </button>
+              <div class="bg-white border-2 rounded border-wine">
+                  @if (
+                       (reaplyForm.controls['oficio'].invalid && (reaplyForm.controls['oficio'].dirty || reaplyForm.controls['oficio'].touched))
+                    || (reaplyForm.controls['fechaAtencion'].invalid && (reaplyForm.controls['fechaAtencion'].dirty || reaplyForm.controls['fechaAtencion'].touched))
+                    || (reaplyForm.controls['atencion'].invalid && (reaplyForm.controls['atencion'].dirty || reaplyForm.controls['atencion'].touched))
+                    || (reaplyForm.controls['documentoescaneado'].invalid && (reaplyForm.controls['documentoescaneado'].dirty || reaplyForm.controls['documentoescaneado'].touched))
+                    || (reaplyForm.controls['descripcion'].invalid && (reaplyForm.controls['descripcion'].dirty || reaplyForm.controls['descripcion'].touched))
+                    || (reaplyForm.controls['folioscanner'].invalid && (reaplyForm.controls['folioscanner'].dirty || reaplyForm.controls['folioscanner'].touched))
+                  ) {
+                    @if (
+                        (reaplyForm.get('oficio')?.errors?.['required'])
+                      ||(reaplyForm.get('fechaAtencion')?.errors?.['required'])
+                      ||(reaplyForm.get('atencion')?.errors?.['required'])
+                      ||(reaplyForm.get('descripcion')?.errors?.['required'])
+                      ||(reaplyForm.get('folioscanner')?.errors?.['required'])
+                      ||(reaplyForm.get('documentoescaneado')?.errors?.['required'])
+                    ) {
+                      <div class="text-wine text-base p-3 flex gap-3">
+                        <span>REQUERIDO</span>
+                        <mat-icon>error</mat-icon>
+                    </div>
+                    }
+                  }
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
