@@ -40,8 +40,8 @@ export class TrackingTableComponent {
   ngOnInit() {
     this.openPdf = false;
     this.asuntoService.documentsUpdated.subscribe((documents) => {
-      this.router.navigate(['/site/rep/consulta/tracking']);
-      this.openPdf = false;
+      this.openPdf = this.asuntoService.pdfIsOpen;
+      console.log(this.openPdf);
       this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
       this.documents = documents;
@@ -80,7 +80,7 @@ export class TrackingTableComponent {
   }
 
   openPdfViewer() {
-    this.openPdf = true;
+    this.asuntoService.pdfIsOpen = true;
     this.router.navigate(['/site/rep/consulta/tracking/pdfViewer']);
   }
 

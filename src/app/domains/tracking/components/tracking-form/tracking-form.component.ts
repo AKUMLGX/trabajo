@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ReactiveFormsModule } from '@angular/forms';
 import { AsuntoService } from '../../../services/asunto.service';
 import { MatIcon } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tracking-form',
@@ -23,10 +24,13 @@ export class TrackingFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private asuntoService: AsuntoService
+    private asuntoService: AsuntoService,
+    private router: Router
   ) { }
 
   onSave(): void {
+    this.router.navigate(['/site/rep/consulta/tracking']);
+    this.asuntoService.pdfIsOpen = false;
     this.asuntoService.filterDocuments(this.consultForm);
   }
 }

@@ -12,6 +12,8 @@ export class AsuntoService {
 
   documentsUpdated: EventEmitter<Asunto[]> = new EventEmitter();
 
+  public pdfIsOpen: boolean = false;
+  
   public tipoBusqueda = '';
 
   constructor(private httpClient: HttpClient) {}
