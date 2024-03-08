@@ -4,7 +4,7 @@
     <div class="w-auto lg:w-12/12  h-auto mx-auto mt-2">
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
         <div class="flex justify-end">
-          <button [routerLink]="['/layout/assistance']"
+          <button [routerLink]="['/site/rep/consulta/assistance']"
             class=" hover:bg-gray-600 rounded-lg active:bg-gray-400 focus:outline-none focus:ring "><mat-icon>close</mat-icon>
           </button>
         </div>
@@ -116,7 +116,7 @@
 }
 
 <!-- Respuesta-Folio -->
-<div class="h-max w-auto text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto">
+<div class="h-max w-auto text-3xl border-2 rounded-lg  bg-white  border-rojo-Akamba overflow-auto">
 
   <app-reaply *ngIf="filaSeleccionada" [datosFolio]="filaSeleccionada" />
 

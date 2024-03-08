@@ -107,9 +107,9 @@ export class InfoTableComponent {
   });
     //const euacapeFormObject = {...this.euacapeForm};
     console.log(this.euacapeFormObject());
-    //this.euacapeAperturaService.insertEuacapeForm(
-    //  this.euacapeFormObject()
-    //);
+    this.euacapeAperturaService.insertEuacapeForm(
+     this.euacapeFormObject()
+    );
   }
 
 }
