@@ -9,8 +9,8 @@ export const loginGuard = () => {
     let expiryDate = new Date(parse.exp * 1000);
     let currentDate = new Date(Date.now());
     if (expiryDate < currentDate) {
-      router.navigate(['login']);
-      return false;
+      //router.navigate(['login']);
+      return true;
     }
   }
   return true;
