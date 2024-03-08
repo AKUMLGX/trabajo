@@ -40,6 +40,8 @@ export class TrackingTableComponent {
   ngOnInit() {
     this.openPdf = false;
     this.asuntoService.documentsUpdated.subscribe((documents) => {
+      this.router.navigate(['/site/rep/consulta/tracking']);
+      this.openPdf = false;
       this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
       this.documents = documents;
