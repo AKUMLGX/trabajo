@@ -5,16 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { HeatMapService } from '../../../../../services/heat-map.service';
 import { RouterModule } from '@angular/router';
+import { ReaplyComponent } from './reaply/reaply.component';
 
 @Component({
   selector: 'app-traffic-lights-atencion',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule,RouterModule],
+  imports: [CommonModule, FormsModule, MatIconModule,RouterModule,ReaplyComponent],
   templateUrl: './traffic-lights-atencion.component.html',
   styleUrl: './traffic-lights-atencion.component.css'
 })
 
 export class TrafficLightsAtencionComponent {
+  mostrarRespuesta:boolean = false
+  mostrarGrafico:boolean = true
+  filaSeleccionada: any
 
 
 datos = [
@@ -60,20 +64,21 @@ fechaActual = new Date()
 fechas = [
 { fecha: new Date('2024/03/30'),visible:true,},
 { fecha: new Date("2024/03/28"),visible:true,},
-{ fecha: new Date("2024/03/25"),visible:true,},
-{ fecha: new Date("2024/03/18"),visible:true,},
+// { fecha: new Date("2024/03/25"),visible:true,},
+// { fecha: new Date("2024/03/18"),visible:true,},
 { fecha: new Date("2024/03/15"),visible:true,},
 { fecha: new Date("2024/03/14"),visible:true,},
-{ fecha: new Date("2024/03/13"),visible:true,},
+// { fecha: new Date("2024/03/13"),visible:true,},
 { fecha: new Date("2024/03/08"),visible:true,},
 { fecha: new Date("2024/03/07 "),visible:true,},
-{ fecha: new Date("2024/03/06"),visible:true,},
+// { fecha: new Date("2024/03/06"),visible:true,},
 ]
  numero : number | null = null
 
  colorGrafica(fecha:Date,numero:number|null,):string{
  //debugger
   const diferenciaEnDias = Math.round(Math.abs(Math.floor((this.fechaActual.getDate() - fecha.getDate()))));
+
 //debugger
   if(numero !==null && numero < 72 ){
     return 'red'
@@ -86,10 +91,24 @@ fechas = [
   }
  }
 
- ocultar(index:number):void{
+
+
+
+ responder(index:number):void{
   this.fechas[index].visible=false
  }
+ mostrarComponente():void{
+  this.mostrarRespuesta=!this.mostrarRespuesta
+  this.mostrarGrafico=!this.mostrarGrafico
+  console.log(this.mostrarGrafico);
+  console.log(this.mostrarRespuesta);
+ }
 
+ seleccionarFila(fila: any) {
+  this.filaSeleccionada = fila;
+  console.log(this.filaSeleccionada);
+
+}
 }
 
 

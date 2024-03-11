@@ -1,0 +1,23 @@
+.wrapping-individual-container {
+  @apply w-full lg:w-6/12 px-4 relative mb-3;
+}
+
+.label-field {
+  @apply block uppercase text-xs font-bold mb-2;
+}
+
+.input-field {
+  @apply border-0 px-3 py-3 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
+}
+
+.disabled-input-field {
+  @apply border-0 px-3 py-3 text-gray-400 bg-gray-100/30 rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
+}
+
+.next-button {
+  @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+}
+
+.next-button-disabled {
+  @apply bg-wine/40 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow outline-none mr-1
+}
