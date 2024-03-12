@@ -29,96 +29,101 @@
             haciendo clic en 'Siguiente'.</li>
     </ol>
     <app-search-bar />
-    <div class="flex justify-center items-center text-xl mt-2">Resultados</div>
-    <section class="py-1 bg-blueGray-50" id="sectionTable">
-        <div class="w-full lg:w-12/12 mx-auto mt-2">
-            <div
-                class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-                <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full border-collapse bg-white">
-                            <thead>
-                                <tr>
-                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                                        {{ "ID Asunto historico" }}
-                                    </th>
-                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                                        {{ "Folio Interno" }}
-                                    </th>
-                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                                        {{ "Carpeta de Investigación" }}
-                                    </th>
-                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                                        {{ "Persona Relacionada" }}
-                                    </th>
-                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                                        {{ "Folio Scanner" }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                        <div class="text-sm leading-5 text-wine">
-                                            Asunto Histórico ABCDE
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                        <div class="text-sm leading-5 text-wine">
-                                            Folio Interno FGHIJ
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                        <div class="text-sm leading-5 text-wine">
-                                            Carpeta Investigación KLMNOP
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                        <div class="text-sm leading-5 text-wine">
-                                            Persona relacionada QRSTUV
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                        <div class="text-sm leading-5 text-wine">
-                                            Folio Scanner WXYZKKK
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
-                        <div>
-                            
-                            <nav class="relative z-0 inline-flex shadow-sm">
-                                <button (click)="null"
-                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                                    aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
-                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-
-
-                                <button (click)="null"
-                                    class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                                    aria-label="Next">
-                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </nav>
-                            
+    @if (isEmptyList) {
+        <div class="w-full flex justify-center items-center">
+            <div class="w-2/5 bg-white rounded-lg border-2 border-[#691C32] p-4 mt-8 flex justify-center items-center gap-3">
+                <span class="text-wine">No se encontraron resultados</span>
+                <mat-icon>error</mat-icon>
+            </div>
+        </div>
+    } @else {
+        <div class="flex justify-center items-center text-xl mt-8 uppercase font-medium">Resultados</div>
+        <section class="py-1 bg-blueGray-50" id="sectionTable">
+            <div class="w-full lg:w-12/12 mx-auto mt-2">
+                <div
+                    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
+                    <div class="flex-auto px-4 lg:px-10 py-10">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border-collapse bg-white">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                                            {{ firstColumnHeader }}
+                                        </th>
+                                        <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                                            {{ secondColumnHeader }}
+                                        </th>
+                                        <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                                            {{ thirdColumnHeader }}
+                                        </th>
+                                        <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                                            {{ fourthColumnHeader }}
+                                        </th>
+                                        <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                                            {{ fifthColumnHeader }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                            <div class="text-sm leading-5 text-wine">
+                                                Asunto Histórico
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                            <div class="text-sm leading-5 text-wine">
+                                                Folio Interno
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                            <div class="text-sm leading-5 text-wine">
+                                                Carpeta Investigación
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                            <div class="text-sm leading-5 text-wine">
+                                                Persona relacionada
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                            <div class="text-sm leading-5 text-wine">
+                                                Folio Scanner
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+                            <div>
+                                <nav class="relative z-0 inline-flex shadow-sm">
+                                    <button (click)="null"
+                                        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                                        aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
+                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <button (click)="null"
+                                        class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                                        aria-label="Next">
+                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    }
     <button matStepperNext class="base-next-button mt-8" (click)="triggerSecondStep()">
         <span>Siguiente</span>
     </button>
