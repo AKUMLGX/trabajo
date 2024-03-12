@@ -4,76 +4,87 @@
         <mat-step label="Búsqueda" 
                 [completed]="firstStepButtonStatus" 
                 [editable]="false">
-            <app-first-step (firstStepButtonStatusEmitter)="buttonStatusFromFirstStepChild($event)" />
+            <app-first-step 
+                (firstStepButtonStatusEmitter)="buttonStatusFromFirstStepChild($event)" 
+                (isEmptyListEmitter)="retrieveStatusFromFirstStepList($event)"    
+            />
         </mat-step>
 
-        <mat-step label="Elección de asunto" 
-                [completed]="secondStepChild.isSecondStepPressed"
-                [editable]="false">
-            <app-second-step #secondStepChild (selectedOptionEmitter)="retrieveSelectionFromSecondStep($event)" />
-        </mat-step>
+        @if(isEmptySearchResultsList) {
+            <mat-step label="Elección de asunto" 
+                    [completed]="secondStepChild.isSecondStepPressed"
+                    [editable]="false">
+                <app-second-step #secondStepChild (selectedOptionEmitter)="retrieveSelectionFromSecondStep($event)" />
+            </mat-step>
 
-        <div>
-            @switch (dropdownChoice) {
-                @case ('Civil') {
-                    <mat-step label="Formulario Civil (parte I)" 
-                        [completed]="thirdStepChild.preliminarForm.valid" 
-                        [editable]="true">
+            <div>
+                @switch (dropdownChoice) {
+                    @case ('Civil') {
+                        <mat-step label="Formulario Civil (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="third-step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Civil (parte II)">
                             <div class="third-step-wrapper">
-                                <app-preliminar-form #thirdStepChild />
+                                <app-civil-form />
                             </div>
-                    </mat-step>
-
-                    <mat-step label="Formulario Civil (parte II)">
-                        <div class="third-step-wrapper">
-                            <app-civil-form />
-                        </div>
-                    </mat-step>
-                }
-                @case ('Penal') {
-                    <mat-step label="Formulario Penal (parte I)" 
-                        [completed]="thirdStepChild.preliminarForm.valid" 
-                        [editable]="true">
+                        </mat-step>
+                    }
+                    @case ('Penal') {
+                        <mat-step label="Formulario Penal (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="third-step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Penal (parte II)">
                             <div class="third-step-wrapper">
-                                <app-preliminar-form #thirdStepChild />
+                                <app-penal-form />
                             </div>
-                    </mat-step>
-
-                    <mat-step label="Formulario Penal (parte II)">
-                        <div class="third-step-wrapper">
-                            <app-penal-form />
-                        </div>
-                    </mat-step>
-                }
-                @case ('Concurso mercantil') {
-                    <mat-step label="Formulario Concurso mercantil">
-                        <div class="third-step-wrapper">
-                            <app-concurso-mercantil-form />
-                        </div>
-                    </mat-step>
-                }
-                @case ('EUACAPE') {
-                    <mat-step label="Formulario EUACAPE (parte I)" 
-                        [completed]="thirdStepChild.preliminarForm.valid" 
-                        [editable]="true">
+                        </mat-step>
+                    }
+                    @case ('Concurso mercantil') {
+                        <mat-step label="Formulario Concurso mercantil">
                             <div class="third-step-wrapper">
-                                <app-preliminar-form #thirdStepChild />
+                                <app-concurso-mercantil-form />
                             </div>
-                    </mat-step>
+                        </mat-step>
+                    }
+                    @case ('EUACAPE') {
+                        <mat-step label="Formulario EUACAPE (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="third-step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario EUACAPE (parte II)">
+                            <app-fourth-step />
+                        </mat-step>
+                    }
+                    @case ('Generalidades') {
+                        <mat-step label="Formulario Generalidades">
+                            <div class="third-step-wrapper">
+                                <app-generalidades-form />
+                            </div>
+                        </mat-step>
+                    }
+                }
+            </div>            
 
-                    <mat-step label="Formulario EUACAPE (parte II)">
-                        <app-fourth-step />
-                    </mat-step>
-                }
-                @case ('Generalidades') {
-                    <mat-step label="Formulario Generalidades">
-                        <div class="third-step-wrapper">
-                            <app-generalidades-form />
-                        </div>
-                    </mat-step>
-                }
-            }
-        </div>
+        } @else {
+            <mat-step label="Formulario Segunda Pieza">
+                <app-second-pieces-form />
+            </mat-step>
+        }
+        
     </mat-vertical-stepper>
 </div>
 

@@ -36,6 +36,7 @@ export class FirstStepComponent {
   ];
 
   @Output() firstStepButtonStatusEmitter = new EventEmitter();
+  @Output() isEmptyListEmitter = new EventEmitter(); 
 
   ngOnInit() {
     setTimeout(() => {
@@ -49,6 +50,7 @@ export class FirstStepComponent {
   triggerSecondStep() {
     console.log(this.firstStepButtonStatus);
     this.firstStepButtonStatusEmitter.emit(this.firstStepButtonStatus);
+    this.isEmptyListEmitter.emit(this.isEmptyList);
   }
 
 }
