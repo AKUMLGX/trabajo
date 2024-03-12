@@ -65,33 +65,35 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="table-data-cell-item whitespace-no-wrap">
-                                            <div class="table-data-cell-content">
-                                                Asunto Histórico
-                                            </div>
-                                        </td>
-                                        <td class="table-data-cell-item whitespace-no-wrap">
-                                            <div class="table-data-cell-content">
-                                                Folio Interno
-                                            </div>
-                                        </td>
-                                        <td class="table-data-cell-item whitespace-no-wrap">
-                                            <div class="table-data-cell-content">
-                                                Carpeta Investigación
-                                            </div>
-                                        </td>
-                                        <td class="table-data-cell-item whitespace-no-wrap">
-                                            <div class="table-data-cell-content">
-                                                Persona relacionada
-                                            </div>
-                                        </td>
-                                        <td class="table-data-cell-item whitespace-no-wrap">
-                                            <div class="table-data-cell-content">
-                                                Folio Scanner
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @for(row of SEARCH_RESULTS; track row.id) {
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                                <div class="text-sm leading-5 text-wine">
+                                                    {{ row.folio }}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                                <div class="text-sm leading-5 text-wine">
+                                                    {{ row.carpeta }}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                                <div class="text-sm leading-5 text-wine">
+                                                    {{ row.oficio }}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                                <div class="text-sm leading-5 text-wine">
+                                                    {{ row.autoridad }}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                                <div class="text-sm leading-5 text-wine">
+                                                    {{ row.persona }}
+                                                </div>
+                                            </td>
+                                        </tr>    
+                                    }
                                 </tbody>
                             </table>
                         </div>
