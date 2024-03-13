@@ -9,7 +9,7 @@ import { CivilFormComponent } from './third-step/civil-form/civil-form.component
 import { PenalFormComponent } from './third-step/penal-form/penal-form.component';
 import { GeneralidadesFormComponent } from './third-step/generalidades-form/generalidades-form.component';
 import { ConcursoMercantilFormComponent } from './third-step/concurso-mercantil-form/concurso-mercantil-form.component';
-import { SecondPiecesFormComponent } from './second-step/second-pieces-form/second-pieces-form.component';
+import { PreliminarSecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/preliminar-second-pieces-form.component';
 
 @Component({
   selector: 'app-stepper-base',
@@ -25,7 +25,7 @@ import { SecondPiecesFormComponent } from './second-step/second-pieces-form/seco
     PenalFormComponent,
     ConcursoMercantilFormComponent,
     GeneralidadesFormComponent,
-    SecondPiecesFormComponent,
+    PreliminarSecondPiecesFormComponent,
   ],
   templateUrl: './stepper-base.component.html',
   styleUrl: './stepper-base.component.css'
