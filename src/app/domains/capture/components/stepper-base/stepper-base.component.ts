@@ -9,6 +9,7 @@ import { CivilFormComponent } from './third-step/civil-form/civil-form.component
 import { PenalFormComponent } from './third-step/penal-form/penal-form.component';
 import { GeneralidadesFormComponent } from './third-step/generalidades-form/generalidades-form.component';
 import { ConcursoMercantilFormComponent } from './third-step/concurso-mercantil-form/concurso-mercantil-form.component';
+import { SecondPiecesFormComponent } from './second-step/second-pieces-form/second-pieces-form.component';
 
 @Component({
   selector: 'app-stepper-base',
@@ -24,6 +25,7 @@ import { ConcursoMercantilFormComponent } from './third-step/concurso-mercantil-
     PenalFormComponent,
     ConcursoMercantilFormComponent,
     GeneralidadesFormComponent,
+    SecondPiecesFormComponent,
   ],
   templateUrl: './stepper-base.component.html',
   styleUrl: './stepper-base.component.css'
@@ -31,6 +33,8 @@ import { ConcursoMercantilFormComponent } from './third-step/concurso-mercantil-
 export class StepperBaseComponent {
 
   firstStepButtonStatus = false;
+
+  isEmptySearchResultsList = false;
 
   dropdownChoice: string = '';
 
@@ -42,6 +46,11 @@ export class StepperBaseComponent {
   //  console.log(event);
   //  this.secondStepButtonStatus = event;
   //}
+
+  retrieveStatusFromFirstStepList(event: boolean){
+    console.log(event);
+    this.isEmptySearchResultsList = event;
+  }
 
   retrieveSelectionFromSecondStep(event:string){
     console.log(event);
