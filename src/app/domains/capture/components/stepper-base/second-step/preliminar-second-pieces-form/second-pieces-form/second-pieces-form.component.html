@@ -69,27 +69,40 @@
                             }
                         </div>
 
-                        <div class="wrapping-individual-container">
-                            <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                                    Persona relacionada
-                                    @if (secondPiecesForm.controls['personaRelacionada'].invalid && (secondPiecesForm.controls['personaRelacionada'].dirty || secondPiecesForm.controls['personaRelacionada'].touched)) {
-                                        @if(secondPiecesForm.get('personaRelacionada')?.errors?.['required']) {
-                                            <div class="text-wine ml-1">
-                                                <span>*</span>
-                                            </div>
+                        @if(isSecondPiece) {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Persona relacionada
+                                </label>
+                                <input type="text" placeholder="Persona relacionada"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="personaRelacionada" value=""
+                                >
+                            </div>
+                        } @else {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                                        Persona relacionada
+                                        @if (secondPiecesForm.controls['personaRelacionada'].invalid && (secondPiecesForm.controls['personaRelacionada'].dirty || secondPiecesForm.controls['personaRelacionada'].touched)) {
+                                            @if(secondPiecesForm.get('personaRelacionada')?.errors?.['required']) {
+                                                <div class="text-wine ml-1">
+                                                    <span>*</span>
+                                                </div>
+                                            }
                                         }
-                                    }
-                            </label>
-                            <input type="text" placeholder="Persona relacionada"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="personaRelacionada" value=""
-                            >
-                            @if (secondPiecesForm.get('personaRelacionada')?.errors?.['maxlength']) {
-                                <div class="text-sm text-wine mt-1.5">
-                                    <span >Máximo 255 caracteres</span>
-                                </div> 
-                            }
-                        </div>
+                                </label>
+                                <input type="text" placeholder="Persona relacionada"
+                                    class="input-field placeholder-blueGray-300"
+                                    formControlName="personaRelacionada" value=""
+                                >
+                                @if (secondPiecesForm.get('personaRelacionada')?.errors?.['maxlength']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span >Máximo 255 caracteres</span>
+                                    </div> 
+                                }
+                            </div>
+                        }
 
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -129,28 +142,41 @@
                             }
                         </div>
 
-                        <div class="wrapping-individual-container">
-                            <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                                    Administración
-                                    @if (secondPiecesForm.controls['administracion'].invalid && (secondPiecesForm.controls['administracion'].dirty || secondPiecesForm.controls['administracion'].touched)) {
-                                        @if(secondPiecesForm.get('administracion')?.errors?.['required']) {
-                                            <div class="text-wine ml-1">
-                                                <span>*</span>
-                                            </div>
+                        @if(isSecondPiece) {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Administración
+                                </label>
+                                <input type="text" placeholder="Administración"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="administracion" value=""
+                                >
+                            </div>
+                        } @else {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                                        Administración
+                                        @if (secondPiecesForm.controls['administracion'].invalid && (secondPiecesForm.controls['administracion'].dirty || secondPiecesForm.controls['administracion'].touched)) {
+                                            @if(secondPiecesForm.get('administracion')?.errors?.['required']) {
+                                                <div class="text-wine ml-1">
+                                                    <span>*</span>
+                                                </div>
+                                            }
                                         }
-                                    }
-                            </label>
-                            <select id="administracion"
-                                    formControlName="administracion"
-                                    class="input-field">
-                                <option [ngValue]="null" disabled >Elija una administración</option>
-                                <option value="A_1">a_1</option>
-                                <option value="A_2">a_2</option>
-                                <option value="A_3">a_3</option>
-                                <option value="A_4">a_4</option>
-                                <option value="A_5">a_5</option>
-                            </select>
-                        </div>
+                                </label>
+                                <select id="administracion"
+                                        formControlName="administracion"
+                                        class="input-field">
+                                    <option [ngValue]="null" disabled >Elija una administración</option>
+                                    <option value="A_1">a_1</option>
+                                    <option value="A_2">a_2</option>
+                                    <option value="A_3">a_3</option>
+                                    <option value="A_4">a_4</option>
+                                    <option value="A_5">a_5</option>
+                                </select>
+                            </div>
+                        }
 
                         <div class="wrapping-individual-container">
                             <div class="flex">
@@ -179,7 +205,7 @@
                                 htmlfor="grid-password">
                                     Atención
                             </label>
-                            @if(isApertura){
+                            @if(isSecondPiece){
                                 <input type="text" placeholder="Atención"
                                     class="disabled-input-field placeholder-blueGray-300"
                                     formControlName="atencion" value=""
@@ -200,7 +226,7 @@
                                 htmlfor="grid-password">
                                     Tipo de respuesta
                             </label>
-                            @if(isApertura){
+                            @if(isSecondPiece){
                                 <input type="text" placeholder="Tipo de respuesta"
                                     class="disabled-input-field placeholder-blueGray-300"
                                     formControlName="tipoRespuesta" value=""
@@ -217,9 +243,7 @@
                                 </select> 
                             } 
                         </div>
-                        
-                        
-                        
+
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">

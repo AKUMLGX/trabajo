@@ -31,7 +31,7 @@ import { SecondPiecesInfoTableComponent } from './second-pieces-info-table/secon
 })
 export class SecondPiecesFormComponent {
 
-  isApertura: boolean = true;
+  isSecondPiece: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +40,8 @@ export class SecondPiecesFormComponent {
   ){}
 
   public secondPiecesForm: FormGroup = this.fb.group({
-    administracion: [null, [Validators.required]],
+    administracion: [{value: 'a_3', disabled: true},], 
+              //este campo se debe traer desde el back 
     fechaRecepcion: [null, [Validators.required]],
     documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
     atencion: [{value: 'Requerimiento', disabled: true},],
@@ -48,7 +49,8 @@ export class SecondPiecesFormComponent {
     tipoRespuesta: [{value: 'En trámite', disabled: true},],
     autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
     carpetaInvestigacion: [null, [Validators.maxLength(255)]],
-    personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
+    personaRelacionada: [{value: 'persona relacionada', disabled: true},], 
+            //este campo se debe traer desde el back
     tipoAsunto: [{value: 'EUACAPE', disabled: true},],
     plazoAtencion: [null, [Validators.min(1)]],
   });
@@ -63,15 +65,17 @@ export class SecondPiecesFormComponent {
 
   openCustomModalWithTemplate(template: TemplateRef<any>){
     this.collectSecondPiecesInfoService.updateEuacapeForm(
-      this.secondPiecesForm.value.administracion,
+      this.isSecondPiece ? 'a_3' : this.secondPiecesForm.value.administracion, 
+                //este dato se va a traer desde el back
       this.secondPiecesForm.value.fechaRecepcion,
       this.secondPiecesForm.value.documentoEscaneado,
-      this.isApertura ? 'Requerimiento' : this.secondPiecesForm.value.atencion,
+      this.isSecondPiece ? 'Requerimiento' : this.secondPiecesForm.value.atencion,
       this.secondPiecesForm.value.descripcion,
-      this.isApertura ? 'En trámite' : this.secondPiecesForm.value.tipoRespuesta,
+      this.isSecondPiece ? 'En trámite' : this.secondPiecesForm.value.tipoRespuesta,
       this.secondPiecesForm.value.autoridadSolicitante,
       this.secondPiecesForm.value.carpetaInvestigacion,
-      this.secondPiecesForm.value.personaRelacionada,
+      this.isSecondPiece ? 'Nombre de la persona' : this.secondPiecesForm.value.personaRelacionada,
+                //este dato se va a traer desde el back
       this.secondPiecesForm.value.plazoAtencion,
     );
     this.modalService.openCustomDialogWithTemplate({
