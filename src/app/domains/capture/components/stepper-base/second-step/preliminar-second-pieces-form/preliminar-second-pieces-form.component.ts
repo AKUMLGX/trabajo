@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { SecondPiecesFormComponent } from './second-pieces-form/second-pieces-form.component';
+import { CollectSecondPiecesInfoService } from '../../../../../shared/services/collect-second-pieces-info.service';
 
 @Component({
   selector: 'app-preliminar-second-pieces-form',
@@ -26,8 +27,8 @@ import { SecondPiecesFormComponent } from './second-pieces-form/second-pieces-fo
 export class PreliminarSecondPiecesFormComponent {
 
   constructor(
-  private fb: FormBuilder,
-    
+    private fb: FormBuilder,
+    private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
   ){ }
 
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
@@ -39,12 +40,12 @@ export class PreliminarSecondPiecesFormComponent {
 
   saveSecondPiecesPreliminarForm(): void {
     console.log(this.secondPiecesPreliminarForm.value);
-    // this.collectEuacapeInfoService.updatePreliminarEuacapeForm(
-    //   this.secondPiecesPreliminarForm.value.oficio,
-    //   this.secondPiecesPreliminarForm.value.turnoJefatura,
-    //   this.secondPiecesPreliminarForm.value.folioInterno,
-    //   this.secondPiecesPreliminarForm.value.folioScanner
-    // );
+    this.collectSecondPiecesInfoService.updatePreliminarEuacapeForm(
+      this.secondPiecesPreliminarForm.value.oficio,
+      this.secondPiecesPreliminarForm.value.turnoJefatura,
+      this.secondPiecesPreliminarForm.value.folioInterno,
+      this.secondPiecesPreliminarForm.value.folioScanner
+    );
   }
 
 }
