@@ -3,87 +3,46 @@
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
       <div class="flex justify-end">
       </div>
-      <!-- <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Gafico de Calor de Folios.</div> -->
       <div class="flex justify-center items-center h-full mb-14">
-        <div class="bg-white shadow-md rounded-lg overflow-hidden ">
+        <div class="bg-[#D9BCA3]/30 shadow-md rounded-lg overflow-hidden  ">
           <div class="py-6 px-4">
-            <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Respuesta  del Folio:
-             <span>{{datosFolio.folio_interno}}</span> </div>
+            <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">Respuesta  del Folio Interno:
+               <span>{{datosFolio.folio_interno}}</span> </div>
             <div class=" overflow-x-auto ">
               <table class=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 table-auto">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th scope="col" class="px-6 py-3 font-montserrat">
-                      Oficio
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Turno Jefatura
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
                       Folio Interno
                     </th>
                     <th scope="col" class="px-6 py-3 font-montserrat">
-                      Folio Scanner
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Administración
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Documento Escaneado
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Descripción
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Autoridad Solicitante
+                      Oficio
                     </th>
                     <th scope="col" class="px-6 py-3 font-montserrat">
                       Persona Relacionada
                     </th>
                     <th scope="col" class="px-6 py-3 font-montserrat">
-                      Plazo de Atención
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      fecha de Recepción
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Atención
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Tipo de Respuesta
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
                       Carpeta de investigación
                     </th>
                     <th scope="col" class="px-6 py-3 font-montserrat">
-                      Tipo Asunto
+                      Autoridad Solicitante
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <td class="font-montserrat text-center">{{datosFolio.oficio}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.turno_Jefatura}}</td>
                   <td class="font-montserrat text-center">{{datosFolio.folio_interno}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.folio_scanner}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.administracion}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.documento_escaneado}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.descripcion}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.autoridad_solicitante}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.oficio}}</td>
                   <td class="font-montserrat text-center">{{datosFolio.persona_relacionada}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.plazo_atencion}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.fecha_recepcion}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.atencion}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.tipo_repusta}}</td>
                   <td class="font-montserrat text-center">{{datosFolio.caprte_investigacion}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.tipo_asunto}}</td>
+                  <td class="font-montserrat text-center">{{datosFolio.autoridad_solicitante}}</td>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Formulario de Respuesta.</div>
-      <div class="flex-auto px-4 lg:px-10 py-10 bg-[#F9F8F8]/45 rounded-lg pt-8">
+      <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">Formulario de Respuesta.</div>
+      <div class="flex-auto px-4 lg:px-10  bg-[#D9BCA3]/30 rounded-lg pt-8">
         <form [formGroup]="reaplyForm"  (ngSubmit)="sendReaply()">
           <div class="flex flex-wrap">
             <div class="wrapping-individual-container">
