@@ -13,93 +13,53 @@
           <div class="bg-white shadow-md rounded-lg overflow-hidden ">
             <div class="py-6 px-4">
               <!-- <div class="text-center font-bold text-xl mb-8 font-montserrat"> Semaforo </div> -->
-              <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Gafico de Calor de Folios.
+              <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">Gafico de Calor de Folios.
               </div>
               <div class=" overflow-x-auto ">
                 <table class=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 table-auto">
                   <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                      <th scope="col" class="px-6 py-3">
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                      </th>
-                      <th scope="col" class="px-6 py-3">
+                      <th scope="col" class="px-6 py-3 font-montserrat">
+                        Folio Interno
                       </th>
                       <th scope="col" class="px-6 py-3 font-montserrat">
                         Oficio
                       </th>
                       <th scope="col" class="px-6 py-3 font-montserrat">
-                        Turno Jefatura
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Folio Interno
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Folio Scanner
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Administración
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Documento Escaneado
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Descripción
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Autoridad Solicitante
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
                         Persona Relacionada
                       </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Plazo de Atención
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        fecha de Recepción
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Atención
-                      </th>
-                      <th scope="col" class="px-6 py-3 font-montserrat">
-                        Tipo de Respuesta
-                      </th>
+
                       <th scope="col" class="px-6 py-3 font-montserrat">
                         Carpeta de investigación
                       </th>
                       <th scope="col" class="px-6 py-3 font-montserrat">
-                        Tipo Asunto
+                        Autoridad Solicitante
                       </th>
+
+                      <th scope="col" class="px-6 py-3">
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                      </th>
+
 
                     </tr>
                   </thead>
                   <tbody *ngFor="let dato of  datos ">
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700
                       hover:bg-gray-50 dark:hover:bg-gray-600" *ngFor="let fechaObj of fechas; let i = index ">
-                      @if (fechaObj.visible) {
-                        <th id="circle" [ngClass]="colorGrafica(fechaObj.fecha,numero)"></th>
-                        <td><button class=" text-xs  font-medium text-center text-white bg-blue-400 rounded-lg
+                      @if (fechaObj.visible ) {
+                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.folio_interno}} </td>
+                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.oficio}}</td>
+                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.persona_relacionada}}</td>
+                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.caprte_investigacion}}</td>
+                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.autoridad_solicitante}}</td>
+                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{fechaObj.fecha| date}}</td>
+                      <!-- <th id="circle" [ngClass]="colorGrafica(fechaObj.fecha,numero)"></th> -->
+                      <td><button class=" text-xs  font-medium text-center text-white bg-blue-400 rounded-lg
                           hover:bg-blue-800 focus:ring-4 focus:outline-none
                           focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
                           (click)="seleccionarFila(dato)" (click)="mostrarComponente()" (click)="responder(i)">Responder
                           <mat-icon>reply</mat-icon></button></td>
-                          <td class="font-montserrat text-center">{{fechaObj.fecha| date}}</td>
-                      <td class="font-montserrat text-center">{{dato.oficio}}</td>
-                      <td class="font-montserrat text-center">{{dato.turno_Jefatura}}</td>
-                      <td class="font-montserrat text-center">{{dato.folio_interno}}</td>
-                      <td class="font-montserrat text-center">{{dato.folio_scanner}}</td>
-                      <td class="font-montserrat text-center">{{dato.administracion}}</td>
-                      <td class="font-montserrat text-center">{{dato.documento_escaneado}}</td>
-                      <td class="font-montserrat text-center">{{dato.descripcion}}</td>
-                      <td class="font-montserrat text-center">{{dato.autoridad_solicitante}}</td>
-                      <td class="font-montserrat text-center">{{dato.persona_relacionada}}</td>
-                      <td class="font-montserrat text-center">{{dato.plazo_atencion}}</td>
-                      <td class="font-montserrat text-center">{{dato.fecha_recepcion}}</td>
-                      <td class="font-montserrat text-center">{{dato.atencion}}</td>
-                      <td class="font-montserrat text-center">{{dato.tipo_repusta}}</td>
-                      <td class="font-montserrat text-center">{{dato.caprte_investigacion}}</td>
-                      <td class="font-montserrat text-center">{{dato.tipo_asunto}}</td>
-
                       }
                       <!-- <th id="circle" [ngClass]="colorGrafica(fechaObj.fecha,numero)" *ngIf="fechaObj.visible"></th> -->
                     </tr>
@@ -114,12 +74,8 @@
   </div>
 </div>
 }
-
 <!-- Respuesta-Folio -->
-<div class="h-max w-auto text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto">
-
+<div class="h-max w-auto text-3xl border-2 rounded-lg  bg-white border-rojo-Akamba overflow-auto">
   <app-reaply *ngIf="filaSeleccionada" [datosFolio]="filaSeleccionada" />
-
-
 </div>
-<!--Formulario-Respuesta-->
+
