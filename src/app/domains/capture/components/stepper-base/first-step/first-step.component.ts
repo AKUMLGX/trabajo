@@ -20,7 +20,7 @@ export class FirstStepComponent {
 
   firstStepButtonStatus: boolean = false;
 
-  isEmptyList: boolean = true;
+  isEmptyList: boolean = false;
 
   firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
