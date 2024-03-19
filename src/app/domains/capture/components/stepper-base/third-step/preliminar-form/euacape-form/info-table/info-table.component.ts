@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { CollectEuacapeInfoService } from '../../../../../../../shared/services/collect-euacape-info.service';
@@ -24,6 +24,8 @@ export class InfoTableComponent {
     private collectEuacapeInfoService: CollectEuacapeInfoService,
     private euacapeAperturaService: EuacapeAperturaService,
   ){ }
+
+  @Input() dropdownChoice: string = '';
 
   ADMINISTRACION = this.collectEuacapeInfoService.ADMON;
   FECHARECEPCION = this.collectEuacapeInfoService.FECHAREC;
@@ -72,6 +74,12 @@ export class InfoTableComponent {
     {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
     {position: 14, name: 'Tipo asunto', answer: 'EUACAPE'},
     {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
+  ];
+
+  CIVIL_OR_PENAL_DATA = [
+    ...this.EUACAPE_DATA,
+    {position: 16, name: 'Autoridad administrativa', answer: 'Autoridad Administrativa'},
+    {position: 17, name: 'Folio Júpiter', answer: 'Folio Júpiter'}
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
