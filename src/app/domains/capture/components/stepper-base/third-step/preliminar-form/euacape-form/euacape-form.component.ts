@@ -53,6 +53,8 @@ export class EuacapeFormComponent {
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: 'EUACAPE', disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
+      autoridadAdministrativa: [null, [Validators.maxLength(255)]],
+      folioJupiter: [null, [Validators.maxLength(255)]],
     });
 
     saveEuacapeForm(): void {

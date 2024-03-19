@@ -129,13 +129,40 @@
                             }
                         </div>
 
-                        @if (dropdownChoice === 'EUACAPE') {
-                            <div>
-                                Trying with a random text to proove if this component 
-                            </div>
-                            <div>
-                                is actually receiving the dropdownChoice election.
-                            </div>
+                        @if (dropdownChoice === 'Civil' || dropdownChoice === 'Penal') {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Autoridad administrativa
+                                </label>
+                                <input type="text" placeholder="Autoridad administrativa"
+                                    class="input-field placeholder-blueGray-300"
+                                    formControlName="autoridadAdministrativa" value=""
+                                >
+                                @if (euacapeForm.get('autoridadAdministrativa')?.errors?.['maxlength']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span >Máximo 255 caracteres</span>
+                                    </div> 
+                                }
+                            </div> 
+                        }
+
+                        @if (dropdownChoice === 'Civil' || dropdownChoice === 'Penal') {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Folio Júpiter
+                                </label>
+                                <input type="text" placeholder="Folio Júpiter"
+                                    class="input-field placeholder-blueGray-300"
+                                    formControlName="folioJupiter" value=""
+                                >
+                                @if (euacapeForm.get('folioJupiter')?.errors?.['maxlength']) {
+                                    <div class="text-sm text-wine mt-1.5">
+                                        <span >Máximo 255 caracteres</span>
+                                    </div> 
+                                }
+                            </div> 
                         }
 
                         <div class="wrapping-individual-container">
