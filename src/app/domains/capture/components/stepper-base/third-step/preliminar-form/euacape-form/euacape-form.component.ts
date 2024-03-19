@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../../shared/services/modal.service';
 import { FormBuilder, 
@@ -38,6 +38,8 @@ export class EuacapeFormComponent {
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
+
+    @Input() dropdownChoice: string = '';
 
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [null, [Validators.required]],
