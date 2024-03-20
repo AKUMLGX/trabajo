@@ -9,12 +9,22 @@
           <th>Nombre</th>
           <th>Respuesta</th>
         </tr>
-        @for (row of EUACAPE_DATA; track row.position) {
-          <tr>
-            <td>{{ row.position }}</td>
-            <td> {{ row.name }} </td>
-            <td>{{ row.answer }}</td>
-          </tr>
+        @if(dropdownChoice === 'EUACAPE'){
+          @for (row of EUACAPE_DATA; track row.position) {
+            <tr>
+              <td>{{ row.position }}</td>
+              <td> {{ row.name }} </td>
+              <td>{{ row.answer }}</td>
+            </tr>
+          }
+        } @else if(dropdownChoice === 'Civil' || dropdownChoice === 'Penal' ) {
+          @for (row of CIVIL_OR_PENAL_DATA; track row.position) {
+            <tr>
+              <td>{{ row.position }}</td>
+              <td> {{ row.name }} </td>
+              <td>{{ row.answer }}</td>
+            </tr>
+          }
         }
       </table>
     </mat-dialog-content>

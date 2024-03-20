@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { EuacapeFormComponent } from '../third-step/preliminar-form/euacape-form/euacape-form.component';
 
 @Component({
@@ -11,5 +11,7 @@ import { EuacapeFormComponent } from '../third-step/preliminar-form/euacape-form
   styleUrl: './fourth-step.component.css'
 })
 export class FourthStepComponent {
+
+  @Input({required: true}) dropdownChoice: string = '';
 
 }

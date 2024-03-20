@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../../shared/services/modal.service';
 import { FormBuilder, 
@@ -39,6 +39,8 @@ export class EuacapeFormComponent {
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
 
+    @Input() dropdownChoice: string = '';
+
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [null, [Validators.required]],
       fechaRecepcion: [null, [Validators.required]],
@@ -51,6 +53,8 @@ export class EuacapeFormComponent {
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: 'EUACAPE', disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
+      autoridadAdministrativa: [null, [Validators.maxLength(255)]],
+      folioJupiter: [null, [Validators.maxLength(255)]],
     });
 
     saveEuacapeForm(): void {
@@ -84,6 +88,12 @@ export class EuacapeFormComponent {
         this.euacapeForm.value.personaRelacionada,
         this.euacapeForm.value.plazoAtencion,
       );
+      if(this.dropdownChoice === 'Civil' || this.dropdownChoice === 'Penal'){
+        this.collectEuacapeInfoService.updateAdditionalInfoForCivilAndPenal(
+          this.euacapeForm.value.autoridadAdministrativa,
+          this.euacapeForm.value.folioJupiter,
+        );
+      }
       this.modalService.openCustomDialogWithTemplate({
         template
       })

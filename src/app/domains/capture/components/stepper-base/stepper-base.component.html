@@ -27,11 +27,9 @@
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Civil (parte II)">
-                            <div class="step-wrapper">
-                                <app-civil-form />
-                            </div>
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
                     @case ('Penal') {
@@ -42,11 +40,9 @@
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Penal (parte II)">
-                            <div class="step-wrapper">
-                                <app-penal-form />
-                            </div>
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
                     @case ('Concurso mercantil') {
@@ -66,7 +62,7 @@
                         </mat-step>
     
                         <mat-step label="Formulario EUACAPE (parte II)">
-                            <app-fourth-step />
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
                     @case ('Generalidades') {

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { CollectEuacapeInfoService } from '../../../../../../../shared/services/collect-euacape-info.service';
@@ -25,6 +25,8 @@ export class InfoTableComponent {
     private euacapeAperturaService: EuacapeAperturaService,
   ){ }
 
+  @Input() dropdownChoice: string = '';
+
   ADMINISTRACION = this.collectEuacapeInfoService.ADMON;
   FECHARECEPCION = this.collectEuacapeInfoService.FECHAREC;
   DOCUMENTOESCANEADO = this.collectEuacapeInfoService.DOCSCAN;
@@ -40,6 +42,9 @@ export class InfoTableComponent {
   TURNOJEFATURA = this.collectEuacapeInfoService.TURNOJEFATURA;
   FOLIOINTERNO = this.collectEuacapeInfoService.FOLIOINT;
   FOLIOSCANNER = this.collectEuacapeInfoService.FOLIOSCAN;
+
+  AUTORIDADADMINISTRATIVA = this.collectEuacapeInfoService.AUTORIDADADMINISTRATIVA;
+  FOLIOJUPITER = this.collectEuacapeInfoService.FOLIOJUPITER;
 
   euacapeFormObject = signal<EuacapeApertura>({
     folio_interno:         '',
@@ -72,6 +77,12 @@ export class InfoTableComponent {
     {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
     {position: 14, name: 'Tipo asunto', answer: 'EUACAPE'},
     {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
+  ];
+
+  CIVIL_OR_PENAL_DATA = [
+    ...this.EUACAPE_DATA,
+    {position: 16, name: 'Autoridad administrativa', answer: (this.AUTORIDADADMINISTRATIVA() !== null) ? this.AUTORIDADADMINISTRATIVA() : '---'},
+    {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
