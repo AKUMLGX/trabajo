@@ -88,6 +88,12 @@ export class EuacapeFormComponent {
         this.euacapeForm.value.personaRelacionada,
         this.euacapeForm.value.plazoAtencion,
       );
+      if(this.dropdownChoice === 'Civil' || this.dropdownChoice === 'Penal'){
+        this.collectEuacapeInfoService.updateAdditionalInfoForCivilAndPenal(
+          this.euacapeForm.value.autoridadAdministrativa,
+          this.euacapeForm.value.folioJupiter,
+        );
+      }
       this.modalService.openCustomDialogWithTemplate({
         template
       })

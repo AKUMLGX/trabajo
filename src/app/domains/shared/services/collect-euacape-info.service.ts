@@ -16,7 +16,7 @@ export class CollectEuacapeInfoService {
 
   updatePreliminarEuacapeForm(
     oficioEntry: string,
-    tJefaturaEntry: string,
+    tJefaturaEntry: string | null,
     folioInt: string,
     folioScan: string
   ){
@@ -62,4 +62,18 @@ export class CollectEuacapeInfoService {
     this.PERSONAREL.set(persRel);
     this.PLAZOATENCION.set(plazoAt);
   }
+
+  //Additional info if the user chooses the Civil or Penal path.
+
+  AUTORIDADADMINISTRATIVA = signal<null | string>(null);
+  FOLIOJUPITER = signal<null | string>(null);
+
+  updateAdditionalInfoForCivilAndPenal(
+    autoridadAdmin: string | null,
+    folioJupiter: string | null,
+  ){
+    this.AUTORIDADADMINISTRATIVA.set(autoridadAdmin);
+    this.FOLIOJUPITER.set(folioJupiter);
+  }  
+
 }

@@ -43,6 +43,9 @@ export class InfoTableComponent {
   FOLIOINTERNO = this.collectEuacapeInfoService.FOLIOINT;
   FOLIOSCANNER = this.collectEuacapeInfoService.FOLIOSCAN;
 
+  AUTORIDADADMINISTRATIVA = this.collectEuacapeInfoService.AUTORIDADADMINISTRATIVA;
+  FOLIOJUPITER = this.collectEuacapeInfoService.FOLIOJUPITER;
+
   euacapeFormObject = signal<EuacapeApertura>({
     folio_interno:         '',
     folio_scanner:         '',
@@ -78,8 +81,8 @@ export class InfoTableComponent {
 
   CIVIL_OR_PENAL_DATA = [
     ...this.EUACAPE_DATA,
-    {position: 16, name: 'Autoridad administrativa', answer: 'Autoridad Administrativa'},
-    {position: 17, name: 'Folio Júpiter', answer: 'Folio Júpiter'}
+    {position: 16, name: 'Autoridad administrativa', answer: (this.AUTORIDADADMINISTRATIVA() !== null) ? this.AUTORIDADADMINISTRATIVA() : '---'},
+    {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
