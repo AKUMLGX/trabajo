@@ -7,7 +7,7 @@ import { FormBuilder,
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
-import { EuacapeFormComponent } from './euacape-form/euacape-form.component';
+import { FormComponent } from './form/form.component';
 import { CollectEuacapeInfoService } from '../../../../../shared/services/collect-euacape-info.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { CollectEuacapeInfoService } from '../../../../../shared/services/collec
     MatStepperModule,
     CommonModule,
     MatIconModule,
-    EuacapeFormComponent,
+    FormComponent,
   ],
   templateUrl: './preliminar-form.component.html',
   styleUrl: './preliminar-form.component.css'

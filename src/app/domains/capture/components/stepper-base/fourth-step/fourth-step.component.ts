@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { EuacapeFormComponent } from '../third-step/preliminar-form/euacape-form/euacape-form.component';
+import { FormComponent } from '../third-step/preliminar-form/form/form.component';
 
 @Component({
   selector: 'app-fourth-step',
   standalone: true,
   imports: [
-    EuacapeFormComponent,
+    FormComponent,
   ],
   templateUrl: './fourth-step.component.html',
   styleUrl: './fourth-step.component.css'
