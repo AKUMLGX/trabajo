@@ -14,7 +14,7 @@ import { InfoTableComponent } from './info-table/info-table.component';
 import { CollectEuacapeInfoService } from '../../../../../../shared/services/collect-euacape-info.service';
 
 @Component({
-  selector: 'app-euacape-form',
+  selector: 'app-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -26,10 +26,10 @@ import { CollectEuacapeInfoService } from '../../../../../../shared/services/col
     MatIconModule,
     InfoTableComponent,
   ],
-  templateUrl: './euacape-form.component.html',
-  styleUrl: './euacape-form.component.css'
+  templateUrl: './form.component.html',
+  styleUrl: './form.component.css'
 })
-export class EuacapeFormComponent {
+export class FormComponent {
 
   constructor(
     private fb: FormBuilder,
