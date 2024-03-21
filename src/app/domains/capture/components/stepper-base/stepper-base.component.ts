@@ -5,10 +5,6 @@ import { SecondStepComponent } from './second-step/second-step.component';
 import { ThirdStepComponent } from './third-step/third-step.component';
 import { FourthStepComponent } from './fourth-step/fourth-step.component';
 import { PreliminarFormComponent } from './third-step/preliminar-form/preliminar-form.component';
-import { CivilFormComponent } from './third-step/civil-form/civil-form.component';
-import { PenalFormComponent } from './third-step/penal-form/penal-form.component';
-import { GeneralidadesFormComponent } from './third-step/generalidades-form/generalidades-form.component';
-import { ConcursoMercantilFormComponent } from './third-step/concurso-mercantil-form/concurso-mercantil-form.component';
 import { PreliminarSecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/preliminar-second-pieces-form.component';
 import { SecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/second-pieces-form/second-pieces-form.component';
 import { CollectEuacapeInfoService } from '../../../shared/services/collect-euacape-info.service';
@@ -23,10 +19,6 @@ import { CollectEuacapeInfoService } from '../../../shared/services/collect-euac
     ThirdStepComponent,
     FourthStepComponent,
     PreliminarFormComponent,
-    CivilFormComponent,
-    PenalFormComponent,
-    ConcursoMercantilFormComponent,
-    GeneralidadesFormComponent,
     PreliminarSecondPiecesFormComponent,
     SecondPiecesFormComponent,
   ],
