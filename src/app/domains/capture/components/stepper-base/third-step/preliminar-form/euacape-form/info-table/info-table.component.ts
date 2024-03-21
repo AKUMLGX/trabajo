@@ -79,7 +79,12 @@ export class InfoTableComponent {
     {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
   ];
 
-  CIVIL_OR_PENAL_DATA = [
+  CONCURSO_DATA = [
+    ...this.EUACAPE_DATA,
+    {position: 16, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
+  ]
+
+  CIVIL_OR_PENAL_OR_GENERALIDADES_DATA = [
     ...this.EUACAPE_DATA,
     {position: 16, name: 'Autoridad administrativa', answer: (this.AUTORIDADADMINISTRATIVA() !== null) ? this.AUTORIDADADMINISTRATIVA() : '---'},
     {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}

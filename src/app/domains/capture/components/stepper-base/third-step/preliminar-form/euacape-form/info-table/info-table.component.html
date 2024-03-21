@@ -17,14 +17,26 @@
               <td>{{ row.answer }}</td>
             </tr>
           }
-        } @else if(dropdownChoice === 'Civil' || dropdownChoice === 'Penal' ) {
-          @for (row of CIVIL_OR_PENAL_DATA; track row.position) {
+        } @else if (
+            dropdownChoice === 'Civil' || 
+            dropdownChoice === 'Penal' || 
+            dropdownChoice === 'Generalidades' 
+          ) {
+          @for (row of CIVIL_OR_PENAL_OR_GENERALIDADES_DATA; track row.position) {
             <tr>
               <td>{{ row.position }}</td>
               <td> {{ row.name }} </td>
               <td>{{ row.answer }}</td>
             </tr>
           }
+        } @else if (dropdownChoice === 'Concurso mercantil'){
+            @for (row of CONCURSO_DATA; track row.position) {
+              <tr>
+                <td>{{ row.position }}</td>
+                <td> {{ row.name }} </td>
+                <td>{{ row.answer }}</td>
+              </tr>
+            }
         }
       </table>
     </mat-dialog-content>
