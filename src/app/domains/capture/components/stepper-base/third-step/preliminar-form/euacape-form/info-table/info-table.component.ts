@@ -46,6 +46,8 @@ export class InfoTableComponent {
   AUTORIDADADMINISTRATIVA = this.collectEuacapeInfoService.AUTORIDADADMINISTRATIVA;
   FOLIOJUPITER = this.collectEuacapeInfoService.FOLIOJUPITER;
 
+  TIPOASUNTO = this.collectEuacapeInfoService.TIPOASUNTO;
+
   euacapeFormObject = signal<EuacapeApertura>({
     folio_interno:         '',
     folio_scanner:         '',
@@ -75,7 +77,7 @@ export class InfoTableComponent {
     {position: 11, name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
     {position: 12, name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
     {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
-    {position: 14, name: 'Tipo asunto', answer: 'EUACAPE'},
+    {position: 14, name: 'Tipo asunto', answer: this.TIPOASUNTO()},
     {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
   ];
 

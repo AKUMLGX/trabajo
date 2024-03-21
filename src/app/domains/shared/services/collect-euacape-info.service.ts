@@ -80,4 +80,10 @@ export class CollectEuacapeInfoService {
     this.FOLIOJUPITER.set(folioJupiter);
   }
 
+  TIPOASUNTO = signal('');
+  
+  dropdownChoice(choice: string){
+    this.TIPOASUNTO.set(choice);
+  }
+
 }

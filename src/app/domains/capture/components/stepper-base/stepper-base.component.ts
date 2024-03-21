@@ -11,6 +11,7 @@ import { GeneralidadesFormComponent } from './third-step/generalidades-form/gene
 import { ConcursoMercantilFormComponent } from './third-step/concurso-mercantil-form/concurso-mercantil-form.component';
 import { PreliminarSecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/preliminar-second-pieces-form.component';
 import { SecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/second-pieces-form/second-pieces-form.component';
+import { CollectEuacapeInfoService } from '../../../shared/services/collect-euacape-info.service';
 
 @Component({
   selector: 'app-stepper-base',
@@ -33,6 +34,8 @@ import { SecondPiecesFormComponent } from './second-step/preliminar-second-piece
   styleUrl: './stepper-base.component.css'
 })
 export class StepperBaseComponent {
+
+  constructor(private collectEuacapeInfoService: CollectEuacapeInfoService){}
 
   firstStepButtonStatus = false;
 
@@ -57,6 +60,7 @@ export class StepperBaseComponent {
   retrieveSelectionFromSecondStep(event:string){
     console.log(event);
     this.dropdownChoice = event;
+    this.collectEuacapeInfoService.dropdownChoice(this.dropdownChoice);
   }
 
 }

@@ -51,7 +51,7 @@ export class EuacapeFormComponent {
       autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
       carpetaInvestigacion: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
-      tipoAsunto: [{value: 'EUACAPE', disabled: true},],
+      tipoAsunto: [{value: this.collectEuacapeInfoService.TIPOASUNTO(), disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
       autoridadAdministrativa: [null, [Validators.maxLength(255)]],
       folioJupiter: [null, [Validators.maxLength(255)]],
