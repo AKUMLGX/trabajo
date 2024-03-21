@@ -129,7 +129,10 @@
                             }
                         </div>
 
-                        @if (dropdownChoice === 'Civil' || dropdownChoice === 'Penal') {
+                        @if (
+                                dropdownChoice === 'Civil' || dropdownChoice === 'Penal'
+                                || dropdownChoice === 'Generalidades'
+                            ) {
                             <div class="wrapping-individual-container">
                                 <label class="label-field text-blueGray-600"
                                     htmlfor="grid-password">
@@ -147,7 +150,10 @@
                             </div> 
                         }
 
-                        @if (dropdownChoice === 'Civil' || dropdownChoice === 'Penal') {
+                        @if (
+                                dropdownChoice === 'Civil' || dropdownChoice === 'Penal'
+                                || dropdownChoice === 'Generalidades' || dropdownChoice === 'Concurso mercantil'  
+                            ) {
                             <div class="wrapping-individual-container">
                                 <label class="label-field text-blueGray-600"
                                     htmlfor="grid-password">
