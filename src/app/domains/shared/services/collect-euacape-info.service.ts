@@ -68,12 +68,22 @@ export class CollectEuacapeInfoService {
   AUTORIDADADMINISTRATIVA = signal<null | string>(null);
   FOLIOJUPITER = signal<null | string>(null);
 
-  updateAdditionalInfoForCivilAndPenal(
+  updateAdditionalInfoForCivilPenalAndGeneralidades(
     autoridadAdmin: string | null,
     folioJupiter: string | null,
   ){
     this.AUTORIDADADMINISTRATIVA.set(autoridadAdmin);
     this.FOLIOJUPITER.set(folioJupiter);
-  }  
+  }
+  
+  updateAdditionalInfoForConcurso(folioJupiter: string | null){
+    this.FOLIOJUPITER.set(folioJupiter);
+  }
+
+  TIPOASUNTO = signal('');
+  
+  dropdownChoice(choice: string){
+    this.TIPOASUNTO.set(choice);
+  }
 
 }

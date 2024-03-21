@@ -51,7 +51,7 @@ export class EuacapeFormComponent {
       autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
       carpetaInvestigacion: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
-      tipoAsunto: [{value: 'EUACAPE', disabled: true},],
+      tipoAsunto: [{value: this.collectEuacapeInfoService.TIPOASUNTO(), disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
       autoridadAdministrativa: [null, [Validators.maxLength(255)]],
       folioJupiter: [null, [Validators.maxLength(255)]],
@@ -88,11 +88,17 @@ export class EuacapeFormComponent {
         this.euacapeForm.value.personaRelacionada,
         this.euacapeForm.value.plazoAtencion,
       );
-      if(this.dropdownChoice === 'Civil' || this.dropdownChoice === 'Penal'){
-        this.collectEuacapeInfoService.updateAdditionalInfoForCivilAndPenal(
+      if (
+          this.dropdownChoice === 'Civil' || this.dropdownChoice === 'Penal'
+          || this.dropdownChoice === 'Generalidades'
+        ){
+        this.collectEuacapeInfoService.updateAdditionalInfoForCivilPenalAndGeneralidades(
           this.euacapeForm.value.autoridadAdministrativa,
           this.euacapeForm.value.folioJupiter,
         );
+      }
+      if (this.dropdownChoice === 'Concurso mercantil'){
+        this.collectEuacapeInfoService.updateAdditionalInfoForConcurso(this.euacapeForm.value.folioJupiter);
       }
       this.modalService.openCustomDialogWithTemplate({
         template
