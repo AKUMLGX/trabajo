@@ -5,7 +5,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, finalize } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { LoadAnimationService } from '../services/load-animation.service';
 
 export const loadAnimationInterceptor: HttpInterceptorFn = (

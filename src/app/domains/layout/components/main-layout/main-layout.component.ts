@@ -10,6 +10,8 @@ import { RouterModule } from '@angular/router';
 import { Oauth2Service } from '../../../services/ouath2.service';
 import { Oauth2Code } from '../../../interfaces/oauth2.interfaces';
 import { LoadAnimationComponent } from '../../../components/load-animation/load-animation.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -23,13 +25,17 @@ import { LoadAnimationComponent } from '../../../components/load-animation/load-
     NavbarContentComponent,
     NavbarContentInfoComponent,
     LoadAnimationComponent,
+    MatDialogModule,
     RouterModule,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css',
 })
 export class MainLayoutComponent {
-  constructor(private oauth2Service: Oauth2Service) {}
+
+  showErrorDialog = false;
+
+  constructor(private oauth2Service: Oauth2Service, private modalService: ModalService) {}
 
   collapsed = signal(false);
 
@@ -37,6 +43,9 @@ export class MainLayoutComponent {
 
   ngOnInit(): void {
     this.getToken();
+    this.modalService.showError.subscribe((show) => {
+      this.showErrorDialog = show;
+    });
   }
 
   getToken(): void {
