@@ -5,7 +5,7 @@ import { CollectEuacapeInfoService } from '../../../../../../../shared/services/
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 
-export interface EuacapeTableBeforeSubmit {
+export interface DataBeforeSubmit {
   name: string;
   position: number;
   answer: string | Date | number | null;
@@ -63,7 +63,7 @@ export class InfoTableComponent {
     carpeta_investigacion: null,
   });
 
-  EUACAPE_DATA: EuacapeTableBeforeSubmit[] = [
+  EUACAPE_DATA: DataBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: this.OFICIO()},
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
@@ -81,12 +81,12 @@ export class InfoTableComponent {
     {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
   ];
 
-  CONCURSO_DATA = [
+  CONCURSO_DATA: DataBeforeSubmit[] = [
     ...this.EUACAPE_DATA,
     {position: 16, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
   ]
 
-  CIVIL_OR_PENAL_OR_GENERALIDADES_DATA = [
+  CIVIL_OR_PENAL_OR_GENERALIDADES_DATA: DataBeforeSubmit[] = [
     ...this.EUACAPE_DATA,
     {position: 16, name: 'Autoridad administrativa', answer: (this.AUTORIDADADMINISTRATIVA() !== null) ? this.AUTORIDADADMINISTRATIVA() : '---'},
     {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
@@ -109,25 +109,42 @@ export class InfoTableComponent {
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
   ) {
-    this.euacapeFormObject.set({
-        folio_interno: folioInterno,
-        folio_scanner: folioScanner,
-        oficio: oficio,
-        documento_escaneado: documentoEscaneado,
-        persona_relacionada: personaRelacionada,
-        descripcion: descripcion,
-        fecha_recepcion: fechaRecepcion,
-        autoridad_solicitante: autoridadSolicitante,
-        plazo_atencion: plazoAtencion,
-        administracion: administracion,
-        carpeta_investigacion: carpetaInvestigacion,
-        turno_jefatura: turnoJefatura,
-  });
-    //const euacapeFormObject = {...this.euacapeForm};
-    console.log(this.euacapeFormObject());
-    //this.euacapeAperturaService.insertEuacapeForm(
-    //  this.euacapeFormObject()
-    //);
+
+    switch (this.dropdownChoice) {
+      case "Civil":
+        console.log("El kilogramo de naranjas cuesta $0.59.");
+        break;
+      case "Penal":
+        console.log("El kilogramo de manzanas cuesta $0.32.");
+        break;
+      case "Concurso mercantil":
+        console.log("El kilogramo de platanos cuesta $0.48.");
+        break;
+      case "EUACAPE":
+        this.euacapeFormObject.set({
+          folio_interno: folioInterno,
+          folio_scanner: folioScanner,
+          oficio: oficio,
+          documento_escaneado: documentoEscaneado,
+          persona_relacionada: personaRelacionada,
+          descripcion: descripcion,
+          fecha_recepcion: fechaRecepcion,
+          autoridad_solicitante: autoridadSolicitante,
+          plazo_atencion: plazoAtencion,
+          administracion: administracion,
+          carpeta_investigacion: carpetaInvestigacion,
+          turno_jefatura: turnoJefatura,
+        });
+        console.log(this.euacapeFormObject());
+        this.euacapeAperturaService.insertEuacapeForm(
+          this.euacapeFormObject()
+        );
+      break;
+      case "Generalidades":
+        console.log("El kilogramo de mangos y papayas cuesta $2.79.");
+        break;
+    }
+
   }
 
 }
