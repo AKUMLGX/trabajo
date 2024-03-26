@@ -5,7 +5,7 @@ import { CollectEuacapeInfoService } from '../../../../../../../shared/services/
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 
-export interface EuacapeTableBeforeSubmit {
+export interface DataBeforeSubmit {
   name: string;
   position: number;
   answer: string | Date | number | null;
@@ -63,7 +63,7 @@ export class InfoTableComponent {
     carpeta_investigacion: null,
   });
 
-  EUACAPE_DATA: EuacapeTableBeforeSubmit[] = [
+  EUACAPE_DATA: DataBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: this.OFICIO()},
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
@@ -81,12 +81,12 @@ export class InfoTableComponent {
     {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
   ];
 
-  CONCURSO_DATA = [
+  CONCURSO_DATA: DataBeforeSubmit[] = [
     ...this.EUACAPE_DATA,
     {position: 16, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
   ]
 
-  CIVIL_OR_PENAL_OR_GENERALIDADES_DATA = [
+  CIVIL_OR_PENAL_OR_GENERALIDADES_DATA: DataBeforeSubmit[] = [
     ...this.EUACAPE_DATA,
     {position: 16, name: 'Autoridad administrativa', answer: (this.AUTORIDADADMINISTRATIVA() !== null) ? this.AUTORIDADADMINISTRATIVA() : '---'},
     {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
@@ -125,9 +125,9 @@ export class InfoTableComponent {
   });
     //const euacapeFormObject = {...this.euacapeForm};
     console.log(this.euacapeFormObject());
-    //this.euacapeAperturaService.insertEuacapeForm(
-    //  this.euacapeFormObject()
-    //);
+    this.euacapeAperturaService.insertEuacapeForm(
+      this.euacapeFormObject()
+    );
   }
 
 }
