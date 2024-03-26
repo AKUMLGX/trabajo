@@ -109,25 +109,42 @@ export class InfoTableComponent {
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
   ) {
-    this.euacapeFormObject.set({
-        folio_interno: folioInterno,
-        folio_scanner: folioScanner,
-        oficio: oficio,
-        documento_escaneado: documentoEscaneado,
-        persona_relacionada: personaRelacionada,
-        descripcion: descripcion,
-        fecha_recepcion: fechaRecepcion,
-        autoridad_solicitante: autoridadSolicitante,
-        plazo_atencion: plazoAtencion,
-        administracion: administracion,
-        carpeta_investigacion: carpetaInvestigacion,
-        turno_jefatura: turnoJefatura,
-  });
-    //const euacapeFormObject = {...this.euacapeForm};
-    console.log(this.euacapeFormObject());
-    this.euacapeAperturaService.insertEuacapeForm(
-      this.euacapeFormObject()
-    );
+
+    switch (this.dropdownChoice) {
+      case "Civil":
+        console.log("El kilogramo de naranjas cuesta $0.59.");
+        break;
+      case "Penal":
+        console.log("El kilogramo de manzanas cuesta $0.32.");
+        break;
+      case "Concurso mercantil":
+        console.log("El kilogramo de platanos cuesta $0.48.");
+        break;
+      case "EUACAPE":
+        this.euacapeFormObject.set({
+          folio_interno: folioInterno,
+          folio_scanner: folioScanner,
+          oficio: oficio,
+          documento_escaneado: documentoEscaneado,
+          persona_relacionada: personaRelacionada,
+          descripcion: descripcion,
+          fecha_recepcion: fechaRecepcion,
+          autoridad_solicitante: autoridadSolicitante,
+          plazo_atencion: plazoAtencion,
+          administracion: administracion,
+          carpeta_investigacion: carpetaInvestigacion,
+          turno_jefatura: turnoJefatura,
+        });
+        console.log(this.euacapeFormObject());
+        this.euacapeAperturaService.insertEuacapeForm(
+          this.euacapeFormObject()
+        );
+      break;
+      case "Generalidades":
+        console.log("El kilogramo de mangos y papayas cuesta $2.79.");
+        break;
+    }
+
   }
 
 }
