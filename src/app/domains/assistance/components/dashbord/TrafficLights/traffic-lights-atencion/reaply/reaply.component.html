@@ -1,46 +1,34 @@
 <div class=" py-1 bg-blueGray-50 ">
   <div class="w-auto lg:w-12/12  h-auto mx-auto mt-2">
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
-      <div class="flex justify-end">
-      </div>
-      <div class="flex justify-center items-center h-full mb-14">
-        <div class="bg-[#D9BCA3]/30 shadow-md rounded-lg overflow-hidden  ">
-          <div class="py-6 px-4">
-            <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">Respuesta  del Folio Interno:
-               <span>{{datosFolio.folio_interno}}</span> </div>
-            <div class=" overflow-x-auto ">
-              <table class=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 table-auto">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Folio Interno
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Oficio
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Persona Relacionada
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Carpeta de investigación
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-montserrat">
-                      Autoridad Solicitante
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <td class="font-montserrat text-center">{{datosFolio.folio_interno}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.oficio}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.persona_relacionada}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.caprte_investigacion}}</td>
-                  <td class="font-montserrat text-center">{{datosFolio.autoridad_solicitante}}</td>
-                </tbody>
-              </table>
+      <div class="flex justify-center items-center text-xl mb-8 uppercase font-medium font-montserrat  ">Respuesta  del Folio Interno:
+        <span>{{datosFolio.folio_interno}}</span> </div>
+        <section class="py-1 bg-blueGray-50" id="sectionTable">
+          <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
+            <div class="flex-auto px-4 lg:px-10 py-10">
+                <table class="min-w-full border-collapse bg-white">
+                    <thead>
+                      <tr>
+                        <th class="table-head-item text-center font-montserrat sm:text-xs md:text-base mt-2 ml-2 "> Folio Interno </th>
+                        <th class="table-head-item text-center font-montserrat sm:text-xs md:text-base mt-2 ml-2 "> Oficio </th>
+                        <th class="table-head-item text-center font-montserrat sm:text-xs md:text-base mt-2 ml-2 "> Persona Relacionada </th>
+                        <th class="table-head-item text-center font-montserrat sm:text-xs md:text-base mt-2 ml-2 "> Carpeta de investigación </th>
+                        <th class="table-head-item text-center font-montserrat sm:text-xs md:text-base mt-2 ml-2 "> Autoridad Solicitante</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                  <td class="font-montserrat text-center px-6 py-4 whitespace-no-wrap border-b border-gray-500"><div class="text-sm leading-5 text-wine">{{datosFolio.folio_interno}}</div></td>
+                  <td class="font-montserrat text-center px-6 py-4 whitespace-no-wrap border-b border-gray-500"><div class="text-sm leading-5 text-wine">{{datosFolio.oficio}}</div></td>
+                  <td class="font-montserrat text-center px-6 py-4 whitespace-no-wrap border-b border-gray-500"><div class="text-sm leading-5 text-wine">{{datosFolio.persona_relacionada}}</div></td>
+                  <td class="font-montserrat text-center px-6 py-4 whitespace-no-wrap border-b border-gray-500"><div class="text-sm leading-5 text-wine">{{datosFolio.caprte_investigacion}}</div></td>
+                  <td class="font-montserrat text-center px-6 py-4 whitespace-no-wrap border-b border-gray-500"><div class="text-sm leading-5 text-wine">{{datosFolio.autoridad_solicitante}}</div></td>
+                    </tbody>
+                </table>
+
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+
       <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">Formulario de Respuesta.</div>
       <div class="flex-auto px-4 lg:px-10  bg-[#D9BCA3]/30 rounded-lg pt-8">
         <form [formGroup]="reaplyForm"  (ngSubmit)="sendReaply()">
@@ -145,6 +133,7 @@
                 formControlName="foliointerno" value="" >
 
             </div>
+          </div>
             <br>
             <div class="flex justify-between items-center">
               <button
@@ -170,7 +159,7 @@
                       ||(reaplyForm.get('folioscanner')?.errors?.['required'])
                       ||(reaplyForm.get('documentoescaneado')?.errors?.['required'])
                     ) {
-                      <div class="text-wine text-base p-3 flex gap-3">
+                      <div class="text-wine text-base p-3 flex gap-9">
                         <span>REQUERIDO</span>
                         <mat-icon>error</mat-icon>
                     </div>
@@ -178,7 +167,6 @@
                   }
               </div>
             </div>
-          </div>
         </form>
       </div>
     </div>

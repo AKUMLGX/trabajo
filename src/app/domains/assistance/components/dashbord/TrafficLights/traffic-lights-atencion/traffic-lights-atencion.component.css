@@ -1,18 +1,145 @@
+.instructions-text {
+  @apply sm:text-xs md:text-base mt-2 ml-2 text-justify
+}
 
+.base-next-button {
+  @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+}
 
-.green {
-  background-color: #b8d8c2;
+.base-next-button-disabled {
+  @apply bg-wine/40 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow outline-none mr-1
+}
+
+.table-head-item {
+  @apply px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider
+}
+
+.table-data-cell-item {
+  @apply px-6 py-4 border-b border-gray-500
+}
+
+.table-data-cell-content {
+  @apply text-sm leading-5 text-wine
+}
+/*
+ .green {
+  background-color: #66CC33;
+ }
+ .green-ligth{
+  background-color: #ADCC33;
+ }
+ .orange{
+  background-color: #FF9133;
  }
 
  .yellow {
-  background-color: #f1d68d;
+  background-color: #FFCC33;
  }
 
  .red {
   background-color: #D52929;
+ } */
+
+  .green{
+  background-color:#004400;
  }
- #circle {
-  border-radius: 50%;
-  width: 5px;
-  height: 5px;
+.green-1{
+  background-color:#004D00;
 }
+.green-2{
+  background-color:#006400;
+}
+.green-3{
+  background-color:#2E8B57;
+}
+.green-4{
+  background-color:#3CB371;
+}
+.green-5{
+  background-color:#53AD00;
+}
+.green-6{
+  background-color:#98FB98;
+}
+
+
+.yellow-1{
+  /* background-color:#FFDB00; */
+  background-color:#f7d901;
+}
+.yellow-2{
+  /* background-color:#FFD100; */
+  background-color:#EADE00;
+}
+
+.yellow-3{
+  /* background-color:#FFF700; */
+  background-color:#FBEE00;
+}
+.yellow-4{
+  /* background-color:#FFF200; */
+  background-color:#FFF537;
+
+}
+.yellow-5{
+  /* background-color:#FFFF4C; */
+  background-color:#FFF86C;
+}
+
+.yellow-6{
+  /* background-color:#FFFF67; */
+  background-color:#FFFBA6;
+}
+
+
+.orange-1{
+  background-color:#F9AD07;
+
+}
+.orange-2{
+
+  background-color:#F0A80A;
+}
+.orange-3{
+
+  background-color:#F28919;
+}
+.orange-4{
+  background-color:#F2780F;
+
+}
+.orange-5{
+  background-color:#E07627;
+
+}
+.orange-6{
+
+  background-color:#D55915;
+}
+
+.red{
+  background-color:#ff0000;
+
+}
+.red-1{
+
+  background-color:#D53515;
+}
+.red-2{
+
+  background-color:#D43F22;
+}
+.red-3{
+
+  background-color:#C4361B;
+}
+.red-4{
+  background-color:#B2341C;
+
+}
+
+.red-5{
+  background-color:#D81D1D;
+
+}
+
