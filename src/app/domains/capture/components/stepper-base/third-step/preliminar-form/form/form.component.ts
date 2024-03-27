@@ -11,7 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { InfoTableComponent } from './info-table/info-table.component';
-import { CollectEuacapeInfoService } from '../../../../../../shared/services/collect-euacape-info.service';
+import { CollectFormInfoService } from '../../../../../../shared/services/collect-form-info.service';
 
 @Component({
   selector: 'app-form',
@@ -34,7 +34,7 @@ export class FormComponent {
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
-    private collectEuacapeInfoService: CollectEuacapeInfoService,
+    private collectFormInfoService: CollectFormInfoService,
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
@@ -51,7 +51,7 @@ export class FormComponent {
       autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
       carpetaInvestigacion: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
-      tipoAsunto: [{value: this.collectEuacapeInfoService.TIPOASUNTO(), disabled: true},],
+      tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
       autoridadAdministrativa: [null, [Validators.maxLength(255)]],
       folioJupiter: [null, [Validators.maxLength(255)]],
@@ -76,7 +76,7 @@ export class FormComponent {
     }
   
     openCustomModalWithTemplate(template: TemplateRef<any>){
-      this.collectEuacapeInfoService.updateEuacapeForm(
+      this.collectFormInfoService.updateEuacapeForm(
         this.euacapeForm.value.administracion,
         this.euacapeForm.value.fechaRecepcion,
         this.euacapeForm.value.documentoEscaneado,
@@ -92,13 +92,13 @@ export class FormComponent {
           this.dropdownChoice === 'Civil' || this.dropdownChoice === 'Penal'
           || this.dropdownChoice === 'Generalidades'
         ){
-        this.collectEuacapeInfoService.updateAdditionalInfoForCivilPenalAndGeneralidades(
+        this.collectFormInfoService.updateAdditionalInfoForCivilPenalAndGeneralidades(
           this.euacapeForm.value.autoridadAdministrativa,
           this.euacapeForm.value.folioJupiter,
         );
       }
       if (this.dropdownChoice === 'Concurso mercantil'){
-        this.collectEuacapeInfoService.updateAdditionalInfoForConcurso(this.euacapeForm.value.folioJupiter);
+        this.collectFormInfoService.updateAdditionalInfoForConcurso(this.euacapeForm.value.folioJupiter);
       }
       this.modalService.openCustomDialogWithTemplate({
         template

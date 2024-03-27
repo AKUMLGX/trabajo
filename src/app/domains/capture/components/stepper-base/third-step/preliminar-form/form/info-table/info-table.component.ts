@@ -1,7 +1,7 @@
 import { Component, Input, signal } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { CollectEuacapeInfoService } from '../../../../../../../shared/services/collect-euacape-info.service';
+import { CollectFormInfoService } from '../../../../../../../shared/services/collect-form-info.service';
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 import { FormsObjectService } from '../../../../../../../shared/services/forms-object.service';
@@ -26,7 +26,7 @@ export interface DataBeforeSubmit {
 export class InfoTableComponent {
 
   constructor(
-    private collectEuacapeInfoService: CollectEuacapeInfoService,
+    private collectFormInfoService: CollectFormInfoService,
     private civilAperturaService: CivilAperturaService,
     private euacapeAperturaService: EuacapeAperturaService,
     private formsObjectService: FormsObjectService,
@@ -37,26 +37,26 @@ export class InfoTableComponent {
 
   @Input() dropdownChoice: string = '';
 
-  ADMINISTRACION = this.collectEuacapeInfoService.ADMON;
-  FECHARECEPCION = this.collectEuacapeInfoService.FECHAREC;
-  DOCUMENTOESCANEADO = this.collectEuacapeInfoService.DOCSCAN;
-  ATENCION = this.collectEuacapeInfoService.ATENCION;
-  DESCRIPCION = this.collectEuacapeInfoService.DESCRIPCION;
-  TIPORESPUESTA = this.collectEuacapeInfoService.TIPORES;
-  AUTORIDADSOLICITANTE = this.collectEuacapeInfoService.AUTORIDADSOLIC;
-  CARPETAINVESTIGACION = this.collectEuacapeInfoService.CARPETAINV;
-  PERSONARELACIONADA = this.collectEuacapeInfoService.PERSONAREL;
-  PLAZOATENCION = this.collectEuacapeInfoService.PLAZOATENCION;
+  ADMINISTRACION = this.collectFormInfoService.ADMON;
+  FECHARECEPCION = this.collectFormInfoService.FECHAREC;
+  DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCAN;
+  ATENCION = this.collectFormInfoService.ATENCION;
+  DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
+  TIPORESPUESTA = this.collectFormInfoService.TIPORES;
+  AUTORIDADSOLICITANTE = this.collectFormInfoService.AUTORIDADSOLIC;
+  CARPETAINVESTIGACION = this.collectFormInfoService.CARPETAINV;
+  PERSONARELACIONADA = this.collectFormInfoService.PERSONAREL;
+  PLAZOATENCION = this.collectFormInfoService.PLAZOATENCION;
 
-  OFICIO = this.collectEuacapeInfoService.OFICIO;
-  TURNOJEFATURA = this.collectEuacapeInfoService.TURNOJEFATURA;
-  FOLIOINTERNO = this.collectEuacapeInfoService.FOLIOINT;
-  FOLIOSCANNER = this.collectEuacapeInfoService.FOLIOSCAN;
+  OFICIO = this.collectFormInfoService.OFICIO;
+  TURNOJEFATURA = this.collectFormInfoService.TURNOJEFATURA;
+  FOLIOINTERNO = this.collectFormInfoService.FOLIOINT;
+  FOLIOSCANNER = this.collectFormInfoService.FOLIOSCAN;
 
-  AUTORIDADADMINISTRATIVA = this.collectEuacapeInfoService.AUTORIDADADMINISTRATIVA;
-  FOLIOJUPITER = this.collectEuacapeInfoService.FOLIOJUPITER;
+  AUTORIDADADMINISTRATIVA = this.collectFormInfoService.AUTORIDADADMINISTRATIVA;
+  FOLIOJUPITER = this.collectFormInfoService.FOLIOJUPITER;
 
-  TIPOASUNTO = this.collectEuacapeInfoService.TIPOASUNTO;
+  TIPOASUNTO = this.collectFormInfoService.TIPOASUNTO;
 
   // euacapeFormObject = signal<EuacapeApertura>({
   //   folio_interno:         '',

@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { FormComponent } from './form/form.component';
-import { CollectEuacapeInfoService } from '../../../../../shared/services/collect-euacape-info.service';
+import { CollectFormInfoService } from '../../../../../shared/services/collect-form-info.service';
 
 @Component({
   selector: 'app-preliminar-form',
@@ -28,7 +28,7 @@ export class PreliminarFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private collectEuacapeInfoService : CollectEuacapeInfoService,
+    private collectFormInfoService :  CollectFormInfoService,
     ){ }
 
   public preliminarForm: FormGroup = this.fb.group({
@@ -42,7 +42,7 @@ export class PreliminarFormComponent {
 
   savePreliminarEuacapeForm(): void {
     console.log(this.preliminarForm.value);
-    this.collectEuacapeInfoService.updatePreliminarEuacapeForm(
+    this.collectFormInfoService.updatePreliminarEuacapeForm(
       this.preliminarForm.value.oficio,
       this.preliminarForm.value.turnoJefatura,
       this.preliminarForm.value.folioInterno,
