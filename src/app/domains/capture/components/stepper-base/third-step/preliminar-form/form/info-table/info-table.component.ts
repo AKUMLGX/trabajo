@@ -4,6 +4,11 @@ import { MatTableModule } from '@angular/material/table';
 import { CollectEuacapeInfoService } from '../../../../../../../shared/services/collect-euacape-info.service';
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
+import { FormsObjectService } from '../../../../../../../shared/services/forms-object.service';
+import { CivilAperturaService } from '../../../../../../../services/civil-apertura.service';
+import { PenalAperturaService } from '../../../../../../../services/penal-apertura.service';
+import { ConcursoMercantilAperturaService } from '../../../../../../../services/concurso-mercantil-apertura.service';
+import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
 
 export interface DataBeforeSubmit {
   name: string;
@@ -22,7 +27,12 @@ export class InfoTableComponent {
 
   constructor(
     private collectEuacapeInfoService: CollectEuacapeInfoService,
+    private civilAperturaService: CivilAperturaService,
     private euacapeAperturaService: EuacapeAperturaService,
+    private formsObjectService: FormsObjectService,
+    private penalAperturaService: PenalAperturaService,
+    private concursoMercantilAperturaService: ConcursoMercantilAperturaService,
+    private generalidadesAperturaService: GeneralidadesAperturaService,
   ){ }
 
   @Input() dropdownChoice: string = '';
@@ -48,20 +58,20 @@ export class InfoTableComponent {
 
   TIPOASUNTO = this.collectEuacapeInfoService.TIPOASUNTO;
 
-  euacapeFormObject = signal<EuacapeApertura>({
-    folio_interno:         '',
-    folio_scanner:         '',
-    oficio:                '',
-    documento_escaneado:   '',
-    persona_relacionada:   '',
-    descripcion:           '',
-    fecha_recepcion:       '',
-    autoridad_solicitante: '',
-    plazo_atencion:        null,
-    administracion:        '',
-    turno_jefatura:        null,
-    carpeta_investigacion: null,
-  });
+  // euacapeFormObject = signal<EuacapeApertura>({
+  //   folio_interno:         '',
+  //   folio_scanner:         '',
+  //   oficio:                '',
+  //   documento_escaneado:   '',
+  //   persona_relacionada:   '',
+  //   descripcion:           '',
+  //   fecha_recepcion:       '',
+  //   autoridad_solicitante: '',
+  //   plazo_atencion:        null,
+  //   administracion:        '',
+  //   turno_jefatura:        null,
+  //   carpeta_investigacion: null,
+  // });
 
   EUACAPE_DATA: DataBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: this.OFICIO()},
@@ -108,20 +118,80 @@ export class InfoTableComponent {
     administracion: string,
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
+    autoridadAdministrativa: string | null,
+    folioJupiter: string | null,
   ) {
-
     switch (this.dropdownChoice) {
       case "Civil":
-        console.log("El kilogramo de naranjas cuesta $0.59.");
+        this.formsObjectService.civilFormObject.set({
+          folio_interno: folioInterno,
+          folio_scanner: folioScanner,
+          oficio: oficio,
+          documento_escaneado: documentoEscaneado,
+          persona_relacionada: personaRelacionada,
+          descripcion: descripcion,
+          fecha_recepcion: fechaRecepcion,
+          autoridad_solicitante: autoridadSolicitante,
+          plazo_atencion: plazoAtencion,
+          administracion: administracion,
+          carpeta_investigacion: carpetaInvestigacion,
+          turno_jefatura: turnoJefatura,
+          autoridad_administrativa: autoridadAdministrativa,
+          folio_jupiter: folioJupiter,
+        });
+        console.log("Estamos en Civil");
+        console.log(this.formsObjectService.civilFormObject());
+        this.civilAperturaService.insertCivilForm(
+          this.formsObjectService.civilFormObject()
+        );
         break;
       case "Penal":
-        console.log("El kilogramo de manzanas cuesta $0.32.");
+        this.formsObjectService.penalFormObject.set({
+          folio_interno: folioInterno,
+          folio_scanner: folioScanner,
+          oficio: oficio,
+          documento_escaneado: documentoEscaneado,
+          persona_relacionada: personaRelacionada,
+          descripcion: descripcion,
+          fecha_recepcion: fechaRecepcion,
+          autoridad_solicitante: autoridadSolicitante,
+          plazo_atencion: plazoAtencion,
+          administracion: administracion,
+          carpeta_investigacion: carpetaInvestigacion,
+          turno_jefatura: turnoJefatura,
+          autoridad_administrativa: autoridadAdministrativa,
+          folio_jupiter: folioJupiter,
+        });
+        console.log("Estamos en Penal");
+        console.log(this.formsObjectService.penalFormObject());
+        this.penalAperturaService.insertPenalForm(
+          this.formsObjectService.penalFormObject()
+        );
         break;
       case "Concurso mercantil":
-        console.log("El kilogramo de platanos cuesta $0.48.");
+        this.formsObjectService.concursoMercantilFormObject.set({
+          folio_interno: folioInterno,
+          folio_scanner: folioScanner,
+          oficio: oficio,
+          documento_escaneado: documentoEscaneado,
+          persona_relacionada: personaRelacionada,
+          descripcion: descripcion,
+          fecha_recepcion: fechaRecepcion,
+          autoridad_solicitante: autoridadSolicitante,
+          plazo_atencion: plazoAtencion,
+          administracion: administracion,
+          carpeta_investigacion: carpetaInvestigacion,
+          turno_jefatura: turnoJefatura,
+          folio_jupiter: folioJupiter,
+        });
+        console.log("Estamos en Concurso");
+        console.log(this.formsObjectService.concursoMercantilFormObject());
+        this.concursoMercantilAperturaService.insertConcursoMercantilForm(
+          this.formsObjectService.concursoMercantilFormObject()
+        );
         break;
       case "EUACAPE":
-        this.euacapeFormObject.set({
+        this.formsObjectService.euacapeFormObject.set({
           folio_interno: folioInterno,
           folio_scanner: folioScanner,
           oficio: oficio,
@@ -135,13 +205,34 @@ export class InfoTableComponent {
           carpeta_investigacion: carpetaInvestigacion,
           turno_jefatura: turnoJefatura,
         });
-        console.log(this.euacapeFormObject());
+        console.log("Estamos en Euacape");
+        console.log(this.formsObjectService.euacapeFormObject());
         this.euacapeAperturaService.insertEuacapeForm(
-          this.euacapeFormObject()
+          this.formsObjectService.euacapeFormObject()
         );
-      break;
+        break;
       case "Generalidades":
-        console.log("El kilogramo de mangos y papayas cuesta $2.79.");
+        this.formsObjectService.generalidadesFormObject.set({
+          folio_interno: folioInterno,
+          folio_scanner: folioScanner,
+          oficio: oficio,
+          documento_escaneado: documentoEscaneado,
+          persona_relacionada: personaRelacionada,
+          descripcion: descripcion,
+          fecha_recepcion: fechaRecepcion,
+          autoridad_solicitante: autoridadSolicitante,
+          plazo_atencion: plazoAtencion,
+          administracion: administracion,
+          carpeta_investigacion: carpetaInvestigacion,
+          turno_jefatura: turnoJefatura,
+          autoridad_administrativa: autoridadAdministrativa,
+          folio_jupiter: folioJupiter,
+        });
+        console.log("Estamos en Generalidades");
+        console.log(this.formsObjectService.generalidadesFormObject());
+        this.generalidadesAperturaService.insertGeneralidadesForm(
+          this.formsObjectService.generalidadesFormObject()
+        );
         break;
     }
 
