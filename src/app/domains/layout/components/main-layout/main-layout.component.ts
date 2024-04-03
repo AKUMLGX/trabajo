@@ -11,9 +11,7 @@ import { ModalService } from './../../../shared/services/modal.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { PendientesAcusarComponent } from './navbar-content/select-pendientes-acusar/pendientes-acusar/pendientes-acusar.component';
-
-
-
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -30,14 +28,12 @@ import { PendientesAcusarComponent } from './navbar-content/select-pendientes-ac
     RouterModule,
     CommonModule,
     PendientesAcusarComponent,
-
-
+    NotificationsComponent,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent {
-  modalClose = true
 
   constructor(private modalService:ModalService){}
 
@@ -50,16 +46,8 @@ export class MainLayoutComponent {
     template
    })
   }
-  modalCancelButton():void{
-    this.modalClose=false
-  }
+  
 
-  selecionarOpcion:string=''
-
-  onSelectedOption(event: Event){
-      const target = event.target as HTMLSelectElement
-      this.selecionarOpcion = target.value
-  }
 }
 
 
