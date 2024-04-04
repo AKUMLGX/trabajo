@@ -1,1 +1,53 @@
-<p>pendientes-por-acusar works!</p>
+<div class="h-max w-auto text-3xl border-2 rounded-lg mt-16 bg-[#D9BCA3]/30  border-rojo-Akamba ">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden ">
+      <div class="py-6 px-4">
+        <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">Pendientes Por Acusar</div>
+        <div class=" overflow-x-auto ">
+          <table class="table-auto relative">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th></th>
+                <th scope="col" class="px-6 py-3">Tipo Asusnto</th>
+                <th scope="col" class="px-6 py-3">Fecha de Recepción</th>
+                <th scope="col" class="px-6 py-3">Folio Interno</th>
+                <th scope="col" class="px-6 py-3">Oficio</th>
+                <th scope="col" class="px-6 py-3">Carpeta de investigación</th>
+                <th scope="col" class="px-6 py-3">Persona Relacionada</th>
+                <th scope="col" class="px-6 py-3">Autoridad Solicitante</th>
+                <th scope="col" class="px-6 py-3">Folio Jupiter</th>
+                <th scope="col" class="px-6 py-3">Administración</th>
+                <th scope="col" class="px-6 py-3">Documento Escaneado</th>
+                <th scope="col" class="px-6 py-3">Plazo de Atención</th>
+                <th scope="col" class="px-6 py-3">Descripción</th>
+                <th scope="col" class="px-6 py-3">Turno Jefatura</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr  scope="row" class="px-6 py-4 text-xs  text-gray-900 whitespace-nowrap dark:text-white" *ngFor="let item of datosPorAcusar">
+                  <th><mat-icon>visibility</mat-icon></th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.tipoAsusnto}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.fechadeRecepcion}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.folioInterno}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.oficio}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.carpetadeinvestigacion}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.personaRelacionada}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.autoridadSolicitante}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.folioJupiter}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.administracion}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.documentoEscaneado}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.plazodeAtencion}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.descripcion}}</th>
+                  <th  scope="col" class="px-6 py-4 ">{{item.turnoJefatura}}</th>
+                  <th  scope="col" class="px-6 py-4 "><button class="btnEditar" >Editar</button></th>
+                  <th  scope="col" class="px-0.5 py-4 " ><button  class="btnTurnar">Turnar</button></th>
+                </tr>
+            </tbody>
+          </table>
+
+        </div>
+        <button class="btnGenerarReporte">Generar Reporte</button>
+      </div>
+    </div>
+</div>

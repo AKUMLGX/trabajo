@@ -6,11 +6,15 @@
       <select class="bg-gray-50 border text-center border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  (change)="onSelectedOption($event)">
         <option value="">Seelciona una Opcion</option>
         <option value="pendientesacusar">PendientesPorAcusar</option>
-        <option value="">Validador de Respuesta</option>
+        <option value="validadorrespuestas">Validador de Respuesta</option>
       </select>
       @if (selecionarOpcion === 'pendientesacusar') {
         <div>
-          Allo le monde!!! pendientes acusar
+          <app-pendientes-por-acusar />
+        </div>
+      } @else {
+        <div>
+            <app-validador-de-respuestas />
         </div>
       }
     </mat-dialog-content>
