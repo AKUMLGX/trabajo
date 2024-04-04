@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { ModalService } from './../../../shared/services/modal.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { PendientesAcusarComponent } from './navbar-content/select-pendientes-acusar/pendientes-acusar/pendientes-acusar.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 
 @Component({
@@ -27,7 +26,6 @@ import { NotificationsComponent } from './notifications/notifications.component'
     NavbarContentInfoComponent,
     RouterModule,
     CommonModule,
-    PendientesAcusarComponent,
     NotificationsComponent,
   ],
   templateUrl: './main-layout.component.html',
