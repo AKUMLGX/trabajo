@@ -19,16 +19,16 @@ interface PendientesAcusar {
 }
 
 @Component({
-  selector: 'app-pendientes-acusar',
+  selector: 'app-pendientes-por-acusar',
   standalone: true,
-  imports: [CommonModule,
-  MatIconModule],
-  templateUrl: './pendientes-acusar.component.html',
-  styleUrl: './pendientes-acusar.component.css'
+  imports: [
+    CommonModule,
+    MatIconModule,
+  ],
+  templateUrl: './pendientes-por-acusar.component.html',
+  styleUrl: './pendientes-por-acusar.component.css'
 })
-
-
-export class PendientesAcusarComponent {
+export class PendientesPorAcusarComponent {
 
   datosPorAcusar: PendientesAcusar[] = [
     {
@@ -47,4 +47,5 @@ export class PendientesAcusarComponent {
        turnoJefatura:"Nuevo"
     },
   ]
+
 }
