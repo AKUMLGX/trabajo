@@ -1,0 +1,23 @@
+.instructions-text {
+    @apply sm:text-xs md:text-base mt-2 ml-2 text-justify
+}
+
+.base-next-button {
+    @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+}
+
+.base-next-button-disabled {
+    @apply bg-wine/40 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow outline-none mr-1
+}
+
+.table-head-item {
+    @apply px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider
+}
+
+.table-data-cell-item {
+    @apply px-6 py-4 border-b border-gray-500
+}
+
+.table-data-cell-content {
+    @apply text-sm leading-5 text-wine
+}

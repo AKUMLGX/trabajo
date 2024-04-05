@@ -1,3 +1,64 @@
-<div>
-  Pendientes por Acusar Content
-</div>
+<div class="flex justify-center items-center text-xl mt-8 uppercase font-medium">Resultados</div>
+<section class="py-1 bg-blueGray-50" id="sectionTable">
+  <div class="w-full lg:w-12/12 mx-auto mt-2">
+      <div
+          class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
+          <div class="flex-auto px-4 lg:px-10 py-10">
+              <div class="overflow-x-auto">
+                  <table class="min-w-full border-collapse bg-white">
+                      <thead>
+                          <tr>
+                              <th class="table-head-item">
+                                  {{ firstColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ secondColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ thirdColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ fourthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ fifthColumnHeader }}
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          @for(row of SEARCH_RESULTS; track row.id) {
+                              <tr>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.folio }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.carpeta }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.oficio }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.autoridad }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.persona }}
+                                      </div>
+                                  </td>
+                              </tr>    
+                          }
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
