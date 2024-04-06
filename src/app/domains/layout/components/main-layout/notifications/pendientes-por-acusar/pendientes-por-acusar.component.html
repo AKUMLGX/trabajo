@@ -9,6 +9,9 @@
                       <thead>
                           <tr>
                               <th class="table-head-item">
+                                  {{ zeroColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
                                   {{ firstColumnHeader }}
                               </th>
                               <th class="table-head-item">
@@ -23,11 +26,22 @@
                               <th class="table-head-item">
                                   {{ fifthColumnHeader }}
                               </th>
+                              <th class="table-head-item">
+                                  {{ sixthColumnHeader }}
+                            </th>
                           </tr>
                       </thead>
                       <tbody>
                           @for(row of SEARCH_RESULTS; track row.id) {
                               <tr>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content flex justify-center items-center">
+                                          <img 
+                                            src="assets/icons/others/binoculars-icon.svg"
+                                            width="40px"
+                                          >
+                                    </div>
+                                  </td>
                                   <td class="table-data-cell-item whitespace-no-wrap">
                                       <div class="table-data-cell-content">
                                           {{ row.folio }}
@@ -52,6 +66,14 @@
                                       <div class="table-data-cell-content">
                                           {{ row.persona }}
                                       </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content flex justify-center items-center">
+                                          <img 
+                                            src="assets/icons/others/three-dots-vertical.svg"
+                                            width="22px"
+                                          >
+                                    </div>
                                   </td>
                               </tr>    
                           }

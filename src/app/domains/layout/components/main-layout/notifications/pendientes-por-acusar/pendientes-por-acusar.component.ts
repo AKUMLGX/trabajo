@@ -12,13 +12,13 @@ import { CommonModule } from '@angular/common';
 })
 export class PendientesPorAcusarComponent {
 
-  zeroColumnHeader: string = 'Ver más';
-  firstColumnHeader: string = 'Folio interno';
+  zeroColumnHeader  : string = 'Ver más';
+  firstColumnHeader : string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
-  thirdColumnHeader: string = 'Oficio';
+  thirdColumnHeader : string = 'Oficio';
   fourthColumnHeader: string = 'Autoridad remitente';
-  fifthColumnHeader: string = 'Persona relacionada';
-  sixthColumnHeader: string = 'Otras acciones';
+  fifthColumnHeader : string = 'Persona relacionada';
+  sixthColumnHeader : string = 'Otras acciones';
 
   SEARCH_RESULTS = [
     {id: 1, folio: 'Folio 1', carpeta: 'Carpeta investigación 1', oficio: 'Oficio 1 ABCDEFGH', autoridad: 'Autoridad 1', persona: 'Persona 1',},

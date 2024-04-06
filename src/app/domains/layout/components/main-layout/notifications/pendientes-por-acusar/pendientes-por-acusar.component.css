@@ -11,7 +11,7 @@
 }
 
 .table-head-item {
-    @apply px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider
+    @apply px-6 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider
 }
 
 .table-data-cell-item {
