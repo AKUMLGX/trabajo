@@ -8,6 +8,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTable } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalService } from '../../../../../../shared/services/modal.service';
+import { CollectformReplyInfoService } from '../../../../../../shared/services/collect-form-reply-info.service';
+import {  InfotableReplyComponent } from './info-table/info-table-reply.component';
+
 
 
 interface Datos {
@@ -30,7 +33,7 @@ interface Datos {
 
 
 @Component({
-  selector: 'app-reaply',
+  selector: 'app-reply',
   standalone: true,
   imports: [
     TrafficLightsAtencionComponent,
@@ -39,10 +42,11 @@ interface Datos {
     MatTable,
     MatDialogModule,
     CommonModule,
-    MatIcon
+    MatIcon,
+    InfotableReplyComponent
   ],
-  templateUrl: './reaply.component.html',
-  styleUrl: './reaply.component.css'
+  templateUrl: './reply.component.html',
+  styleUrl: './reply.component.css'
 })
 
 export class ReaplyComponent implements OnInit {
@@ -52,14 +56,17 @@ export class ReaplyComponent implements OnInit {
 
 
 
-  constructor(private fb: FormBuilder,private modalService:ModalService) { }
+  constructor(private fb: FormBuilder,private modalService:ModalService,
+    private collectFormReplyInfo: CollectformReplyInfoService
+  ) { }
   ngOnInit(): void {
-    this.reaplyForm.controls['foliointerno'].setValue(this.datosFolio.folio_interno)
+    this.replyForm.controls['foliointerno'].setValue(this.datosFolio.folio_interno)
+
   }
 
 
 
-  public reaplyForm: FormGroup = this.fb.group({
+  public replyForm: FormGroup = this.fb.group({
     oficio: [null, [Validators.required]],
     fechaAtencion: [null, [Validators.required]],
     atencion: [{ value: "Respuesta", disabled: true }],
@@ -70,13 +77,28 @@ export class ReaplyComponent implements OnInit {
     foliointerno: [null,[Validators.required ],]
   })
 
+
+  getToday(): string {
+    return new Date().toISOString().split('T')[0]
+  }
+
   sendReaply():void{
-    console.log(this.reaplyForm.value);
+    console.log(this.replyForm.value);
   }
 
   openModalWithTemplate(template:TemplateRef<any>){
-
-
-
+    this.collectFormReplyInfo.updateReplyFrom(
+      this.replyForm.value.oficio,
+      this.replyForm.value.fechaAtencion,
+      this.replyForm.value.documentoescaneado,
+       //this.reaplyForm.value.atencion,
+      this.replyForm.value.descripcion,
+      this.replyForm.value.tiporespuesta,
+      this.replyForm.value.folioscanner,
+      this.replyForm.value.foliointerno,
+    )
+this.modalService.openCustomDialogWithTemplate({
+  template
+})
   }
 }
