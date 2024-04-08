@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { HeatMapService } from '../../../../../services/heat-map.service';
 import { RouterModule } from '@angular/router';
-import { ReaplyComponent } from './reaply/reaply.component';
+import { ReaplyComponent } from './reaply/reply.component';
 
 
 @Component({
