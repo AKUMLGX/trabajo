@@ -1,53 +1,86 @@
-<div class="h-max w-auto text-3xl border-2 rounded-lg mt-16 bg-[#D9BCA3]/30  border-rojo-Akamba ">
-    <div class="bg-white shadow-md rounded-lg overflow-hidden ">
-      <div class="py-6 px-4">
-        <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">Pendientes Por Acusar</div>
-        <div class=" overflow-x-auto ">
-          <table class="table-auto relative">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th></th>
-                <th scope="col" class="px-6 py-3">Tipo Asusnto</th>
-                <th scope="col" class="px-6 py-3">Fecha de Recepción</th>
-                <th scope="col" class="px-6 py-3">Folio Interno</th>
-                <th scope="col" class="px-6 py-3">Oficio</th>
-                <th scope="col" class="px-6 py-3">Carpeta de investigación</th>
-                <th scope="col" class="px-6 py-3">Persona Relacionada</th>
-                <th scope="col" class="px-6 py-3">Autoridad Solicitante</th>
-                <th scope="col" class="px-6 py-3">Folio Jupiter</th>
-                <th scope="col" class="px-6 py-3">Administración</th>
-                <th scope="col" class="px-6 py-3">Documento Escaneado</th>
-                <th scope="col" class="px-6 py-3">Plazo de Atención</th>
-                <th scope="col" class="px-6 py-3">Descripción</th>
-                <th scope="col" class="px-6 py-3">Turno Jefatura</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr  scope="row" class="px-6 py-4 text-xs  text-gray-900 whitespace-nowrap dark:text-white" *ngFor="let item of datosPorAcusar">
-                  <th><mat-icon>visibility</mat-icon></th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.tipoAsusnto}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.fechadeRecepcion}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.folioInterno}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.oficio}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.carpetadeinvestigacion}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.personaRelacionada}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.autoridadSolicitante}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.folioJupiter}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.administracion}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.documentoEscaneado}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.plazodeAtencion}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.descripcion}}</th>
-                  <th  scope="col" class="px-6 py-4 ">{{item.turnoJefatura}}</th>
-                  <th  scope="col" class="px-6 py-4 "><button class="btnEditar" >Editar</button></th>
-                  <th  scope="col" class="px-0.5 py-4 " ><button  class="btnTurnar">Turnar</button></th>
-                </tr>
-            </tbody>
-          </table>
-
-        </div>
-        <button class="btnGenerarReporte">Generar Reporte</button>
+<div class="flex justify-center items-center text-xl mt-8 uppercase font-medium">Resultados</div>
+<section class="py-1 bg-blueGray-50" id="sectionTable">
+  <div class="w-full lg:w-12/12 mx-auto mt-2">
+      <div
+          class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
+          <div class="flex-auto px-4 lg:px-10 py-10">
+              <div class="overflow-x-auto">
+                  <table class="min-w-full border-collapse bg-white">
+                      <thead>
+                          <tr>
+                              <th class="table-head-item">
+                                  {{ zeroColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ firstColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ secondColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ thirdColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ fourthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ fifthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ sixthColumnHeader }}
+                            </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          @for(row of SEARCH_RESULTS; track row.id) {
+                              <tr>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content flex justify-center items-center">
+                                          <img 
+                                            src="assets/icons/others/binoculars-icon.svg"
+                                            width="40px"
+                                          >
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.folio }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.carpeta }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.oficio }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.autoridad }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                      <div class="table-data-cell-content">
+                                          {{ row.persona }}
+                                      </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content flex justify-center items-center">
+                                          <img 
+                                            src="assets/icons/others/three-dots-vertical.svg"
+                                            width="22px"
+                                          >
+                                    </div>
+                                  </td>
+                              </tr>    
+                          }
+                      </tbody>
+                  </table>
+              </div>
+          </div>
       </div>
-    </div>
-</div>
+  </div>
+</section>
