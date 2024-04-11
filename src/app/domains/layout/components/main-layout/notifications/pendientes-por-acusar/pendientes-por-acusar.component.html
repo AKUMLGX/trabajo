@@ -28,6 +28,42 @@
                               </th>
                               <th class="table-head-item">
                                   {{ sixthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ seventhColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ eighthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ ninthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ tenthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ eleventhColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ twelfthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ thirteenthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ fourteenthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ fifteenthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ sixteenthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ seventeenthColumnHeader }}
+                              </th>
+                              <th class="table-head-item">
+                                  {{ eighteenthColumnHeader }}
                             </th>
                           </tr>
                       </thead>
@@ -44,12 +80,12 @@
                                   </td>
                                   <td class="table-data-cell-item whitespace-no-wrap">
                                       <div class="table-data-cell-content">
-                                          {{ row.folio }}
+                                          {{ row.documento_escaneado }}
                                       </div>
                                   </td>
                                   <td class="table-data-cell-item whitespace-no-wrap">
                                       <div class="table-data-cell-content">
-                                          {{ row.carpeta }}
+                                          {{ row.folio_interno }}
                                       </div>
                                   </td>
                                   <td class="table-data-cell-item whitespace-no-wrap">
@@ -59,13 +95,73 @@
                                   </td>
                                   <td class="table-data-cell-item whitespace-no-wrap">
                                       <div class="table-data-cell-content">
-                                          {{ row.autoridad }}
+                                          {{ row.fecha_recepcion }}
                                       </div>
                                   </td>
                                   <td class="table-data-cell-item whitespace-no-wrap">
                                       <div class="table-data-cell-content">
-                                          {{ row.persona }}
+                                          {{ row.autoridad_solicitante }}
                                       </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.persona_relacionada }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.carpeta_investigacion }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.descripcion }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.administracion }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.folio_scanner }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.turno_jefatura }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.atencion }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.tipo_respuesta }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.tipo_asunto }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.plazo_atencion }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.folio_jupiter }}
+                                    </div>
+                                  </td>
+                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                    <div class="table-data-cell-content">
+                                        {{ row.volante_jefatura }}
+                                    </div>
                                   </td>
                                   <td class="table-data-cell-item whitespace-no-wrap">
                                     <div class="table-data-cell-content flex justify-center items-center">
