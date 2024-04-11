@@ -3,3 +3,9 @@
   background-color: #691C32 !important;
   border-color: red !important;
 }
+
+.options {
+  display: flex;
+  justify-content: space-evenly;
+
+}
