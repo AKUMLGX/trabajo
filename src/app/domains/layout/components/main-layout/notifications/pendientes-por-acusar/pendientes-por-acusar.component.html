@@ -8,7 +8,7 @@
                   <table class="min-w-full border-collapse bg-white">
                       <thead>
                           <tr>
-                              <th class="table-head-item">
+                              <th class="table-head-item bg-white sticky left-0">
                                   {{ zeroColumnHeader }}
                               </th>
                               <th class="table-head-item">
@@ -62,7 +62,7 @@
                               <th class="table-head-item">
                                   {{ seventeenthColumnHeader }}
                               </th>
-                              <th class="table-head-item">
+                              <th class="table-head-item bg-white sticky right-0">
                                   {{ eighteenthColumnHeader }}
                             </th>
                           </tr>
@@ -70,7 +70,7 @@
                       <tbody>
                           @for(row of SEARCH_RESULTS; track row.id) {
                               <tr>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white sticky left-0">
                                     <div class="table-data-cell-content flex justify-center items-center">
                                           <img 
                                             src="assets/icons/others/binoculars-icon.svg"
@@ -78,92 +78,92 @@
                                           >
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                       <div class="table-data-cell-content">
                                           {{ row.documento_escaneado }}
                                       </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                       <div class="table-data-cell-content">
                                           {{ row.folio_interno }}
                                       </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                       <div class="table-data-cell-content">
                                           {{ row.oficio }}
                                       </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                       <div class="table-data-cell-content">
                                           {{ row.fecha_recepcion }}
                                       </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                       <div class="table-data-cell-content">
                                           {{ row.autoridad_solicitante }}
                                       </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.persona_relacionada }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.carpeta_investigacion }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.descripcion }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.administracion }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.folio_scanner }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.turno_jefatura }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.atencion }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.tipo_respuesta }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.tipo_asunto }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.plazo_atencion }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.folio_jupiter }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white">
                                     <div class="table-data-cell-content">
                                         {{ row.volante_jefatura }}
                                     </div>
                                   </td>
-                                  <td class="table-data-cell-item whitespace-no-wrap">
+                                  <td class="table-data-cell-item whitespace-no-wrap bg-white sticky right-0">
                                     <div class="table-data-cell-content flex justify-center items-center">
                                           <img 
                                             src="assets/icons/others/three-dots-vertical.svg"
