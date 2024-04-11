@@ -7,7 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
-import * as printJS from "print-js";
+
 
 @Component({
   selector: 'app-tracking-table',

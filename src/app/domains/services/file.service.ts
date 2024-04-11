@@ -21,7 +21,7 @@ export class FileService {
       });
   }
 
-  printFile(): string {
+  printFile(): void {
     this.httpClient
       .get(environment.getPdfEndpoint + '/test.pdf', { responseType: 'text' })
       .subscribe((data) => {
@@ -33,10 +33,11 @@ export class FileService {
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'application/pdf' });
         let blobURL = URL.createObjectURL(blob);
-        let myWindow = window.open(blobURL);
-        if (myWindow !== null) myWindow.print();
-        return data;
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = blobURL;
+        document.body.appendChild(iframe);
+        if (iframe.contentWindow !== null) iframe.contentWindow.print();
       });
-    return '';
   }
 }
