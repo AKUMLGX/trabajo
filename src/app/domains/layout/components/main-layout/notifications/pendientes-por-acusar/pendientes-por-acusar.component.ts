@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-pendientes-por-acusar',
   standalone: true,
   imports: [
     CommonModule,
+    MatDialogModule,
   ],
   templateUrl: './pendientes-por-acusar.component.html',
   styleUrl: './pendientes-por-acusar.component.css'
