@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-pendientes-por-acusar',
@@ -8,11 +9,14 @@ import { MatDialogModule } from '@angular/material/dialog';
   imports: [
     CommonModule,
     MatDialogModule,
+    MatIconModule,
   ],
   templateUrl: './pendientes-por-acusar.component.html',
   styleUrl: './pendientes-por-acusar.component.css'
 })
 export class PendientesPorAcusarComponent {
+
+  isEmptyList            : boolean = true;
 
   zeroColumnHeader       : string = 'Ver más';
   firstColumnHeader      : string = 'Documento escaneado';
