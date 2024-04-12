@@ -46,6 +46,7 @@ export class AsuntoService {
       oficio: oficio,
       autoridad_remitente: autoridadRemitente,
       persona_relacionada: personaRelacionada,
+      volante
     };
     this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
       this.documentList = data;
