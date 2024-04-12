@@ -3,11 +3,13 @@
   </div>
   <div class="text-center" >
     <mat-dialog-content  >
-      <select class="bg-gray-50 border text-center border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  (change)="onSelectedOption($event)">
-        <option value="">Selecciona una opción</option>
-        <option value="pendientesacusar">Pendientes por acusar</option>
-        <option value="validadorrespuestas">Validador de respuestas</option>
-      </select>
+      <div class="flex justify-center items-center mt-2">
+        <select class="bg-gray-50 border-[#691C32] text-center text-gray-900 mb-6 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  (change)="onSelectedOption($event)">
+          <option disabled selected value="">Selecciona una opción</option>
+          <option value="pendientesacusar">Pendientes por acusar</option>
+          <option value="validadorrespuestas">Validador de respuestas</option>
+        </select>
+      </div>
       @if (selecionarOpcion === 'pendientesacusar') {
         <div>
           <app-pendientes-por-acusar />
@@ -20,8 +22,16 @@
     </mat-dialog-content>
   </div>
 
-  <div class="flex justify-center items-center">
-    <mat-dialog-actions>
-      <button class="modal-right-button mr-10"mat-button mat-dialog-close> cerrar</button>
-    </mat-dialog-actions>
-  </div>
+  @if(selecionarOpcion !== 'pendientesacusar' && selecionarOpcion !== 'validadorrespuestas' ) {
+    <div class="flex justify-center items-center"> 
+      <mat-dialog-actions>
+        <button 
+          class="bg-wine text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150 mb-4 mt-6"
+          mat-button 
+          mat-dialog-close
+        > 
+          Cerrar
+        </button>
+      </mat-dialog-actions>    
+    </div>
+  }
