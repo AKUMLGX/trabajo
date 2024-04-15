@@ -113,29 +113,29 @@ export class TrafficLightsAtencionComponent {
     { fecha: new Date("2024/11/08"), visible: true, },
     { fecha: new Date("2024/05/08"), visible: true, },
     { fecha: new Date("2024/04/20  "), visible: true, },
-    { fecha: new Date("2024/04/19  "), visible: true, },
-    { fecha: new Date("2024/04/15  "), visible: true, },
-    { fecha: new Date("2024/04/14  "), visible: true, },
-    { fecha: new Date("2024/04/13"), visible: true, },
-    { fecha: new Date("2024/04/12  "), visible: true, },
-    { fecha: new Date("2024/04/11"), visible: true, },
-    { fecha: new Date("2024/04/10 "), visible: true, },
-    { fecha: new Date("2024/04/09 "), visible: true, },
-    { fecha: new Date("2024/04/08"), visible: true, },
-    { fecha: new Date("2024/04/07"), visible: true, },
-    { fecha: new Date("2024/04/06"), visible: true, },
-    { fecha: new Date("2024/04/05 "), visible: true, },
-    { fecha: new Date("2024/04/04"), visible: true, },
-    { fecha: new Date("2024/04/03"), visible: true, },
-    { fecha: new Date("2024/04/02"), visible: true, },
-    { fecha: new Date("2024/04/01"), visible: true, },
-    { fecha: new Date("2024/03/31"), visible: true, },
-    { fecha: new Date("2024/03/30"), visible: true, },
-    { fecha: new Date("2024/03/29"), visible: true, },
-    { fecha: new Date("2024/03/28"), visible: true, },
-   // { fecha: new Date("2024/03/27"), visible: true, },
-   // { fecha: new Date("2024/03/26"), visible: true, },
-     //{ fecha: new Date("2024/01/26"), visible: true, },
+  //   { fecha: new Date("2024/04/19  "), visible: true, },
+  //   { fecha: new Date("2024/04/15  "), visible: true, },
+  //   { fecha: new Date("2024/04/14  "), visible: true, },
+  //   { fecha: new Date("2024/04/13"), visible: true, },
+  //   { fecha: new Date("2024/04/12  "), visible: true, },
+  //   { fecha: new Date("2024/04/11"), visible: true, },
+  //   { fecha: new Date("2024/04/10 "), visible: true, },
+  //   { fecha: new Date("2024/04/09 "), visible: true, },
+  //   { fecha: new Date("2024/04/08"), visible: true, },
+  //   { fecha: new Date("2024/04/07"), visible: true, },
+  //   { fecha: new Date("2024/04/06"), visible: true, },
+  //   { fecha: new Date("2024/04/05 "), visible: true, },
+  //   { fecha: new Date("2024/04/04"), visible: true, },
+  //   { fecha: new Date("2024/04/03"), visible: true, },
+  //   { fecha: new Date("2024/04/02"), visible: true, },
+  //   { fecha: new Date("2024/04/01"), visible: true, },
+  //   { fecha: new Date("2024/03/31"), visible: true, },
+  //   { fecha: new Date("2024/03/30"), visible: true, },
+  //   { fecha: new Date("2024/03/29"), visible: true, },
+  //   { fecha: new Date("2024/03/28"), visible: true, },
+  //  { fecha: new Date("2024/03/27"), visible: true, },
+  //  { fecha: new Date("2024/03/26"), visible: true, },
+  //    { fecha: new Date("2024/01/26"), visible: true, },
   ]
 
 
@@ -230,7 +230,7 @@ export class TrafficLightsAtencionComponent {
     } else if (diferenciaEnDias <= 26) {
       return 'red'
     } else if (diferenciaEnDias <= 27) {
-      return 'reed'
+      return 'red'
     }
      else if (28 <= diferenciaEnDias) {
       return 'red'
