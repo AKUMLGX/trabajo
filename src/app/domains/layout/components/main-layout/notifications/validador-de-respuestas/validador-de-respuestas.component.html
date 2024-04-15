@@ -1,1 +1,25 @@
-<p>Componente para Validador de respuestas</p>
+<!-- Tabs -->
+<mat-tab-group animationDuration="2000ms">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Requerimientos
+      <mat-icon class="ml-4">playlist_add_check_circle</mat-icon>
+    </ng-template>
+    <app-requerimientos/>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Visualizador
+      <mat-icon class="ml-4">picture_as_pdf</mat-icon>
+    </ng-template>
+    <app-visualizador/>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Respuesta
+      <mat-icon class="ml-4">reply_all</mat-icon>
+    </ng-template>
+    <app-respuesta/>
+  </mat-tab>
+</mat-tab-group>
+
