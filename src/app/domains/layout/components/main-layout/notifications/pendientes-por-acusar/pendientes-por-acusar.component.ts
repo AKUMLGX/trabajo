@@ -1,28 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule  } from '@angular/material/icon';
-
-interface PendientesAcusar {
-  tipoAsusnto: string;
-  fechadeRecepcion: string;
-  folioInterno: number
-   oficio: string;
-   carpetadeinvestigacion: string;
-   personaRelacionada: string;
-   autoridadSolicitante: string;
-   folioJupiter: number;
-   administracion: string;
-   documentoEscaneado: string;
-   plazodeAtencion: number;
-   descripcion: string;
-   turnoJefatura: string;
-}
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-pendientes-por-acusar',
   standalone: true,
   imports: [
     CommonModule,
+    MatDialogModule,
     MatIconModule,
   ],
   templateUrl: './pendientes-por-acusar.component.html',
@@ -30,22 +16,111 @@ interface PendientesAcusar {
 })
 export class PendientesPorAcusarComponent {
 
-  datosPorAcusar: PendientesAcusar[] = [
-    {
-      tipoAsusnto:"Nuevo",
-      fechadeRecepcion:"15/02/2024",
-      folioInterno: 56,
-       oficio:"89_SD",
-       carpetadeinvestigacion:"GHP",
-       personaRelacionada:"Juan Perez",
-       autoridadSolicitante:"Federal",
-       folioJupiter:589,
-       administracion:"GTY",
-       documentoEscaneado:"RTY",
-       plazodeAtencion:48,
-       descripcion:"Nueva Descripción",
-       turnoJefatura:"Nuevo"
+  isEmptyList            : boolean = true;
+
+  zeroColumnHeader       : string = 'Ver más';
+  firstColumnHeader      : string = 'Documento escaneado';
+  secondColumnHeader     : string = 'Folio interno';
+  thirdColumnHeader      : string = 'Oficio';
+  fourthColumnHeader     : string = 'Fecha de recepción';
+  fifthColumnHeader      : string = 'Autoridad solicitante';
+  sixthColumnHeader      : string = 'Persona relacionada';
+  seventhColumnHeader    : string = 'Carpeta de investigación';
+  eighthColumnHeader     : string = 'Descripción';
+  ninthColumnHeader      : string = 'Administración';
+  tenthColumnHeader      : string = 'Folio scanner';
+  eleventhColumnHeader   : string = 'Turno jefatura';
+  twelfthColumnHeader    : string = 'Atención';
+  thirteenthColumnHeader : string = 'Tipo de respuesta';
+  fourteenthColumnHeader : string = 'Tipo asunto';
+  fifteenthColumnHeader  : string = 'Plazo de atención';
+  sixteenthColumnHeader  : string = 'Folio Júpiter';
+  seventeenthColumnHeader: string = 'Volante de jefatura';
+  eighteenthColumnHeader : string = 'Otras acciones';
+
+
+  SEARCH_RESULTS = [
+    { 
+      id                    :  1, 
+      documento_escaneado   : 'Documento escaneado 1',
+      folio_interno         : 'Folio interno 1',
+      oficio                : 'Oficio 1',
+      fecha_recepcion       : 'Fecha de recepción 1',
+      autoridad_solicitante : 'Autoridad solicitante 1',
+      persona_relacionada   : 'Persona relacionada 1',
+      carpeta_investigacion : 'Carpeta de investigación 1',
+      descripcion           : 'Descripción 1',
+      administracion        : 'Administración 1',
+      folio_scanner         : 'Folio scanner 1',
+      turno_jefatura        : 'Turno jefatura 1',
+      atencion              : 'Atención 1',
+      tipo_respuesta        : 'Tipo de respuesta 1',
+      tipo_asunto           : 'Tipo asunto 1',
+      plazo_atencion        : 'Plazo de atención 1',
+      folio_jupiter         : 'Folio Júpiter 1',
+      volante_jefatura      : 'Volante de jefatura 1',
     },
-  ]
+    { 
+      id                    :  2, 
+      documento_escaneado   : 'Documento escaneado 2',
+      folio_interno         : 'Folio interno 2',
+      oficio                : 'Oficio 2',
+      fecha_recepcion       : 'Fecha de recepción 2',
+      autoridad_solicitante : 'Autoridad solicitante 2',
+      persona_relacionada   : 'Persona relacionada 2',
+      carpeta_investigacion : 'Carpeta de investigación 2',
+      descripcion           : 'Descripción 2',
+      administracion        : 'Administración 2',
+      folio_scanner         : 'Folio scanner 2',
+      turno_jefatura        : 'Turno jefatura 2',
+      atencion              : 'Atención 2',
+      tipo_respuesta        : 'Tipo de respuesta 2',
+      tipo_asunto           : 'Tipo asunto 2',
+      plazo_atencion        : 'Plazo de atención 2',
+      folio_jupiter         : 'Folio Júpiter 2',
+      volante_jefatura      : 'Volante de jefatura 2',
+    },
+    { 
+      id                    :  3, 
+      documento_escaneado   : 'Documento escaneado 3',
+      folio_interno         : 'Folio interno 3',
+      oficio                : 'Oficio 3',
+      fecha_recepcion       : 'Fecha de recepción 3',
+      autoridad_solicitante : 'Autoridad solicitante 3',
+      persona_relacionada   : 'Persona relacionada 3',
+      carpeta_investigacion : 'Carpeta de investigación 3',
+      descripcion           : 'Descripción 3',
+      administracion        : 'Administración 3',
+      folio_scanner         : 'Folio scanner 3',
+      turno_jefatura        : 'Turno jefatura 3',
+      atencion              : 'Atención 3',
+      tipo_respuesta        : 'Tipo de respuesta 3',
+      tipo_asunto           : 'Tipo asunto 3',
+      plazo_atencion        : 'Plazo de atención 3',
+      folio_jupiter         : 'Folio Júpiter 3',
+      volante_jefatura      : 'Volante de jefatura 3',
+    },
+    { 
+      id                    :  4, 
+      documento_escaneado   : 'Documento escaneado 4',
+      folio_interno         : 'Folio interno 4',
+      oficio                : 'Oficio 4',
+      fecha_recepcion       : 'Fecha de recepción 4',
+      autoridad_solicitante : 'Autoridad solicitante 4',
+      persona_relacionada   : 'Persona relacionada 4',
+      carpeta_investigacion : 'Carpeta de investigación 4',
+      descripcion           : 'Descripción 4',
+      administracion        : 'Administración 4',
+      folio_scanner         : 'Folio scanner 4',
+      turno_jefatura        : 'Turno jefatura 4',
+      atencion              : 'Atención 4',
+      tipo_respuesta        : 'Tipo de respuesta 4',
+      tipo_asunto           : 'Tipo asunto 4',
+      plazo_atencion        : 'Plazo de atención 4',
+      folio_jupiter         : 'Folio Júpiter 4',
+      volante_jefatura      : 'Volante de jefatura 4',
+    },
+    
+  ];
 
 }
