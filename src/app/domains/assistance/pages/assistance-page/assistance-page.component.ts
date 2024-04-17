@@ -11,7 +11,7 @@ import { TramitePageComponent } from '../tramite-page/tramite-page.component';
   standalone: true,
   imports: [InitTemplateComponent,CardsComponent,RouterModule,TramitePageComponent],
   templateUrl: './assistance-page.component.html',
-  styleUrl: './assistance-page.component.css'
+  styleUrl: './assistance-page.component.css',
 })
 export class AssistancePageComponent {
 

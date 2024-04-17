@@ -15,7 +15,7 @@
                                                 <span>*</span>
                                             </div>
                                         }
-                                    } 
+                                    }
                             </label>
                             <input type="text" placeholder="Documentos escaneados"
                                 class="input-field placeholder-blueGray-300"
@@ -24,7 +24,7 @@
                             @if (euacapeForm.get('documentoEscaneado')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
-                                </div> 
+                                </div>
                             }
                         </div>
 
@@ -65,7 +65,7 @@
                             @if (euacapeForm.get('autoridadSolicitante')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
-                                </div> 
+                                </div>
                             }
                         </div>
 
@@ -87,7 +87,7 @@
                             @if (euacapeForm.get('personaRelacionada')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
-                                </div> 
+                                </div>
                             }
                         </div>
 
@@ -103,7 +103,7 @@
                             @if (euacapeForm.get('carpetaInvestigacion')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                      <span >Máximo 255 caracteres</span>
-                                </div> 
+                                </div>
                              }
                         </div>
 
@@ -116,7 +116,7 @@
                                                 <span>*</span>
                                             </div>
                                         }
-                                    } 
+                                    }
                             </label>
                             <input type="text" placeholder="Descripción"
                                 class="input-field placeholder-blueGray-300"
@@ -125,7 +125,7 @@
                             @if (euacapeForm.get('descripcion')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 1000 caracteres</span>
-                                </div> 
+                                </div>
                             }
                         </div>
 
@@ -145,14 +145,14 @@
                                 @if (euacapeForm.get('autoridadAdministrativa')?.errors?.['maxlength']) {
                                     <div class="text-sm text-wine mt-1.5">
                                         <span >Máximo 255 caracteres</span>
-                                    </div> 
+                                    </div>
                                 }
-                            </div> 
+                            </div>
                         }
 
                         @if (
                                 dropdownChoice === 'Civil' || dropdownChoice === 'Penal'
-                                || dropdownChoice === 'Generalidades' || dropdownChoice === 'Concurso mercantil'  
+                                || dropdownChoice === 'Generalidades' || dropdownChoice === 'Concurso mercantil'
                             ) {
                             <div class="wrapping-individual-container">
                                 <label class="label-field text-blueGray-600"
@@ -166,9 +166,9 @@
                                 @if (euacapeForm.get('folioJupiter')?.errors?.['maxlength']) {
                                     <div class="text-sm text-wine mt-1.5">
                                         <span >Máximo 255 caracteres</span>
-                                    </div> 
+                                    </div>
                                 }
-                            </div> 
+                            </div>
                         }
 
                         <div class="wrapping-individual-container">
@@ -198,7 +198,7 @@
                             <div class="flex">
                                 <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Plazo de atención 
+                                    Plazo de atención
                                 </label>
                                 <div class="ml-1 text-xs">
                                     (Ingresar plazo en horas).
@@ -211,11 +211,11 @@
                             @if (euacapeForm.get('plazoAtencion')?.errors?.['min']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >No ingresar números negativos</span>
-                                </div> 
+                                </div>
                             }
                         </div>
-                        
-                        
+
+
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
@@ -233,10 +233,10 @@
                                     <option [ngValue]="null" disabled >Elija una atención</option>
                                     <option value="Requerimiento">Requerimiento</option>
                                     <option value="Respuesta">Respuesta</option>
-                                </select>     
-                            }      
+                                </select>
+                            }
                         </div>
-                        
+
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
@@ -248,20 +248,20 @@
                                     formControlName="tipoRespuesta" value=""
                                 >
                             } @else {
-                                <select 
-                                        id="tipoRespuesta" 
+                                <select
+                                        id="tipoRespuesta"
                                         formControlName="tipoRespuesta"
                                         class="input-field">
                                     <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
                                     <option value="Total">Total</option>
                                     <option value="Parcial">Parcial</option>
                                     <option value="En trámite">En trámite</option>
-                                </select> 
-                            } 
+                                </select>
+                            }
                         </div>
-                        
-                        
-                        
+
+
+
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
@@ -272,7 +272,7 @@
                                 formControlName="tipoAsunto" value=""
                             >
                         </div>
-                             
+
                     </div>
                     <br>
                     <div class="flex justify-between items-center">
@@ -287,7 +287,7 @@
                             @if (
                                     (euacapeForm.controls['administracion'].invalid && (euacapeForm.controls['administracion'].dirty || euacapeForm.controls['administracion'].touched))
                                 ||  (euacapeForm.controls['fechaRecepcion'].invalid && (euacapeForm.controls['fechaRecepcion'].dirty || euacapeForm.controls['fechaRecepcion'].touched))
-                                ||  (euacapeForm.controls['documentoEscaneado'].invalid && (euacapeForm.controls['documentoEscaneado'].dirty || euacapeForm.controls['documentoEscaneado'].touched))  
+                                ||  (euacapeForm.controls['documentoEscaneado'].invalid && (euacapeForm.controls['documentoEscaneado'].dirty || euacapeForm.controls['documentoEscaneado'].touched))
                                 ||  (euacapeForm.controls['descripcion'].invalid && (euacapeForm.controls['descripcion'].dirty || euacapeForm.controls['descripcion'].touched))
                                 ||  (euacapeForm.controls['autoridadSolicitante'].invalid && (euacapeForm.controls['autoridadSolicitante'].dirty || euacapeForm.controls['autoridadSolicitante'].touched))
                                 ||  (euacapeForm.controls['personaRelacionada'].invalid && (euacapeForm.controls['personaRelacionada'].dirty || euacapeForm.controls['personaRelacionada'].touched))
@@ -305,7 +305,7 @@
                                         <mat-icon>error</mat-icon>
                                     </div>
                                 }
-                            } 
+                            }
                         </div>
                     </div>
                 </form>
@@ -315,5 +315,5 @@
 </section>
 
 <ng-template #template1>
-    <app-info-table [dropdownChoice]="dropdownChoice" /> 
+    <app-info-table [dropdownChoice]="dropdownChoice" />
 </ng-template>

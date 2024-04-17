@@ -12,64 +12,72 @@
           <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
             <mat-icon>restore_page</mat-icon>
           </div>
-          <button type="button"    class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
+          <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
           hover:bg-rojo-Akamba focus:ring-4 focus:outline-none  " [routerLink]="['/layout/tramite-card']"
             routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
         </div>
+        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
+                        hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat  "
+          [routerLink]="['/site/rep/consulta/tramite-card']" routerLinkActive="active">Ver detalles.
+          <mat-icon>info</mat-icon></button>
       </div>
-      <!-- Parcial -->
-      <div class="bg-white shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
-        <div class="flex-1 ">
-          <h2 class="text-lg font-semibold mb-2 font-montserrat"> Parcial: </h2>
-          <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 120 </h2>
-        </div>
-        <div class="flex flex-col items-center justify-center">
-          <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
-            <mat-icon>incomplete_circle</mat-icon>
-          </div>
-          <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat " [routerLink]="['/layout/parcial-card']"
-            routerLinkActive="active"> Ver detalles. <mat-icon>info</mat-icon></button>
-        </div>
+    </div>
+    <!-- Parcial -->
+    <div class="bg-white shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
+      <div class="flex-1 ">
+        <h2 class="text-lg font-semibold mb-2 font-montserrat"> Parcial: </h2>
+        <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 120 </h2>
       </div>
-      <!-- Finalizado -->
-      <div class="bg-white shadow-md rounded p-4 flex flex-row items-center justify-between">
-        <div class="flex-1">
-          <h2 class="text-lg font-semibold mb-2 font-montserrat"> Finalizado: </h2>
-          <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 360 </h2>
+      <div class="flex flex-col items-center justify-center">
+        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
+          <mat-icon>incomplete_circle</mat-icon>
         </div>
-        <div class="flex flex-col items-center justify-center">
-          <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2  ">
-            <mat-icon>done</mat-icon>
-          </div>
-          <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-         hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat " [routerLink]="['/layout/finalizado-card']"
-            routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
+        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
+          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat "
+          [routerLink]="['/layout/parcial-card']" routerLinkActive="active"> Ver detalles.
+          <mat-icon>info</mat-icon></button>
+      </div>
+    </div>
+    <!-- Finalizado -->
+    <div class="bg-white shadow-md rounded p-4 flex flex-row items-center justify-between">
+      <div class="flex-1">
+        <h2 class="text-lg font-semibold mb-2 font-montserrat"> Finalizado: </h2>
+        <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 360 </h2>
+      </div>
+      <div class="flex flex-col items-center justify-center">
+        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2  ">
+          <mat-icon>done</mat-icon>
         </div>
+        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
+         hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat "
+          [routerLink]="['/layout/finalizado-card']" routerLinkActive="active">Ver detalles.
+          <mat-icon>info</mat-icon></button>
       </div>
     </div>
   </div>
-  <div class="flex justify-center items-end ">
+</div>
+<div class="flex justify-center items-end ">
 
-      <div class="flex w-auto p-4">
-        <div class="w-full ">
-          <div class="bg-white shadow-md rounded-lg p-4 ">
-             <h2 class="text-lg font-semibold mb-2 text-center font-montserrat  ">Gráfico de Calor</h2>
-                <div class="flex">
-                  <div class="w-1/2">
-                    <div class="flex justify-center w-full">
-                      <div class="flex flex-col items-center justify-center ">
-                        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
-                          <mat-icon>traffic</mat-icon>
-                        </div>
-                        <button   type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-                        hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat  "  [routerLink]="['/layout/semaforo']"
-                          routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-1/2">
-                      <!-- <div class=" flex justify-center items-center flex-col gap-12">
+  <div class="flex w-auto p-4">
+    <div class="w-full ">
+      <div class="bg-white shadow-md rounded-lg p-4 ">
+        <h2 class="text-lg font-semibold mb-2 text-center font-montserrat  ">Gráfico de Calor</h2>
+        <div class="flex">
+          <div class="w-1/2">
+            <div class="flex justify-center w-full">
+              <div class="flex flex-col items-center justify-center ">
+                <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
+                  <mat-icon>traffic</mat-icon>
+                </div>
+                <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
+                        hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat  "
+                  [routerLink]="['/site/rep/consulta/semaforo']" routerLinkActive="active">Ver detalles.
+                  <mat-icon>info</mat-icon></button>
+              </div>
+            </div>
+          </div>
+          <div class="w-1/2">
+            <!-- <div class=" flex justify-center items-center flex-col gap-12">
                         <div class="bg-[#D9BCA3]/30  shadow-md rounded-lg p-4 ">
                               <p class="text-sm  mb-2" >Mayor a 15 dias </p>
                         </div>
@@ -80,30 +88,29 @@
                               <p class="text-sm"> primeros 4 dias</p>
                         </div>
                       </div> -->
-                  </div>
-                </div>
-          </div>
-        </div>
-      </div>
-
-    <div class="flex w-1/2  p-4">
-      <div class="w-full ">
-        <div class="bg-white shadow-md rounded-lg p-4">
-          <!-- <h2 class="text-lg font-semibold mb-2 text-center">Gráfica</h2> -->
-          <div class="flex justify-center mt-5 mb-5 ">
-            <app-cardsgraphic/>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="flex justify-end  ">
-    <div class="flex w-screen  p-4 justify-end">
-      <div class="w-full">
-        <div class="bg-white shadow-md rounded-lg p-4 content-center">
-          <!-- <h2 class="text-lg font-semibold mb-2 text-center">Gráfica Vertical</h2> -->
-          <app-graphic-administracion />
+
+  <div class="flex w-1/2  p-4">
+    <div class="w-full ">
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <!-- <h2 class="text-lg font-semibold mb-2 text-center">Gráfica</h2> -->
+        <div class="flex justify-center mt-5 mb-5 ">
+          <app-cardsgraphic />
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex justify-end  ">
+  <div class="flex w-screen  p-4 justify-end">
+    <div class="w-full">
+      <div class="bg-white shadow-md rounded-lg p-4 content-center">
+        <!-- <h2 class="text-lg font-semibold mb-2 text-center">Gráfica Vertical</h2> -->
+        <app-graphic-administracion />
       </div>
     </div>
   </div>

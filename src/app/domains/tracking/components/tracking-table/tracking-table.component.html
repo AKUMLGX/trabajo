@@ -1,4 +1,4 @@
-@if (documents.length > 0) {
+@if (documents.length > 0 && !openPdf) {
 <div class="flex justify-center items-center text-xl mt-2">Resultados</div>
 <section class="py-1 bg-blueGray-50" id="sectionTable">
   <div class="w-full lg:w-12/12 mx-auto mt-2">
@@ -13,7 +13,7 @@
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
-                  {{ "ID Asunto historico" }}
+                  {{ "PDF" }}
                 </th>
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
@@ -40,21 +40,27 @@
                 >
                   {{ "Volante" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Descargo" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Tipo de Asunto" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Autor" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -70,42 +76,59 @@
                 >
                   {{ "Folio" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Administración" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Folio Jupiter" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Orden" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Fecha Recepción" }}
                 </th>
+                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
+                >
+                  {{ "Fecha Atención" }}
+                </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Documento Escaneado" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Atención" }}
                 </th>
-
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Descripción" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -116,6 +139,13 @@
                 >
                   {{ "Areas Pendientes" }}
                 </th>
+                } @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
+                >
+                  {{ "Area Pendiente" }}
+                </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -137,6 +167,8 @@
                 >
                   {{ "Plazo de Atención" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -177,12 +209,14 @@
                 >
                   {{ "Tipo" }}
                 </th>
-
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Unidad Administrativa de Autoridad" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -193,11 +227,14 @@
                 >
                   {{ "Fecha de Oficio" }}
                 </th>
+                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Respuesta" }}
                 </th>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -218,298 +255,349 @@
                 >
                   {{ "Base de Captura de Administración" }}
                 </th>
+                }
               </tr>
             </thead>
             <tbody>
-              @for (document of pages[pageSelected]; track $index) {
+              @for (document of pages[pageSelected - 1]; track $index) {
               <tr>
                 <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                  class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5"
                 >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].id_asunto_historico }}
+                  <div>
+                    <button
+                      mat-button
+                      (click)="openPdfViewer()"
+                      class="text-wine leading-5"
+                    >
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio_interno }}
+                    {{ document.folio_interno }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].carpeta_investigacion }}
+                    {{ document.carpeta_investigacion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].persona_relacionada }}
+                    {{ document.persona_relacionada }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio_scanner }}
+                    {{ document.folio_scanner }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].volante }}
+                    {{ document.volante }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.descargo }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.tipo_asunto }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.autor }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.oficio }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].descargo }}
+                    {{ document.autoridad_remitente }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].tipo_asunto }}
+                    {{ document.folio }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.administracion }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.folio_jupiter }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.orden }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.fecha_recepcion }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.fecha_atencion }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.documento_escaneado }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.atencion }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.descripcion }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.tipo_respuesta }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].autor }}
+                    {{ document.areas_pendientes }}
+                  </div>
+                </td>
+                } @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.area_pendiente }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.autoridad_solicitante }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].oficio }}
+                    {{ document.turno_jefatura }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].autoridad_remitente }}
+                    {{ document.correo_electronico }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio }}
+                    {{ document.plazo_atencion }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.jefatura }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].administracion }}
+                    {{ document.que_solicita }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].folio_jupiter }}
+                    {{ document.fecha_numero_oficio_atencion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].orden }}
+                    {{ document.asuntos_enviados_correo_mara }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_recepcion }}
+                    {{ document.atentas_notas_respuestas }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].documento_escaneado }}
+                    {{ document.fecha_turnado }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].atencion }}
+                    {{ document.hora_recepcion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].descripcion }}
+                    {{ document.tipo }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.unidad_administrativa_autoridad }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.fecha_descargo }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].tipo_respuesta }}
+                    {{ document.fecha_oficio }}
+                  </div>
+                </td>
+                }
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.respuesta }}
+                  </div>
+                </td>
+                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
+                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.reporte }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].areas_pendientes }}
+                    {{ document.acuse }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].autoridad_solicitante }}
+                    {{ document.piezas_fgr_administracion }}
                   </div>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].turno_jefatura }}
+                    {{ document.base_captura_administracion }}
                   </div>
                 </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].correo_electronico }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].plazo_atencion }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].jefatura }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].que_solicita }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_numero_oficio_atencion }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].asuntos_enviados_correo_mara }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].atentas_notas_respuestas }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_turnado }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].hora_recepcion }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].tipo }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].unidad_administrativa_autoridad }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_descargo }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].fecha_oficio }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].respuesta }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].reporte }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].acuse }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].piezas_fgr_administracion }}
-                  </div>
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ documents[$index].base_captura_administracion }}
-                  </div>
-                </td>
+                }
               </tr>
               }
             </tbody>
@@ -520,103 +608,36 @@
         >
           <div>
             @if (pages.length > 0) {
-            <nav class="relative z-0 inline-flex shadow-sm">
-              <button
-                (click)="previousPage()"
-                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                aria-label="Previous"
-                v-on:click.prevent="changePage(pagination.current_page - 1)"
-              >
-                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fill-rule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-
-              <div>
-                @if (pages.length <= 1000) { @for (page of pages; track $index)
-                {
-                <button
-                  type="button"
-                  (click)="updatePageSelected($index)"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ $index + 1 }}
-                </button>
-                } }@else {
-                <a
-                  href="#"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ 1 }}
-                </a>
-                <a
-                  href="#"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ 2 }}
-                </a>
-                <a
-                  href="#"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ 3 }}
-                </a>
-                <a
-                  href="#"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ "..." }}
-                </a>
-                <a
-                  href="#"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ 4 }}
-                </a>
-                <a
-                  href="#"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ 5 }}
-                </a>
-                <a
-                  href="#"
-                  class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-wine focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary"
-                >
-                  {{ 6 }}
-                </a>
-                }
-              </div>
-
-              <button
-                (click)="nextPage()"
-                class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                aria-label="Next"
-              >
-                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-            </nav>
+            <ul>
+              <li
+                *ngFor="
+                  let document of documents
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: pageSelected
+                        }
+                "
+              ></li>
+            </ul>
+            <div class="has-text-centered">
+              <pagination-controls
+                (pageChange)="pageSelected = $event"
+                [nextLabel]="labels.nextLabel"
+                [previousLabel]="labels.previousLabel"
+              ></pagination-controls>
+            </div>
             }
           </div>
         </div>
         <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
           <p class="text-sm leading-5 text-wine">
             Mostrando
-            <span class="font-medium">{{ pageSelected * 5 + 1 }}</span>
+            <span class="font-medium">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
             a
             <span class="font-medium">{{
-              pageSelected * 5 + 5 < documents.length
-                ? pageSelected * 5 + 5
+              (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length
+                ? (pageSelected -1 ) * itemsPerPage + itemsPerPage
                 : documents.length
             }}</span>
             de
