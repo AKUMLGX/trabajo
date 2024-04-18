@@ -81,7 +81,7 @@ export class TrackingTableComponent {
 
   openPdfViewer() {
     this.asuntoService.pdfIsOpen = true;
-    this.router.navigate(['/site/rep/consulta/tracking/pdfViewer']);
+    this.router.navigate(['/layout/tracking/pdfViewer']);
   }
 
   previousPage() {

@@ -20,7 +20,7 @@ export const routes: Routes = [
     component: LoginPageComponent,
   },
   {
-    path: 'site/rep/consulta',
+    path: 'layout',
     component: MainLayoutComponent,
     canActivate: [loginGuard],
     children: [

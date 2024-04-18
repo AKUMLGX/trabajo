@@ -4,6 +4,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterModule } from '@angular/router';
 import { LogoutService } from '../../../../services/logout.service';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-custom-sidenav',
@@ -20,27 +21,29 @@ export class CustomSidenavComponent {
 
   constructor(private logoutService: LogoutService) {}
   @Input() collapsed: boolean = false;
-
+  
+  public environment = environment;
+  
   menuItems = signal<MenuItem[]>([
     {
       icon: 'dvr',
       label: 'Bandeja de captura',
-      route: '/site/rep/consulta/capture',
+      route: '/layout/capture',
     },
     {
       icon: 'dashboard',
       label: 'Bandeja de atención',
-      route: '/site/rep/consulta/assistance',
+      route: '/layout/assistance',
     },
     {
       icon: 'analytics',
       label: 'Bandeja de seguimiento',
-      route: '/site/rep/consulta/tracking',
+      route: '/layout/tracking',
     },
     {
       icon: 'folder',
       label: 'Bandeja de reportes',
-      route: '/site/rep/consulta/reports',
+      route: '/layout/reports',
     },
   ]);
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { environment } from '../../../../../../../environments/environment';
 
 @Component({
   selector: 'app-pendientes-por-acusar',
@@ -16,8 +17,9 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class PendientesPorAcusarComponent {
 
-  isEmptyList            : boolean = true;
+  public environment = environment;
 
+  isEmptyList            : boolean = true;
   zeroColumnHeader       : string = 'Ver más';
   firstColumnHeader      : string = 'Documento escaneado';
   secondColumnHeader     : string = 'Folio interno';

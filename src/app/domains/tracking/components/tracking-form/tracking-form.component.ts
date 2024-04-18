@@ -29,7 +29,7 @@ export class TrackingFormComponent {
   ) { }
 
   onSave(): void {
-    this.router.navigate(['/site/rep/consulta/tracking']);
+    this.router.navigate(['/layout/tracking']);
     this.asuntoService.pdfIsOpen = false;
     this.asuntoService.filterDocuments(this.consultForm);
   }
