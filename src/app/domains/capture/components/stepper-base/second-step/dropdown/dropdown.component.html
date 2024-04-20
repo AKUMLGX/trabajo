@@ -1,27 +1,19 @@
-<div id="container">
-    <div id="button" (click)="isDropdownActive = true">
-        <div style="display: flex; width: 100%; justify-content: space-between;">
-            {{ selectedOption?.name  || "Para continuar elija un asunto de la lista" }}
-            @if (selectedOption) {
-                <span (click)="selectedOption = undefined;
-                    selectedOptionHandler()">
-                    x
-                </span>
-            }
-        </div>
-
-        <div id="dropdown" [ngClass]="{ active: isItemActive }">
-            <ul>
-                @for (asunto of asuntos; track asunto.value) {
-                    <li>
-                        <a (click)="selectedOption = asunto; 
-                        selectedOptionHandler()"
-                        >
-                            {{ asunto.name }}
-                        </a>
-                    </li>
-                }
+<div class="dropdown inline-block relative mb-[20rem]">
+	<button class="w-72 bg-gray-200 text-black border-[#691C32] border-2 font-medium py-2 px-4 rounded-md inline-flex justify-center items-center">
+		<span>ASUNTOS</span>
+	</button>
+	<ul class="dropdown-content absolute w-72 text-gray-800 text-xl pt-1">
+		<li><a class="rounded-t-md bg-white border-y-[#691C32] border-x-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap">EUACAPE</a></li>
+      	<li class="dropdown">
+          <a class="bg-white border-x-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap">GENERALIDADES</a>
+          	<ul class="dropdown-content w-[22rem] absolute text-gray-700 pl-5 ml-64 -mt-10">
+          		<li><a class="rounded-t-md border-y-[#691C32] border-x-[#691C32] border-2 bg-white text-center hover:bg-[#691C32] hover:text-white py-2 px-4 block whitespace-nowrap">ASUNTO PENAL</a>
+              	<li><a class=" border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap">ASUNTO CIVIL</a>
+                <li><a class="border-y-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap">LABORAL</a>
+                <li><a class=" border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap">JUICIO AMPARO</a>
+                <li><a class="rounded-b-md border-y-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap">CONCURSO MERCANTIL</a>
             </ul>
-        </div>
-    </div>
+      	</li>
+		<li><a class="rounded-b-md bg-white border-y-[#691C32] border-x-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap">RESPUESTA</a></li>
+	</ul>
 </div>
