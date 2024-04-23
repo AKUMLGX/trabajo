@@ -20,12 +20,18 @@ export class DropdownComponent {
     { name: 'Concurso mercantil', value: 'option-3' },
     { name: 'EUACAPE', value: 'option-4' },
     { name: 'Generalidades', value: 'option-5' },
-];
+  ];
+
+  isSubmenuDeployed: boolean = true;
 
   @Output() selectionEmitter = new EventEmitter;
 
   selectedOptionHandler(){
     this.selectionEmitter.emit(this.selectedOption);
+  }
+
+  showSubmenu(){
+    this.isSubmenuDeployed = !this.isSubmenuDeployed;
   }
 
 }
