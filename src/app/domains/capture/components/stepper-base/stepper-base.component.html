@@ -19,7 +19,10 @@
 
             <div>
                 @switch (dropdownChoice) {
-                    @case ('Civil') {
+
+                    <!-- Comente los casos que ya NO se van a considerar -->
+                    
+                    <!-- @case ('Civil') {
                         <mat-step label="Formulario Civil (parte I)" 
                             [completed]="thirdStepChild.preliminarForm.valid" 
                             [editable]="true">
@@ -31,8 +34,9 @@
                         <mat-step label="Formulario Civil (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
-                    }
-                    @case ('Penal') {
+                    } -->
+                    
+                    <!-- @case ('Penal') {
                         <mat-step label="Formulario Penal (parte I)" 
                             [completed]="thirdStepChild.preliminarForm.valid" 
                             [editable]="true">
@@ -44,8 +48,9 @@
                         <mat-step label="Formulario Penal (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
-                    }
-                    @case ('Concurso mercantil') {
+                    } -->
+                    
+                    <!-- @case ('Concurso mercantil') {
                         <mat-step label="Formulario Concurso mercantil (parte I)" 
                             [completed]="thirdStepChild.preliminarForm.valid" 
                             [editable]="true">
@@ -57,7 +62,8 @@
                         <mat-step label="Formulario Concurso mercantil (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
-                    }
+                    } -->
+
                     @case ('EUACAPE') {
                         <mat-step label="Formulario EUACAPE (parte I)" 
                             [completed]="thirdStepChild.preliminarForm.valid" 
@@ -71,7 +77,8 @@
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
-                    @case ('Generalidades') {
+                    
+                    <!-- @case ('Generalidades') {
                         <mat-step label="Formulario Generalidades (parte I)" 
                             [completed]="thirdStepChild.preliminarForm.valid" 
                             [editable]="true">
@@ -83,7 +90,7 @@
                         <mat-step label="Formulario Generalidades (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
-                    }
+                    } -->
                 }
             </div>            
 
