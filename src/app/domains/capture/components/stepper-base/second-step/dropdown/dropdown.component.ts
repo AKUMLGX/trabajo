@@ -14,6 +14,8 @@ export class DropdownComponent {
   isItemActive = false;
   selectedOption: any;
 
+  isSubmenuDeployed: boolean = false;
+
   asuntos = [
     { name: 'Civil', value: 'option-1' },
     { name: 'Penal', value: 'option-2' },
@@ -22,15 +24,13 @@ export class DropdownComponent {
     { name: 'Generalidades', value: 'option-5' },
   ];
 
-  isSubmenuDeployed: boolean = true;
-
   @Output() selectionEmitter = new EventEmitter;
 
   selectedOptionHandler(){
     this.selectionEmitter.emit(this.selectedOption);
   }
 
-  showSubmenu(){
+  showSubmenuHandler(){
     this.isSubmenuDeployed = !this.isSubmenuDeployed;
   }
 
