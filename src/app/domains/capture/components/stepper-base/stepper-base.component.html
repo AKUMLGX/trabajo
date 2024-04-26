@@ -77,6 +77,76 @@
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
+
+                    @case ('Asunto Penal') {
+                        <mat-step label="Formulario Generalidades Asunto Penal (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Generalidades Asunto Penal (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
+
+                    @case ('Asunto Civil') {
+                        <mat-step label="Formulario Generalidades Asunto Civil (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Generalidades Asunto Civil (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
+
+                    @case ('Laboral') {
+                        <mat-step label="Formulario Generalidades Laboral (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Generalidades Laboral (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
+
+                    @case ('Juicio Amparo') {
+                        <mat-step label="Formulario Generalidades Juicio Amparo (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Generalidades Juicio Amparo (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
+
+                    @case ('Concurso Mercantil') {
+                        <mat-step label="Formulario Generalidades Concurso Mercantil (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Generalidades Concurso Mercantil (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
                     
                     <!-- @case ('Generalidades') {
                         <mat-step label="Formulario Generalidades (parte I)" 
