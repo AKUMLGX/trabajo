@@ -14,15 +14,17 @@ export class DropdownComponent {
   isItemActive = false;
   selectedOption: any;
 
-  asuntos = [
-    { name: 'Civil', value: 'option-1' },
-    { name: 'Penal', value: 'option-2' },
-    { name: 'Concurso mercantil', value: 'option-3' },
-    { name: 'EUACAPE', value: 'option-4' },
-    { name: 'Generalidades', value: 'option-5' },
-  ];
+  isSubmenuDeployed: boolean = false;
 
-  isSubmenuDeployed: boolean = true;
+  asuntos = [
+    { name: 'EUACAPE', value: 'option-1' },
+    { name: 'Respuesta', value: 'option-2' },
+    { name: 'Asunto Penal', value: 'option-3' },
+    { name: 'Asunto Civil', value: 'option-4' },
+    { name: 'Laboral', value: 'option-5' },
+    { name: 'Juicio Amparo', value: 'option-6' },
+    { name: 'Concurso Mercantil', value: 'option-7' },
+  ];
 
   @Output() selectionEmitter = new EventEmitter;
 
@@ -30,7 +32,7 @@ export class DropdownComponent {
     this.selectionEmitter.emit(this.selectedOption);
   }
 
-  showSubmenu(){
+  showSubmenuHandler(){
     this.isSubmenuDeployed = !this.isSubmenuDeployed;
   }
 
