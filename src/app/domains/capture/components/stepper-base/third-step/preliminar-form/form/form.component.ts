@@ -53,8 +53,9 @@ export class FormComponent {
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
-      autoridadAdministrativa: [null, [Validators.maxLength(255)]],
+      
       folioJupiter: [null, [Validators.maxLength(255)]],
+      volanteJefatura: [null, [Validators.maxLength(255)]],
     });
 
     saveEuacapeForm(): void {
