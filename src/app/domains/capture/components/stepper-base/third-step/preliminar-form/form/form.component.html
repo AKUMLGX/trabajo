@@ -94,18 +94,18 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Carpeta de investigación
+                                    Turno jefatura
                             </label>
-                            <input type="text" placeholder="Carpeta de investigación"
+                            <input type="text" placeholder="Turno jefatura"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="carpetaInvestigacion" value=""
+                                formControlName="turnoJefatura" value=""
                             >
-                            @if (euacapeForm.get('carpetaInvestigacion')?.errors?.['maxlength']) {
+                            @if (euacapeForm.get('turnoJefatura')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
-                                     <span >Máximo 255 caracteres</span>
+                                    <span >Máximo 255 caracteres</span>
                                 </div> 
-                             }
-                        </div>
+                            }
+                        </div> 
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">

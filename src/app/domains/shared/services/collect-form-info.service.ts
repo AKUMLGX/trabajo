@@ -10,18 +10,18 @@ export class CollectFormInfoService {
   //Info from Preliminar Euacape Form
 
   OFICIO = signal('');
-  TURNOJEFATURA = signal<null | string>(null);
+  CARPETAINV = signal<null | string>(null);
   FOLIOINT = signal('');
   FOLIOSCAN = signal('');
 
   updatePreliminarEuacapeForm(
     oficioEntry: string,
-    tJefaturaEntry: string | null,
+    carpetaInv: string | null,
     folioInt: string,
     folioScan: string
   ){
     this.OFICIO.set(oficioEntry);
-    this.TURNOJEFATURA.set(tJefaturaEntry);
+    this.CARPETAINV.set(carpetaInv);
     this.FOLIOINT.set(folioInt);
     this.FOLIOSCAN.set(folioScan);
   }
@@ -35,7 +35,7 @@ export class CollectFormInfoService {
   DESCRIPCION = signal('');
   TIPORES = signal('');
   AUTORIDADSOLIC = signal('');
-  CARPETAINV = signal<null | string>(null);
+  TURNOJEFATURA = signal<null | string>(null);
   PERSONAREL = signal('');
   PLAZOATENCION = signal<null | number>(null);
 
@@ -47,7 +47,7 @@ export class CollectFormInfoService {
     descripcion: string,
     tipoRes: string,
     autoridadSol: string,
-    carpetaInv: string | null,
+    tJefaturaEntry: string | null,
     persRel: string,
     plazoAt: number | null,
   ){
@@ -58,7 +58,7 @@ export class CollectFormInfoService {
     this.DESCRIPCION.set(descripcion);
     this.TIPORES.set(tipoRes);
     this.AUTORIDADSOLIC.set(autoridadSol);
-    this.CARPETAINV.set(carpetaInv);
+    this.TURNOJEFATURA.set(tJefaturaEntry);
     this.PERSONAREL.set(persRel);
     this.PLAZOATENCION.set(plazoAt);
   }

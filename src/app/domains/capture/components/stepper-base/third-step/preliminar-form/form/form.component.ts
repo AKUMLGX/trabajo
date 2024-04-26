@@ -49,7 +49,7 @@ export class FormComponent {
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
       tipoRespuesta: [{value: 'En trámite', disabled: true},],
       autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
-      carpetaInvestigacion: [null, [Validators.maxLength(255)]],
+      turnoJefatura: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
@@ -85,7 +85,7 @@ export class FormComponent {
         this.euacapeForm.value.descripcion,
         this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta,
         this.euacapeForm.value.autoridadSolicitante,
-        this.euacapeForm.value.carpetaInvestigacion,
+        this.euacapeForm.value.turnoJefatura,
         this.euacapeForm.value.personaRelacionada,
         this.euacapeForm.value.plazoAtencion,
       );

@@ -33,7 +33,7 @@ export class PreliminarFormComponent {
 
   public preliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
-    turnoJefatura: [null, [Validators.maxLength(255)]],
+    carpetaInvestigacion: [null, [Validators.maxLength(255)]],
     folioInterno: ['', [Validators.required, Validators.maxLength(255)]],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
@@ -44,7 +44,7 @@ export class PreliminarFormComponent {
     console.log(this.preliminarForm.value);
     this.collectFormInfoService.updatePreliminarEuacapeForm(
       this.preliminarForm.value.oficio,
-      this.preliminarForm.value.turnoJefatura,
+      this.preliminarForm.value.carpetaInvestigacion,
       this.preliminarForm.value.folioInterno,
       this.preliminarForm.value.folioScanner
     );
