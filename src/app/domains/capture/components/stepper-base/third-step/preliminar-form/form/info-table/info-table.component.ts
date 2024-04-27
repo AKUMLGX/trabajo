@@ -32,7 +32,7 @@ export class InfoTableComponent {
   ADMINISTRACION = this.collectFormInfoService.ADMON;
   FECHARECEPCION = this.collectFormInfoService.FECHAREC;
   DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCAN;
-  ATENCION = this.collectFormInfoService.ATENCION;
+  DOCUMENTO = this.collectFormInfoService.DOCUMENTO;
   DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
   TIPORESPUESTA = this.collectFormInfoService.TIPORES;
   AUTORIDADREMITENTE = this.collectFormInfoService.AUTORIDADREMI;
@@ -70,7 +70,7 @@ export class InfoTableComponent {
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
     {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {position: 5, name: 'Atención', answer: this.ATENCION()},
+    {position: 5, name: 'Documento', answer: this.DOCUMENTO()},
     {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
     {position: 7, name: 'Tipo de respuesta', answer: this.TIPORESPUESTA()},
     {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
@@ -118,7 +118,7 @@ export class InfoTableComponent {
       //   this.formsObjectService.civilFormObject.set({
       //     folio_interno: folioInterno,
       //     folio_scanner: folioScanner,
-      //     oficio: oficio,
+      //     oficio: oficio, and Info Table 
       //     documento_escaneado: documentoEscaneado,
       //     persona_relacionada: personaRelacionada,
       //     descripcion: descripcion,

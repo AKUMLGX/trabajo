@@ -216,16 +216,16 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Atención
+                                    Documento
                             </label>
                             @if(isApertura){
-                                <input type="text" placeholder="Atención"
+                                <input type="text" placeholder="Documento"
                                     class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="atencion" value=""
+                                    formControlName="documento" value=""
                                 >
                             } @else {
-                                <select id="atencion"
-                                        formControlName="atencion"
+                                <select id="documento"
+                                        formControlName="documento"
                                         class="input-field">
                                     <option [ngValue]="null" disabled >Elija una atención</option>
                                     <option value="Requerimiento">Requerimiento</option>

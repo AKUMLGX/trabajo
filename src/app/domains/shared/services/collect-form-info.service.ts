@@ -31,7 +31,7 @@ export class CollectFormInfoService {
   ADMON = signal('');
   FECHAREC = signal<null | Date>(null);
   DOCSCAN = signal('');
-  ATENCION = signal('');
+  DOCUMENTO = signal('');
   DESCRIPCION = signal('');
   TIPORES = signal('');
   AUTORIDADREMI = signal('');
@@ -43,7 +43,7 @@ export class CollectFormInfoService {
     admon: string,
     fechaRec: null | Date,
     docScan:string,
-    atencion: string,
+    documento: string,
     descripcion: string,
     tipoRes: string,
     autoridadRemi: string,
@@ -54,7 +54,7 @@ export class CollectFormInfoService {
     this.ADMON.set(admon);
     this.FECHAREC.set(fechaRec);
     this.DOCSCAN.set(docScan);
-    this.ATENCION.set(atencion);
+    this.DOCUMENTO.set(documento);
     this.DESCRIPCION.set(descripcion);
     this.TIPORES.set(tipoRes);
     this.AUTORIDADREMI.set(autoridadRemi);
