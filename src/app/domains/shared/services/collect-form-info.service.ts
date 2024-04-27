@@ -63,20 +63,16 @@ export class CollectFormInfoService {
     this.PLAZOATENCION.set(plazoAt);
   }
 
-  //Additional info if the user chooses the Civil or Penal path.
+  //Additional info if the user chooses any of the Generalidades.
 
-  AUTORIDADADMINISTRATIVA = signal<null | string>(null);
+  VOLANTEJEFATURA = signal<null | string>(null);
   FOLIOJUPITER = signal<null | string>(null);
 
-  updateAdditionalInfoForCivilPenalAndGeneralidades(
-    autoridadAdmin: string | null,
+  updateAdditionalInfoForGeneralidades(
+    volanteJefatura: string | null,
     folioJupiter: string | null,
   ){
-    this.AUTORIDADADMINISTRATIVA.set(autoridadAdmin);
-    this.FOLIOJUPITER.set(folioJupiter);
-  }
-  
-  updateAdditionalInfoForConcurso(folioJupiter: string | null){
+    this.VOLANTEJEFATURA.set(volanteJefatura);
     this.FOLIOJUPITER.set(folioJupiter);
   }
 

@@ -5,10 +5,6 @@ import { CollectFormInfoService } from '../../../../../../../shared/services/col
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 import { FormsObjectService } from '../../../../../../../shared/services/forms-object.service';
-import { CivilAperturaService } from '../../../../../../../services/civil-apertura.service';
-import { PenalAperturaService } from '../../../../../../../services/penal-apertura.service';
-import { ConcursoMercantilAperturaService } from '../../../../../../../services/concurso-mercantil-apertura.service';
-import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
 
 export interface DataBeforeSubmit {
   name: string;
@@ -27,12 +23,8 @@ export class InfoTableComponent {
 
   constructor(
     private collectFormInfoService: CollectFormInfoService,
-    private civilAperturaService: CivilAperturaService,
     private euacapeAperturaService: EuacapeAperturaService,
     private formsObjectService: FormsObjectService,
-    private penalAperturaService: PenalAperturaService,
-    private concursoMercantilAperturaService: ConcursoMercantilAperturaService,
-    private generalidadesAperturaService: GeneralidadesAperturaService,
   ){ }
 
   @Input() dropdownChoice: string = '';
@@ -53,7 +45,7 @@ export class InfoTableComponent {
   FOLIOINTERNO = this.collectFormInfoService.FOLIOINT;
   FOLIOSCANNER = this.collectFormInfoService.FOLIOSCAN;
 
-  AUTORIDADADMINISTRATIVA = this.collectFormInfoService.AUTORIDADADMINISTRATIVA;
+  VOLANTEJEFATURA = this.collectFormInfoService.VOLANTEJEFATURA;
   FOLIOJUPITER = this.collectFormInfoService.FOLIOJUPITER;
 
   TIPOASUNTO = this.collectFormInfoService.TIPOASUNTO;
@@ -91,14 +83,9 @@ export class InfoTableComponent {
     {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
   ];
 
-  CONCURSO_DATA: DataBeforeSubmit[] = [
+  GENERALIDADES_DATA: DataBeforeSubmit[] = [
     ...this.EUACAPE_DATA,
-    {position: 16, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
-  ]
-
-  CIVIL_OR_PENAL_OR_GENERALIDADES_DATA: DataBeforeSubmit[] = [
-    ...this.EUACAPE_DATA,
-    {position: 16, name: 'Autoridad administrativa', answer: (this.AUTORIDADADMINISTRATIVA() !== null) ? this.AUTORIDADADMINISTRATIVA() : '---'},
+    {position: 16, name: 'Volante jefatura', answer: (this.VOLANTEJEFATURA() !== null) ? this.VOLANTEJEFATURA() : '---'},
     {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
   ];
 
@@ -118,78 +105,86 @@ export class InfoTableComponent {
     administracion: string,
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
-    autoridadAdministrativa: string | null,
+    volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
     switch (this.dropdownChoice) {
-      case "Civil":
-        this.formsObjectService.civilFormObject.set({
-          folio_interno: folioInterno,
-          folio_scanner: folioScanner,
-          oficio: oficio,
-          documento_escaneado: documentoEscaneado,
-          persona_relacionada: personaRelacionada,
-          descripcion: descripcion,
-          fecha_recepcion: fechaRecepcion,
-          autoridad_remitente: autoridadRemitente,
-          plazo_atencion: plazoAtencion,
-          administracion: administracion,
-          carpeta_investigacion: carpetaInvestigacion,
-          turno_jefatura: turnoJefatura,
-          autoridad_administrativa: autoridadAdministrativa,
-          folio_jupiter: folioJupiter,
-        });
-        console.log("Estamos en Civil");
-        console.log(this.formsObjectService.civilFormObject());
-        this.civilAperturaService.insertCivilForm(
-          this.formsObjectService.civilFormObject()
-        );
-        break;
-      case "Penal":
-        this.formsObjectService.penalFormObject.set({
-          folio_interno: folioInterno,
-          folio_scanner: folioScanner,
-          oficio: oficio,
-          documento_escaneado: documentoEscaneado,
-          persona_relacionada: personaRelacionada,
-          descripcion: descripcion,
-          fecha_recepcion: fechaRecepcion,
-          autoridad_remitente: autoridadRemitente,
-          plazo_atencion: plazoAtencion,
-          administracion: administracion,
-          carpeta_investigacion: carpetaInvestigacion,
-          turno_jefatura: turnoJefatura,
-          autoridad_administrativa: autoridadAdministrativa,
-          folio_jupiter: folioJupiter,
-        });
-        console.log("Estamos en Penal");
-        console.log(this.formsObjectService.penalFormObject());
-        this.penalAperturaService.insertPenalForm(
-          this.formsObjectService.penalFormObject()
-        );
-        break;
-      case "Concurso mercantil":
-        this.formsObjectService.concursoMercantilFormObject.set({
-          folio_interno: folioInterno,
-          folio_scanner: folioScanner,
-          oficio: oficio,
-          documento_escaneado: documentoEscaneado,
-          persona_relacionada: personaRelacionada,
-          descripcion: descripcion,
-          fecha_recepcion: fechaRecepcion,
-          autoridad_remitente: autoridadRemitente,
-          plazo_atencion: plazoAtencion,
-          administracion: administracion,
-          carpeta_investigacion: carpetaInvestigacion,
-          turno_jefatura: turnoJefatura,
-          folio_jupiter: folioJupiter,
-        });
-        console.log("Estamos en Concurso");
-        console.log(this.formsObjectService.concursoMercantilFormObject());
-        this.concursoMercantilAperturaService.insertConcursoMercantilForm(
-          this.formsObjectService.concursoMercantilFormObject()
-        );
-        break;
+
+      //La realidad es que hoy 26/04/24 comente esto pero se va a borrar. 
+      //Nadamas para tener la referencia para cuando haga los cases 
+      //propios para cada una de las generalidades
+
+      // case "Civil":
+      //   this.formsObjectService.civilFormObject.set({
+      //     folio_interno: folioInterno,
+      //     folio_scanner: folioScanner,
+      //     oficio: oficio,
+      //     documento_escaneado: documentoEscaneado,
+      //     persona_relacionada: personaRelacionada,
+      //     descripcion: descripcion,
+      //     fecha_recepcion: fechaRecepcion,
+      //     autoridad_remitente: autoridadRemitente,
+      //     plazo_atencion: plazoAtencion,
+      //     administracion: administracion,
+      //     carpeta_investigacion: carpetaInvestigacion,
+      //     turno_jefatura: turnoJefatura,
+      //     autoridad_administrativa: autoridadAdministrativa,
+      //     folio_jupiter: folioJupiter,
+      //   });
+      //   console.log("Estamos en Civil");
+      //   console.log(this.formsObjectService.civilFormObject());
+      //   this.civilAperturaService.insertCivilForm(
+      //     this.formsObjectService.civilFormObject()
+      //   );
+      //   break;
+      
+      // case "Penal":
+      //   this.formsObjectService.penalFormObject.set({
+      //     folio_interno: folioInterno,
+      //     folio_scanner: folioScanner,
+      //     oficio: oficio,
+      //     documento_escaneado: documentoEscaneado,
+      //     persona_relacionada: personaRelacionada,
+      //     descripcion: descripcion,
+      //     fecha_recepcion: fechaRecepcion,
+      //     autoridad_remitente: autoridadRemitente,
+      //     plazo_atencion: plazoAtencion,
+      //     administracion: administracion,
+      //     carpeta_investigacion: carpetaInvestigacion,
+      //     turno_jefatura: turnoJefatura,
+      //     autoridad_administrativa: autoridadAdministrativa,
+      //     folio_jupiter: folioJupiter,
+      //   });
+      //   console.log("Estamos en Penal");
+      //   console.log(this.formsObjectService.penalFormObject());
+      //   this.penalAperturaService.insertPenalForm(
+      //     this.formsObjectService.penalFormObject()
+      //   );
+      //   break;
+
+      // case "Concurso mercantil":
+      //   this.formsObjectService.concursoMercantilFormObject.set({
+      //     folio_interno: folioInterno,
+      //     folio_scanner: folioScanner,
+      //     oficio: oficio,
+      //     documento_escaneado: documentoEscaneado,
+      //     persona_relacionada: personaRelacionada,
+      //     descripcion: descripcion,
+      //     fecha_recepcion: fechaRecepcion,
+      //     autoridad_remitente: autoridadRemitente,
+      //     plazo_atencion: plazoAtencion,
+      //     administracion: administracion,
+      //     carpeta_investigacion: carpetaInvestigacion,
+      //     turno_jefatura: turnoJefatura,
+      //     folio_jupiter: folioJupiter,
+      //   });
+      //   console.log("Estamos en Concurso");
+      //   console.log(this.formsObjectService.concursoMercantilFormObject());
+      //   this.concursoMercantilAperturaService.insertConcursoMercantilForm(
+      //     this.formsObjectService.concursoMercantilFormObject()
+      //   );
+      //   break;
+
       case "EUACAPE":
         this.formsObjectService.euacapeFormObject.set({
           folio_interno: folioInterno,
@@ -211,29 +206,29 @@ export class InfoTableComponent {
           this.formsObjectService.euacapeFormObject()
         );
         break;
-      case "Generalidades":
-        this.formsObjectService.generalidadesFormObject.set({
-          folio_interno: folioInterno,
-          folio_scanner: folioScanner,
-          oficio: oficio,
-          documento_escaneado: documentoEscaneado,
-          persona_relacionada: personaRelacionada,
-          descripcion: descripcion,
-          fecha_recepcion: fechaRecepcion,
-          autoridad_remitente: autoridadRemitente,
-          plazo_atencion: plazoAtencion,
-          administracion: administracion,
-          carpeta_investigacion: carpetaInvestigacion,
-          turno_jefatura: turnoJefatura,
-          autoridad_administrativa: autoridadAdministrativa,
-          folio_jupiter: folioJupiter,
-        });
-        console.log("Estamos en Generalidades");
-        console.log(this.formsObjectService.generalidadesFormObject());
-        this.generalidadesAperturaService.insertGeneralidadesForm(
-          this.formsObjectService.generalidadesFormObject()
-        );
-        break;
+      // case "Generalidades":
+      //   this.formsObjectService.generalidadesFormObject.set({
+      //     folio_interno: folioInterno,
+      //     folio_scanner: folioScanner,
+      //     oficio: oficio,
+      //     documento_escaneado: documentoEscaneado,
+      //     persona_relacionada: personaRelacionada,
+      //     descripcion: descripcion,
+      //     fecha_recepcion: fechaRecepcion,
+      //     autoridad_remitente: autoridadRemitente,
+      //     plazo_atencion: plazoAtencion,
+      //     administracion: administracion,
+      //     carpeta_investigacion: carpetaInvestigacion,
+      //     turno_jefatura: turnoJefatura,
+      //     autoridad_administrativa: autoridadAdministrativa,
+      //     folio_jupiter: folioJupiter,
+      //   });
+      //   console.log("Estamos en Generalidades");
+      //   console.log(this.formsObjectService.generalidadesFormObject());
+      //   this.generalidadesAperturaService.insertGeneralidadesForm(
+      //     this.formsObjectService.generalidadesFormObject()
+      //   );
+      //   break;
     }
 
   }

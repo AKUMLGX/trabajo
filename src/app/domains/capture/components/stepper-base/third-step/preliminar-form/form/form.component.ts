@@ -89,18 +89,18 @@ export class FormComponent {
         this.euacapeForm.value.personaRelacionada,
         this.euacapeForm.value.plazoAtencion,
       );
-      // if (
-      //     this.dropdownChoice === 'Civil' || this.dropdownChoice === 'Penal'
-      //     || this.dropdownChoice === 'Generalidades'
-      //   ){
-      //   this.collectFormInfoService.updateAdditionalInfoForCivilPenalAndGeneralidades(
-      //     this.euacapeForm.value.autoridadAdministrativa,
-      //     this.euacapeForm.value.folioJupiter,
-      //   );
-      // }
-      // if (this.dropdownChoice === 'Concurso mercantil'){
-      //   this.collectFormInfoService.updateAdditionalInfoForConcurso(this.euacapeForm.value.folioJupiter);
-      // }
+
+      if (
+            this.dropdownChoice === 'Asunto Penal' || this.dropdownChoice === 'Asunto Civil'
+            || this.dropdownChoice === 'Laboral' || this.dropdownChoice === 'Juicio Amparo'
+            || this.dropdownChoice === 'Concurso Mercantil'
+        ) {
+              this.collectFormInfoService.updateAdditionalInfoForGeneralidades(
+                this.euacapeForm.value.volanteJefatura,
+                this.euacapeForm.value.folioJupiter,
+              );
+      }
+
       this.modalService.openCustomDialogWithTemplate({
         template
       })
