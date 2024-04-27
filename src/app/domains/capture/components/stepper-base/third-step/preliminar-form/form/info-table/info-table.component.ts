@@ -43,7 +43,7 @@ export class InfoTableComponent {
   ATENCION = this.collectFormInfoService.ATENCION;
   DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
   TIPORESPUESTA = this.collectFormInfoService.TIPORES;
-  AUTORIDADSOLICITANTE = this.collectFormInfoService.AUTORIDADSOLIC;
+  AUTORIDADREMITENTE = this.collectFormInfoService.AUTORIDADREMI;
   CARPETAINVESTIGACION = this.collectFormInfoService.CARPETAINV;
   PERSONARELACIONADA = this.collectFormInfoService.PERSONAREL;
   PLAZOATENCION = this.collectFormInfoService.PLAZOATENCION;
@@ -81,7 +81,7 @@ export class InfoTableComponent {
     {position: 5, name: 'Atención', answer: this.ATENCION()},
     {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
     {position: 7, name: 'Tipo de respuesta', answer: this.TIPORESPUESTA()},
-    {position: 8, name: 'Autoridad solicitante', answer: this.AUTORIDADSOLICITANTE()},
+    {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
     {position: 9, name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
     {position: 10, name: 'Folio interno', answer: this.FOLIOINTERNO()},
     {position: 11, name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
@@ -113,7 +113,7 @@ export class InfoTableComponent {
     personaRelacionada: string,
     descripcion: string,
     fechaRecepcion: string,
-    autoridadSolicitante: string,
+    autoridadRemitente: string,
     plazoAtencion: number | null,
     administracion: string,
     carpetaInvestigacion: string | null,
@@ -131,7 +131,7 @@ export class InfoTableComponent {
           persona_relacionada: personaRelacionada,
           descripcion: descripcion,
           fecha_recepcion: fechaRecepcion,
-          autoridad_solicitante: autoridadSolicitante,
+          autoridad_remitente: autoridadRemitente,
           plazo_atencion: plazoAtencion,
           administracion: administracion,
           carpeta_investigacion: carpetaInvestigacion,
@@ -154,7 +154,7 @@ export class InfoTableComponent {
           persona_relacionada: personaRelacionada,
           descripcion: descripcion,
           fecha_recepcion: fechaRecepcion,
-          autoridad_solicitante: autoridadSolicitante,
+          autoridad_remitente: autoridadRemitente,
           plazo_atencion: plazoAtencion,
           administracion: administracion,
           carpeta_investigacion: carpetaInvestigacion,
@@ -177,7 +177,7 @@ export class InfoTableComponent {
           persona_relacionada: personaRelacionada,
           descripcion: descripcion,
           fecha_recepcion: fechaRecepcion,
-          autoridad_solicitante: autoridadSolicitante,
+          autoridad_remitente: autoridadRemitente,
           plazo_atencion: plazoAtencion,
           administracion: administracion,
           carpeta_investigacion: carpetaInvestigacion,
@@ -199,7 +199,7 @@ export class InfoTableComponent {
           persona_relacionada: personaRelacionada,
           descripcion: descripcion,
           fecha_recepcion: fechaRecepcion,
-          autoridad_solicitante: autoridadSolicitante,
+          autoridad_remitente: autoridadRemitente,
           plazo_atencion: plazoAtencion,
           administracion: administracion,
           carpeta_investigacion: carpetaInvestigacion,
@@ -220,7 +220,7 @@ export class InfoTableComponent {
           persona_relacionada: personaRelacionada,
           descripcion: descripcion,
           fecha_recepcion: fechaRecepcion,
-          autoridad_solicitante: autoridadSolicitante,
+          autoridad_remitente: autoridadRemitente,
           plazo_atencion: plazoAtencion,
           administracion: administracion,
           carpeta_investigacion: carpetaInvestigacion,

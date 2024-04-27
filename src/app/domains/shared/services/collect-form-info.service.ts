@@ -34,7 +34,7 @@ export class CollectFormInfoService {
   ATENCION = signal('');
   DESCRIPCION = signal('');
   TIPORES = signal('');
-  AUTORIDADSOLIC = signal('');
+  AUTORIDADREMI = signal('');
   TURNOJEFATURA = signal<null | string>(null);
   PERSONAREL = signal('');
   PLAZOATENCION = signal<null | number>(null);
@@ -46,7 +46,7 @@ export class CollectFormInfoService {
     atencion: string,
     descripcion: string,
     tipoRes: string,
-    autoridadSol: string,
+    autoridadRemi: string,
     tJefaturaEntry: string | null,
     persRel: string,
     plazoAt: number | null,
@@ -57,7 +57,7 @@ export class CollectFormInfoService {
     this.ATENCION.set(atencion);
     this.DESCRIPCION.set(descripcion);
     this.TIPORES.set(tipoRes);
-    this.AUTORIDADSOLIC.set(autoridadSol);
+    this.AUTORIDADREMI.set(autoridadRemi);
     this.TURNOJEFATURA.set(tJefaturaEntry);
     this.PERSONAREL.set(persRel);
     this.PLAZOATENCION.set(plazoAt);

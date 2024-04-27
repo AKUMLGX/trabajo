@@ -49,20 +49,20 @@
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                                    Autoridad solicitante
-                                    @if (secondPiecesForm.controls['autoridadSolicitante'].invalid && (secondPiecesForm.controls['autoridadSolicitante'].dirty || secondPiecesForm.controls['autoridadSolicitante'].touched)) {
-                                        @if(secondPiecesForm.get('autoridadSolicitante')?.errors?.['required']) {
+                                    Autoridad remitente
+                                    @if (secondPiecesForm.controls['autoridadRemitente'].invalid && (secondPiecesForm.controls['autoridadRemitente'].dirty || secondPiecesForm.controls['autoridadRemitente'].touched)) {
+                                        @if(secondPiecesForm.get('autoridadRemitente')?.errors?.['required']) {
                                             <div class="text-wine ml-1">
                                                 <span>*</span>
                                             </div>
                                         }
                                     }
                             </label>
-                            <input type="text" placeholder="Autoridad solicitante"
+                            <input type="text" placeholder="Autoridad remitente"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="autoridadSolicitante" value=""
+                                formControlName="autoridadRemitente" value=""
                             >
-                            @if (secondPiecesForm.get('autoridadSolicitante')?.errors?.['maxlength']) {
+                            @if (secondPiecesForm.get('autoridadRemitente')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div> 
@@ -271,7 +271,7 @@
                                 ||  (secondPiecesForm.controls['fechaRecepcion'].invalid && (secondPiecesForm.controls['fechaRecepcion'].dirty || secondPiecesForm.controls['fechaRecepcion'].touched))
                                 ||  (secondPiecesForm.controls['documentoEscaneado'].invalid && (secondPiecesForm.controls['documentoEscaneado'].dirty || secondPiecesForm.controls['documentoEscaneado'].touched))  
                                 ||  (secondPiecesForm.controls['descripcion'].invalid && (secondPiecesForm.controls['descripcion'].dirty || secondPiecesForm.controls['descripcion'].touched))
-                                ||  (secondPiecesForm.controls['autoridadSolicitante'].invalid && (secondPiecesForm.controls['autoridadSolicitante'].dirty || secondPiecesForm.controls['autoridadSolicitante'].touched))
+                                ||  (secondPiecesForm.controls['autoridadRemitente'].invalid && (secondPiecesForm.controls['autoridadRemitente'].dirty || secondPiecesForm.controls['autoridadRemitente'].touched))
                                 ||  (secondPiecesForm.controls['personaRelacionada'].invalid && (secondPiecesForm.controls['personaRelacionada'].dirty || secondPiecesForm.controls['personaRelacionada'].touched))
                                 ) {
                                 @if (
@@ -279,7 +279,7 @@
                                     ||  (secondPiecesForm.get('fechaRecepcion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('documentoEscaneado')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('descripcion')?.errors?.['required'])
-                                    ||  (secondPiecesForm.get('autoridadSolicitante')?.errors?.['required'])
+                                    ||  (secondPiecesForm.get('autoridadRemitente')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('personaRelacionada')?.errors?.['required'])
                                 ) {
                                     <div class="text-wine text-base p-3 flex gap-3">

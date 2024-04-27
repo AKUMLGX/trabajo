@@ -6,7 +6,7 @@ export interface CivilApertura {
     persona_relacionada:      string;
     descripcion:              string;
     fecha_recepcion:          string;
-    autoridad_solicitante:    string;
+    autoridad_remitente:      string;
     plazo_atencion:           number | null;
     administracion:           string;
     turno_jefatura:           string | null;

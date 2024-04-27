@@ -49,20 +49,20 @@
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                                    Autoridad solicitante
-                                    @if (euacapeForm.controls['autoridadSolicitante'].invalid && (euacapeForm.controls['autoridadSolicitante'].dirty || euacapeForm.controls['autoridadSolicitante'].touched)) {
-                                        @if(euacapeForm.get('autoridadSolicitante')?.errors?.['required']) {
+                                    Autoridad remitente
+                                    @if (euacapeForm.controls['autoridadRemitente'].invalid && (euacapeForm.controls['autoridadRemitente'].dirty || euacapeForm.controls['autoridadRemitente'].touched)) {
+                                        @if(euacapeForm.get('autoridadRemitente')?.errors?.['required']) {
                                             <div class="text-wine ml-1">
                                                 <span>*</span>
                                             </div>
                                         }
                                     }
                             </label>
-                            <input type="text" placeholder="Autoridad solicitante"
+                            <input type="text" placeholder="Autoridad remitente"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="autoridadSolicitante" value=""
+                                formControlName="autoridadRemitente" value=""
                             >
-                            @if (euacapeForm.get('autoridadSolicitante')?.errors?.['maxlength']) {
+                            @if (euacapeForm.get('autoridadRemitente')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div> 
@@ -284,7 +284,7 @@
                                 ||  (euacapeForm.controls['fechaRecepcion'].invalid && (euacapeForm.controls['fechaRecepcion'].dirty || euacapeForm.controls['fechaRecepcion'].touched))
                                 ||  (euacapeForm.controls['documentoEscaneado'].invalid && (euacapeForm.controls['documentoEscaneado'].dirty || euacapeForm.controls['documentoEscaneado'].touched))  
                                 ||  (euacapeForm.controls['descripcion'].invalid && (euacapeForm.controls['descripcion'].dirty || euacapeForm.controls['descripcion'].touched))
-                                ||  (euacapeForm.controls['autoridadSolicitante'].invalid && (euacapeForm.controls['autoridadSolicitante'].dirty || euacapeForm.controls['autoridadSolicitante'].touched))
+                                ||  (euacapeForm.controls['autoridadRemitente'].invalid && (euacapeForm.controls['autoridadRemitente'].dirty || euacapeForm.controls['autoridadRemitente'].touched))
                                 ||  (euacapeForm.controls['personaRelacionada'].invalid && (euacapeForm.controls['personaRelacionada'].dirty || euacapeForm.controls['personaRelacionada'].touched))
                                 ) {
                                 @if (
@@ -292,7 +292,7 @@
                                     ||  (euacapeForm.get('fechaRecepcion')?.errors?.['required'])
                                     ||  (euacapeForm.get('documentoEscaneado')?.errors?.['required'])
                                     ||  (euacapeForm.get('descripcion')?.errors?.['required'])
-                                    ||  (euacapeForm.get('autoridadSolicitante')?.errors?.['required'])
+                                    ||  (euacapeForm.get('autoridadRemitente')?.errors?.['required'])
                                     ||  (euacapeForm.get('personaRelacionada')?.errors?.['required'])
                                 ) {
                                     <div class="text-wine text-base p-3 flex gap-3">
