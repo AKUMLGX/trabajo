@@ -237,19 +237,19 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Tipo de respuesta
+                                    Atención
                             </label>
                             @if(isApertura){
-                                <input type="text" placeholder="Tipo de respuesta"
+                                <input type="text" placeholder="Atención"
                                     class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="tipoRespuesta" value=""
+                                    formControlName="atencion" value=""
                                 >
                             } @else {
                                 <select 
-                                        id="tipoRespuesta" 
-                                        formControlName="tipoRespuesta"
+                                        id="atencion" 
+                                        formControlName="atencion"
                                         class="input-field">
-                                    <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
+                                    <option [ngValue]="null" disabled>Elija una atención</option>
                                     <option value="Total">Total</option>
                                     <option value="Parcial">Parcial</option>
                                     <option value="En trámite">En trámite</option>

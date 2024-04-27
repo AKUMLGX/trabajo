@@ -34,7 +34,7 @@ export class InfoTableComponent {
   DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCAN;
   DOCUMENTO = this.collectFormInfoService.DOCUMENTO;
   DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
-  TIPORESPUESTA = this.collectFormInfoService.TIPORES;
+  ATENCION = this.collectFormInfoService.ATENCION;
   AUTORIDADREMITENTE = this.collectFormInfoService.AUTORIDADREMI;
   CARPETAINVESTIGACION = this.collectFormInfoService.CARPETAINV;
   PERSONARELACIONADA = this.collectFormInfoService.PERSONAREL;
@@ -72,7 +72,7 @@ export class InfoTableComponent {
     {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
     {position: 5, name: 'Documento', answer: this.DOCUMENTO()},
     {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
-    {position: 7, name: 'Tipo de respuesta', answer: this.TIPORESPUESTA()},
+    {position: 7, name: 'Atención', answer: this.ATENCION()},
     {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
     {position: 9, name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
     {position: 10, name: 'Folio interno', answer: this.FOLIOINTERNO()},

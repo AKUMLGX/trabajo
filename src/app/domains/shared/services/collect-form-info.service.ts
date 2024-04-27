@@ -33,7 +33,7 @@ export class CollectFormInfoService {
   DOCSCAN = signal('');
   DOCUMENTO = signal('');
   DESCRIPCION = signal('');
-  TIPORES = signal('');
+  ATENCION = signal('');
   AUTORIDADREMI = signal('');
   TURNOJEFATURA = signal<null | string>(null);
   PERSONAREL = signal('');
@@ -45,7 +45,7 @@ export class CollectFormInfoService {
     docScan:string,
     documento: string,
     descripcion: string,
-    tipoRes: string,
+    atencion: string,
     autoridadRemi: string,
     tJefaturaEntry: string | null,
     persRel: string,
@@ -56,7 +56,7 @@ export class CollectFormInfoService {
     this.DOCSCAN.set(docScan);
     this.DOCUMENTO.set(documento);
     this.DESCRIPCION.set(descripcion);
-    this.TIPORES.set(tipoRes);
+    this.ATENCION.set(atencion);
     this.AUTORIDADREMI.set(autoridadRemi);
     this.TURNOJEFATURA.set(tJefaturaEntry);
     this.PERSONAREL.set(persRel);
