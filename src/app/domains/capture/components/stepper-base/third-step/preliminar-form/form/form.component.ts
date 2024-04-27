@@ -45,16 +45,17 @@ export class FormComponent {
       administracion: [null, [Validators.required]],
       fechaRecepcion: [null, [Validators.required]],
       documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-      atencion: [{value: 'Requerimiento', disabled: true},],
+      documento: [{value: 'Requerimiento', disabled: true},],
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-      tipoRespuesta: [{value: 'En trámite', disabled: true},],
-      autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
-      carpetaInvestigacion: [null, [Validators.maxLength(255)]],
+      atencion: [{value: 'En trámite', disabled: true},],
+      autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
+      turnoJefatura: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
       plazoAtencion: [null, [Validators.min(1)]],
-      autoridadAdministrativa: [null, [Validators.maxLength(255)]],
+      
       folioJupiter: [null, [Validators.maxLength(255)]],
+      volanteJefatura: [null, [Validators.maxLength(255)]],
     });
 
     saveEuacapeForm(): void {
@@ -80,26 +81,26 @@ export class FormComponent {
         this.euacapeForm.value.administracion,
         this.euacapeForm.value.fechaRecepcion,
         this.euacapeForm.value.documentoEscaneado,
-        this.isApertura ? 'Requerimiento' : this.euacapeForm.value.atencion,
+        this.isApertura ? 'Requerimiento' : this.euacapeForm.value.documento,
         this.euacapeForm.value.descripcion,
-        this.isApertura ? 'En trámite' : this.euacapeForm.value.tipoRespuesta,
-        this.euacapeForm.value.autoridadSolicitante,
-        this.euacapeForm.value.carpetaInvestigacion,
+        this.isApertura ? 'En trámite' : this.euacapeForm.value.atencion,
+        this.euacapeForm.value.autoridadRemitente,
+        this.euacapeForm.value.turnoJefatura,
         this.euacapeForm.value.personaRelacionada,
         this.euacapeForm.value.plazoAtencion,
       );
-      // if (
-      //     this.dropdownChoice === 'Civil' || this.dropdownChoice === 'Penal'
-      //     || this.dropdownChoice === 'Generalidades'
-      //   ){
-      //   this.collectFormInfoService.updateAdditionalInfoForCivilPenalAndGeneralidades(
-      //     this.euacapeForm.value.autoridadAdministrativa,
-      //     this.euacapeForm.value.folioJupiter,
-      //   );
-      // }
-      // if (this.dropdownChoice === 'Concurso mercantil'){
-      //   this.collectFormInfoService.updateAdditionalInfoForConcurso(this.euacapeForm.value.folioJupiter);
-      // }
+
+      if (
+            this.dropdownChoice === 'Asunto Penal' || this.dropdownChoice === 'Asunto Civil'
+            || this.dropdownChoice === 'Laboral' || this.dropdownChoice === 'Juicio Amparo'
+            || this.dropdownChoice === 'Concurso Mercantil'
+        ) {
+              this.collectFormInfoService.updateAdditionalInfoForGeneralidades(
+                this.euacapeForm.value.volanteJefatura,
+                this.euacapeForm.value.folioJupiter,
+              );
+      }
+
       this.modalService.openCustomDialogWithTemplate({
         template
       })

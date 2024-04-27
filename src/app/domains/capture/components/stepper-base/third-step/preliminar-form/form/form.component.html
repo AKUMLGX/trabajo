@@ -49,20 +49,20 @@
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                                    Autoridad solicitante
-                                    @if (euacapeForm.controls['autoridadSolicitante'].invalid && (euacapeForm.controls['autoridadSolicitante'].dirty || euacapeForm.controls['autoridadSolicitante'].touched)) {
-                                        @if(euacapeForm.get('autoridadSolicitante')?.errors?.['required']) {
+                                    Autoridad remitente
+                                    @if (euacapeForm.controls['autoridadRemitente'].invalid && (euacapeForm.controls['autoridadRemitente'].dirty || euacapeForm.controls['autoridadRemitente'].touched)) {
+                                        @if(euacapeForm.get('autoridadRemitente')?.errors?.['required']) {
                                             <div class="text-wine ml-1">
                                                 <span>*</span>
                                             </div>
                                         }
                                     }
                             </label>
-                            <input type="text" placeholder="Autoridad solicitante"
+                            <input type="text" placeholder="Autoridad remitente"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="autoridadSolicitante" value=""
+                                formControlName="autoridadRemitente" value=""
                             >
-                            @if (euacapeForm.get('autoridadSolicitante')?.errors?.['maxlength']) {
+                            @if (euacapeForm.get('autoridadRemitente')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div> 
@@ -94,18 +94,18 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Carpeta de investigación
+                                    Turno jefatura
                             </label>
-                            <input type="text" placeholder="Carpeta de investigación"
+                            <input type="text" placeholder="Turno jefatura"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="carpetaInvestigacion" value=""
+                                formControlName="turnoJefatura" value=""
                             >
-                            @if (euacapeForm.get('carpetaInvestigacion')?.errors?.['maxlength']) {
+                            @if (euacapeForm.get('turnoJefatura')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
-                                     <span >Máximo 255 caracteres</span>
+                                    <span >Máximo 255 caracteres</span>
                                 </div> 
-                             }
-                        </div>
+                            }
+                        </div> 
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
@@ -129,47 +129,44 @@
                             }
                         </div>
 
-                        <!-- @if (
-                                dropdownChoice === 'Civil' || dropdownChoice === 'Penal'
-                                || dropdownChoice === 'Generalidades'
+                        @if (
+                                dropdownChoice === 'Asunto Penal' || dropdownChoice === 'Asunto Civil'
+                                || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio Amparo'
+                                || dropdownChoice === 'Concurso Mercantil'  
                             ) {
-                            <div class="wrapping-individual-container">
-                                <label class="label-field text-blueGray-600"
-                                    htmlfor="grid-password">
-                                        Autoridad administrativa
-                                </label>
-                                <input type="text" placeholder="Autoridad administrativa"
-                                    class="input-field placeholder-blueGray-300"
-                                    formControlName="autoridadAdministrativa" value=""
-                                >
-                                @if (euacapeForm.get('autoridadAdministrativa')?.errors?.['maxlength']) {
-                                    <div class="text-sm text-wine mt-1.5">
-                                        <span >Máximo 255 caracteres</span>
-                                    </div> 
-                                }
-                            </div> 
-                        } -->
 
-                        <!-- @if (
-                                dropdownChoice === 'Civil' || dropdownChoice === 'Penal'
-                                || dropdownChoice === 'Generalidades' || dropdownChoice === 'Concurso mercantil'  
-                            ) {
-                            <div class="wrapping-individual-container">
-                                <label class="label-field text-blueGray-600"
-                                    htmlfor="grid-password">
-                                        Folio Júpiter
-                                </label>
-                                <input type="text" placeholder="Folio Júpiter"
-                                    class="input-field placeholder-blueGray-300"
-                                    formControlName="folioJupiter" value=""
-                                >
-                                @if (euacapeForm.get('folioJupiter')?.errors?.['maxlength']) {
-                                    <div class="text-sm text-wine mt-1.5">
-                                        <span >Máximo 255 caracteres</span>
-                                    </div> 
-                                }
-                            </div> 
-                        } -->
+                                <div class="wrapping-individual-container">
+                                    <label class="label-field text-blueGray-600"
+                                        htmlfor="grid-password">
+                                            Volante jefatura
+                                    </label>
+                                    <input type="text" placeholder="Volante jefatura"
+                                        class="input-field placeholder-blueGray-300"
+                                        formControlName="volanteJefatura" value=""
+                                    >
+                                    @if (euacapeForm.get('volanteJefatura')?.errors?.['maxlength']) {
+                                        <div class="text-sm text-wine mt-1.5">
+                                            <span >Máximo 255 caracteres</span>
+                                        </div> 
+                                    }
+                                </div>
+
+                                <div class="wrapping-individual-container">
+                                    <label class="label-field text-blueGray-600"
+                                        htmlfor="grid-password">
+                                            Folio Júpiter
+                                    </label>
+                                    <input type="text" placeholder="Folio Júpiter"
+                                        class="input-field placeholder-blueGray-300"
+                                        formControlName="folioJupiter" value=""
+                                    >
+                                    @if (euacapeForm.get('folioJupiter')?.errors?.['maxlength']) {
+                                        <div class="text-sm text-wine mt-1.5">
+                                            <span >Máximo 255 caracteres</span>
+                                        </div> 
+                                    }
+                                </div> 
+                        }
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
@@ -219,16 +216,16 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Atención
+                                    Documento
                             </label>
                             @if(isApertura){
-                                <input type="text" placeholder="Atención"
+                                <input type="text" placeholder="Documento"
                                     class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="atencion" value=""
+                                    formControlName="documento" value=""
                                 >
                             } @else {
-                                <select id="atencion"
-                                        formControlName="atencion"
+                                <select id="documento"
+                                        formControlName="documento"
                                         class="input-field">
                                     <option [ngValue]="null" disabled >Elija una atención</option>
                                     <option value="Requerimiento">Requerimiento</option>
@@ -240,27 +237,25 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Tipo de respuesta
+                                    Atención
                             </label>
                             @if(isApertura){
-                                <input type="text" placeholder="Tipo de respuesta"
+                                <input type="text" placeholder="Atención"
                                     class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="tipoRespuesta" value=""
+                                    formControlName="atencion" value=""
                                 >
                             } @else {
                                 <select 
-                                        id="tipoRespuesta" 
-                                        formControlName="tipoRespuesta"
+                                        id="atencion" 
+                                        formControlName="atencion"
                                         class="input-field">
-                                    <option [ngValue]="null" disabled>Elija un tipo de respuesta</option>
+                                    <option [ngValue]="null" disabled>Elija una atención</option>
                                     <option value="Total">Total</option>
                                     <option value="Parcial">Parcial</option>
                                     <option value="En trámite">En trámite</option>
                                 </select> 
                             } 
                         </div>
-                        
-                        
                         
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -289,7 +284,7 @@
                                 ||  (euacapeForm.controls['fechaRecepcion'].invalid && (euacapeForm.controls['fechaRecepcion'].dirty || euacapeForm.controls['fechaRecepcion'].touched))
                                 ||  (euacapeForm.controls['documentoEscaneado'].invalid && (euacapeForm.controls['documentoEscaneado'].dirty || euacapeForm.controls['documentoEscaneado'].touched))  
                                 ||  (euacapeForm.controls['descripcion'].invalid && (euacapeForm.controls['descripcion'].dirty || euacapeForm.controls['descripcion'].touched))
-                                ||  (euacapeForm.controls['autoridadSolicitante'].invalid && (euacapeForm.controls['autoridadSolicitante'].dirty || euacapeForm.controls['autoridadSolicitante'].touched))
+                                ||  (euacapeForm.controls['autoridadRemitente'].invalid && (euacapeForm.controls['autoridadRemitente'].dirty || euacapeForm.controls['autoridadRemitente'].touched))
                                 ||  (euacapeForm.controls['personaRelacionada'].invalid && (euacapeForm.controls['personaRelacionada'].dirty || euacapeForm.controls['personaRelacionada'].touched))
                                 ) {
                                 @if (
@@ -297,7 +292,7 @@
                                     ||  (euacapeForm.get('fechaRecepcion')?.errors?.['required'])
                                     ||  (euacapeForm.get('documentoEscaneado')?.errors?.['required'])
                                     ||  (euacapeForm.get('descripcion')?.errors?.['required'])
-                                    ||  (euacapeForm.get('autoridadSolicitante')?.errors?.['required'])
+                                    ||  (euacapeForm.get('autoridadRemitente')?.errors?.['required'])
                                     ||  (euacapeForm.get('personaRelacionada')?.errors?.['required'])
                                 ) {
                                     <div class="text-wine text-base p-3 flex gap-3">

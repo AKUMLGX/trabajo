@@ -18,19 +18,11 @@
             </tr>
           }
         } @else if (
-            dropdownChoice === 'Civil' || 
-            dropdownChoice === 'Penal' || 
-            dropdownChoice === 'Generalidades' 
-          ) {
-          @for (row of CIVIL_OR_PENAL_OR_GENERALIDADES_DATA; track row.position) {
-            <tr>
-              <td>{{ row.position }}</td>
-              <td> {{ row.name }} </td>
-              <td>{{ row.answer }}</td>
-            </tr>
-          }
-        } @else if (dropdownChoice === 'Concurso mercantil'){
-            @for (row of CONCURSO_DATA; track row.position) {
+          dropdownChoice === 'Asunto Penal' || dropdownChoice === 'Asunto Civil'
+          || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio Amparo'
+          || dropdownChoice === 'Concurso Mercantil'
+        ){
+            @for (row of GENERALIDADES_DATA; track row.position) {
               <tr>
                 <td>{{ row.position }}</td>
                 <td> {{ row.name }} </td>
@@ -57,12 +49,12 @@
           PERSONARELACIONADA(), 
           DESCRIPCION(), 
           FECHARECEPCION()!.toString(), 
-          AUTORIDADSOLICITANTE(), 
+          AUTORIDADREMITENTE(), 
           PLAZOATENCION(), 
           ADMINISTRACION(),
           CARPETAINVESTIGACION(),
           TURNOJEFATURA(),
-          AUTORIDADADMINISTRATIVA(),
+          VOLANTEJEFATURA(),
           FOLIOJUPITER()
           )"
           class="modal-right-button ml-10" 

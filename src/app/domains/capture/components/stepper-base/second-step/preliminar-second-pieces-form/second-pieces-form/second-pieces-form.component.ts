@@ -47,7 +47,7 @@ export class SecondPiecesFormComponent {
     atencion: [{value: 'Requerimiento', disabled: true},],
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
     tipoRespuesta: [{value: 'En trámite', disabled: true},],
-    autoridadSolicitante: ['', [Validators.required, Validators.maxLength(255)]],
+    autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     carpetaInvestigacion: [null, [Validators.maxLength(255)]],
     personaRelacionada: [{value: 'persona relacionada', disabled: true},], 
             //este campo se debe traer desde el back
@@ -72,7 +72,7 @@ export class SecondPiecesFormComponent {
       this.isSecondPiece ? 'Requerimiento' : this.secondPiecesForm.value.atencion,
       this.secondPiecesForm.value.descripcion,
       this.isSecondPiece ? 'En trámite' : this.secondPiecesForm.value.tipoRespuesta,
-      this.secondPiecesForm.value.autoridadSolicitante,
+      this.secondPiecesForm.value.autoridadRemitente,
       this.secondPiecesForm.value.carpetaInvestigacion,
       this.isSecondPiece ? 'Nombre de la persona' : this.secondPiecesForm.value.personaRelacionada,
                 //este dato se va a traer desde el back

@@ -76,18 +76,18 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Turno jefatura
+                                    Carpeta de investigación
                             </label>
-                            <input type="text" placeholder="Turno jefatura"
+                            <input type="text" placeholder="Carpeta de investigación"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="turnoJefatura" value=""
+                                formControlName="carpetaInvestigacion" value=""
                             >
-                            @if (preliminarForm.get('turnoJefatura')?.errors?.['maxlength']) {
+                            @if (preliminarForm.get('carpetaInvestigacion')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
-                                    <span >Máximo 255 caracteres</span>
+                                     <span >Máximo 255 caracteres</span>
                                 </div> 
-                            }
-                        </div>                        
+                             }
+                        </div>                       
                         
                     </div>
                     <br>
