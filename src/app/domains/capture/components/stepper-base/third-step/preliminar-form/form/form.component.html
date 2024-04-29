@@ -198,14 +198,23 @@
                                     Plazo de atención 
                                 </label>
                                 <div class="ml-1 text-xs">
-                                    (Ingresar plazo en horas).
+                                    (Ingresar plazo en horas a la izquierda y en días a la derecha).
                                 </div>
                             </div>
-                            <input type="number" min="1" placeholder="Plazo de atención"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="plazoAtencion" value=""
-                            >
-                            @if (euacapeForm.get('plazoAtencion')?.errors?.['min']) {
+                            <div class="flex gap-6">
+                                <input type="number" min="1" placeholder="Plazo de atención (en hrs)."
+                                    class="input-field placeholder-blueGray-300"
+                                    formControlName="plazoAtencionHoras" value=""
+                                >
+                                <input type="number" min="0" placeholder="Plazo de atención (en días)"
+                                    class="input-field placeholder-blueGray-300"
+                                    formControlName="plazoAtencionDias" value=""
+                                >
+                            </div>
+                            @if (
+                                    euacapeForm.get('plazoAtencionHoras')?.errors?.['min']
+                                    || euacapeForm.get('plazoAtencionDias')?.errors?.['min']
+                                ) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >No ingresar números negativos</span>
                                 </div> 

@@ -52,7 +52,8 @@ export class FormComponent {
       turnoJefatura: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
-      plazoAtencion: [null, [Validators.min(1)]],
+      plazoAtencionHoras: [null, [Validators.min(1)]],
+      plazoAtencionDias: [null, [Validators.min(0)]],
       
       folioJupiter: [null, [Validators.maxLength(255)]],
       volanteJefatura: [null, [Validators.maxLength(255)]],
@@ -87,7 +88,13 @@ export class FormComponent {
         this.euacapeForm.value.autoridadRemitente,
         this.euacapeForm.value.turnoJefatura,
         this.euacapeForm.value.personaRelacionada,
-        this.euacapeForm.value.plazoAtencion,
+        this.euacapeForm.value.plazoAtencionHoras,
+        this.euacapeForm.value.plazoAtencionDias,
+      );
+
+      this.collectFormInfoService.updatePlazoDeAtencion(
+        this.euacapeForm.value.plazoAtencionHoras,
+        this.euacapeForm.value.plazoAtencionDias,
       );
 
       if (
