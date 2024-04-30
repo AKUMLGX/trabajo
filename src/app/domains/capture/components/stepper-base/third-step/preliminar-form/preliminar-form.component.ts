@@ -28,7 +28,7 @@ export class PreliminarFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private collectFormInfoService :  CollectFormInfoService,
+    private collectFormInfoService: CollectFormInfoService,
     ){ }
 
   public preliminarForm: FormGroup = this.fb.group({

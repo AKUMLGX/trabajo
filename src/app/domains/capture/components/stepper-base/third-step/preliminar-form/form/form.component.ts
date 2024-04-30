@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { InfoTableComponent } from './info-table/info-table.component';
 import { CollectFormInfoService } from '../../../../../../shared/services/collect-form-info.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-form',
@@ -25,6 +26,7 @@ import { CollectFormInfoService } from '../../../../../../shared/services/collec
     CommonModule,
     MatIconModule,
     InfoTableComponent,
+    MatCheckboxModule,
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'

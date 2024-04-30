@@ -198,18 +198,32 @@
                                     Plazo de atención 
                                 </label>
                                 <div class="ml-1 text-xs">
-                                    (Ingresar plazo en horas a la izquierda y en días a la derecha).
+                                    (Ingresar plazo en horas y días ó marcar como urgente).
                                 </div>
                             </div>
                             <div class="flex gap-6">
-                                <input type="number" min="1" placeholder="Plazo de atención (en hrs)."
+                                <input type="number" min="1" placeholder="Plazo en hrs."
                                     class="input-field placeholder-blueGray-300"
                                     formControlName="plazoAtencionHoras" value=""
                                 >
-                                <input type="number" min="0" placeholder="Plazo de atención (en días)"
+                                <input type="number" min="0" placeholder="Plazo en días"
                                     class="input-field placeholder-blueGray-300"
                                     formControlName="plazoAtencionDias" value=""
                                 >
+                                <div class="text-md mt-3">
+                                    ó
+                                </div>
+                                <div class="flex justify-center items-center">
+                                    <div class="bg-white rounded-lg border-2 border-[#691C32] p-0.5">
+                                        <mat-checkbox 
+                                            class="example-margin"
+                                        >
+                                        <div class="text-sm text-gray-400 mr-2">
+                                            Urgente
+                                        </div>
+                                </mat-checkbox>  
+                                    </div>
+                                </div>                              
                             </div>
                             @if (
                                     euacapeForm.get('plazoAtencionHoras')?.errors?.['min']
