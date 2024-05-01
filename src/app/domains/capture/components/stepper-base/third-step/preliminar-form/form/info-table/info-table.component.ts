@@ -32,7 +32,8 @@ export class InfoTableComponent {
   ADMINISTRACION = this.collectFormInfoService.ADMON;
   FECHARECEPCION = this.collectFormInfoService.FECHAREC;
   DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCAN;
-  DOCUMENTO = this.collectFormInfoService.DOCUMENTO;
+  DOCUMENTOEUACAPE = this.collectFormInfoService.DOCUMENTOEUACAPE;
+  DOCUMENTOOTROS = this.collectFormInfoService.DOCUMENTOOTROS;
   DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
   ATENCION = this.collectFormInfoService.ATENCION;
   AUTORIDADREMITENTE = this.collectFormInfoService.AUTORIDADREMI;
@@ -70,7 +71,7 @@ export class InfoTableComponent {
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
     {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {position: 5, name: 'Documento', answer: this.DOCUMENTO()},
+    {position: 5, name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },
     {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
     {position: 7, name: 'Atención', answer: this.ATENCION()},
     {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},

@@ -236,27 +236,37 @@
                             }
                         </div>
                         
-                        
-                        <div class="wrapping-individual-container">
-                            <label class="label-field text-blueGray-600"
-                                htmlfor="grid-password">
-                                    Documento
-                            </label>
-                            @if(isApertura){
-                                <input type="text" placeholder="Documento"
-                                    class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="documento" value=""
-                                >
-                            } @else {
-                                <select id="documento"
-                                        formControlName="documento"
+                        @if(dropdownChoice === 'EUACAPE') {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Documento
+                                </label>
+                                <select id="documentoEuacape"
+                                        formControlName="documentoEuacape"
                                         class="input-field">
                                     <option [ngValue]="null" disabled >Elija una atención</option>
                                     <option value="Requerimiento">Requerimiento</option>
-                                    <option value="Respuesta">Respuesta</option>
-                                </select>     
-                            }      
-                        </div>
+                                    <option value="Solicitud Interna">Solicitud Interna</option>
+                                    <option value="Respuesta Interna">Respuesta Interna</option>
+                                    <option value="Respuesta a FGR">Respuesta a FGR</option>
+                                    <option value="Alcance">Alcance</option>
+                                </select>      
+                            </div>
+                        }
+
+                        @if(dropdownChoice !== 'EUACAPE') {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Documento
+                                </label>
+                                <input type="text" placeholder="Documento"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="documentoOtros" value=""
+                                >      
+                            </div>   
+                        }
                         
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
