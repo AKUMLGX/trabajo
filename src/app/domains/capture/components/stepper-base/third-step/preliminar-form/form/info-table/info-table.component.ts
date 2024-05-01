@@ -38,8 +38,6 @@ export class InfoTableComponent {
   AUTORIDADREMITENTE = this.collectFormInfoService.AUTORIDADREMI;
   CARPETAINVESTIGACION = this.collectFormInfoService.CARPETAINV;
   PERSONARELACIONADA = this.collectFormInfoService.PERSONAREL;
-  PLAZOATENCIONHORAS = this.collectFormInfoService.PLAZOATENCIONHRS;
-  PLAZOATENCIONDIAS = this.collectFormInfoService.PLAZOATENCIONDIAS;
   PLAZOATENCION = this.collectFormInfoService.PLAZOATENCION;
 
   OFICIO = this.collectFormInfoService.OFICIO;
@@ -82,7 +80,7 @@ export class InfoTableComponent {
     {position: 12, name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
     {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
     {position: 14, name: 'Tipo asunto', answer: this.TIPOASUNTO()},
-    {position: 15, name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    {position: 15, name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
   ];
 
   GENERALIDADES_DATA: DataBeforeSubmit[] = [

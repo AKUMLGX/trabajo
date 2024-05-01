@@ -56,6 +56,7 @@ export class FormComponent {
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
       plazoAtencionHoras: [null, [Validators.min(1)]],
       plazoAtencionDias: [null, [Validators.min(0)]],
+      plazoAtencionUrgente: [null],
       
       folioJupiter: [null, [Validators.maxLength(255)]],
       volanteJefatura: [null, [Validators.maxLength(255)]],
@@ -90,14 +91,14 @@ export class FormComponent {
         this.euacapeForm.value.autoridadRemitente,
         this.euacapeForm.value.turnoJefatura,
         this.euacapeForm.value.personaRelacionada,
-        this.euacapeForm.value.plazoAtencionHoras,
-        this.euacapeForm.value.plazoAtencionDias,
       );
 
       this.collectFormInfoService.updatePlazoDeAtencion(
         this.euacapeForm.value.plazoAtencionHoras,
         this.euacapeForm.value.plazoAtencionDias,
+        this.euacapeForm.value.plazoAtencionUrgente,
       );
+      console.log('URGENT', this.euacapeForm.value.plazoAtencionUrgente);
 
       if (
             this.dropdownChoice === 'Asunto Penal' || this.dropdownChoice === 'Asunto Civil'
