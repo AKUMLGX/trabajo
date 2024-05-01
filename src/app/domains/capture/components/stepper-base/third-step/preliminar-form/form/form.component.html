@@ -198,30 +198,30 @@
                                     Plazo de atención 
                                 </label>
                                 <div class="ml-1 text-xs">
-                                    (Ingresar plazo en horas y días ó marcar como urgente).
+                                    (Ingresar plazo en horas y días o marcar como urgente).
                                 </div>
                             </div>
-                            <div class="flex gap-6">
+                            <div class="flex gap-3">
                                 <input type="number" min="1" placeholder="Plazo en hrs."
-                                    class="input-field placeholder-blueGray-300"
+                                    class="w-32 input-field placeholder-blueGray-300"
                                     formControlName="plazoAtencionHoras" value=""
                                 >
                                 <input type="number" min="0" placeholder="Plazo en días"
-                                    class="input-field placeholder-blueGray-300"
+                                    class="w-32 input-field placeholder-blueGray-300"
                                     formControlName="plazoAtencionDias" value=""
                                 >
                                 <div class="text-md mt-3">
-                                    ó
+                                    o
                                 </div>
-                                <div class="flex justify-center items-center">
-                                    <div class="bg-white rounded-lg border-2 border-[#691C32] p-0.5">
+                                <div class="flex justify-center items-center w-40">
+                                    <div class="bg-white rounded-lg border-2 border-[#691C32] p-0.5 flex">
                                         <mat-checkbox
                                             formControlName="plazoAtencionUrgente" 
-                                            class="example-margin"
+                                            class="example-margin flex"
                                         >
-                                        <div class="text-sm text-gray-400 mr-2">
-                                            Urgente
-                                        </div>
+                                            <span class="text-sm text-gray-400 mr-3">
+                                                URGENTE
+                                            </span>
                                 </mat-checkbox>  
                                     </div>
                                 </div>                              

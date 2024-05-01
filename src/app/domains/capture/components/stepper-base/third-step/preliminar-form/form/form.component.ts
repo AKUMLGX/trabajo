@@ -98,7 +98,6 @@ export class FormComponent {
         this.euacapeForm.value.plazoAtencionDias,
         this.euacapeForm.value.plazoAtencionUrgente,
       );
-      console.log('URGENT', this.euacapeForm.value.plazoAtencionUrgente);
 
       if (
             this.dropdownChoice === 'Asunto Penal' || this.dropdownChoice === 'Asunto Civil'
