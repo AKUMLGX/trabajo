@@ -269,7 +269,12 @@
                                     formControlName="atencion" value=""
                                 >
                             } @else {
-                                <select 
+                                <!-- Modificación sobre el campo atención hecha el 30.04.24
+                                Esta viene ahora precargada como "Recibido" y ya NO  
+                                como "En trámite". Por lo tanto, tamb comenté el 
+                                select de opciones de aquí abajo pues aparentemente
+                                ya no aplicaría como antes. -->
+                                <!-- <select 
                                         id="atencion" 
                                         formControlName="atencion"
                                         class="input-field">
@@ -277,7 +282,7 @@
                                     <option value="Total">Total</option>
                                     <option value="Parcial">Parcial</option>
                                     <option value="En trámite">En trámite</option>
-                                </select> 
+                                </select>  -->
                             } 
                         </div>
                         
