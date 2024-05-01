@@ -31,36 +31,36 @@ export class CollectFormInfoService {
   ADMON = signal('');
   FECHAREC = signal<null | Date>(null);
   DOCSCAN = signal('');
-  DOCUMENTO = signal('');
+  DOCUMENTOEUACAPE = signal('');
+  DOCUMENTOOTROS = signal('');
   DESCRIPCION = signal('');
   ATENCION = signal('');
   AUTORIDADREMI = signal('');
   TURNOJEFATURA = signal<null | string>(null);
   PERSONAREL = signal('');
-  PLAZOATENCION = signal<null | number>(null);
 
   updateEuacapeForm(
     admon: string,
     fechaRec: null | Date,
     docScan:string,
-    documento: string,
+    documentoEuacape: string,
+    documentoOtros: string,
     descripcion: string,
     atencion: string,
     autoridadRemi: string,
     tJefaturaEntry: string | null,
     persRel: string,
-    plazoAt: number | null,
   ){
     this.ADMON.set(admon);
     this.FECHAREC.set(fechaRec);
     this.DOCSCAN.set(docScan);
-    this.DOCUMENTO.set(documento);
+    this.DOCUMENTOEUACAPE.set(documentoEuacape);
+    this.DOCUMENTOOTROS.set(documentoOtros);
     this.DESCRIPCION.set(descripcion);
     this.ATENCION.set(atencion);
     this.AUTORIDADREMI.set(autoridadRemi);
     this.TURNOJEFATURA.set(tJefaturaEntry);
     this.PERSONAREL.set(persRel);
-    this.PLAZOATENCION.set(plazoAt);
   }
 
   //Additional info if the user chooses any of the Generalidades.
@@ -81,5 +81,38 @@ export class CollectFormInfoService {
   dropdownChoice(choice: string){
     this.TIPOASUNTO.set(choice);
   }
+
+  PLAZOATENCIONHRS = signal<null | number>(null);
+  PLAZOATENCIONDIAS = signal<null | number>(null);
+  PLAZOATENCION = signal<null | number>(null); //este es la suma de los 2 anteriores
+  PLAZOATENCIONURGENTE = signal(false); //O bien, tmb plazo atención puede ser una urgencia
+
+  updatePlazoDeAtencion(
+    plazoAtHrs: number | null,
+    plazoAtDias: number | null,
+    plazoAtUrgente: boolean,
+  ){
+    let plazoInHours: number;
+    if (plazoAtHrs !== null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+      plazoInHours = (plazoAtHrs + (plazoAtDias * 24)); 
+      return this.PLAZOATENCION.set(plazoInHours);
+    } else if (plazoAtHrs !== null && plazoAtDias !== null && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs === null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+      plazoInHours = (plazoAtDias * 24);
+      return this.PLAZOATENCION.set(plazoInHours);
+    } else if (plazoAtHrs === null && plazoAtDias !== null && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs !== null && plazoAtDias === null  && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+      plazoInHours = plazoAtHrs;
+      return this.PLAZOATENCION.set(plazoInHours);
+    } else if (plazoAtHrs !== null && plazoAtDias === null  && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === null )){
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs === null && plazoAtDias === null && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(0);
+    }
+  }  
 
 }

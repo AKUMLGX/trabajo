@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { InfoTableComponent } from './info-table/info-table.component';
 import { CollectFormInfoService } from '../../../../../../shared/services/collect-form-info.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-form',
@@ -25,6 +26,7 @@ import { CollectFormInfoService } from '../../../../../../shared/services/collec
     CommonModule,
     MatIconModule,
     InfoTableComponent,
+    MatCheckboxModule,
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
@@ -45,14 +47,17 @@ export class FormComponent {
       administracion: [null, [Validators.required]],
       fechaRecepcion: [null, [Validators.required]],
       documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-      documento: [{value: 'Requerimiento', disabled: true},],
+      documentoEuacape: [null,],
+      documentoOtros: [{value: 'Requerimiento', disabled: true},],
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-      atencion: [{value: 'En trámite', disabled: true},],
+      atencion: [{value: 'Recibido', disabled: true},],
       autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
       turnoJefatura: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
-      plazoAtencion: [null, [Validators.min(1)]],
+      plazoAtencionHoras: [null, [Validators.min(1)]],
+      plazoAtencionDias: [null, [Validators.min(0)]],
+      plazoAtencionUrgente: [null],
       
       folioJupiter: [null, [Validators.maxLength(255)]],
       volanteJefatura: [null, [Validators.maxLength(255)]],
@@ -81,13 +86,19 @@ export class FormComponent {
         this.euacapeForm.value.administracion,
         this.euacapeForm.value.fechaRecepcion,
         this.euacapeForm.value.documentoEscaneado,
-        this.isApertura ? 'Requerimiento' : this.euacapeForm.value.documento,
+        this.euacapeForm.value.documentoEuacape,
+        'Requerimiento',
         this.euacapeForm.value.descripcion,
-        this.isApertura ? 'En trámite' : this.euacapeForm.value.atencion,
+        this.isApertura ? 'Recibido' : this.euacapeForm.value.atencion,
         this.euacapeForm.value.autoridadRemitente,
         this.euacapeForm.value.turnoJefatura,
         this.euacapeForm.value.personaRelacionada,
-        this.euacapeForm.value.plazoAtencion,
+      );
+
+      this.collectFormInfoService.updatePlazoDeAtencion(
+        this.euacapeForm.value.plazoAtencionHoras,
+        this.euacapeForm.value.plazoAtencionDias,
+        this.euacapeForm.value.plazoAtencionUrgente,
       );
 
       if (

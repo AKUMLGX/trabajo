@@ -198,41 +198,75 @@
                                     Plazo de atención 
                                 </label>
                                 <div class="ml-1 text-xs">
-                                    (Ingresar plazo en horas).
+                                    (Ingresar plazo en horas y días o marcar como urgente).
                                 </div>
                             </div>
-                            <input type="number" min="1" placeholder="Plazo de atención"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="plazoAtencion" value=""
-                            >
-                            @if (euacapeForm.get('plazoAtencion')?.errors?.['min']) {
+                            <div class="flex gap-3">
+                                <input type="number" min="1" placeholder="Plazo en hrs."
+                                    class="w-32 input-field placeholder-blueGray-300"
+                                    formControlName="plazoAtencionHoras" value=""
+                                >
+                                <input type="number" min="0" placeholder="Plazo en días"
+                                    class="w-32 input-field placeholder-blueGray-300"
+                                    formControlName="plazoAtencionDias" value=""
+                                >
+                                <div class="text-md mt-3">
+                                    o
+                                </div>
+                                <div class="flex justify-center items-center w-40">
+                                    <div class="bg-white rounded-lg border-2 border-[#691C32] p-0.5 flex">
+                                        <mat-checkbox
+                                            formControlName="plazoAtencionUrgente" 
+                                            class="example-margin flex"
+                                        >
+                                            <span class="text-sm text-gray-400 mr-3">
+                                                URGENTE
+                                            </span>
+                                </mat-checkbox>  
+                                    </div>
+                                </div>                              
+                            </div>
+                            @if (
+                                    euacapeForm.get('plazoAtencionHoras')?.errors?.['min']
+                                    || euacapeForm.get('plazoAtencionDias')?.errors?.['min']
+                                ) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >No ingresar números negativos</span>
                                 </div> 
                             }
                         </div>
                         
-                        
-                        <div class="wrapping-individual-container">
-                            <label class="label-field text-blueGray-600"
-                                htmlfor="grid-password">
-                                    Documento
-                            </label>
-                            @if(isApertura){
-                                <input type="text" placeholder="Documento"
-                                    class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="documento" value=""
-                                >
-                            } @else {
-                                <select id="documento"
-                                        formControlName="documento"
+                        @if(dropdownChoice === 'EUACAPE') {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Documento
+                                </label>
+                                <select id="documentoEuacape"
+                                        formControlName="documentoEuacape"
                                         class="input-field">
                                     <option [ngValue]="null" disabled >Elija una atención</option>
                                     <option value="Requerimiento">Requerimiento</option>
-                                    <option value="Respuesta">Respuesta</option>
-                                </select>     
-                            }      
-                        </div>
+                                    <option value="Solicitud Interna">Solicitud Interna</option>
+                                    <option value="Respuesta Interna">Respuesta Interna</option>
+                                    <option value="Respuesta a FGR">Respuesta a FGR</option>
+                                    <option value="Alcance">Alcance</option>
+                                </select>      
+                            </div>
+                        }
+
+                        @if(dropdownChoice !== 'EUACAPE') {
+                            <div class="wrapping-individual-container">
+                                <label class="label-field text-blueGray-600"
+                                    htmlfor="grid-password">
+                                        Documento
+                                </label>
+                                <input type="text" placeholder="Documento"
+                                    class="disabled-input-field placeholder-blueGray-300"
+                                    formControlName="documentoOtros" value=""
+                                >      
+                            </div>   
+                        }
                         
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
@@ -245,7 +279,12 @@
                                     formControlName="atencion" value=""
                                 >
                             } @else {
-                                <select 
+                                <!-- Modificación sobre el campo atención hecha el 30.04.24
+                                Esta viene ahora precargada como "Recibido" y ya NO  
+                                como "En trámite". Por lo tanto, tamb comenté el 
+                                select de opciones de aquí abajo pues aparentemente
+                                ya no aplicaría como antes. -->
+                                <!-- <select 
                                         id="atencion" 
                                         formControlName="atencion"
                                         class="input-field">
@@ -253,7 +292,7 @@
                                     <option value="Total">Total</option>
                                     <option value="Parcial">Parcial</option>
                                     <option value="En trámite">En trámite</option>
-                                </select> 
+                                </select>  -->
                             } 
                         </div>
                         

@@ -32,7 +32,8 @@ export class InfoTableComponent {
   ADMINISTRACION = this.collectFormInfoService.ADMON;
   FECHARECEPCION = this.collectFormInfoService.FECHAREC;
   DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCAN;
-  DOCUMENTO = this.collectFormInfoService.DOCUMENTO;
+  DOCUMENTOEUACAPE = this.collectFormInfoService.DOCUMENTOEUACAPE;
+  DOCUMENTOOTROS = this.collectFormInfoService.DOCUMENTOOTROS;
   DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
   ATENCION = this.collectFormInfoService.ATENCION;
   AUTORIDADREMITENTE = this.collectFormInfoService.AUTORIDADREMI;
@@ -70,7 +71,7 @@ export class InfoTableComponent {
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
     {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {position: 5, name: 'Documento', answer: this.DOCUMENTO()},
+    {position: 5, name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },
     {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
     {position: 7, name: 'Atención', answer: this.ATENCION()},
     {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
@@ -80,7 +81,7 @@ export class InfoTableComponent {
     {position: 12, name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
     {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
     {position: 14, name: 'Tipo asunto', answer: this.TIPOASUNTO()},
-    {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
+    {position: 15, name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
   ];
 
   GENERALIDADES_DATA: DataBeforeSubmit[] = [
