@@ -147,6 +147,20 @@
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
+
+                    @case ('Respuesta') {
+                        <mat-step label="Formulario Respuesta (parte I)" 
+                            [completed]="thirdStepChild.preliminarForm.valid" 
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+    
+                        <mat-step label="Formulario Respuesta (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
                     
                     <!-- @case ('Generalidades') {
                         <mat-step label="Formulario Generalidades (parte I)" 
