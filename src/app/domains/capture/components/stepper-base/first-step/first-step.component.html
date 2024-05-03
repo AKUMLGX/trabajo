@@ -3,19 +3,18 @@
         Inicio del Proceso de Búsqueda
     </div>
     <div class="instructions-text">
-        Para iniciar el flujo de captura, utilice la función de búsqueda introduciendo cualquiera de los siguientes
+        Para iniciar, utilice la función de búsqueda introduciendo cualquiera de los siguientes
         datos:
     </div>
     <ol type=”A” class="instructions-text mb-4">
+        <li>✔ Carpeta de Investigación</li>
+        <li>✔ Persona Relacionada</li>
         <li>✔ Folio interno</li>
         <li>✔ Oficio</li>
-        <li>✔ Persona relacionada</li>
-        <li>✔ Carpeta de investigación</li>
     </ol>
     <div class="sm:text-xs md:text-base ml-2 text-justify">
         Haga clic en el icono de la lupa para buscar registros existentes. Esta búsqueda le ayudará a determinar si ya
-        hay información en el sistema que se relacione con el caso que está manejando, lo cual previene el registro
-        de información duplicada.
+        hay un caso en el sistema que se relacione con el documento que va a registrar y poder asociarlo con aquel.
     </div>
     <div class="instructions-text font-semibold">
         Instrucciones:
@@ -23,10 +22,12 @@
     <ol type=”A” class="instructions-text mb-5">
         <li>1. Ingrese el dato correspondiente en el campo de búsqueda.</li>
         <li>2. Examine los resultados.</li>
-        <li>3. En caso de encontrar un caso relacionado, selecciónelo para agregar la información a su gestión actual.
+        <li>
+            3. De encontrar un caso relacionado, podrá seleccionarlo para agregar el documento y los datos correspondientes a su gestión actual.
         </li>
-        <li>4. Si no se identifica un caso relacionado, puede continuar al siguiente paso para registrar un nuevo caso
-            haciendo clic en 'Siguiente'.</li>
+        <li>
+            4. De lo contrario, puede continuar con el siguiente paso para registrar un nuevo caso haciendo clic en “Siguiente”.
+        </li>
     </ol>
     <app-search-bar />
     @if (isEmptyList) {
