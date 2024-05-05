@@ -42,17 +42,16 @@ export class SecondPiecesFormComponent {
   dropdownChoice = this.collectSecondPiecesInfoService.TIPOASUNTO;
 
   public secondPiecesForm: FormGroup = this.fb.group({
-    administracion: [null, [Validators.required]],
+    administracion: [{value: 'a_5_e.g.', disabled: true}],
     fechaRecepcion: [null, [Validators.required]],
     documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-    documentoEuacape: [null,],
-    documentoOtros: [{value: 'Requerimiento', disabled: true},],
+    documento: [{value: 'Requerimiento_e.g.', disabled: true},],
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-    atencion: [{value: 'Recibido', disabled: true},],
+    atencion: [{value: 'Recibido_e.g.', disabled: true},],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
-    personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
-    tipoAsunto: [{value: this.collectSecondPiecesInfoService.TIPOASUNTO(), disabled: true},],
+    personaRelacionada: [{value: 'persona_relacionada_e.g.', disabled: true}],
+    tipoAsunto: [{value: 'concurso_mercantil_e.g.', disabled: true},],
     plazoAtencionHoras: [null, [Validators.min(1)]],
     plazoAtencionDias: [null, [Validators.min(0)]],
     plazoAtencionUrgente: [null],
@@ -72,17 +71,16 @@ export class SecondPiecesFormComponent {
 
   openCustomModalWithTemplate(template: TemplateRef<any>){
     this.collectSecondPiecesInfoService.updateSecondPiecesForm(
-      this.secondPiecesForm.value.administracion,
+      'a_5_e.g.',
       this.secondPiecesForm.value.fechaRecepcion,
       this.secondPiecesForm.value.documentoEscaneado,
-      this.secondPiecesForm.value.documentoEuacape,
-      'Requerimiento',
+      'Requerimiento_e.g.',
       this.secondPiecesForm.value.descripcion,
-      this.isSecondPiece ? 'Recibido' : this.secondPiecesForm.value.atencion,
+      'Recibido_e.g.',
       this.secondPiecesForm.value.autoridadRemitente,
       this.secondPiecesForm.value.turnoJefatura,
-      this.secondPiecesForm.value.personaRelacionada,
-
+      'persona_relacionada_e.g.',
+      'concurso_mercantil_e.g.',
       this.secondPiecesForm.value.volanteJefatura,
       this.secondPiecesForm.value.folioJupiter,
     );

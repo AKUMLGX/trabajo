@@ -26,8 +26,7 @@ export class SecondPiecesInfoTableComponent {
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
   FECHARECEPCION = this.collectSecondPiecesInfoService.FECHAREC;
   DOCUMENTOESCANEADO = this.collectSecondPiecesInfoService.DOCSCAN;
-  DOCUMENTOEUACAPE = this.collectSecondPiecesInfoService.DOCUMENTOEUACAPE;
-  DOCUMENTOOTROS = this.collectSecondPiecesInfoService.DOCUMENTOOTROS;
+  DOCUMENTO = this.collectSecondPiecesInfoService.DOCUMENTO;
   DESCRIPCION = this.collectSecondPiecesInfoService.DESCRIPCION;
   ATENCION = this.collectSecondPiecesInfoService.ATENCION;
   AUTORIDADREMITENTE = this.collectSecondPiecesInfoService.AUTORIDADREMI;
@@ -66,7 +65,7 @@ export class SecondPiecesInfoTableComponent {
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
     {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {position: 5, name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },
+    {position: 5, name: 'Documento', answer: this.DOCUMENTO() },
     {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
     {position: 7, name: 'Atención', answer: this.ATENCION()},
     {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},

@@ -31,12 +31,10 @@ export class PreliminarSecondPiecesFormComponent {
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
   ){ }
 
-  isSecondPiece: boolean = true;
-
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
     carpetaInvestigacion: [null, [Validators.maxLength(255)]],
-    folioInterno: ['', [Validators.required, Validators.maxLength(255)]],
+    folioInterno: [{value: 'ABCDEFG0000_e.g.', disabled: true}],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
@@ -44,9 +42,8 @@ export class PreliminarSecondPiecesFormComponent {
     console.log(this.secondPiecesPreliminarForm.value);
     this.collectSecondPiecesInfoService.updatePreliminarSecondPiecesForm(
       this.secondPiecesPreliminarForm.value.oficio,
-      this.secondPiecesPreliminarForm.value.turnoJefatura,
-      this.isSecondPiece ? 'ABCDEFG0000' : this.secondPiecesPreliminarForm.value.folioInterno,
-                //este dato se va a traer desde el back
+      this.secondPiecesPreliminarForm.value.carpetaInvestigacion,
+      'ABCDEFG0000_e.g.',
       this.secondPiecesPreliminarForm.value.folioScanner
     );
   }
