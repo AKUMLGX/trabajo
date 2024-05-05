@@ -39,20 +39,27 @@ export class SecondPiecesFormComponent {
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
   ){}
 
+  dropdownChoice = this.collectSecondPiecesInfoService.TIPOASUNTO;
+
   public secondPiecesForm: FormGroup = this.fb.group({
-    administracion: [{value: 'a_3', disabled: true},], 
-              //este campo se debe traer desde el back 
+    administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
     documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-    atencion: [{value: 'Requerimiento', disabled: true},],
+    documentoEuacape: [null,],
+    documentoOtros: [{value: 'Requerimiento', disabled: true},],
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-    tipoRespuesta: [{value: 'En trámite', disabled: true},],
+    atencion: [{value: 'Recibido', disabled: true},],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
-    carpetaInvestigacion: [null, [Validators.maxLength(255)]],
-    personaRelacionada: [{value: 'persona relacionada', disabled: true},], 
-            //este campo se debe traer desde el back
-    tipoAsunto: [{value: 'EUACAPE', disabled: true},],
-    plazoAtencion: [null, [Validators.min(1)]],
+    turnoJefatura: [null, [Validators.maxLength(255)]],
+    personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
+    tipoAsunto: [{value: this.collectSecondPiecesInfoService.TIPOASUNTO(), disabled: true},],
+    plazoAtencionHoras: [null, [Validators.min(1)]],
+    plazoAtencionDias: [null, [Validators.min(0)]],
+    plazoAtencionUrgente: [null],
+      
+    folioJupiter: [null, [Validators.maxLength(255)]],
+    volanteJefatura: [null, [Validators.maxLength(255)]],
+
   });
 
   saveSecondPiecesForm(): void {
@@ -64,20 +71,28 @@ export class SecondPiecesFormComponent {
   }
 
   openCustomModalWithTemplate(template: TemplateRef<any>){
-    this.collectSecondPiecesInfoService.updateEuacapeForm(
-      this.isSecondPiece ? 'a_3' : this.secondPiecesForm.value.administracion, 
-                //este dato se va a traer desde el back
+    this.collectSecondPiecesInfoService.updateSecondPiecesForm(
+      this.secondPiecesForm.value.administracion,
       this.secondPiecesForm.value.fechaRecepcion,
       this.secondPiecesForm.value.documentoEscaneado,
-      this.isSecondPiece ? 'Requerimiento' : this.secondPiecesForm.value.atencion,
+      this.secondPiecesForm.value.documentoEuacape,
+      'Requerimiento',
       this.secondPiecesForm.value.descripcion,
-      this.isSecondPiece ? 'En trámite' : this.secondPiecesForm.value.tipoRespuesta,
+      this.isSecondPiece ? 'Recibido' : this.secondPiecesForm.value.atencion,
       this.secondPiecesForm.value.autoridadRemitente,
-      this.secondPiecesForm.value.carpetaInvestigacion,
-      this.isSecondPiece ? 'Nombre de la persona' : this.secondPiecesForm.value.personaRelacionada,
-                //este dato se va a traer desde el back
-      this.secondPiecesForm.value.plazoAtencion,
+      this.secondPiecesForm.value.turnoJefatura,
+      this.secondPiecesForm.value.personaRelacionada,
+
+      this.secondPiecesForm.value.volanteJefatura,
+      this.secondPiecesForm.value.folioJupiter,
     );
+
+    this.collectSecondPiecesInfoService.updatePlazoDeAtencion(
+      this.secondPiecesForm.value.plazoAtencionHoras,
+      this.secondPiecesForm.value.plazoAtencionDias,
+      this.secondPiecesForm.value.plazoAtencionUrgente,
+    );
+
     this.modalService.openCustomDialogWithTemplate({
       template
     })

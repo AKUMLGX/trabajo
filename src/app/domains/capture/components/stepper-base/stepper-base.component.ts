@@ -8,6 +8,7 @@ import { PreliminarFormComponent } from './third-step/preliminar-form/preliminar
 import { PreliminarSecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/preliminar-second-pieces-form.component';
 import { SecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/second-pieces-form/second-pieces-form.component';
 import { CollectFormInfoService } from '../../../shared/services/collect-form-info.service';
+import { CollectSecondPiecesInfoService } from '../../../shared/services/collect-second-pieces-info.service';
 
 @Component({
   selector: 'app-stepper-base',
@@ -27,7 +28,10 @@ import { CollectFormInfoService } from '../../../shared/services/collect-form-in
 })
 export class StepperBaseComponent {
 
-  constructor(private collectFormInfoService: CollectFormInfoService){}
+  constructor(
+    private collectFormInfoService: CollectFormInfoService,
+    private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
+  ){}
 
   firstStepButtonStatus = false;
 
@@ -52,7 +56,7 @@ export class StepperBaseComponent {
   retrieveSelectionFromSecondStep(event:string){
     console.log(event);
     this.dropdownChoice = event;
-    this.collectFormInfoService.dropdownChoice(this.dropdownChoice);
+    this.collectSecondPiecesInfoService.dropdownChoice(this.dropdownChoice);
   }
 
 }

@@ -6,40 +6,27 @@
                 <form [formGroup]="secondPiecesPreliminarForm" (ngSubmit)="saveSecondPiecesPreliminarForm()">
                     <div class="flex flex-wrap">
 
-                        @if(isSecondPiece) {
-                            <div class="wrapping-individual-container">
-                                <label class="label-field text-blueGray-600"
-                                    htmlfor="grid-password">
+                        <div class="wrapping-individual-container">
+                            <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                     Folio interno
-                                </label>
-                                <input type="text" placeholder="Folio interno"
-                                    class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="folioInterno" value=""
-                                >
-                            </div>
-                        } @else {
-                            <div class="wrapping-individual-container">
-                                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                                        Folio interno
-                                        @if (secondPiecesPreliminarForm.controls['folioInterno'].invalid && (secondPiecesPreliminarForm.controls['folioInterno'].dirty || secondPiecesPreliminarForm.controls['folioInterno'].touched)) {
-                                            @if(secondPiecesPreliminarForm.get('folioInterno')?.errors?.['required']) {
-                                                <div class="text-wine ml-1">
-                                                    <span>*</span>
-                                                </div>
-                                            }
+                                    @if (secondPiecesPreliminarForm.controls['folioInterno'].invalid && (secondPiecesPreliminarForm.controls['folioInterno'].dirty || secondPiecesPreliminarForm.controls['folioInterno'].touched)) {
+                                        @if(secondPiecesPreliminarForm.get('folioInterno')?.errors?.['required']) {
+                                            <div class="text-wine ml-1">
+                                                <span>*</span>
+                                            </div>
                                         }
-                                </label>
-                                <input type="text" placeholder="Folio interno"
-                                    class="input-field placeholder-blueGray-300"
-                                    formControlName="folioInterno" value=""
-                                > 
-                                @if (secondPiecesPreliminarForm.get('folioInterno')?.errors?.['maxlength']) {
-                                    <div class="text-sm text-wine mt-1.5">
-                                        <span >Máximo 255 caracteres</span>
-                                    </div>
-                                }    
-                            </div>
-                        }
+                                    }
+                            </label>
+                            <input type="text" placeholder="Folio interno"
+                                class="input-field placeholder-blueGray-300"
+                                formControlName="folioInterno" value=""
+                            > 
+                            @if (secondPiecesPreliminarForm.get('folioInterno')?.errors?.['maxlength']) {
+                                <div class="text-sm text-wine mt-1.5">
+                                    <span >Máximo 255 caracteres</span>
+                                </div>
+                            }    
+                        </div>
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
@@ -89,18 +76,18 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Turno jefatura
+                                    Carpeta de investigación
                             </label>
-                            <input type="text" placeholder="Turno jefatura"
+                            <input type="text" placeholder="Carpeta de investigación"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="turnoJefatura" value=""
+                                formControlName="carpetaInvestigacion" value=""
                             >
-                            @if (secondPiecesPreliminarForm.get('turnoJefatura')?.errors?.['maxlength']) {
+                            @if (secondPiecesPreliminarForm.get('carpetaInvestigacion')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
-                                    <span >Máximo 255 caracteres</span>
+                                     <span >Máximo 255 caracteres</span>
                                 </div> 
-                            }
-                        </div>                        
+                             }
+                        </div>                       
                         
                     </div>
                     <br>
@@ -136,3 +123,7 @@
         </div>
     </div>
 </section>
+
+<!-- <ng-template>
+    <app-form />
+</ng-template> -->

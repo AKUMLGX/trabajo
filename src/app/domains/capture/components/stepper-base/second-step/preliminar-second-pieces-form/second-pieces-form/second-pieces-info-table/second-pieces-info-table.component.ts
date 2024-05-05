@@ -26,9 +26,10 @@ export class SecondPiecesInfoTableComponent {
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
   FECHARECEPCION = this.collectSecondPiecesInfoService.FECHAREC;
   DOCUMENTOESCANEADO = this.collectSecondPiecesInfoService.DOCSCAN;
-  ATENCION = this.collectSecondPiecesInfoService.ATENCION;
+  DOCUMENTOEUACAPE = this.collectSecondPiecesInfoService.DOCUMENTOEUACAPE;
+  DOCUMENTOOTROS = this.collectSecondPiecesInfoService.DOCUMENTOOTROS;
   DESCRIPCION = this.collectSecondPiecesInfoService.DESCRIPCION;
-  TIPORESPUESTA = this.collectSecondPiecesInfoService.TIPORES;
+  ATENCION = this.collectSecondPiecesInfoService.ATENCION;
   AUTORIDADREMITENTE = this.collectSecondPiecesInfoService.AUTORIDADREMI;
   CARPETAINVESTIGACION = this.collectSecondPiecesInfoService.CARPETAINV;
   PERSONARELACIONADA = this.collectSecondPiecesInfoService.PERSONAREL;
@@ -38,6 +39,11 @@ export class SecondPiecesInfoTableComponent {
   TURNOJEFATURA = this.collectSecondPiecesInfoService.TURNOJEFATURA;
   FOLIOINTERNO = this.collectSecondPiecesInfoService.FOLIOINT;
   FOLIOSCANNER = this.collectSecondPiecesInfoService.FOLIOSCAN;
+
+  VOLANTEJEFATURA = this.collectSecondPiecesInfoService.VOLANTEJEFATURA;
+  FOLIOJUPITER = this.collectSecondPiecesInfoService.FOLIOJUPITER;
+
+  TIPOASUNTO = this.collectSecondPiecesInfoService.TIPOASUNTO;
 
   //de este hay que trabajar el tipado que se va a manejar para segundas piezas
   secondPiecesFormObject = signal<EuacapeApertura>({
@@ -60,17 +66,19 @@ export class SecondPiecesInfoTableComponent {
     {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
     {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
     {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {position: 5, name: 'Atención', answer: this.ATENCION()},
+    {position: 5, name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },
     {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
-    {position: 7, name: 'Tipo de respuesta', answer: this.TIPORESPUESTA()},
+    {position: 7, name: 'Atención', answer: this.ATENCION()},
     {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
     {position: 9, name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
     {position: 10, name: 'Folio interno', answer: this.FOLIOINTERNO()},
     {position: 11, name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
     {position: 12, name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
     {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
-    {position: 14, name: 'Tipo asunto', answer: 'EUACAPE'},
-    {position: 15, name: 'Plazo de atención', answer: ( this.PLAZOATENCION() !== null ) ? this.PLAZOATENCION() : '---'},
+    {position: 14, name: 'Tipo asunto', answer: this.TIPOASUNTO()},
+    {position: 15, name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    {position: 16, name: 'Volante jefatura', answer: (this.VOLANTEJEFATURA() !== null) ? this.VOLANTEJEFATURA() : '---'},
+    {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
@@ -89,21 +97,23 @@ export class SecondPiecesInfoTableComponent {
     administracion: string,
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
+    volanteJefatura: string | null,
+    folioJupiter: string | null,
   ) {
     this.secondPiecesFormObject.set({
-        folio_interno: folioInterno,
-        folio_scanner: folioScanner,
-        oficio: oficio,
-        documento_escaneado: documentoEscaneado,
-        persona_relacionada: personaRelacionada,
-        descripcion: descripcion,
-        fecha_recepcion: fechaRecepcion,
-        autoridad_remitente: autoridadRemitente,
-        plazo_atencion: plazoAtencion,
-        administracion: administracion,
-        carpeta_investigacion: carpetaInvestigacion,
-        turno_jefatura: turnoJefatura,
-  });
+      folio_interno: folioInterno,
+      folio_scanner: folioScanner,
+      oficio: oficio,
+      documento_escaneado: documentoEscaneado,
+      persona_relacionada: personaRelacionada,
+      descripcion: descripcion,
+      fecha_recepcion: fechaRecepcion,
+      autoridad_remitente: autoridadRemitente,
+      plazo_atencion: plazoAtencion,
+      administracion: administracion,
+      carpeta_investigacion: carpetaInvestigacion,
+      turno_jefatura: turnoJefatura,
+    });
     //const euacapeFormObject = {...this.euacapeForm};
     console.log(this.secondPiecesFormObject());
     //this.euacapeAperturaService.insertEuacapeForm(

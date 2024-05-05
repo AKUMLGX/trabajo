@@ -35,15 +35,14 @@ export class PreliminarSecondPiecesFormComponent {
 
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
-    turnoJefatura: [null, [Validators.maxLength(255)]],
-    folioInterno: [{value: 'ABCDEFG0000', disabled: true},],
-              //este campo se debe traer desde el back 
+    carpetaInvestigacion: [null, [Validators.maxLength(255)]],
+    folioInterno: ['', [Validators.required, Validators.maxLength(255)]],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
   saveSecondPiecesPreliminarForm(): void {
     console.log(this.secondPiecesPreliminarForm.value);
-    this.collectSecondPiecesInfoService.updatePreliminarEuacapeForm(
+    this.collectSecondPiecesInfoService.updatePreliminarSecondPiecesForm(
       this.secondPiecesPreliminarForm.value.oficio,
       this.secondPiecesPreliminarForm.value.turnoJefatura,
       this.isSecondPiece ? 'ABCDEFG0000' : this.secondPiecesPreliminarForm.value.folioInterno,

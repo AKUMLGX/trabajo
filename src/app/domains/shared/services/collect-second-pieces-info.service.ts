@@ -10,57 +10,108 @@ export class CollectSecondPiecesInfoService {
   //Info from Preliminar Second Pieces Form
 
   OFICIO = signal('');
-  TURNOJEFATURA = signal<null | string>(null);
+  CARPETAINV = signal<null | string>(null);
   FOLIOINT = signal('');
   FOLIOSCAN = signal('');
 
-  updatePreliminarEuacapeForm(
+  updatePreliminarSecondPiecesForm(
     oficioEntry: string,
-    tJefaturaEntry: string,
+    carpetaInv: string | null,
     folioInt: string,
     folioScan: string
   ){
     this.OFICIO.set(oficioEntry);
-    this.TURNOJEFATURA.set(tJefaturaEntry);
+    this.CARPETAINV.set(carpetaInv);
     this.FOLIOINT.set(folioInt);
     this.FOLIOSCAN.set(folioScan);
   }
 
    //Info from Second Pieces Form
 
-  ADMON = signal('');
-  FECHAREC = signal<null | Date>(null);
-  DOCSCAN = signal('');
-  ATENCION = signal('');
-  DESCRIPCION = signal('');
-  TIPORES = signal('');
-  AUTORIDADREMI = signal('');
-  CARPETAINV = signal<null | string>(null);
-  PERSONAREL = signal('');
-  PLAZOATENCION = signal<null | number>(null);
+   ADMON = signal('');
+   FECHAREC = signal<null | Date>(null);
+   DOCSCAN = signal('');
+   DOCUMENTOEUACAPE = signal('');
+   DOCUMENTOOTROS = signal('');
+   DESCRIPCION = signal('');
+   ATENCION = signal('');
+   AUTORIDADREMI = signal('');
+   TURNOJEFATURA = signal<null | string>(null);
+   PERSONAREL = signal('');
 
-  updateEuacapeForm(
-    admon: string,
-    fechaRec: null | Date,
-    docScan:string,
-    atencion: string,
-    descripcion: string,
-    tipoRes: string,
-    autoridadRemi: string,
-    carpetaInv: string | null,
-    persRel: string,
-    plazoAt: number | null,
-  ){
-    this.ADMON.set(admon);
-    this.FECHAREC.set(fechaRec);
-    this.DOCSCAN.set(docScan);
-    this.ATENCION.set(atencion);
-    this.DESCRIPCION.set(descripcion);
-    this.TIPORES.set(tipoRes);
-    this.AUTORIDADREMI.set(autoridadRemi);
-    this.CARPETAINV.set(carpetaInv);
-    this.PERSONAREL.set(persRel);
-    this.PLAZOATENCION.set(plazoAt);
+   VOLANTEJEFATURA = signal<null | string>(null);
+   FOLIOJUPITER = signal<null | string>(null);
+ 
+   updateSecondPiecesForm(
+     admon: string,
+     fechaRec: null | Date,
+     docScan:string,
+     documentoEuacape: string,
+     documentoOtros: string,
+     descripcion: string,
+     atencion: string,
+     autoridadRemi: string,
+     tJefaturaEntry: string | null,
+     persRel: string,
+     volanteJefatura: string | null,
+     folioJupiter: string | null,
+   ){
+     this.ADMON.set(admon);
+     this.FECHAREC.set(fechaRec);
+     this.DOCSCAN.set(docScan);
+     this.DOCUMENTOEUACAPE.set(documentoEuacape);
+     this.DOCUMENTOOTROS.set(documentoOtros);
+     this.DESCRIPCION.set(descripcion);
+     this.ATENCION.set(atencion);
+     this.AUTORIDADREMI.set(autoridadRemi);
+     this.TURNOJEFATURA.set(tJefaturaEntry);
+     this.PERSONAREL.set(persRel);
+
+     this.VOLANTEJEFATURA.set(volanteJefatura);
+     this.FOLIOJUPITER.set(folioJupiter);
+   }
+
+  //Recording Tipo Asunto
+
+  TIPOASUNTO = signal('');
+  
+  dropdownChoice(choice: string){
+    this.TIPOASUNTO.set(choice);
   }
+
+  //Handling Plazo de Atención
+
+  PLAZOATENCIONHRS = signal<null | number>(null);
+  PLAZOATENCIONDIAS = signal<null | number>(null);
+  PLAZOATENCION = signal<null | number>(null); //este es la suma de los 2 anteriores
+  PLAZOATENCIONURGENTE = signal(false); //O bien, tmb plazo atención puede ser una urgencia
+
+  updatePlazoDeAtencion(
+    plazoAtHrs: number | null,
+    plazoAtDias: number | null,
+    plazoAtUrgente: boolean,
+  ){
+    let plazoInHours: number;
+    if (plazoAtHrs !== null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+      plazoInHours = (plazoAtHrs + (plazoAtDias * 24)); 
+      return this.PLAZOATENCION.set(plazoInHours);
+    } else if (plazoAtHrs !== null && plazoAtDias !== null && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs === null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+      plazoInHours = (plazoAtDias * 24);
+      return this.PLAZOATENCION.set(plazoInHours);
+    } else if (plazoAtHrs === null && plazoAtDias !== null && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs !== null && plazoAtDias === null  && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+      plazoInHours = plazoAtHrs;
+      return this.PLAZOATENCION.set(plazoInHours);
+    } else if (plazoAtHrs !== null && plazoAtDias === null  && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === null )){
+      return this.PLAZOATENCION.set(null);
+    } else if (plazoAtHrs === null && plazoAtDias === null && plazoAtUrgente === true) {
+      return this.PLAZOATENCION.set(0);
+    }
+  }  
 
 }

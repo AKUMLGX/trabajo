@@ -1,50 +1,52 @@
 <div class="bg-[#D9BCA3]/30">
-    <h2 mat-dialog-title>
-      Se enviará la siguiente información:
-    </h2>
-    <mat-dialog-content>
-      <table>
+  <h2 mat-dialog-title>
+    Se enviará la siguiente información:
+  </h2>
+  <mat-dialog-content>
+    <table>
+      <tr>
+        <th>No.</th>
+        <th>Nombre</th>
+        <th>Respuesta</th>
+      </tr>
+      @for (row of SECOND_PIECES_DATA; track row.position) {
         <tr>
-          <th>No.</th>
-          <th>Nombre</th>
-          <th>Respuesta</th>
+          <td>{{ row.position }}</td>
+          <td> {{ row.name }} </td>
+          <td>{{ row.answer }}</td>
         </tr>
-        @for (row of SECOND_PIECES_DATA; track row.position) {
-          <tr>
-            <td>{{ row.position }}</td>
-            <td> {{ row.name }} </td>
-            <td>{{ row.answer }}</td>
-          </tr>
-        }
-      </table>
-    </mat-dialog-content>
-    <div class="flex justify-center items-center">
-      <mat-dialog-actions>
-        <button 
-          class="modal-left-button mr-10"
-          mat-button 
-          mat-dialog-close
-        >
-          Cancelar
-        </button>
-        <button (click)="confirmData(
-          FOLIOINTERNO(), 
-          FOLIOSCANNER(),
-          OFICIO(), 
-          DOCUMENTOESCANEADO(), 
-          PERSONARELACIONADA(), 
-          DESCRIPCION(), 
-          FECHARECEPCION()!.toString(), 
-          AUTORIDADREMITENTE(), 
-          PLAZOATENCION(), 
-          ADMINISTRACION(),
-          CARPETAINVESTIGACION(),
-          TURNOJEFATURA()
-          )"
-          class="modal-right-button ml-10" 
-        >
-          Confirmar
-        </button>
-    </mat-dialog-actions> 
-    </div>   
+      }
+    </table>
+  </mat-dialog-content>
+  <div class="flex justify-center items-center">
+    <mat-dialog-actions>
+      <button 
+        class="modal-left-button mr-10"
+        mat-button 
+        mat-dialog-close
+      >
+        Cancelar
+      </button>
+      <button (click)="confirmData(
+        FOLIOINTERNO(), 
+        FOLIOSCANNER(),
+        OFICIO(), 
+        DOCUMENTOESCANEADO(), 
+        PERSONARELACIONADA(), 
+        DESCRIPCION(), 
+        FECHARECEPCION()!.toString(), 
+        AUTORIDADREMITENTE(), 
+        PLAZOATENCION(), 
+        ADMINISTRACION(),
+        CARPETAINVESTIGACION(),
+        TURNOJEFATURA(),
+        VOLANTEJEFATURA(),
+        FOLIOJUPITER()
+        )"
+        class="modal-right-button ml-10" 
+      >
+        Confirmar
+      </button>
+  </mat-dialog-actions> 
+  </div>   
 </div>
