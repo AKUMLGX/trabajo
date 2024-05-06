@@ -20,7 +20,8 @@
         } @else if (
           dropdownChoice === 'Asunto Penal' || dropdownChoice === 'Asunto Civil'
           || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio Amparo'
-          || dropdownChoice === 'Concurso Mercantil'
+          || dropdownChoice === 'Concurso Mercantil' || dropdownChoice === 'Copia de Conocimiento'
+          || dropdownChoice === 'Respuesta'
         ){
             @for (row of GENERALIDADES_DATA; track row.position) {
               <tr>
