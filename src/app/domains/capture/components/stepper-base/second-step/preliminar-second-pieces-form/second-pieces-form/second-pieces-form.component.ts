@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CollectSecondPiecesInfoService } from '../../../../../../shared/services/collect-second-pieces-info.service';
 import { SecondPiecesInfoTableComponent } from './second-pieces-info-table/second-pieces-info-table.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-second-pieces-form',
@@ -25,6 +26,7 @@ import { SecondPiecesInfoTableComponent } from './second-pieces-info-table/secon
     CommonModule,
     MatIconModule,
     SecondPiecesInfoTableComponent,
+    MatCheckboxModule,
   ],
   templateUrl: './second-pieces-form.component.html',
   styleUrl: './second-pieces-form.component.css'
