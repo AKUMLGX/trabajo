@@ -53,8 +53,7 @@ export class StepperBaseComponent {
   retrieveSelectionFromSecondStep(event:string){
     console.log(event);
     this.dropdownChoice = event;
-    // this.collectSecondPiecesInfoService.dropdownChoice(this.dropdownChoice);
-    //lo comento de momento pqe no sé porque borre el guardado del choice solo con el Collect Info Service (el de sefundas piezas ese si NO va).
+    this.collectFormInfoService.dropdownChoice(this.dropdownChoice);
   }
 
 }

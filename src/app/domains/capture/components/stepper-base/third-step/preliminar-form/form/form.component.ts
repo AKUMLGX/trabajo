@@ -104,7 +104,8 @@ export class FormComponent {
       if (
             this.dropdownChoice === 'Asunto Penal' || this.dropdownChoice === 'Asunto Civil'
             || this.dropdownChoice === 'Laboral' || this.dropdownChoice === 'Juicio Amparo'
-            || this.dropdownChoice === 'Concurso Mercantil'
+            || this.dropdownChoice === 'Concurso Mercantil' || this.dropdownChoice === 'Copia de Conocimiento'
+            || this.dropdownChoice === 'Respuesta'
         ) {
               this.collectFormInfoService.updateAdditionalInfoForGeneralidades(
                 this.euacapeForm.value.volanteJefatura,

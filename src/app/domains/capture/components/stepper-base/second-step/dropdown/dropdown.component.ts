@@ -24,6 +24,7 @@ export class DropdownComponent {
     { name: 'Laboral', value: 'option-5' },
     { name: 'Juicio Amparo', value: 'option-6' },
     { name: 'Concurso Mercantil', value: 'option-7' },
+    { name: 'Copia de Conocimiento', value: 'option-8' },
   ];
 
   @Output() selectionEmitter = new EventEmitter;
