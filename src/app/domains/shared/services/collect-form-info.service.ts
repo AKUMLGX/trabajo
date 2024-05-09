@@ -11,18 +11,15 @@ export class CollectFormInfoService {
 
   OFICIO = signal('');
   CARPETAINV = signal<null | string>(null);
-  FOLIOINT = signal('');
   FOLIOSCAN = signal('');
 
   updatePreliminarEuacapeForm(
     oficioEntry: string,
     carpetaInv: string | null,
-    folioInt: string,
     folioScan: string
   ){
     this.OFICIO.set(oficioEntry);
     this.CARPETAINV.set(carpetaInv);
-    this.FOLIOINT.set(folioInt);
     this.FOLIOSCAN.set(folioScan);
   }
 
@@ -75,6 +72,16 @@ export class CollectFormInfoService {
     this.VOLANTEJEFATURA.set(volanteJefatura);
     this.FOLIOJUPITER.set(folioJupiter);
   }
+
+  //Additional info if the user directly chooses Respuesta
+
+  FOLIOINT = signal('');
+
+  updateFolioInterno(folioInt: string){
+    this.FOLIOINT.set(folioInt);
+  }
+
+  //TIPO DE ASUNTO STORE
 
   TIPOASUNTO = signal('');
   
