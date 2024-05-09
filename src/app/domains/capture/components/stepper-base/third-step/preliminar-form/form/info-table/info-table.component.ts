@@ -121,6 +121,7 @@ export class InfoTableComponent {
     administracion: string,
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
+    documento: string,
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
@@ -203,18 +204,18 @@ export class InfoTableComponent {
 
       case "EUACAPE":
         this.formsObjectService.euacapeFormObject.set({
-          folio_interno: folioInterno,
-          folio_scanner: folioScanner,
-          oficio: oficio,
-          documento_escaneado: documentoEscaneado,
-          persona_relacionada: personaRelacionada,
-          descripcion: descripcion,
-          fecha_recepcion: fechaRecepcion,
-          autoridad_remitente: autoridadRemitente,
-          plazo_atencion: plazoAtencion,
-          administracion: administracion,
+          oficio:                oficio,
+          folio_scanner:         folioScanner,
           carpeta_investigacion: carpetaInvestigacion,
-          turno_jefatura: turnoJefatura,
+          documento_escaneado:   documentoEscaneado,
+          fecha_recepcion:       fechaRecepcion,
+          autoridad_remitente:   autoridadRemitente,
+          persona_relacionada:   personaRelacionada,
+          turno_jefatura:        turnoJefatura,
+          descripcion:           descripcion,
+          administracion:        administracion,
+          plazo_atencion:        plazoAtencion,
+          documento:             documento,
         });
         console.log("Estamos en Euacape");
         console.log(this.formsObjectService.euacapeFormObject());

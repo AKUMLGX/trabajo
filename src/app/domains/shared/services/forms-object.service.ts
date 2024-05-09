@@ -9,18 +9,18 @@ export class FormsObjectService {
   constructor() { }
 
   euacapeFormObject = signal<EuacapeApertura>({
-    folio_interno:              '',
-    folio_scanner:              '',
-    oficio:                     '',
-    documento_escaneado:        '',
-    persona_relacionada:        '',
-    descripcion:                '',
-    fecha_recepcion:            '',
-    autoridad_remitente:        '',
-    plazo_atencion:             null,
-    administracion:             '',
-    turno_jefatura:             null,
-    carpeta_investigacion:      null,
+    oficio:                '',
+    folio_scanner:         '',
+    carpeta_investigacion: null,
+    documento_escaneado:   '',
+    fecha_recepcion:       '',
+    autoridad_remitente:   '',
+    persona_relacionada:   '',
+    turno_jefatura:        null,
+    descripcion:           '',
+    administracion:        '',
+    plazo_atencion:        null,
+    documento:             '',
   });
 
 }

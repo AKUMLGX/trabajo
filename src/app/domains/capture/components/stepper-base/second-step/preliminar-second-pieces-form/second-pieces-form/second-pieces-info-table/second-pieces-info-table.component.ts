@@ -45,20 +45,20 @@ export class SecondPiecesInfoTableComponent {
   TIPOASUNTO = this.collectSecondPiecesInfoService.TIPOASUNTO;
 
   //de este hay que trabajar el tipado que se va a manejar para segundas piezas
-  secondPiecesFormObject = signal<EuacapeApertura>({
-    folio_interno:         '',
-    folio_scanner:         '',
-    oficio:                '',
-    documento_escaneado:   '',
-    persona_relacionada:   '',
-    descripcion:           '',
-    fecha_recepcion:       '',
-    autoridad_remitente:   '',
-    plazo_atencion:        null,
-    administracion:        '',
-    turno_jefatura:        null,
-    carpeta_investigacion: null,
-  });
+  // secondPiecesFormObject = signal<EuacapeApertura>({
+  //   folio_interno:         '',
+  //   folio_scanner:         '',
+  //   oficio:                '',
+  //   documento_escaneado:   '',
+  //   persona_relacionada:   '',
+  //   descripcion:           '',
+  //   fecha_recepcion:       '',
+  //   autoridad_remitente:   '',
+  //   plazo_atencion:        null,
+  //   administracion:        '',
+  //   turno_jefatura:        null,
+  //   carpeta_investigacion: null,
+  // });
 
   SECOND_PIECES_DATA: SecondPiecesTableBeforeSubmit[] = [
     {position: 1, name: 'Oficio', answer: this.OFICIO()},
@@ -99,22 +99,22 @@ export class SecondPiecesInfoTableComponent {
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-    this.secondPiecesFormObject.set({
-      folio_interno: folioInterno,
-      folio_scanner: folioScanner,
-      oficio: oficio,
-      documento_escaneado: documentoEscaneado,
-      persona_relacionada: personaRelacionada,
-      descripcion: descripcion,
-      fecha_recepcion: fechaRecepcion,
-      autoridad_remitente: autoridadRemitente,
-      plazo_atencion: plazoAtencion,
-      administracion: administracion,
-      carpeta_investigacion: carpetaInvestigacion,
-      turno_jefatura: turnoJefatura,
-    });
-    //const euacapeFormObject = {...this.euacapeForm};
-    console.log(this.secondPiecesFormObject());
+    // this.secondPiecesFormObject.set({
+    //   folio_interno: folioInterno,
+    //   folio_scanner: folioScanner,
+    //   oficio: oficio,
+    //   documento_escaneado: documentoEscaneado,
+    //   persona_relacionada: personaRelacionada,
+    //   descripcion: descripcion,
+    //   fecha_recepcion: fechaRecepcion,
+    //   autoridad_remitente: autoridadRemitente,
+    //   plazo_atencion: plazoAtencion,
+    //   administracion: administracion,
+    //   carpeta_investigacion: carpetaInvestigacion,
+    //   turno_jefatura: turnoJefatura,
+    // });
+    // //const euacapeFormObject = {...this.euacapeForm};
+    // console.log(this.secondPiecesFormObject());
     //this.euacapeAperturaService.insertEuacapeForm(
     //  this.euacapeFormObject()
     //);
