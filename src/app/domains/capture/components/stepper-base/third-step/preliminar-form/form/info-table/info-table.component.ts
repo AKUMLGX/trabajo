@@ -122,10 +122,64 @@ export class InfoTableComponent {
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
     documento: string,
+    tipoAsunto: string,
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-    switch (this.dropdownChoice) {
+
+    if(this.dropdownChoice === 'EUACAPE') {
+      this.formsObjectService.euacapeFormObject.set({
+        oficio:                oficio,
+        folio_scanner:         folioScanner,
+        carpeta_investigacion: carpetaInvestigacion,
+        documento_escaneado:   documentoEscaneado,
+        fecha_recepcion:       fechaRecepcion,
+        autoridad_remitente:   autoridadRemitente,
+        persona_relacionada:   personaRelacionada,
+        turno_jefatura:        turnoJefatura,
+        descripcion:           descripcion,
+        administracion:        administracion,
+        plazo_atencion:        plazoAtencion,
+        documento:             documento,
+      });
+      console.log("Estamos en Euacape");
+      console.log(this.formsObjectService.euacapeFormObject());
+      this.euacapeAperturaService.insertEuacapeForm(
+        this.formsObjectService.euacapeFormObject()
+      );
+    } else if (
+        this.dropdownChoice === 'Asunto Penal' 
+        || 'Asunto Civil'
+        || 'Laboral'
+        || 'Juicio Amparo'
+        || 'Concurso Mercantil'
+        || 'Copia de Conocimiento'
+      ) {
+      this.formsObjectService.generalidadesFormObject.set({
+        oficio:                oficio,
+        folio_scanner:         folioScanner,
+        carpeta_investigacion: carpetaInvestigacion,
+        documento_escaneado:   documentoEscaneado,
+        fecha_recepcion:       fechaRecepcion,
+        autoridad_remitente:   autoridadRemitente,
+        persona_relacionada:   personaRelacionada,
+        turno_jefatura:        turnoJefatura,
+        descripcion:           descripcion,
+        volante_jefatura:      volanteJefatura,
+        folio_jupiter:         folioJupiter,
+        administracion:        administracion,
+        plazo_atencion:        plazoAtencion,
+        documento:             documento,
+        tipo_asunto:           tipoAsunto,
+      });
+      console.log("Estamos en Generalidades");
+      console.log(this.formsObjectService.generalidadesFormObject());
+      // this.euacapeAperturaService.insertEuacapeForm(
+      //   this.formsObjectService.euacapeFormObject()
+      // );
+    }
+
+    // switch (this.dropdownChoice) {
 
       //La realidad es que hoy 26/04/24 comente esto pero se va a borrar. 
       //Nadamas para tener la referencia para cuando haga los cases 
@@ -202,27 +256,56 @@ export class InfoTableComponent {
       //   );
       //   break;
 
-      case "EUACAPE":
-        this.formsObjectService.euacapeFormObject.set({
-          oficio:                oficio,
-          folio_scanner:         folioScanner,
-          carpeta_investigacion: carpetaInvestigacion,
-          documento_escaneado:   documentoEscaneado,
-          fecha_recepcion:       fechaRecepcion,
-          autoridad_remitente:   autoridadRemitente,
-          persona_relacionada:   personaRelacionada,
-          turno_jefatura:        turnoJefatura,
-          descripcion:           descripcion,
-          administracion:        administracion,
-          plazo_atencion:        plazoAtencion,
-          documento:             documento,
-        });
-        console.log("Estamos en Euacape");
-        console.log(this.formsObjectService.euacapeFormObject());
-        this.euacapeAperturaService.insertEuacapeForm(
-          this.formsObjectService.euacapeFormObject()
-        );
-        break;
+      // case "EUACAPE":
+      //   this.formsObjectService.euacapeFormObject.set({
+      //     oficio:                oficio,
+      //     folio_scanner:         folioScanner,
+      //     carpeta_investigacion: carpetaInvestigacion,
+      //     documento_escaneado:   documentoEscaneado,
+      //     fecha_recepcion:       fechaRecepcion,
+      //     autoridad_remitente:   autoridadRemitente,
+      //     persona_relacionada:   personaRelacionada,
+      //     turno_jefatura:        turnoJefatura,
+      //     descripcion:           descripcion,
+      //     administracion:        administracion,
+      //     plazo_atencion:        plazoAtencion,
+      //     documento:             documento,
+      //   });
+      //   console.log("Estamos en Euacape");
+      //   console.log(this.formsObjectService.euacapeFormObject());
+      //   this.euacapeAperturaService.insertEuacapeForm(
+      //     this.formsObjectService.euacapeFormObject()
+      //   );
+      // break;
+
+      // case "Asunto Penal" 
+      // // || "Asunto Civil" || "Laboral" || "Juicio Amparo" 
+      // //       || "Concurso Mercantil" || "Copia de Conocimiento"
+      //       :
+      //   this.formsObjectService.generalidadesFormObject.set({
+      //     oficio:                oficio,
+      //     folio_scanner:         folioScanner,
+      //     carpeta_investigacion: carpetaInvestigacion,
+      //     documento_escaneado:   documentoEscaneado,
+      //     fecha_recepcion:       fechaRecepcion,
+      //     autoridad_remitente:   autoridadRemitente,
+      //     persona_relacionada:   personaRelacionada,
+      //     turno_jefatura:        turnoJefatura,
+      //     descripcion:           descripcion,
+      //     volante_jefatura:      volanteJefatura,
+      //     folio_jupiter:         folioJupiter,
+      //     administracion:        administracion,
+      //     plazo_atencion:        plazoAtencion,
+      //     documento:             documento,
+      //     tipo_asunto:           tipoAsunto,
+      //   });
+      //   console.log("Estamos en Generalidades");
+      //   console.log(this.formsObjectService.generalidadesFormObject());
+      //   // this.euacapeAperturaService.insertEuacapeForm(
+      //   //   this.formsObjectService.euacapeFormObject()
+      //   // );
+      //   break;
+
       // case "Generalidades":
       //   this.formsObjectService.generalidadesFormObject.set({
       //     folio_interno: folioInterno,
@@ -246,7 +329,7 @@ export class InfoTableComponent {
       //     this.formsObjectService.generalidadesFormObject()
       //   );
       //   break;
-    }
+    // }
 
   }
 
