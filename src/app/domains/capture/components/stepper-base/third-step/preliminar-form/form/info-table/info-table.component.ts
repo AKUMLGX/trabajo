@@ -92,21 +92,8 @@ export class InfoTableComponent {
   //Este vato si incluye el folio interno
 
   RESPUESTA_DATA: DataBeforeSubmit[] = [
-    {position: 1, name: 'Oficio', answer: this.OFICIO()},
-    {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
-    {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
-    {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {position: 5, name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },
-    {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
-    {position: 7, name: 'Atención', answer: this.ATENCION()},
-    {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
-    {position: 9, name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
-    {position: 10, name: 'Folio interno', answer: this.FOLIOINTERNO()},
-    {position: 11, name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
-    {position: 12, name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
-    {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
-    {position: 14, name: 'Tipo asunto', answer: this.TIPOASUNTO()},
-    {position: 15, name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    ...this.GENERALIDADES_DATA,
+    {position: 17, name: 'Folio interno', answer: this.FOLIOINTERNO()},
   ]
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
