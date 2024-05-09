@@ -65,34 +65,44 @@ export class InfoTableComponent {
   //   carpeta_investigacion: null,
   // });
 
-  EUACAPE_DATA: DataBeforeSubmit[] = [
+  EUACAPE_FIRST_ROUND: DataBeforeSubmit[] = [
     {name: 'Oficio', answer: this.OFICIO()},
-    {name: 'Administración', answer: this.ADMINISTRACION()},
-    {name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
-    {name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },
-    {name: 'Descripción', answer: this.DESCRIPCION()},
-    {name: 'Atención', answer: this.ATENCION()},
-    {name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
-    {name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
-    {name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
-    {name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
     {name: 'Folio scanner', answer: this.FOLIOSCANNER()},
-    {name: 'Tipo asunto', answer: this.TIPOASUNTO()},
+    {name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
+
+    {name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
+    {name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
+    {name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
+    {name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
+    {name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
+    {name: 'Descripción', answer: this.DESCRIPCION()},
+  ];
+
+  EUACAPE_SECOND_ROUND: DataBeforeSubmit[] = [
+    {name: 'Administración', answer: this.ADMINISTRACION()},
     {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },    
+    {name: 'Atención', answer: this.ATENCION()},
+    {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
+  ];
+
+  EUACAPE_DATA: DataBeforeSubmit[] = [
+    ...this.EUACAPE_FIRST_ROUND,
+    ...this.EUACAPE_SECOND_ROUND,
   ];
 
   GENERALIDADES_DATA: DataBeforeSubmit[] = [
-    ...this.EUACAPE_DATA,
+    ...this.EUACAPE_FIRST_ROUND,
     {name: 'Volante jefatura', answer: (this.VOLANTEJEFATURA() !== null) ? this.VOLANTEJEFATURA() : '---'},
-    {name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
+    {name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
+    ...this.EUACAPE_SECOND_ROUND,  
   ];
 
-  //Este vato si incluye el folio interno
+  //Este vato, RESPUESTA_DATA si incluye el folio interno
 
-  RESPUESTA_DATA: DataBeforeSubmit[] = [
-    ...this.GENERALIDADES_DATA,
+   RESPUESTA_DATA: DataBeforeSubmit[] = [
     {name: 'Folio interno', answer: this.FOLIOINTERNO()},
+    ...this.GENERALIDADES_DATA,
   ]
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
