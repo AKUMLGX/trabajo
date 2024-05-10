@@ -5,6 +5,8 @@ import { CollectFormInfoService } from '../../../../../../../shared/services/col
 import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 import { FormsObjectService } from '../../../../../../../shared/services/forms-object.service';
+import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
+import { RespuestaAperturaService } from '../../../../../../../services/respuesta-apertura.service';
 
 export interface DataBeforeSubmit {
   name: string;
@@ -22,8 +24,11 @@ export class InfoTableComponent {
 
   constructor(
     private collectFormInfoService: CollectFormInfoService,
-    private euacapeAperturaService: EuacapeAperturaService,
     private formsObjectService: FormsObjectService,
+    
+    private euacapeAperturaService: EuacapeAperturaService,
+    private generalidadesAperturaService: GeneralidadesAperturaService,
+    private respuestaAperturaService: RespuestaAperturaService,
   ){ }
 
   @Input() dropdownChoice: string = '';
@@ -175,9 +180,9 @@ export class InfoTableComponent {
       });
       console.log("Estamos en Generalidades");
       console.log(this.formsObjectService.generalidadesFormObject());
-      // this.euacapeAperturaService.insertEuacapeForm(
-      //   this.formsObjectService.euacapeFormObject()
-      // );
+      this.generalidadesAperturaService.insertGeneralidadesForm(
+        this.formsObjectService.generalidadesFormObject()
+      );
     } else if (this.dropdownChoice === 'Respuesta') {
       this.formsObjectService.respuestaFormObject.set({
         folio_interno:         folioInterno,
@@ -199,9 +204,9 @@ export class InfoTableComponent {
       });
       console.log("Estamos en Respuesta");
       console.log(this.formsObjectService.respuestaFormObject());
-      // this.euacapeAperturaService.insertEuacapeForm(
-      //   this.formsObjectService.euacapeFormObject()
-      // );
+      this.respuestaAperturaService.insertRespuestaForm(
+        this.formsObjectService.respuestaFormObject()
+      );
     }
 
     // switch (this.dropdownChoice) {
