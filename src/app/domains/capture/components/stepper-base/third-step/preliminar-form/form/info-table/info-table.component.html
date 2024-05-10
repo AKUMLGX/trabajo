@@ -58,7 +58,7 @@
           ADMINISTRACION(),
           CARPETAINVESTIGACION(),
           TURNOJEFATURA(),
-          (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS(),
+          (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE().toUpperCase() : this.DOCUMENTOOTROS().toUpperCase(),
           ATENCION(),
           TIPOASUNTO(),
           VOLANTEJEFATURA(),
