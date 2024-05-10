@@ -5,14 +5,12 @@
     <mat-dialog-content>
       <table>
         <tr>
-          <th>No.</th>
           <th>Nombre</th>
           <th>Respuesta</th>
         </tr>
         @if(dropdownChoice === 'EUACAPE'){
-          @for (row of EUACAPE_DATA; track row.position) {
+          @for (row of EUACAPE_DATA; track row.name) {
             <tr>
-              <td>{{ row.position }}</td>
               <td> {{ row.name }} </td>
               <td>{{ row.answer }}</td>
             </tr>
@@ -21,11 +19,16 @@
           dropdownChoice === 'Asunto Penal' || dropdownChoice === 'Asunto Civil'
           || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio Amparo'
           || dropdownChoice === 'Concurso Mercantil' || dropdownChoice === 'Copia de Conocimiento'
-          || dropdownChoice === 'Respuesta'
         ){
-            @for (row of GENERALIDADES_DATA; track row.position) {
+            @for (row of GENERALIDADES_DATA; track row.name) {
               <tr>
-                <td>{{ row.position }}</td>
+                <td> {{ row.name }} </td>
+                <td>{{ row.answer }}</td>
+              </tr>
+            }
+        } @else if (dropdownChoice === 'Respuesta') {
+            @for (row of RESPUESTA_DATA; track row.name) {
+              <tr>
                 <td> {{ row.name }} </td>
                 <td>{{ row.answer }}</td>
               </tr>
@@ -55,6 +58,9 @@
           ADMINISTRACION(),
           CARPETAINVESTIGACION(),
           TURNOJEFATURA(),
+          (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS(),
+          ATENCION(),
+          TIPOASUNTO(),
           VOLANTEJEFATURA(),
           FOLIOJUPITER()
           )"

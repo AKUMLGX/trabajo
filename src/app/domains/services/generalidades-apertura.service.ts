@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GeneralidadesApertura } from '../interfaces/generalidades-apertura';
-import { GeneralidadesAperturaResponse } from '../interfaces/generalidades-apertura-response';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +9,13 @@ import { GeneralidadesAperturaResponse } from '../interfaces/generalidades-apert
 export class GeneralidadesAperturaService {
 
   constructor(
-    private http: HttpClient,
+    private httpClient: HttpClient,
   ) { }
 
   insertGeneralidadesForm(generalidadesForm: GeneralidadesApertura) {
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    this.http.post<GeneralidadesAperturaResponse>(
-      'http://localhost:8080/akamba/api/v1/asunto/nuevo/euacape/apertura/',
+    this.httpClient.post( 
+      environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
         generalidadesForm, {headers: headers})
         .subscribe((res) => {
         console.log(res);

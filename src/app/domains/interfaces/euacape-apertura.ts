@@ -1,14 +1,15 @@
 export interface EuacapeApertura {
-    folio_interno:         string;
-    folio_scanner:         string;
     oficio:                string;
+    folio_scanner:         string;
+    carpeta_investigacion: string | null;
     documento_escaneado:   string;
-    persona_relacionada:   string;
-    descripcion:           string;
     fecha_recepcion:       string;
     autoridad_remitente:   string;
-    plazo_atencion:        number | null;
-    administracion:        string;
+    persona_relacionada:   string;
     turno_jefatura:        string | null;
-    carpeta_investigacion: string | null;
+    descripcion:           string;
+    administracion:        string;
+    plazo_atencion:        number | null;
+    documento:             string;
 }
+

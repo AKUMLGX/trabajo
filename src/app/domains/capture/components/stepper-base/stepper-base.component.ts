@@ -5,6 +5,7 @@ import { SecondStepComponent } from './second-step/second-step.component';
 import { ThirdStepComponent } from './third-step/third-step.component';
 import { FourthStepComponent } from './fourth-step/fourth-step.component';
 import { PreliminarFormComponent } from './third-step/preliminar-form/preliminar-form.component';
+import { RespuestaPreliminarFormComponent } from './third-step/respuesta-preliminar-form/respuesta-preliminar-form.component';
 import { PreliminarSecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/preliminar-second-pieces-form.component';
 import { SecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/second-pieces-form/second-pieces-form.component';
 import { CollectFormInfoService } from '../../../shared/services/collect-form-info.service';
@@ -18,6 +19,7 @@ import { CollectFormInfoService } from '../../../shared/services/collect-form-in
     ThirdStepComponent,
     FourthStepComponent,
     PreliminarFormComponent,
+    RespuestaPreliminarFormComponent,
     PreliminarSecondPiecesFormComponent,
     SecondPiecesFormComponent,
   ],
