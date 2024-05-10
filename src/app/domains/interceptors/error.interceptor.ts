@@ -1,35 +1,31 @@
 import {
-    HttpEvent,
-    HttpHandlerFn,
-    HttpInterceptorFn,
-    HttpRequest,
-  } from '@angular/common/http';
-  import { inject } from '@angular/core';
-  import { Observable } from 'rxjs';
-  import { LogoutService } from '../services/logout.service';
-  
-  export const errorInterceptor: HttpInterceptorFn = (
-    request: HttpRequest<any>,
-    next: HttpHandlerFn,
-  ): Observable<HttpEvent<unknown>> => {
-    let sessionInfo = localStorage.getItem('sessionInfo');
-    if (sessionInfo !== null) {
-      let parse = JSON.parse(sessionInfo);
-      let expiryDate = new Date(parse.exp * 1000);
-      let currentDate = new Date(Date.now());
-      if (expiryDate < currentDate) {
-        let logoutService = inject(LogoutService);
-        logoutService.logout();
-      }
-      let token = parse.token;
-      if (token) {
-        request = request.clone({
-          setHeaders: {
-            Authorization: token,
+  HttpEvent,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+} from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Observable, catchError, throwError } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
+
+export const errorInterceptor: HttpInterceptorFn = (
+  request: HttpRequest<any>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
+  let matDialog = inject(MatDialog);
+  return next(request).pipe(
+    catchError((err) => {
+      ///Este caso ya se cubre solicitando un nuevo token.
+      if (err.status !== 401) {
+        matDialog.open(ErrorDialogComponent, {
+          data: {
+            errorTittle: 'Ha ocurrido un error',
+            errorDescription: err.message,
           },
         });
       }
-    }
-    return next(request);
-  };
-  
+      return throwError(() => new Error(err.statusText));
+    })
+  );
+};

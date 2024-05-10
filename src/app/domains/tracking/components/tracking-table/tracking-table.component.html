@@ -38,7 +38,7 @@
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
-                  {{ "Volante" }}
+                  {{ "Volante Jefatura" }}
                 </th>
                 @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
                 {
@@ -265,13 +265,26 @@
                   class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5"
                 >
                   <div>
-                    <button
-                      mat-button
-                      (click)="openPdfViewer()"
-                      class="text-wine leading-5"
-                    >
-                      <mat-icon>remove_red_eye</mat-icon>
-                    </button>
+                    <div class="options">
+                      <button
+                        mat-button
+                        (click)="openPdfViewer()"
+                        class="text-wine leading-5"
+                      >
+                        <mat-icon>remove_red_eye</mat-icon>
+                      </button>
+                      @if(document.volante !== null && document.volante !== ""
+                      && document.volante !== undefined ) {
+
+                      <button
+                        mat-button
+                        (click)="printPdf()"
+                        class="text-wine leading-5"
+                      >
+                        <mat-icon style="margin-left: 5px">print</mat-icon>
+                      </button>
+                      }
+                    </div>
                   </div>
                 </td>
                 <td
@@ -633,11 +646,14 @@
         <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
           <p class="text-sm leading-5 text-wine">
             Mostrando
-            <span class="font-medium">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
+            <span class="font-medium">{{
+              (pageSelected - 1) * itemsPerPage + 1
+            }}</span>
             a
             <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length
-                ? (pageSelected -1 ) * itemsPerPage + itemsPerPage
+              (pageSelected - 1) * itemsPerPage + itemsPerPage <
+              documents.length
+                ? (pageSelected - 1) * itemsPerPage + itemsPerPage
                 : documents.length
             }}</span>
             de

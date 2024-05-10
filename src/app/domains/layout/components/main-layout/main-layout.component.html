@@ -1,7 +1,11 @@
 <app-load-animation></app-load-animation>
 <mat-toolbar class="mat-elevation-z3">
   <div class="flex">
-    <button mat-icon-button class="text-white" (click)="collapsed.set(!collapsed())">
+    <button
+      mat-icon-button
+      class="text-white"
+      (click)="collapsed.set(!collapsed())"
+    >
       <mat-icon>menu</mat-icon>
     </button>
     <button mat-icon-button class="text-white">
@@ -10,28 +14,21 @@
     <button mat-icon-button class="text-white">
       <mat-icon>pageview</mat-icon>
     </button>
-    <button (click)="openModal(templateNotification)" mat-icon-button class="text-white">
-      <mat-icon>circle_notifications</mat-icon>
-    </button>
   </div>
   <app-navbar-content-info></app-navbar-content-info>
   <app-navbar-content></app-navbar-content>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav opened mode="side" class="mat-sidenav" [style.width]="sidenavWidth()">
+  <mat-sidenav
+    opened
+    mode="side"
+    class="mat-sidenav"
+    [style.width]="sidenavWidth()"
+  >
     <app-custom-sidenav [collapsed]="collapsed()" />
   </mat-sidenav>
   <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
-    <!-- Allô le monde! -->
     <router-outlet />
   </mat-sidenav-content>
 </mat-sidenav-container>
 
-
-<!-- #region Boton DE NOTIFICACIONES -->
-
-<ng-template #templateNotification>
-  <app-notifications />
-</ng-template>
-
-<!--  #endregion Boton DE NOTIFICACIONES -->

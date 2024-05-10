@@ -19,6 +19,7 @@ export class TrackingFormComponent {
     oficio: new FormControl(''),
     autoridadRemitente: new FormControl(''),
     personaRelacionada: new FormControl(''),
+    volante: new FormControl(''),
     tipoBusqueda: new FormControl('Nuevos')
   });
 
