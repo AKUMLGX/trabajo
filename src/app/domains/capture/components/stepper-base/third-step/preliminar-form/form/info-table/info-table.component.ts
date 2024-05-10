@@ -122,6 +122,7 @@ export class InfoTableComponent {
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
     documento: string,
+    atencion: string,
     tipoAsunto: string,
     volanteJefatura: string | null,
     folioJupiter: string | null,
@@ -149,11 +150,11 @@ export class InfoTableComponent {
       );
     } else if (
         this.dropdownChoice === 'Asunto Penal' 
-        || 'Asunto Civil'
-        || 'Laboral'
-        || 'Juicio Amparo'
-        || 'Concurso Mercantil'
-        || 'Copia de Conocimiento'
+        || this.dropdownChoice === 'Asunto Civil'
+        || this.dropdownChoice === 'Laboral'
+        || this.dropdownChoice === 'Juicio Amparo'
+        || this.dropdownChoice === 'Concurso Mercantil'
+        || this.dropdownChoice === 'Copia de Conocimiento'
       ) {
       this.formsObjectService.generalidadesFormObject.set({
         oficio:                oficio,
@@ -174,6 +175,30 @@ export class InfoTableComponent {
       });
       console.log("Estamos en Generalidades");
       console.log(this.formsObjectService.generalidadesFormObject());
+      // this.euacapeAperturaService.insertEuacapeForm(
+      //   this.formsObjectService.euacapeFormObject()
+      // );
+    } else if (this.dropdownChoice === 'Respuesta') {
+      this.formsObjectService.respuestaFormObject.set({
+        folio_interno:         folioInterno,
+        oficio:                oficio,
+        folio_scanner:         folioScanner,
+        carpeta_investigacion: carpetaInvestigacion,
+        documento_escaneado:   documentoEscaneado,
+        fecha_recepcion:       fechaRecepcion,
+        autoridad_remitente:   autoridadRemitente,
+        persona_relacionada:   personaRelacionada,
+        turno_jefatura:        turnoJefatura,
+        descripcion:           descripcion,
+        volante_jefatura:      volanteJefatura,
+        folio_jupiter:         folioJupiter,
+        administracion:        administracion,
+        plazo_atencion:        plazoAtencion,
+        documento:             documento,
+        atencion:              atencion,
+      });
+      console.log("Estamos en Respuesta");
+      console.log(this.formsObjectService.respuestaFormObject());
       // this.euacapeAperturaService.insertEuacapeForm(
       //   this.formsObjectService.euacapeFormObject()
       // );

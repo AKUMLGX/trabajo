@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { EuacapeApertura } from '../../interfaces/euacape-apertura';
 import { GeneralidadesApertura } from '../../interfaces/generalidades-apertura';
+import { RespuestaApertura } from '../../interfaces/respuesta-apertura';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,26 @@ export class FormsObjectService {
     documento:             '',
     tipo_asunto:           '',
   });
+
+  respuestaFormObject = signal<RespuestaApertura>({
+    folio_interno:         '',
+    oficio:                '',
+    folio_scanner:         '',
+    carpeta_investigacion: null,
+    documento_escaneado:   '',
+    fecha_recepcion:       '',
+    autoridad_remitente:   '',
+    persona_relacionada:   '',
+    turno_jefatura:        null,
+    descripcion:           '',
+    volante_jefatura:      null,
+    folio_jupiter:         null,
+    administracion:        '',
+    plazo_atencion:        null,
+    documento:             '',
+    atencion:              '',
+  });
+
+
 
 }
