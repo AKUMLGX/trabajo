@@ -55,9 +55,9 @@ export class FormComponent {
       turnoJefatura: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
-      plazoAtencionHoras: [null, [Validators.min(1)]],
-      plazoAtencionDias: [null, [Validators.min(0)]],
-      plazoAtencionUrgente: [null],
+      plazoAtencionHoras: [{ value: null, }, [Validators.min(1)]],
+      plazoAtencionDias: [{ value: null,  }, [Validators.min(0)]],
+      plazoAtencionUrgente: [false],
       
       folioJupiter: [null, [Validators.maxLength(255)]],
       volanteJefatura: [null, [Validators.maxLength(255)]],
