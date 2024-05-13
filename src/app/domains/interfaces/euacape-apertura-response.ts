@@ -1,7 +1,7 @@
-import { EuacapeApertura } from './euacape-apertura';
+import { EuacapeAperturaBack } from './euacape-apertura-back';
 
 export interface EuacapeAperturaResponse {
     descripcion: string,
     autor: string,
-    values: EuacapeApertura[],
+    values: EuacapeAperturaBack[],
 }
