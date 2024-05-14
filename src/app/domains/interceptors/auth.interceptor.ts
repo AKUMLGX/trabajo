@@ -8,6 +8,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, catchError, throwError } from 'rxjs';
 import { LogoutService } from '../services/logout.service';
+import { ModalService } from '../shared/services/modal.service';
 
 export const authInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
@@ -33,7 +34,6 @@ export const authInterceptor: HttpInterceptorFn = (
     }
   }
   return next(request).pipe(catchError(err => {
-    console.log("Se obtiene un error " + err.statusText);
     if (err.status === 401) {
     console.log("Token invalido");
      // remove Bearer token and redirect to login page

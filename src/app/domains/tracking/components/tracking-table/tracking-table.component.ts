@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
+import { FileService } from '../../../services/file.service';
+
 
 @Component({
   selector: 'app-tracking-table',
@@ -15,7 +17,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './tracking-table.component.css',
 })
 export class TrackingTableComponent {
-  
   public documents: Asunto[] = [];
   public pages: Asunto[][] = [];
 
@@ -32,10 +33,13 @@ export class TrackingTableComponent {
   public labels = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
-};
+  };
 
-
-  constructor(private asuntoService: AsuntoService, private router: Router) {}
+  constructor(
+    private asuntoService: AsuntoService,
+    private fileService: FileService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.openPdf = false;
@@ -84,15 +88,7 @@ export class TrackingTableComponent {
     this.router.navigate(['/layout/tracking/pdfViewer']);
   }
 
-  previousPage() {
-    this.pageSelected -= 1;
-  }
-
-  nextPage() {
-    this.pageSelected += 1;
+  printPdf() {
+    this.fileService.printFile();
   }
 }
-function BooleanArray(arg0: number): never[] {
-  throw new Error('Function not implemented.');
-}
-

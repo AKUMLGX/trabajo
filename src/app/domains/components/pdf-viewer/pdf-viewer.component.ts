@@ -14,7 +14,7 @@ export class PdfViewerComponent {
   pdfUrl: string = '';
 
   constructor(private fileService: FileService) {
-    this.fileService.getFile();
+    this.fileService.updateFile();
   }
 
   ngOnInit(): void {
