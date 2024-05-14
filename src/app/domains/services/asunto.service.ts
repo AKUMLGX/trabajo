@@ -25,7 +25,7 @@ export class AsuntoService {
     let oficio = consultForm.get('oficio')?.value;
     let autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
     let personaRelacionada = consultForm.get('personaRelacionada')?.value;
-    let volante = consultForm.get('volante')?.value;
+    let volante_jefatura = consultForm.get('volante_jefatura')?.value;
     let url = environment.baseUrl;
     switch (this.tipoBusqueda) {
       case 'Nuevos': {
@@ -46,7 +46,7 @@ export class AsuntoService {
       oficio: oficio,
       autoridad_remitente: autoridadRemitente,
       persona_relacionada: personaRelacionada,
-      volante
+      volante_jefatura
     };
     this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
       this.documentList = data;
