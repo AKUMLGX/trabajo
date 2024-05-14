@@ -1,43 +1,68 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { AsuntoHistoricoService } from '../../../services/asuntoHistorico.service';
-import { AsuntoHistorico } from '../../../interfaces/asuntos.interfaces';
+import { Component, Input } from '@angular/core';
+import { AsuntoService } from '../../../services/asunto.service';
+import { Asunto } from '../../../interfaces/asuntos.interfaces';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CommonModule } from '@angular/common';
+import { FileService } from '../../../services/file.service';
+
 
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [],
+  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
 export class TrackingTableComponent {
-  public documents: AsuntoHistorico[] = [];
-  public pages: AsuntoHistorico[][] = [];
+  public documents: Asunto[] = [];
+  public pages: Asunto[][] = [];
 
-  public pageSelected: number = 0;
+  public pageSelected: number = 1;
 
-  private _elementsByPage: number = 5;
+  public itemsPerPage: number = 5;
 
-  public newTableIsRendered = false;
+  public tipoBusqueda: string = '';
 
-  constructor(private asuntoNuevoService: AsuntoHistoricoService) {}
+  public openPdf: boolean = false;
+
+  public newTableIsRendered: boolean = false;
+
+  public labels = {
+    previousLabel: 'Anterior',
+    nextLabel: 'Siguiente',
+  };
+
+  constructor(
+    private asuntoService: AsuntoService,
+    private fileService: FileService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.asuntoNuevoService.documentsUpdated.subscribe((documents) => {
+    this.openPdf = false;
+    this.asuntoService.documentsUpdated.subscribe((documents) => {
+      this.openPdf = this.asuntoService.pdfIsOpen;
+      console.log(this.openPdf);
+      this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
       this.documents = documents;
       let index = 0;
-      let page: AsuntoHistorico[] = [];
+      let page: Asunto[] = [];
       this.pages = [];
-      this.pageSelected = 0;
+      this.pageSelected = 1;
       this.documents.forEach((document) => {
         page.push(document);
         index += 1;
-        if (index === this._elementsByPage) {
+        if (index === this.itemsPerPage) {
           this.pages.push(page);
           index = 0;
           page = [];
         }
       });
+      if (page.length !== 0) this.pages.push(page);
     });
   }
 
@@ -58,15 +83,12 @@ export class TrackingTableComponent {
     }
   }
 
-  updatePageSelected(page: number) {
-    this.pageSelected = page;
+  openPdfViewer() {
+    this.asuntoService.pdfIsOpen = true;
+    this.router.navigate(['/layout/tracking/pdfViewer']);
   }
 
-  previousPage() {
-    this.pageSelected -= 1;
-  }
-
-  nextPage() {
-    this.pageSelected += 1;
+  printPdf() {
+    this.fileService.printFile();
   }
 }

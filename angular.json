@@ -38,6 +38,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "baseHref": "/akamba/",
             "outputPath": "dist/acamba",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -61,12 +62,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "10mb"
+                  "maximumError": "50mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "10mb"
+                  "maximumError": "50mb"
                 }
               ],
               "outputHashing": "all"

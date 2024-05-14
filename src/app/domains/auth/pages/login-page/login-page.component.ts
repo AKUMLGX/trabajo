@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Oauth2Service } from '../../../services/ouath2.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-login-page',
@@ -8,5 +10,13 @@ import { Component } from '@angular/core';
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent {
+
+  public environment = environment;
+
+  constructor(private oauth2Service: Oauth2Service) {}
+
+  login():void {
+    this.oauth2Service.do_oauth();
+  }
 
 }
