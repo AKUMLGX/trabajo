@@ -261,6 +261,7 @@
                       >
                         <mat-icon>remove_red_eye</mat-icon>
                       </button>
+                      @if(getExtension(document.documento_escaneado) === 'pdf') {
                       <button
                         mat-button
                         (click)="printPdf()"
@@ -268,6 +269,7 @@
                       >
                         <mat-icon style="margin-left: 5px">print</mat-icon>
                       </button>
+                    }
                     </div>
                   </div>
                 </td>

@@ -8,7 +8,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
 
-
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
@@ -83,12 +82,23 @@ export class TrackingTableComponent {
     }
   }
 
-  openPdfViewer() {
+  getFileName(route: String): string {
+    let split: string[] = route.replace('\\\\', '\\').split('\\');
+    let name = split.pop();
+    return name != undefined ? name.replaceAll('#', '') : '';
+  }
+
+  getExtension(route: String): string | undefined {
+    let name = this.getFileName(route);
+    return name.split('.').pop()?.toLocaleLowerCase();
+  }
+
+  openPdfViewer(): void {
     this.asuntoService.pdfIsOpen = true;
     this.router.navigate(['/layout/tracking/pdfViewer']);
   }
 
-  printPdf() {
+  printPdf(): void {
     this.fileService.printFile();
   }
 }

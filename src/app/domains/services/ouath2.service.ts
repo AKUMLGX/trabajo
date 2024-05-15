@@ -15,7 +15,7 @@ export class Oauth2Service {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
   getToken(oauth2Code: Oauth2Code): void {
-    /*this.httpClient
+    this.httpClient
       .post<SessionInfo>(
         environment.baseUrl + environment.tokenValidationEndpoint,
         oauth2Code
@@ -27,7 +27,7 @@ export class Oauth2Service {
         error: () => {
           this.router.navigate(['/login']);
         },
-      });*/
+      });
   }
 
   do_oauth(): void {
