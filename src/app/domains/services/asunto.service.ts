@@ -26,20 +26,7 @@ export class AsuntoService {
     let autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
     let personaRelacionada = consultForm.get('personaRelacionada')?.value;
     let volante_jefatura = consultForm.get('volante_jefatura')?.value;
-    let url = environment.baseUrl;
-    switch (this.tipoBusqueda) {
-      case 'Nuevos': {
-        url += environment.asuntoNuevoEndpoint;
-        break;
-      }
-      case 'Historicos': {
-        url += environment.asuntoHistoricoEndpoint;
-        break;
-      }
-      case 'Todos': {
-        url += environment.asuntoEndpoint;
-      }
-    }
+    let url = environment.baseUrl + environment.asuntoEndpoint;
     let params = {
       folio_interno: folioInterno,
       carpeta_investigacion: carpetaInvertigacion,
