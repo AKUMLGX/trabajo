@@ -17,12 +17,12 @@ export class DropdownComponent {
   isSubmenuDeployed: boolean = false;
 
   asuntos = [
-    { name: 'EUACAPE', value: 'option-1' },
+    { name: 'EUACAPES', value: 'option-1' },
     { name: 'Respuesta', value: 'option-2' },
-    { name: 'Asunto Penal', value: 'option-3' },
-    { name: 'Asunto Civil', value: 'option-4' },
+    { name: 'Penal', value: 'option-3' },
+    { name: 'Civil', value: 'option-4' },
     { name: 'Laboral', value: 'option-5' },
-    { name: 'Juicio Amparo', value: 'option-6' },
+    { name: 'Juicio de Amparo', value: 'option-6' },
     { name: 'Concurso Mercantil', value: 'option-7' },
     { name: 'Copia de Conocimiento', value: 'option-8' },
   ];

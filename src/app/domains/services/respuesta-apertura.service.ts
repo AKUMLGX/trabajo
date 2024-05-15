@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RespuestaApertura } from '../interfaces/respuesta-apertura';
 import { environment } from '../../../environments/environment';
+import { RespuestaAperturaResponse } from '../interfaces/respuesta-apertura-response';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ export class RespuestaAperturaService {
 
   insertRespuestaForm(respuestaForm: RespuestaApertura) {
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    this.http.post( 
+    this.http.post<RespuestaAperturaResponse>( 
       environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
         respuestaForm, {headers: headers})
         .subscribe((res) => {

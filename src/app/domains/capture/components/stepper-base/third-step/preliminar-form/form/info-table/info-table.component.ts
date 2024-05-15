@@ -86,7 +86,7 @@ export class InfoTableComponent {
   EUACAPE_SECOND_ROUND: DataBeforeSubmit[] = [
     {name: 'Administración', answer: this.ADMINISTRACION()},
     {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
-    {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },    
+    {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPES') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },    
     {name: 'Atención', answer: this.ATENCION()},
     {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
   ];
@@ -133,7 +133,7 @@ export class InfoTableComponent {
     folioJupiter: string | null,
   ) {
 
-    if(this.dropdownChoice === 'EUACAPE') {
+    if(this.dropdownChoice === 'EUACAPES') {
       this.formsObjectService.euacapeFormObject.set({
         oficio:                oficio,
         folio_scanner:         folioScanner,
@@ -154,10 +154,10 @@ export class InfoTableComponent {
         this.formsObjectService.euacapeFormObject()
       );
     } else if (
-        this.dropdownChoice === 'Asunto Penal' 
-        || this.dropdownChoice === 'Asunto Civil'
+        this.dropdownChoice === 'Penal' 
+        || this.dropdownChoice === 'Civil'
         || this.dropdownChoice === 'Laboral'
-        || this.dropdownChoice === 'Juicio Amparo'
+        || this.dropdownChoice === 'Juicio de Amparo'
         || this.dropdownChoice === 'Concurso Mercantil'
         || this.dropdownChoice === 'Copia de Conocimiento'
       ) {
