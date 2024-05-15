@@ -15,19 +15,19 @@ export class Oauth2Service {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
   getToken(oauth2Code: Oauth2Code): void {
-    // this.httpClient
-    //   .post<SessionInfo>(
-    //     environment.baseUrl + environment.tokenValidationEndpoint,
-    //     oauth2Code
-    //   )
-    //   .subscribe({
-    //     next: (data) => {
-    //       localStorage.setItem('sessionInfo', JSON.stringify(data));
-    //     },
-    //     error: () => {
-    //       this.router.navigate(['/login']);
-    //     },
-    //   });
+    this.httpClient
+      .post<SessionInfo>(
+        environment.baseUrl + environment.tokenValidationEndpoint,
+        oauth2Code
+      )
+      .subscribe({
+        next: (data) => {
+          localStorage.setItem('sessionInfo', JSON.stringify(data));
+        },
+        error: () => {
+          this.router.navigate(['/login']);
+        },
+      });
   }
 
   do_oauth(): void {
