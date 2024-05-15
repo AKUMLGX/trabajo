@@ -10,7 +10,7 @@ export interface Asunto {
   documento_escaneado: String;
   atencion: String;
   descripcion: String;
-  tipo_respuesta: String;
+  documento: String;
   areas_pendientes: String;
   autoridad_solicitante: String;
   turno_jefatura: String;

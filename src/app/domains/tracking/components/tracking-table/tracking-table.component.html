@@ -40,27 +40,25 @@
                 >
                   {{ "Volante Jefatura" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Descargo" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Tipo de Asunto" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Autor" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -76,76 +74,70 @@
                 >
                   {{ "Folio" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Administración" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Folio Jupiter" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Orden" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Fecha Recepción" }}
                 </th>
-                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Fecha Atención" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Documento Escaneado" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
+                >
+                  {{ "Documento" }}
+                </th>
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Atención" }}
                 </th>
-                }
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Descripción" }}
-                </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
-                <th
-                  class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                >
-                  {{ "Tipo Respuesta" }}
                 </th>
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Areas Pendientes" }}
                 </th>
-                } @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Area Pendiente" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -167,8 +159,7 @@
                 >
                   {{ "Plazo de Atención" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -209,14 +200,13 @@
                 >
                   {{ "Tipo" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Unidad Administrativa de Autoridad" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -227,14 +217,13 @@
                 >
                   {{ "Fecha de Oficio" }}
                 </th>
-                }
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
                   {{ "Respuesta" }}
                 </th>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <th
                   class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                 >
@@ -255,7 +244,6 @@
                 >
                   {{ "Base de Captura de Administración" }}
                 </th>
-                }
               </tr>
             </thead>
             <tbody>
@@ -315,11 +303,10 @@
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
-                    {{ document.volante_jefatura}}
+                    {{ document.volante_jefatura }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -327,7 +314,7 @@
                     {{ document.descargo }}
                   </div>
                 </td>
-                }
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -335,8 +322,7 @@
                     {{ document.tipo_asunto }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -344,7 +330,7 @@
                     {{ document.autor }}
                   </div>
                 </td>
-                }
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -366,8 +352,7 @@
                     {{ document.folio }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -375,7 +360,7 @@
                     {{ document.administracion }}
                   </div>
                 </td>
-                }
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -383,8 +368,7 @@
                     {{ document.folio_jupiter }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -392,7 +376,7 @@
                     {{ document.orden }}
                   </div>
                 </td>
-                }
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -400,7 +384,7 @@
                     {{ document.fecha_recepcion }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -408,7 +392,7 @@
                     {{ document.fecha_atencion }}
                   </div>
                 </td>
-                }
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -416,8 +400,13 @@
                     {{ document.documento_escaneado }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+                <td
+                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                >
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.documento }}
+                  </div>
+                </td>
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -425,21 +414,11 @@
                     {{ document.atencion }}
                   </div>
                 </td>
-                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
                   <div class="text-sm leading-5 text-wine">
                     {{ document.descripcion }}
-                  </div>
-                </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
-                <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                >
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.tipo_respuesta }}
                   </div>
                 </td>
                 <td
@@ -449,7 +428,6 @@
                     {{ document.areas_pendientes }}
                   </div>
                 </td>
-                } @if (tipoBusqueda === "Nuevos" || tipoBusqueda === "Todos") {
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -457,7 +435,6 @@
                     {{ document.area_pendiente }}
                   </div>
                 </td>
-                }
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -486,8 +463,7 @@
                     {{ document.plazo_atencion }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -544,7 +520,7 @@
                     {{ document.tipo }}
                   </div>
                 </td>
-                }
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -552,8 +528,7 @@
                     {{ document.unidad_administrativa_autoridad }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -568,7 +543,7 @@
                     {{ document.fecha_oficio }}
                   </div>
                 </td>
-                }
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -576,8 +551,7 @@
                     {{ document.respuesta }}
                   </div>
                 </td>
-                @if (tipoBusqueda === "Historicos" || tipoBusqueda === "Todos")
-                {
+
                 <td
                   class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
                 >
@@ -606,7 +580,6 @@
                     {{ document.base_captura_administracion }}
                   </div>
                 </td>
-                }
               </tr>
               }
             </tbody>
