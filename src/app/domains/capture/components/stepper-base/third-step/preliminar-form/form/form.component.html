@@ -130,8 +130,8 @@
                         </div>
 
                         @if (
-                                dropdownChoice === 'Asunto Penal' || dropdownChoice === 'Asunto Civil'
-                                || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio Amparo'
+                                dropdownChoice === 'Penal' || dropdownChoice === 'Civil'
+                                || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio de Amparo'
                                 || dropdownChoice === 'Concurso Mercantil' || dropdownChoice === 'Copia de Conocimiento' 
                                 || dropdownChoice === 'Respuesta'  
                             ) {
@@ -253,7 +253,7 @@
                             }
                         </div>
                         
-                        @if(dropdownChoice === 'EUACAPE') {
+                        @if(dropdownChoice === 'EUACAPES') {
                             <div class="wrapping-individual-container">
                                 <label class="label-field text-blueGray-600"
                                     htmlfor="grid-password">
@@ -272,7 +272,7 @@
                             </div>
                         }
 
-                        @if(dropdownChoice !== 'EUACAPE') {
+                        @if(dropdownChoice !== 'EUACAPES') {
                             <div class="wrapping-individual-container">
                                 <label class="label-field text-blueGray-600"
                                     htmlfor="grid-password">

@@ -102,8 +102,8 @@ export class FormComponent {
       );
 
       if (
-            this.dropdownChoice === 'Asunto Penal' || this.dropdownChoice === 'Asunto Civil'
-            || this.dropdownChoice === 'Laboral' || this.dropdownChoice === 'Juicio Amparo'
+            this.dropdownChoice === 'Penal' || this.dropdownChoice === 'Civil'
+            || this.dropdownChoice === 'Laboral' || this.dropdownChoice === 'Juicio de Amparo'
             || this.dropdownChoice === 'Concurso Mercantil' || this.dropdownChoice === 'Copia de Conocimiento'
             || this.dropdownChoice === 'Respuesta'
         ) {

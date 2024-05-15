@@ -8,7 +8,7 @@
           <th>Nombre</th>
           <th>Respuesta</th>
         </tr>
-        @if(dropdownChoice === 'EUACAPE'){
+        @if(dropdownChoice === 'EUACAPES'){
           @for (row of EUACAPE_DATA; track row.name) {
             <tr>
               <td> {{ row.name }} </td>
@@ -16,8 +16,8 @@
             </tr>
           }
         } @else if (
-          dropdownChoice === 'Asunto Penal' || dropdownChoice === 'Asunto Civil'
-          || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio Amparo'
+          dropdownChoice === 'Penal' || dropdownChoice === 'Civil'
+          || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio de Amparo'
           || dropdownChoice === 'Concurso Mercantil' || dropdownChoice === 'Copia de Conocimiento'
         ){
             @for (row of GENERALIDADES_DATA; track row.name) {
@@ -58,7 +58,7 @@
           ADMINISTRACION(),
           CARPETAINVESTIGACION(),
           TURNOJEFATURA(),
-          (this.TIPOASUNTO() === 'EUACAPE') ? this.DOCUMENTOEUACAPE().toUpperCase() : this.DOCUMENTOOTROS().toUpperCase(),
+          (this.TIPOASUNTO() === 'EUACAPES') ? this.DOCUMENTOEUACAPE().toUpperCase() : this.DOCUMENTOOTROS().toUpperCase(),
           ATENCION(),
           TIPOASUNTO().toUpperCase(),
           VOLANTEJEFATURA(),
