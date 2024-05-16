@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { DocumentElectionComponent } from './document-election/document-election.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [
     SearchBarComponent,
+    DocumentElectionComponent,
     CommonModule,
     MatStepperModule,
     MatIconModule,
@@ -21,6 +23,8 @@ export class FirstStepComponent {
   firstStepButtonStatus: boolean = false;
 
   isEmptyList: boolean = true;
+
+  isDocumentSelected: boolean = false;
 
   firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
@@ -45,6 +49,10 @@ export class FirstStepComponent {
       console.log(this.firstStepButtonStatus);
     }, 1000);
     
+  }
+
+  showSearchBar() {
+    this.isDocumentSelected = true;
   }
 
   triggerSecondStep() {
