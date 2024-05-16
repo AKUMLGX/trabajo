@@ -16,7 +16,7 @@ export class EuacapeAperturaService {
   insertEuacapeForm(euacapeForm: EuacapeApertura) {
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
     this.httpClient.post<EuacapeAperturaResponse>(
-      environment.baseUrl + 'asunto/nuevo/euacape/apertura',
+      environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
         euacapeForm, {headers: headers})
         .subscribe((res) => {
         console.log(res);
