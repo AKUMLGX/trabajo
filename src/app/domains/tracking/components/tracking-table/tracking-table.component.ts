@@ -44,7 +44,6 @@ export class TrackingTableComponent {
     this.openPdf = false;
     this.asuntoService.documentsUpdated.subscribe((documents) => {
       this.openPdf = this.asuntoService.pdfIsOpen;
-      console.log(this.openPdf);
       this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
       this.documents = documents;
@@ -82,8 +81,8 @@ export class TrackingTableComponent {
     }
   }
 
-  getFileName(route: String): string {
-    let split: string[] = route.replace('\\\\', '\\').split('\\');
+  getFileName(path: String): string {
+    let split: string[] = path.replace('\\\\', '\\').split('\\');
     let name = split.pop();
     return name != undefined ? name.replaceAll('#', '') : '';
   }
@@ -93,12 +92,20 @@ export class TrackingTableComponent {
     return name.split('.').pop()?.toLocaleLowerCase();
   }
 
-  openPdfViewer(): void {
+  openPdfViewer(folio: String, path: String): void {
+    let fileName = this.getFileName(path);
+    this.fileService.updatePdfFile(folio.toString(), fileName);
     this.asuntoService.pdfIsOpen = true;
     this.router.navigate(['/layout/tracking/pdfViewer']);
   }
 
-  printPdf(): void {
-    this.fileService.printFile();
+  openMsgReader(): void {
+    //this.asuntoService.pdfIsOpen = true;
+    //this.router.navigate(['/layout/tracking/pdfViewer']);
+  }
+
+  printPdf(folio: String, path: String): void {
+    let fileName = this.getFileName(path);
+    this.fileService.printFile(folio.toString(), fileName);
   }
 }

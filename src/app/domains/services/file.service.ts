@@ -12,18 +12,26 @@ export class FileService {
 
   constructor(private httpClient: HttpClient) {}
 
-  updateFile(): void {
+  updatePdfFile(folio: string, fileName: string): void {
+    let params = {
+      folio: folio,
+      file_name: fileName,
+    };
     this.httpClient
-      .get(environment.getPdfEndpoint + '/test.pdf', { responseType: 'text' })
+      .get(environment.baseUrl + environment.getPdfEndpoint, { params: params, responseType: 'text' })
       .subscribe((data) => {
         this.file = data;
         this.fileUpdated.emit(this.file);
       });
   }
 
-  printFile(): void {
+  printFile(folio: string, fileName: string): void {
+    let params = {
+      folio: folio,
+      file_name: fileName,
+    };
     this.httpClient
-      .get(environment.getPdfEndpoint + '/test.pdf', { responseType: 'text' })
+      .get(environment.baseUrl + environment.getPdfEndpoint, { params: params, responseType: 'text' })
       .subscribe((data) => {
         const byteCharacters = atob(data);
         const byteNumbers = new Array(byteCharacters.length);

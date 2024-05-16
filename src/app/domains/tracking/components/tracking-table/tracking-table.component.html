@@ -254,22 +254,34 @@
                 >
                   <div>
                     <div class="options">
+                      @if(getExtension(document.documento_escaneado) === 'pdf')
+                      {
                       <button
                         mat-button
-                        (click)="openPdfViewer()"
+                        (click)="openPdfViewer(document.folio_interno, document.documento_escaneado)"
                         class="text-wine leading-5"
                       >
                         <mat-icon>remove_red_eye</mat-icon>
                       </button>
-                      @if(getExtension(document.documento_escaneado) === 'pdf') {
+                      } @else if (getExtension(document.documento_escaneado) ===
+                      'msg') {
                       <button
                         mat-button
-                        (click)="printPdf()"
+                        (click)="openMsgReader()"
+                        class="text-wine leading-5"
+                      >
+                        <mat-icon>remove_red_eye</mat-icon>
+                      </button>
+                      } @if(getExtension(document.documento_escaneado) ===
+                      'pdf') {
+                      <button
+                        mat-button
+                        (click)="printPdf(document.folio_interno, document.documento_escaneado)"
                         class="text-wine leading-5"
                       >
                         <mat-icon style="margin-left: 5px">print</mat-icon>
                       </button>
-                    }
+                      }
                     </div>
                   </div>
                 </td>

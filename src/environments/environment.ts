@@ -5,6 +5,6 @@ export const environment = {
   asuntoEndpoint: 'asunto/',
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
-  getPdfEndpoint: 'http://akmer.dev.cloudb.sat.gob.mx:8080/getPdf',
+  getPdfEndpoint: 'getPdf',
   base: '/akamba',
 };
