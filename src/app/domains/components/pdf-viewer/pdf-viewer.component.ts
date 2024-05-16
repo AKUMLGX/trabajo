@@ -13,12 +13,10 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 export class PdfViewerComponent {
   pdfUrl: string = '';
 
-  constructor(private fileService: FileService) {
-    //this.fileService.updateFile();
-  }
+  constructor(private fileService: FileService) {}
 
   ngOnInit(): void {
-    this.fileService.fileUpdated.subscribe((file) => {
+    this.fileService.pdfUpdated.subscribe((file) => {
       const byteCharacters = atob(file);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {

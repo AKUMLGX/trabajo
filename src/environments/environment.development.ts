@@ -6,5 +6,6 @@ export const environment = {
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
   getPdfEndpoint: 'getPdf',
+  getMsgEndpoint: 'getMsg',
   base: '/akamba',
 };

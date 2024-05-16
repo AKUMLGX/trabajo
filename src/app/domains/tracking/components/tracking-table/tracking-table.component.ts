@@ -99,13 +99,13 @@ export class TrackingTableComponent {
     this.router.navigate(['/layout/tracking/pdfViewer']);
   }
 
-  openMsgReader(): void {
-    //this.asuntoService.pdfIsOpen = true;
-    //this.router.navigate(['/layout/tracking/pdfViewer']);
+  openMsgReader(folio: String, path: String): void {
+    let fileName = this.getFileName(path).replaceAll(' ', '_');
+    this.fileService.updateMsgFile(folio.toString(), fileName);
   }
 
   printPdf(folio: String, path: String): void {
     let fileName = this.getFileName(path);
-    this.fileService.printFile(folio.toString(), fileName);
+    this.fileService.printPdf(folio.toString(), fileName);
   }
 }
