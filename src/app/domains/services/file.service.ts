@@ -37,25 +37,8 @@ export class FileService {
       .get(environment.baseUrl + environment.getMsgEndpoint, { params: params, responseType: 'text' })
       .subscribe((data) => {
         this.msg = data;
-        console.log("Descargando");
-        this.msgReader();
         this.msgUpdated.emit(this.msg);
       });
-  }
-
-  msgReader(): void {
-    const byteCharacters = atob(this.msg);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-    var blobURL = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'archivo.msg';
-    link.click();
   }
 
   printPdf(folio: string, fileName: string): void {

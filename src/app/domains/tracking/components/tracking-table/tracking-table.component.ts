@@ -2,11 +2,11 @@ import { Component, Input } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tracking-table',
@@ -25,9 +25,9 @@ export class TrackingTableComponent {
 
   public tipoBusqueda: string = '';
 
-  public openPdf: boolean = false;
-
   public newTableIsRendered: boolean = false;
+
+  public pdfIsOpen: boolean = false;
 
   public labels = {
     previousLabel: 'Anterior',
@@ -37,13 +37,14 @@ export class TrackingTableComponent {
   constructor(
     private asuntoService: AsuntoService,
     private fileService: FileService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
-    this.openPdf = false;
+    this.asuntoService.pdfIsOpenUpdated.subscribe((pdfIsOpen) => {
+      this.pdfIsOpen = pdfIsOpen;
+    });
     this.asuntoService.documentsUpdated.subscribe((documents) => {
-      this.openPdf = this.asuntoService.pdfIsOpen;
       this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
       this.documents = documents;
@@ -95,7 +96,7 @@ export class TrackingTableComponent {
   openPdfViewer(folio: String, path: String): void {
     let fileName = this.getFileName(path);
     this.fileService.updatePdfFile(folio.toString(), fileName);
-    this.asuntoService.pdfIsOpen = true;
+    this.asuntoService.openPdf();
     this.router.navigate(['/layout/tracking/pdfViewer']);
   }
 

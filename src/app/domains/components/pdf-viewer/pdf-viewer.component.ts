@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { AsuntoService } from '../../services/asunto.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 export class PdfViewerComponent {
   pdfUrl: string = '';
 
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService) {  }
 
   ngOnInit(): void {
     this.fileService.pdfUpdated.subscribe((file) => {

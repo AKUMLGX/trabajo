@@ -31,7 +31,6 @@ export class TrackingFormComponent {
 
   onSave(): void {
     this.router.navigate(['/layout/tracking']);
-    this.asuntoService.pdfIsOpen = false;
     this.asuntoService.filterDocuments(this.consultForm);
   }
 }

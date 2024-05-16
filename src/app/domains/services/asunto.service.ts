@@ -12,6 +12,8 @@ export class AsuntoService {
 
   documentsUpdated: EventEmitter<Asunto[]> = new EventEmitter();
 
+  pdfIsOpenUpdated: EventEmitter<boolean> = new EventEmitter();
+
   public pdfIsOpen: boolean = false;
   
   public tipoBusqueda = '';
@@ -39,5 +41,16 @@ export class AsuntoService {
       this.documentList = data;
       this.documentsUpdated.emit(this.documentList);
     });
+  }
+
+
+  openPdf(): void {
+    this.pdfIsOpen = true;
+    this.pdfIsOpenUpdated.emit(true);
+  }
+
+  closePdf(): void {
+    this.pdfIsOpen = false;
+    this.pdfIsOpenUpdated.emit(false);
   }
 }
