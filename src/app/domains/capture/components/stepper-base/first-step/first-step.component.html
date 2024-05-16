@@ -138,11 +138,13 @@
                 <span>Siguiente</span>
         </button>
     } @else {
-        <app-document-election />
-        <button 
-            class="base-next-button mt-8" 
-            (click)="showSearchBar()">
-                <span>Siguiente Ia parte</span>
-        </button>
+        <div class="flex flex-col justify-center items-center">
+            <app-document-election />
+            <button 
+                class="w-32 base-next-button mt-8" 
+                (click)="showSearchBar()">
+                    <span>Continuar</span>
+            </button>
+        </div>
     }
 </div>
