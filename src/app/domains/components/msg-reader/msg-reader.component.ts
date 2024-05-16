@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import fs from 'fs';
-import MsgReader from '@kenjiuno/msgreader';
+import MsgReader, { FieldsData } from '@kenjiuno/msgreader';
 import { FileService } from '../../services/file.service';
 
 @Component({
@@ -11,22 +10,54 @@ import { FileService } from '../../services/file.service';
   styleUrl: './msg-reader.component.css',
 })
 export class MsgReaderComponent {
+
+  public senderName: string | undefined= '';
+  public senderEmail: string | undefined= '';
+  public recipients: FieldsData[] | undefined = [];
+  public submitTime: string | undefined = '';
+  public subject: string | undefined = '';
+  public body: string | undefined = '';
+  public attachments: FieldsData[]| undefined = []; 
+  
+  public msg: string = '';
+
   constructor(private fileService: FileService) {}
 
   ngOnInit(): void {
     this.fileService.msgUpdated.subscribe((msg) => {
+      this.msg = msg;
       const byteCharacters = atob(msg);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);
+      const msgReader = new MsgReader(byteArray);
+      const fileData = msgReader.getFileData();
+      if (!fileData.error) {
+        this.senderName = fileData.senderName;
+        this.senderEmail = fileData.senderSmtpAddress; 
+        this.recipients = fileData.recipients;
+        this.submitTime = fileData.clientSubmitTime;
+        this.subject = fileData.subject;
+        this.body = fileData.body;
+        this.attachments = fileData.attachments;
+      }
+    });
+  }
+
+  downloadMsg(): void {
+      console.log("Entrando");
+      const byteCharacters = atob(this.msg);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-      var blobURL = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.download = 'archivo.msg';
+      link.download = 'correo.msg';
       link.click();
-    });
   }
 }

@@ -103,6 +103,8 @@ export class TrackingTableComponent {
   openMsgReader(folio: String, path: String): void {
     let fileName = this.getFileName(path).replaceAll(' ', '_');
     this.fileService.updateMsgFile(folio.toString(), fileName);
+    this.asuntoService.openMsg();
+    this.router.navigate(['/layout/tracking/msgReader']);
   }
 
   printPdf(folio: String, path: String): void {

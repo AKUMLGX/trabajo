@@ -12,6 +12,7 @@ import { TramitePageComponent } from './domains/assistance/pages/tramite-page/tr
 import { TrafficLightsAtencionComponent } from './domains/assistance/components/dashbord/TrafficLights/traffic-lights-atencion/traffic-lights-atencion.component';
 import { ParcialPageComponent } from './domains/assistance/pages/parcial-page/parcial-page/parcial-page.component';
 import { FinalizadoComponent } from './domains/assistance/pages/finalizado-page/finalizado/finalizado-page.component';
+import { MsgReaderComponent } from './domains/components/msg-reader/msg-reader.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -69,6 +70,10 @@ export const routes: Routes = [
           {
             path: 'pdfViewer',
             component: PdfViewerComponent
+          },
+          {
+            path: 'msgReader',
+            component: MsgReaderComponent
           }
         ],
       },
