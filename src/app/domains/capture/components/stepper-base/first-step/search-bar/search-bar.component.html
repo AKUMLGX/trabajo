@@ -1,6 +1,13 @@
-<div class="wrapper">
+<div class="flex flex-col">
+  <div class="wrapper">
     <form id="content">
       <input type="text" name="input" class="input lens" [ngClass]="iptClass">
       <button type="reset" class="search"  [ngClass]="btnClass" (click)="btnClickHandler()"></button>
     </form>
+</div>
+<button 
+    class="w-28 base-next-button mt-4" 
+    (click)="null">
+        <span>Enviar</span>
+</button>
 </div>
