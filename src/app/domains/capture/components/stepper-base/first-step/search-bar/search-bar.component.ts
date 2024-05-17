@@ -14,18 +14,34 @@ export class SearchBarComponent {
   btnClass: any;
   iptClass:any;
 
-tabChange(data: number){
-this.index = data;
-}
-btnClickHandler() {
-  if(this.btnClass) {
-this.btnClass  = '';
-this.iptClass  = '';
-  } else {
-this.btnClass = 'close'
-this.iptClass = 'square'
+  isSendButtonHidden: boolean = false;
+
+  tabChange(data: number){
+    this.index = data;
+  }
+  btnClickHandler() {
+    if(this.btnClass) {
+      this.btnClass  = '';
+      this.iptClass  = '';
+    } else {
+    this.btnClass = 'close'
+    this.iptClass = 'square'
+    }
+  }
+
+  sendSearch() {
+
+    const inputSearch = document.getElementById("searchId") as HTMLInputElement;
+    const retrievingValueType = inputSearch.value;
 
   }
-}
+
+//ESTE APPROACH NO VA A FUNCIONAR. PARA HABILITAR EL BOTON DE ENVIAR
+//ES NECESARIO TRABAJAR CON REACTIVE FORMS DE ANGULAR
+//PUES ES LA FORMA MAS RAPIDA
+//PARA IMPLEMENTAR EL HECHO DE QUE EL USUARIO AL INGRESAR UN CARACTER
+//SE ACTIVE EL BOTON DE ENVIAR
+  
+
 
 }

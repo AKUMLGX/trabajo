@@ -1,8 +1,18 @@
 <div class="flex flex-col">
   <div class="wrapper">
     <form id="content">
-      <input type="text" name="input" class="input lens" [ngClass]="iptClass">
-      <button type="reset" class="search"  [ngClass]="btnClass" (click)="btnClickHandler()"></button>
+      <input 
+        id="searchId" 
+        type="text" 
+        name="input" 
+        class="input lens" 
+        [ngClass]="iptClass">
+      <button 
+        type="reset" 
+        class="search"  
+        [ngClass]="btnClass" 
+        (click)="btnClickHandler()">
+      </button>
     </form>
 </div>
 <button 
