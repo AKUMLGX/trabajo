@@ -30,15 +30,24 @@
         </li>
     </ol>
     @if (isDocumentSelected) {
-        <div class="flex-col">
+        <div class="w-full flex justify-center items-center">
+            <div class="sm:w-40 md:w-[30rem] sm:text-xs md:text-lg bg-white rounded-lg border-2 border-[#691C32] p-4 mt-4 flex justify-center items-center gap-3">
+                <div class="md:visible">
+                    <mat-icon>search</mat-icon>
+                </div>
+                <span class="text-wine">Ingrese: {{ selectedOption.name }}, dando clic</span>
+            </div>
+        </div>
+        <div class="flex-col mt-8">
             <app-search-bar />
-            
         </div>
         @if (isEmptyList) {
             <div class="w-full flex justify-center items-center">
-                <div class="w-2/5 bg-white rounded-lg border-2 border-[#691C32] p-4 mt-8 flex justify-center items-center gap-3">
+                <div class="sm:w-40 md:w-96 sm:text-xs md:text-lg bg-white rounded-lg border-2 border-[#691C32] p-4 mt-8 flex justify-center items-center gap-3">
                     <span class="text-wine">No se encontraron resultados</span>
-                    <mat-icon>error</mat-icon>
+                    <div class="md:visible">
+                        <mat-icon>error</mat-icon>
+                    </div>
                 </div>
             </div>
         } @else {
@@ -139,9 +148,13 @@
         </button>
     } @else {
         <div class="flex flex-col justify-center items-center">
-            <app-document-election />
-            <button 
-                class="w-32 base-next-button mt-8" 
+            <div class="mt-4">
+                <app-document-election (selectionEmitter)="retrieveSelectionFromDropdown($event)" />
+            </div>
+            <button
+                [disabled]="!enabledButton"
+                [ngClass]=" enabledButton ? 'base-next-button' : 'base-next-button-disabled' "  
+                class="w-32 mt-8" 
                 (click)="showSearchBar()">
                     <span>Continuar</span>
             </button>

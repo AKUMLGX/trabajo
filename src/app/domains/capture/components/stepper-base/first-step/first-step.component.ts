@@ -26,6 +26,24 @@ export class FirstStepComponent {
 
   isDocumentSelected: boolean = false;
 
+  selectedOption: any;
+
+  enabledButton: boolean = false;
+
+  @Output() selectedOptionEmitter = new EventEmitter();
+
+  retrieveSelectionFromDropdown(event:any){
+    this.selectedOption = event;
+    //console.log("Estoy -*recibiendo o nelson");
+    console.log(this.selectedOption);
+    if(this.selectedOption !== undefined){
+      this.enabledButton = true;
+    } else {
+      this.enabledButton = false;
+    }
+     return this.enabledButton;
+   }
+
   firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
   thirdColumnHeader: string = 'Oficio';
