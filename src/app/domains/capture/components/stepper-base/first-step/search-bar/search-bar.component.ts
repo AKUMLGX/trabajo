@@ -1,20 +1,42 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, 
+  FormBuilder, 
+  FormGroup, 
+  Validators, 
+  ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-search-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,  
+  ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.css'
 })
 export class SearchBarComponent {
 
+  constructor(
+    private fb: FormBuilder,
+  ){}
+
+  public userInputForm: FormGroup = this.fb.group({
+    userInput: ['', [Validators.required]],
+  });
+
+  saveuserInputForm(): void {
+    console.log(this.userInputForm.value);
+  }
+
   index = 0;
   btnClass: any;
   iptClass:any;
 
-  isSendButtonHidden: boolean = false;
+  capturedText = '';
 
   tabChange(data: number){
     this.index = data;
@@ -29,19 +51,12 @@ export class SearchBarComponent {
     }
   }
 
-  sendSearch() {
+  // submitSearch(event:any) {
 
-    const inputSearch = document.getElementById("searchId") as HTMLInputElement;
-    const retrievingValueType = inputSearch.value;
+  //   //this.capturedText = event.target.value ;
 
-  }
+  //   console.log(event.target.value);
 
-//ESTE APPROACH NO VA A FUNCIONAR. PARA HABILITAR EL BOTON DE ENVIAR
-//ES NECESARIO TRABAJAR CON REACTIVE FORMS DE ANGULAR
-//PUES ES LA FORMA MAS RAPIDA
-//PARA IMPLEMENTAR EL HECHO DE QUE EL USUARIO AL INGRESAR UN CARACTER
-//SE ACTIVE EL BOTON DE ENVIAR
-  
-
+  // }
 
 }

@@ -31,11 +31,14 @@
     </ol>
     @if (isDocumentSelected) {
         <div class="w-full flex justify-center items-center">
-            <div class="sm:w-40 md:w-[30rem] sm:text-xs md:text-lg bg-white rounded-lg border-2 border-[#691C32] p-4 mt-4 flex justify-center items-center gap-3">
+            <div class="sm:w-40 md:w-[32rem] sm:text-xs md:text-lg bg-white rounded-lg border-2 border-[#691C32] p-4 mt-4 flex justify-center items-center gap-3">
                 <div class="md:visible">
                     <mat-icon>search</mat-icon>
                 </div>
-                <span class="text-wine">Ingrese: {{ selectedOption.name }}, dando clic</span>
+                <span 
+                    class="text-wine">
+                        Ingrese: {{ selectedOption.name }}, dando clic
+                </span>
             </div>
         </div>
         <div class="flex-col mt-8">

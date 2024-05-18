@@ -1,12 +1,18 @@
 <div class="flex flex-col">
   <div class="wrapper">
-    <form id="content">
+    <form id="content" 
+      [formGroup]="userInputForm" 
+      (ngSubmit)="saveuserInputForm()"
+    >
       <input 
         id="searchId" 
         type="text" 
         name="input" 
         class="input lens" 
-        [ngClass]="iptClass">
+        [ngClass]="iptClass"
+        formControlName="userInput" 
+        value=""
+      >
       <button 
         type="reset" 
         class="search"  
@@ -14,10 +20,12 @@
         (click)="btnClickHandler()">
       </button>
     </form>
-</div>
-<button 
-    class="w-28 base-next-button mt-4" 
-    (click)="null">
-        <span>Enviar</span>
-</button>
+  </div>
+  <button
+      [disabled]="!this.userInputForm.valid"
+      class="mt-4 w-28"
+      [ngClass]=" !this.userInputForm.valid ? 'next-button-disabled' : 'next-button' "
+    >
+      Continuar
+  </button>
 </div>
