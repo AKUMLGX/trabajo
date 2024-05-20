@@ -1,6 +1,140 @@
-<div class="wrapper">
-    <form id="content">
-      <input type="text" name="input" class="input lens" [ngClass]="iptClass">
-      <button type="reset" class="search"  [ngClass]="btnClass" (click)="btnClickHandler()"></button>
+<div class="flex flex-col">
+  <div class="wrapper">
+    <form id="content" 
+      [formGroup]="userInputForm" 
+      (ngSubmit)="saveuserInputForm()"
+    >
+      <input 
+        id="searchId" 
+        type="text" 
+        name="input" 
+        class="input lens" 
+        [ngClass]="iptClass"
+        formControlName="userInput" 
+        value=""
+      >
+      <button 
+        type="reset" 
+        class="search"  
+        [ngClass]="btnClass" 
+        (click)="btnClickHandler()">
+      </button>
     </form>
+  </div>
+  @if(isSubmittedButtonHidden){
+    @if(isEmptyList) {
+      <div class="w-full flex justify-center items-center">
+          <div class="sm:w-40 md:w-96 sm:text-xs md:text-lg bg-white rounded-lg border-2 border-[#691C32] p-4 mt-8 flex justify-center items-center gap-3">
+              <span class="text-wine">No se encontraron resultados</span>
+              <div class="md:visible">
+                  <mat-icon>error</mat-icon>
+              </div>
+          </div>
+      </div>
+    } @else {
+      <div class="flex justify-center items-center text-xl mt-8 uppercase font-medium">Resultados</div>
+      <section class="py-1 bg-blueGray-50" id="sectionTable">
+          <div class="w-full lg:w-12/12 mx-auto mt-2">
+              <div
+                  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
+                  <div class="flex-auto px-4 lg:px-10 py-10">
+                      <div class="overflow-x-auto">
+                          <table class="min-w-full border-collapse bg-white">
+                              <thead>
+                                  <tr>
+                                      <th class="table-head-item">
+                                          {{ firstColumnHeader }}
+                                      </th>
+                                      <th class="table-head-item">
+                                          {{ secondColumnHeader }}
+                                      </th>
+                                      <th class="table-head-item">
+                                          {{ thirdColumnHeader }}
+                                      </th>
+                                      <th class="table-head-item">
+                                          {{ fourthColumnHeader }}
+                                      </th>
+                                      <th class="table-head-item">
+                                          {{ fifthColumnHeader }}
+                                      </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  @for(row of SEARCH_RESULTS; track row.id) {
+                                      <tr>
+                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                              <div class="text-sm leading-5 text-wine">
+                                                  {{ row.folio }}
+                                              </div>
+                                          </td>
+                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                              <div class="text-sm leading-5 text-wine">
+                                                  {{ row.carpeta }}
+                                              </div>
+                                          </td>
+                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                              <div class="text-sm leading-5 text-wine">
+                                                  {{ row.oficio }}
+                                              </div>
+                                          </td>
+                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                              <div class="text-sm leading-5 text-wine">
+                                                  {{ row.autoridad }}
+                                              </div>
+                                          </td>
+                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                              <div class="text-sm leading-5 text-wine">
+                                                  {{ row.persona }}
+                                              </div>
+                                          </td>
+                                      </tr>    
+                                  }
+                              </tbody>
+                          </table>
+                      </div>
+                      <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+                          <div>
+                              <nav class="relative z-0 inline-flex shadow-sm">
+                                  <button (click)="null"
+                                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                                      aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
+                                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                          <path fill-rule="evenodd"
+                                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                              clip-rule="evenodd" />
+                                      </svg>
+                                  </button>
+                                  <button (click)="null"
+                                      class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                                      aria-label="Next">
+                                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                          <path fill-rule="evenodd"
+                                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                              clip-rule="evenodd" />
+                                      </svg>
+                                  </button>
+                              </nav>
+                          </div>
+                      </div>
+                  </div>
+              </div> 
+          </div>
+      </section>
+    }
+    <button 
+        matStepperNext 
+        class="base-next-button w-32 mt-8" 
+        >
+            <span>Siguiente</span>
+    </button>
+  } @else {
+      <button
+        [disabled]="!this.userInputForm.valid"
+        class="mt-4 w-28"
+        [ngClass]=" !this.userInputForm.valid ? 'next-button-disabled' : 'next-button' "
+        (click)="submitInput()"
+        >
+          Continuar
+      </button>
+  }
 </div>
