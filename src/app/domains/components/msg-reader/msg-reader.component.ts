@@ -11,17 +11,17 @@ import { FileService } from '../../services/file.service';
 })
 export class MsgReaderComponent {
 
-  public senderName: string | undefined= '';
-  public senderEmail: string | undefined= '';
+  public senderName: string | undefined = '';
+  public senderEmail: string | undefined = '';
   public recipients: FieldsData[] | undefined = [];
   public submitTime: string | undefined = '';
   public subject: string | undefined = '';
   public body: string | undefined = '';
-  public attachments: FieldsData[]| undefined = []; 
-  
+  public attachments: FieldsData[] | undefined = [];
+
   public msg: string = '';
 
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService) { }
 
   ngOnInit(): void {
     this.fileService.msgUpdated.subscribe((msg) => {
@@ -36,9 +36,13 @@ export class MsgReaderComponent {
       const fileData = msgReader.getFileData();
       if (!fileData.error) {
         this.senderName = fileData.senderName;
-        this.senderEmail = fileData.senderSmtpAddress; 
+        this.senderEmail = fileData.senderSmtpAddress !== null &&
+          fileData.senderSmtpAddress !== undefined
+          ? fileData.senderSmtpAddress : fileData.lastModifierName;
         this.recipients = fileData.recipients;
-        this.submitTime = fileData.clientSubmitTime;
+        this.submitTime = fileData.clientSubmitTime !== null &&
+          fileData.clientSubmitTime !== undefined
+          ? fileData.clientSubmitTime : fileData.creationTime;
         this.subject = fileData.subject;
         this.body = fileData.body;
         this.attachments = fileData.attachments;
@@ -47,17 +51,16 @@ export class MsgReaderComponent {
   }
 
   downloadMsg(): void {
-      console.log("Entrando");
-      const byteCharacters = atob(this.msg);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = 'correo.msg';
-      link.click();
+    const byteCharacters = atob(this.msg);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/octet-stream' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'correo.msg';
+    link.click();
   }
 }
