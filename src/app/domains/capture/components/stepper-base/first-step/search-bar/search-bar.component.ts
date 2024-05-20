@@ -6,7 +6,7 @@ import { FormsModule,
   Validators, 
   ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-search-bar',
@@ -16,6 +16,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     ReactiveFormsModule,
     FormsModule,  
     MatStepperModule,
+    MatIconModule,
   ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.css'
@@ -41,7 +42,7 @@ export class SearchBarComponent {
     this.isSubmittedButtonHidden = true;
   }
 
-  isEmptyList: boolean = true;
+  isEmptyList: boolean = false;
 
   firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
