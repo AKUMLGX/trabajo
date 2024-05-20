@@ -32,25 +32,9 @@ export class StepperBaseComponent {
     private collectFormInfoService: CollectFormInfoService,
   ){}
 
-  firstStepButtonStatus = false;
-
-  isEmptySearchResultsList = false;
+  isEmptySearchResultsList: boolean | undefined = false;
 
   dropdownChoice: string = '';
-
-  buttonStatusFromFirstStepChild(event: boolean) {
-    this.firstStepButtonStatus = event;
-  }
-
-  //buttonStatusFromSecondStepChild(event: boolean) {
-  //  console.log(event);
-  //  this.secondStepButtonStatus = event;
-  //}
-
-  retrieveStatusFromFirstStepList(event: boolean){
-    console.log(event);
-    this.isEmptySearchResultsList = event;
-  }
 
   retrieveSelectionFromSecondStep(event:string){
     console.log(event);

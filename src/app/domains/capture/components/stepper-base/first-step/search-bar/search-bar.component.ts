@@ -32,17 +32,19 @@ export class SearchBarComponent {
   });
 
   saveuserInputForm(): void {
-    //this.isSubmittedButtonHidden = true;
     console.log(this.userInputForm.value);
   }
+
+  @Output() isSubmittedButtonHiddenEmitter = new EventEmitter(); 
 
   isSubmittedButtonHidden: boolean = false;
 
   submitInput() {
     this.isSubmittedButtonHidden = true;
+    this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
   }
 
-  isEmptyList: boolean = false;
+  isEmptyList: boolean | undefined = false;
 
   firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';

@@ -20,17 +20,13 @@ import { MatStepperModule } from '@angular/material/stepper';
 })
 export class FirstStepComponent {
 
-  firstStepButtonStatus: boolean = false;  //parece que se va. Ya no se necesitaria
-
-  isEmptyList: boolean = true;   //esta si se ocupa pero igual hay que borrarla de aqui
-
   isDocumentSelected: boolean = false;
 
   selectedOption: any;
 
-  enabledButton: boolean = false;
+  submitButtonHiddenStatus: boolean = false;
 
-  @Output() selectedOptionEmitter = new EventEmitter(); //este hay que borrarlo, creo que no se ocupa, pero igual borramos hasta que podamos compilar
+  enabledButton: boolean = false;
 
   retrieveSelectionFromDropdown(event:any){
     this.selectedOption = event;
@@ -44,30 +40,12 @@ export class FirstStepComponent {
      return this.enabledButton;
   }
 
+  retrieveSubmitButtonStatus(event: boolean) {
+    this.submitButtonHiddenStatus  = event;
+  }
+
   showSearchBar() {
     this.isDocumentSelected = true;
-  }
-
-  //segun yo, todo lo de aqui abajo debe borrarse.
-
-  @Output() firstStepButtonStatusEmitter = new EventEmitter();
-  @Output() isEmptyListEmitter = new EventEmitter(); 
-
-  ngOnInit() {
-    setTimeout(() => {
-      console.log(this.firstStepButtonStatus);
-      this.firstStepButtonStatus = true;
-      console.log(this.firstStepButtonStatus);
-    }, 1000);
-    
-  }
-
-  
-
-  triggerSecondStep() {
-    console.log(this.firstStepButtonStatus);
-    this.firstStepButtonStatusEmitter.emit(this.firstStepButtonStatus);
-    this.isEmptyListEmitter.emit(this.isEmptyList);
   }
 
 }

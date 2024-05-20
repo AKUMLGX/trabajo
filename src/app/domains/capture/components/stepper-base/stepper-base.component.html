@@ -2,11 +2,10 @@
     <mat-vertical-stepper linear [labelPosition]="'bottom'">
 
         <mat-step label="Búsqueda" 
-                [completed]="firstStepButtonStatus" 
-                [editable]="false">
-            <app-first-step 
-                (firstStepButtonStatusEmitter)="buttonStatusFromFirstStepChild($event)" 
-                (isEmptyListEmitter)="retrieveStatusFromFirstStepList($event)"    
+                [completed]= "firstStepChild.submitButtonHiddenStatus"
+                [editable]="false"
+        >
+            <app-first-step  #firstStepChild   
             />
         </mat-step>
 
