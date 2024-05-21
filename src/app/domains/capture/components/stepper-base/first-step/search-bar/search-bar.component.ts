@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, 
   FormBuilder, 
@@ -7,6 +7,7 @@ import { FormsModule,
   ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { AsuntoService } from '../../../../../services/asunto.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -25,24 +26,36 @@ export class SearchBarComponent {
 
   constructor(
     private fb: FormBuilder,
+    private asuntoService: AsuntoService,
   ){}
 
   public userInputForm: FormGroup = this.fb.group({
     userInput: ['', [Validators.required]],
   });
 
+  @Input() selectedSearchEntryType: string = '';
+
   saveuserInputForm(): void {
-    //this.isSubmittedButtonHidden = true;
     console.log(this.userInputForm.value);
   }
 
+  @Output() isSubmittedButtonHiddenEmitter = new EventEmitter(); 
+
   isSubmittedButtonHidden: boolean = false;
 
-  submitInput() {
+  searchFromInput() {
+    this.asuntoService.searchBarCoincidences(
+      this.selectedSearchEntryType,
+      this.userInputForm,
+    );
+    //console.log(this.asuntoService.documentList);
+    //Falta implementar
+    //SI la petición fue exitosa ent adelante con lo siguiente
     this.isSubmittedButtonHidden = true;
+    this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
   }
 
-  isEmptyList: boolean = false;
+  isEmptyList: boolean | undefined = false;
 
   firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';

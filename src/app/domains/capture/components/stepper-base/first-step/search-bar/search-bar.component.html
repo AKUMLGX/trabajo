@@ -132,7 +132,7 @@
         [disabled]="!this.userInputForm.valid"
         class="mt-4 w-28"
         [ngClass]=" !this.userInputForm.valid ? 'next-button-disabled' : 'next-button' "
-        (click)="submitInput()"
+        (click)="searchFromInput()"
         >
           Continuar
       </button>
