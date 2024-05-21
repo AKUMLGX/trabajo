@@ -42,49 +42,49 @@
                           <table class="min-w-full border-collapse bg-white">
                               <thead>
                                   <tr>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ firstColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ secondColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ thirdColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ fourthColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
-                                          {{ fifthColumnHeader }}
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ fifthColumnHeader }} 
                                       </th>
                                   </tr>
                               </thead>
                               <tbody>
-                                  @for(row of SEARCH_RESULTS; track row.id) {
+                                  @for(item of searchBarResultsList; track $index) {
                                       <tr>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.folio }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.folio_interno }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.carpeta }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.carpeta_investigacion }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.oficio }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.oficio }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.autoridad }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.autoridad_remitente }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.persona }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.persona_relacionada }}
                                               </div>
                                           </td>
                                       </tr>    
