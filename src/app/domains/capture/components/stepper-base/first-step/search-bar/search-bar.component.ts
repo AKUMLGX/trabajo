@@ -8,6 +8,7 @@ import { FormsModule,
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { AsuntoService } from '../../../../../services/asunto.service';
+import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
 
 @Component({
   selector: 'app-search-bar',
@@ -29,6 +30,8 @@ export class SearchBarComponent {
     private asuntoService: AsuntoService,
   ){}
 
+  searchBarResultsList: Asunto[] = [];
+
   public userInputForm: FormGroup = this.fb.group({
     userInput: ['', [Validators.required]],
   });
@@ -47,7 +50,10 @@ export class SearchBarComponent {
     this.asuntoService.searchBarCoincidences(
       this.selectedSearchEntryType,
       this.userInputForm,
-    );
+    ).subscribe((results) => {
+      this.searchBarResultsList = results;
+      console.log('search bar results', this.searchBarResultsList);
+    });
     //console.log(this.asuntoService.documentList);
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente

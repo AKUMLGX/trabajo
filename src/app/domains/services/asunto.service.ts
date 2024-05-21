@@ -3,6 +3,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Asunto } from '../interfaces/asuntos.interfaces';
 import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +50,8 @@ export class AsuntoService {
   searchBarCoincidences(
       searchEntryType: string, 
       userInputForm: FormGroup
-    ): void {
+    ): Observable<Asunto[]> {
+      
     this.tipoBusqueda = searchEntryType;
     
     let userInput = userInputForm.get('userInput')?.value;
@@ -89,12 +91,9 @@ export class AsuntoService {
       persona_relacionada: personaRelacionada,
       volante_jefatura
     };
-    this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
-      this.documentList = data;
-      this.documentsUpdated.emit(this.documentList);
-      console.log(this.documentList);
-    });
 
+    return this.httpClient.get<Asunto[]>(
+        url, { params: params });
   }
 
 
