@@ -7,6 +7,7 @@ import { FormsModule,
   ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { AsuntoService } from '../../../../../services/asunto.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -25,13 +26,14 @@ export class SearchBarComponent {
 
   constructor(
     private fb: FormBuilder,
+    private asuntoService: AsuntoService,
   ){}
 
   public userInputForm: FormGroup = this.fb.group({
     userInput: ['', [Validators.required]],
   });
 
-  @Input() selectedInputType: string = '';
+  @Input() selectedSearchEntryType: string = '';
 
   saveuserInputForm(): void {
     console.log(this.userInputForm.value);
@@ -41,7 +43,14 @@ export class SearchBarComponent {
 
   isSubmittedButtonHidden: boolean = false;
 
-  submitInput() {
+  searchFromInput() {
+    this.asuntoService.searchBarCoincidences(
+      this.selectedSearchEntryType,
+      this.userInputForm,
+    );
+    //console.log(this.asuntoService.documentList);
+    //Falta implementar
+    //SI la petición fue exitosa ent adelante con lo siguiente
     this.isSubmittedButtonHidden = true;
     this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
   }

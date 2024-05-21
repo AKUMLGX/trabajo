@@ -32,7 +32,7 @@ export class StepperBaseComponent {
     private collectFormInfoService: CollectFormInfoService,
   ){}
 
-  isEmptySearchResultsList: boolean | undefined = false;
+  isEmptySearchResultsList: boolean | undefined = true;
 
   dropdownChoice: string = '';
 

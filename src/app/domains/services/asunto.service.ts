@@ -46,6 +46,58 @@ export class AsuntoService {
   }
 
 
+  searchBarCoincidences(
+      searchEntryType: string, 
+      userInputForm: FormGroup
+    ): void {
+    this.tipoBusqueda = searchEntryType;
+    
+    let userInput = userInputForm.get('userInput')?.value;
+
+    let carpetaInvestigacion: string = '';
+    let personaRelacionada: string = '';
+    let folioInterno: string = '';
+    let oficio: string = '';
+    let autoridadRemitente: string = '';
+    let volante_jefatura: string = '';
+
+    switch(this.tipoBusqueda) {
+      case "CARPETA DE INVESTIGACIÓN": {
+        carpetaInvestigacion = userInput;
+        break;
+      }
+      case "PERSONA RELACIONADA": {
+        personaRelacionada = userInput;
+        break;
+      }
+      case "FOLIO INTERNO": {
+        folioInterno = userInput;
+        break;
+      }
+      case "OFICIO": {
+        oficio = userInput;
+        break;
+      }
+    }
+
+    let url = environment.baseUrl + environment.asuntoEndpoint;
+    let params = {
+      folio_interno: folioInterno,
+      carpeta_investigacion: carpetaInvestigacion,
+      oficio: oficio,
+      autoridad_remitente: autoridadRemitente,
+      persona_relacionada: personaRelacionada,
+      volante_jefatura
+    };
+    this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
+      this.documentList = data;
+      this.documentsUpdated.emit(this.documentList);
+      console.log(this.documentList);
+    });
+
+  }
+
+
   openPdf(): void {
     this.pdfIsOpen = true;
     this.pdfIsOpenUpdated.emit(true);
