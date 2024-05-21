@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, 
   FormBuilder, 
@@ -30,6 +30,8 @@ export class SearchBarComponent {
   public userInputForm: FormGroup = this.fb.group({
     userInput: ['', [Validators.required]],
   });
+
+  @Input() selectedInputType: string = '';
 
   saveuserInputForm(): void {
     console.log(this.userInputForm.value);

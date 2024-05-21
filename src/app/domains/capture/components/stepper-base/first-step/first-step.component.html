@@ -42,7 +42,10 @@
             </div>
         </div>
         <div class="flex-col mt-8">
-            <app-search-bar (isSubmittedButtonHiddenEmitter)="retrieveSubmitButtonStatus($event)" />
+            <app-search-bar 
+                [selectedInputType]="selectedOption.name"
+                (isSubmittedButtonHiddenEmitter)="retrieveSubmitButtonStatus($event)" 
+            />
         </div>
     } @else {
         <div class="flex flex-col justify-center items-center">
