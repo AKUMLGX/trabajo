@@ -38,7 +38,6 @@ export class PreliminarSecondPiecesFormComponent {
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
     carpetaInvestigacion: [null, [Validators.maxLength(255)]],
-    folioInterno: ['' ,{value: '', disabled: true}],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
