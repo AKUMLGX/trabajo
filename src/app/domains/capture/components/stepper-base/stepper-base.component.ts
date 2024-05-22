@@ -32,8 +32,6 @@ export class StepperBaseComponent {
     private collectFormInfoService: CollectFormInfoService,
   ){}
 
-  isEmptySearchResultsList: boolean | undefined = true;
-
   dropdownChoice: string = '';
 
   retrieveSelectionFromSecondStep(event:string){

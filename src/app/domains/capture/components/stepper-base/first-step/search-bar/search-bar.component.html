@@ -22,7 +22,7 @@
     </form>
   </div>
   @if(isSubmittedButtonHidden){
-    @if(isEmptyList) {
+    @if(searchBarResultsList.length === 0) {
       <div class="w-full flex justify-center items-center">
           <div class="sm:w-40 md:w-96 sm:text-xs md:text-lg bg-white rounded-lg border-2 border-[#691C32] p-4 mt-8 flex justify-center items-center gap-3">
               <span class="text-wine">No se encontraron resultados</span>
