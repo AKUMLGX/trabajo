@@ -10,7 +10,7 @@
             />
         </mat-step>
 
-        @if(true) {
+        @if(isSearchBarResultsListEmpty()) {
             <mat-step label="Elección de asunto" 
                     [completed]="secondStepChild.isSecondStepPressed"
                     [editable]="false">

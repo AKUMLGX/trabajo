@@ -8,6 +8,7 @@ import { FormsModule,
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { AsuntoService } from '../../../../../services/asunto.service';
+import { CoincidencesSearchListService } from '../../../../../shared/services/coincidences-search-list.service';
 import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
 
 @Component({
@@ -28,6 +29,7 @@ export class SearchBarComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
+    private coincidencesSearchListService: CoincidencesSearchListService,
   ){}
 
   searchBarResultsList: Asunto[] = [];
@@ -55,16 +57,23 @@ export class SearchBarComponent {
     ).subscribe((results) => {
       this.searchBarResultsList = results;
       //console.log('search bar results', this.searchBarResultsList);
+
+      if(this.searchBarResultsList.length === 0) {
+        this.isResultsListEmpty = true;
+      } else {
+        this.isResultsListEmpty = false;
+      };
+      this.coincidencesSearchListService.updateResultsListStatus(
+        this.isResultsListEmpty
+      );
+
     });
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente
 
-    if(this.searchBarResultsList.length === 0) {
-      this.isResultsListEmpty = true;
-    } else {
-      this.isResultsListEmpty = false;
-    };
+    
     ///////this.isResultsListEmptyStatusEmitter.emit(this.isResultsListEmpty);
+    
 
     this.isSubmittedButtonHidden = true;
     this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
