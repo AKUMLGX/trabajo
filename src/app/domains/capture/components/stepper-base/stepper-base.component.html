@@ -5,15 +5,18 @@
                 [completed]= "firstStepChild.submitButtonHiddenStatus"
                 [editable]="false"
         >
-            <app-first-step  #firstStepChild   
+            <app-first-step  
+                #firstStepChild   
             />
         </mat-step>
 
-        @if(isEmptySearchResultsList) {
+        @if(isSearchBarResultsListEmpty()) {
             <mat-step label="Elección de asunto" 
                     [completed]="secondStepChild.isSecondStepPressed"
                     [editable]="false">
-                <app-second-step #secondStepChild (selectedOptionEmitter)="retrieveSelectionFromSecondStep($event)" />
+                <app-second-step #secondStepChild 
+                    (selectedOptionEmitter)="retrieveSelectionFromSecondStep($event)" 
+                />
             </mat-step>
 
             <div>

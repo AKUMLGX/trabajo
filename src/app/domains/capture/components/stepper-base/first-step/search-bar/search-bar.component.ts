@@ -8,6 +8,8 @@ import { FormsModule,
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { AsuntoService } from '../../../../../services/asunto.service';
+import { CoincidencesSearchListService } from '../../../../../shared/services/coincidences-search-list.service';
+import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
 
 @Component({
   selector: 'app-search-bar',
@@ -27,7 +29,10 @@ export class SearchBarComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
+    private coincidencesSearchListService: CoincidencesSearchListService,
   ){}
+
+  searchBarResultsList: Asunto[] = [];
 
   public userInputForm: FormGroup = this.fb.group({
     userInput: ['', [Validators.required]],
@@ -43,32 +48,50 @@ export class SearchBarComponent {
 
   isSubmittedButtonHidden: boolean = false;
 
+  isResultsListEmpty: boolean | undefined = undefined;
+
   searchFromInput() {
     this.asuntoService.searchBarCoincidences(
       this.selectedSearchEntryType,
       this.userInputForm,
-    );
-    //console.log(this.asuntoService.documentList);
+    ).subscribe((results) => {
+      this.searchBarResultsList = results;
+      //console.log('search bar results', this.searchBarResultsList);
+
+      if(this.searchBarResultsList.length === 0) {
+        this.isResultsListEmpty = true;
+      } else {
+        this.isResultsListEmpty = false;
+      };
+      this.coincidencesSearchListService.updateResultsListStatus(
+        this.isResultsListEmpty
+      );
+
+    });
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente
+
+    
+    ///////this.isResultsListEmptyStatusEmitter.emit(this.isResultsListEmpty);
+    
+
     this.isSubmittedButtonHidden = true;
     this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
   }
 
-  isEmptyList: boolean | undefined = false;
-
-  firstColumnHeader: string = 'Folio interno';
+  firstColumnHeader : string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
-  thirdColumnHeader: string = 'Oficio';
+  thirdColumnHeader : string = 'Oficio';
   fourthColumnHeader: string = 'Autoridad remitente';
-  fifthColumnHeader: string = 'Persona relacionada';
+  fifthColumnHeader : string = 'Persona relacionada';
 
-  SEARCH_RESULTS = [
-    {id: 1, folio: 'Folio 1', carpeta: 'Carpeta investigación 1', oficio: 'Oficio 1 ABCDEFGH', autoridad: 'Autoridad 1', persona: 'Persona 1',},
-    {id: 2, folio: 'Folio 2', carpeta: 'Carpeta investigación 2', oficio: 'Oficio 2 ABCDEFGH', autoridad: 'Autoridad 2', persona: 'Persona 2',},
-    {id: 3, folio: 'Folio 3', carpeta: 'Carpeta investigación 3', oficio: 'Oficio 3 ABCDEFGH', autoridad: 'Autoridad 3', persona: 'Persona 3',},
-    {id: 4, folio: 'Folio 4', carpeta: 'Carpeta investigación 4', oficio: 'Oficio 4 ABCDEFGH', autoridad: 'Autoridad 4', persona: 'Persona 4',},
-  ];
+  //Dummy data, formerly used to feed table.
+  // SEARCH_RESULTS = [
+  //   {id: 1, folio: 'Folio 1', carpeta: 'Carpeta investigación 1', oficio: 'Oficio 1 ABCDEFGH', autoridad: 'Autoridad 1', persona: 'Persona 1',},
+  //   {id: 2, folio: 'Folio 2', carpeta: 'Carpeta investigación 2', oficio: 'Oficio 2 ABCDEFGH', autoridad: 'Autoridad 2', persona: 'Persona 2',},
+  //   {id: 3, folio: 'Folio 3', carpeta: 'Carpeta investigación 3', oficio: 'Oficio 3 ABCDEFGH', autoridad: 'Autoridad 3', persona: 'Persona 3',},
+  //   {id: 4, folio: 'Folio 4', carpeta: 'Carpeta investigación 4', oficio: 'Oficio 4 ABCDEFGH', autoridad: 'Autoridad 4', persona: 'Persona 4',},
+  // ];
 
   index = 0;
   btnClass: any;

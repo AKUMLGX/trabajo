@@ -22,7 +22,7 @@
     </form>
   </div>
   @if(isSubmittedButtonHidden){
-    @if(isEmptyList) {
+    @if(searchBarResultsList.length === 0) {
       <div class="w-full flex justify-center items-center">
           <div class="sm:w-40 md:w-96 sm:text-xs md:text-lg bg-white rounded-lg border-2 border-[#691C32] p-4 mt-8 flex justify-center items-center gap-3">
               <span class="text-wine">No se encontraron resultados</span>
@@ -39,82 +39,58 @@
                   class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
                   <div class="flex-auto px-4 lg:px-10 py-10">
                       <div class="overflow-x-auto">
-                          <table class="min-w-full border-collapse bg-white">
+                          <table class="min-w-full border-collapse bg-white mb-8">
                               <thead>
                                   <tr>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ firstColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ secondColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ thirdColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ fourthColumnHeader }}
                                       </th>
-                                      <th class="table-head-item">
-                                          {{ fifthColumnHeader }}
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ fifthColumnHeader }} 
                                       </th>
                                   </tr>
                               </thead>
                               <tbody>
-                                  @for(row of SEARCH_RESULTS; track row.id) {
+                                  @for(item of searchBarResultsList; track $index) {
                                       <tr>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.folio }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.folio_interno }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.carpeta }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.carpeta_investigacion }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.oficio }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.oficio }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.autoridad }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.autoridad_remitente }}
                                               </div>
                                           </td>
-                                          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                                              <div class="text-sm leading-5 text-wine">
-                                                  {{ row.persona }}
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.persona_relacionada }}
                                               </div>
                                           </td>
                                       </tr>    
                                   }
                               </tbody>
                           </table>
-                      </div>
-                      <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
-                          <div>
-                              <nav class="relative z-0 inline-flex shadow-sm">
-                                  <button (click)="null"
-                                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                                      aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
-                                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                          <path fill-rule="evenodd"
-                                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                              clip-rule="evenodd" />
-                                      </svg>
-                                  </button>
-                                  <button (click)="null"
-                                      class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                                      aria-label="Next">
-                                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                          <path fill-rule="evenodd"
-                                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                              clip-rule="evenodd" />
-                                      </svg>
-                                  </button>
-                              </nav>
-                          </div>
                       </div>
                   </div>
               </div> 
