@@ -8,7 +8,7 @@ import { FormsModule,
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { AsuntoService } from '../../../../../services/asunto.service';
-import { CoincidencesSearchListService } from '../../../../../shared/services/coincidences-search-list.service';
+import { SearchStatusService } from '../../../../../shared/services/search-status.service';
 import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
 
 @Component({
@@ -29,7 +29,7 @@ export class SearchBarComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
-    private coincidencesSearchListService: CoincidencesSearchListService,
+    private searchStatusService : SearchStatusService,
   ){}
 
   searchBarResultsList: Asunto[] = [];
@@ -50,6 +50,8 @@ export class SearchBarComponent {
 
   isResultsListEmpty: boolean | undefined = undefined;
 
+  folioInternoFromResults: string = '';
+
   searchFromInput() {
     this.asuntoService.searchBarCoincidences(
       this.selectedSearchEntryType,
@@ -63,10 +65,13 @@ export class SearchBarComponent {
       } else {
         this.isResultsListEmpty = false;
       };
-      this.coincidencesSearchListService.updateResultsListStatus(
+      this.searchStatusService.updateResultsListStatus(
         this.isResultsListEmpty
       );
 
+      this.folioInternoFromResults = 
+        this.searchBarResultsList[0].folio_interno.toString();
+      console.log('calonch', this.folioInternoFromResults);
     });
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente

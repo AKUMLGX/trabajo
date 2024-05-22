@@ -4,7 +4,7 @@ import { Asunto } from '../../interfaces/asuntos.interfaces';
 @Injectable({
   providedIn: 'root'
 })
-export class CoincidencesSearchListService {
+export class SearchStatusService {
 
   constructor() { }
 
