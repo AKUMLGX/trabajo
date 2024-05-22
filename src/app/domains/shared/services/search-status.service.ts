@@ -10,7 +10,13 @@ export class SearchStatusService {
 
   reactiveCoincidencesSearchList = signal<Asunto[]>([]);
 
+  preloadedFolioInterno = signal('');
+
   isSearchResultsListEmpty = signal<boolean | undefined>(undefined);
+
+  updateReactiveFolioInterno(folioFromResults: string) {
+    this.preloadedFolioInterno.set(folioFromResults);
+  }
 
   updateResultsListStatus(status: boolean) {
     this.isSearchResultsListEmpty.set(status);

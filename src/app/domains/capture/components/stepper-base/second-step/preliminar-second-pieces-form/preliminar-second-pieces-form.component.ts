@@ -9,6 +9,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { SecondPiecesFormComponent } from './second-pieces-form/second-pieces-form.component';
 import { CollectSecondPiecesInfoService } from '../../../../../shared/services/collect-second-pieces-info.service';
+import { SearchStatusService } from '../../../../../shared/services/search-status.service';
 
 @Component({
   selector: 'app-preliminar-second-pieces-form',
@@ -29,12 +30,15 @@ export class PreliminarSecondPiecesFormComponent {
   constructor(
     private fb: FormBuilder,
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
+    private searchStatusService: SearchStatusService,
   ){ }
+
+  preloadedFolioInterno = this.searchStatusService.preloadedFolioInterno;
 
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
     carpetaInvestigacion: [null, [Validators.maxLength(255)]],
-    folioInterno: [{value: 'ABCDEFG0000_e.g.', disabled: true}],
+    folioInterno: ['' ,{value: '', disabled: true}],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
@@ -43,7 +47,7 @@ export class PreliminarSecondPiecesFormComponent {
     this.collectSecondPiecesInfoService.updatePreliminarSecondPiecesForm(
       this.secondPiecesPreliminarForm.value.oficio,
       this.secondPiecesPreliminarForm.value.carpetaInvestigacion,
-      'ABCDEFG0000_e.g.',
+      this.preloadedFolioInterno(),
       this.secondPiecesPreliminarForm.value.folioScanner
     );
   }

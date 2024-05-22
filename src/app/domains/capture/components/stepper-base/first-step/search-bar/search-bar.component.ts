@@ -72,6 +72,13 @@ export class SearchBarComponent {
       this.folioInternoFromResults = 
         this.searchBarResultsList[0].folio_interno.toString();
       console.log('calonch', this.folioInternoFromResults);
+
+      this.searchStatusService.updateReactiveFolioInterno(
+        this.folioInternoFromResults
+      );
+
+      console.log('calonch2', this.folioInternoFromResults);
+
     });
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente
