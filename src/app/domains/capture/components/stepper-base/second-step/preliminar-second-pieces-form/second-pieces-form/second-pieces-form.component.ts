@@ -44,19 +44,22 @@ export class SecondPiecesFormComponent {
   dropdownChoice = this.collectSecondPiecesInfoService.TIPOASUNTO;
 
   public secondPiecesForm: FormGroup = this.fb.group({
-    administracion: [{value: 'a_5_e.g.', disabled: true}],
+    administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
     documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-    documento: [{value: 'Requerimiento_e.g.', disabled: true},],
+    
+    documentoEuacape: [null,],  ///hay que ver como manejar este caso pues ya no sabemos de antemano que es un euacape
+    documentoOtros: [{value: 'Requerimiento', disabled: true},],
+
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-    atencion: [{value: 'Recibido_e.g.', disabled: true},],
+    atencion: [{value: 'Recibido', disabled: true},],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
-    personaRelacionada: [{value: 'persona_relacionada_e.g.', disabled: true}],
-    tipoAsunto: [{value: 'concurso_mercantil_e.g.', disabled: true},],
-    plazoAtencionHoras: [null, [Validators.min(1)]],
-    plazoAtencionDias: [null, [Validators.min(0)]],
-    plazoAtencionUrgente: [null],
+    personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
+    tipoAsunto: [null, [Validators.required]],
+    plazoAtencionHoras: [{ value: null,}, [Validators.min(1)]],
+    plazoAtencionDias: [{ value: null, }, [Validators.min(0)]],
+    plazoAtencionUrgente: [false],
       
     folioJupiter: [null, [Validators.maxLength(255)]],
     volanteJefatura: [null, [Validators.maxLength(255)]],
@@ -73,15 +76,16 @@ export class SecondPiecesFormComponent {
 
   openCustomModalWithTemplate(template: TemplateRef<any>){
     this.collectSecondPiecesInfoService.updateSecondPiecesForm(
-      'a_5_e.g.',
+      this.secondPiecesForm.value.administracion,
       this.secondPiecesForm.value.fechaRecepcion,
       this.secondPiecesForm.value.documentoEscaneado,
-      'Requerimiento_e.g.',
+      this.secondPiecesForm.value.documentoEuacape,
+      'Requerimiento',
       this.secondPiecesForm.value.descripcion,
-      'Recibido_e.g.',
+      'Recibido',
       this.secondPiecesForm.value.autoridadRemitente,
       this.secondPiecesForm.value.turnoJefatura,
-      'persona_relacionada_e.g.',
+      this.secondPiecesForm.value.personaRelacionada,
       'concurso_mercantil_e.g.',
       this.secondPiecesForm.value.volanteJefatura,
       this.secondPiecesForm.value.folioJupiter,
