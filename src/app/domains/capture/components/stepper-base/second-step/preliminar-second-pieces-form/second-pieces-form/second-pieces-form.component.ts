@@ -41,8 +41,6 @@ export class SecondPiecesFormComponent {
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
   ){}
 
-  dropdownChoice = this.collectSecondPiecesInfoService.TIPOASUNTO;
-
   public secondPiecesForm: FormGroup = this.fb.group({
     administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
