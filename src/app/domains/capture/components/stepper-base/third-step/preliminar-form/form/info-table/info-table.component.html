@@ -5,8 +5,8 @@
     <mat-dialog-content>
       <table>
         <tr>
-          <th>Nombre</th>
-          <th>Respuesta</th>
+          <th>Campo</th>
+          <th>Valor</th>
         </tr>
         @if(dropdownChoice === 'EUACAPES'){
           @for (row of EUACAPE_DATA; track row.name) {
@@ -38,23 +38,23 @@
     </mat-dialog-content>
     <div class="flex justify-center items-center">
       <mat-dialog-actions>
-        <button 
+        <button
           class="modal-left-button mr-10"
-          mat-button 
+          mat-button
           mat-dialog-close
         >
           Cancelar
         </button>
         <button (click)="confirmData(
-          FOLIOINTERNO(), 
+          FOLIOINTERNO(),
           FOLIOSCANNER(),
-          OFICIO(), 
-          DOCUMENTOESCANEADO(), 
-          PERSONARELACIONADA(), 
-          DESCRIPCION(), 
-          FECHARECEPCION()!.toString(), 
-          AUTORIDADREMITENTE(), 
-          PLAZOATENCION(), 
+          OFICIO(),
+          DOCUMENTOESCANEADO(),
+          PERSONARELACIONADA(),
+          DESCRIPCION(),
+          FECHARECEPCION()!.toString(),
+          AUTORIDADREMITENTE(),
+          PLAZOATENCION(),
           ADMINISTRACION(),
           CARPETAINVESTIGACION(),
           TURNOJEFATURA(),
@@ -64,10 +64,10 @@
           VOLANTEJEFATURA(),
           FOLIOJUPITER()
           )"
-          class="modal-right-button ml-10" 
+          class="modal-right-button ml-10"
         >
           Confirmar
         </button>
-    </mat-dialog-actions> 
-    </div>   
+    </mat-dialog-actions>
+    </div>
 </div>
