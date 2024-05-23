@@ -1,9 +1,9 @@
 import { Component, Input, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../../shared/services/modal.service';
-import { FormBuilder, 
-  FormGroup, 
-  Validators, 
+import { FormBuilder,
+  FormGroup,
+  Validators,
   ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
@@ -19,7 +19,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    FormsModule, 
+    FormsModule,
     MatStepperModule,
     MatTableModule,
     MatDialogModule,
@@ -40,12 +40,14 @@ export class FormComponent {
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
-
+    nameDocumentoEscaneadoFile: string = '';
+    file?:File;
     @Input() dropdownChoice: string = '';
 
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [null, [Validators.required]],
       fechaRecepcion: [null, [Validators.required]],
+      documentoEscaneadoFile:[''],
       documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
       documentoEuacape: [null,],
       documentoOtros: [{value: 'Requerimiento', disabled: true},],
@@ -58,7 +60,7 @@ export class FormComponent {
       plazoAtencionHoras: [{ value: null, }, [Validators.min(1)]],
       plazoAtencionDias: [{ value: null,  }, [Validators.min(0)]],
       plazoAtencionUrgente: [false],
-      
+
       folioJupiter: [null, [Validators.maxLength(255)]],
       volanteJefatura: [null, [Validators.maxLength(255)]],
     });
@@ -69,7 +71,7 @@ export class FormComponent {
       //this.OFICIO = this.euacapeForm.value.administracion;
       //console.log(this.OFICIO);
     }
-  
+
     //openCustomModal() {
     //  this.modalService.openCustomDialog({
     //     title: 'Title for cutom dialog',
@@ -80,12 +82,21 @@ export class FormComponent {
     getToday(): string {
       return new Date().toISOString().split('T')[0]
     }
-  
+    onFileSelected(event: any) {
+      const file: File = event.target.files[0]
+      this.file = file;
+      if (file) {
+        this.nameDocumentoEscaneadoFile = file.name
+        console.log("Nombre del archivo:", this.nameDocumentoEscaneadoFile);
+        console.log('Tipo MIME del archivo:', file.type);
+      }
+    }
     openCustomModalWithTemplate(template: TemplateRef<any>){
       this.collectFormInfoService.updateEuacapeForm(
         this.euacapeForm.value.administracion,
         this.euacapeForm.value.fechaRecepcion,
-        this.euacapeForm.value.documentoEscaneado,
+        // this.euacapeForm.value.documentoEscaneado,
+        this.nameDocumentoEscaneadoFile,
         this.euacapeForm.value.documentoEuacape,
         'Requerimiento',
         this.euacapeForm.value.descripcion,
