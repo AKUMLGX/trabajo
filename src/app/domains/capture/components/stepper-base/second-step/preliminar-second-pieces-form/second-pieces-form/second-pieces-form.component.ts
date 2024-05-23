@@ -46,8 +46,7 @@ export class SecondPiecesFormComponent {
     fechaRecepcion: [null, [Validators.required]],
     documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
     
-    documentoEuacape: [null,],  ///hay que ver como manejar este caso pues ya no sabemos de antemano que es un euacape
-    documentoOtros: [{value: 'Requerimiento', disabled: true},],
+    documento: [null, [Validators.required]],  
 
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
     atencion: [{value: 'Recibido', disabled: true},],
@@ -77,8 +76,7 @@ export class SecondPiecesFormComponent {
       this.secondPiecesForm.value.administracion,
       this.secondPiecesForm.value.fechaRecepcion,
       this.secondPiecesForm.value.documentoEscaneado,
-      this.secondPiecesForm.value.documentoEuacape,
-      'Requerimiento',
+      this.secondPiecesForm.value.documento,
       this.secondPiecesForm.value.descripcion,
       'Recibido',
       this.secondPiecesForm.value.autoridadRemitente,

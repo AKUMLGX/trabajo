@@ -33,8 +33,7 @@ export class SecondPiecesInfoTableComponent {
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
   FECHARECEPCION = this.collectSecondPiecesInfoService.FECHAREC;
   DOCUMENTOESCANEADO = this.collectSecondPiecesInfoService.DOCSCAN;
-  DOCUMENTOEUACAPE = this.collectSecondPiecesInfoService.DOCUMENTOEUACAPE;
-  DOCUMENTOOTROS = this.collectSecondPiecesInfoService.DOCUMENTOOTROS;
+  DOCUMENTO = this.collectSecondPiecesInfoService.DOCUMENTO;
   DESCRIPCION = this.collectSecondPiecesInfoService.DESCRIPCION;
   ATENCION = this.collectSecondPiecesInfoService.ATENCION;
   AUTORIDADREMITENTE = this.collectSecondPiecesInfoService.AUTORIDADREMI;
@@ -85,7 +84,7 @@ export class SecondPiecesInfoTableComponent {
   EUACAPE_SECOND_ROUND: SecondPiecesTableBeforeSubmit[] = [
     {name: 'Administración', answer: this.ADMINISTRACION()},
     {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
-    {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPES') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },    
+    {name: 'Documento', answer: this.DOCUMENTO() },    
     {name: 'Atención', answer: this.ATENCION()},
     {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
   ];

@@ -250,8 +250,8 @@
                                 htmlfor="grid-password">
                                     Documento
                             </label>
-                            <select id="documentoEuacape"
-                                    formControlName="documentoEuacape"
+                            <select id="documento"
+                                    formControlName="documento"
                                     class="input-field">
                                 <option [ngValue]="null" disabled >Elija un documento</option>
                                 <option value="Requerimiento">Requerimiento</option>
@@ -267,27 +267,15 @@
                                 htmlfor="grid-password">
                                     Atención
                             </label>
-                            @if(isSecondPiece){
-                                <input type="text" placeholder="Atención"
-                                    class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="atencion" value=""
-                                >
-                            } @else {
-                                <!-- Modificación sobre el campo atención hecha el 30.04.24
-                                Esta viene ahora precargada como "Recibido" y ya NO  
-                                como "En trámite". Por lo tanto, tamb comenté el 
-                                select de opciones de aquí abajo pues aparentemente
-                                ya no aplicaría como antes. -->
-                                <!-- <select 
-                                        id="atencion" 
-                                        formControlName="atencion"
-                                        class="input-field">
-                                    <option [ngValue]="null" disabled>Elija una atención</option>
-                                    <option value="Total">Total</option>
-                                    <option value="Parcial">Parcial</option>
-                                    <option value="En trámite">En trámite</option>
-                                </select>  -->
-                            } 
+                                <select 
+                                    id="atencion" 
+                                    formControlName="atencion"
+                                    class="input-field">
+                                        <option [ngValue]="null" disabled>Elija una atención</option>
+                                        <option value="Total">Total</option>
+                                        <option value="Parcial">Parcial</option>
+                                        <option value="En trámite">En trámite</option>
+                                </select> 
                         </div>
                         
                         <div class="wrapping-individual-container">
@@ -295,10 +283,22 @@
                                 htmlfor="grid-password">
                                     Tipo asunto
                             </label>
-                            <input type="text" placeholder="Tipo asunto"
-                                class="disabled-input-field placeholder-blueGray-300"
-                                formControlName="tipoAsunto" value=""
-                            >
+                            <select 
+                                    id="tipoAsunto" 
+                                    formControlName="tipoAsunto"
+                                    class="input-field">
+                                        <option [ngValue]="null" disabled>Elija una asunto</option>
+                                        <option value="Total">EUACAPES</option>
+                                        <option value="Parcial">Respuesta</option>
+                                        <option [ngValue]="null" disabled>GENERALIDADES</option>
+                                        <option value="En trámite">Penal</option>
+                                        <option value="En trámite">Civil</option>
+                                        <option value="En trámite">Laboral</option>
+                                        <option value="En trámite">Juicio de Amparo</option>
+                                        <option value="En trámite">Concurso Mercantil</option>
+                                        <option value="En trámite">Copia de Conocimiento</option>
+                                        <option value="En trámite">Penal</option>
+                                </select>
                         </div>
                              
                     </div>

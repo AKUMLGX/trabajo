@@ -31,8 +31,7 @@ export class CollectSecondPiecesInfoService {
    ADMON = signal('');
    FECHAREC = signal<null | Date>(null);
    DOCSCAN = signal('');
-   DOCUMENTOEUACAPE = signal('');
-   DOCUMENTOOTROS = signal('');
+   DOCUMENTO = signal('');
    DESCRIPCION = signal('');
    ATENCION = signal('');
    AUTORIDADREMI = signal('');
@@ -47,8 +46,7 @@ export class CollectSecondPiecesInfoService {
      admon: string,
      fechaRec: null | Date,
      docScan:string,
-     documentoEuacape: string,
-     documentoOtros: string,
+     documento: string,
      descripcion: string,
      atencion: string,
      autoridadRemi: string,
@@ -62,8 +60,7 @@ export class CollectSecondPiecesInfoService {
      this.ADMON.set(admon);
      this.FECHAREC.set(fechaRec);
      this.DOCSCAN.set(docScan);
-     this.DOCUMENTOEUACAPE.set(documentoEuacape);
-     this.DOCUMENTOOTROS.set(documentoOtros);
+     this.DOCUMENTO.set(documento);
      this.DESCRIPCION.set(descripcion);
      this.ATENCION.set(atencion);
      this.AUTORIDADREMI.set(autoridadRemi);
