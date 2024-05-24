@@ -35,7 +35,7 @@ export class SecondPiecesFormComponent {
 
   isSecondPiece: boolean = true;
 
-  nameDocumentoEscaneadoFile: string = '';
+  documentoEscaneadoName: string = '';
   file?:File;
 
   constructor(
@@ -47,8 +47,7 @@ export class SecondPiecesFormComponent {
   public secondPiecesForm: FormGroup = this.fb.group({
     administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
-    documentoEscaneadoFile:[''],
-    documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
+    documentoEscaneadoFile:[null, [Validators.required]],
 
     documento: [null, [Validators.required]],
 
@@ -79,8 +78,8 @@ export class SecondPiecesFormComponent {
     const file: File = event.target.files[0]
     this.file = file;
     if (file) {
-      this.nameDocumentoEscaneadoFile = file.name
-      console.log("Nombre del archivo:", this.nameDocumentoEscaneadoFile);
+      this.documentoEscaneadoName = file.name
+      console.log("Nombre del archivo:", this.documentoEscaneadoName);
       console.log('Tipo MIME del archivo:', file.type);
     }
   }
@@ -90,7 +89,7 @@ export class SecondPiecesFormComponent {
       this.secondPiecesForm.value.administracion,
       this.secondPiecesForm.value.fechaRecepcion,
       //this.secondPiecesForm.value.documentoEscaneado,
-      this.nameDocumentoEscaneadoFile,
+      this.documentoEscaneadoName,
       this.secondPiecesForm.value.documento,
       this.secondPiecesForm.value.descripcion,
       this.secondPiecesForm.value.atencion,
