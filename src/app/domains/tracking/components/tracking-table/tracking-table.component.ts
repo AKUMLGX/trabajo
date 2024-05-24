@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
 import { Router } from '@angular/router';
+import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-table.component';
 
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule],
+  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule,EditTackingTableComponent],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })

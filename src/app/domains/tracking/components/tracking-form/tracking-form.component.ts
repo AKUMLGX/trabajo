@@ -30,7 +30,7 @@ export class TrackingFormComponent {
   ) { }
 
   onSave(): void {
-    this.router.navigate(['/layout/tracking']);
+    // this.router.navigate(['/layout/tracking']);
     this.asuntoService.filterDocuments(this.consultForm);
   }
 }
