@@ -3,28 +3,32 @@ import {
   HttpHandlerFn,
   HttpInterceptorFn,
   HttpRequest,
+  HttpResponse,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
-import {MatDialog } from '@angular/material/dialog';
+import { Observable, map } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { SuccessfulDialogComponent } from '../components/successful-dialog/successful-dialog.component';
 
-export const successfullInterceptor: HttpInterceptorFn=(
-  request:HttpRequest<any>,
-  next:HttpHandlerFn
-): Observable<HttpEvent<unknown>> =>{
-   let matDialog_ = inject(MatDialog)
-   return next(request).pipe(
-    catchError((suf)=>{
-      if (suf.status === 200 ) {
-        matDialog_.open(SuccessfulDialogComponent,{
-          data:{
-            msjTitle:"Exito",
-            msjDescription:suf.message
-          }
-        })
+export const successfullInterceptor: HttpInterceptorFn = (
+  request: HttpRequest<any>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
+  let matDialog_ = inject(MatDialog)
+  return next(request).pipe(
+    map((event: HttpEvent<any>) => {
+      if (event instanceof HttpResponse) {
+        if (event.status === 200) {
+          matDialog_.open(SuccessfulDialogComponent, {
+            data: {
+              msjTitle: "Exito",
+              msjDescription: "Acción realizada con exito"
+            }
+          })
+        }
       }
-      return throwError(()=>new Error(suf.statusText))
+      return event;
     })
-   )
+  )
 }
+

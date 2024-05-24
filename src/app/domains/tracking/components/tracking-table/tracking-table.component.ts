@@ -85,7 +85,7 @@ export class TrackingTableComponent {
 
   getFileName(path: String): string {
     let split: string[] = path.replace('\\\\', '\\').split('\\');
-    let name = split.pop();
+    let name = split.pop()?.replaceAll(' ', '_');
     return name != undefined ? name.replaceAll('#', '') : '';
   }
 
