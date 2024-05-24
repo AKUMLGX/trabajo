@@ -6,7 +6,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, finalize, map, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessfulDialogComponent } from '../components/successful-dialog/successful-dialog.component';
 
@@ -22,7 +22,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
           matDialog_.open(SuccessfulDialogComponent, {
             data: {
               msjTitle: "Exito",
-              msjDescription: "Ehshsh"
+              msjDescription: "Acción realizada con exito"
             }
           })
         }
