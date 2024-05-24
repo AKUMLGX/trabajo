@@ -1,9 +1,9 @@
 import { Component, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../../shared/services/modal.service';
-import { FormBuilder, 
-  FormGroup, 
-  Validators, 
+import { FormBuilder,
+  FormGroup,
+  Validators,
   ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
@@ -19,7 +19,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    FormsModule, 
+    FormsModule,
     MatStepperModule,
     MatTableModule,
     MatDialogModule,
@@ -35,6 +35,9 @@ export class SecondPiecesFormComponent {
 
   isSecondPiece: boolean = true;
 
+  nameDocumentoEscaneadoFile: string = '';
+  file?:File;
+
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
@@ -44,9 +47,10 @@ export class SecondPiecesFormComponent {
   public secondPiecesForm: FormGroup = this.fb.group({
     administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
+    documentoEscaneadoFile:[''],
     documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-    
-    documento: [null, [Validators.required]],  
+
+    documento: [null, [Validators.required]],
 
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
     atencion: [null, [Validators.required]],
@@ -57,7 +61,7 @@ export class SecondPiecesFormComponent {
     plazoAtencionHoras: [{ value: null,}, [Validators.min(1)]],
     plazoAtencionDias: [{ value: null, }, [Validators.min(0)]],
     plazoAtencionUrgente: [false],
-      
+
     folioJupiter: [null, [Validators.maxLength(255)]],
     volanteJefatura: [null, [Validators.maxLength(255)]],
 
@@ -71,11 +75,22 @@ export class SecondPiecesFormComponent {
     return new Date().toISOString().split('T')[0]
   }
 
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0]
+    this.file = file;
+    if (file) {
+      this.nameDocumentoEscaneadoFile = file.name
+      console.log("Nombre del archivo:", this.nameDocumentoEscaneadoFile);
+      console.log('Tipo MIME del archivo:', file.type);
+    }
+  }
+
   openCustomModalWithTemplate(template: TemplateRef<any>){
     this.collectSecondPiecesInfoService.updateSecondPiecesForm(
       this.secondPiecesForm.value.administracion,
       this.secondPiecesForm.value.fechaRecepcion,
-      this.secondPiecesForm.value.documentoEscaneado,
+      //this.secondPiecesForm.value.documentoEscaneado,
+      this.nameDocumentoEscaneadoFile,
       this.secondPiecesForm.value.documento,
       this.secondPiecesForm.value.descripcion,
       this.secondPiecesForm.value.atencion,
@@ -97,5 +112,5 @@ export class SecondPiecesFormComponent {
       template
     })
   }
-  
+
 }
