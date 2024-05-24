@@ -25,7 +25,7 @@ import { Asunto } from '../../../interfaces/asuntos.interfaces';
 })
 export class EditTackingTableComponent {
 constructor(private fb:FormBuilder,
-  //  private modalService:ModalService
+//  private modalService:ModalService,
   private updateSerivce: EditTackingTableService
   ){}
 
@@ -77,6 +77,27 @@ public updateTableForm: FormGroup = this.fb.group({
     // })
 
   }
+
+
+// openCustomModalWithTemplate(template: TemplateRef<any>){
+//   const formData = this.updateTableForm.value
+
+//   // const dataSend: Asunto = {
+//   //       carpeta_investigacion: formData.carpetaInvestigacion,
+//   //       persona_relacionada: formData.personaRelacionada,
+//   //       folio_scanner:formData.folioScanner,
+//   //       oficio:formData.oficio,
+//   //       autoridad_remitente:formData.autoridadReminente,
+//   //       folio_jupiter:formData.folioJupiter,
+//   //       descripcion:formData.descripcion,
+//   //       turno_jefatura:formData.turnoJefatura,
+//   //       administracion:formData.administracion
+//   //     }
+
+//       this.modalService.openCustomDialogWithTemplate({
+//         template
+//       })
+// }
 
 }
 

@@ -35,6 +35,8 @@ export class TrackingTableComponent {
     nextLabel: 'Siguiente',
   };
 
+  editar:boolean= false
+
   constructor(
     private asuntoService: AsuntoService,
     private fileService: FileService,
@@ -111,5 +113,9 @@ export class TrackingTableComponent {
   printPdf(folio: String, path: String): void {
     let fileName = this.getFileName(path);
     this.fileService.printPdf(folio.toString(), fileName);
+  }
+
+  updateTable(){
+     this.editar= true
   }
 }

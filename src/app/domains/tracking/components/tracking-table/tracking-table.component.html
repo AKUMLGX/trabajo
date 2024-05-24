@@ -281,9 +281,10 @@
                       >
                         <mat-icon style="margin-left: 5px">print</mat-icon>
                       </button>
-                      <button  mat-button class="text-wine leading-5" >
+                      <button  mat-button class="text-wine leading-5"
+                       (click)="updateTable()"
+                      >
                         <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
-                        <!-- <app-edit-tacking-table/> -->
                       </button>
                       }
                     </div>
@@ -654,4 +655,7 @@
   </div>
   {{ scrollToTable() }}
 </section>
+}
+@if (editar) {
+  <app-edit-tacking-table/>
 }
