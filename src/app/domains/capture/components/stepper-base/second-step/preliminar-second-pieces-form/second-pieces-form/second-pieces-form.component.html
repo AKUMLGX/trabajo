@@ -249,6 +249,13 @@
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
                                     Documento
+                                    @if (secondPiecesForm.controls['documento'].invalid && (secondPiecesForm.controls['documento'].dirty || secondPiecesForm.controls['documento'].touched)) {
+                                        @if(secondPiecesForm.get('documento')?.errors?.['required']) {
+                                            <div class="text-wine ml-1">
+                                                <span>*</span>
+                                            </div>
+                                        }
+                                    }
                             </label>
                             <select id="documento"
                                     formControlName="documento"
@@ -266,6 +273,13 @@
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
                                     Atención
+                                    @if (secondPiecesForm.controls['atencion'].invalid && (secondPiecesForm.controls['atencion'].dirty || secondPiecesForm.controls['atencion'].touched)) {
+                                        @if(secondPiecesForm.get('atencion')?.errors?.['required']) {
+                                            <div class="text-wine ml-1">
+                                                <span>*</span>
+                                            </div>
+                                        }
+                                    }
                             </label>
                                 <select 
                                     id="atencion" 
@@ -282,6 +296,13 @@
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
                                     Tipo asunto
+                                    @if (secondPiecesForm.controls['tipoAsunto'].invalid && (secondPiecesForm.controls['tipoAsunto'].dirty || secondPiecesForm.controls['tipoAsunto'].touched)) {
+                                        @if(secondPiecesForm.get('tipoAsunto')?.errors?.['required']) {
+                                            <div class="text-wine ml-1">
+                                                <span>*</span>
+                                            </div>
+                                        }
+                                    }
                             </label>
                             <select 
                                     id="tipoAsunto" 
@@ -297,7 +318,6 @@
                                         <option value="En trámite">Juicio de Amparo</option>
                                         <option value="En trámite">Concurso Mercantil</option>
                                         <option value="En trámite">Copia de Conocimiento</option>
-                                        <option value="En trámite">Penal</option>
                                 </select>
                         </div>
                              
@@ -319,6 +339,9 @@
                                 ||  (secondPiecesForm.controls['descripcion'].invalid && (secondPiecesForm.controls['descripcion'].dirty || secondPiecesForm.controls['descripcion'].touched))
                                 ||  (secondPiecesForm.controls['autoridadRemitente'].invalid && (secondPiecesForm.controls['autoridadRemitente'].dirty || secondPiecesForm.controls['autoridadRemitente'].touched))
                                 ||  (secondPiecesForm.controls['personaRelacionada'].invalid && (secondPiecesForm.controls['personaRelacionada'].dirty || secondPiecesForm.controls['personaRelacionada'].touched))
+                                ||  (secondPiecesForm.controls['documento'].invalid && (secondPiecesForm.controls['documento'].dirty || secondPiecesForm.controls['documento'].touched))
+                                ||  (secondPiecesForm.controls['atencion'].invalid && (secondPiecesForm.controls['atencion'].dirty || secondPiecesForm.controls['atencion'].touched))                                
+                                ||  (secondPiecesForm.controls['tipoAsunto'].invalid && (secondPiecesForm.controls['tipoAsunto'].dirty || secondPiecesForm.controls['tipoAsunto'].touched))
                                 ) {
                                 @if (
                                         (secondPiecesForm.get('administracion')?.errors?.['required'])
@@ -327,6 +350,9 @@
                                     ||  (secondPiecesForm.get('descripcion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('autoridadRemitente')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('personaRelacionada')?.errors?.['required'])
+                                    ||  (secondPiecesForm.get('documento')?.errors?.['required'])
+                                    ||  (secondPiecesForm.get('atencion')?.errors?.['required'])
+                                    ||  (secondPiecesForm.get('tipoAsunto')?.errors?.['required'])
                                 ) {
                                     <div class="text-wine text-base p-3 flex gap-3">
                                         <span>REQUERIDO</span>

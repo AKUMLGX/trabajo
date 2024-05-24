@@ -49,7 +49,7 @@ export class SecondPiecesFormComponent {
     documento: [null, [Validators.required]],  
 
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-    atencion: [{value: 'Recibido', disabled: true},],
+    atencion: [null, [Validators.required]],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
     personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
@@ -78,11 +78,11 @@ export class SecondPiecesFormComponent {
       this.secondPiecesForm.value.documentoEscaneado,
       this.secondPiecesForm.value.documento,
       this.secondPiecesForm.value.descripcion,
-      'Recibido',
+      this.secondPiecesForm.value.atencion,
       this.secondPiecesForm.value.autoridadRemitente,
       this.secondPiecesForm.value.turnoJefatura,
       this.secondPiecesForm.value.personaRelacionada,
-      'concurso_mercantil_e.g.',
+      this.secondPiecesForm.value.tipoAsunto,
       this.secondPiecesForm.value.volanteJefatura,
       this.secondPiecesForm.value.folioJupiter,
     );
