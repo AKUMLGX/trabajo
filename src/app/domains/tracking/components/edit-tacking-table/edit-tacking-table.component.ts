@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { ModalService } from '../../../shared/services/modal.service';
+import { EditTackingTableService } from '../../../services/edit-tacking-table.service';
+import { Asunto } from '../../../interfaces/asuntos.interfaces';
+
 
 @Component({
   selector: 'app-edit-tacking-table',
@@ -22,12 +25,13 @@ import { ModalService } from '../../../shared/services/modal.service';
 })
 export class EditTackingTableComponent {
 constructor(private fb:FormBuilder,
-   private modalService:ModalService
+  //  private modalService:ModalService
+  private updateSerivce: EditTackingTableService
   ){}
 
 
 public updateTableForm: FormGroup = this.fb.group({
-  carpetaInvestigacion: [''],
+  carpetaInvestigacion: [""],
   personaRelacionada:[''],
   folioScanner:[""],
   volanteJefatura:[""],
@@ -41,6 +45,37 @@ public updateTableForm: FormGroup = this.fb.group({
 
   saveUpdateForm():void{
     console.log(this.updateTableForm);
+    const formData = this.updateTableForm.value
+
+      // const dataSend: Asunto = {
+      //   carpeta_investigacion: formData.carpetaInvestigacion,
+      //   persona_relacionada: formData.personaRelacionada,
+      //   folio_scanner:formData.folioScanner,
+      //   oficio:formData.oficio,
+      //   autoridad_remitente:formData.autoridadReminente,
+      //   folio_jupiter:formData.folioJupiter,
+      //   descripcion:formData.descripcion,
+      //   turno_jefatura:formData.turnoJefatura,
+      //   administracion:formData.administracion
+      // }
+
+      // const dataSend: Asunto = {
+      //   carpeta_investigacion:  formData.value.carpetaInvestigacion,
+      //   persona_relacionada:    formData.value.personaRelacionada,
+      //   folio_scanner:          formData.value.folioScanner,
+      //   oficio:                 formData.value.oficio,
+      //   autoridad_remitente:    formData.value.autoridadReminente,
+      //   folio_jupiter:          formData.value.folioJupiter,
+      //   descripcion:            formData.value.descripcion,
+      //   turno_jefatura:         formData.value.turnoJefatura,
+      //   administracion:         formData.value.administracion
+      // }
+
+    // this.updateSerivce.updateTrackingTable(dataSend).subscribe(response =>{
+    //   console.log("Datos enviados exitosamente:", response);
+
+    // })
+
   }
 
 }
