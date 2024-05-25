@@ -13,12 +13,34 @@ export class EuacapeAperturaService {
     private httpClient: HttpClient,
   ) { }
 
-  insertEuacapeForm(euacapeForm: EuacapeApertura) {
-    const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    this.httpClient.post<EuacapeAperturaResponse>(
+  // insertEuacapeForm(euacapeForm: EuacapeApertura) {
+  //   const headers = new HttpHeaders({'Content-Type': 'application/json'});
+  //   this.httpClient.post<EuacapeAperturaResponse>(
+  //     environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
+  //       euacapeForm, {headers: headers})
+  //       .subscribe((res) => {
+  //       console.log(res);
+  //   });
+  // }
+
+  insertEuacapeForm(euacapeForm: EuacapeApertura, selectedFile: File) {
+
+    const euacapeFormJson = JSON.stringify(euacapeForm);
+    const euacapeFormBlob = new Blob([euacapeFormJson], {
+      type: 'application/json'
+    });
+
+    const formData = new FormData();
+
+    formData.append('file', selectedFile, selectedFile.name);
+    formData.append('euacapeForm', euacapeFormBlob);
+
+    const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
+
+    this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
-        euacapeForm, {headers: headers})
-        .subscribe((res) => {
+      formData, {headers: headers}
+    ).subscribe((res) => {
         console.log(res);
     });
   }
