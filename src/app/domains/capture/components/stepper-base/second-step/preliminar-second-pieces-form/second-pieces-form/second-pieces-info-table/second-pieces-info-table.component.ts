@@ -32,7 +32,8 @@ export class SecondPiecesInfoTableComponent {
 
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
   FECHARECEPCION = this.collectSecondPiecesInfoService.FECHAREC;
-  DOCUMENTOESCANEADO = this.collectSecondPiecesInfoService.DOCSCAN;
+  DOCUMENTOESCANEADO = this.collectSecondPiecesInfoService.DOCSCANNAME;
+  DOCUMENTOESCANEADOFILE = this.collectSecondPiecesInfoService.DOCSCANFILE;
   DOCUMENTO = this.collectSecondPiecesInfoService.DOCUMENTO;
   DESCRIPCION = this.collectSecondPiecesInfoService.DESCRIPCION;
   ATENCION = this.collectSecondPiecesInfoService.ATENCION;
@@ -109,6 +110,7 @@ export class SecondPiecesInfoTableComponent {
     folioScanner: string,
     oficio: string,
     documentoEscaneado: string,
+    documentoEscaneadoFile: undefined | File,
     personaRelacionada: string,
     descripcion: string,
     fechaRecepcion: string,
@@ -123,7 +125,7 @@ export class SecondPiecesInfoTableComponent {
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-    
+    console.log('Carlos Montañas', documentoEscaneadoFile?.type);
     if(this.TIPOASUNTO() === 'EUACAPES') {
       this.formsObjectService.euacapeFormObject.set({
         oficio:                oficio,

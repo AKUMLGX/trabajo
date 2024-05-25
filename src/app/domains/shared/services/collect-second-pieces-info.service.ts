@@ -30,7 +30,8 @@ export class CollectSecondPiecesInfoService {
 
    ADMON = signal('');
    FECHAREC = signal<null | Date>(null);
-   DOCSCAN = signal('');
+   DOCSCANNAME = signal('');
+   DOCSCANFILE = signal<undefined | File>(undefined);
    DOCUMENTO = signal('');
    DESCRIPCION = signal('');
    ATENCION = signal('');
@@ -45,7 +46,8 @@ export class CollectSecondPiecesInfoService {
    updateSecondPiecesForm(
      admon: string,
      fechaRec: null | Date,
-     docScan:string,
+     docScanName:string,
+     docScanFile: undefined | File,
      documento: string,
      descripcion: string,
      atencion: string,
@@ -59,7 +61,8 @@ export class CollectSecondPiecesInfoService {
    ){
      this.ADMON.set(admon);
      this.FECHAREC.set(fechaRec);
-     this.DOCSCAN.set(docScan);
+     this.DOCSCANNAME.set(docScanName);
+     this.DOCSCANFILE.set(docScanFile);
      this.DOCUMENTO.set(documento);
      this.DESCRIPCION.set(descripcion);
      this.ATENCION.set(atencion);
