@@ -9,8 +9,8 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                     Documento escaneado
-                                    @if (euacapeForm.controls['documentoEscaneado'].invalid && (euacapeForm.controls['documentoEscaneado'].dirty || euacapeForm.controls['documentoEscaneado'].touched)) {
-                                        @if(euacapeForm.get('documentoEscaneado')?.errors?.['required']) {
+                                    @if (euacapeForm.controls['documentoEscaneadoField'].invalid && (euacapeForm.controls['documentoEscaneadoField'].dirty || euacapeForm.controls['documentoEscaneadoField'].touched)) {
+                                        @if(euacapeForm.get('documentoEscaneadoField')?.errors?.['required']) {
                                             <div class="text-wine ml-1">
                                                 <span>*</span>
                                             </div>
@@ -19,14 +19,16 @@
                             </label>
                             <!-- <input type="text" placeholder="Documentos escaneados"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="documentoEscaneado" value=""
+                                formControlName="documentoEscaneadoField" value=""
                             > -->
-                          <input type="file" placeholder="Documentos escaneados"
-                         class="input-field placeholder-blueGray-300"
-                          formControlName="documentoEscaneado"   value="" accept="*" (change)="onFileSelected($event)">
+                          <input type="file" placeholder="Documento escaneado"
+                            class="input-field placeholder-blueGray-300"
+                            formControlName="documentoEscaneadoField"   
+                            value="" 
+                            accept="*" 
+                            (change)="onFileSelected($event)">
 
-
-                            @if (euacapeForm.get('documentoEscaneado')?.errors?.['maxlength']) {
+                            @if (euacapeForm.get('documentoEscaneadoField')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
                                 </div>
@@ -343,7 +345,7 @@
                             @if (
                                     (euacapeForm.controls['administracion'].invalid && (euacapeForm.controls['administracion'].dirty || euacapeForm.controls['administracion'].touched))
                                 ||  (euacapeForm.controls['fechaRecepcion'].invalid && (euacapeForm.controls['fechaRecepcion'].dirty || euacapeForm.controls['fechaRecepcion'].touched))
-                                ||  (euacapeForm.controls['documentoEscaneado'].invalid && (euacapeForm.controls['documentoEscaneado'].dirty || euacapeForm.controls['documentoEscaneado'].touched))
+                                ||  (euacapeForm.controls['documentoEscaneadoField'].invalid && (euacapeForm.controls['documentoEscaneadoField'].dirty || euacapeForm.controls['documentoEscaneadoField'].touched))
                                 ||  (euacapeForm.controls['descripcion'].invalid && (euacapeForm.controls['descripcion'].dirty || euacapeForm.controls['descripcion'].touched))
                                 ||  (euacapeForm.controls['autoridadRemitente'].invalid && (euacapeForm.controls['autoridadRemitente'].dirty || euacapeForm.controls['autoridadRemitente'].touched))
                                 ||  (euacapeForm.controls['personaRelacionada'].invalid && (euacapeForm.controls['personaRelacionada'].dirty || euacapeForm.controls['personaRelacionada'].touched))
@@ -351,7 +353,7 @@
                                 @if (
                                         (euacapeForm.get('administracion')?.errors?.['required'])
                                     ||  (euacapeForm.get('fechaRecepcion')?.errors?.['required'])
-                                    ||  (euacapeForm.get('documentoEscaneado')?.errors?.['required'])
+                                    ||  (euacapeForm.get('documentoEscaneadoField')?.errors?.['required'])
                                     ||  (euacapeForm.get('descripcion')?.errors?.['required'])
                                     ||  (euacapeForm.get('autoridadRemitente')?.errors?.['required'])
                                     ||  (euacapeForm.get('personaRelacionada')?.errors?.['required'])
