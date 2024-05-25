@@ -9,8 +9,8 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                     Documento escaneado
-                                    @if (secondPiecesForm.controls['documentoEscaneadoFile'].invalid && (secondPiecesForm.controls['documentoEscaneadoFile'].dirty || secondPiecesForm.controls['documentoEscaneadoFile'].touched)) {
-                                        @if(secondPiecesForm.get('documentoEscaneadoFile')?.errors?.['required']) {
+                                    @if (secondPiecesForm.controls['documentoEscaneadoField'].invalid && (secondPiecesForm.controls['documentoEscaneadoField'].dirty || secondPiecesForm.controls['documentoEscaneadoField'].touched)) {
+                                        @if(secondPiecesForm.get('documentoEscaneadoField')?.errors?.['required']) {
                                             <div class="text-wine ml-1">
                                                 <span>*</span>
                                             </div>
@@ -19,7 +19,7 @@
                             </label>
                             <input type="file" placeholder="Documento escaneado"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="documentoEscaneadoFile" 
+                                formControlName="documentoEscaneadoField" 
                                 value="" 
                                 accept="*" 
                                 (change)="onFileSelected($event)">
@@ -332,7 +332,7 @@
                             @if (
                                     (secondPiecesForm.controls['administracion'].invalid && (secondPiecesForm.controls['administracion'].dirty || secondPiecesForm.controls['administracion'].touched))
                                 ||  (secondPiecesForm.controls['fechaRecepcion'].invalid && (secondPiecesForm.controls['fechaRecepcion'].dirty || secondPiecesForm.controls['fechaRecepcion'].touched))
-                                ||  (secondPiecesForm.controls['documentoEscaneadoFile'].invalid && (secondPiecesForm.controls['documentoEscaneadoFile'].dirty || secondPiecesForm.controls['documentoEscaneadoFile'].touched))
+                                ||  (secondPiecesForm.controls['documentoEscaneadoField'].invalid && (secondPiecesForm.controls['documentoEscaneadoField'].dirty || secondPiecesForm.controls['documentoEscaneadoField'].touched))
                                 ||  (secondPiecesForm.controls['descripcion'].invalid && (secondPiecesForm.controls['descripcion'].dirty || secondPiecesForm.controls['descripcion'].touched))
                                 ||  (secondPiecesForm.controls['autoridadRemitente'].invalid && (secondPiecesForm.controls['autoridadRemitente'].dirty || secondPiecesForm.controls['autoridadRemitente'].touched))
                                 ||  (secondPiecesForm.controls['personaRelacionada'].invalid && (secondPiecesForm.controls['personaRelacionada'].dirty || secondPiecesForm.controls['personaRelacionada'].touched))
@@ -343,7 +343,7 @@
                                 @if (
                                         (secondPiecesForm.get('administracion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('fechaRecepcion')?.errors?.['required'])
-                                    ||  (secondPiecesForm.get('documentoEscaneadoFile')?.errors?.['required'])
+                                    ||  (secondPiecesForm.get('documentoEscaneadoField')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('descripcion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('autoridadRemitente')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('personaRelacionada')?.errors?.['required'])
