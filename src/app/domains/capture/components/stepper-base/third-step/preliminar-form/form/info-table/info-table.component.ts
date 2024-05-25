@@ -35,7 +35,8 @@ export class InfoTableComponent {
 
   ADMINISTRACION = this.collectFormInfoService.ADMON;
   FECHARECEPCION = this.collectFormInfoService.FECHAREC;
-  DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCAN;
+  DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCANNAME;
+  DOCUMENTOESCANEADOFILE = this.collectFormInfoService.DOCSCANFILE;
   DOCUMENTOEUACAPE = this.collectFormInfoService.DOCUMENTOEUACAPE;
   DOCUMENTOOTROS = this.collectFormInfoService.DOCUMENTOOTROS;
   DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
@@ -118,6 +119,7 @@ export class InfoTableComponent {
     folioScanner: string,
     oficio: string,
     documentoEscaneado: string,
+    documentoEscaneadoFile: undefined | File,
     personaRelacionada: string,
     descripcion: string,
     fechaRecepcion: string,
@@ -132,7 +134,7 @@ export class InfoTableComponent {
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-
+    console.log('Cwarlitros', documentoEscaneadoFile?.name);
     if(this.dropdownChoice === 'EUACAPES') {
       this.formsObjectService.euacapeFormObject.set({
         oficio:                oficio,
@@ -151,7 +153,8 @@ export class InfoTableComponent {
       console.log("Estamos en Euacape");
       console.log(this.formsObjectService.euacapeFormObject());
       this.euacapeAperturaService.insertEuacapeForm(
-        this.formsObjectService.euacapeFormObject()
+        this.formsObjectService.euacapeFormObject(),
+        documentoEscaneadoFile!
       );
     } else if (
         this.dropdownChoice === 'Penal' 

@@ -144,7 +144,8 @@ export class SecondPiecesInfoTableComponent {
       console.log("Estamos en Euacape");
       console.log(this.formsObjectService.euacapeFormObject());
       this.euacapeAperturaService.insertEuacapeForm(
-        this.formsObjectService.euacapeFormObject()
+        this.formsObjectService.euacapeFormObject(),
+        documentoEscaneadoFile!
       );
     } else if (
         this.TIPOASUNTO() === 'Penal' 

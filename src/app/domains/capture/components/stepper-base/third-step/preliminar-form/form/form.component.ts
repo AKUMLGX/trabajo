@@ -103,7 +103,7 @@ export class FormComponent {
         this.euacapeForm.value.fechaRecepcion,
         // this.euacapeForm.value.documentoEscaneado,
         this.documentoEscaneadoName,
-        //this.documentoEscaneadoFile,
+        this.documentoEscaneadoFile,
         this.euacapeForm.value.documentoEuacape,
         'Requerimiento',
         this.euacapeForm.value.descripcion,
@@ -135,6 +135,4 @@ export class FormComponent {
         template
       })
     }
-
-    X() {}
 }
