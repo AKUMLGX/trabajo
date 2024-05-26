@@ -16,3 +16,8 @@ export interface GeneralidadesSecondPiece{
     documento:             string;
     tipo_asunto:           string;
 }
+
+//en insomnia sigue apareciendo autoridadad_solicitante
+
+//campos que no se estan contemplando en el insomnia (yo si):
+//carpeta_investigacion, volante_jefatura & folio_jupiter

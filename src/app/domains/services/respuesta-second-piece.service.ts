@@ -30,7 +30,7 @@ export class RespuestaSecondPieceService {
     const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
 
     this.httpClient.post(
-      environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
+      environment.baseUrl + 'asunto/nuevo/respuesta/segunda_pieza/',
       formData, {headers: headers}
     ).subscribe((res) => {
         console.log(res);

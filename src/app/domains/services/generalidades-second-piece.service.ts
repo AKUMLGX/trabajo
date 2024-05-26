@@ -27,10 +27,14 @@ export class GeneralidadesSecondPieceService {
     formData.append('file', selectedFile, selectedFile.name);
     formData.append('generalidadesForm', generalidadesFormBlob);
 
-    const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
+    const headers = new HttpHeaders({
+      Accept: "application/json ,text/plain, */*",
+      'Content-Type': 'multipart/form-data'
+    });
+
 
     this.httpClient.post(
-      environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
+      environment.baseUrl + 'asunto/nuevo/generalidad/segunda_pieza/',
       formData, {headers: headers}
     ).subscribe((res) => {
         console.log(res);

@@ -13,3 +13,5 @@ export interface EuacapeSecondPiece {
     plazo_atencion:        number | null;
     documento:             string;
 }
+
+//Yo incluí documento, pero aparentemente el back no lo espera

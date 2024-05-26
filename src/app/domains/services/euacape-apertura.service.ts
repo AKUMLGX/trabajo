@@ -23,23 +23,23 @@ export class EuacapeAperturaService {
   //   });
   // }
 
-  insertEuacapeForm(euacapeForm: EuacapeApertura, selectedFile: File) {
+  insertEuacapeForm(data: EuacapeApertura, selectedFile: File) {
 
-    const euacapeFormJson = JSON.stringify(euacapeForm);
-    const euacapeFormBlob = new Blob([euacapeFormJson], {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], {
       type: 'application/json'
     });
 
     const formData = new FormData();
 
-    formData.append('file', selectedFile, selectedFile.name);
-    formData.append('euacapeForm', euacapeFormBlob);
+    formData.append("data", blob);
+    formData.append("file", selectedFile, selectedFile.name);
 
-    const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
+    //const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
 
     this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
-      formData, {headers: headers}
+      formData,
     ).subscribe((res) => {
         console.log(res);
     });

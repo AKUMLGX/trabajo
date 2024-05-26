@@ -212,4 +212,7 @@ export class SecondPiecesInfoTableComponent {
 
   }
 
+  //https://www.techiediaries.com/angular-send-file-to-api/
+  //https://stackoverflow.com/questions/50774176/sending-file-and-json-in-post-multipart-form-data-request-with-axios
+
 }

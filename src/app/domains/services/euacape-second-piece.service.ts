@@ -30,7 +30,7 @@ export class EuacapeSecondPieceService {
     const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
 
     this.httpClient.post(
-      environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
+      environment.baseUrl + 'asunto/nuevo/euacape/segunda_pieza/',
       formData, {headers: headers}
     ).subscribe((res) => {
         console.log(res);
