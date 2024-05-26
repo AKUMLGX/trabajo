@@ -27,7 +27,8 @@ export class CollectFormInfoService {
 
   ADMON = signal('');
   FECHAREC = signal<null | Date>(null);
-  DOCSCAN = signal('');
+  DOCSCANNAME = signal('');
+  DOCSCANFILE = signal<undefined | File>(undefined);
   DOCUMENTOEUACAPE = signal('');
   DOCUMENTOOTROS = signal('');
   DESCRIPCION = signal('');
@@ -39,7 +40,8 @@ export class CollectFormInfoService {
   updateEuacapeForm(
     admon: string,
     fechaRec: null | Date,
-    docScan:string,
+    docScanName:string,
+    docScanFile: undefined | File,
     documentoEuacape: string,
     documentoOtros: string,
     descripcion: string,
@@ -50,7 +52,8 @@ export class CollectFormInfoService {
   ){
     this.ADMON.set(admon);
     this.FECHAREC.set(fechaRec);
-    this.DOCSCAN.set(docScan);
+    this.DOCSCANNAME.set(docScanName);
+    this.DOCSCANFILE.set(docScanFile);
     this.DOCUMENTOEUACAPE.set(documentoEuacape);
     this.DOCUMENTOOTROS.set(documentoOtros);
     this.DESCRIPCION.set(descripcion);

@@ -40,17 +40,21 @@ export class FormComponent {
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
-    nameDocumentoEscaneadoFile: string = '';
-    file?:File;
+    
+    documentoEscaneadoName: string = '';
+    documentoEscaneadoFile?:File;
+
     @Input() dropdownChoice: string = '';
 
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [null, [Validators.required]],
       fechaRecepcion: [null, [Validators.required]],
-      documentoEscaneadoFile:[''],
-      documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
+      
+      documentoEscaneadoField:[null, [Validators.required]],
+
       documentoEuacape: [null,],
       documentoOtros: [{value: 'Requerimiento', disabled: true},],
+
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
       atencion: [{value: 'Recibido', disabled: true},],
       autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
@@ -82,21 +86,24 @@ export class FormComponent {
     getToday(): string {
       return new Date().toISOString().split('T')[0]
     }
+
     onFileSelected(event: any) {
       const file: File = event.target.files[0]
-      this.file = file;
-      if (file) {
-        this.nameDocumentoEscaneadoFile = file.name
-        console.log("Nombre del archivo:", this.nameDocumentoEscaneadoFile);
-        console.log('Tipo MIME del archivo:', file.type);
+      this.documentoEscaneadoFile = file;
+      if (this.documentoEscaneadoFile) {
+        this.documentoEscaneadoName = this.documentoEscaneadoFile.name
+        console.log("Nombre del archivo:", this.documentoEscaneadoName);
+        console.log('Tipo MIME del archivo:', this.documentoEscaneadoFile.type);
       }
     }
+
     openCustomModalWithTemplate(template: TemplateRef<any>){
       this.collectFormInfoService.updateEuacapeForm(
         this.euacapeForm.value.administracion,
         this.euacapeForm.value.fechaRecepcion,
         // this.euacapeForm.value.documentoEscaneado,
-        this.nameDocumentoEscaneadoFile,
+        this.documentoEscaneadoName,
+        this.documentoEscaneadoFile,
         this.euacapeForm.value.documentoEuacape,
         'Requerimiento',
         this.euacapeForm.value.descripcion,

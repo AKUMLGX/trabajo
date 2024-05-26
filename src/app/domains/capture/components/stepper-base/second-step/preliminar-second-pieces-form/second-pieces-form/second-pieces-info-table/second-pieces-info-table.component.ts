@@ -6,6 +6,10 @@ import { FormsObjectService } from '../../../../../../../shared/services/forms-o
 import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
 import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
 import { RespuestaAperturaService } from '../../../../../../../services/respuesta-apertura.service';
+import { SecondPiecesFormsObjectService } from '../../../../../../../shared/services/second-pieces-forms-object.service';
+import { EuacapeSecondPieceService } from '../../../../../../../services/euacape-second-piece.service';
+import { GeneralidadesSecondPieceService } from '../../../../../../../services/generalidades-second-piece.service';
+import { RespuestaSecondPieceService } from '../../../../../../../services/respuesta-second-piece.service';
 
 export interface SecondPiecesTableBeforeSubmit {
   name: string;
@@ -23,11 +27,11 @@ export class SecondPiecesInfoTableComponent {
 
   constructor(
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
-    private formsObjectService: FormsObjectService,
+    private secondPiecesFormsObjectService: SecondPiecesFormsObjectService,
 
-    private euacapeAperturaService: EuacapeAperturaService,
-    private generalidadesAperturaService: GeneralidadesAperturaService,
-    private respuestaAperturaService: RespuestaAperturaService,
+    private euacapeSecondPieceService: EuacapeSecondPieceService,
+    private generalidadesSecondPieceService: GeneralidadesSecondPieceService,
+    private respuestaSecondPieceService: RespuestaSecondPieceService,
   ){ }
 
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
@@ -125,9 +129,9 @@ export class SecondPiecesInfoTableComponent {
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-    console.log('Carlos Montañas', documentoEscaneadoFile?.type);
     if(this.TIPOASUNTO() === 'EUACAPES') {
-      this.formsObjectService.euacapeFormObject.set({
+      this.secondPiecesFormsObjectService.euacapeFormObject.set({
+        folio_interno:         folioInterno,
         oficio:                oficio,
         folio_scanner:         folioScanner,
         carpeta_investigacion: carpetaInvestigacion,
@@ -142,9 +146,10 @@ export class SecondPiecesInfoTableComponent {
         documento:             documento,
       });
       console.log("Estamos en Euacape");
-      console.log(this.formsObjectService.euacapeFormObject());
-      this.euacapeAperturaService.insertEuacapeForm(
-        this.formsObjectService.euacapeFormObject()
+      console.log(this.secondPiecesFormsObjectService.euacapeFormObject());
+      this.euacapeSecondPieceService.insertSecondPieceEuacapeForm(
+        this.secondPiecesFormsObjectService.euacapeFormObject(),
+        documentoEscaneadoFile!
       );
     } else if (
         this.TIPOASUNTO() === 'Penal' 
@@ -154,7 +159,8 @@ export class SecondPiecesInfoTableComponent {
         || this.TIPOASUNTO() === 'Concurso Mercantil'
         || this.TIPOASUNTO() === 'Copia de Conocimiento'
       ) {
-      this.formsObjectService.generalidadesFormObject.set({
+      this.secondPiecesFormsObjectService.generalidadesFormObject.set({
+        folio_interno:         folioInterno,
         oficio:                oficio,
         folio_scanner:         folioScanner,
         carpeta_investigacion: carpetaInvestigacion,
@@ -172,12 +178,13 @@ export class SecondPiecesInfoTableComponent {
         tipo_asunto:           tipoAsunto,
       });
       console.log("Estamos en Generalidades");
-      console.log(this.formsObjectService.generalidadesFormObject());
-      this.generalidadesAperturaService.insertGeneralidadesForm(
-        this.formsObjectService.generalidadesFormObject()
+      console.log(this.secondPiecesFormsObjectService.generalidadesFormObject());
+      this.generalidadesSecondPieceService.insertSecondPieceGeneralidadesForm(
+        this.secondPiecesFormsObjectService.generalidadesFormObject(),
+        documentoEscaneadoFile!
       );
     } else if (this.TIPOASUNTO() === 'Respuesta') {
-      this.formsObjectService.respuestaFormObject.set({
+      this.secondPiecesFormsObjectService.respuestaFormObject.set({
         folio_interno:         folioInterno,
         oficio:                oficio,
         folio_scanner:         folioScanner,
@@ -196,9 +203,10 @@ export class SecondPiecesInfoTableComponent {
         atencion:              atencion,
       });
       console.log("Estamos en Respuesta");
-      console.log(this.formsObjectService.respuestaFormObject());
-      this.respuestaAperturaService.insertRespuestaForm(
-        this.formsObjectService.respuestaFormObject()
+      console.log(this.secondPiecesFormsObjectService.respuestaFormObject());
+      this.respuestaSecondPieceService.insertSecondPieceRespuestaForm(
+        this.secondPiecesFormsObjectService.respuestaFormObject(),
+        documentoEscaneadoFile!
       );
     }
 
