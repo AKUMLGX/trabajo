@@ -13,25 +13,23 @@ export class EuacapeSecondPieceService {
   ) { }
 
   insertSecondPieceEuacapeForm(
-    euacapeForm: EuacapeSecondPiece, 
+    data: EuacapeSecondPiece, 
     selectedFile: File
   ) {
 
-    const euacapeFormJson = JSON.stringify(euacapeForm);
-    const euacapeFormBlob = new Blob([euacapeFormJson], {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], {
       type: 'application/json'
     });
 
     const formData = new FormData();
 
-    formData.append('file', selectedFile, selectedFile.name);
-    formData.append('euacapeForm', euacapeFormBlob);
-
-    const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
+    formData.append("data", blob);
+    formData.append("file", selectedFile, selectedFile.name);
 
     this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/euacape/segunda_pieza/',
-      formData, {headers: headers}
+      formData, 
     ).subscribe((res) => {
         console.log(res);
     });
