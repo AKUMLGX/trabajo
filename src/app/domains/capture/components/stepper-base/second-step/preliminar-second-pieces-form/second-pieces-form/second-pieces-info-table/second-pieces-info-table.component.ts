@@ -175,7 +175,8 @@ export class SecondPiecesInfoTableComponent {
       console.log("Estamos en Generalidades");
       console.log(this.formsObjectService.generalidadesFormObject());
       this.generalidadesAperturaService.insertGeneralidadesForm(
-        this.formsObjectService.generalidadesFormObject()
+        this.formsObjectService.generalidadesFormObject(),
+        documentoEscaneadoFile!
       );
     } else if (this.TIPOASUNTO() === 'Respuesta') {
       this.formsObjectService.respuestaFormObject.set({

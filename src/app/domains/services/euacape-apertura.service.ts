@@ -45,5 +45,7 @@ export class EuacapeAperturaService {
     });
   }
 
+  X(){}
+
 }
   
