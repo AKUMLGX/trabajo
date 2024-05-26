@@ -134,7 +134,6 @@ export class InfoTableComponent {
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-    console.log('Cwarlitros', documentoEscaneadoFile?.name);
     if(this.dropdownChoice === 'EUACAPES') {
       this.formsObjectService.euacapeFormObject.set({
         oficio:                oficio,
@@ -209,7 +208,8 @@ export class InfoTableComponent {
       console.log("Estamos en Respuesta");
       console.log(this.formsObjectService.respuestaFormObject());
       this.respuestaAperturaService.insertRespuestaForm(
-        this.formsObjectService.respuestaFormObject()
+        this.formsObjectService.respuestaFormObject(),
+        documentoEscaneadoFile!
       );
     }
 

@@ -11,15 +11,40 @@ import { RespuestaAperturaResponse } from '../interfaces/respuesta-apertura-resp
 export class RespuestaAperturaService {
 
   constructor(
-    private http: HttpClient,
+    private httpClient: HttpClient,
   ) { }
 
-  insertRespuestaForm(respuestaForm: RespuestaApertura) {
-    const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    this.http.post<RespuestaAperturaResponse>( 
+  // insertRespuestaForm(respuestaForm: RespuestaApertura) {
+  //   const headers = new HttpHeaders({'Content-Type': 'application/json'});
+  //   this.http.post<RespuestaAperturaResponse>( 
+  //     environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
+  //       respuestaForm, {headers: headers})
+  //       .subscribe((res) => {
+  //       console.log(res);
+  //   });
+  // }
+
+  insertRespuestaForm(
+    respuestaForm: RespuestaApertura, 
+    selectedFile: File
+  ) {
+
+    const respuestaFormJson = JSON.stringify(respuestaForm);
+    const respuestaFormBlob = new Blob([respuestaFormJson], {
+      type: 'application/json'
+    });
+
+    const formData = new FormData();
+
+    formData.append('file', selectedFile, selectedFile.name);
+    formData.append('respuestaForm', respuestaFormBlob);
+
+    const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
+
+    this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
-        respuestaForm, {headers: headers})
-        .subscribe((res) => {
+      formData, {headers: headers}
+    ).subscribe((res) => {
         console.log(res);
     });
   }

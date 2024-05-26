@@ -125,7 +125,6 @@ export class SecondPiecesInfoTableComponent {
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-    console.log('Carlos Montañas', documentoEscaneadoFile?.type);
     if(this.TIPOASUNTO() === 'EUACAPES') {
       this.formsObjectService.euacapeFormObject.set({
         oficio:                oficio,
@@ -200,7 +199,8 @@ export class SecondPiecesInfoTableComponent {
       console.log("Estamos en Respuesta");
       console.log(this.formsObjectService.respuestaFormObject());
       this.respuestaAperturaService.insertRespuestaForm(
-        this.formsObjectService.respuestaFormObject()
+        this.formsObjectService.respuestaFormObject(),
+        documentoEscaneadoFile!
       );
     }
 
