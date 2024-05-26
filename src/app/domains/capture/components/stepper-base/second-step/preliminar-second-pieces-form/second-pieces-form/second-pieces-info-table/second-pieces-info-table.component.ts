@@ -7,6 +7,9 @@ import { EuacapeAperturaService } from '../../../../../../../services/euacape-ap
 import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
 import { RespuestaAperturaService } from '../../../../../../../services/respuesta-apertura.service';
 import { SecondPiecesFormsObjectService } from '../../../../../../../shared/services/second-pieces-forms-object.service';
+import { EuacapeSecondPieceService } from '../../../../../../../services/euacape-second-piece.service';
+import { GeneralidadesSecondPieceService } from '../../../../../../../services/generalidades-second-piece.service';
+import { RespuestaSecondPieceService } from '../../../../../../../services/respuesta-second-piece.service';
 
 export interface SecondPiecesTableBeforeSubmit {
   name: string;
@@ -26,9 +29,9 @@ export class SecondPiecesInfoTableComponent {
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
     private secondPiecesFormsObjectService: SecondPiecesFormsObjectService,
 
-    private euacapeAperturaService: EuacapeAperturaService,
-    private generalidadesAperturaService: GeneralidadesAperturaService,
-    private respuestaAperturaService: RespuestaAperturaService,
+    private euacapeSecondPieceService: EuacapeSecondPieceService,
+    private generalidadesSecondPieceService: GeneralidadesSecondPieceService,
+    private respuestaSecondPieceService: RespuestaSecondPieceService,
   ){ }
 
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
@@ -144,10 +147,10 @@ export class SecondPiecesInfoTableComponent {
       });
       console.log("Estamos en Euacape");
       console.log(this.secondPiecesFormsObjectService.euacapeFormObject());
-      // this.euacapeAperturaService.insertEuacapeForm(
-      //   this.formsObjectService.euacapeFormObject(),
-      //   documentoEscaneadoFile!
-      // );
+      this.euacapeSecondPieceService.insertSecondPieceEuacapeForm(
+        this.secondPiecesFormsObjectService.euacapeFormObject(),
+        documentoEscaneadoFile!
+      );
     } else if (
         this.TIPOASUNTO() === 'Penal' 
         || this.TIPOASUNTO() === 'Civil'
@@ -176,10 +179,10 @@ export class SecondPiecesInfoTableComponent {
       });
       console.log("Estamos en Generalidades");
       console.log(this.secondPiecesFormsObjectService.generalidadesFormObject());
-      // this.generalidadesAperturaService.insertGeneralidadesForm(
-      //   this.formsObjectService.generalidadesFormObject(),
-      //   documentoEscaneadoFile!
-      // );
+      this.generalidadesSecondPieceService.insertSecondPieceGeneralidadesForm(
+        this.secondPiecesFormsObjectService.generalidadesFormObject(),
+        documentoEscaneadoFile!
+      );
     } else if (this.TIPOASUNTO() === 'Respuesta') {
       this.secondPiecesFormsObjectService.respuestaFormObject.set({
         folio_interno:         folioInterno,
@@ -201,10 +204,10 @@ export class SecondPiecesInfoTableComponent {
       });
       console.log("Estamos en Respuesta");
       console.log(this.secondPiecesFormsObjectService.respuestaFormObject());
-      // this.respuestaAperturaService.insertRespuestaForm(
-      //   this.formsObjectService.respuestaFormObject(),
-      //   documentoEscaneadoFile!
-      // );
+      this.respuestaSecondPieceService.insertSecondPieceRespuestaForm(
+        this.secondPiecesFormsObjectService.respuestaFormObject(),
+        documentoEscaneadoFile!
+      );
     }
 
   }
