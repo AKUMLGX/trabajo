@@ -24,25 +24,28 @@ export class GeneralidadesAperturaService {
   // }
 
   insertGeneralidadesForm(
-    generalidadesForm: GeneralidadesApertura, 
+    data: GeneralidadesApertura, 
     selectedFile: File
   ) {
 
-    const generalidadesFormJson = JSON.stringify(generalidadesForm);
-    const generalidadesFormBlob = new Blob([generalidadesFormJson], {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], {
       type: 'application/json'
     });
 
     const formData = new FormData();
 
-    formData.append('file', selectedFile, selectedFile.name);
-    formData.append('generalidadesForm', generalidadesFormBlob);
+    formData.append("data", blob);
+    formData.append("file", selectedFile, selectedFile.name);
 
-    const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
+    // const headers = new HttpHeaders({
+    //   Accept: "application/json ,text/plain, */*",
+    //   'Content-Type': 'multipart/form-data'
+    // });
 
     this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
-      formData, {headers: headers}
+      formData,
     ).subscribe((res) => {
         console.log(res);
     });

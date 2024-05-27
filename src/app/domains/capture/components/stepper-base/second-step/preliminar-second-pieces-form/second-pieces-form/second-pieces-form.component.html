@@ -192,16 +192,16 @@
                                 </div>
                             </div>
                             <div class="flex gap-3">
-                                <input type="number" min="1" placeholder="Plazo en hrs."
-                                    class="w-32 placeholder-blueGray-300"
+                                <input type="number" min="1" placeholder="Hrs."
+                                    class="w-20 placeholder-blueGray-300"
                                     formControlName="plazoAtencionHoras" value=""
                                     (change)="secondPiecesForm.get('plazoAtencionUrgente')!
                                         [$event ? 'disable':'enable']();
                                     "
                                     [ngClass]="secondPiecesForm.controls['plazoAtencionHoras'].disabled ? 'disabled-input-field' : 'input-field' "
                                 >
-                                <input type="number" min="0" placeholder="Plazo en días"
-                                    class="w-32 placeholder-blueGray-300"
+                                <input type="number" min="0" placeholder="Días"
+                                    class="w-20 placeholder-blueGray-300"
                                     formControlName="plazoAtencionDias" value=""
                                     (change)="secondPiecesForm.get('plazoAtencionUrgente')!
                                         [$event ? 'disable':'enable']()
@@ -211,7 +211,7 @@
                                 <div class="text-md mt-3">
                                     o
                                 </div>
-                                <div class="flex justify-center items-center w-40">
+                                <div class="flex justify-center items-center w-24 ml-2">
                                     <div
                                         class="p-0.5 flex"
                                         [ngClass]="secondPiecesForm.controls['plazoAtencionUrgente'].disabled ? 'bg-gray-100/30' : 'bg-white' "
@@ -285,7 +285,7 @@
                                         <option [ngValue]="null" disabled>Elija una atención</option>
                                         <option value="Total">Total</option>
                                         <option value="Parcial">Parcial</option>
-                                        <option value="En trámite">En trámite</option>
+                                        <option value="En tramite">En trámite</option>
                                 </select>
                         </div>
 

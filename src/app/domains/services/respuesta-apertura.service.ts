@@ -25,25 +25,23 @@ export class RespuestaAperturaService {
   // }
 
   insertRespuestaForm(
-    respuestaForm: RespuestaApertura, 
+    data: RespuestaApertura, 
     selectedFile: File
   ) {
 
-    const respuestaFormJson = JSON.stringify(respuestaForm);
-    const respuestaFormBlob = new Blob([respuestaFormJson], {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], {
       type: 'application/json'
     });
 
     const formData = new FormData();
 
-    formData.append('file', selectedFile, selectedFile.name);
-    formData.append('respuestaForm', respuestaFormBlob);
-
-    const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
+    formData.append("data", blob);
+    formData.append("file", selectedFile, selectedFile.name);
 
     this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
-      formData, {headers: headers}
+      formData,
     ).subscribe((res) => {
         console.log(res);
     });

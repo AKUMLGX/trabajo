@@ -16,3 +16,9 @@ export interface RespuestaSecondPiece {
     documento:             string;
     atencion:              string;
 }
+
+//En el insomnia, administracion se repite dos veces
+
+//Nuevamente, hay 3 campos que yo mando pero que no aparecen en insomnia,
+//mismo caso que ocurrio en Generalidades Segunda Pieza, estos son:
+//carpeta_investigacion, volante_jefatura & folio_jupiter
