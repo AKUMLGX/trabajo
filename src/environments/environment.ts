@@ -8,4 +8,6 @@
   getPdfEndpoint: 'getPdf',
   getMsgEndpoint: 'getMsg',
   base: '/akamba',
+  loginUrl: 'http://localhost:4200/login',
+  logoutUrl: 'https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout'
 };

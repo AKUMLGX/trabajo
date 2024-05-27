@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LogoutService {
-  constructor(private router: Router) {}    
-
+  constructor() {}    
   logout() {
     localStorage.clear();
-    window.location.href = 'https://auth.uat.cloudb.sat.gob.mx/nidp/app/logout';
-  }
-        
+    window.location.href = environment.logoutUrl;
+  }     
 }
 
 

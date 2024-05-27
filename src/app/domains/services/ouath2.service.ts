@@ -12,10 +12,10 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class Oauth2Service {
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(private httpClient: HttpClient, private router: Router) { }
 
   getToken(oauth2Code: Oauth2Code): void {
-    /*this.httpClient
+    this.httpClient
       .post<SessionInfo>(
         environment.baseUrl + environment.tokenValidationEndpoint,
         oauth2Code
@@ -25,9 +25,9 @@ export class Oauth2Service {
           localStorage.setItem('sessionInfo', JSON.stringify(data));
         },
         error: () => {
-          this.router.navigate(['/login']);
+          window.location.href = environment.loginUrl;
         },
-      });*/
+      });
   }
 
   do_oauth(): void {
