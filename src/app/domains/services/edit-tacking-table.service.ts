@@ -18,7 +18,7 @@ export class EditTackingTableService {
 
 
   updateTrackingTable(data:Asunto):Observable<Asunto>{
-    debugger
+   // debugger
     let  targetUrl  = environment.baseUrl
     if (data.id_asunto_historico !== null) {
       targetUrl = environment.baseUrl + environment.asuntoHistoricoEndpoint
@@ -28,7 +28,7 @@ export class EditTackingTableService {
       console.log(targetUrl);
 
     }
-     return this.http.put<Asunto>(targetUrl,
+     return this.http.patch<Asunto>(targetUrl,
       data, this.httpOptions)
 
   }
