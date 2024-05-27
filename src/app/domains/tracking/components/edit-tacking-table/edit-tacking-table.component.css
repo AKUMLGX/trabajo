@@ -14,10 +14,41 @@
   @apply border-0 px-3 py-3 text-gray-400 bg-gray-100/30 rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
 }
 
-.modal-right-button {
-  @apply bg-[#2F722F] text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
-}
-
-.modal-left-button {
+.next-button {
   @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
 }
+
+.next-button-disabled {
+  @apply bg-[#2F722F]/40 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow outline-none mr-1
+}
+
+.instructions-text {
+  @apply sm:text-xs md:text-base mt-2 ml-2 text-justify
+}
+
+.base-next-button {
+  @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+}
+
+.base-next-button-disabled {
+  @apply bg-wine/40 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow outline-none mr-1
+}
+
+.table-head-item {
+  @apply px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider
+}
+
+.table-data-cell-item {
+  @apply px-6 py-4 border-b border-gray-500
+}
+
+.table-data-cell-content {
+  @apply text-sm leading-5 text-wine
+}
+  .modal-right-button {
+    @apply bg-[#2F722F] text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+  }
+
+  .modal-left-button {
+    @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+  }

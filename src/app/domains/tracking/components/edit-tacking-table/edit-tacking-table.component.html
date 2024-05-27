@@ -92,100 +92,108 @@
 </div> -->
 
 
+@if(mostrarTabla){
+<div class="w-full lg:w-12/12 mx-auto mt-2">
+  <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
+    <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
+      <div class="flex justify-center items-center text-3xl mb-14 font-montserrat "> Se Actualizara la siguiente
+        información:</div>
 
+      <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
+        <form [formGroup]="updateTableForm" >
+          <div class="flex flex-wrap">
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
 
-  <div class="w-full lg:w-12/12 mx-auto mt-2">
-      <div
-          class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
-          <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
-            <h2 >
-              Se Actualizara la siguiente información:
-            </h2>
-            <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
-              <form [formGroup]="updateTableForm">
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Carpeta de Investigación
-                  </label>
-                  <input type="text" placeholder="Carpeta de Investigación" class="input-field placeholder-blueGray-300"
-                    formControlName="carpetaInvestigacion" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Persona Relacionada
-                  </label>
-                  <input type="text" placeholder="Persona Relacionada" class="input-field placeholder-blueGray-300"
-                    formControlName="personaRelacionada" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Folio Scanner
-                  </label>
-                  <input type="text" placeholder="Folio Scanner" class="input-field placeholder-blueGray-300"
-                    formControlName="folioScanner" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Volante Jefatura
-                  </label>
-                  <input type="text" placeholder="volanteJefatura" class="input-field placeholder-blueGray-300"
-                    formControlName="volanteJefatura" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Oficio
-                  </label>
-                  <input type="text" placeholder="oficio" class="input-field placeholder-blueGray-300" formControlName="oficio"
-                    value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Autoridad Remitente
-                  </label>
-                  <input type="text" placeholder="Autoridad Reminente" class="input-field placeholder-blueGray-300"
-                    formControlName="autoridadReminente" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Folio Jupiter
-                  </label>
-                  <input type="text" placeholder="Folio Jupiter" class="input-field placeholder-blueGray-300"
-                    formControlName="folioJupiter" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Descripción
-                  </label>
-                  <input type="text" placeholder="Descripción" class="input-field placeholder-blueGray-300"
-                    formControlName="descripcion" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Turno Jefatura
-                  </label>
-                  <input type="text" placeholder="Turno Jefatura" class="input-field placeholder-blueGray-300"
-                    formControlName="turnoJefatura" value="">
-                </div>
-                <div class="wrapping-individual-container">
-                  <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                    Administración
-                  </label>
-                  <input type="text" placeholder="Administración" class="input-field placeholder-blueGray-300"
-                    formControlName="administracion" value="">
-                </div>
+                Carpeta de Investigación
+                @if (updateTableForm.get('carpetaInvestigacion')?.invalid && updateTableForm.get('carpetaInvestigacion')?.touched ) {
+                  <div>No deje el campo vacio</div>
+                }
+              </label>
+              <input type="text" placeholder="Carpeta de Investigación" class="input-field placeholder-blueGray-300"
+                formControlName="carpeta_investigacion" value="">
 
-                <div class="flex justify-center items-center">
-
-                  <button class="modal-left-button mr-10" mat-button mat-dialog-close>
-                    Cancelar
-                  </button>
-                  <button class="modal-right-button ml-10">
-                    Confirmar
-                  </button>
-
-                </div>
-              </form>
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Persona Relacionada
+              </label>
+              <input type="text" placeholder="Persona Relacionada" class="input-field placeholder-blueGray-300"
+                formControlName="persona_relacionada" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Folio Scanner
+              </label>
+              <input type="text" placeholder="Folio Scanner" class="input-field placeholder-blueGray-300"
+                formControlName="folio_scanner" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Volante Jefatura
+              </label>
+              <input type="text" placeholder="volante Jefatura" class="input-field placeholder-blueGray-300"
+                formControlName="volante_jefatura" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Oficio
+              </label>
+              <input type="text" placeholder="Oficio" class="input-field placeholder-blueGray-300"
+                formControlName="oficio" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Autoridad Remitente
+              </label>
+              <input type="text" placeholder="Autoridad Reminente" class="input-field placeholder-blueGray-300"
+                formControlName="autoridad_remitente" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Folio Jupiter
+              </label>
+              <input type="text" placeholder="Folio Jupiter" class="input-field placeholder-blueGray-300"
+                formControlName="folio_jupiter" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Descripción
+              </label>
+              <input type="text" placeholder="Descripción" class="input-field placeholder-blueGray-300"
+                formControlName="descripcion" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Turno Jefatura
+              </label>
+              <input type="text" placeholder="Turno Jefatura" class="input-field placeholder-blueGray-300"
+                formControlName="turno_jefatura" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Administración
+              </label>
+              <input type="text" placeholder="Administración " class="input-field placeholder-blueGray-300"
+                formControlName="administracion" value="">
+            </div>
           </div>
+          <div class="flex justify-center items-center mt-8">
+
+            <button (click)="showagain()" class="modal-left-button mr-10">
+              Cancelar
+            </button>
+
+
+            <button (click)="saveUpdateForm()" [disabled]="!botonHabilitado"
+              [ngClass]=" !botonHabilitado ? 'next-button-disabled' : 'modal-right-button ml-1 '">
+              Editar
+            </button>
+
+          </div>
+        </form>
       </div>
+    </div>
   </div>
-  </div>
+</div>
+}

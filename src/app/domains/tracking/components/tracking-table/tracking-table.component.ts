@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, ViewChild  } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
 import { Router } from '@angular/router';
 import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-table.component';
+
 
 @Component({
   selector: 'app-tracking-table',
@@ -36,6 +37,15 @@ export class TrackingTableComponent {
   };
 
   editar:boolean= false
+
+  filaSeleccionada: any
+
+  mostrarTabla: boolean = false
+  clickclose: boolean = false
+
+
+  @ViewChild("edit-tacking-table") miComponente!: ElementRef;
+
 
   constructor(
     private asuntoService: AsuntoService,
@@ -117,5 +127,26 @@ export class TrackingTableComponent {
 
   updateTable(){
      this.editar= true
+     this.mostrarTabla=false
+     console.log("mostrarTabla",this.mostrarTabla);
+     console.log("editar",this.editar);
   }
+
+  seleccionarFila(fila: any) {
+    this.filaSeleccionada = fila;
+    console.log(this.filaSeleccionada);
+  }
+
+  showAgainTable() {
+    this.mostrarTabla=false
+    this.editar=false
+    console.log("mostrarTabla",this.mostrarTabla);
+    console.log("editar",this.editar);
+
+  }
+
+
+
+
+
 }

@@ -1,5 +1,6 @@
 export interface Asunto {
-  id_asunto_historico: number;
+  id_asunto_historico: number|null;
+  id_asunto_nuevo:number|null;
   oficio: String;
   autoridad_remitente: String;
   folio: String;
