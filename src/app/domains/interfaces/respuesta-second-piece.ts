@@ -14,7 +14,9 @@ export interface RespuestaSecondPiece {
     administracion:        string;
     plazo_atencion:        number | null;
     documento:             string;
+    adminstracion:         string,
     atencion:              string;
+    tipo_asunto:           string;
 }
 
 //En el insomnia, administracion se repite dos veces

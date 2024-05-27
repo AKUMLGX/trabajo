@@ -46,21 +46,24 @@ export class SecondPiecesFormsObjectService {
   });
 
   respuestaFormObject = signal<RespuestaSecondPiece>({
-    folio_interno:         '',
-    oficio:                '',
-    folio_scanner:         '',
-    carpeta_investigacion: null,
-    documento_escaneado:   '',
-    fecha_recepcion:       '',
-    autoridad_remitente:   '',
-    persona_relacionada:   '',
-    turno_jefatura:        null,
-    descripcion:           '',
-    volante_jefatura:      null,
-    folio_jupiter:         null,
-    administracion:        '',
-    plazo_atencion:        null,
+    folio_interno:         '',     
+    oficio:                '',     
+    folio_scanner:         '',     
+    carpeta_investigacion: null,   
+    documento_escaneado:   '',     
+    fecha_recepcion:       '',     
+    autoridad_remitente:   '',     
+    persona_relacionada:   '',     
+    turno_jefatura:        null,   
+    descripcion:           '',     
+    volante_jefatura:      null,   
+    folio_jupiter:         null,   
+    administracion:        '',     
+    plazo_atencion:        null,   
     documento:             '',
+    adminstracion:         '',
     atencion:              '',
+    tipo_asunto:           '',     
   });
+  
 }
