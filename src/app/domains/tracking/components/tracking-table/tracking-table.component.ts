@@ -80,10 +80,10 @@ export class TrackingTableComponent {
 
   scrollToTable(): void {
     const element = document.getElementById('sectionTable');
-    if (element !== null && !this.newTableIsRendered) {
+    if (element !== null && !this.newTableIsRendered ) {
       const checkEvery = 100;
       setTimeout(() => {
-        if (window.scrollY !== element.offsetTop) {
+        if (window.scrollY !== element.offsetTop ) {
           element.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
@@ -94,6 +94,26 @@ export class TrackingTableComponent {
       this.newTableIsRendered = true;
     }
   }
+
+  // scrollToTableUpdate():void{
+  //   const element = document.getElementById("sectionUpdate");
+  //   if (element !== null && !this.newTableIsRendered ) {
+  //     const checkEvery = 100;
+  //     setTimeout(() => {
+  //       if (window.scrollY !== element.offsetTop ) {
+  //         element.scrollIntoView({
+  //           behavior: 'smooth',
+  //           block: 'start',
+  //           inline: 'nearest',
+  //         });
+  //         console.log("momento",element);
+
+  //       }
+  //     }, checkEvery);
+  //     this.newTableIsRendered = true;
+  //   }
+
+  // }
 
   getFileName(path: String): string {
     let split: string[] = path.replace('\\\\', '\\').split('\\');
@@ -144,9 +164,4 @@ export class TrackingTableComponent {
     console.log("editar PT-!",this.editar);
 
   }
-
-
-
-
-
 }
