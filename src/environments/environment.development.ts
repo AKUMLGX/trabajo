@@ -4,6 +4,8 @@ export const environment = {
   tokenValidationEndpoint: 'login/token_validation',
   asuntoEndpoint: 'asunto/',
   asuntoHistoricoEndpoint: 'asunto/historico/',
+  updateTableHistorico:"asunto/historico/update",
+  updateTableNuevo: "asunto/nuevo/update",
   asuntoNuevoEndpoint: 'asunto/nuevo/',
   getPdfEndpoint: 'getPdf',
   getMsgEndpoint: 'getMsg',

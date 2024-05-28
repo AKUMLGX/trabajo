@@ -17,7 +17,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
   let matDialog_ = inject(MatDialog)
   return next(request).pipe(
     map((event: HttpEvent<any>) => {
-      if(request.method === "POST"){
+      if(request.method !== "GET"){
         if (event instanceof HttpResponse) {
           if (event.status === 200) {
             matDialog_.open(SuccessfulDialogComponent, {
