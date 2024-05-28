@@ -140,8 +140,8 @@ export class TrackingTableComponent {
   showAgainTable() {
     this.mostrarTabla=false
     this.editar=false
-    console.log("mostrarTabla",this.mostrarTabla);
-    console.log("editar",this.editar);
+    console.log("mostrarTabla PT-!",this.mostrarTabla);
+    console.log("editar PT-!",this.editar);
 
   }
 

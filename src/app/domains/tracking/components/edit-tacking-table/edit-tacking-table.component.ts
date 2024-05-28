@@ -5,9 +5,9 @@ import { FormComponent } from '../../../capture/components/stepper-base/third-st
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { ModalService } from '../../../shared/services/modal.service';
 import { EditTackingTableService } from '../../../services/edit-tacking-table.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
+// import {generatePDF} from '../../../shared/acuse-PDF'
 
 
 @Component({
@@ -25,10 +25,10 @@ import { Asunto } from '../../../interfaces/asuntos.interfaces';
   styleUrl: './edit-tacking-table.component.css'
 })
 export class EditTackingTableComponent implements OnInit {
-constructor(private fb:FormBuilder,
-  private updateSerivce: EditTackingTableService
-  ){}
-  botonHabilitado:boolean = false
+  constructor(private fb: FormBuilder,
+    private updateSerivce: EditTackingTableService
+  ) { }
+  botonHabilitado: boolean = false
   mostrarTabla: boolean = true
   @Output() showTable = new EventEmitter<void>()
   @Input() documents!: Asunto
@@ -50,59 +50,56 @@ constructor(private fb:FormBuilder,
     this.btnEdita()
   }
 
-public updateTableForm: FormGroup = this.fb.group({
-  carpeta_investigacion: [["",Validators.required], { value:this.documents?.carpeta_investigacion}],
-  persona_relacionada:   [["",Validators.required], {value:this.documents?.persona_relacionada}],
-  folio_scanner:         [["",Validators.required], {value:this.documents?.folio_scanner      }],
-  volante_jefatura:      [["",Validators.required], {value:this.documents?.volante_jefatura   }],
-  oficio:               [["",Validators.required], {value:this.documents?.oficio             }],
-  autoridad_remitente:   [["",Validators.required], {value:this.documents?.autoridad_remitente}],
-  folio_jupiter:         [["",Validators.required], {value:this.documents?.folio_jupiter      }],
-  descripcion:          [["",Validators.required], {value:this.documents?.descripcion        }],
-  turno_jefatura:        [["",Validators.required], {value:this.documents?.turno_jefatura     }] ,
-  administracion:       [["",Validators.required], {value:this.documents?.administracion     }],
-  id_asunto_historico:   [["",Validators.required], {value:this.documents?.id_asunto_historico}],
-  id_asunto_nuevo:          [["",Validators.required], {value:this.documents?.id_asunto_historico}]
-
+  public updateTableForm: FormGroup = this.fb.group({
+    carpeta_investigacion:     [["", Validators.required], { value: this.documents?.carpeta_investigacion }],
+    persona_relacionada:       [["", Validators.required], { value: this.documents?.persona_relacionada }],
+    folio_scanner:             [["", Validators.required], { value: this.documents?.folio_scanner }],
+    volante_jefatura:          [["", Validators.required], { value: this.documents?.volante_jefatura }],
+    oficio:                    [["", Validators.required], { value: this.documents?.oficio }],
+    autoridad_remitente:       [["", Validators.required], { value: this.documents?.autoridad_remitente }],
+    folio_jupiter:             [["", Validators.required], { value: this.documents?.folio_jupiter }],
+    descripcion:               [["", Validators.required], { value: this.documents?.descripcion }],
+    turno_jefatura:            [["", Validators.required], { value: this.documents?.turno_jefatura }],
+    administracion:            [["", Validators.required], { value: this.documents?.administracion }],
+    id_asunto_historico:       [["", Validators.required], { value: this.documents?.id_asunto_historico }],
+    id_asunto_nuevo:           [["", Validators.required], { value: this.documents?.id_asunto_historico }]
   });
 
 
-
-
-  saveUpdateForm():void{
+  saveUpdateForm(): void {
     console.log(this.updateTableForm.value);
-
-    if(this.updateTableForm.valid === true){
-      console.log(this.updateTableForm.valid,"Valido");
-
-        const update = this.updateTableForm.value;
-        this.updateSerivce.updateTrackingTable(update).subscribe(
-          response =>{
-            console.log('Actualizado:', response);
-          }
-        )
-       // new this.showTable()
-    }else{
+    this.showagain()
+    if (this.updateTableForm.valid === true) {
+      console.log(this.updateTableForm.valid, "Valido");
+      const update = this.updateTableForm.value;
+      this.updateSerivce.updateTrackingTable(update).subscribe(
+        response => {
+          console.log('Actualizado:', response);
+          // generatePDF(response)
+        }
+      )
+      //debugger
+    } else {
       this.updateTableForm.markAllAsTouched();
       console.log('El formulario no es válido');
     }
   }
 
-  btnEdita(){
-    this.updateTableForm.valueChanges.subscribe(()=>{
+  btnEdita() {
+    this.updateTableForm.valueChanges.subscribe(() => {
       const camposModificados = Object.keys(this.updateTableForm.controls)
-      .some(k=>this.updateTableForm.get(k)?.dirty)
-      this.botonHabilitado=camposModificados
+        .some(k => this.updateTableForm.get(k)?.dirty)
+      this.botonHabilitado = camposModificados
       console.log(camposModificados);
       console.log(this.botonHabilitado);
-      console.log("Form",this.updateTableForm.valid);
+      console.log("Form", this.updateTableForm.valid);
 
     });
 
     this.botonHabilitado = this.updateTableForm.dirty && this.updateTableForm.valid
 
     console.log(this.botonHabilitado);
-    console.log("Dirty",this.updateTableForm.dirty);
+    console.log("Dirty", this.updateTableForm.dirty);
 
   }
 
@@ -110,7 +107,7 @@ public updateTableForm: FormGroup = this.fb.group({
   showagain() {
     this.showTable.emit()
     this.mostrarTabla = false
-    console.log(this.mostrarTabla);
+    console.log(this.mostrarTabla,"showagain-PT!");
   }
 
 }
