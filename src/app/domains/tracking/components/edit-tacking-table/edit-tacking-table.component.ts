@@ -7,7 +7,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { EditTackingTableService } from '../../../services/edit-tacking-table.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
-// import {generatePDF} from '../../../shared/acuse-PDF'
+import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
+
 
 
 @Component({
@@ -26,7 +27,8 @@ import { Asunto } from '../../../interfaces/asuntos.interfaces';
 })
 export class EditTackingTableComponent implements OnInit {
   constructor(private fb: FormBuilder,
-    private updateSerivce: EditTackingTableService
+    private updateSerivce: EditTackingTableService,
+    private pdfAcuse: PdfAcuseService
   ) { }
   botonHabilitado: boolean = false
   mostrarTabla: boolean = true
@@ -75,7 +77,15 @@ export class EditTackingTableComponent implements OnInit {
       this.updateSerivce.updateTrackingTable(update).subscribe(
         response => {
           console.log('Actualizado:', response);
-          // generatePDF(response)
+          this.pdfAcuse.generatePDF(response).then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ejemplo.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          });
         }
       )
       //debugger
