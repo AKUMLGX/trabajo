@@ -86,7 +86,7 @@ export class InfoTableComponent {
 
   EUACAPE_SECOND_ROUND: DataBeforeSubmit[] = [
     {name: 'Administración', answer: this.ADMINISTRACION()},
-    {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? ((this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`)  : '---' },
     {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPES') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },    
     {name: 'Atención', answer: this.ATENCION()},
     {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
