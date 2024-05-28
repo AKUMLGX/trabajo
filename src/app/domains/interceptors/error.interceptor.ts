@@ -16,7 +16,6 @@ export const errorInterceptor: HttpInterceptorFn = (
   let matDialog = inject(MatDialog);
   return next(request).pipe(
     catchError((err) => {
-      ///Este caso ya se cubre solicitando un nuevo token.
       if (err.status !== 401) {
         matDialog.open(ErrorDialogComponent, {
           data: {
