@@ -1,18 +1,19 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import {
   Oauth2Code,
   Oauth2Params,
   SessionInfo,
 } from '../interfaces/oauth2.interfaces';
-import { Router } from '@angular/router';
+import { LogoutService } from './logout.service';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class Oauth2Service {
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(private httpClient: HttpClient, private logoutService: LogoutService) { }
 
   getToken(oauth2Code: Oauth2Code): void {
     this.httpClient
@@ -25,7 +26,7 @@ export class Oauth2Service {
           localStorage.setItem('sessionInfo', JSON.stringify(data));
         },
         error: () => {
-          window.location.href = environment.loginUrl;
+          this.logoutService.logout();
         },
       });
   }

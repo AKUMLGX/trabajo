@@ -7,7 +7,6 @@ import {
 import { inject } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { LogoutService } from '../services/logout.service';
-import { environment } from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
@@ -26,15 +25,16 @@ export const authInterceptor: HttpInterceptorFn = (
     if (token) {
       request = request.clone({
         setHeaders: {
-          Authorization: "Bearer " + token,
+          Authorization: token,
         },
       });
     }
   }
   return next(request).pipe(catchError(err => {
     if (err.status === 401) {
-      console.log("Token invalido");
-      // window.location.href = environment.loginUrl;
+      console.log("ssssssssssssssssssaaaaaaaaaaaaaaaa");
+      let logoutService = inject(LogoutService);
+      logoutService.logout();
     }
     return throwError(() => new Error(err.statusText));
   }));
