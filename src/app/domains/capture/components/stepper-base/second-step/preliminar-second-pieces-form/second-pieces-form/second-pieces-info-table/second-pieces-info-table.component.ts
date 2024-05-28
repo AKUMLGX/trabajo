@@ -88,7 +88,7 @@ export class SecondPiecesInfoTableComponent {
 
   EUACAPE_SECOND_ROUND: SecondPiecesTableBeforeSubmit[] = [
     {name: 'Administración', answer: this.ADMINISTRACION()},
-    {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? ((this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`)  : '---' },
     {name: 'Documento', answer: this.DOCUMENTO() },    
     {name: 'Atención', answer: this.ATENCION()},
     {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 

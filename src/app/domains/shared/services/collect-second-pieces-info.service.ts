@@ -82,32 +82,28 @@ export class CollectSecondPiecesInfoService {
   PLAZOATENCION = signal<null | number>(null); //este es la suma de los 2 anteriores
   PLAZOATENCIONURGENTE = signal(false); //O bien, tmb plazo atención puede ser una urgencia
 
+  updatePlazoDeAtencionIfCheck() {
+    this.PLAZOATENCION.set(0);
+  }
+  
   updatePlazoDeAtencion(
     plazoAtHrs: number | null,
     plazoAtDias: number | null,
     plazoAtUrgente: boolean,
   ){
     let plazoInHours: number;
-    if (plazoAtHrs !== null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+    if (plazoAtHrs !== null && plazoAtDias !== null ) {
       plazoInHours = (plazoAtHrs + (plazoAtDias * 24)); 
       return this.PLAZOATENCION.set(plazoInHours);
-    } else if (plazoAtHrs !== null && plazoAtDias !== null && plazoAtUrgente === true) {
-      return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs === null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+    } else if (plazoAtHrs === null && plazoAtDias !== null ) {
       plazoInHours = (plazoAtDias * 24);
       return this.PLAZOATENCION.set(plazoInHours);
-    } else if (plazoAtHrs === null && plazoAtDias !== null && plazoAtUrgente === true) {
-      return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs !== null && plazoAtDias === null  && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+    } else if (plazoAtHrs !== null && plazoAtDias === null ) {
       plazoInHours = plazoAtHrs;
       return this.PLAZOATENCION.set(plazoInHours);
-    } else if (plazoAtHrs !== null && plazoAtDias === null  && plazoAtUrgente === true) {
+    } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === undefined )){
       return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === null )){
-      return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs === null && plazoAtDias === null && plazoAtUrgente === true) {
-      return this.PLAZOATENCION.set(0);
-    }
+    } 
   }  
 
 }
