@@ -61,8 +61,8 @@ export class FormComponent {
       turnoJefatura: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
       tipoAsunto: [{value: this.collectFormInfoService.TIPOASUNTO(), disabled: true},],
-      plazoAtencionHoras: [{ value: null, }, [Validators.min(1)]],
-      plazoAtencionDias: [{ value: null,  }, [Validators.min(0)]],
+      plazoAtencionHoras: [null, [Validators.min(1)]],
+      plazoAtencionDias: [null, [Validators.min(0)]],
       plazoAtencionUrgente: [false],
 
       folioJupiter: [null, [Validators.maxLength(255)]],
@@ -113,11 +113,20 @@ export class FormComponent {
         this.euacapeForm.value.personaRelacionada,
       );
 
-      this.collectFormInfoService.updatePlazoDeAtencion(
-        this.euacapeForm.value.plazoAtencionHoras,
-        this.euacapeForm.value.plazoAtencionDias,
-        this.euacapeForm.value.plazoAtencionUrgente,
-      );
+      if(this.euacapeForm.value.plazoAtencionUrgente) {
+        this.collectFormInfoService.updatePlazoDeAtencionIfCheck();
+      }
+      
+      if(
+        this.euacapeForm.value.plazoAtencionUrgente === false ||
+        this.euacapeForm.value.plazoAtencionUrgente === undefined
+      ) {
+        this.collectFormInfoService.updatePlazoDeAtencion(
+          this.euacapeForm.value.plazoAtencionHoras,
+          this.euacapeForm.value.plazoAtencionDias,
+          this.euacapeForm.value.plazoAtencionUrgente,
+        );
+      }
 
       if (
             this.dropdownChoice === 'Penal' || this.dropdownChoice === 'Civil'
