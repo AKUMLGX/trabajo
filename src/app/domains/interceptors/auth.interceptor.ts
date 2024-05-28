@@ -34,7 +34,7 @@ export const authInterceptor: HttpInterceptorFn = (
   return next(request).pipe(catchError(err => {
     if (err.status === 401) {
       console.log("Token invalido");
-      window.location.href = environment.loginUrl;
+      // window.location.href = environment.loginUrl;
     }
     return throwError(() => new Error(err.statusText));
   }));
