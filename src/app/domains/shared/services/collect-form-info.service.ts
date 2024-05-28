@@ -27,7 +27,8 @@ export class CollectFormInfoService {
 
   ADMON = signal('');
   FECHAREC = signal<null | Date>(null);
-  DOCSCAN = signal('');
+  DOCSCANNAME = signal('');
+  DOCSCANFILE = signal<undefined | File>(undefined);
   DOCUMENTOEUACAPE = signal('');
   DOCUMENTOOTROS = signal('');
   DESCRIPCION = signal('');
@@ -39,7 +40,8 @@ export class CollectFormInfoService {
   updateEuacapeForm(
     admon: string,
     fechaRec: null | Date,
-    docScan:string,
+    docScanName:string,
+    docScanFile: undefined | File,
     documentoEuacape: string,
     documentoOtros: string,
     descripcion: string,
@@ -50,7 +52,8 @@ export class CollectFormInfoService {
   ){
     this.ADMON.set(admon);
     this.FECHAREC.set(fechaRec);
-    this.DOCSCAN.set(docScan);
+    this.DOCSCANNAME.set(docScanName);
+    this.DOCSCANFILE.set(docScanFile);
     this.DOCUMENTOEUACAPE.set(documentoEuacape);
     this.DOCUMENTOOTROS.set(documentoOtros);
     this.DESCRIPCION.set(descripcion);
@@ -94,32 +97,28 @@ export class CollectFormInfoService {
   PLAZOATENCION = signal<null | number>(null); //este es la suma de los 2 anteriores
   PLAZOATENCIONURGENTE = signal(false); //O bien, tmb plazo atención puede ser una urgencia
 
+  updatePlazoDeAtencionIfCheck() {
+    this.PLAZOATENCION.set(0);
+  }
+  
   updatePlazoDeAtencion(
     plazoAtHrs: number | null,
     plazoAtDias: number | null,
     plazoAtUrgente: boolean,
   ){
     let plazoInHours: number;
-    if (plazoAtHrs !== null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+    if (plazoAtHrs !== null && plazoAtDias !== null ) {
       plazoInHours = (plazoAtHrs + (plazoAtDias * 24)); 
       return this.PLAZOATENCION.set(plazoInHours);
-    } else if (plazoAtHrs !== null && plazoAtDias !== null && plazoAtUrgente === true) {
-      return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs === null && plazoAtDias !== null && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+    } else if (plazoAtHrs === null && plazoAtDias !== null ) {
       plazoInHours = (plazoAtDias * 24);
       return this.PLAZOATENCION.set(plazoInHours);
-    } else if (plazoAtHrs === null && plazoAtDias !== null && plazoAtUrgente === true) {
-      return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs !== null && plazoAtDias === null  && (plazoAtUrgente === false || plazoAtUrgente === null )) {
+    } else if (plazoAtHrs !== null && plazoAtDias === null ) {
       plazoInHours = plazoAtHrs;
       return this.PLAZOATENCION.set(plazoInHours);
-    } else if (plazoAtHrs !== null && plazoAtDias === null  && plazoAtUrgente === true) {
+    } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === undefined )){
       return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === null )){
-      return this.PLAZOATENCION.set(null);
-    } else if (plazoAtHrs === null && plazoAtDias === null && plazoAtUrgente === true) {
-      return this.PLAZOATENCION.set(0);
-    }
+    } 
   }  
 
 }

@@ -4,13 +4,19 @@ import { Asunto } from '../../interfaces/asuntos.interfaces';
 @Injectable({
   providedIn: 'root'
 })
-export class CoincidencesSearchListService {
+export class SearchStatusService {
 
   constructor() { }
 
   reactiveCoincidencesSearchList = signal<Asunto[]>([]);
 
+  preloadedFolioInterno = signal('');
+
   isSearchResultsListEmpty = signal<boolean | undefined>(undefined);
+
+  updateReactiveFolioInterno(folioFromResults: string) {
+    this.preloadedFolioInterno.set(folioFromResults);
+  }
 
   updateResultsListStatus(status: boolean) {
     this.isSearchResultsListEmpty.set(status);

@@ -35,7 +35,8 @@ export class InfoTableComponent {
 
   ADMINISTRACION = this.collectFormInfoService.ADMON;
   FECHARECEPCION = this.collectFormInfoService.FECHAREC;
-  DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCAN;
+  DOCUMENTOESCANEADO = this.collectFormInfoService.DOCSCANNAME;
+  DOCUMENTOESCANEADOFILE = this.collectFormInfoService.DOCSCANFILE;
   DOCUMENTOEUACAPE = this.collectFormInfoService.DOCUMENTOEUACAPE;
   DOCUMENTOOTROS = this.collectFormInfoService.DOCUMENTOOTROS;
   DESCRIPCION = this.collectFormInfoService.DESCRIPCION;
@@ -85,7 +86,7 @@ export class InfoTableComponent {
 
   EUACAPE_SECOND_ROUND: DataBeforeSubmit[] = [
     {name: 'Administración', answer: this.ADMINISTRACION()},
-    {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? ((this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`)  : '---' },
     {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPES') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },    
     {name: 'Atención', answer: this.ATENCION()},
     {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
@@ -118,6 +119,7 @@ export class InfoTableComponent {
     folioScanner: string,
     oficio: string,
     documentoEscaneado: string,
+    documentoEscaneadoFile: undefined | File,
     personaRelacionada: string,
     descripcion: string,
     fechaRecepcion: string,
@@ -132,7 +134,6 @@ export class InfoTableComponent {
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-
     if(this.dropdownChoice === 'EUACAPES') {
       this.formsObjectService.euacapeFormObject.set({
         oficio:                oficio,
@@ -151,7 +152,8 @@ export class InfoTableComponent {
       console.log("Estamos en Euacape");
       console.log(this.formsObjectService.euacapeFormObject());
       this.euacapeAperturaService.insertEuacapeForm(
-        this.formsObjectService.euacapeFormObject()
+        this.formsObjectService.euacapeFormObject(),
+        documentoEscaneadoFile!
       );
     } else if (
         this.dropdownChoice === 'Penal' 
@@ -181,7 +183,8 @@ export class InfoTableComponent {
       console.log("Estamos en Generalidades");
       console.log(this.formsObjectService.generalidadesFormObject());
       this.generalidadesAperturaService.insertGeneralidadesForm(
-        this.formsObjectService.generalidadesFormObject()
+        this.formsObjectService.generalidadesFormObject(),
+        documentoEscaneadoFile!
       );
     } else if (this.dropdownChoice === 'Respuesta') {
       this.formsObjectService.respuestaFormObject.set({
@@ -205,7 +208,8 @@ export class InfoTableComponent {
       console.log("Estamos en Respuesta");
       console.log(this.formsObjectService.respuestaFormObject());
       this.respuestaAperturaService.insertRespuestaForm(
-        this.formsObjectService.respuestaFormObject()
+        this.formsObjectService.respuestaFormObject(),
+        documentoEscaneadoFile!
       );
     }
 

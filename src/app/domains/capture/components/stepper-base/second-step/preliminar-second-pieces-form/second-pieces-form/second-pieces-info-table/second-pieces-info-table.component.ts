@@ -2,11 +2,17 @@ import { Component, signal } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { CollectSecondPiecesInfoService } from '../../../../../../../shared/services/collect-second-pieces-info.service';
-import { EuacapeApertura } from '../../../../../../../interfaces/euacape-apertura';
+import { FormsObjectService } from '../../../../../../../shared/services/forms-object.service';
+import { EuacapeAperturaService } from '../../../../../../../services/euacape-apertura.service';
+import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
+import { RespuestaAperturaService } from '../../../../../../../services/respuesta-apertura.service';
+import { SecondPiecesFormsObjectService } from '../../../../../../../shared/services/second-pieces-forms-object.service';
+import { EuacapeSecondPieceService } from '../../../../../../../services/euacape-second-piece.service';
+import { GeneralidadesSecondPieceService } from '../../../../../../../services/generalidades-second-piece.service';
+import { RespuestaSecondPieceService } from '../../../../../../../services/respuesta-second-piece.service';
 
 export interface SecondPiecesTableBeforeSubmit {
   name: string;
-  position: number;
   answer: string | Date | number | null;
 }
 
@@ -21,11 +27,17 @@ export class SecondPiecesInfoTableComponent {
 
   constructor(
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
+    private secondPiecesFormsObjectService: SecondPiecesFormsObjectService,
+
+    private euacapeSecondPieceService: EuacapeSecondPieceService,
+    private generalidadesSecondPieceService: GeneralidadesSecondPieceService,
+    private respuestaSecondPieceService: RespuestaSecondPieceService,
   ){ }
 
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
   FECHARECEPCION = this.collectSecondPiecesInfoService.FECHAREC;
-  DOCUMENTOESCANEADO = this.collectSecondPiecesInfoService.DOCSCAN;
+  DOCUMENTOESCANEADO = this.collectSecondPiecesInfoService.DOCSCANNAME;
+  DOCUMENTOESCANEADOFILE = this.collectSecondPiecesInfoService.DOCSCANFILE;
   DOCUMENTO = this.collectSecondPiecesInfoService.DOCUMENTO;
   DESCRIPCION = this.collectSecondPiecesInfoService.DESCRIPCION;
   ATENCION = this.collectSecondPiecesInfoService.ATENCION;
@@ -60,34 +72,49 @@ export class SecondPiecesInfoTableComponent {
   //   carpeta_investigacion: null,
   // });
 
-  SECOND_PIECES_DATA: SecondPiecesTableBeforeSubmit[] = [
-    {position: 1, name: 'Oficio', answer: this.OFICIO()},
-    {position: 2, name: 'Administración', answer: this.ADMINISTRACION()},
-    {position: 3, name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
-    {position: 4, name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
-    {position: 5, name: 'Documento', answer: this.DOCUMENTO() },
-    {position: 6, name: 'Descripción', answer: this.DESCRIPCION()},
-    {position: 7, name: 'Atención', answer: this.ATENCION()},
-    {position: 8, name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
-    {position: 9, name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
-    {position: 10, name: 'Folio interno', answer: this.FOLIOINTERNO()},
-    {position: 11, name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
-    {position: 12, name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
-    {position: 13, name: 'Folio scanner', answer: this.FOLIOSCANNER()},
-    {position: 14, name: 'Tipo asunto', answer: this.TIPOASUNTO()},
-    {position: 15, name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
-    {position: 16, name: 'Volante jefatura', answer: (this.VOLANTEJEFATURA() !== null) ? this.VOLANTEJEFATURA() : '---'},
-    {position: 17, name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'}
+  EUACAPE_FIRST_ROUND: SecondPiecesTableBeforeSubmit[] = [
+    {name: 'Folio interno', answer: this.FOLIOINTERNO()},
+    {name: 'Oficio', answer: this.OFICIO()},
+    {name: 'Folio scanner', answer: this.FOLIOSCANNER()},
+    {name: 'Carpeta de investigación', answer: (this.CARPETAINVESTIGACION() !== null) ? this.CARPETAINVESTIGACION() : '---'},
+
+    {name: 'Documento escaneado', answer: this.DOCUMENTOESCANEADO()},
+    {name: 'Fecha de recepción (yyyy-MM-dd)', answer: this.FECHARECEPCION()},
+    {name: 'Autoridad remitente', answer: this.AUTORIDADREMITENTE()},
+    {name: 'Persona relacionada', answer: this.PERSONARELACIONADA()},
+    {name: 'Turno jefatura', answer: (this.TURNOJEFATURA() !== null) ? this.TURNOJEFATURA() : '---'},
+    {name: 'Descripción', answer: this.DESCRIPCION()},
+  ];
+
+  EUACAPE_SECOND_ROUND: SecondPiecesTableBeforeSubmit[] = [
+    {name: 'Administración', answer: this.ADMINISTRACION()},
+    {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? (this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`  : '---' },
+    {name: 'Documento', answer: this.DOCUMENTO() },    
+    {name: 'Atención', answer: this.ATENCION()},
+    {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
+  ];
+
+  EUACAPE_DATA: SecondPiecesTableBeforeSubmit[] = [
+    ...this.EUACAPE_FIRST_ROUND,
+    ...this.EUACAPE_SECOND_ROUND,
+  ];
+
+  GENERALIDADES_AND_RESPUESTA_DATA: SecondPiecesTableBeforeSubmit[] = [
+    ...this.EUACAPE_FIRST_ROUND,
+    {name: 'Volante jefatura', answer: (this.VOLANTEJEFATURA() !== null) ? this.VOLANTEJEFATURA() : '---'},
+    {name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
+    ...this.EUACAPE_SECOND_ROUND,  
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
-  dataSource = this.SECOND_PIECES_DATA;
+  dataSource = this.EUACAPE_DATA;
 
   confirmData(
     folioInterno: string,
     folioScanner: string,
     oficio: string,
     documentoEscaneado: string,
+    documentoEscaneadoFile: undefined | File,
     personaRelacionada: string,
     descripcion: string,
     fechaRecepcion: string,
@@ -96,28 +123,98 @@ export class SecondPiecesInfoTableComponent {
     administracion: string,
     carpetaInvestigacion: string | null,
     turnoJefatura: string | null,
+    documento: string,
+    atencion: string,
+    tipoAsunto: string,
     volanteJefatura: string | null,
     folioJupiter: string | null,
   ) {
-    // this.secondPiecesFormObject.set({
-    //   folio_interno: folioInterno,
-    //   folio_scanner: folioScanner,
-    //   oficio: oficio,
-    //   documento_escaneado: documentoEscaneado,
-    //   persona_relacionada: personaRelacionada,
-    //   descripcion: descripcion,
-    //   fecha_recepcion: fechaRecepcion,
-    //   autoridad_remitente: autoridadRemitente,
-    //   plazo_atencion: plazoAtencion,
-    //   administracion: administracion,
-    //   carpeta_investigacion: carpetaInvestigacion,
-    //   turno_jefatura: turnoJefatura,
-    // });
-    // //const euacapeFormObject = {...this.euacapeForm};
-    // console.log(this.secondPiecesFormObject());
-    //this.euacapeAperturaService.insertEuacapeForm(
-    //  this.euacapeFormObject()
-    //);
+    if(this.TIPOASUNTO() === 'EUACAPES') {
+      this.secondPiecesFormsObjectService.euacapeFormObject.set({
+        folio_interno:         folioInterno,
+        oficio:                oficio,
+        folio_scanner:         folioScanner,
+        carpeta_investigacion: carpetaInvestigacion,
+        documento_escaneado:   documentoEscaneado,
+        fecha_recepcion:       fechaRecepcion,
+        autoridad_remitente:   autoridadRemitente,
+        persona_relacionada:   personaRelacionada,
+        turno_jefatura:        turnoJefatura,
+        descripcion:           descripcion,
+        administracion:        administracion,
+        plazo_atencion:        plazoAtencion,
+        documento:             documento,
+      });
+      console.log("Estamos en Euacape");
+      console.log(this.secondPiecesFormsObjectService.euacapeFormObject());
+      this.euacapeSecondPieceService.insertSecondPieceEuacapeForm(
+        this.secondPiecesFormsObjectService.euacapeFormObject(),
+        documentoEscaneadoFile!
+      );
+    } else if (
+        this.TIPOASUNTO() === 'Penal' 
+        || this.TIPOASUNTO() === 'Civil'
+        || this.TIPOASUNTO() === 'Laboral'
+        || this.TIPOASUNTO() === 'Juicio de Amparo'
+        || this.TIPOASUNTO() === 'Concurso Mercantil'
+        || this.TIPOASUNTO() === 'Copia de Conocimiento'
+      ) {
+      this.secondPiecesFormsObjectService.generalidadesFormObject.set({
+        folio_interno:         folioInterno,
+        oficio:                oficio,
+        folio_scanner:         folioScanner,
+        carpeta_investigacion: carpetaInvestigacion,
+        documento_escaneado:   documentoEscaneado,
+        fecha_recepcion:       fechaRecepcion,
+        autoridad_remitente:   autoridadRemitente,
+        persona_relacionada:   personaRelacionada,
+        turno_jefatura:        turnoJefatura,
+        descripcion:           descripcion,
+        volante_jefatura:      volanteJefatura,
+        folio_jupiter:         folioJupiter,
+        administracion:        administracion,
+        plazo_atencion:        plazoAtencion,
+        documento:             documento,
+        tipo_asunto:           tipoAsunto,
+      });
+      console.log("Estamos en Generalidades");
+      console.log(this.secondPiecesFormsObjectService.generalidadesFormObject());
+      this.generalidadesSecondPieceService.insertSecondPieceGeneralidadesForm(
+        this.secondPiecesFormsObjectService.generalidadesFormObject(),
+        documentoEscaneadoFile!
+      );
+    } else if (this.TIPOASUNTO() === 'Respuesta') {
+      this.secondPiecesFormsObjectService.respuestaFormObject.set({
+        folio_interno:         folioInterno,
+        oficio:                oficio,      
+        folio_scanner:         folioScanner, 
+        carpeta_investigacion: carpetaInvestigacion, 
+        documento_escaneado:   documentoEscaneado,   
+        fecha_recepcion:       fechaRecepcion,    
+        autoridad_remitente:   autoridadRemitente,  
+        persona_relacionada:   personaRelacionada, 
+        turno_jefatura:        turnoJefatura,     
+        descripcion:           descripcion,       
+        volante_jefatura:      volanteJefatura,   
+        folio_jupiter:         folioJupiter,       
+        administracion:        administracion,     
+        plazo_atencion:        plazoAtencion,       
+        documento:             documento,
+        adminstracion:         administracion,
+        atencion:              atencion,
+        tipo_asunto:           tipoAsunto,
+      });
+      console.log("Estamos en Respuesta");
+      console.log(this.secondPiecesFormsObjectService.respuestaFormObject());
+      this.respuestaSecondPieceService.insertSecondPieceRespuestaForm(
+        this.secondPiecesFormsObjectService.respuestaFormObject(),
+        documentoEscaneadoFile!
+      );
+    }
+
   }
+
+  //https://www.techiediaries.com/angular-send-file-to-api/
+  //https://stackoverflow.com/questions/50774176/sending-file-and-json-in-post-multipart-form-data-request-with-axios
 
 }

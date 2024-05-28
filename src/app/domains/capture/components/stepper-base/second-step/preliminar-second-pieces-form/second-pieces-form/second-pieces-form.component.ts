@@ -1,9 +1,9 @@
 import { Component, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../../shared/services/modal.service';
-import { FormBuilder, 
-  FormGroup, 
-  Validators, 
+import { FormBuilder,
+  FormGroup,
+  Validators,
   ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
@@ -19,7 +19,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    FormsModule, 
+    FormsModule,
     MatStepperModule,
     MatTableModule,
     MatDialogModule,
@@ -35,29 +35,32 @@ export class SecondPiecesFormComponent {
 
   isSecondPiece: boolean = true;
 
+  documentoEscaneadoName: string = '';
+  documentoEscaneadoFile?:File;
+
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
   ){}
 
-  dropdownChoice = this.collectSecondPiecesInfoService.TIPOASUNTO;
-
   public secondPiecesForm: FormGroup = this.fb.group({
-    administracion: [{value: 'a_5_e.g.', disabled: true}],
+    administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
-    documentoEscaneado: ['', [Validators.required, Validators.maxLength(255)]],
-    documento: [{value: 'Requerimiento_e.g.', disabled: true},],
+    documentoEscaneadoField:[null, [Validators.required]],
+
+    documento: [null, [Validators.required]],
+
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-    atencion: [{value: 'Recibido_e.g.', disabled: true},],
+    atencion: [null, [Validators.required]],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
-    personaRelacionada: [{value: 'persona_relacionada_e.g.', disabled: true}],
-    tipoAsunto: [{value: 'concurso_mercantil_e.g.', disabled: true},],
-    plazoAtencionHoras: [null, [Validators.min(1)]],
-    plazoAtencionDias: [null, [Validators.min(0)]],
-    plazoAtencionUrgente: [null],
-      
+    personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
+    tipoAsunto: [null, [Validators.required]],
+    plazoAtencionHoras: [{ value: null,}, [Validators.min(1)]],
+    plazoAtencionDias: [{ value: null, }, [Validators.min(0)]],
+    plazoAtencionUrgente: [false],
+
     folioJupiter: [null, [Validators.maxLength(255)]],
     volanteJefatura: [null, [Validators.maxLength(255)]],
 
@@ -71,18 +74,30 @@ export class SecondPiecesFormComponent {
     return new Date().toISOString().split('T')[0]
   }
 
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0]
+    this.documentoEscaneadoFile = file;
+    if (this.documentoEscaneadoFile) {
+      this.documentoEscaneadoName = this.documentoEscaneadoFile.name
+      console.log("Nombre del archivo:", this.documentoEscaneadoName);
+      console.log('Tipo MIME del archivo:', this.documentoEscaneadoFile.type);
+    }
+  }
+
   openCustomModalWithTemplate(template: TemplateRef<any>){
     this.collectSecondPiecesInfoService.updateSecondPiecesForm(
-      'a_5_e.g.',
+      this.secondPiecesForm.value.administracion,
       this.secondPiecesForm.value.fechaRecepcion,
-      this.secondPiecesForm.value.documentoEscaneado,
-      'Requerimiento_e.g.',
+      //this.secondPiecesForm.value.documentoEscaneado,
+      this.documentoEscaneadoName,
+      this.documentoEscaneadoFile,
+      this.secondPiecesForm.value.documento,
       this.secondPiecesForm.value.descripcion,
-      'Recibido_e.g.',
+      this.secondPiecesForm.value.atencion,
       this.secondPiecesForm.value.autoridadRemitente,
       this.secondPiecesForm.value.turnoJefatura,
-      'persona_relacionada_e.g.',
-      'concurso_mercantil_e.g.',
+      this.secondPiecesForm.value.personaRelacionada,
+      this.secondPiecesForm.value.tipoAsunto,
       this.secondPiecesForm.value.volanteJefatura,
       this.secondPiecesForm.value.folioJupiter,
     );
@@ -97,5 +112,5 @@ export class SecondPiecesFormComponent {
       template
     })
   }
-  
+
 }

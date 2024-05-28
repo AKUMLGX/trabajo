@@ -9,7 +9,7 @@ import { RespuestaPreliminarFormComponent } from './third-step/respuesta-prelimi
 import { PreliminarSecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/preliminar-second-pieces-form.component';
 import { SecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/second-pieces-form/second-pieces-form.component';
 import { CollectFormInfoService } from '../../../shared/services/collect-form-info.service';
-import { CoincidencesSearchListService } from '../../../shared/services/coincidences-search-list.service';
+import { SearchStatusService } from '../../../shared/services/search-status.service';
 
 @Component({
   selector: 'app-stepper-base',
@@ -32,12 +32,12 @@ export class StepperBaseComponent {
 
   constructor(
     private collectFormInfoService: CollectFormInfoService,
-    private coincidencesSearchListService: CoincidencesSearchListService,
+    private searchStatusService: SearchStatusService,
   ){}
 
   dropdownChoice: string = '';
 
-  isSearchBarResultsListEmpty = this.coincidencesSearchListService.isSearchResultsListEmpty;
+  isSearchBarResultsListEmpty = this.searchStatusService.isSearchResultsListEmpty;
   
   retrieveSelectionFromSecondStep(event:string){
     console.log(event);

@@ -13,12 +13,40 @@ export class GeneralidadesAperturaService {
     private httpClient: HttpClient,
   ) { }
 
-  insertGeneralidadesForm(generalidadesForm: GeneralidadesApertura) {
-    const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    this.httpClient.post<GeneralidadesAperturaResponse>( 
+  // insertGeneralidadesForm(generalidadesForm: GeneralidadesApertura) {
+  //   const headers = new HttpHeaders({'Content-Type': 'application/json'});
+  //   this.httpClient.post<GeneralidadesAperturaResponse>( 
+  //     environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
+  //       generalidadesForm, {headers: headers})
+  //       .subscribe((res) => {
+  //       console.log(res);
+  //   });
+  // }
+
+  insertGeneralidadesForm(
+    data: GeneralidadesApertura, 
+    selectedFile: File
+  ) {
+
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], {
+      type: 'application/json'
+    });
+
+    const formData = new FormData();
+
+    formData.append("data", blob);
+    formData.append("file", selectedFile, selectedFile.name);
+
+    // const headers = new HttpHeaders({
+    //   Accept: "application/json ,text/plain, */*",
+    //   'Content-Type': 'multipart/form-data'
+    // });
+
+    this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
-        generalidadesForm, {headers: headers})
-        .subscribe((res) => {
+      formData,
+    ).subscribe((res) => {
         console.log(res);
     });
   }
