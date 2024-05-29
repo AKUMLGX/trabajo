@@ -8,6 +8,7 @@ import { FormsObjectService } from '../../../../../../../shared/services/forms-o
 import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
 import { RespuestaAperturaService } from '../../../../../../../services/respuesta-apertura.service';
 
+
 export interface DataBeforeSubmit {
   name: string;
   answer: string | Date | number | null;
@@ -25,10 +26,11 @@ export class InfoTableComponent {
   constructor(
     private collectFormInfoService: CollectFormInfoService,
     private formsObjectService: FormsObjectService,
-    
+
     private euacapeAperturaService: EuacapeAperturaService,
     private generalidadesAperturaService: GeneralidadesAperturaService,
     private respuestaAperturaService: RespuestaAperturaService,
+
   ){ }
 
   @Input() dropdownChoice: string = '';
@@ -87,9 +89,9 @@ export class InfoTableComponent {
   EUACAPE_SECOND_ROUND: DataBeforeSubmit[] = [
     {name: 'Administración', answer: this.ADMINISTRACION()},
     {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? ((this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`)  : '---' },
-    {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPES') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },    
+    {name: 'Documento', answer: (this.TIPOASUNTO() === 'EUACAPES') ? this.DOCUMENTOEUACAPE() : this.DOCUMENTOOTROS() },
     {name: 'Atención', answer: this.ATENCION()},
-    {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
+    {name: 'Tipo asunto', answer: this.TIPOASUNTO()},
   ];
 
   EUACAPE_DATA: DataBeforeSubmit[] = [
@@ -101,7 +103,7 @@ export class InfoTableComponent {
     ...this.EUACAPE_FIRST_ROUND,
     {name: 'Volante jefatura', answer: (this.VOLANTEJEFATURA() !== null) ? this.VOLANTEJEFATURA() : '---'},
     {name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
-    ...this.EUACAPE_SECOND_ROUND,  
+    ...this.EUACAPE_SECOND_ROUND,
   ];
 
   //Este vato, RESPUESTA_DATA si incluye el folio interno
@@ -156,7 +158,7 @@ export class InfoTableComponent {
         documentoEscaneadoFile!
       );
     } else if (
-        this.dropdownChoice === 'Penal' 
+        this.dropdownChoice === 'Penal'
         || this.dropdownChoice === 'Civil'
         || this.dropdownChoice === 'Laboral'
         || this.dropdownChoice === 'Juicio de Amparo'
@@ -186,6 +188,7 @@ export class InfoTableComponent {
         this.formsObjectService.generalidadesFormObject(),
         documentoEscaneadoFile!
       );
+      // this.euacapeAperturaPdfAcuse.generatePDF()
     } else if (this.dropdownChoice === 'Respuesta') {
       this.formsObjectService.respuestaFormObject.set({
         folio_interno:         folioInterno,
@@ -215,15 +218,15 @@ export class InfoTableComponent {
 
     // switch (this.dropdownChoice) {
 
-      //La realidad es que hoy 26/04/24 comente esto pero se va a borrar. 
-      //Nadamas para tener la referencia para cuando haga los cases 
+      //La realidad es que hoy 26/04/24 comente esto pero se va a borrar.
+      //Nadamas para tener la referencia para cuando haga los cases
       //propios para cada una de las generalidades
 
       // case "Civil":
       //   this.formsObjectService.civilFormObject.set({
       //     folio_interno: folioInterno,
       //     folio_scanner: folioScanner,
-      //     oficio: oficio, and Info Table 
+      //     oficio: oficio, and Info Table
       //     documento_escaneado: documentoEscaneado,
       //     persona_relacionada: personaRelacionada,
       //     descripcion: descripcion,
@@ -242,7 +245,7 @@ export class InfoTableComponent {
       //     this.formsObjectService.civilFormObject()
       //   );
       //   break;
-      
+
       // case "Penal":
       //   this.formsObjectService.penalFormObject.set({
       //     folio_interno: folioInterno,
@@ -312,8 +315,8 @@ export class InfoTableComponent {
       //   );
       // break;
 
-      // case "Asunto Penal" 
-      // // || "Asunto Civil" || "Laboral" || "Juicio Amparo" 
+      // case "Asunto Penal"
+      // // || "Asunto Civil" || "Laboral" || "Juicio Amparo"
       // //       || "Concurso Mercantil" || "Copia de Conocimiento"
       //       :
       //   this.formsObjectService.generalidadesFormObject.set({

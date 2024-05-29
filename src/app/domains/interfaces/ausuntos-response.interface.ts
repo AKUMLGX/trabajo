@@ -1,0 +1,20 @@
+export interface AsuntoResponse {
+  descripcion: string;
+  autor:       string;
+  values:      Value[];
+}
+
+export interface Value {
+  folio_interno:         String;
+  persona_relacionada:   String;
+  administracion:        String;
+  oficio:                String;
+  documento_escaneado:   String;
+  folio_scanner:         String;
+  descripcion:           String;
+  turno_jefatura:        String;
+  plazo_atencion:        String;
+  fecha_recepcion:      Date;
+  autoridad_remitente:   String;
+  carpeta_investigacion: String;
+}

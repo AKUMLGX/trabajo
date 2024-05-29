@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { GeneralidadesSecondPiece } from '../interfaces/generalidades-second-piece';
+import { PdfAcuseService } from '../shared/services/pdf-acuse.service';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +12,11 @@ export class GeneralidadesSecondPieceService {
 
   constructor(
     private httpClient: HttpClient,
+    private pdfAcuseService: PdfAcuseService,
   ) { }
 
   insertSecondPieceGeneralidadesForm(
-    data: GeneralidadesSecondPiece, 
+    data: GeneralidadesSecondPiece,
     selectedFile: File
   ) {
 
@@ -27,12 +30,18 @@ export class GeneralidadesSecondPieceService {
     formData.append("data", blob);
     formData.append("file", selectedFile, selectedFile.name);
 
-    this.httpClient.post(
+    this.httpClient.post<AsuntoResponse>(
       environment.baseUrl + 'asunto/nuevo/generalidad/segunda_pieza/',
-      formData, 
-    ).subscribe((res) => {
-        console.log(res);
-    });
+      formData,
+    ).subscribe((data) => {
+      console.log('success', data);
+      this.pdfAcuseService.generatePDF(data);
+     //   console.log(res);
+    },
+    (error)=>{
+      console.log('oops', error)
+    },
+  );
   }
 
 }

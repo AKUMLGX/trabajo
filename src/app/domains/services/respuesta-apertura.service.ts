@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { RespuestaApertura } from '../interfaces/respuesta-apertura';
 import { environment } from '../../../environments/environment';
 import { RespuestaAperturaResponse } from '../interfaces/respuesta-apertura-response';
-
+import { PdfAcuseService } from '../shared/services/pdf-acuse.service';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,12 @@ export class RespuestaAperturaService {
 
   constructor(
     private httpClient: HttpClient,
+    private pdfAcuseService: PdfAcuseService,
   ) { }
 
   // insertRespuestaForm(respuestaForm: RespuestaApertura) {
   //   const headers = new HttpHeaders({'Content-Type': 'application/json'});
-  //   this.http.post<RespuestaAperturaResponse>( 
+  //   this.http.post<RespuestaAperturaResponse>(
   //     environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
   //       respuestaForm, {headers: headers})
   //       .subscribe((res) => {
@@ -25,7 +27,7 @@ export class RespuestaAperturaService {
   // }
 
   insertRespuestaForm(
-    data: RespuestaApertura, 
+    data: RespuestaApertura,
     selectedFile: File
   ) {
 
@@ -39,12 +41,17 @@ export class RespuestaAperturaService {
     formData.append("data", blob);
     formData.append("file", selectedFile, selectedFile.name);
 
-    this.httpClient.post(
+    this.httpClient.post<AsuntoResponse> (
       environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
       formData,
-    ).subscribe((res) => {
-        console.log(res);
-    });
+    ).subscribe((data) => {
+      console.log("success",data);
+      this.pdfAcuseService.generatePDF(data)
+        console.log("");
+    },
+  (error)=>{
+
+  });
   }
 
 }

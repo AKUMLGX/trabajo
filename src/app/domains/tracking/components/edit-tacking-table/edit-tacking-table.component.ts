@@ -11,6 +11,7 @@ import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
 
 
 
+
 @Component({
   selector: 'app-edit-tacking-table',
   standalone: true,
@@ -77,18 +78,9 @@ export class EditTackingTableComponent implements OnInit {
       this.updateSerivce.updateTrackingTable(update).subscribe(
         response => {
           console.log('Actualizado:', response);
-          this.pdfAcuse.generatePDF(response).then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'ejemplo.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          });
+          this.pdfAcuse.generatePDF(response)
         }
       )
-      //debugger
     } else {
       this.updateTableForm.markAllAsTouched();
       console.log('El formulario no es válido');
@@ -100,16 +92,16 @@ export class EditTackingTableComponent implements OnInit {
       const camposModificados = Object.keys(this.updateTableForm.controls)
         .some(k => this.updateTableForm.get(k)?.dirty)
       this.botonHabilitado = camposModificados
-      console.log(camposModificados);
-      console.log(this.botonHabilitado);
-      console.log("Form", this.updateTableForm.valid);
+      // console.log(camposModificados);
+      // console.log(this.botonHabilitado);
+      // console.log("Form", this.updateTableForm.valid);
 
     });
 
     this.botonHabilitado = this.updateTableForm.dirty && this.updateTableForm.valid
 
-    console.log(this.botonHabilitado);
-    console.log("Dirty", this.updateTableForm.dirty);
+    // console.log(this.botonHabilitado);
+    // console.log("Dirty", this.updateTableForm.dirty);
 
   }
 
@@ -117,7 +109,7 @@ export class EditTackingTableComponent implements OnInit {
   showagain() {
     this.showTable.emit()
     this.mostrarTabla = false
-    console.log(this.mostrarTabla,"showagain-PT!");
+    // console.log(this.mostrarTabla,"showagain-PT!");
   }
 
 }

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EuacapeSecondPiece } from '../interfaces/euacape-second-piece';
 import { environment } from '../../../environments/environment';
+import { PdfAcuseService } from '../shared/services/pdf-acuse.service';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +12,11 @@ export class EuacapeSecondPieceService {
 
   constructor(
     private httpClient: HttpClient,
+    private pdfAcuseService: PdfAcuseService,
   ) { }
 
   insertSecondPieceEuacapeForm(
-    data: EuacapeSecondPiece, 
+    data: EuacapeSecondPiece,
     selectedFile: File
   ) {
 
@@ -27,12 +30,17 @@ export class EuacapeSecondPieceService {
     formData.append("data", blob);
     formData.append("file", selectedFile, selectedFile.name);
 
-    this.httpClient.post(
+    this.httpClient.post<AsuntoResponse>(
       environment.baseUrl + 'asunto/nuevo/euacape/segunda_pieza/',
-      formData, 
-    ).subscribe((res) => {
-        console.log(res);
-    });
+      formData,
+    ).subscribe((data) => {
+      console.log('success', data);
+      this.pdfAcuseService.generatePDF(data);
+        // console.log(res);
+    },
+  (error)=>{
+            console.log('oops', error)
+  });
   }
 
 }
