@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { EuacapeApertura } from '../interfaces/euacape-apertura';
 import { EuacapeAperturaResponse } from '../interfaces/euacape-apertura-response';
 import { environment } from '../../../environments/environment';
+import { PdfAcuseService } from '../shared/services/pdf-acuse.service';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,7 @@ export class EuacapeAperturaService {
 
   constructor(
     private httpClient: HttpClient,
+    private pdfAcuseService: PdfAcuseService,
   ) { }
 
   // insertEuacapeForm(euacapeForm: EuacapeApertura) {
@@ -37,13 +40,16 @@ export class EuacapeAperturaService {
 
     //const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
 
-    this.httpClient.post(
+    this.httpClient.post<AsuntoResponse>(
       environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
       formData,
-    ).subscribe((res) => {
-        console.log(res);
-    });
-  }
+    ).subscribe((data) => {
+      console.log("success",data);
+      this.pdfAcuseService.generatePDF(data)
+       // console.log(res);
+    },
+  (error)=>{
 
+  });
+  }
 }
-  

@@ -78,19 +78,9 @@ export class EditTackingTableComponent implements OnInit {
       this.updateSerivce.updateTrackingTable(update).subscribe(
         response => {
           console.log('Actualizado:', response);
-
-          this.pdfAcuse.generatePDF(response).then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'ejemplo.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          });
+          this.pdfAcuse.generatePDF(response)
         }
       )
-      //debugger
     } else {
       this.updateTableForm.markAllAsTouched();
       console.log('El formulario no es válido');
