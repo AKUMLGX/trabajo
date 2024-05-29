@@ -5,16 +5,16 @@ export interface AsuntoResponse {
 }
 
 export interface Value {
-  folio_interno:         any;
-  persona_relacionada:   any;
-  administracion:        any;
-  oficio:                any;
-  documento_escaneado:   any;
-  folio_scanner:         any;
-  descripcion:           any;
-  turno_jefatura:        any;
-  plazo_atencion:        any;
-  fecha_recepcion:      any
-  autoridad_remitente:   any;
-  carpeta_investigacion: any;
+  folio_interno:         String;
+  persona_relacionada:   String;
+  administracion:        String;
+  oficio:                String;
+  documento_escaneado:   String;
+  folio_scanner:         String;
+  descripcion:           String;
+  turno_jefatura:        String;
+  plazo_atencion:        String;
+  fecha_recepcion:      Date;
+  autoridad_remitente:   String;
+  carpeta_investigacion: String;
 }

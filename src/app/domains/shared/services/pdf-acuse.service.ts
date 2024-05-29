@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { AsuntoResponse,Value } from '../../interfaces/ausuntos-response.interface';
+import { AsuntoResponse, Value } from '../../interfaces/ausuntos-response.interface';
 
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class PdfAcuseService {
 
-  constructor() { }
-  async generatePDF(data: AsuntoResponse): Promise<Blob> {
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-    console.log("Entrando a la generacion");
+    constructor() { }
+    async generatePDF(data: AsuntoResponse): Promise<Blob> {
+        const currentDate = new Date();
+        const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+        console.log("Entrando a la generacion");
 
-    let htmlContent = `
+        let htmlContent = `
     <!DOCTYPE html>
     <html lang="es">
     <head>
@@ -66,14 +66,14 @@ export class PdfAcuseService {
                 margin-bottom: 20px;
             }
             .header .description {
-                font-size: 14px;
+                font-size: 10px;
                 font-weight: bold;
                 margin-top:30px;
                 margin-left:20px;
                 color: #800020;
             }
             .header .author {
-                font-size: 14px;
+                font-size: 10px;
                 margin-left:80px;
                 color: #800020;
             }
@@ -89,13 +89,14 @@ export class PdfAcuseService {
             }
             .document h2 {
                 margin-top: 0;
-                margin-bottom: 20px;
+                margin-bottom: 16px;
                 color: #800020;
                 font-size: 24px;
 
                 padding-bottom: 10px;
             }
             .document .fields {
+                font-size:12px;
                 display: flex;
                 flex-wrap: wrap;
                 gap: 20px;
@@ -116,10 +117,9 @@ export class PdfAcuseService {
                 text-align: right;
                 color: #666;
                 font-style: italic;
-                font-weight: bold;
                 position: absolute;
                 right: 20px;
-                top:0
+                top:0;   
             }
             .logo-left {
                 position: absolute;
@@ -140,16 +140,18 @@ export class PdfAcuseService {
                 <h1>Acuse Akamba</h1>
                 <div class="date">Fecha: ${formattedDate}</div>
                 <div class="header">
-                    <div class="description">Descripción:${data.descripcion}</div>
-                    <div class="author">Autor:${data.autor}</div>
+                    <div class="description">Descripción: ${data.descripcion}</div>
+                    <div class="author">Autor: ${data.autor}</div>
                 </div>
                 <div class="document">
-                <div class="folio" style="color: #006666;  font-size: 16px; font-weight: bold;">Registros:</div>
+                <div class="folio" style="color: #006666;  font-size: 12px; font-weight: bold;">Registros:</div>
                     <div class="fields">`;
-                    for (const [key, value] of Object.entries(data.values[0])) {
-                        htmlContent += ` <div class="field"><label>${key.replace(/_/g, ' ')}:</label> ${value !== null ? value : 'N/A'}</label></div>`;
-                    }
-                    htmlContent += `
+        for (const [key, value] of Object.entries(data.values[0])) {
+            if (value !== null) {
+                htmlContent += ` <div class="field"><label>${key.replace(/_/g, ' ')}:</label> ${value !== null ? value : 'N/A'}</label></div>`;
+            }
+        }
+        htmlContent += `
                     </div>
                 </div>
             </div>
@@ -158,33 +160,33 @@ export class PdfAcuseService {
     </html>
     `;
 
-    const doc = new jsPDF('p', 'pt', 'a4');
-    const content: HTMLElement = document.createElement('div');
-    content.innerHTML = htmlContent;
+        const doc = new jsPDF('p', 'pt', 'a4');
+        const content: HTMLElement = document.createElement('div');
+        content.innerHTML = htmlContent;
 
-    document.body.appendChild(content);
-    const canvas = await html2canvas(content, { scale: 2 });
-    const imgWidth = 541.89; // Ancho personalizado
-    const imgHeight = 795.28; // Alto personalizado
-    const imgPosX = 10; // Posición X personalizada
-    const imgPosY = 10; // Posición Y personalizada
+        document.body.appendChild(content);
+        const canvas = await html2canvas(content, { scale: 2 });
+        const imgWidth = 541.89; // Ancho personalizado
+        const imgHeight = 795.28; // Alto personalizado
+        const imgPosX = 10; // Posición X personalizada
+        const imgPosY = 10; // Posición Y personalizada
 
-    const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL('image/png');
 
-    doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
+        doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
-    //document.body.removeChild(content);
+        //document.body.removeChild(content);
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-  doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
+        doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
-  document.body.removeChild(content);
-    return new Promise<Blob>((resolve) => {
-        console.log("Descargando");
-        doc.save("test.pdf");
-      //const blob = doc.output('blob');
-      //resolve(blob);
-    });
-  }
+        document.body.removeChild(content);
+        return new Promise<Blob>((resolve) => {
+            console.log("Descargando");
+            doc.save("Acuse.pdf");
+            //const blob = doc.output('blob');
+            //resolve(blob);
+        });
+    }
 }

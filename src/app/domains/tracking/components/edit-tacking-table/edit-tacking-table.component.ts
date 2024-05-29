@@ -73,7 +73,7 @@ export class EditTackingTableComponent implements OnInit {
     console.log(this.updateTableForm.value);
     this.showagain()
     if (this.updateTableForm.valid === true) {
-      console.log(this.updateTableForm.valid, "Valido");
+      console.log(this.updateTableForm.valid, "Valido");  
       const update = this.updateTableForm.value;
       this.updateSerivce.updateTrackingTable(update).subscribe(
         response => {
