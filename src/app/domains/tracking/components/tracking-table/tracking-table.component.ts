@@ -96,7 +96,7 @@ export class TrackingTableComponent {
   }
 
   scrollToTableUpdate():void{
-    const element = document.getElementById("sectionTable");
+    const element = document.getElementById("sectionUpdate");
     if (element !== null && !this.newTableIsRendered ) {
       const checkEvery = 100
       setTimeout(() => {

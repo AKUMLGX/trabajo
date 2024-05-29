@@ -7,7 +7,6 @@ import { EuacapeAperturaService } from '../../../../../../../services/euacape-ap
 import { FormsObjectService } from '../../../../../../../shared/services/forms-object.service';
 import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
 import { RespuestaAperturaService } from '../../../../../../../services/respuesta-apertura.service';
-import { EuacapeAperturaPdfAcuse } from '../../../../../../../shared/services/euacape-apertura-pdf-acuse.service';
 
 
 export interface DataBeforeSubmit {
@@ -31,7 +30,7 @@ export class InfoTableComponent {
     private euacapeAperturaService: EuacapeAperturaService,
     private generalidadesAperturaService: GeneralidadesAperturaService,
     private respuestaAperturaService: RespuestaAperturaService,
-    private euacapeAperturaPdfAcuse : EuacapeAperturaPdfAcuse
+
   ){ }
 
   @Input() dropdownChoice: string = '';
