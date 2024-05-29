@@ -295,6 +295,7 @@
                           </button>
                           }
                         </div>
+                        <!-- {{scrollToTableUpdate()}} -->
                       </div>
                     </td>
                     <td
@@ -639,6 +640,7 @@
                 }
               </div>
             </div>
+            {{scrollToTableUpdate()}}
             <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
               <p class="text-sm leading-5 text-wine">
                 Mostrando
@@ -663,9 +665,8 @@
       {{ scrollToTable() }}
     </section>
   }
-  <section >
-    <!-- {{scrollToTableUpdate()}} -->
-    <div id="sectionUpdate">
+  <section   id="sectionUpdate" >
+    <div  >
       @if (editar && filaSeleccionada )  {
         <app-edit-tacking-table  (showTable)="showAgainTable()"  [documents]="filaSeleccionada"/>
       }

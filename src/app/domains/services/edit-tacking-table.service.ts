@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Asunto } from '../interfaces/asuntos.interfaces';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class EditTackingTableService {
 
   constructor(private http: HttpClient) { }
 
-  updateTrackingTable(data:Asunto):Observable<Asunto>{
+  updateTrackingTable(data:Asunto):Observable<AsuntoResponse>{
     //debugger
     let  targetUrl  = environment.baseUrl
     if (data.id_asunto_historico !== null) {
@@ -27,7 +28,7 @@ export class EditTackingTableService {
     }
     console.log(targetUrl);
 
-     return this.http.patch<Asunto>(targetUrl,
+     return this.http.patch<AsuntoResponse>(targetUrl,
       data, this.httpOptions)
   }
 

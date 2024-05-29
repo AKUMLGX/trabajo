@@ -95,25 +95,25 @@ export class TrackingTableComponent {
     }
   }
 
-  // scrollToTableUpdate():void{
-  //   const element = document.getElementById("sectionUpdate");
-  //   if (element !== null && !this.newTableIsRendered ) {
-  //     const checkEvery = 100;
-  //     setTimeout(() => {
-  //       if (window.scrollY !== element.offsetTop ) {
-  //         element.scrollIntoView({
-  //           behavior: 'smooth',
-  //           block: 'start',
-  //           inline: 'nearest',
-  //         });
-  //         console.log("momento",element);
+  scrollToTableUpdate():void{
+    const element = document.getElementById("sectionTable");
+    if (element !== null && !this.newTableIsRendered ) {
+      const checkEvery = 100
+      setTimeout(() => {
+        if (window.scrollY !== element.offsetTop ) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+          });
+          console.log("momento",element);
 
-  //       }
-  //     }, checkEvery);
-  //     this.newTableIsRendered = true;
-  //   }
+        }
+      }, checkEvery);
+      this.newTableIsRendered = true;
+    }
 
-  // }
+  }
 
   getFileName(path: String): string {
     let split: string[] = path.replace('\\\\', '\\').split('\\');

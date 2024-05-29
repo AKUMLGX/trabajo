@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { AsuntoResponse,Value } from '../../interfaces/ausuntos-response.interface';
+
 
 
 @Injectable({
@@ -9,7 +11,7 @@ import html2canvas from 'html2canvas';
 export class PdfAcuseService {
 
   constructor() { }
-  async generatePDF(data: any): Promise<Blob> {
+  async generatePDF(data: AsuntoResponse): Promise<Blob> {
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 
@@ -144,9 +146,9 @@ export class PdfAcuseService {
                 <div class="document">
                 <div class="folio" style="color: #006666;  font-size: 16px; font-weight: bold;">Registros:</div>
                     <div class="fields">`;
-                    data.values.forEach((value:any) => {
+                   data.values.forEach((value:Value) => {
                         for (let key in value) {
-                            htmlContent += ` <div class="field"><label>${key.replace(/_/g, ' ')}:</label> ${value[key] !== null ? value[key] : 'N/A'}</label></div>`;
+                            htmlContent += ` <div class="field"><label>${key.replace(/_/g, ' ')}:</label> ${value !== null ? value : 'N/A'}</label></div>`;
                         }
                     });
                     htmlContent += `

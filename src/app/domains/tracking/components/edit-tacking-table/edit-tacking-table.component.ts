@@ -11,6 +11,7 @@ import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
 
 
 
+
 @Component({
   selector: 'app-edit-tacking-table',
   standalone: true,
@@ -77,6 +78,7 @@ export class EditTackingTableComponent implements OnInit {
       this.updateSerivce.updateTrackingTable(update).subscribe(
         response => {
           console.log('Actualizado:', response);
+
           this.pdfAcuse.generatePDF(response).then(blob => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
