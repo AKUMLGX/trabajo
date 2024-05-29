@@ -118,8 +118,8 @@ export class PdfAcuseService {
                 font-style: italic;
                 font-weight: bold;
                 position: absolute;
-                top: 10px;
                 right: 20px;
+                top:0
             }
             .logo-left {
                 position: absolute;
@@ -172,17 +172,17 @@ export class PdfAcuseService {
     const imgData = canvas.toDataURL('image/png');
 
     doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
-  
+
     //document.body.removeChild(content);
 
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
-  document.body.removeChild(content);               
+  document.body.removeChild(content);
     return new Promise<Blob>((resolve) => {
         console.log("Descargando");
-        doc.save("test.pdf");  
+        doc.save("test.pdf");
       //const blob = doc.output('blob');
       //resolve(blob);
     });
