@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { GeneralidadesApertura } from '../interfaces/generalidades-apertura';
 import { environment } from '../../../environments/environment';
 import { GeneralidadesAperturaResponse } from '../interfaces/generalidades-apertura-response';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
+import { PdfAcuseService } from '../shared/services/pdf-acuse.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,7 @@ export class GeneralidadesAperturaService {
 
   constructor(
     private httpClient: HttpClient,
+    private pdfAcuseService: PdfAcuseService,
   ) { }
 
   // insertGeneralidadesForm(generalidadesForm: GeneralidadesApertura) {
@@ -24,7 +27,7 @@ export class GeneralidadesAperturaService {
   // }
 
   insertGeneralidadesForm(
-    data: GeneralidadesApertura, 
+    data: GeneralidadesApertura,
     selectedFile: File
   ) {
 
@@ -43,12 +46,16 @@ export class GeneralidadesAperturaService {
     //   'Content-Type': 'multipart/form-data'
     // });
 
-    this.httpClient.post(
+    this.httpClient.post<AsuntoResponse>(
       environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
       formData,
-    ).subscribe((res) => {
-        console.log(res);
-    });
+    ).subscribe((data) => {
+      console.log('success', data);
+      this.pdfAcuseService.generatePDF(data);
+    },
+      (error) => {
+        //console.log('oops', error)
+      });
   }
 
 }

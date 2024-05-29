@@ -14,7 +14,7 @@ export class PdfAcuseService {
   async generatePDF(data: AsuntoResponse): Promise<Blob> {
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-
+    console.log("Entrando a la generacion");
 
     let htmlContent = `
     <!DOCTYPE html>
@@ -146,11 +146,9 @@ export class PdfAcuseService {
                 <div class="document">
                 <div class="folio" style="color: #006666;  font-size: 16px; font-weight: bold;">Registros:</div>
                     <div class="fields">`;
-                   data.values.forEach((value:Value) => {
-                        for (let key in value) {
-                            htmlContent += ` <div class="field"><label>${key.replace(/_/g, ' ')}:</label> ${value !== null ? value : 'N/A'}</label></div>`;
-                        }
-                    });
+                    for (const [key, value] of Object.entries(data.values[0])) {
+                        htmlContent += ` <div class="field"><label>${key.replace(/_/g, ' ')}:</label> ${value !== null ? value : 'N/A'}</label></div>`;
+                    }
                     htmlContent += `
                     </div>
                 </div>
@@ -174,17 +172,19 @@ export class PdfAcuseService {
     const imgData = canvas.toDataURL('image/png');
 
     doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
-    document.body.removeChild(content);
+  
+    //document.body.removeChild(content);
 
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
-  document.body.removeChild(content);
-
+  document.body.removeChild(content);               
     return new Promise<Blob>((resolve) => {
-      const blob = doc.output('blob');
-      resolve(blob);
+        console.log("Descargando");
+        doc.save("test.pdf");  
+      //const blob = doc.output('blob');
+      //resolve(blob);
     });
   }
 }

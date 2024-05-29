@@ -43,7 +43,7 @@ export class RespuestaAperturaService {
       environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
       formData,
     ).subscribe((res) => {
-        console.log(res);
+        console.log("Holaaaaa");
     });
   }
 
