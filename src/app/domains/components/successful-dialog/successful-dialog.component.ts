@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,9 +11,10 @@ import { Router } from '@angular/router';
 })
 export class SuccessfulDialogComponent {
 
-  constructor(@Inject(MAT_DIALOG_DATA)public data:any, private router:Router){}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private router: Router) { }
 
-  navigete(){
-  this.router.navigate(["layout/capture"])
+  navigete() {
+    window.location.href = "http://localhost:4200/akamba/layout/capture"
+    this.router.navigate(["/capture"])
   }
 }

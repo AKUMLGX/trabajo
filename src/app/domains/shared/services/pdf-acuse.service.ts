@@ -175,16 +175,16 @@ export class PdfAcuseService {
 
         doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
-        //document.body.removeChild(content);
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // await new Promise(resolve => setTimeout(resolve, 1000));
 
         doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
         document.body.removeChild(content);
         return new Promise<Blob>((resolve) => {
-            console.log("Descargando");
-            doc.save("Acuse.pdf");
+          console.log("Descargando");
+          doc.save("Acuse.pdf");
+          document.body.removeChild(content);
             //const blob = doc.output('blob');
             //resolve(blob);
         });

@@ -78,7 +78,7 @@ export class SecondPiecesFormComponent {
     const file: File = event.target.files[0]
     this.documentoEscaneadoFile = file;
     if (this.documentoEscaneadoFile) {
-      this.documentoEscaneadoName = this.documentoEscaneadoFile.name
+      this.documentoEscaneadoName = this.documentoEscaneadoFile.name.toString().replaceAll(' ','_')
       console.log("Nombre del archivo:", this.documentoEscaneadoName);
       console.log('Tipo MIME del archivo:', this.documentoEscaneadoFile.type);
     }

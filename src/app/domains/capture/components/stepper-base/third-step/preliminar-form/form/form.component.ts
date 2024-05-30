@@ -40,7 +40,7 @@ export class FormComponent {
     ){}
 
     isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
-    
+
     documentoEscaneadoName: string = '';
     documentoEscaneadoFile?:File;
 
@@ -49,7 +49,7 @@ export class FormComponent {
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [null, [Validators.required]],
       fechaRecepcion: [null, [Validators.required]],
-      
+
       documentoEscaneadoField:[null, [Validators.required]],
 
       documentoEuacape: [null,],
@@ -91,7 +91,7 @@ export class FormComponent {
       const file: File = event.target.files[0]
       this.documentoEscaneadoFile = file;
       if (this.documentoEscaneadoFile) {
-        this.documentoEscaneadoName = this.documentoEscaneadoFile.name
+        this.documentoEscaneadoName = this.documentoEscaneadoFile.name.toString().replaceAll(' ','_')
         console.log("Nombre del archivo:", this.documentoEscaneadoName);
         console.log('Tipo MIME del archivo:', this.documentoEscaneadoFile.type);
       }
@@ -116,7 +116,7 @@ export class FormComponent {
       if(this.euacapeForm.value.plazoAtencionUrgente) {
         this.collectFormInfoService.updatePlazoDeAtencionIfCheck();
       }
-      
+
       if(
         this.euacapeForm.value.plazoAtencionUrgente === false ||
         this.euacapeForm.value.plazoAtencionUrgente === undefined
