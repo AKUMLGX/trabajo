@@ -97,8 +97,8 @@ export class TrackingTableComponent {
 
   scrollToTableUpdate():void{
     const element = document.getElementById("sectionUpdate");
-    if (element !== null && !this.newTableIsRendered ) {
-      const checkEvery = 100
+    if (element !== null ) {
+      const checkEvery = 500
       setTimeout(() => {
         if (window.scrollY !== element.offsetTop ) {
           element.scrollIntoView({
@@ -114,6 +114,7 @@ export class TrackingTableComponent {
     }
 
   }
+
 
   getFileName(path: String): string {
     let split: string[] = path.replace('\\\\', '\\').split('\\');
@@ -165,3 +166,5 @@ export class TrackingTableComponent {
 
   }
 }
+
+

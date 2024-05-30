@@ -67,7 +67,7 @@ export class PdfAcuseService {
             }
             .header .description {
                 font-size: 10px;
-                font-weight: bold;
+                font-weight: normal;
                 margin-top:30px;
                 margin-left:20px;
                 color: #800020;
@@ -108,7 +108,7 @@ export class PdfAcuseService {
                 color: #333;
             }
             .document label {
-                font-weight: bold;
+                font-weight: normal;
                 color: #800020;
                 display: block;
                 margin-bottom: 5px;
@@ -119,7 +119,7 @@ export class PdfAcuseService {
                 font-style: italic;
                 position: absolute;
                 right: 20px;
-                top:0;   
+                top:0;
             }
             .logo-left {
                 position: absolute;
@@ -144,7 +144,7 @@ export class PdfAcuseService {
                     <div class="author">Autor: ${data.autor}</div>
                 </div>
                 <div class="document">
-                <div class="folio" style="color: #006666;  font-size: 12px; font-weight: bold;">Registros:</div>
+                <div class="folio" style="color: #006666;  font-size: 12px; font-weight: normal;">Registros:</div>
                     <div class="fields">`;
         for (const [key, value] of Object.entries(data.values[0])) {
             if (value !== null) {
