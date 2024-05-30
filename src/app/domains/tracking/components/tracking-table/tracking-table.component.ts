@@ -114,7 +114,7 @@ export class TrackingTableComponent {
         if (window.scrollY !== element.offsetTop) {
           element.scrollIntoView({
             behavior: 'smooth',
-            block: 'start',
+            block: 'end',
             inline: 'nearest',
           });
         }

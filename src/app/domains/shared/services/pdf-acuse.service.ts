@@ -141,7 +141,7 @@ export class PdfAcuseService {
                 <div class="date">Fecha: ${formattedDate}</div>
                 <div class="header">
                     <div class="description">Descripción: ${data.descripcion}</div>
-                    <div class="author">Autor: ${data.autor}</div>
+
                 </div>
                 <div class="document">
                 <div class="folio" style="color: #006666;  font-size: 12px; font-weight: normal;">Registros:</div>
