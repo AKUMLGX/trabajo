@@ -20,19 +20,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
   let matDialog_ = inject(MatDialog)
   return next(request).pipe(
     map((event: HttpEvent<any>) => {
-      if(request.method !== "GET"){
-        if (event instanceof HttpResponse) {
-          if (event.status === 200) {
-            matDialog_.open(SuccessfulDialogComponent, {
-              data: {
-                msjTitle: "Exito",
-                msjDescription: "Acción realizada con exito"
-              }
-            })
-          }
-        }
-        console.log(request.method);
-      }else if(request.url === environment.baseUrl + environment.tokenValidationEndpoint ){
+      if (request.url === environment.baseUrl + environment.tokenValidationEndpoint) {
         if (event instanceof HttpResponse) {
           if (event.status === 200) {
             matDialog_.open(LoginDialogComponent, {
@@ -43,10 +31,22 @@ export const successfullInterceptor: HttpInterceptorFn = (
             })
           }
         }
-        console.log(request.url);
+      }else{
+        if (request.method !== "GET") {
+          if (event instanceof HttpResponse) {
+            if (event.status === 200) {
+              matDialog_.open(SuccessfulDialogComponent, {
+                data: {
+                  msjTitle: "Exito",
+                  msjDescription: "Acción realizada con exito"
+                }
+              })
+            }
+          }
+          console.log(request.method);
+        }
       }
       return event;
     })
   )
 }
-

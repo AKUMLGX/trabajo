@@ -288,14 +288,13 @@
                           >
                             <mat-icon style="margin-left: 5px">print</mat-icon>
                           </button>
-                          <button  mat-button class="text-wine leading-5"
+                          <button  id="scrollDownButton" mat-button class="text-wine leading-5"
                            (click)="updateTable() " (click)="seleccionarFila(document)"
                           >
                             <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
                           </button>
                           }
                         </div>
-                        <!-- {{scrollToTableUpdate()}} -->
                       </div>
                     </td>
                     <td
@@ -640,8 +639,6 @@
                 }
               </div>
             </div>
-            {{scrollToTableUpdate()}}
-            {{scrollToTable()}}
             <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
               <p class="text-sm leading-5 text-wine">
                 Mostrando
@@ -660,6 +657,7 @@
                 resultados
               </p>
             </div>
+            {{ scrollToTableUpdate() }}
           </div>
         </div>
       </div>
