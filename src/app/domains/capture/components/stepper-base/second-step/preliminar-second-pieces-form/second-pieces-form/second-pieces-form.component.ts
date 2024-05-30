@@ -57,8 +57,8 @@ export class SecondPiecesFormComponent {
     turnoJefatura: [null, [Validators.maxLength(255)]],
     personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
     tipoAsunto: [null, [Validators.required]],
-    plazoAtencionHoras: [{ value: null,}, [Validators.min(1)]],
-    plazoAtencionDias: [{ value: null, }, [Validators.min(0)]],
+    plazoAtencionHoras: [null, [Validators.min(1)]],
+    plazoAtencionDias: [null, [Validators.min(0)]],
     plazoAtencionUrgente: [false],
 
     folioJupiter: [null, [Validators.maxLength(255)]],
@@ -102,11 +102,21 @@ export class SecondPiecesFormComponent {
       this.secondPiecesForm.value.folioJupiter,
     );
 
-    this.collectSecondPiecesInfoService.updatePlazoDeAtencion(
-      this.secondPiecesForm.value.plazoAtencionHoras,
-      this.secondPiecesForm.value.plazoAtencionDias,
-      this.secondPiecesForm.value.plazoAtencionUrgente,
-    );
+    if(this.secondPiecesForm.value.plazoAtencionUrgente) {
+      this.collectSecondPiecesInfoService.updatePlazoDeAtencionIfCheck();
+    }
+    
+    if(
+      this.secondPiecesForm.value.plazoAtencionUrgente === false ||
+      this.secondPiecesForm.value.plazoAtencionUrgente === undefined
+    ) {
+      this.collectSecondPiecesInfoService.updatePlazoDeAtencion(
+        this.secondPiecesForm.value.plazoAtencionHoras,
+        this.secondPiecesForm.value.plazoAtencionDias,
+        this.secondPiecesForm.value.plazoAtencionUrgente,
+      );
+    }
+
 
     this.modalService.openCustomDialogWithTemplate({
       template

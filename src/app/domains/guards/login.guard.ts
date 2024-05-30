@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 export const loginGuard = () => {
   const router = inject(Router);
@@ -9,7 +10,7 @@ export const loginGuard = () => {
     let expiryDate = new Date(parse.exp * 1000);
     let currentDate = new Date(Date.now());
     if (expiryDate < currentDate) {
-      //router.navigate(['login']);
+      window.location.href = environment.loginUrl;
       return true;
     }
   }

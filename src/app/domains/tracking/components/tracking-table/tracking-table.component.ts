@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild  } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -13,7 +13,7 @@ import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-ta
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule,EditTackingTableComponent],
+  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule, EditTackingTableComponent],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
@@ -36,7 +36,8 @@ export class TrackingTableComponent {
     nextLabel: 'Siguiente',
   };
 
-  editar:boolean= false
+
+  editar: boolean = false
 
   filaSeleccionada: any
 
@@ -51,7 +52,7 @@ export class TrackingTableComponent {
     private asuntoService: AsuntoService,
     private fileService: FileService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.asuntoService.pdfIsOpenUpdated.subscribe((pdfIsOpen) => {
@@ -80,10 +81,10 @@ export class TrackingTableComponent {
 
   scrollToTable(): void {
     const element = document.getElementById('sectionTable');
-    if (element !== null && !this.newTableIsRendered ) {
+    if (element !== null && !this.newTableIsRendered) {
       const checkEvery = 100;
       setTimeout(() => {
-        if (window.scrollY !== element.offsetTop ) {
+        if (window.scrollY !== element.offsetTop) {
           element.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
@@ -95,19 +96,27 @@ export class TrackingTableComponent {
     }
   }
 
-  scrollToTableUpdate():void{
+  getRol(): string {
+    let sessionInfo = localStorage.getItem('sessionInfo');
+    if (sessionInfo !== null) {
+      let parse = JSON.parse(sessionInfo);
+      let rol = parse.roles;
+      return rol;
+    }
+    return "";
+  }
+
+  scrollToTableUpdate(): void {
     const element = document.getElementById("sectionUpdate");
-    if (element !== null ) {
+    if (element !== null) {
       const checkEvery = 500
       setTimeout(() => {
-        if (window.scrollY !== element.offsetTop ) {
+        if (window.scrollY !== element.offsetTop) {
           element.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
             inline: 'nearest',
           });
-          console.log("momento",element);
-
         }
       }, checkEvery);
       this.newTableIsRendered = true;
@@ -146,11 +155,11 @@ export class TrackingTableComponent {
     this.fileService.printPdf(folio.toString(), fileName);
   }
 
-  updateTable(){
-     this.editar= true
-     this.mostrarTabla=false
-     console.log("mostrarTabla",this.mostrarTabla);
-     console.log("editar",this.editar);
+  updateTable() {
+    this.editar = true
+    this.mostrarTabla = false
+    console.log("mostrarTabla", this.mostrarTabla);
+    console.log("editar", this.editar);
   }
 
   seleccionarFila(fila: any) {
@@ -159,10 +168,10 @@ export class TrackingTableComponent {
   }
 
   showAgainTable() {
-    this.mostrarTabla=false
-    this.editar=false
-    console.log("mostrarTabla PT-!",this.mostrarTabla);
-    console.log("editar PT-!",this.editar);
+    this.mostrarTabla = false
+    this.editar = false
+    console.log("mostrarTabla PT-!", this.mostrarTabla);
+    console.log("editar PT-!", this.editar);
 
   }
 }
