@@ -32,7 +32,6 @@ export const authInterceptor: HttpInterceptorFn = (
   }
   return next(request).pipe(catchError(err => {
     if (err.status === 401) {
-      console.log("ssssssssssssssssssaaaaaaaaaaaaaaaa");
       let logoutService = inject(LogoutService);
       logoutService.logout();
     }

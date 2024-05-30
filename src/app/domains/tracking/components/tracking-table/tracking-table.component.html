@@ -13,7 +13,7 @@
                     <th
                       class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
                     >
-                      {{ "PDF" }}
+                      {{ "VER" }}
                     </th>
                     <th
                       class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
@@ -266,7 +266,6 @@
 
                           } @else if (getExtension(document.documento_escaneado) ===
                           'msg') {
-                            <!-- msg edit -->
                           <button
                             mat-button
                             (click)="openMsgReader(document.folio_interno, document.documento_escaneado)"
@@ -274,6 +273,7 @@
                           >
                             <mat-icon>remove_red_eye</mat-icon>
                           </button>
+
                           <button  mat-button class="text-wine leading-5"
                           (click)="updateTable() " (click)="seleccionarFila(document)"
                          >
@@ -288,12 +288,14 @@
                           >
                             <mat-icon style="margin-left: 5px">print</mat-icon>
                           </button>
-                          <button  id="scrollDownButton" mat-button class="text-wine leading-5"
-                           (click)="updateTable() " (click)="seleccionarFila(document)"
-                          >
-                            <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
-                          </button>
                           }
+                          @if (getRol() === "AKAMBA_002_SUPERVISA"){
+                          <button  mat-button class="text-wine leading-5"
+                          (click)="updateTable() " (click)="seleccionarFila(document)"
+                         >
+                           <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
+                         </button>
+                        }
                         </div>
                       </div>
                     </td>
