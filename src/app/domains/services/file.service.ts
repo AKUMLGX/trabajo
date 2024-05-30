@@ -61,6 +61,7 @@ export class FileService {
         iframe.style.display = 'none';
         iframe.src = blobURL;
         document.body.appendChild(iframe);
+        console.log("He llegado" + iframe.contentWindow);
         if (iframe.contentWindow !== null) iframe.contentWindow.print();
       });
   }

@@ -109,7 +109,7 @@ export class TrackingTableComponent {
   scrollToTableUpdate(): void {
     const element = document.getElementById("sectionUpdate");
     if (element !== null) {
-      const checkEvery = 500
+      const checkEvery = 100
       setTimeout(() => {
         if (window.scrollY !== element.offsetTop) {
           element.scrollIntoView({
@@ -119,7 +119,6 @@ export class TrackingTableComponent {
           });
         }
       }, checkEvery);
-      this.newTableIsRendered = true;
     }
 
   }

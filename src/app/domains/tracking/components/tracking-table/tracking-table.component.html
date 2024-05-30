@@ -1,45 +1,31 @@
 @if (documents.length > 0 && !pdfIsOpen && !mostrarTabla) {
-    <div class="flex justify-center items-center text-xl mt-2" >Resultados </div>
-    <section  class="py-1 bg-blueGray-50" id="sectionTable">
-      <div class="w-full lg:w-12/12 mx-auto mt-2">
-        <div
-          class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0"
-        >
-          <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-            <div class="overflow-x-auto">
-              <table class="min-w-full border-collapse bg-white">
-                <thead>
-                  <tr>
-                    <th
-                      class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                    >
-                      {{ "VER" }}
-                    </th>
-                    <th
-                      class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                    >
-                      {{ "Folio Interno" }}
-                    </th>
-                    <th
-                      class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                    >
-                      {{ "Carpeta de Investigación" }}
-                    </th>
-                    <th
-                      class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                    >
-                      {{ "Persona Relacionada" }}
-                    </th>
-                    <th
-                      class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                    >
-                      {{ "Folio Scanner" }}
-                    </th>
-                    <th
-                      class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider"
-                    >
-                      {{ "Volante Jefatura" }}
-                    </th>
+<div class="flex justify-center items-center text-xl mt-2">Resultados </div>
+<section class="py-1 bg-blueGray-50" id="sectionTable">
+  <div class="w-full lg:w-12/12 mx-auto mt-2">
+    <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
+      <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse bg-white">
+            <thead>
+              <tr>
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "VER" }}
+                </th>
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Folio Interno" }}
+                </th>
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Carpeta de Investigación" }}
+                </th>
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Persona Relacionada" }}
+                </th>
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Folio Scanner" }}
+                </th>
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Volante Jefatura" }}
+                </th>
 
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Descargo" }}
@@ -184,47 +170,31 @@
                         class="text-wine leading-5">
                         <mat-icon>remove_red_eye</mat-icon>
                       </button>
-
-                          } @else if (getExtension(document.documento_escaneado) ===
-                          'msg') {
-                          <button
-                            mat-button
-                            (click)="openMsgReader(document.folio_interno, document.documento_escaneado)"
-                            class="text-wine leading-5"
-                          >
-                            <mat-icon>remove_red_eye</mat-icon>
-                          </button>
-
-                          <button  mat-button class="text-wine leading-5"
-                          (click)="updateTable() " (click)="seleccionarFila(document)"
-                         >
-                           <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
-                         </button>
-                          } @if(getExtension(document.documento_escaneado) ===
-                          'pdf') {
-                          <button
-                            mat-button
-                            (click)="printPdf(document.folio_interno, document.documento_escaneado)"
-                            class="text-wine leading-5"
-                          >
-                            <mat-icon style="margin-left: 5px">print</mat-icon>
-                          </button>
-                          }
-                          @if (getRol() === "AKAMBA_002_SUPERVISA"){
-                          <button  mat-button class="text-wine leading-5"
-                          (click)="updateTable() " (click)="seleccionarFila(document)"
-                         >
-                           <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
-                         </button>
-                        }
-                        </div>
-                      </div>
-                    </td>
-                    <td
-                      class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                    >
-                      <div class="text-sm leading-5 text-wine">
-                        {{ document.folio_interno }}
+                      } @else if (getExtension(document.documento_escaneado) ===
+                      'msg') {
+                      <button mat-button (click)="openMsgReader(document.folio_interno, document.documento_escaneado)"
+                        class="text-wine leading-5">
+                        <mat-icon>remove_red_eye</mat-icon>
+                      </button>
+                      } @if(getExtension(document.documento_escaneado) ===
+                      'pdf') {
+                      <button mat-button (click)="printPdf(document.folio_interno, document.documento_escaneado)"
+                        class="text-wine leading-5">
+                        <mat-icon style="margin-left: 5px">print</mat-icon>
+                      </button>
+                      }
+                      @if (getRol() === "AKAMBA_002_SUPERVISA"){
+                      <button mat-button class="text-wine leading-5" (click)="updateTable() "
+                        (click)="seleccionarFila(document)">
+                        <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
+                      </button>
+                      }
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.folio_interno }}
 
                   </div>
                 </td>
@@ -491,7 +461,6 @@
       </div>
     </div>
     {{ scrollToTable() }}
-    {{ scrollToTableUpdate()}}
   </div>
 </section>
 @if (editar && filaSeleccionada ) {
