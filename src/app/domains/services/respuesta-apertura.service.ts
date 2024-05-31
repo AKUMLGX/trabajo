@@ -45,9 +45,7 @@ export class RespuestaAperturaService {
       environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
       formData,
     ).subscribe((data) => {
-      console.log("success",data);
       this.pdfAcuseService.generatePDF(data)
-        console.log("");
     },
   (error)=>{
 

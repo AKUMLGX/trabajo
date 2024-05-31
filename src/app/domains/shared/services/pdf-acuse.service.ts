@@ -14,8 +14,6 @@ export class PdfAcuseService {
     async generatePDF(data: AsuntoResponse): Promise<Blob> {
         const currentDate = new Date();
         const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-        console.log("Entrando a la generacion");
-
         let htmlContent = `
     <!DOCTYPE html>
     <html lang="es">
@@ -182,11 +180,8 @@ export class PdfAcuseService {
 
         document.body.removeChild(content);
         return new Promise<Blob>((resolve) => {
-          console.log("Descargando");
           doc.save("Acuse.pdf");
           document.body.removeChild(content);
-            //const blob = doc.output('blob');
-            //resolve(blob);
         });
     }
 }

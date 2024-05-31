@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, 
-  FormBuilder, 
-  FormGroup, 
-  Validators, 
-  ReactiveFormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { AsuntoService } from '../../../../../services/asunto.service';
@@ -17,7 +19,7 @@ import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule,  
+    FormsModule,
     MatStepperModule,
     MatIconModule,
   ],
@@ -29,8 +31,8 @@ export class SearchBarComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
-    private searchStatusService : SearchStatusService,
-  ){}
+    private searchStatusService: SearchStatusService,
+  ) { }
 
   searchBarResultsList: Asunto[] = [];
 
@@ -41,10 +43,9 @@ export class SearchBarComponent {
   @Input() selectedSearchEntryType: string = '';
 
   saveuserInputForm(): void {
-    console.log(this.userInputForm.value);
   }
 
-  @Output() isSubmittedButtonHiddenEmitter = new EventEmitter(); 
+  @Output() isSubmittedButtonHiddenEmitter = new EventEmitter();
 
   isSubmittedButtonHidden: boolean = false;
 
@@ -60,7 +61,7 @@ export class SearchBarComponent {
       this.searchBarResultsList = results;
       //console.log('search bar results', this.searchBarResultsList);
 
-      if(this.searchBarResultsList.length === 0) {
+      if (this.searchBarResultsList.length === 0) {
         this.isResultsListEmpty = true;
       } else {
         this.isResultsListEmpty = false;
@@ -69,33 +70,29 @@ export class SearchBarComponent {
         this.isResultsListEmpty
       );
 
-      this.folioInternoFromResults = 
+      this.folioInternoFromResults =
         this.searchBarResultsList[0].folio_interno.toString();
-      console.log('calonch', this.folioInternoFromResults);
-
       this.searchStatusService.updateReactiveFolioInterno(
         this.folioInternoFromResults
       );
-
-      console.log('calonch2', this.folioInternoFromResults);
 
     });
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente
 
-    
+
     ///////this.isResultsListEmptyStatusEmitter.emit(this.isResultsListEmpty);
-    
+
 
     this.isSubmittedButtonHidden = true;
     this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
   }
 
-  firstColumnHeader : string = 'Folio interno';
+  firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
-  thirdColumnHeader : string = 'Oficio';
+  thirdColumnHeader: string = 'Oficio';
   fourthColumnHeader: string = 'Autoridad remitente';
-  fifthColumnHeader : string = 'Persona relacionada';
+  fifthColumnHeader: string = 'Persona relacionada';
 
   //Dummy data, formerly used to feed table.
   // SEARCH_RESULTS = [
@@ -107,29 +104,21 @@ export class SearchBarComponent {
 
   index = 0;
   btnClass: any;
-  iptClass:any;
+  iptClass: any;
 
   capturedText = '';
 
-  tabChange(data: number){
+  tabChange(data: number) {
     this.index = data;
   }
   btnClickHandler() {
-    if(this.btnClass) {
-      this.btnClass  = '';
-      this.iptClass  = '';
+    if (this.btnClass) {
+      this.btnClass = '';
+      this.iptClass = '';
     } else {
-    this.btnClass = 'close'
-    this.iptClass = 'square'
+      this.btnClass = 'close'
+      this.iptClass = 'square'
     }
   }
-
-  // submitSearch(event:any) {
-
-  //   //this.capturedText = event.target.value ;
-
-  //   console.log(event.target.value);
-
-  // }
 
 }

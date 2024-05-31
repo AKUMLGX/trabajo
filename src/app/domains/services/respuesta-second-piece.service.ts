@@ -34,11 +34,9 @@ export class RespuestaSecondPieceService {
       environment.baseUrl + 'asunto/nuevo/respuesta/segunda_pieza/',
       formData,
     ).subscribe((data) => {
-      console.log('success', data);
       this.pdfAcuseService.generatePDF(data);
 
     },(error)=>{
-      console.log('oops', error)
     });
   }
 

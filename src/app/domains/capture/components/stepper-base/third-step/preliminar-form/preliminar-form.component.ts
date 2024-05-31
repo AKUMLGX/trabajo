@@ -40,7 +40,6 @@ export class PreliminarFormComponent {
   isPreliminarEuacapeFormValid = !this.preliminarForm.valid;
 
   savePreliminarEuacapeForm(): void {
-    console.log(this.preliminarForm.value);
     this.collectFormInfoService.updatePreliminarEuacapeForm(
       this.preliminarForm.value.oficio,
       this.preliminarForm.value.carpetaInvestigacion,

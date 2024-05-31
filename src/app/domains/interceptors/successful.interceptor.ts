@@ -43,7 +43,6 @@ export const successfullInterceptor: HttpInterceptorFn = (
               })
             }
           }
-          console.log(request.method);
         }
       }
       return event;

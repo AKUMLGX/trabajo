@@ -17,17 +17,12 @@ export class EditTackingTableService {
   constructor(private http: HttpClient) { }
 
   updateTrackingTable(data:Asunto):Observable<AsuntoResponse>{
-    //debugger
     let  targetUrl  = environment.baseUrl
     if (data.id_asunto_historico !== null) {
       targetUrl =  environment.baseUrl +    environment.updateTableHistorico
-      console.log(targetUrl);
     }else if(data.id_asunto_nuevo !==null){
       targetUrl= environment.baseUrl +  environment.updateTableNuevo
-      console.log(targetUrl);
     }
-    console.log(targetUrl);
-
      return this.http.patch<AsuntoResponse>(targetUrl,
       data, this.httpOptions)
   }

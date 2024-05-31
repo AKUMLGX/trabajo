@@ -34,12 +34,9 @@ export class GeneralidadesSecondPieceService {
       environment.baseUrl + 'asunto/nuevo/generalidad/segunda_pieza/',
       formData,
     ).subscribe((data) => {
-      console.log('success', data);
       this.pdfAcuseService.generatePDF(data);
-     //   console.log(res);
     },
     (error)=>{
-      console.log('oops', error)
     },
   );
   }

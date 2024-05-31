@@ -157,21 +157,15 @@ export class TrackingTableComponent {
   updateTable() {
     this.editar = true
     this.mostrarTabla = false
-    console.log("mostrarTabla", this.mostrarTabla);
-    console.log("editar", this.editar);
   }
 
   seleccionarFila(fila: any) {
     this.filaSeleccionada = fila;
-    console.log(this.filaSeleccionada);
   }
 
   showAgainTable() {
     this.mostrarTabla = false
     this.editar = false
-    console.log("mostrarTabla PT-!", this.mostrarTabla);
-    console.log("editar PT-!", this.editar);
-
   }
 }
 

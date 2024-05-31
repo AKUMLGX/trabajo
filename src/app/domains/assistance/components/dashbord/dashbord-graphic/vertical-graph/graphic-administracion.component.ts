@@ -55,12 +55,4 @@ export class GraphicAdministracionComponent {
 
 
 
-  // constructor() {
-  //   Object.assign(this, { single })
-  // }
-
-  // onSelect(event) {
-  //   console.log(event);
-  // }
-
 }

@@ -67,7 +67,6 @@ export class SecondPiecesFormComponent {
   });
 
   saveSecondPiecesForm(): void {
-    console.log(this.secondPiecesForm.value);
   }
 
   getToday(): string {
@@ -79,8 +78,6 @@ export class SecondPiecesFormComponent {
     this.documentoEscaneadoFile = file;
     if (this.documentoEscaneadoFile) {
       this.documentoEscaneadoName = this.documentoEscaneadoFile.name.toString().replaceAll(' ','_')
-      console.log("Nombre del archivo:", this.documentoEscaneadoName);
-      console.log('Tipo MIME del archivo:', this.documentoEscaneadoFile.type);
     }
   }
 

@@ -44,9 +44,7 @@ export class EuacapeAperturaService {
       environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
       formData,
     ).subscribe((data) => {
-      console.log("success",data);
-      this.pdfAcuseService.generatePDF(data)
-       // console.log(res);
+      this.pdfAcuseService.generatePDF(data);
     },
   (error)=>{
 

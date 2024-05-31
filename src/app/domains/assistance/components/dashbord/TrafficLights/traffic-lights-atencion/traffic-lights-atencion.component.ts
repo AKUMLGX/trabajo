@@ -302,13 +302,10 @@ export class TrafficLightsAtencionComponent {
   mostrarComponente(): void {
     this.mostrarRespuesta = !this.mostrarRespuesta
     this.mostrarGrafico = !this.mostrarGrafico
-    console.log(this.mostrarGrafico);
-    console.log(this.mostrarRespuesta);
   }
 
   seleccionarFila(fila: any) {
     this.filaSeleccionada = fila;
-    console.log(this.filaSeleccionada);
   }
 }
 

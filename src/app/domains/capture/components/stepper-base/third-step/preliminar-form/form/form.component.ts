@@ -70,18 +70,8 @@ export class FormComponent {
     });
 
     saveEuacapeForm(): void {
-      console.log(this.euacapeForm.value);
-      //this.OFICIO = this.secondEuacapeForm.value
-      //this.OFICIO = this.euacapeForm.value.administracion;
-      //console.log(this.OFICIO);
     }
 
-    //openCustomModal() {
-    //  this.modalService.openCustomDialog({
-    //     title: 'Title for cutom dialog',
-    //     content: 'Allo le monde, vous pouvez voir le contenu ici, une fois de plus!',
-    //   });
-    // }
 
     getToday(): string {
       return new Date().toISOString().split('T')[0]
@@ -92,8 +82,6 @@ export class FormComponent {
       this.documentoEscaneadoFile = file;
       if (this.documentoEscaneadoFile) {
         this.documentoEscaneadoName = this.documentoEscaneadoFile.name.toString().replaceAll(' ','_')
-        console.log("Nombre del archivo:", this.documentoEscaneadoName);
-        console.log('Tipo MIME del archivo:', this.documentoEscaneadoFile.type);
       }
     }
 

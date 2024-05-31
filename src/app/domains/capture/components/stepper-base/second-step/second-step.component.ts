@@ -21,7 +21,7 @@ export class SecondStepComponent {
 
   constructor(
     private modalService: ModalService,
-    ){}
+  ) { }
 
   selectedOption: any;
 
@@ -31,35 +31,32 @@ export class SecondStepComponent {
 
   @Output() selectedOptionEmitter = new EventEmitter();
 
-  retrieveSelectionFromDropdown(event:any){
+  retrieveSelectionFromDropdown(event: any) {
     this.selectedOption = event;
-    //console.log("Estoy -*recibiendo o nelson");
-    console.log(this.selectedOption);
-    if(this.selectedOption !== undefined){
+    if (this.selectedOption !== undefined) {
       this.enabledButton = true;
     } else {
       this.enabledButton = false;
     }
-     return this.enabledButton;
-   }
-
-  proceedToStepThreeHandler(){
-    console.log(this.selectedOption.name);
+    return this.enabledButton;
   }
 
-   openCustomModalWithTemplate(template: TemplateRef<any>){
-     this.modalService.openCustomDialogWithTemplate({
-       template
-     });
-     this.isSecondStepPressed = true;
-     this.selectedOptionEmitter.emit(this.selectedOption.name);
-   }
+  proceedToStepThreeHandler() {
+  }
 
-   modalCancelButton(){
+  openCustomModalWithTemplate(template: TemplateRef<any>) {
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    });
+    this.isSecondStepPressed = true;
+    this.selectedOptionEmitter.emit(this.selectedOption.name);
+  }
+
+  modalCancelButton() {
     this.isSecondStepPressed = false;
-   }
+  }
 
-  
+
 
 
 

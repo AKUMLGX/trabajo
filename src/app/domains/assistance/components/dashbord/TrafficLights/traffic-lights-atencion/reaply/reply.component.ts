@@ -83,7 +83,6 @@ export class ReaplyComponent implements OnInit {
   }
 
   sendReaply():void{
-    console.log(this.replyForm.value);
   }
 
   openModalWithTemplate(template:TemplateRef<any>){

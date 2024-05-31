@@ -151,8 +151,6 @@ export class InfoTableComponent {
         plazo_atencion:        plazoAtencion,
         documento:             documento,
       });
-      console.log("Estamos en Euacape");
-      console.log(this.formsObjectService.euacapeFormObject());
       this.euacapeAperturaService.insertEuacapeForm(
         this.formsObjectService.euacapeFormObject(),
         documentoEscaneadoFile!
@@ -182,8 +180,6 @@ export class InfoTableComponent {
         documento:             documento,
         tipo_asunto:           tipoAsunto,
       });
-      console.log("Estamos en Generalidades");
-      console.log(this.formsObjectService.generalidadesFormObject());
       this.generalidadesAperturaService.insertGeneralidadesForm(
         this.formsObjectService.generalidadesFormObject(),
         documentoEscaneadoFile!
@@ -208,8 +204,6 @@ export class InfoTableComponent {
         documento:             documento,
         atencion:              atencion,
       });
-      console.log("Estamos en Respuesta");
-      console.log(this.formsObjectService.respuestaFormObject());
       this.respuestaAperturaService.insertRespuestaForm(
         this.formsObjectService.respuestaFormObject(),
         documentoEscaneadoFile!

@@ -71,9 +71,6 @@ export class InfotableReplyComponent {
   folioScanner:folioScanner,
   folioInterno: folioInterno,
  })
-
-
- console.log("FormularioRespuesta");
  this.formReplyObjectService.replyFormObject()
 }
 }

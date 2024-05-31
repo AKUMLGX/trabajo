@@ -42,7 +42,6 @@ export class PreliminarSecondPiecesFormComponent {
   });
 
   saveSecondPiecesPreliminarForm(): void {
-    console.log(this.secondPiecesPreliminarForm.value);
     this.collectSecondPiecesInfoService.updatePreliminarSecondPiecesForm(
       this.secondPiecesPreliminarForm.value.oficio,
       this.secondPiecesPreliminarForm.value.carpetaInvestigacion,

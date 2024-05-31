@@ -145,8 +145,6 @@ export class SecondPiecesInfoTableComponent {
         plazo_atencion:        plazoAtencion,
         documento:             documento,
       });
-      console.log("Estamos en Euacape");
-      console.log(this.secondPiecesFormsObjectService.euacapeFormObject());
       this.euacapeSecondPieceService.insertSecondPieceEuacapeForm(
         this.secondPiecesFormsObjectService.euacapeFormObject(),
         documentoEscaneadoFile!
@@ -177,8 +175,6 @@ export class SecondPiecesInfoTableComponent {
         documento:             documento,
         tipo_asunto:           tipoAsunto,
       });
-      console.log("Estamos en Generalidades");
-      console.log(this.secondPiecesFormsObjectService.generalidadesFormObject());
       this.generalidadesSecondPieceService.insertSecondPieceGeneralidadesForm(
         this.secondPiecesFormsObjectService.generalidadesFormObject(),
         documentoEscaneadoFile!
@@ -204,8 +200,6 @@ export class SecondPiecesInfoTableComponent {
         atencion:              atencion,
         tipo_asunto:           tipoAsunto,
       });
-      console.log("Estamos en Respuesta");
-      console.log(this.secondPiecesFormsObjectService.respuestaFormObject());
       this.respuestaSecondPieceService.insertSecondPieceRespuestaForm(
         this.secondPiecesFormsObjectService.respuestaFormObject(),
         documentoEscaneadoFile!
@@ -213,8 +207,4 @@ export class SecondPiecesInfoTableComponent {
     }
 
   }
-
-  //https://www.techiediaries.com/angular-send-file-to-api/
-  //https://stackoverflow.com/questions/50774176/sending-file-and-json-in-post-multipart-form-data-request-with-axios
-
 }

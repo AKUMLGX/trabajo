@@ -34,12 +34,9 @@ export class EuacapeSecondPieceService {
       environment.baseUrl + 'asunto/nuevo/euacape/segunda_pieza/',
       formData,
     ).subscribe((data) => {
-      console.log('success', data);
       this.pdfAcuseService.generatePDF(data);
-        // console.log(res);
     },
   (error)=>{
-            console.log('oops', error)
   });
   }
 

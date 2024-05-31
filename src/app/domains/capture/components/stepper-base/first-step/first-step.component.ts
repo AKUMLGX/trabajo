@@ -30,8 +30,6 @@ export class FirstStepComponent {
 
   retrieveSelectionFromDropdown(event:any){
     this.selectedOption = event;
-    //console.log("Estoy -*recibiendo o nelson");
-    console.log(this.selectedOption);
     if(this.selectedOption !== undefined){
       this.enabledButton = true;
     } else {

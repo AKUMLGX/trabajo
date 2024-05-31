@@ -40,7 +40,6 @@ export class RespuestaPreliminarFormComponent {
   });
 
   savePreliminarRespuestaForm(): void {
-    console.log(this.respuestaPreliminarForm.value);
     this.collectFormInfoService.updatePreliminarEuacapeForm(
       this.respuestaPreliminarForm.value.oficio,
       this.respuestaPreliminarForm.value.carpetaInvestigacion,

@@ -70,20 +70,16 @@ export class EditTackingTableComponent implements OnInit {
 
 
   saveUpdateForm(): void {
-    console.log(this.updateTableForm.value);
     this.showagain()
     if (this.updateTableForm.valid === true) {
-      console.log(this.updateTableForm.valid, "Valido");
       const update = this.updateTableForm.value;
       this.updateSerivce.updateTrackingTable(update).subscribe(
         response => {
-          console.log('Actualizado:', response);
           this.pdfAcuse.generatePDF(response)
         }
       )
     } else {
       this.updateTableForm.markAllAsTouched();
-      console.log('El formulario no es válido');
     }
   }
 
@@ -92,24 +88,15 @@ export class EditTackingTableComponent implements OnInit {
       const camposModificados = Object.keys(this.updateTableForm.controls)
         .some(k => this.updateTableForm.get(k)?.dirty)
       this.botonHabilitado = camposModificados
-      // console.log(camposModificados);
-      // console.log(this.botonHabilitado);
-      // console.log("Form", this.updateTableForm.valid);
 
     });
-
     this.botonHabilitado = this.updateTableForm.dirty && this.updateTableForm.valid
-
-    // console.log(this.botonHabilitado);
-    // console.log("Dirty", this.updateTableForm.dirty);
-
   }
 
 
   showagain() {
     this.showTable.emit()
     this.mostrarTabla = false
-    // console.log(this.mostrarTabla,"showagain-PT!");
   }
 
 }
