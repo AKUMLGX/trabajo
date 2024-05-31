@@ -140,6 +140,7 @@ export class TrackingTableComponent {
     this.fileService.updatePdfFile(folio.toString(), fileName);
     this.asuntoService.openPdf();
     this.router.navigate(['/layout/tracking/pdfViewer']);
+    this.editar = false
   }
 
   openMsgReader(folio: String, path: String): void {
