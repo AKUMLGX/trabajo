@@ -8,12 +8,14 @@ import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
 import { Router } from '@angular/router';
 import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-table.component';
+import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
+import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
 
 
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule, EditTackingTableComponent],
+  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule, EditTackingTableComponent, PdfViewerComponent, MsgReaderComponent],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
@@ -29,20 +31,26 @@ export class TrackingTableComponent {
 
   public newTableIsRendered: boolean = false;
 
-  public pdfIsOpen: boolean = false;
+  public formUpdateIsRendered: boolean = false;
 
   public labels = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
   };
 
+  public fileIsOpen: boolean = false;
+
+  public visualizarPdf: boolean = false;
+
+  public visualizarMsg: boolean = false;
 
   editar: boolean = false
+  
 
   filaSeleccionada: any
 
-  mostrarTabla: boolean = false
-  clickclose: boolean = false
+  public mostrarTabla: boolean = false;
+  clickclose: boolean = false;
 
 
   @ViewChild("edit-tacking-table") miComponente!: ElementRef;
@@ -55,12 +63,19 @@ export class TrackingTableComponent {
   ) { }
 
   ngOnInit() {
-    this.asuntoService.pdfIsOpenUpdated.subscribe((pdfIsOpen) => {
-      this.pdfIsOpen = pdfIsOpen;
+    this.asuntoService.fileIsOpenUpdated.subscribe((fileIsOpen) => {
+      this.editar = false;
+      this.fileIsOpen = fileIsOpen;
     });
     this.asuntoService.documentsUpdated.subscribe((documents) => {
+      this.fileIsOpen = false;
+      this.mostrarTabla = true;
+      this.visualizarPdf = false;
+      this.visualizarMsg = false;
+      this.editar = false;
       this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
+      this.formUpdateIsRendered = false;
       this.documents = documents;
       let index = 0;
       let page: Asunto[] = [];
@@ -108,7 +123,7 @@ export class TrackingTableComponent {
 
   scrollToTableUpdate(): void {
     const element = document.getElementById("sectionUpdate");
-    if (element !== null) {
+    if (element !== null && !this.formUpdateIsRendered) {
       const checkEvery = 100
       setTimeout(() => {
         if (window.scrollY !== element.offsetTop) {
@@ -120,7 +135,7 @@ export class TrackingTableComponent {
         }
       }, checkEvery);
     }
-
+    this.formUpdateIsRendered = true;
   }
 
 
@@ -136,18 +151,21 @@ export class TrackingTableComponent {
   }
 
   openPdfViewer(folio: String, path: String): void {
-    let fileName = this.getFileName(path);
+    let fileName = this.getFileName(path).replaceAll(' ', '_');
     this.fileService.updatePdfFile(folio.toString(), fileName);
     this.asuntoService.openPdf();
-    this.router.navigate(['/layout/tracking/pdfViewer']);
-    this.editar = false
+    this.visualizarPdf = true;
+    this.mostrarTabla = false;
+    this.editar = false;
   }
 
   openMsgReader(folio: String, path: String): void {
     let fileName = this.getFileName(path).replaceAll(' ', '_');
     this.fileService.updateMsgFile(folio.toString(), fileName);
     this.asuntoService.openMsg();
-    this.router.navigate(['/layout/tracking/msgReader']);
+    this.visualizarMsg = true;
+    this.mostrarTabla = false;
+    this.editar = false
   }
 
   printPdf(folio: String, path: String): void {
@@ -155,17 +173,20 @@ export class TrackingTableComponent {
     this.fileService.printPdf(folio.toString(), fileName);
   }
 
-  updateTable() {
-    this.editar = true
-    this.mostrarTabla = false
+  updateTable(fila: any) {
+    console.log("Entro");
+    this.editar = true;
+    this.mostrarTabla = false;
+    this.filaSeleccionada = fila;
   }
 
   seleccionarFila(fila: any) {
+    console.log("Fila");
     this.filaSeleccionada = fila;
   }
 
   showAgainTable() {
-    this.mostrarTabla = false
+    this.mostrarTabla = true;
     this.editar = false
   }
 }

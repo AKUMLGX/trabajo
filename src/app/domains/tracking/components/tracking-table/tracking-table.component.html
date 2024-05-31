@@ -1,4 +1,4 @@
-@if (documents.length > 0 && !pdfIsOpen && !mostrarTabla) {
+@if (documents.length > 0 && !fileIsOpen && mostrarTabla) {
 <div class="flex justify-center items-center text-xl mt-2">Resultados </div>
 <section class="py-1 bg-blueGray-50" id="sectionTable">
   <div class="w-full lg:w-12/12 mx-auto mt-2">
@@ -184,7 +184,7 @@
                       </button>
                       }
                       @if (getRol() === "AKAMBA_002_SUPERVISA"){
-                      <button mat-button class="text-wine leading-5" (click)="updateTable() "
+                      <button mat-button class="text-wine leading-5" (click)="updateTable(document)"
                         (click)="seleccionarFila(document)">
                         <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
                       </button>
@@ -461,10 +461,15 @@
       </div>
     </div>
     {{ scrollToTable() }}
-    {{scrollToTableUpdate()}}
   </div>
 </section>
-@if (editar && filaSeleccionada ) {
-<app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
 }
+@if (editar && filaSeleccionada ) {
+  <app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
+  }
+@if (visualizarPdf ) {
+<app-pdf-viewer></app-pdf-viewer>
+}
+@if (visualizarMsg ) {
+<app-msg-reader></app-msg-reader>
 }
