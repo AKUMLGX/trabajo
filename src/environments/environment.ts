@@ -1,5 +1,6 @@
   export const environment = {
   baseUrl: 'http://akmer.dev.cloudb.sat.gob.mx:8080/akamba/api/v1/',
+  layoutUrl:"http://localhost:4200/akamba/layout/capture",
   oauthParametersEndpoint: 'login/get_oauth_parameters',
   tokenValidationEndpoint: 'login/token_validation',
   asuntoEndpoint: 'asunto/',
