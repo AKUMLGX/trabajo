@@ -11,7 +11,7 @@ import { AsuntoResponse, Value } from '../../interfaces/ausuntos-response.interf
 export class PdfAcuseService {
 
     constructor() { }
-    async generatePDF(data: AsuntoResponse): Promise<Blob> {
+    async generatePDF(data: AsuntoResponse): Promise<void> {
         const currentDate = new Date();
         const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
         let htmlContent = `
@@ -21,17 +21,15 @@ export class PdfAcuseService {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Acuse</title>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
         <style>
             body {
                 font-family: 'Montserrat';
-                margin: 0;
-                padding: 0;
                 background-color: #f0f0f0;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
+                width: 100vw;
                 overflow: hidden;
             }
             .page {
@@ -43,32 +41,28 @@ export class PdfAcuseService {
             }
             .container {
                 width: 100%;
-                max-width: 800px;
-                margin: 20px;
-                padding: 20px;
+                padding-top: 20px;
+                padding-bottom: 20px;
                 background-color: #fff;
-
                 position: relative;
+                border: 1px solid  #800020;
             }
-            h1 {
+            h5 {
+                font-size:14px;
                 text-align: center;
                 color: #800020;
-                margin-bottom: 20px;
             }
             .header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-
-                padding-bottom: 10px;
-                margin-bottom: 20px;
             }
             .header .description {
                 font-size: 10px;
                 font-weight: normal;
-                margin-top:30px;
-                margin-left:20px;
-                color: #800020;
+                margin-top:10px;
+                margin-left:5px;
+                color: #006666
             }
             .header .author {
                 font-size: 10px;
@@ -80,43 +74,24 @@ export class PdfAcuseService {
                 text-align: right;
             }
             .document {
-                margin-bottom: 30px;
-                padding: 20px;
+                padding-left: 5px;
+            }
 
-
-            }
-            .document h2 {
-                margin-top: 0;
-                margin-bottom: 16px;
-                color: #800020;
-                font-size: 24px;
-
-                padding-bottom: 10px;
-            }
-            .document .fields {
-                font-size:12px;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-                justify-content: space-between;
-            }
-            .document .field {
-                flex: 1 1 calc(50% - 20px);
-                margin-bottom: 10px;
-                color: #333;
-            }
             .document label {
-                font-weight: normal;
                 color: #800020;
-                display: block;
-                margin-bottom: 5px;
+                font-size: 10px;
+            }
+            span {
+                color: black;
+                font-size: 8px;
             }
             .date {
                 text-align: right;
+                font-size: 10px;
                 color: #666;
                 font-style: italic;
                 position: absolute;
-                right: 20px;
+                right: 5px;
                 top:0;
             }
             .logo-left {
@@ -133,20 +108,17 @@ export class PdfAcuseService {
     </head>
     <body>
             <div class="container">
-                <img class="logo-left"  alt="Logo Izquierdo" width="300">
-                <img class="logo-right"  alt="Logo Derecho" width="90">
-                <h1>Acuse Akamba</h1>
+                <h5>Acuse Akamba</h5>
                 <div class="date">Fecha: ${formattedDate}</div>
                 <div class="header">
-                    <div class="description">Descripción: ${data.descripcion}</div>
-
+                    <div class="description">Descripción: <span> ${data.descripcion}</span></div>
                 </div>
                 <div class="document">
-                <div class="folio" style="color: #006666;  font-size: 12px; font-weight: normal;">Registros:</div>
-                    <div class="fields">`;
+                <div class="folio" style="color: #006666;  font-size: 10px; font-weight: normal;">Registros:</div>
+                    <div>`;
         for (const [key, value] of Object.entries(data.values[0])) {
             if (value !== null) {
-                htmlContent += ` <div class="field"><label>${key.replace(/_/g, ' ')}:</label> ${value !== null ? value : 'N/A'}</label></div>`;
+                htmlContent += ` <div><label>${key.replace(/_/g, ' ')}:<span>${value !== null ? ' ' + value : ' N/A'}</span> </label> </div>`;
             }
         }
         htmlContent += `
@@ -163,25 +135,24 @@ export class PdfAcuseService {
         content.innerHTML = htmlContent;
 
         document.body.appendChild(content);
-        const canvas = await html2canvas(content, { scale: 2 });
-        const imgWidth = 541.89; // Ancho personalizado
-        const imgHeight = 795.28; // Alto personalizado
+        const canvas = await html2canvas(content, { scale: 10 });
+        const imgWidth = 576; // Ancho personalizado
+        const imgHeight = 820; // Alto personalizado
         const imgPosX = 10; // Posición X personalizada
         const imgPosY = 10; // Posición Y personalizada
 
         const imgData = canvas.toDataURL('image/png');
-
-        doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
-
+        
+        //doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
         // await new Promise(resolve => setTimeout(resolve, 1000));
 
         doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
 
+        //document.body.removeChild(content);
+
+        doc.save("Acuse.pdf");
         document.body.removeChild(content);
-        return new Promise<Blob>((resolve) => {
-          doc.save("Acuse.pdf");
-          document.body.removeChild(content);
-        });
+        return;
     }
 }
