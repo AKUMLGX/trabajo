@@ -142,15 +142,9 @@ export class PdfAcuseService {
         const imgPosY = 10; // Posición Y personalizada
 
         const imgData = canvas.toDataURL('image/png');
-        
-        //doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
-
-        // await new Promise(resolve => setTimeout(resolve, 1000));
 
         doc.addImage(imgData, 'PNG', imgPosX, imgPosY, imgWidth, imgHeight);
-
-        //document.body.removeChild(content);
-
+        
         doc.save("Acuse.pdf");
         document.body.removeChild(content);
         return;

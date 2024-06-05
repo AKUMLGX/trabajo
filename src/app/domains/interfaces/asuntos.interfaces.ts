@@ -41,6 +41,7 @@ export interface Asunto {
   descargo: String;
   tipo_asunto: String;
   autor: String;
+  fecha_captura: String;
   fecha_atencion: Date;
   area_pendiente: String;
 }

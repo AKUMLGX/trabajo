@@ -59,7 +59,6 @@ export class TrackingTableComponent {
   constructor(
     private asuntoService: AsuntoService,
     private fileService: FileService,
-    private router: Router,
   ) { }
 
   ngOnInit() {
