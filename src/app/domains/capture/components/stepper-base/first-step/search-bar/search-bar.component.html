@@ -43,6 +43,9 @@
                               <thead>
                                   <tr>
                                       <th class="table-head-item whitespace-nowrap">
+                                          <div>zero</div>
+                                      </th>
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ firstColumnHeader }}
                                       </th>
                                       <th class="table-head-item whitespace-nowrap">
@@ -62,6 +65,14 @@
                               <tbody>
                                   @for(item of searchBarResultsList; track $index) {
                                       <tr>
+                                          <td>
+                                            <mat-checkbox
+                                              (change)="selectionModel.toggle(item)"
+                                              [checked]="selectionModel.isSelected(item)"
+                                            >
+                                              Check
+                                            </mat-checkbox>
+                                          </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
                                                 {{ item.folio_interno }}
@@ -100,6 +111,7 @@
     <button 
         matStepperNext 
         class="base-next-button w-32 mt-8" 
+        (click)="tryNext()"
         >
             <span>Siguiente</span>
     </button>

@@ -9,6 +9,9 @@ import {
 } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectionModel } from '@angular/cdk/collections';
+
 import { AsuntoService } from '../../../../../services/asunto.service';
 import { SearchStatusService } from '../../../../../shared/services/search-status.service';
 import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
@@ -19,6 +22,7 @@ import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatCheckboxModule,
     FormsModule,
     MatStepperModule,
     MatIconModule,
@@ -34,6 +38,8 @@ export class SearchBarComponent {
     private searchStatusService: SearchStatusService,
   ) { }
 
+  selectionModel = new SelectionModel(false);
+
   searchBarResultsList: Asunto[] = [];
 
   public userInputForm: FormGroup = this.fb.group({
@@ -41,9 +47,6 @@ export class SearchBarComponent {
   });
 
   @Input() selectedSearchEntryType: string = '';
-
-  saveuserInputForm(): void {
-  }
 
   @Output() isSubmittedButtonHiddenEmitter = new EventEmitter();
 
@@ -86,6 +89,10 @@ export class SearchBarComponent {
 
     this.isSubmittedButtonHidden = true;
     this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
+  }
+
+  tryNext() {
+    console.log('selectionMOdel-array', this.selectionModel.selected);
   }
 
   firstColumnHeader: string = 'Folio interno';
