@@ -111,8 +111,11 @@
     }
     <button 
         matStepperNext 
-        class="base-next-button w-32 mt-8" 
+        [disabled]=" this.selectionModel.selected.length===0 "
+        class="w-32 mt-8" 
+        [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
         (click)="tryNext()"
+
         >
             <span>Siguiente</span>
     </button>
