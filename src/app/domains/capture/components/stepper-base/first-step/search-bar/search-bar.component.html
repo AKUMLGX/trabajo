@@ -43,7 +43,7 @@
                               <thead>
                                   <tr>
                                       <th class="table-head-item whitespace-nowrap">
-                                          <div>zero</div>
+                                          <div>Seleccionar</div>
                                       </th>
                                       <th class="table-head-item whitespace-nowrap">
                                           {{ firstColumnHeader }}
@@ -65,13 +65,14 @@
                               <tbody>
                                   @for(item of searchBarResultsList; track $index) {
                                       <tr>
-                                          <td>
-                                            <mat-checkbox
-                                              (change)="selectionModel.toggle(item)"
-                                              [checked]="selectionModel.isSelected(item)"
-                                            >
-                                              Check
-                                            </mat-checkbox>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                            <div class="text-sm leading-5 text-wine text-center">
+                                              <mat-checkbox
+                                                (change)="selectionModel.toggle(item)"
+                                                [checked]="selectionModel.isSelected(item)"
+                                              >
+                                              </mat-checkbox>
+                                            </div>
                                           </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">

@@ -48,6 +48,8 @@ export class SearchBarComponent {
 
   @Input() selectedSearchEntryType: string = '';
 
+  saveuserInputForm(): void {}
+
   @Output() isSubmittedButtonHiddenEmitter = new EventEmitter();
 
   isSubmittedButtonHidden: boolean = false;
