@@ -166,6 +166,7 @@
                 <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
                   <div>
                     <div class="options">
+                      @if(document.documento_escaneado !== null) {
                       @if(getExtension(document.documento_escaneado) === 'pdf')
                       {
                       <button mat-button (click)="openPdfViewer(document.folio_interno, document.documento_escaneado)"
@@ -190,6 +191,7 @@
                         (click)="seleccionarFila(document)">
                         <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
                       </button>
+                      }
                       }
                     </div>
                   </div>
@@ -472,8 +474,8 @@
 </section>
 }
 @if (editar && filaSeleccionada ) {
-  <app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
-  }
+<app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
+}
 @if (visualizarPdf ) {
 <app-pdf-viewer></app-pdf-viewer>
 }
