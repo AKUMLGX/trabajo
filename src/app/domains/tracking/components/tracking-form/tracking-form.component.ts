@@ -42,7 +42,7 @@ export class TrackingFormComponent {
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: { [key: string]: boolean } = {};
   campoValor: { [key: string]: any } = {};
-
+  campos:string[]=["persona_relacionada","autoridad_remitente","folio_interno"]
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
@@ -69,12 +69,9 @@ export class TrackingFormComponent {
         this.cleanCoincidencias();
       }
     }
-  
     cleanCoincidencias(): void {
       this.coincidencias = [];
     }
-  
-
   onSave(): void {
     // this.router.navigate(['/layout/tracking']);
     this.asuntoService.filterDocuments(this.consultForm);
@@ -95,29 +92,24 @@ export class TrackingFormComponent {
     }
     const valor_input = fomulario_control.value;
   
-    // console.log('Valor del campo:', valor_input);
-              
-              
-    
-    this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input).subscribe((coincidencias: string[]) => {
-     console.log(`Estas son las coincidencias ${coincidencias}`); 
+       
+    if (this.nombre_campo_input === "carpetaInvertigacion") {
+      this.nombre_campo_input = "carpetaInvestigacion";
+  }
+    this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
+   
      this.coincidencias = coincidencias.slice(0,5);
     });
   }
   selectCoincidencia(coincidencia: string): void {
-    // console.log('Campo seleccionado:', this.nombre_campo_input);
-    // console.log('Valor seleccionado en el selectCoincidenica:', coincidencia);
-
-
+ 
   const formControl = this.consultForm.get(this.nombre_campo_input);
-  if (formControl) {
-   
+  if (formControl) {  
       formControl.setValue(coincidencia);
   } else {
       console.error(`Error: No se pudo encontrar el control del formulario para '${this.nombre_campo_input}'.`);
   }
 
   this.cleanCoincidencias();
-  }
-  
+  }   
 }

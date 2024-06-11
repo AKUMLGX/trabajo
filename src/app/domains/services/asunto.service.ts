@@ -18,8 +18,7 @@ export class AsuntoService {
   public fileIsOpen: boolean = false;
 
   public tipoBusqueda = '';
-
-  constructor(private httpClient: HttpClient) {}
+constructor(private httpClient: HttpClient) {}
 
   filterDocuments(consultForm: FormGroup): void {
     this.tipoBusqueda = consultForm.get('tipoBusqueda')?.value;
@@ -45,13 +44,15 @@ export class AsuntoService {
   }
 
 
-  searchBarCoincidencesIlike(consulta: string,campo:string) :Observable<string[]> {
- 
-   
+  searchBarCoincidencesIlike(consulta: string, campo: string): Observable<string[]> {
+    console.log(`Nombre del campo es ${campo}`);
     let url = environment.baseUrl + environment.asuntoEndpoint;
-    let params = { [campo]:consulta};
+    let params = { [campo]: consulta };
+    
     return this.httpClient.get<any[]>(url, { params }).pipe(
-        map((data: any[]) =>data.map((item: any) => item[campo]))
+      map((data: any[]) => {
+        return data.map((item: any) => item[campo]).filter((coincidencia: string) => coincidencia.trim() !== '');
+      })
     );
   }
   searchBarCoincidencesIlikeAsunto(consulta: string,campo:string) :Observable<Asunto[]> {
