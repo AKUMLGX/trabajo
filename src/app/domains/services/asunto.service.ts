@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { Asunto } from '../interfaces/asuntos.interfaces';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -18,8 +18,7 @@ export class AsuntoService {
   public fileIsOpen: boolean = false;
 
   public tipoBusqueda = '';
-
-  constructor(private httpClient: HttpClient) {}
+constructor(private httpClient: HttpClient) {}
 
   filterDocuments(consultForm: FormGroup): void {
     this.tipoBusqueda = consultForm.get('tipoBusqueda')?.value;
@@ -45,22 +44,38 @@ export class AsuntoService {
   }
 
 
+  searchBarCoincidencesIlike(consulta: string, campo: string): Observable<string[]> {
+    let url = environment.baseUrl + environment.asuntoEndpoint;
+    let params = { [campo]: consulta };
+    
+    return this.httpClient.get<any[]>(url, { params }).pipe(
+      map((data: any[]) => {
+        return data.map((item: any) => item[campo]).filter((coincidencia: string) => coincidencia.trim() !== '');
+      })
+    );
+  }
+  searchBarCoincidencesIlikeAsunto(consulta: string,campo:string) :Observable<Asunto[]> {
+    let url = environment.baseUrl + environment.asuntoEndpoint;
+    let params = { [campo]:consulta};
+    return this.httpClient.get<Asunto[]>(
+      url, { params: params });
+      
+  }     
   searchBarCoincidences(
       searchEntryType: string,
       userInputForm: FormGroup
     ): Observable<Asunto[]> {
-
+    
     this.tipoBusqueda = searchEntryType;
 
-    let userInput = userInputForm.get('userInput')?.value;
 
+    let userInput = userInputForm.get('userInput')?.value;
     let carpetaInvestigacion: string = '';
     let personaRelacionada: string = '';
     let folioInterno: string = '';
     let oficio: string = '';
     let autoridadRemitente: string = '';
     let volante_jefatura: string = '';
-
     switch(this.tipoBusqueda) {
       case "CARPETA DE INVESTIGACIÓN": {
         carpetaInvestigacion = userInput;
@@ -92,6 +107,7 @@ export class AsuntoService {
 
     return this.httpClient.get<Asunto[]>(
         url, { params: params });
+        
   }
 
 

@@ -7,7 +7,8 @@
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         <form [formGroup]="consultForm" (ngSubmit)="onSave()">
           <div class="flex flex-wrap">
-            <div class="w-full lg:w-6/12 px-4">
+            <div class="w-full lg:w-6/12 px-4" (mouseenter)="DetectInput(true, 'folioInterno')"
+            (mouseleave)="DetectInput(false, 'folioInterno')">
               <div class="relative w-full mb-3">
                 <label
                   class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -27,15 +28,26 @@
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="folioInterno"
                   value=""
-                />
+                   [(ngModel)]="campoValor['folioInterno']"
+                  (ngModelChange)="getValueInput()"
+                
+                  #InputFormulario/>
+                  <mat-list *ngIf="showCoincidencias['folioInterno'] && coincidencias.length > 0" class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150" [@fadeInOut]>
+                    <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index" (click)="selectCoincidencia(coincidencia)"    class="hover-item"[@fadeInOut]>
+                      {{ coincidencia }}
+                      <hr style="background-color: #783246;  padding: 1px 0;"/>
+                    </mat-list-item>
+                  </mat-list>
+                  
+                 
               </div>
             </div>
             <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3">
+              <div class="relative w-full mb-3"(mouseenter)="DetectInput(true, 'carpetaInvertigacion')"
+              (mouseleave)="DetectInput(false, 'carpetaInvertigacion')">
                 <label
                   class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                  htmlfor="grid-password"
-                >
+                  htmlfor="grid-password">
                   Carpeta de investigación
                   <span
                     title="Número de la carpeta de investigación asociada al asunto. "
@@ -49,12 +61,25 @@
                   placeholder="Carpeta de investigación"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="carpetaInvertigacion"
-                  value=""
-                />
+                  value=""    
+                  [(ngModel)]="campoValor['carpetaInvertigacion']"
+                  (ngModelChange)="getValueInput()"
+                
+                  #InputFormulario/>
+               
+                  <mat-list *ngIf="showCoincidencias['carpetaInvertigacion']  && coincidencias.length > 0" class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150" [@fadeInOut]>
+                    <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index" (click)="selectCoincidencia(coincidencia)"    class="hover-item"[@fadeInOut]>
+                      {{ coincidencia }}
+                      <hr style="background-color: #783246;  padding: 1px 0;"/>
+                    </mat-list-item>
+                  </mat-list>
+                  
+                    
               </div>
             </div>
             <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3">
+              <div class="relative w-full mb-3"(mouseenter)="DetectInput(true, 'oficio')"
+              (mouseleave)="DetectInput(false, 'oficio')">
                 <label
                   class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                   htmlfor="grid-password"
@@ -72,11 +97,23 @@
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="oficio"
                   value=""
-                />
+                  [(ngModel)]="campoValor['oficio']"
+                  (ngModelChange)="getValueInput()"
+                
+                  #InputFormulario/>
+                  <mat-list *ngIf="showCoincidencias['oficio'] && coincidencias.length > 0" class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150" [@fadeInOut]>
+                    <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index" (click)="selectCoincidencia(coincidencia)"    class="hover-item"[@fadeInOut]>
+                      {{ coincidencia }}
+                      <hr style="background-color: #783246;  padding: 1px 0;"/>
+                    </mat-list-item>
+                  </mat-list>
+                  
+                 
               </div>
             </div>
             <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3">
+              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'autoridadRemitente')"
+              (mouseleave)="DetectInput(false, 'autoridadRemitente')">
                 <label
                   class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                   htmlfor="grid-password"
@@ -94,11 +131,23 @@
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="autoridadRemitente"
                   value=""
-                />
+                  [(ngModel)]="campoValor['autoridadRemitente']"
+                  (ngModelChange)="getValueInput()"
+                
+                  #InputFormulario/>
+                  <mat-list *ngIf="showCoincidencias['autoridadRemitente'] && coincidencias.length > 0" class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150" [@fadeInOut]>
+                    <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index" (click)="selectCoincidencia(coincidencia)"    class="hover-item"[@fadeInOut]>
+                      {{ coincidencia }}
+                      <hr style="background-color: #783246;  padding: 1px 0;"/>
+                    </mat-list-item>
+                  </mat-list>
+                  
+                 
               </div>
             </div>
             <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3">
+              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'personaRelacionada')"
+              (mouseleave)="DetectInput(false, 'personaRelacionada')">
                 <label
                   class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                   htmlfor="grid-password"
@@ -116,15 +165,27 @@
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="personaRelacionada"
                   value=""
-                />
+                  [(ngModel)]="campoValor['personaRelacionada']"
+                  (ngModelChange)="getValueInput()"
+                
+                  #InputFormulario/>
+                  <mat-list *ngIf="showCoincidencias['personaRelacionada'] && coincidencias.length > 0" class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150" [@fadeInOut]>
+                    <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index" (click)="selectCoincidencia(coincidencia)"    class="hover-item"[@fadeInOut]>
+                      {{ coincidencia }}
+                      <hr style="background-color: #783246;  padding: 1px 0;"/>
+                    </mat-list-item>
+                  </mat-list>
+                  
+                 
               </div>
             </div>
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3">
+            <div class="w-full lg:w-6/12 px-4" >
+              <div class="relative w-full mb-3"  (mouseenter)="DetectInput(true, 'volante_jefatura')"
+              (mouseleave)="DetectInput(false, 'volante_jefatura')" >
                 <label
                   class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                   htmlfor="grid-password"
-                >
+                  >
                   Volante Jefatura
                   <span title="Volante"
                     ><mat-icon class="icon-display"
@@ -138,7 +199,19 @@
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="volante_jefatura"
                   value=""
+                  [(ngModel)]="campoValor['volante_jefatura']"
+                  (ngModelChange)="getValueInput()"
+                
+                  #InputFormulario
                 />
+                <mat-list *ngIf="showCoincidencias['volante_jefatura']  && coincidencias.length > 0" class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150" [@fadeInOut]>
+                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index" (click)="selectCoincidencia(coincidencia)"    class="hover-item"[@fadeInOut]>
+                    {{ coincidencia }}
+                    <hr style="background-color: #783246;  padding: 1px 0;"/>
+                  </mat-list-item>
+                </mat-list>
+                
+                
               </div>
             </div>
           </div>
