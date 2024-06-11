@@ -45,7 +45,6 @@ constructor(private httpClient: HttpClient) {}
 
 
   searchBarCoincidencesIlike(consulta: string, campo: string): Observable<string[]> {
-    console.log(`Nombre del campo es ${campo}`);
     let url = environment.baseUrl + environment.asuntoEndpoint;
     let params = { [campo]: consulta };
     
