@@ -70,7 +70,8 @@
                                               <mat-checkbox
                                                 (change)="selectionModel.toggle(item)"
                                                 [checked]="selectionModel.isSelected(item)"
-                                              >
+                                                (click)="reactToCheck()"
+                                                >
                                               </mat-checkbox>
                                             </div>
                                           </td>
@@ -115,7 +116,6 @@
         class="w-32 mt-8" 
         [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
         (click)="tryNext()"
-
         >
             <span>Siguiente</span>
     </button>

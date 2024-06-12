@@ -58,6 +58,8 @@ export class SearchBarComponent {
 
   folioInternoFromResults: string = '';
 
+  isNextButtonEnabled = false;
+
   searchFromInput() {
     this.asuntoService.searchBarCoincidences(
       this.selectedSearchEntryType,
@@ -95,6 +97,11 @@ export class SearchBarComponent {
 
   tryNext() {
     console.log('selectionMOdel-array', this.selectionModel.selected);
+  }
+
+  reactToCheck() {
+    this.isNextButtonEnabled = true;
+    this.searchStatusService.updateNextButtonStatus(this.isNextButtonEnabled);
   }
 
   firstColumnHeader: string = 'Folio interno';
