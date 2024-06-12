@@ -60,6 +60,9 @@
                                       <th class="table-head-item whitespace-nowrap">
                                         {{ fifthColumnHeader }} 
                                       </th>
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ sixthColumnHeader }} 
+                                      </th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -96,6 +99,11 @@
                                               </div>
                                           </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                            <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.administracion }}
+                                            </div>
+                                        </td>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
                                                 {{ item.persona_relacionada }}
                                               </div>
@@ -111,13 +119,15 @@
       </section>
     }
     @if(searchBarResultsList.length === 0) {
+        <!-- Aperturas Next Button -->
         <button 
           matStepperNext 
           class="base-next-button w-32 mt-8" 
           >
-            <span>Siguiente Aperturas</span>
+            <span>Siguiente</span>
         </button>
     } @else {
+        <!-- Second Pieces Next Button -->
         <button 
           matStepperNext 
           [disabled]=" this.selectionModel.selected.length===0 "
@@ -125,7 +135,7 @@
           [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
           (click)="tryNext()"
           >
-              <span>Siguiente SecondPieces</span>
+              <span>Siguiente</span>
         </button>
     }
   } @else {
