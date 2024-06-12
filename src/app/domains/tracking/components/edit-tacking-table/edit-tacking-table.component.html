@@ -2,16 +2,18 @@
 <div class="w-full lg:w-12/12 mx-auto mt-2">
   <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
     <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
-      <div class="flex justify-center items-center text-3xl mb-14 font-montserrat "> Se Actualizara la siguiente información:</div>
+      <div class="flex justify-center items-center text-3xl mb-14 font-montserrat "> Se Actualizara la siguiente
+        información:</div>
       <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
-        <form [formGroup]="updateTableForm" >
+        <form [formGroup]="updateTableForm">
           <div class="flex flex-wrap">
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
 
                 Carpeta de Investigación
-                @if (updateTableForm.get('carpetaInvestigacion')?.invalid && updateTableForm.get('carpetaInvestigacion')?.touched ) {
-                  <div>No deje el campo vacio</div>
+                @if (updateTableForm.get('carpetaInvestigacion')?.invalid &&
+                updateTableForm.get('carpetaInvestigacion')?.touched ) {
+                <div>No deje el campo vacio</div>
                 }
               </label>
               <input type="text" placeholder="Carpeta de Investigación" class="input-field placeholder-blueGray-300"
@@ -74,12 +76,208 @@
               <input type="text" placeholder="Turno Jefatura" class="input-field placeholder-blueGray-300"
                 formControlName="turno_jefatura" value="">
             </div>
-            <div class="wrapping-individual-container">
+            <!-- <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Administración
               </label>
               <input type="text" placeholder="Administración " class="input-field placeholder-blueGray-300"
                 formControlName="administracion" value="">
+            </div> -->
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Administración
+              </label>
+              <select id="administracion"
+              formControlName="administracion"
+              class="input-field">
+                <option [ngValue]="null" [selected]="true" disabled> Elija una administración</option>
+                <option value="a_1">Administración 1</option>
+                <option value="a_2">Administración 2</option>
+                <option value="a_3">Administración 3</option>
+                <option value="a_4">Administración 4</option>
+                <option value="a_5">Administración 5</option>
+              </select>
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Descargo:
+              </label>
+              <input type="text" placeholder="Descargo" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="descargo" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Tipo De Asunto:
+              </label>
+              <input type="text" placeholder="Tipo De Asunto" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="tipo_asunto" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Autor:
+              </label>
+              <input type="text" placeholder="Autor" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="autor" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Folio:
+              </label>
+              <input type="text" placeholder="Folio" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="folio" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Orden:
+              </label>
+              <input type="text" placeholder="Orden" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="orden" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Fecha de atención:
+              </label>
+              <input type="text" placeholder="fecha de atención" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="fecha_atencion" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Documento
+              </label>
+              <input type="text" placeholder="Documento" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="documento" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Areas pendientes:
+              </label>
+              <input type="text" placeholder="Areas pendientes" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="areas_pendientes" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Area Pendiente:
+              </label>
+              <input type="text" placeholder="Area pendiente" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="area_pendiente" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Autoridad solicitante:
+              </label>
+              <input type="text" placeholder="Autoridad solicitante"
+                class="disabled-input-field placeholder-blueGray-300" formControlName="autoridad_solicitante" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Correo electronico:
+              </label>
+              <input type="text" placeholder="Correo electronico" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="correo_electronico" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Que solicita:
+              </label>
+              <input type="text" placeholder="Que solicita" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="que_solicita" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Fecha de numero de oficio de atención:
+              </label>
+              <input type="text" placeholder="Fecha de numero de oficio de atención"
+                class="disabled-input-field placeholder-blueGray-300" formControlName="fecha_numero_oficio_atencion"
+                value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Asuntos enviados de correo mara:
+              </label>
+              <input type="text" placeholder="Asuntos enviados de correo mara"
+                class="disabled-input-field placeholder-blueGray-300" formControlName="asuntos_enviados_correo_mara"
+                value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Atentas notas respuestas:
+              </label>
+              <input type="text" placeholder="Atentas notas respuestas"
+                class="disabled-input-field placeholder-blueGray-300" formControlName="atentas_notas_respuestas"
+                value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Fecha Turnado:
+              </label>
+              <input type="text" placeholder="Fecha Turnado" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="fecha_turnado" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Hora de recepción:
+              </label>
+              <input type="text" placeholder="hora de recepción" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="hora_recepcion" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Tipo:
+              </label>
+              <input type="text" placeholder="Tipo" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="tipo" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Unidad administrativa de autoridad:
+              </label>
+              <input type="text" placeholder=" Unidad administrativa de autoridad"
+                class="disabled-input-field placeholder-blueGray-300" formControlName="unidad_administrativa_autoridad"
+                value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Fecha descargo:
+              </label>
+              <input type="text" placeholder="Fecha descargo" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="fecha_descargo" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Fecha oficio:
+              </label>
+              <input type="text" placeholder="Fecha oficio" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="fecha_oficio" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Reporte:
+              </label>
+              <input type="text" placeholder="Reporte" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="reporte" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Acuse:
+              </label>
+              <input type="text" placeholder="Acuse" class="disabled-input-field placeholder-blueGray-300"
+                formControlName="acuse" value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Piezas fgr administracion:
+              </label>
+              <input type="text" placeholder=" Piezas fgr administracion"
+                class="disabled-input-field placeholder-blueGray-300" formControlName="piezas_fgr_administracion"
+                value="">
+            </div>
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Base de captura de administracion:
+              </label>
+              <input type="text" placeholder="Base de captura de administracion"
+                class="disabled-input-field placeholder-blueGray-300" formControlName="base_captura_administracion"
+                value="">
             </div>
           </div>
           <div class="flex justify-center items-center mt-8">
