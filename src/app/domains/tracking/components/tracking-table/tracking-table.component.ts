@@ -45,7 +45,9 @@ export class TrackingTableComponent {
   public visualizarMsg: boolean = false;
 
   editar: boolean = false
-  
+
+  shortDescription: boolean = false
+
 
   filaSeleccionada: any
 
