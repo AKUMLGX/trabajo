@@ -110,15 +110,24 @@
           </div>
       </section>
     }
-    <button 
-        matStepperNext 
-        [disabled]=" this.selectionModel.selected.length===0 "
-        class="w-32 mt-8" 
-        [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
-        (click)="tryNext()"
-        >
-            <span>Siguiente</span>
-    </button>
+    @if(searchBarResultsList.length === 0) {
+        <button 
+          matStepperNext 
+          class="base-next-button w-32 mt-8" 
+          >
+            <span>Siguiente Aperturas</span>
+        </button>
+    } @else {
+        <button 
+          matStepperNext 
+          [disabled]=" this.selectionModel.selected.length===0 "
+          class="w-32 mt-8" 
+          [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
+          (click)="tryNext()"
+          >
+              <span>Siguiente SecondPieces</span>
+        </button>
+    }
   } @else {
       <button
         [disabled]="!this.userInputForm.valid"
