@@ -18,9 +18,28 @@ export class SearchStatusService {
 
   selectedRow = signal<any>(undefined);
 
+  folioInternoFromSelectedRow = signal('');
+  carpetaInvestigacionFromSelectedRow = signal('');
+  administracionFromSelectedRow = signal('');
+
   updateReactiveFolioInterno(folioFromResults: string) {
     this.preloadedFolioInterno.set(folioFromResults);
   }
+
+
+
+
+
+
+
+  // MAÑANA HAY QUE BORRAR ESTE FOLIO INTERNO QUE USABAMOS 
+  // ANTES PARA PRECARGAR
+
+
+
+  
+
+
 
   updateResultsListStatus(status: boolean) {
     this.isSearchResultsListEmpty.set(status);
@@ -32,6 +51,9 @@ export class SearchStatusService {
 
   updateSelectedRow(row: any) {
     this.selectedRow.set(row);
+    this.folioInternoFromSelectedRow.set(this.selectedRow()[0].folio_interno);
+    this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion);
+    this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion);
   }
 
   // updateCoincidencesSearchList(list: Asunto[]) {
