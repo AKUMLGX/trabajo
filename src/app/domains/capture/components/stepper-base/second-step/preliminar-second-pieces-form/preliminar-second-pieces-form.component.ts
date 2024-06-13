@@ -33,6 +33,8 @@ export class PreliminarSecondPiecesFormComponent {
     private searchStatusService: SearchStatusService,
   ){ }
 
+  selectedRow = this.searchStatusService.selectedRow;
+
   preloadedFolioInterno = this.searchStatusService.preloadedFolioInterno;
 
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
@@ -42,6 +44,10 @@ export class PreliminarSecondPiecesFormComponent {
   });
 
   saveSecondPiecesPreliminarForm(): void {
+    console.log('hola mundillo');
+    console.log('pillo1',this.selectedRow());
+    console.log('pillo2', this.selectedRow()[0].carpeta_investigacion);
+    //console.log('folio interno desde wario', this.selectedRow().folio_interno);
     this.collectSecondPiecesInfoService.updatePreliminarSecondPiecesForm(
       this.secondPiecesPreliminarForm.value.oficio,
       this.secondPiecesPreliminarForm.value.carpetaInvestigacion,

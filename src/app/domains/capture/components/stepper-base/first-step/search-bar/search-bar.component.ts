@@ -42,6 +42,8 @@ export class SearchBarComponent {
 
   searchBarResultsList: Asunto[] = [];
 
+  selectedRow: any;
+
   public userInputForm: FormGroup = this.fb.group({
     userInput: ['', [Validators.required]],
   });
@@ -97,6 +99,8 @@ export class SearchBarComponent {
 
   tryNext() {
     console.log('selectionMOdel-array', this.selectionModel.selected);
+    this.selectedRow = this.selectionModel.selected;
+    this.searchStatusService.updateSelectedRow(this.selectedRow);
   }
 
   reactToCheck() {

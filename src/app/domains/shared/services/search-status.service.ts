@@ -16,6 +16,8 @@ export class SearchStatusService {
 
   isNextButtonFromSearchBarComponentEnabled = signal<boolean>(false);
 
+  selectedRow = signal<any>(undefined);
+
   updateReactiveFolioInterno(folioFromResults: string) {
     this.preloadedFolioInterno.set(folioFromResults);
   }
@@ -26,6 +28,10 @@ export class SearchStatusService {
 
   updateNextButtonStatus(status: boolean) {
     this.isNextButtonFromSearchBarComponentEnabled.set(status);
+  }
+
+  updateSelectedRow(row: any) {
+    this.selectedRow.set(row);
   }
 
   // updateCoincidencesSearchList(list: Asunto[]) {
