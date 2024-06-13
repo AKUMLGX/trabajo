@@ -473,6 +473,8 @@
     {{ scrollToTable() }}
   </div>
 </section>
+}@else if(!fileIsOpen && mostrarTabla) {
+  <div class="empty">No se encontraron resultados</div>
 }
 @if (editar && filaSeleccionada ) {
 <app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
