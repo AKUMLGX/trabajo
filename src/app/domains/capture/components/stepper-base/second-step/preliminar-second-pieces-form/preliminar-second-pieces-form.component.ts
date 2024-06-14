@@ -36,10 +36,8 @@ export class PreliminarSecondPiecesFormComponent {
   preloadedFolioInterno = this.searchStatusService.folioInternoFromSelectedRow;
   preloadedCarpetaInvestigacion = this.searchStatusService.carpetaInvestigacionFromSelectedRow;
 
-
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
-    carpetaInvestigacion: [null, [Validators.maxLength(255)]],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 

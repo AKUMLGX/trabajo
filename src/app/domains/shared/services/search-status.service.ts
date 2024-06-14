@@ -10,8 +10,6 @@ export class SearchStatusService {
 
   reactiveCoincidencesSearchList = signal<Asunto[]>([]);
 
-  preloadedFolioInterno = signal('');
-
   isSearchResultsListEmpty = signal<boolean | undefined>(undefined);
 
   isNextButtonFromSearchBarComponentEnabled = signal<boolean>(false);
@@ -21,25 +19,6 @@ export class SearchStatusService {
   folioInternoFromSelectedRow = signal('');
   carpetaInvestigacionFromSelectedRow = signal('');
   administracionFromSelectedRow = signal('');
-
-  updateReactiveFolioInterno(folioFromResults: string) {
-    this.preloadedFolioInterno.set(folioFromResults);
-  }
-
-
-
-
-
-
-
-  // MAÑANA HAY QUE BORRAR ESTE FOLIO INTERNO QUE USABAMOS 
-  // ANTES PARA PRECARGAR
-
-
-
-  
-
-
 
   updateResultsListStatus(status: boolean) {
     this.isSearchResultsListEmpty.set(status);
@@ -55,17 +34,5 @@ export class SearchStatusService {
     this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion);
     this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion);
   }
-
-  // updateCoincidencesSearchList(list: Asunto[]) {
-  //   this.reactiveCoincidencesSearchList.set(list);
-  // }
-
-  // isSearchResultsListEmpty(): boolean {
-  //   if(this.reactiveCoincidencesSearchList.length === 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
 }

@@ -79,12 +79,6 @@ export class SearchBarComponent {
         this.isResultsListEmpty
       );
 
-      this.folioInternoFromResults =
-        this.searchBarResultsList[0].folio_interno.toString();
-      this.searchStatusService.updateReactiveFolioInterno(
-        this.folioInternoFromResults
-      );
-
     });
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente
