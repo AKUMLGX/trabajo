@@ -44,7 +44,7 @@ export class PreliminarSecondPiecesFormComponent {
   saveSecondPiecesPreliminarForm(): void {
     this.collectSecondPiecesInfoService.updatePreliminarSecondPiecesForm(
       this.secondPiecesPreliminarForm.value.oficio,
-      this.secondPiecesPreliminarForm.value.carpetaInvestigacion,
+      this.preloadedCarpetaInvestigacion(),
       this.preloadedFolioInterno(),
       this.secondPiecesPreliminarForm.value.folioScanner
     );

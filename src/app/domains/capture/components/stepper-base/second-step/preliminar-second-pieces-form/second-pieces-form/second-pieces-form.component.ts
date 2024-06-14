@@ -86,7 +86,7 @@ export class SecondPiecesFormComponent {
 
   openCustomModalWithTemplate(template: TemplateRef<any>){
     this.collectSecondPiecesInfoService.updateSecondPiecesForm(
-      'a_1',
+      this.preloadedAdministracion(),
       this.secondPiecesForm.value.fechaRecepcion,
       //this.secondPiecesForm.value.documentoEscaneado,
       this.documentoEscaneadoName,

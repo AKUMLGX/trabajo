@@ -98,6 +98,8 @@ export class SearchBarComponent {
   }
 
   reactToCheck() {
+    this.selectedRow = this.selectionModel.selected;
+    this.searchStatusService.updateSelectedRow(this.selectedRow);
     this.isNextButtonEnabled = true;
     this.searchStatusService.updateNextButtonStatus(this.isNextButtonEnabled);
   }
