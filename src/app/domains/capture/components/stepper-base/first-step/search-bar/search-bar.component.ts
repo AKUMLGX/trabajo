@@ -9,6 +9,9 @@ import {
 } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectionModel } from '@angular/cdk/collections';
+
 import { AsuntoService } from '../../../../../services/asunto.service';
 import { SearchStatusService } from '../../../../../shared/services/search-status.service';
 import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
@@ -19,6 +22,7 @@ import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatCheckboxModule,
     FormsModule,
     MatStepperModule,
     MatIconModule,
@@ -34,7 +38,11 @@ export class SearchBarComponent {
     private searchStatusService: SearchStatusService,
   ) { }
 
+  selectionModel = new SelectionModel(false);
+
   searchBarResultsList: Asunto[] = [];
+
+  selectedRow: any;
 
   public userInputForm: FormGroup = this.fb.group({
     userInput: ['', [Validators.required]],
@@ -42,8 +50,7 @@ export class SearchBarComponent {
 
   @Input() selectedSearchEntryType: string = '';
 
-  saveuserInputForm(): void {
-  }
+  saveuserInputForm(): void {}
 
   @Output() isSubmittedButtonHiddenEmitter = new EventEmitter();
 
@@ -52,6 +59,8 @@ export class SearchBarComponent {
   isResultsListEmpty: boolean | undefined = undefined;
 
   folioInternoFromResults: string = '';
+
+  isNextButtonEnabled = false;
 
   searchFromInput() {
     this.asuntoService.searchBarCoincidences(
@@ -70,12 +79,6 @@ export class SearchBarComponent {
         this.isResultsListEmpty
       );
 
-      this.folioInternoFromResults =
-        this.searchBarResultsList[0].folio_interno.toString();
-      this.searchStatusService.updateReactiveFolioInterno(
-        this.folioInternoFromResults
-      );
-
     });
     //Falta implementar
     //SI la petición fue exitosa ent adelante con lo siguiente
@@ -88,11 +91,25 @@ export class SearchBarComponent {
     this.isSubmittedButtonHiddenEmitter.emit(this.isSubmittedButtonHidden);
   }
 
+  tryNext() {
+    console.log('selectionMOdel-array', this.selectionModel.selected);
+    this.selectedRow = this.selectionModel.selected;
+    this.searchStatusService.updateSelectedRow(this.selectedRow);
+  }
+
+  reactToCheck() {
+    this.selectedRow = this.selectionModel.selected;
+    this.searchStatusService.updateSelectedRow(this.selectedRow);
+    this.isNextButtonEnabled = true;
+    this.searchStatusService.updateNextButtonStatus(this.isNextButtonEnabled);
+  }
+
   firstColumnHeader: string = 'Folio interno';
   secondColumnHeader: string = 'Carpeta de Investigación';
   thirdColumnHeader: string = 'Oficio';
   fourthColumnHeader: string = 'Autoridad remitente';
-  fifthColumnHeader: string = 'Persona relacionada';
+  fifthColumnHeader: string = 'Administración'
+  sixthColumnHeader: string = 'Persona relacionada';
 
   //Dummy data, formerly used to feed table.
   // SEARCH_RESULTS = [

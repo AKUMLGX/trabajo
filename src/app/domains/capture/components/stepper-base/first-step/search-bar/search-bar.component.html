@@ -43,6 +43,9 @@
                               <thead>
                                   <tr>
                                       <th class="table-head-item whitespace-nowrap">
+                                          <div>Seleccionar</div>
+                                      </th>
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ firstColumnHeader }}
                                       </th>
                                       <th class="table-head-item whitespace-nowrap">
@@ -57,11 +60,24 @@
                                       <th class="table-head-item whitespace-nowrap">
                                         {{ fifthColumnHeader }} 
                                       </th>
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ sixthColumnHeader }} 
+                                      </th>
                                   </tr>
                               </thead>
                               <tbody>
                                   @for(item of searchBarResultsList; track $index) {
                                       <tr>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                            <div class="text-sm leading-5 text-wine text-center">
+                                              <mat-checkbox
+                                                (change)="selectionModel.toggle(item)"
+                                                [checked]="selectionModel.isSelected(item)"
+                                                (click)="reactToCheck()"
+                                                >
+                                              </mat-checkbox>
+                                            </div>
+                                          </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
                                                 {{ item.folio_interno }}
@@ -83,6 +99,11 @@
                                               </div>
                                           </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                            <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.administracion }}
+                                            </div>
+                                        </td>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
                                                 {{ item.persona_relacionada }}
                                               </div>
@@ -97,12 +118,26 @@
           </div>
       </section>
     }
-    <button 
-        matStepperNext 
-        class="base-next-button w-32 mt-8" 
-        >
+    @if(searchBarResultsList.length === 0) {
+        <!-- Aperturas Next Button -->
+        <button 
+          matStepperNext 
+          class="base-next-button w-32 mt-8" 
+          >
             <span>Siguiente</span>
-    </button>
+        </button>
+    } @else {
+        <!-- Second Pieces Next Button -->
+        <button 
+          matStepperNext 
+          [disabled]=" this.selectionModel.selected.length===0 "
+          class="w-32 mt-8" 
+          [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
+          (click)="tryNext()"
+          >
+              <span>Siguiente</span>
+        </button>
+    }
   } @else {
       <button
         [disabled]="!this.userInputForm.valid"

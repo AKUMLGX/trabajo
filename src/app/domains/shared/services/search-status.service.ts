@@ -10,28 +10,29 @@ export class SearchStatusService {
 
   reactiveCoincidencesSearchList = signal<Asunto[]>([]);
 
-  preloadedFolioInterno = signal('');
-
   isSearchResultsListEmpty = signal<boolean | undefined>(undefined);
 
-  updateReactiveFolioInterno(folioFromResults: string) {
-    this.preloadedFolioInterno.set(folioFromResults);
-  }
+  isNextButtonFromSearchBarComponentEnabled = signal<boolean>(false);
+
+  selectedRow = signal<any>(undefined);
+
+  folioInternoFromSelectedRow = signal('');
+  carpetaInvestigacionFromSelectedRow = signal('');
+  administracionFromSelectedRow = signal('');
 
   updateResultsListStatus(status: boolean) {
     this.isSearchResultsListEmpty.set(status);
   }
 
-  // updateCoincidencesSearchList(list: Asunto[]) {
-  //   this.reactiveCoincidencesSearchList.set(list);
-  // }
+  updateNextButtonStatus(status: boolean) {
+    this.isNextButtonFromSearchBarComponentEnabled.set(status);
+  }
 
-  // isSearchResultsListEmpty(): boolean {
-  //   if(this.reactiveCoincidencesSearchList.length === 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  updateSelectedRow(row: any) {
+    this.selectedRow.set(row);
+    this.folioInternoFromSelectedRow.set(this.selectedRow()[0].folio_interno);
+    this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion);
+    this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion);
+  }
 
 }

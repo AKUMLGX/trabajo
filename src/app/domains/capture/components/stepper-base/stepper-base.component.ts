@@ -38,7 +38,10 @@ export class StepperBaseComponent {
   dropdownChoice: string = '';
 
   isSearchBarResultsListEmpty = this.searchStatusService.isSearchResultsListEmpty;
-  
+
+  isNextButtonFromSearchBarComponentEnabled = 
+    this.searchStatusService.isNextButtonFromSearchBarComponentEnabled;
+
   retrieveSelectionFromSecondStep(event:string){
     this.dropdownChoice = event;
     this.collectFormInfoService.dropdownChoice(this.dropdownChoice);

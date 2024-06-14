@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CollectSecondPiecesInfoService } from '../../../../../../shared/services/collect-second-pieces-info.service';
 import { SecondPiecesInfoTableComponent } from './second-pieces-info-table/second-pieces-info-table.component';
+import { SearchStatusService } from '../../../../../../shared/services/search-status.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
@@ -42,10 +43,12 @@ export class SecondPiecesFormComponent {
     private fb: FormBuilder,
     private modalService: ModalService,
     private collectSecondPiecesInfoService: CollectSecondPiecesInfoService,
+    private searchStatusService: SearchStatusService,
   ){}
 
+  preloadedAdministracion = this.searchStatusService.administracionFromSelectedRow;
+
   public secondPiecesForm: FormGroup = this.fb.group({
-    administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
     documentoEscaneadoField:[null, [Validators.required]],
 
@@ -83,7 +86,7 @@ export class SecondPiecesFormComponent {
 
   openCustomModalWithTemplate(template: TemplateRef<any>){
     this.collectSecondPiecesInfoService.updateSecondPiecesForm(
-      this.secondPiecesForm.value.administracion,
+      this.preloadedAdministracion(),
       this.secondPiecesForm.value.fechaRecepcion,
       //this.secondPiecesForm.value.documentoEscaneado,
       this.documentoEscaneadoName,

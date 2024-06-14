@@ -33,18 +33,18 @@ export class PreliminarSecondPiecesFormComponent {
     private searchStatusService: SearchStatusService,
   ){ }
 
-  preloadedFolioInterno = this.searchStatusService.preloadedFolioInterno;
+  preloadedFolioInterno = this.searchStatusService.folioInternoFromSelectedRow;
+  preloadedCarpetaInvestigacion = this.searchStatusService.carpetaInvestigacionFromSelectedRow;
 
   public secondPiecesPreliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
-    carpetaInvestigacion: [null, [Validators.maxLength(255)]],
     folioScanner: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
   saveSecondPiecesPreliminarForm(): void {
     this.collectSecondPiecesInfoService.updatePreliminarSecondPiecesForm(
       this.secondPiecesPreliminarForm.value.oficio,
-      this.secondPiecesPreliminarForm.value.carpetaInvestigacion,
+      this.preloadedCarpetaInvestigacion(),
       this.preloadedFolioInterno(),
       this.secondPiecesPreliminarForm.value.folioScanner
     );

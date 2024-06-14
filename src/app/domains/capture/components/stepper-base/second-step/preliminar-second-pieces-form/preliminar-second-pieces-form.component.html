@@ -11,7 +11,7 @@
                                     Folio interno
                             </label>
                             <div class="disabled-input-field placeholder-blueGray-300">
-                                {{ preloadedFolioInterno() }}
+                                {{ this.preloadedFolioInterno() }}
                             </div>     
                         </div>
 
@@ -63,17 +63,11 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
-                                    Carpeta de investigación
+                                Carpeta de investigación y/o juzgado
                             </label>
-                            <input type="text" placeholder="Carpeta de investigación"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="carpetaInvestigacion" value=""
-                            >
-                            @if (secondPiecesPreliminarForm.get('carpetaInvestigacion')?.errors?.['maxlength']) {
-                                <div class="text-sm text-wine mt-1.5">
-                                     <span >Máximo 255 caracteres</span>
-                                </div> 
-                             }
+                            <div class="disabled-input-field placeholder-blueGray-300">
+                                {{ this.preloadedCarpetaInvestigacion() }}
+                            </div> 
                         </div>                       
                         
                     </div>

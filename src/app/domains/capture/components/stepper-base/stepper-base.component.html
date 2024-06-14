@@ -2,7 +2,11 @@
     <mat-vertical-stepper linear [labelPosition]="'bottom'">
 
         <mat-step label="Búsqueda" 
-                [completed]= "firstStepChild.submitButtonHiddenStatus"
+                [completed]= "
+                    isSearchBarResultsListEmpty() === true
+                    ? true
+                    : isNextButtonFromSearchBarComponentEnabled()
+                    "
                 [editable]="false"
         >
             <app-first-step  

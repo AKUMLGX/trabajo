@@ -161,24 +161,10 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                     Administración
-                                    @if (secondPiecesForm.controls['administracion'].invalid && (secondPiecesForm.controls['administracion'].dirty || secondPiecesForm.controls['administracion'].touched)) {
-                                        @if(secondPiecesForm.get('administracion')?.errors?.['required']) {
-                                            <div class="text-wine ml-1">
-                                                <span>*</span>
-                                            </div>
-                                        }
-                                    }
                             </label>
-                            <select id="administracion"
-                                    formControlName="administracion"
-                                    class="input-field">
-                                <option [ngValue]="null" disabled >Elija una administración</option>
-                                <option value="a_1">Administración 1</option>
-                                <option value="a_2">Administración 2</option>
-                                <option value="a_3">Administración 3</option>
-                                <option value="a_4">Administración 4</option>
-                                <option value="a_5">Administración 5</option>
-                            </select>
+                            <div class="disabled-input-field placeholder-blueGray-300">
+                                {{ this.preloadedAdministracion() }}
+                            </div> 
                         </div>
 
                         <div class="wrapping-individual-container">
@@ -330,8 +316,7 @@
                         </button>
                         <div class="bg-white border-2 rounded border-wine">
                             @if (
-                                    (secondPiecesForm.controls['administracion'].invalid && (secondPiecesForm.controls['administracion'].dirty || secondPiecesForm.controls['administracion'].touched))
-                                ||  (secondPiecesForm.controls['fechaRecepcion'].invalid && (secondPiecesForm.controls['fechaRecepcion'].dirty || secondPiecesForm.controls['fechaRecepcion'].touched))
+                                    (secondPiecesForm.controls['fechaRecepcion'].invalid && (secondPiecesForm.controls['fechaRecepcion'].dirty || secondPiecesForm.controls['fechaRecepcion'].touched))
                                 ||  (secondPiecesForm.controls['documentoEscaneadoField'].invalid && (secondPiecesForm.controls['documentoEscaneadoField'].dirty || secondPiecesForm.controls['documentoEscaneadoField'].touched))
                                 ||  (secondPiecesForm.controls['descripcion'].invalid && (secondPiecesForm.controls['descripcion'].dirty || secondPiecesForm.controls['descripcion'].touched))
                                 ||  (secondPiecesForm.controls['autoridadRemitente'].invalid && (secondPiecesForm.controls['autoridadRemitente'].dirty || secondPiecesForm.controls['autoridadRemitente'].touched))
@@ -341,8 +326,7 @@
                                 ||  (secondPiecesForm.controls['tipoAsunto'].invalid && (secondPiecesForm.controls['tipoAsunto'].dirty || secondPiecesForm.controls['tipoAsunto'].touched))
                                 ) {
                                 @if (
-                                        (secondPiecesForm.get('administracion')?.errors?.['required'])
-                                    ||  (secondPiecesForm.get('fechaRecepcion')?.errors?.['required'])
+                                        (secondPiecesForm.get('fechaRecepcion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('documentoEscaneadoField')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('descripcion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('autoridadRemitente')?.errors?.['required'])
