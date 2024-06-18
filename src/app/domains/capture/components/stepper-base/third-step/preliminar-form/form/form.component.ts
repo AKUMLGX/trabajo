@@ -56,7 +56,7 @@ export class FormComponent {
       documentoOtros: [{value: 'Requerimiento', disabled: true},],
 
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-      atencion: [{value: 'Recibido', disabled: true},],
+      atencion: [{value: 'No aplica', disabled: true},],
       autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
       turnoJefatura: [null, [Validators.maxLength(255)]],
       personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
@@ -95,7 +95,7 @@ export class FormComponent {
         this.euacapeForm.value.documentoEuacape,
         'Requerimiento',
         this.euacapeForm.value.descripcion,
-        this.isApertura ? 'Recibido' : this.euacapeForm.value.atencion,
+        this.isApertura ? 'No aplica' : this.euacapeForm.value.atencion,
         this.euacapeForm.value.autoridadRemitente,
         this.euacapeForm.value.turnoJefatura,
         this.euacapeForm.value.personaRelacionada,
