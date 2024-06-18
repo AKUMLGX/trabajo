@@ -298,12 +298,14 @@
                                 htmlfor="grid-password">
                                     Atención
                             </label>
-                            @if(isApertura){
-                                <input type="text" placeholder="Atención"
-                                    class="disabled-input-field placeholder-blueGray-300"
-                                    formControlName="atencion" value=""
-                                >
+                            @if(this.dropdownChoice === 'EUACAPES' || this.dropdownChoice === 'Respuesta'){
+                                <div class="disabled-input-field placeholder-blueGray-300">
+                                    Recibido
+                                </div> 
                             } @else {
+                                <div class="disabled-input-field placeholder-blueGray-300">
+                                    No aplica
+                                </div> 
                                 <!-- Modificación sobre el campo atención hecha el 30.04.24
                                 Esta viene ahora precargada como "Recibido" y ya NO
                                 como "En trámite". Por lo tanto, tamb comenté el
