@@ -8,6 +8,8 @@ import { MatTableModule } from '@angular/material/table';
 import { EditTackingTableService } from '../../../services/edit-tacking-table.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
+import { AsuntoService } from '../../../services/asunto.service';
+import { ModalService } from '../../../shared/services/modal.service';
 
 
 
@@ -29,12 +31,18 @@ import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
 export class EditTackingTableComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private updateSerivce: EditTackingTableService,
-    private pdfAcuse: PdfAcuseService
+    private pdfAcuse: PdfAcuseService,
+    private asuntoService: AsuntoService,
+    private modalService: ModalService,
   ) { }
   botonHabilitado: boolean = false
   mostrarTabla: boolean = true
   @Output() showTable = new EventEmitter<void>()
   @Input() documents!: Asunto
+
+  carpetaResultList: Asunto[] = [];
+
+  isavailable:boolean = false;
 
 
   ngOnInit(): void {
@@ -153,5 +161,23 @@ export class EditTackingTableComponent implements OnInit {
     this.showTable.emit()
     this.mostrarTabla = false
   }
+
+  openCustomModalWithTemplate(template: TemplateRef<any>) {
+    this.asuntoService.checkNameCarpetaInvestigacionUpdate(
+      this.updateTableForm
+    ).subscribe((res) => {
+
+      this.carpetaResultList = res
+      if (this.carpetaResultList.length > 0) {
+        this.modalService.openCustomDialogWithTemplate({
+          template
+        })
+      }
+      if(this.carpetaResultList.length === 0){
+        this.isavailable = true;
+      }
+    })
+  }
+
 
 }

@@ -39,8 +39,10 @@ export class StepperBaseComponent {
 
   isSearchBarResultsListEmpty = this.searchStatusService.isSearchResultsListEmpty;
 
-  isNextButtonFromSearchBarComponentEnabled = 
+  isNextButtonFromSearchBarComponentEnabled =
     this.searchStatusService.isNextButtonFromSearchBarComponentEnabled;
+
+@ViewChild(MatStepper) stepper!: MatStepper
 
   retrieveSelectionFromSecondStep(event:string){
     this.dropdownChoice = event;

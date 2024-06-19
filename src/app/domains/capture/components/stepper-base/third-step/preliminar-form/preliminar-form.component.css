@@ -17,3 +17,7 @@
 .next-button-disabled {
     @apply bg-wine/40 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow outline-none mr-1
 }
+
+.modal-left-button {
+  @apply bg-[#2F722F] text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+}

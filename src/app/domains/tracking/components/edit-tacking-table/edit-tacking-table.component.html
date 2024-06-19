@@ -11,10 +11,7 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
 
                 Carpeta de Investigación
-                @if (updateTableForm.get('carpetaInvestigacion')?.invalid &&
-                updateTableForm.get('carpetaInvestigacion')?.touched ) {
-                <div>No deje el campo vacio</div>
-                }
+
               </label>
               <input type="text" placeholder="Carpeta de Investigación" class="input-field placeholder-blueGray-300"
                 formControlName="carpeta_investigacion" value="">
@@ -285,7 +282,8 @@
             <button (click)="showagain()" class="modal-left-button mr-10">
               Cancelar
             </button>
-            <button (click)="saveUpdateForm()" [disabled]="!botonHabilitado"
+            <button (click)=" isavailable === true ? saveUpdateForm(): openCustomModalWithTemplate(templateCarpeta) " [disabled]="!botonHabilitado"
+
               [ngClass]=" !botonHabilitado ? 'next-button-disabled' : 'modal-right-button ml-1 '">
               Aceptar
             </button>
@@ -295,4 +293,26 @@
     </div>
   </div>
 </div>
+
+<ng-template #templateCarpeta>
+  <div class="bg-[#D9BCA3]/30">
+    <h2 mat-dialog-title  > El nombre de la Carpeta de Investigación ya exite.  </h2>
+    <mat-dialog-content>
+      Por favor proceda a cambiar el nombre para poder continuar.
+    </mat-dialog-content>
+    <div class="flex justify-center items-center">
+      <mat-dialog-actions>
+        <button
+                    class="modal-right-button ml-10"
+                    mat-dialog-close
+                    mat-button
+                >
+                Cambiar
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+</ng-template>
+
 }
+

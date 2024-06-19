@@ -1,14 +1,20 @@
-import { Component } from '@angular/core';
+import {  Component, Input, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FormBuilder, 
-  FormGroup, 
-  Validators, 
-  ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { FormComponent } from './form/form.component';
 import { CollectFormInfoService } from '../../../../../shared/services/collect-form-info.service';
+import { ModalService } from '../../../../../shared/services/modal.service';
+import { AsuntoService } from '../../../../../services/asunto.service';
+import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-preliminar-form',
@@ -20,16 +26,20 @@ import { CollectFormInfoService } from '../../../../../shared/services/collect-f
     CommonModule,
     MatIconModule,
     FormComponent,
+    MatDialogModule,
+
   ],
   templateUrl: './preliminar-form.component.html',
   styleUrl: './preliminar-form.component.css'
 })
-export class PreliminarFormComponent {
+export class PreliminarFormComponent  {
 
   constructor(
     private fb: FormBuilder,
     private collectFormInfoService: CollectFormInfoService,
-    ){ }
+    private asuntoService: AsuntoService,
+    private modalService: ModalService,
+  ) { }
 
   public preliminarForm: FormGroup = this.fb.group({
     oficio: ['', [Validators.required, Validators.maxLength(255)]],
@@ -39,6 +49,38 @@ export class PreliminarFormComponent {
 
   isPreliminarEuacapeFormValid = !this.preliminarForm.valid;
 
+
+  carpetaResultList: Asunto[] = []
+
+  canProceed: boolean = false
+
+
+
+  @Input() stepper!: MatStepper
+
+  openCustomModalWithTemplate(template: TemplateRef<any>) {
+    this.asuntoService.checkNameCarpetaInvestigacion(
+      this.preliminarForm
+    ).subscribe((res) => {
+      this.carpetaResultList = res
+      if (this.carpetaResultList.length > 0) {
+        this.modalService.openCustomDialogWithTemplate({
+          template
+        })
+      }
+      if (this.carpetaResultList.length === 0) {
+        this.canProceed = true
+      }
+    })
+  }
+
+  nextStep() {
+    if (this.stepper) {
+      this.stepper.next()
+    }
+  }
+
+
   savePreliminarEuacapeForm(): void {
     this.collectFormInfoService.updatePreliminarEuacapeForm(
       this.preliminarForm.value.oficio,
@@ -46,5 +88,4 @@ export class PreliminarFormComponent {
       this.preliminarForm.value.folioScanner
     );
   }
-
 }

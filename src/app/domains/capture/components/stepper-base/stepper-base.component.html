@@ -1,7 +1,7 @@
 <div style="padding: 0.5em" class="text-xl">
-    <mat-vertical-stepper linear [labelPosition]="'bottom'">
+    <mat-vertical-stepper  #stepper  linear [labelPosition]="'bottom'">
 
-        <mat-step label="Búsqueda" 
+        <mat-step label="Búsqueda"
                 [completed]= "
                     isSearchBarResultsListEmpty() === true
                     ? true
@@ -9,17 +9,17 @@
                     "
                 [editable]="false"
         >
-            <app-first-step  
-                #firstStepChild   
+            <app-first-step
+                #firstStepChild
             />
         </mat-step>
 
         @if(isSearchBarResultsListEmpty()) {
-            <mat-step label="Elección de asunto" 
+            <mat-step label="Elección de asunto"
                     [completed]="secondStepChild.isSecondStepPressed"
                     [editable]="false">
-                <app-second-step #secondStepChild 
-                    (selectedOptionEmitter)="retrieveSelectionFromSecondStep($event)" 
+                <app-second-step #secondStepChild
+                    (selectedOptionEmitter)="retrieveSelectionFromSecondStep($event)"
                 />
             </mat-step>
 
@@ -27,10 +27,10 @@
                 @switch (dropdownChoice) {
 
                     <!-- Comente los casos que ya NO se van a considerar -->
-                    
+
                     <!-- @case ('Civil') {
-                        <mat-step label="Formulario Civil (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Civil (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
@@ -41,10 +41,10 @@
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     } -->
-                    
+
                     <!-- @case ('Penal') {
-                        <mat-step label="Formulario Penal (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Penal (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
@@ -55,10 +55,10 @@
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     } -->
-                    
+
                     <!-- @case ('Concurso mercantil') {
-                        <mat-step label="Formulario Concurso mercantil (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Concurso mercantil (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
@@ -71,120 +71,121 @@
                     } -->
 
                     @case ('EUACAPES') {
-                        <mat-step label="Formulario EUACAPE (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
-                            [editable]="true">
+                        <mat-step label="Formulario EUACAPE (parte I)"
+                           [completed]="thirdStepChild.preliminarForm.valid"
+
+                           [editable]="true">
                                 <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
+                                    <app-preliminar-form [stepper]="stepper" #thirdStepChild />
                                 </div>
                         </mat-step>
-    
-                        <mat-step label="Formulario EUACAPE (parte II)">
+
+                        <mat-step   label="Formulario EUACAPE (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
 
                     @case ('Penal') {
-                        <mat-step label="Formulario Generalidades Asunto Penal (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Generalidades Asunto Penal (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Generalidades Asunto Penal (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
 
                     @case ('Civil') {
-                        <mat-step label="Formulario Generalidades Asunto Civil (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Generalidades Asunto Civil (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Generalidades Asunto Civil (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
 
                     @case ('Laboral') {
-                        <mat-step label="Formulario Generalidades Laboral (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Generalidades Laboral (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Generalidades Laboral (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
 
                     @case ('Juicio de Amparo') {
-                        <mat-step label="Formulario Generalidades Juicio Amparo (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Generalidades Juicio Amparo (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Generalidades Juicio Amparo (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
 
                     @case ('Concurso Mercantil') {
-                        <mat-step label="Formulario Generalidades Concurso Mercantil (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Generalidades Concurso Mercantil (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Generalidades Concurso Mercantil (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
 
                     @case ('Copia de Conocimiento') {
-                        <mat-step label="Formulario Generalidades Copia de Conocimiento (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Generalidades Copia de Conocimiento (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Generalidades Copia de Conocimiento (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
 
                     @case ('Respuesta') {
-                        <mat-step label="Formulario Respuesta (parte I)" 
-                            [completed]="thirdStepChild.respuestaPreliminarForm.valid" 
+                        <mat-step label="Formulario Respuesta (parte I)"
+                            [completed]="thirdStepChild.respuestaPreliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-respuesta-preliminar-form #thirdStepChild />
                                 </div>
                         </mat-step>
-    
+
                         <mat-step label="Formulario Respuesta (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
-                    
+
                     <!-- @case ('Generalidades') {
-                        <mat-step label="Formulario Generalidades (parte I)" 
-                            [completed]="thirdStepChild.preliminarForm.valid" 
+                        <mat-step label="Formulario Generalidades (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
                                     <app-preliminar-form #thirdStepChild />
@@ -196,7 +197,7 @@
                         </mat-step>
                     } -->
                 }
-            </div>            
+            </div>
 
         } @else {
             <mat-step label="Formulario Segunda Pieza (Parte I)">
@@ -211,7 +212,7 @@
                 </div>
             </mat-step>
         }
-        
+
     </mat-vertical-stepper>
 </div>
 
