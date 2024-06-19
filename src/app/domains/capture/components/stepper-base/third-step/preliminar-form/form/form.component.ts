@@ -95,7 +95,8 @@ export class FormComponent {
         this.euacapeForm.value.documentoEuacape,
         'Requerimiento',
         this.euacapeForm.value.descripcion,
-        this.isApertura ? 'No aplica' : this.euacapeForm.value.atencion,
+        (this.dropdownChoice === 'EUACAPES' || this.dropdownChoice === 'Respuesta') 
+           ? 'Recibido' : 'No aplica',
         this.euacapeForm.value.autoridadRemitente,
         this.euacapeForm.value.turnoJefatura,
         this.euacapeForm.value.personaRelacionada,
