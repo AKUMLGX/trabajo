@@ -11,10 +11,7 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
 
                 Carpeta de Investigación
-                @if (updateTableForm.get('carpetaInvestigacion')?.invalid &&
-                updateTableForm.get('carpetaInvestigacion')?.touched ) {
-                <div>No deje el campo vacio</div>
-                }
+
               </label>
               <input type="text" placeholder="Carpeta de Investigación" class="input-field placeholder-blueGray-300"
                 formControlName="carpeta_investigacion" value="">
@@ -87,9 +84,7 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Administración
               </label>
-              <select id="administracion"
-              formControlName="administracion"
-              class="input-field">
+              <select id="administracion" formControlName="administracion" class="input-field">
                 <option [ngValue]="null" [selected]="true" disabled> Elija una administración</option>
                 <option value="a_1">Administración 1</option>
                 <option value="a_2">Administración 2</option>
@@ -285,7 +280,10 @@
             <button (click)="showagain()" class="modal-left-button mr-10">
               Cancelar
             </button>
-            <button (click)="saveUpdateForm()" [disabled]="!botonHabilitado"
+            <button
+             (click)=" isavailable === true ? saveUpdateForm(): openCustomModalWithTemplate(templateCarpeta) "
+              (click)="availability()"
+              [disabled]="!botonHabilitado"
               [ngClass]=" !botonHabilitado ? 'next-button-disabled' : 'modal-right-button ml-1 '">
               Aceptar
             </button>
@@ -295,4 +293,23 @@
     </div>
   </div>
 </div>
+
+<ng-template #templateCarpeta>
+  <div class="bg-[#D9BCA3]/30">
+    <h2 mat-dialog-title class="text-center"> Carpeta de Investigación no disponible</h2>
+    <mat-dialog-content>
+      La operación no pudo completarse porque ya
+      existe una carpeta de investigación con ese nombre. Por favor, especifique un nombre diferente para poder
+      continuar.
+    </mat-dialog-content>
+    <div class="flex justify-center items-center">
+      <mat-dialog-actions>
+        <button class="modal-right-button ml-10" mat-dialog-close mat-button>
+          Cambiar
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+</ng-template>
+
 }

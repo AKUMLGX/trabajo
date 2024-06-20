@@ -10,6 +10,8 @@ import { PreliminarSecondPiecesFormComponent } from './second-step/preliminar-se
 import { SecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/second-pieces-form/second-pieces-form.component';
 import { CollectFormInfoService } from '../../../shared/services/collect-form-info.service';
 import { SearchStatusService } from '../../../shared/services/search-status.service';
+import { CollectCarpetaStatusService } from './../../../shared/collect-carpeta-status.service';
+
 
 @Component({
   selector: 'app-stepper-base',
@@ -33,14 +35,24 @@ export class StepperBaseComponent {
   constructor(
     private collectFormInfoService: CollectFormInfoService,
     private searchStatusService: SearchStatusService,
+    private collectCarpetaStatusService : CollectCarpetaStatusService,
   ){}
 
   dropdownChoice: string = '';
 
+
+  isCarpetaAvailable = this.collectCarpetaStatusService.isCarpetaAvailable;
+
+  isCarpetaNull = this.collectCarpetaStatusService.isCarpetaNull;
+
+
+  @ViewChild(MatStepper) stepper!: MatStepper
+
   isSearchBarResultsListEmpty = this.searchStatusService.isSearchResultsListEmpty;
 
-  isNextButtonFromSearchBarComponentEnabled = 
+  isNextButtonFromSearchBarComponentEnabled =
     this.searchStatusService.isNextButtonFromSearchBarComponentEnabled;
+
 
   retrieveSelectionFromSecondStep(event:string){
     this.dropdownChoice = event;

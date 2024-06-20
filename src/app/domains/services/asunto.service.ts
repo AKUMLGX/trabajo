@@ -47,7 +47,7 @@ constructor(private httpClient: HttpClient) {}
   searchBarCoincidencesIlike(consulta: string, campo: string): Observable<string[]> {
     let url = environment.baseUrl + environment.asuntoEndpoint;
     let params = { [campo]: consulta };
-    
+
     return this.httpClient.get<any[]>(url, { params }).pipe(
       map((data: any[]) => {
         return data.map((item: any) => item[campo]).filter((coincidencia: string) => coincidencia.trim() !== '');
@@ -59,13 +59,13 @@ constructor(private httpClient: HttpClient) {}
     let params = { [campo]:consulta};
     return this.httpClient.get<Asunto[]>(
       url, { params: params });
-      
-  }     
+
+  }
   searchBarCoincidences(
       searchEntryType: string,
       userInputForm: FormGroup
     ): Observable<Asunto[]> {
-    
+
     this.tipoBusqueda = searchEntryType;
 
 
@@ -107,8 +107,35 @@ constructor(private httpClient: HttpClient) {}
 
     return this.httpClient.get<Asunto[]>(
         url, { params: params });
-        
+
   }
+
+  checkNameCarpetaInvestigacion(
+    userInputForm: FormGroup):Observable<Asunto[]>{
+    let userInput = userInputForm.get('carpetaInvestigacion')?.value
+    let url = environment.baseUrl  + environment.asuntoEndpoint
+    let params = {
+      carpeta_investigacion: userInput,
+    }
+    return this.httpClient.get<Asunto[]>(
+      url,{params:params}
+    )
+  }
+
+
+
+  checkNameCarpetaInvestigacionUpdate(
+    userInputForm: FormGroup):Observable<Asunto[]>{
+    let userInput = userInputForm.get('carpeta_investigacion')?.value
+    let url = environment.baseUrl  + environment.asuntoEndpoint
+    let params = {
+      carpeta_investigacion: userInput,
+    }
+    return this.httpClient.get<Asunto[]>(
+      url,{params:params}
+    )
+  }
+
 
 
   openPdf(): void {
