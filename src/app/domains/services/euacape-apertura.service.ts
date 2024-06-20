@@ -40,14 +40,15 @@ export class EuacapeAperturaService {
 
     //const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
 
-    this.httpClient.post<AsuntoResponse>(
+    this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
       formData,
+      { responseType: 'text' }
     ).subscribe((data) => {
       this.pdfAcuseService.generatePDF(data);
     },
-  (error)=>{
+      (error) => {
 
-  });
+      });
   }
 }

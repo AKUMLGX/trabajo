@@ -46,11 +46,11 @@ export class GeneralidadesAperturaService {
     //   'Content-Type': 'multipart/form-data'
     // });
 
-    this.httpClient.post<AsuntoResponse>(
+    this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
       formData,
+      { responseType: 'text'}
     ).subscribe((data) => {
-      console.log('success', data);
       this.pdfAcuseService.generatePDF(data);
     },
       (error) => {

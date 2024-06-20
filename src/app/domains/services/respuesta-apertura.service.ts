@@ -41,9 +41,10 @@ export class RespuestaAperturaService {
     formData.append("data", blob);
     formData.append("file", selectedFile, selectedFile.name);
 
-    this.httpClient.post<AsuntoResponse> (
+    this.httpClient.post (
       environment.baseUrl + 'asunto/nuevo/respuesta/apertura/',
       formData,
+      { responseType: 'text'}
     ).subscribe((data) => {
       this.pdfAcuseService.generatePDF(data)
     },

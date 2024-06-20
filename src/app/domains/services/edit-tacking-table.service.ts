@@ -16,15 +16,15 @@ export class EditTackingTableService {
 
   constructor(private http: HttpClient) { }
 
-  updateTrackingTable(data:Asunto):Observable<AsuntoResponse>{
+  updateTrackingTable(data:Asunto):Observable<string>{
     let  targetUrl  = environment.baseUrl
     if (data.id_asunto_historico !== null) {
       targetUrl =  environment.baseUrl +    environment.updateTableHistorico
     }else if(data.id_asunto_nuevo !==null){
       targetUrl= environment.baseUrl +  environment.updateTableNuevo
     }
-     return this.http.patch<AsuntoResponse>(targetUrl,
-      data, this.httpOptions)
+     return this.http.patch(targetUrl,
+      data, { responseType: 'text'} );
   }
 
 
