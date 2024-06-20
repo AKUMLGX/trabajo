@@ -50,6 +50,7 @@ export class PreliminarFormComponent {
 
   isPreliminarEuacapeFormValid = !this.preliminarForm.valid;
 
+  @Input() stepper!: MatStepper
 
   carpetaResultList: Asunto[] = []
 
@@ -57,10 +58,6 @@ export class PreliminarFormComponent {
 
   isCarpetaNull: boolean = true
 
-
-
-  @Input() stepper!: MatStepper
-  @Output() procced = new EventEmitter<boolean>()
 
   openCustomModalWithTemplate(template: TemplateRef<any>) {
     if (this.preliminarForm.value.carpetaInvestigacion !== null) {
@@ -70,7 +67,6 @@ export class PreliminarFormComponent {
       this.isCarpetaNull = true;
       this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull)
     }
-
     this.asuntoService.checkNameCarpetaInvestigacion(
       this.preliminarForm
     ).subscribe((res) => {
@@ -80,7 +76,7 @@ export class PreliminarFormComponent {
           template
         })
       }
-      if (this.carpetaResultList.length === 0) {
+      else if (this.carpetaResultList.length === 0) {
         this.canProceed = true
         this.collectCarpetaStatusService.upadateCarpetaStatus(this.canProceed);
       }

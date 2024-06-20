@@ -173,8 +173,21 @@ export class EditTackingTableComponent implements OnInit {
           template
         })
       }
+      // else if(this.carpetaResultList.length === 0){
+      //   this.isavailable = true;
+      // }
+    })
+  }
+
+  availability(){
+    this.asuntoService.checkNameCarpetaInvestigacionUpdate(
+      this.updateTableForm
+    ).subscribe((res)=>{
+      this.carpetaResultList=res
       if(this.carpetaResultList.length === 0){
-        this.isavailable = true;
+       this.isavailable = true;
+       console.log(this.isavailable);
+       this.saveUpdateForm()
       }
     })
   }

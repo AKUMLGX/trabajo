@@ -71,10 +71,8 @@
                     <div class="flex justify-between items-center">
                         <button
                             [disabled]="!this.preliminarForm.valid"
-
-
-                            [ngClass]=" !this.preliminarForm.valid ? 'next-button-disabled' : 'next-button' "
                             (click)=" canProceed === true ? nextStep() : openCustomModalWithTemplate(templateCarpeta)"
+                            [ngClass]=" !this.preliminarForm.valid ? 'next-button-disabled' : 'next-button' "
                         >
                           Continuar
                         </button>
@@ -105,12 +103,12 @@
     <app-form />
 </ng-template>
 
-
 <ng-template #templateCarpeta>
   <div class="bg-[#D9BCA3]/30">
-    <h2 mat-dialog-title  > El nombre de la Carpeta de Investigación ya exite.  </h2>
+    <h2 mat-dialog-title class="text-center">Carpeta de Investigación no disponible</h2>
     <mat-dialog-content>
-      Por favor proceda a cambiar el nombre para poder continuar.
+      La operación no pudo completarse porque ya
+      existe una carpeta de investigación con ese nombre. Por favor, especifique un nombre diferente para poder continuar.
     </mat-dialog-content>
     <div class="flex justify-center items-center">
       <mat-dialog-actions>
