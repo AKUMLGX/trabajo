@@ -1,4 +1,4 @@
-import {  Component, Input, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   FormBuilder,
@@ -15,7 +15,7 @@ import { ModalService } from '../../../../../shared/services/modal.service';
 import { AsuntoService } from '../../../../../services/asunto.service';
 import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { CollectCarpetaStatusService } from '../../../../../shared/collect-carpeta-status.service';
 @Component({
   selector: 'app-preliminar-form',
   standalone: true,
@@ -32,13 +32,14 @@ import { MatDialogModule } from '@angular/material/dialog';
   templateUrl: './preliminar-form.component.html',
   styleUrl: './preliminar-form.component.css'
 })
-export class PreliminarFormComponent  {
+export class PreliminarFormComponent {
 
   constructor(
     private fb: FormBuilder,
     private collectFormInfoService: CollectFormInfoService,
     private asuntoService: AsuntoService,
     private modalService: ModalService,
+    private collectCarpetaStatusService: CollectCarpetaStatusService,
   ) { }
 
   public preliminarForm: FormGroup = this.fb.group({
@@ -54,11 +55,22 @@ export class PreliminarFormComponent  {
 
   canProceed: boolean = false
 
+  isCarpetaNull: boolean = true
+
 
 
   @Input() stepper!: MatStepper
+  @Output() procced = new EventEmitter<boolean>()
 
   openCustomModalWithTemplate(template: TemplateRef<any>) {
+    if (this.preliminarForm.value.carpetaInvestigacion !== null) {
+      this.isCarpetaNull = false;
+      this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull);
+    } else {
+      this.isCarpetaNull = true;
+      this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull)
+    }
+
     this.asuntoService.checkNameCarpetaInvestigacion(
       this.preliminarForm
     ).subscribe((res) => {
@@ -70,17 +82,15 @@ export class PreliminarFormComponent  {
       }
       if (this.carpetaResultList.length === 0) {
         this.canProceed = true
+        this.collectCarpetaStatusService.upadateCarpetaStatus(this.canProceed);
       }
     })
   }
-
   nextStep() {
     if (this.stepper) {
       this.stepper.next()
     }
   }
-
-
   savePreliminarEuacapeForm(): void {
     this.collectFormInfoService.updatePreliminarEuacapeForm(
       this.preliminarForm.value.oficio,

@@ -5,17 +5,8 @@ import { Injectable,signal } from '@angular/core';
 })
 export class StepperModalService {
 
-  constructor() { }
-
-
-
   CARPETAIVN = signal<boolean>(false)
-
-
-    stepperNextAuto(
-      carpeta:boolean
-    ){
-      this.CARPETAIVN.set(carpeta)
+    stepperNextAuto(nextStep:boolean){
+      this.CARPETAIVN.set(nextStep)
     }
-
 }

@@ -72,11 +72,15 @@
 
                     @case ('EUACAPES') {
                         <mat-step label="Formulario EUACAPE (parte I)"
-                           [completed]="thirdStepChild.preliminarForm.valid"
-
-                           [editable]="true">
+                           [completed]="
+                                isCarpetaNull() === true
+                                                ? thirdStepChild.preliminarForm.valid
+                                                : isCarpetaAvailable()
+                                      "
+                           [editable]="true"
+                           >
                                 <div class="step-wrapper">
-                                    <app-preliminar-form [stepper]="stepper" #thirdStepChild />
+                                    <app-preliminar-form [stepper]="stepper"   #thirdStepChild />
                                 </div>
                         </mat-step>
 
