@@ -71,7 +71,7 @@
                     <div class="flex justify-between items-center">
                         <button
                             [disabled]="!this.preliminarForm.valid"
-                            (click)=" canProceed === true ? nextStep() : openCustomModalWithTemplate(templateCarpeta)"
+                            (click)=" canProceed === true ? nextStep(stepper) : openCustomModalWithTemplate(templateCarpeta)"
                             [ngClass]=" !this.preliminarForm.valid ? 'next-button-disabled' : 'next-button' "
                         >
                           Continuar

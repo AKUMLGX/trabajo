@@ -1,5 +1,5 @@
 <div style="padding: 0.5em" class="text-xl">
-    <mat-vertical-stepper  #stepper  linear [labelPosition]="'bottom'">
+    <mat-vertical-stepper  linear [labelPosition]="'bottom'">
 
         <mat-step label="Búsqueda"
                 [completed]= "
@@ -80,7 +80,7 @@
                            [editable]="true"
                            >
                                 <div class="step-wrapper">
-                                    <app-preliminar-form [stepper]="stepper"   #thirdStepChild />
+                                    <app-preliminar-form  tipo="EUACAPES"   #thirdStepChild />
                                 </div>
                         </mat-step>
 
@@ -94,7 +94,7 @@
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
+                                    <app-preliminar-form  #thirdStepChild />
                                 </div>
                         </mat-step>
 
@@ -108,7 +108,7 @@
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
+                                    <app-preliminar-form  #thirdStepChild />
                                 </div>
                         </mat-step>
 
@@ -122,7 +122,7 @@
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
+                                    <app-preliminar-form  #thirdStepChild />
                                 </div>
                         </mat-step>
 
@@ -136,7 +136,7 @@
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
+                                    <app-preliminar-form   #thirdStepChild />
                                 </div>
                         </mat-step>
 
@@ -150,7 +150,7 @@
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
+                                    <app-preliminar-form   #thirdStepChild />
                                 </div>
                         </mat-step>
 
@@ -164,7 +164,7 @@
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
+                                    <app-preliminar-form  #thirdStepChild />
                                 </div>
                         </mat-step>
 
