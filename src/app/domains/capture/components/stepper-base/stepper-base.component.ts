@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { Component } from '@angular/core';
+import { MatStepperModule } from '@angular/material/stepper';
 import { FirstStepComponent } from './first-step/first-step.component';
 import { SecondStepComponent } from './second-step/second-step.component';
 import { ThirdStepComponent } from './third-step/third-step.component';
@@ -46,7 +46,6 @@ export class StepperBaseComponent {
   isCarpetaNull = this.collectCarpetaStatusService.isCarpetaNull;
 
 
-  @ViewChild(MatStepper) stepper!: MatStepper
 
   isSearchBarResultsListEmpty = this.searchStatusService.isSearchResultsListEmpty;
 

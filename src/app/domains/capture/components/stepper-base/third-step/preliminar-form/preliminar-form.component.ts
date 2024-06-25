@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   FormBuilder,
@@ -40,6 +40,8 @@ export class PreliminarFormComponent {
     private asuntoService: AsuntoService,
     private modalService: ModalService,
     private collectCarpetaStatusService: CollectCarpetaStatusService,
+    public stepper: MatStepper,
+    private cdRef: ChangeDetectorRef
   ) { }
 
   public preliminarForm: FormGroup = this.fb.group({
@@ -50,7 +52,9 @@ export class PreliminarFormComponent {
 
   isPreliminarEuacapeFormValid = !this.preliminarForm.valid;
 
-  @Input() stepper!: MatStepper
+  // @Input() stepper!: MatStepper
+
+  @Input() tipo: string = "";
 
   carpetaResultList: Asunto[] = []
 
@@ -60,32 +64,38 @@ export class PreliminarFormComponent {
 
 
   openCustomModalWithTemplate(template: TemplateRef<any>) {
-    if (this.preliminarForm.value.carpetaInvestigacion !== null) {
-      this.isCarpetaNull = false;
-      this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull);
+    if (this.tipo == "EUACAPES") {
+      if (this.preliminarForm.value.carpetaInvestigacion !== null) {
+        this.isCarpetaNull = false;
+        this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull);
+      } else {
+        this.isCarpetaNull = true;
+        this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull)
+      }
+      this.asuntoService.checkNameCarpetaInvestigacion(
+        this.preliminarForm
+      ).subscribe((res) => {
+        this.carpetaResultList = res
+        if (this.carpetaResultList.length > 0) {
+          this.modalService.openCustomDialogWithTemplate({
+            template
+          })
+        }
+        else if (this.carpetaResultList.length === 0) {
+          this.canProceed = true;
+          this.collectCarpetaStatusService.upadateCarpetaStatus(this.canProceed);
+          this.nextStep(this.stepper);
+        }
+      })
     } else {
-      this.isCarpetaNull = true;
-      this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull)
+      this.canProceed = true;
+      this.collectCarpetaStatusService.upadateCarpetaStatus(this.canProceed);
     }
-    this.asuntoService.checkNameCarpetaInvestigacion(
-      this.preliminarForm
-    ).subscribe((res) => {
-      this.carpetaResultList = res
-      if (this.carpetaResultList.length > 0) {
-        this.modalService.openCustomDialogWithTemplate({
-          template
-        })
-      }
-      else if (this.carpetaResultList.length === 0) {
-        this.canProceed = true
-        this.collectCarpetaStatusService.upadateCarpetaStatus(this.canProceed);
-      }
-    })
   }
-  nextStep() {
-    if (this.stepper) {
-      this.stepper.next()
-    }
+
+  nextStep(stepper: MatStepper) {
+    this.cdRef.detectChanges();
+    stepper.next();
   }
   savePreliminarEuacapeForm(): void {
     this.collectFormInfoService.updatePreliminarEuacapeForm(
