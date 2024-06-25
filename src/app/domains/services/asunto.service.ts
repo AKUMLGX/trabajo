@@ -37,7 +37,7 @@ constructor(private httpClient: HttpClient) {}
       persona_relacionada: personaRelacionada,
       volante_jefatura
     };
-    this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
+    this.httpClient.get<Asunto[]>(url, { params: params } ).subscribe((data) => {
       this.documentList = data;
       this.documentsUpdated.emit(this.documentList);
     });

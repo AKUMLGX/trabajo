@@ -3,6 +3,7 @@
   layoutUrl:"http://localhost:4200/akamba/layout/capture",
   oauthParametersEndpoint: 'login/get_oauth_parameters',
   tokenValidationEndpoint: 'login/token_validation',
+  refreshTokenEndpoint: 'login/refresh_token',
   asuntoEndpoint: 'asunto/',
   updateTableHistorico:"asunto/historico/update",
   updateTableNuevo: "asunto/nuevo/update",

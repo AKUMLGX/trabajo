@@ -63,7 +63,6 @@ export class MainLayoutComponent {
   }
 
   getToken(): void {
-    if (!this.checkTokenExist()) {
       let parts = window.location.href.split('&');
       let oauth2Code: Oauth2Code = { code: '', scope: '' };
       parts.forEach((part) => {
@@ -77,24 +76,8 @@ export class MainLayoutComponent {
           oauth2Code.scope = keyValue[1];
         }
       });
-      this.oauth2Service.getToken(oauth2Code);
+      if(oauth2Code.code !== "") this.oauth2Service.getToken(oauth2Code);
     }
-  }
-
-  //Está función no es necesaria, solo es para que al desarrollar no nos saque cada vez que actualizamos
-  //el código.
-  checkTokenExist() {
-    let sessionInfo = localStorage.getItem('sessionInfo');
-    if (sessionInfo !== null) {
-      let parse = JSON.parse(sessionInfo);
-      let expiryDate = new Date(parse.exp * 1000);
-      let currentDate = new Date(Date.now());
-      if (expiryDate > currentDate) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
 
 

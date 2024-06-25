@@ -41,11 +41,6 @@ export class GeneralidadesAperturaService {
     formData.append("data", blob);
     formData.append("file", selectedFile, selectedFile.name);
 
-    // const headers = new HttpHeaders({
-    //   Accept: "application/json ,text/plain, */*",
-    //   'Content-Type': 'multipart/form-data'
-    // });
-
     this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/generalidad/apertura/',
       formData,
@@ -54,7 +49,6 @@ export class GeneralidadesAperturaService {
       this.pdfAcuseService.generatePDF(data);
     },
       (error) => {
-        //console.log('oops', error)
       });
   }
 

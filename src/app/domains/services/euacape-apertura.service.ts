@@ -1,10 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EuacapeApertura } from '../interfaces/euacape-apertura';
-import { EuacapeAperturaResponse } from '../interfaces/euacape-apertura-response';
 import { environment } from '../../../environments/environment';
 import { PdfAcuseService } from '../shared/services/pdf-acuse.service';
-import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'

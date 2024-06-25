@@ -7,8 +7,8 @@ import { environment } from '../../../environments/environment';
 export class LogoutService {
   constructor() {}    
   logout() {
-    localStorage.clear();
-    window.location.href = environment.logoutUrl;
+    //localStorage.clear();
+    //window.location.href = environment.logoutUrl;
   }     
 }
 

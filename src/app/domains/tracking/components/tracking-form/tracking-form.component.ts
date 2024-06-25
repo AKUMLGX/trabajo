@@ -73,7 +73,6 @@ export class TrackingFormComponent {
       this.coincidencias = [];
     }
   onSave(): void {
-    // this.router.navigate(['/layout/tracking']);
     this.asuntoService.filterDocuments(this.consultForm);
   }
  
@@ -81,13 +80,11 @@ export class TrackingFormComponent {
      this.coincidencias=[];
      this.nombre_campo_input = document.activeElement?.getAttribute('formControlName') ??'';
     if (!this.nombre_campo_input || !this.consultForm.contains(this.nombre_campo_input)) {
-      // console.error('Error: Campo no encontrado en el formulario.');
       return;
       }
     const fomulario_control = this.consultForm.get(this.nombre_campo_input);
   
     if (!fomulario_control || fomulario_control.value === undefined) {
-      // console.error(`Error: No se pudo obtener el valor del campo '${this.nombre_campo_input}'.`);
       return;
     }
     const valor_input = fomulario_control.value;

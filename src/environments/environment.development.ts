@@ -3,6 +3,7 @@ export const environment = {
   oauthParametersEndpoint: 'login/get_oauth_parameters',
   layoutUrl:"http://localhost:4200/akamba/layout/capture",
   tokenValidationEndpoint: 'login/token_validation',
+  refreshTokenEndpoint: 'login/refresh_token',
   asuntoEndpoint: 'asunto/',
   asuntoHistoricoEndpoint: 'asunto/historico/',
   updateTableHistorico:"asunto/historico/update",
