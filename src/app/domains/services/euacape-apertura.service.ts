@@ -16,16 +16,6 @@ export class EuacapeAperturaService {
     private pdfAcuseService: PdfAcuseService,
   ) { }
 
-  // insertEuacapeForm(euacapeForm: EuacapeApertura) {
-  //   const headers = new HttpHeaders({'Content-Type': 'application/json'});
-  //   this.httpClient.post<EuacapeAperturaResponse>(
-  //     environment.baseUrl + 'asunto/nuevo/euacape/apertura/',
-  //       euacapeForm, {headers: headers})
-  //       .subscribe((res) => {
-  //       console.log(res);
-  //   });
-  // }
-
   insertEuacapeForm(data: EuacapeApertura, selectedFile: File) {
 
     const json = JSON.stringify(data);
@@ -38,7 +28,6 @@ export class EuacapeAperturaService {
     formData.append("data", blob);
     formData.append("file", selectedFile, selectedFile.name);
 
-    //const headers = new HttpHeaders({'Content-Type': 'multipart/form-data'});
 
     this.httpClient.post(
       environment.baseUrl + 'asunto/nuevo/euacape/apertura/',

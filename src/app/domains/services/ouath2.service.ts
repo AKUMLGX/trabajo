@@ -19,7 +19,7 @@ export class Oauth2Service {
     this.httpClient
       .post<SessionInfo>(
         environment.baseUrl + environment.tokenValidationEndpoint,
-        oauth2Code
+        oauth2Code, { withCredentials: true }
       )
       .subscribe({
         next: (data) => {
