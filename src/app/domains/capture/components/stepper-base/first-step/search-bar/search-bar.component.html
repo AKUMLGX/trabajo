@@ -128,15 +128,23 @@
         </button>
     } @else {
         <!-- Second Pieces Next Button -->
-        <button 
-          matStepperNext 
-          [disabled]=" this.selectionModel.selected.length===0 "
-          class="w-32 mt-8" 
-          [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
-          (click)="tryNext()"
+        <div class="flex justify-center items-center gap-6">
+          <button
+            matStepperNext
+            class="w-40 mt-8 bg-gray-300 text-black active:bg-pink-600 border-2 border-[#691C32] uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+          >
+            Asunto nuevo
+          </button>
+          <button 
+            matStepperNext 
+            [disabled]=" this.selectionModel.selected.length===0 "
+            class="w-32 mt-8" 
+            [ngClass]=" this.selectionModel.selected.length===1 ? 'base-next-button' : 'base-next-button-disabled' "
+            (click)="tryNext()"
           >
               <span>Siguiente</span>
-        </button>
+          </button>
+        </div>
     }
   } @else {
       <button
