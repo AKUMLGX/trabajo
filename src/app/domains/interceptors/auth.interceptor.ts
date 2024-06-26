@@ -33,7 +33,7 @@ export const authInterceptor: HttpInterceptorFn = (
     }
   }
   return next(request).pipe(catchError((err: HttpErrorResponse) => {
-    if (err.message === "Unauthorize") {
+    if (err.message === "Unauthorized") {
       return oauthService.refeshToken().pipe(switchMap((data) => {
         let sessionInfo = localStorage.getItem('sessionInfo');
         if (sessionInfo !== null) {
@@ -49,6 +49,7 @@ export const authInterceptor: HttpInterceptorFn = (
       }))
     }
     matDialog.open(ErrorDialogComponent, {
+      disableClose: true,
       data: {
         errorTittle: 'Sesión inválida',
         errorDescription: 'El tiempo de sesión ha expirado, favor de volver a iniciar sesión.',
