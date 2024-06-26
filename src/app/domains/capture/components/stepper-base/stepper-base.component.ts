@@ -45,6 +45,7 @@ export class StepperBaseComponent {
 
   isCarpetaNull = this.collectCarpetaStatusService.isCarpetaNull;
 
+  isRedirectToAperturasForced = this.searchStatusService.isRedirectToAperturasForced;
 
 
   isSearchBarResultsListEmpty = this.searchStatusService.isSearchResultsListEmpty;

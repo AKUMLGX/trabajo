@@ -16,6 +16,8 @@ export class SearchStatusService {
 
   selectedRow = signal<any>(undefined);
 
+  isRedirectToAperturasForced = signal(false);
+
   folioInternoFromSelectedRow = signal('');
   carpetaInvestigacionFromSelectedRow = signal('');
   administracionFromSelectedRow = signal('');
@@ -33,6 +35,10 @@ export class SearchStatusService {
     this.folioInternoFromSelectedRow.set(this.selectedRow()[0].folio_interno);
     this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion);
     this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion);
+  }
+
+  manuallyRedirectToAperturas(redirectStatus: boolean) {
+    this.isRedirectToAperturasForced.set(redirectStatus);
   }
 
 }
