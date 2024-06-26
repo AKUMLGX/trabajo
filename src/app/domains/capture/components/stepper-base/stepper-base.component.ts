@@ -45,6 +45,7 @@ export class StepperBaseComponent {
 
   isCarpetaNull = this.collectCarpetaStatusService.isCarpetaNull;
 
+  isRedirectToAperturasForced = this.searchStatusService.isRedirectToAperturasForced;
 
   @ViewChild(MatStepper) stepper!: MatStepper
 

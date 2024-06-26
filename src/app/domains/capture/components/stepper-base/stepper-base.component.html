@@ -14,7 +14,7 @@
             />
         </mat-step>
 
-        @if(isSearchBarResultsListEmpty()) {
+        @if( (isSearchBarResultsListEmpty()===false && isRedirectToAperturasForced()===true) || (isSearchBarResultsListEmpty()===true && isRedirectToAperturasForced()===false) ) {
             <mat-step label="Elección de asunto"
                     [completed]="secondStepChild.isSecondStepPressed"
                     [editable]="false">

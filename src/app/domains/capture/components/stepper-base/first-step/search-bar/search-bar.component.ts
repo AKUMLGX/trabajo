@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { 
+  Component, 
+  EventEmitter, 
+  Input, 
+  Output, 
+  TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -8,6 +13,7 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -15,6 +21,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AsuntoService } from '../../../../../services/asunto.service';
 import { SearchStatusService } from '../../../../../shared/services/search-status.service';
 import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
+import { ModalService } from '../../../../../shared/services/modal.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -25,6 +32,7 @@ import { Asunto } from '../../../../../interfaces/asuntos.interfaces';
     MatCheckboxModule,
     FormsModule,
     MatStepperModule,
+    MatDialogModule,
     MatIconModule,
   ],
   templateUrl: './search-bar.component.html',
@@ -36,6 +44,7 @@ export class SearchBarComponent {
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
     private searchStatusService: SearchStatusService,
+    private modalService: ModalService,
   ) { }
 
   selectionModel = new SelectionModel(false);
@@ -61,6 +70,8 @@ export class SearchBarComponent {
   folioInternoFromResults: string = '';
 
   isNextButtonEnabled = false;
+
+  manuallyForceRedirectToAperturasFlux: boolean = false;
 
   searchFromInput() {
     this.asuntoService.searchBarCoincidences(
@@ -102,6 +113,29 @@ export class SearchBarComponent {
     this.searchStatusService.updateSelectedRow(this.selectedRow);
     this.isNextButtonEnabled = true;
     this.searchStatusService.updateNextButtonStatus(this.isNextButtonEnabled);
+  }
+
+  openCustomModalWithTemplate(template: TemplateRef<any>){
+    this.isNextButtonEnabled = true;
+    this.searchStatusService.updateNextButtonStatus(this.isNextButtonEnabled);
+
+    this.manuallyForceRedirectToAperturasFlux = true;
+    this.searchStatusService.manuallyRedirectToAperturas(
+      this.manuallyForceRedirectToAperturasFlux
+    );
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    });
+  }
+
+  onCancelButton() {
+    this.isNextButtonEnabled = false;
+    this.searchStatusService.updateNextButtonStatus(this.isNextButtonEnabled);
+
+    this.manuallyForceRedirectToAperturasFlux = false;
+    this.searchStatusService.manuallyRedirectToAperturas(
+      this.manuallyForceRedirectToAperturasFlux
+    );
   }
 
   firstColumnHeader: string = 'Folio interno';

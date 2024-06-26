@@ -127,12 +127,11 @@
             <span>Siguiente</span>
         </button>
     } @else {
-        <!-- Second Pieces Next Button -->
         <div class="flex justify-center items-center gap-6">
           <button
-            matStepperNext
-            class="w-40 mt-8 bg-gray-300 text-black active:bg-pink-600 border-2 border-[#691C32] uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-          >
+            class="w-40 mt-8 bg-gray-300 text-black active:bg-pink-600 border-2 border-[#691C32] uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none mr-1"
+            (click)="openCustomModalWithTemplate(template1)"
+            >
             Asunto nuevo
           </button>
           <button 
@@ -157,3 +156,24 @@
       </button>
   }
 </div>
+
+<ng-template #template1>
+  <div>
+    hola mundo gogo
+  </div>
+  <button
+    matStepperNext
+    mat-dialog-close 
+    mat-button 
+  >
+    Aceptar
+  </button>
+  <button
+
+    mat-button 
+    (click)="onCancelButton()"
+    mat-dialog-close
+  >
+    cANCELAR
+  </button>
+</ng-template>
