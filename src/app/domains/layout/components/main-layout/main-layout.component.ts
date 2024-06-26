@@ -42,16 +42,16 @@ export class MainLayoutComponent {
 
   showErrorDialog = false;
 
-  constructor(private oauth2Service: Oauth2Service, private modalService: ModalService) {}
+  constructor(private oauth2Service: Oauth2Service, private modalService: ModalService) { }
 
   collapsed = signal(false);
 
   sidenavWidth = computed(() => (this.collapsed() ? '65px' : '270px'));
 
-  openModal(template:TemplateRef<any>){
-   this.modalService.openCustomDialogWithTemplate({
-    template
-   })
+  openModal(template: TemplateRef<any>) {
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    })
   }
 
 
@@ -63,21 +63,21 @@ export class MainLayoutComponent {
   }
 
   getToken(): void {
-      let parts = window.location.href.split('&');
-      let oauth2Code: Oauth2Code = { code: '', scope: '' };
-      parts.forEach((part) => {
-        let keyValue = part.split('=');
-        if (
-          keyValue.length === 2 &&
-          keyValue[0].substring(keyValue[0].length - 4) == 'code'
-        ) {
-          oauth2Code.code = decodeURIComponent(keyValue[1]);
-        } else if (keyValue.length === 2 && keyValue[0] == 'scope') {
-          oauth2Code.scope = keyValue[1];
-        }
-      });
-      if(oauth2Code.code !== "") this.oauth2Service.getToken(oauth2Code);
-    }
+    let parts = window.location.href.split('&');
+    let oauth2Code: Oauth2Code = { code: '', scope: '' };
+    parts.forEach((part) => {
+      let keyValue = part.split('=');
+      if (
+        keyValue.length === 2 &&
+        keyValue[0].substring(keyValue[0].length - 4) == 'code'
+      ) {
+        oauth2Code.code = decodeURIComponent(keyValue[1]);
+      } else if (keyValue.length === 2 && keyValue[0] == 'scope') {
+        oauth2Code.scope = keyValue[1];
+      }
+    });
+    if (oauth2Code.code !== "" && oauth2Code.code !== null && oauth2Code.code !== undefined) this.oauth2Service.getToken(oauth2Code);
+  }
 }
 
 

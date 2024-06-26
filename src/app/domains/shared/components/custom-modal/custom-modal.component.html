@@ -1,5 +1,16 @@
-<h2 mat-dialog-title>{{  data.title }}</h2>
-<mat-dialog-content>{{ data.content }}</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
-</mat-dialog-actions>
+<div class="header">
+  <p mat-dialog-title align="center" class="tittle">{{data.title}}</p>
+  </div>
+  <mat-dialog-content>
+    <p>{{data.content}}</p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+      <button
+        mat-dialog-close
+        class="modal-left-button ml-10"
+       
+      >
+        Aceptar
+      </button>
+    </mat-dialog-actions>

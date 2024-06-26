@@ -1,5 +1,4 @@
 import {
-  HttpClient,
   HttpErrorResponse,
   HttpEvent,
   HttpHandlerFn,
@@ -7,24 +6,23 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { Oauth2Service } from '../services/ouath2.service';
 import { LogoutService } from '../services/logout.service';
-import { environment } from '../../../environments/environment';
+import { ModalData } from '../shared/models/modal-data.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
 
 export const authInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
   let sessionInfo = localStorage.getItem('sessionInfo');
-  let httpClient = inject(HttpClient);
+  let oauthService = inject(Oauth2Service);
   let logoutService = inject(LogoutService);
+  let matDialog = inject(MatDialog);
   if (sessionInfo !== null) {
     let parse = JSON.parse(sessionInfo);
-    let expiryDate = new Date(parse.exp * 1000);
-    let currentDate = new Date(Date.now());
-    if (expiryDate < currentDate && request.url != environment.baseUrl + environment.tokenValidationEndpoint) {
-      logoutService.logout();
-    }
     let token = parse.token;
     if (token) {
       request = request.clone({
@@ -35,27 +33,29 @@ export const authInterceptor: HttpInterceptorFn = (
     }
   }
   return next(request).pipe(catchError((err: HttpErrorResponse) => {
-    if (err.message == "Unauthorized") {
-      httpClient
-      .get(
-        environment.baseUrl + environment.refreshTokenEndpoint, {withCredentials: true, responseType: "text"}
-      )
-      .subscribe({
-        next: (data) => {
-         let sessionInfo = localStorage.getItem('sessionInfo');
-         if (sessionInfo !== null) {
-           let parse = JSON.parse(sessionInfo);
-           parse.token = data;
-           console.log("El nuevo token " + parse.token);
-           localStorage.setItem('sessionInfo', JSON.stringify(parse));
-         }
-        },
-        error: (err) => {
-          logoutService.logout();
-        },
-      });
+    if (err.message === "Unauthorize") {
+      return oauthService.refeshToken().pipe(switchMap((data) => {
+        let sessionInfo = localStorage.getItem('sessionInfo');
+        if (sessionInfo !== null) {
+          let parse = JSON.parse(sessionInfo);
+          parse.token = data;
+          localStorage.setItem('sessionInfo', JSON.stringify(parse));
+        }
+        return next(request.clone({
+          setHeaders: {
+            Authorization: data,
+          },
+        }));
+      }))
     }
-    return throwError(() => new Error(err.statusText));
+    matDialog.open(ErrorDialogComponent, {
+      data: {
+        errorTittle: 'Sesión inválida',
+        errorDescription: 'El tiempo de sesión ha expirado, favor de volver a iniciar sesión.',
+        func: 'logout'
+      },
+    });
+    return throwError(() => new Error('Unauthorized Exception'));
   }));
 };
 

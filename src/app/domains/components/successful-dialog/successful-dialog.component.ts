@@ -15,7 +15,6 @@ export class SuccessfulDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private router: Router) { }
 
   navigate() {
-    // window.location.href = "http://localhost:4200/akamba/layout/capture"
     window.location.href = environment.layoutUrl
     this.router.navigate(["/capture"])
   }

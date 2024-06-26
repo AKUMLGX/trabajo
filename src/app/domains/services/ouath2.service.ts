@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHandlerFn } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import {
@@ -7,6 +7,7 @@ import {
   SessionInfo,
 } from '../interfaces/oauth2.interfaces';
 import { LogoutService } from './logout.service';
+import { BehaviorSubject, from } from 'rxjs';
 
 
 @Injectable({
@@ -19,7 +20,7 @@ export class Oauth2Service {
     this.httpClient
       .post<SessionInfo>(
         environment.baseUrl + environment.tokenValidationEndpoint,
-        oauth2Code, { withCredentials: true}
+        oauth2Code, { withCredentials: true }
       )
       .subscribe({
         next: (data) => {
@@ -29,6 +30,14 @@ export class Oauth2Service {
           this.logoutService.logout();
         },
       });
+  }
+
+  refeshToken() {
+      return this.httpClient
+      .get(
+        environment.baseUrl + environment.refreshTokenEndpoint, { withCredentials: true, responseType: "text" }
+      );
+     
   }
 
   do_oauth(): void {

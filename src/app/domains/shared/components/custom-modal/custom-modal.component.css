@@ -1,0 +1,26 @@
+.modal-left-button {
+    @apply bg-[#2F722F] text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150;
+  }
+  
+  .header {
+    background-color: #2F722F ;
+  }
+  
+  .tittle {
+    color: white;
+    font-size: 20px;
+  }
+  
+  .footer {
+      padding-left: 15px;
+      padding-right: 15px;
+      height: 30%;
+      display: flex;
+      flex-direction: row;
+    }
+  
+    .footer > img {
+      width: 10%;
+      height: 10%;
+    }
+  
