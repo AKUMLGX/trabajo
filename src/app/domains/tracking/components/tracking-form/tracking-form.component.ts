@@ -1,6 +1,6 @@
 import { trigger, style, transition, animate } from '@angular/animations';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Component  ,ElementRef,ViewChild} from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -20,11 +20,11 @@ import { AsuntoService } from '../../../services/asunto.service';
     dynamicHeight,
     trigger('fadeInOut', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.35)' }), 
+        style({ opacity: 0, transform: 'scale(0.35)' }),
         animate('400ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
       ]),
       transition(':leave', [
-        animate('300ms ease-in', style({ opacity: 0, transform: 'scale(0.35)' })), 
+        animate('300ms ease-in', style({ opacity: 0, transform: 'scale(0.35)' })),
       ]),
     ]),
   ],
@@ -42,70 +42,79 @@ export class TrackingFormComponent {
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: { [key: string]: boolean } = {};
   campoValor: { [key: string]: any } = {};
-  campos:string[]=["persona_relacionada","autoridad_remitente","folio_interno"]
+  campos: string[] = ["persona_relacionada", "autoridad_remitente", "folio_interno"]
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
     private router: Router
-    ) {    this.campoValor = {
+  ) {
+    this.campoValor = {
       folioInterno: '',
       carpetaInvertigacion: '',
       oficio: '',
       autoridadRemitente: '',
       personaRelacionada: '',
       volante_jefatura: ''
-    };}
-    
-  
-    coincidencias: string[] = [];
-    nombre_campo_input:string="";
-    mostrar_coincidencias?:boolean;
-  
+    };
+  }
 
-    DetectInput(entering: boolean, campo: string): void {
-      this.showCoincidencias[campo] = entering;
-     
-      if (!entering) {
-        this.cleanCoincidencias();
-      }
+
+  coincidencias: string[] = [];
+  nombre_campo_input: string = "";
+  mostrar_coincidencias?: boolean;
+
+
+  DetectInput(entering: boolean, campo: string): void {
+    this.showCoincidencias[campo] = entering;
+
+    if (!entering) {
+      this.cleanCoincidencias();
     }
-    cleanCoincidencias(): void {
-      this.coincidencias = [];
-    }
+  }
+  cleanCoincidencias(): void {
+    this.coincidencias = [];
+  }
   onSave(): void {
     this.asuntoService.filterDocuments(this.consultForm);
   }
- 
+
   getValueInput(): void {
-     this.coincidencias=[];
-     this.nombre_campo_input = document.activeElement?.getAttribute('formControlName') ??'';
+    this.coincidencias = [];
+    this.nombre_campo_input = document.activeElement?.getAttribute('formControlName') ?? '';
     if (!this.nombre_campo_input || !this.consultForm.contains(this.nombre_campo_input)) {
       return;
-      }
+    }
     const fomulario_control = this.consultForm.get(this.nombre_campo_input);
-  
+
     if (!fomulario_control || fomulario_control.value === undefined) {
       return;
     }
     const valor_input = fomulario_control.value;
-  
-       
+
+
     if (this.nombre_campo_input === "carpetaInvertigacion") {
       this.nombre_campo_input = "carpetaInvestigacion";
-  }
+    }
     this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
-   
-     this.coincidencias = coincidencias.slice(0,5);
+
+      this.coincidencias = coincidencias.slice(0, 5);
     });
   }
-  selectCoincidencia(coincidencia: string): void {
- 
-  const formControl = this.consultForm.get(this.nombre_campo_input);
-  if (formControl) {  
-      formControl.setValue(coincidencia);
-  } else {
-      console.error(`Error: No se pudo encontrar el control del formulario para '${this.nombre_campo_input}'.`);
+
+  descargarAcuse(): void {
+    console.log("hola");
+    this.asuntoService.generateAcuse();
   }
-  this.cleanCoincidencias();
-  }   
+
+
+  selectCoincidencia(coincidencia: string): void {
+
+    const formControl = this.consultForm.get(this.nombre_campo_input);
+    if (formControl) {
+      formControl.setValue(coincidencia);
+    } else {
+      console.error(`Error: No se pudo encontrar el control del formulario para '${this.nombre_campo_input}'.`);
+    }
+    this.cleanCoincidencias();
+  }
 }

@@ -8,6 +8,7 @@ export const environment = {
   asuntoHistoricoEndpoint: 'asunto/historico/',
   updateTableHistorico:"asunto/historico/update",
   updateTableNuevo: "asunto/nuevo/update",
+  generateAcuse: "asunto/nuevo/get_acuse",
   asuntoNuevoEndpoint: 'asunto/nuevo/',
   getPdfEndpoint: 'getPdf',
   getMsgEndpoint: 'getMsg',
@@ -15,3 +16,5 @@ export const environment = {
   loginUrl: 'http://localhost:4200/login',
   logoutUrl: 'https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout'
 };
+
+

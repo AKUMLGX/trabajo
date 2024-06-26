@@ -18,7 +18,7 @@ export class AsuntoService {
   public fileIsOpen: boolean = false;
 
   public tipoBusqueda = '';
-constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   filterDocuments(consultForm: FormGroup): void {
     this.tipoBusqueda = consultForm.get('tipoBusqueda')?.value;
@@ -37,7 +37,7 @@ constructor(private httpClient: HttpClient) {}
       persona_relacionada: personaRelacionada,
       volante_jefatura
     };
-    this.httpClient.get<Asunto[]>(url, { params: params } ).subscribe((data) => {
+    this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
       this.documentList = data;
       this.documentsUpdated.emit(this.documentList);
     });
@@ -54,17 +54,17 @@ constructor(private httpClient: HttpClient) {}
       })
     );
   }
-  searchBarCoincidencesIlikeAsunto(consulta: string,campo:string) :Observable<Asunto[]> {
+  searchBarCoincidencesIlikeAsunto(consulta: string, campo: string): Observable<Asunto[]> {
     let url = environment.baseUrl + environment.asuntoEndpoint;
-    let params = { [campo]:consulta};
+    let params = { [campo]: consulta };
     return this.httpClient.get<Asunto[]>(
       url, { params: params });
 
   }
   searchBarCoincidences(
-      searchEntryType: string,
-      userInputForm: FormGroup
-    ): Observable<Asunto[]> {
+    searchEntryType: string,
+    userInputForm: FormGroup
+  ): Observable<Asunto[]> {
 
     this.tipoBusqueda = searchEntryType;
 
@@ -76,7 +76,7 @@ constructor(private httpClient: HttpClient) {}
     let oficio: string = '';
     let autoridadRemitente: string = '';
     let volante_jefatura: string = '';
-    switch(this.tipoBusqueda) {
+    switch (this.tipoBusqueda) {
       case "CARPETA DE INVESTIGACIÓN": {
         carpetaInvestigacion = userInput;
         break;
@@ -106,36 +106,52 @@ constructor(private httpClient: HttpClient) {}
     };
 
     return this.httpClient.get<Asunto[]>(
-        url, { params: params });
+      url, { params: params });
 
   }
 
   checkNameCarpetaInvestigacion(
-    userInputForm: FormGroup):Observable<Asunto[]>{
+    userInputForm: FormGroup): Observable<Asunto[]> {
     let userInput = userInputForm.get('carpetaInvestigacion')?.value
-    let url = environment.baseUrl  + environment.asuntoEndpoint
+    let url = environment.baseUrl + environment.asuntoEndpoint
     let params = {
       carpeta_investigacion: userInput,
     }
     return this.httpClient.get<Asunto[]>(
-      url,{params:params}
+      url, { params: params }
     )
   }
 
 
 
   checkNameCarpetaInvestigacionUpdate(
-    userInputForm: FormGroup):Observable<Asunto[]>{
+    userInputForm: FormGroup): Observable<Asunto[]> {
     let userInput = userInputForm.get('carpeta_investigacion')?.value
-    let url = environment.baseUrl  + environment.asuntoEndpoint
+    let url = environment.baseUrl + environment.asuntoEndpoint
     let params = {
       carpeta_investigacion: userInput,
     }
     return this.httpClient.get<Asunto[]>(
-      url,{params:params}
+      url, { params: params }
     )
   }
 
+  generateAcuse(): void {
+    let url = environment.baseUrl + environment.generateAcuse + "/" + new Date();
+    this.httpClient.get(url, { responseType: "text" }).subscribe((acuse) => {
+      const byteCharacters = atob(acuse);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'Acuse.pdf';
+      link.click();
+    });
+  }
 
 
   openPdf(): void {
