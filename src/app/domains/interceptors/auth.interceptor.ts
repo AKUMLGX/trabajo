@@ -9,7 +9,6 @@ import { inject } from '@angular/core';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { Oauth2Service } from '../services/ouath2.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
 
 export const authInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,

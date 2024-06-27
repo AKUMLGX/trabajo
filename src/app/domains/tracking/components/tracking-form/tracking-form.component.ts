@@ -39,6 +39,11 @@ export class TrackingFormComponent {
     volante_jefatura: new FormControl(''),
     tipoBusqueda: new FormControl('Nuevos')
   });
+
+  public fecha = new FormControl('');
+
+  public fechaActual = '2018-11-11';
+
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: { [key: string]: boolean } = {};
   campoValor: { [key: string]: any } = {};
@@ -46,7 +51,6 @@ export class TrackingFormComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
-    private router: Router
   ) {
     this.campoValor = {
       folioInterno: '',
@@ -56,9 +60,13 @@ export class TrackingFormComponent {
       personaRelacionada: '',
       volante_jefatura: ''
     };
+    let date = new Date();
+    let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
+    let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
+    let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
+    this.fechaActual = `${year}-${month}-${day}`;
+    this.fecha.setValue(this.fechaActual);
   }
-
-
   coincidencias: string[] = [];
   nombre_campo_input: string = "";
   mostrar_coincidencias?: boolean;
@@ -102,8 +110,8 @@ export class TrackingFormComponent {
   }
 
   descargarAcuse(): void {
-    console.log("hola");
-    this.asuntoService.generateAcuse();
+    if (this.fecha.value)
+      this.asuntoService.generateAcuse(this.fecha.value);
   }
 
 

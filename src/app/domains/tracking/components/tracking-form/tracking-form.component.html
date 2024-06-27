@@ -160,10 +160,14 @@
               type="submit">
               Buscar
             </button>
-            <button type="button" (click)="descargarAcuse()" 
-              class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
-              Descargar acuse
-            </button>
+            <div>
+              <input type="date" class="mr-10 date" value="2024-11-11" [formControl]="fecha" required/>
+              <button type="button" (click)="descargarAcuse()"
+                class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                Descargar acuse
+              </button>
+            </div>
+
           </div>
 
         </form>

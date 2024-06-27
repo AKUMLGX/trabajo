@@ -136,8 +136,8 @@ export class AsuntoService {
     )
   }
 
-  generateAcuse(): void {
-    let url = environment.baseUrl + environment.generateAcuse + "/" + new Date();
+  generateAcuse(date: string): void {
+    let url = environment.baseUrl + environment.generateAcuse + "/" + date;
     this.httpClient.get(url, { responseType: "text" }).subscribe((acuse) => {
       const byteCharacters = atob(acuse);
       const byteNumbers = new Array(byteCharacters.length);
