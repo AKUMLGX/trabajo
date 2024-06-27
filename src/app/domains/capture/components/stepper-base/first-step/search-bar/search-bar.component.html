@@ -158,22 +158,27 @@
 </div>
 
 <ng-template #template1>
-  <div>
-    hola mundo gogo
+  <h2 mat-dialog-title>
+    ¿Está seguro de cambiar a un Asunto Nuevo (aperturas)?
+  </h2>
+  <div class="flex justify-center items-center gap-4 mt-4">
+    <mat-dialog-actions>
+      <button
+        class="modal-right-button mr-10"
+        matStepperNext
+        mat-dialog-close 
+        mat-button 
+      >
+      Aceptar
+      </button>
+      <button
+        class="modal-left-button ml-10"
+        mat-button 
+        (click)="onCancelButton()"
+        mat-dialog-close
+      >
+      Cancelar
+      </button>
+    </mat-dialog-actions>
   </div>
-  <button
-    matStepperNext
-    mat-dialog-close 
-    mat-button 
-  >
-    Aceptar
-  </button>
-  <button
-
-    mat-button 
-    (click)="onCancelButton()"
-    mat-dialog-close
-  >
-    cANCELAR
-  </button>
 </ng-template>
