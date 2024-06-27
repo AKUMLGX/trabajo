@@ -2,75 +2,87 @@
 <div class="w-full lg:w-12/12 mx-auto mt-2">
   <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
     <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
+      @if( getRol() === "SIAT_AKAMBA_002_SUPERVISA"){
       <div class="flex justify-center items-center text-3xl mb-14 font-montserrat "> Se Actualizara la siguiente
         información:</div>
+      }@else if (getRol()=== "SIAT_AKAMBA_001_CAPTURA") {
+      <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">El siguiente formulario es solo
+        informativo:</div>
+      }
       <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
         <form [formGroup]="updateTableForm">
           <div class="flex flex-wrap">
+            {{showInputAkambaUno()}}
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-
-                Carpeta de Investigación
-
+                Carpeta de investigación y/o juzgado
               </label>
-              <input type="text" placeholder="Carpeta de Investigación" class="input-field placeholder-blueGray-300"
+              <input  (blur)="onBlur()" type="text" placeholder=" Carpeta de investigación y/o juzgado"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="carpeta_investigacion" value="">
-
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Persona Relacionada
               </label>
-              <input type="text" placeholder="Persona Relacionada" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Persona Relacionada"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="persona_relacionada" value="">
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Folio Scanner
               </label>
-              <input type="text" placeholder="Folio Scanner" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Folio Scanner"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="folio_scanner" value="">
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Volante Jefatura
               </label>
-              <input type="text" placeholder="volante Jefatura" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="volante Jefatura"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="volante_jefatura" value="">
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Oficio
               </label>
-              <input type="text" placeholder="Oficio" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Oficio"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="oficio" value="">
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Autoridad Remitente
               </label>
-              <input type="text" placeholder="Autoridad Reminente" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Autoridad Reminente"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="autoridad_remitente" value="">
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Folio Jupiter
               </label>
-              <input type="text" placeholder="Folio Jupiter" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Folio Jupiter"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="folio_jupiter" value="">
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Descripción
               </label>
-              <input type="text" placeholder="Descripción" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Descripción"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="descripcion" value="">
             </div>
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Turno Jefatura
               </label>
-              <input type="text" placeholder="Turno Jefatura" class="input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Turno Jefatura"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="turno_jefatura" value="">
             </div>
             <!-- <div class="wrapping-individual-container">
@@ -84,7 +96,8 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Administración
               </label>
-              <select id="administracion" formControlName="administracion" class="input-field">
+              <select id="administracion" formControlName="administracion"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
                 <option [ngValue]="null" [selected]="true" disabled> Elija una administración</option>
                 <option value="a_1">Administración 1</option>
                 <option value="a_2">Administración 2</option>
@@ -276,17 +289,25 @@
             </div>
           </div>
           <div class="flex justify-center items-center mt-8">
-
+            @if (getRol()=== "SIAT_AKAMBA_001_CAPTURA") {
             <button (click)="showagain()" class="modal-left-button mr-10">
               Cancelar
             </button>
-            <button
-             (click)=" isavailable === true ? saveUpdateForm(): openCustomModalWithTemplate(templateCarpeta) "
-              (click)="availability()"
-              [disabled]="!botonHabilitado"
+            }@else if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
+            <button (click)="showagain()" class="modal-left-button mr-10">
+              Cancelar
+            </button>
+            <button (click)="
+                                isavailable === true ?
+                                 saveUpdateForm()
+                                 :
+                                 openCustomModalWithTemplate(templateCarpeta)
+                            "
+                               (click)="availability()"   [disabled]="!botonHabilitado"
               [ngClass]=" !botonHabilitado ? 'next-button-disabled' : 'modal-right-button ml-1 '">
               Aceptar
             </button>
+            }
           </div>
         </form>
       </div>
