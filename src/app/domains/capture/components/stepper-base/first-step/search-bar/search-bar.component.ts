@@ -166,6 +166,7 @@ export class SearchBarComponent {
     if (this.btnClass) {
       this.btnClass = '';
       this.iptClass = '';
+      this.isSubmittedButtonHidden = false;
     } else {
       this.btnClass = 'close'
       this.iptClass = 'square'
