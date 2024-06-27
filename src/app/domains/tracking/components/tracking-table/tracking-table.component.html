@@ -185,7 +185,14 @@
                         class="text-wine leading-5">
                         <mat-icon style="margin-left: 5px">print</mat-icon>
                       </button>
+                      @if (getRol() === "SIAT_AKAMBA_001_CAPTURA") {
+                        <button mat-button class="text-wine leading-5" (click)="updateTable(document)"
+                        (click)="seleccionarFila(document)">
+                        <mat-icon >info</mat-icon>
+                      </button>
                       }
+                      }
+
                       @if (getRol() === "SIAT_AKAMBA_002_SUPERVISA"){
                       <button mat-button class="text-wine leading-5" (click)="updateTable(document)"
                         (click)="seleccionarFila(document)">

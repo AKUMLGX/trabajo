@@ -42,8 +42,11 @@ export class EditTackingTableComponent implements OnInit {
 
   carpetaResultList: Asunto[] = [];
 
-  isavailable:boolean = false;
+  isavailable: boolean = false;
 
+  showInput: boolean = false;
+
+  isTouched: boolean = false;
 
   ngOnInit(): void {
     this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion)
@@ -107,26 +110,26 @@ export class EditTackingTableComponent implements OnInit {
     descargo: [["", Validators.required], { value: this.documents?.descargo }],
     tipo_asunto: [["", Validators.required], { value: this.documents?.tipo_asunto }],
     base_captura_administracion: [["", Validators.required], { value: this.documents?.base_captura_administracion }],
-    autor: [["", Validators.required], { value: this.documents?.autor}],
+    autor: [["", Validators.required], { value: this.documents?.autor }],
     folio: [["", Validators.required], { value: this.documents?.folio }],
     fecha_atencion: [["", Validators.required], { value: this.documents?.fecha_atencion }],
-    orden:               [["", Validators.required],  {value:this.documents?.orden}],
+    orden: [["", Validators.required], { value: this.documents?.orden }],
     documento: [["", Validators.required], { value: this.documents?.documento }],
     areas_pendientes: [["", Validators.required], { value: this.documents?.areas_pendientes }],
     area_pendiente: [["", Validators.required], { value: this.documents?.area_pendiente }],
     autoridad_solicitante: [["", Validators.required], { value: this.documents?.autoridad_solicitante }],
     correo_electronico: [["", Validators.required], { value: this.documents?.correo_electronico }],
     que_solicita: [["", Validators.required], { value: this.documents?.que_solicita }],
-    fecha_numero_oficio_atencion: [["", Validators.required], { value: this.documents?.fecha_numero_oficio_atencion}],
-    asuntos_enviados_correo_mara: [["", Validators.required], { value: this.documents?.asuntos_enviados_correo_mara}],
+    fecha_numero_oficio_atencion: [["", Validators.required], { value: this.documents?.fecha_numero_oficio_atencion }],
+    asuntos_enviados_correo_mara: [["", Validators.required], { value: this.documents?.asuntos_enviados_correo_mara }],
     atentas_notas_respuestas: [["", Validators.required], { value: this.documents?.atentas_notas_respuestas }],
-    fecha_turnado: [["", Validators.required], { value: this.documents?.fecha_turnado}],
-    hora_recepcion: [["", Validators.required], { value: this.documents?.hora_recepcion}],
+    fecha_turnado: [["", Validators.required], { value: this.documents?.fecha_turnado }],
+    hora_recepcion: [["", Validators.required], { value: this.documents?.hora_recepcion }],
     tipo: [["", Validators.required], { value: this.documents?.tipo }],
     unidad_administrativa_autoridad: [["", Validators.required], { value: this.documents?.unidad_administrativa_autoridad }],
     fecha_descargo: [["", Validators.required], { value: this.documents?.fecha_descargo }],
-    fecha_oficio: [["", Validators.required], { value: this.documents?.fecha_oficio}],
-    reporte: [["", Validators.required], { value: this.documents?.reporte}],
+    fecha_oficio: [["", Validators.required], { value: this.documents?.fecha_oficio }],
+    reporte: [["", Validators.required], { value: this.documents?.reporte }],
     acuse: [["", Validators.required], { value: this.documents?.acuse }],
     piezas_fgr_administracion: [["", Validators.required], { value: this.documents?.piezas_fgr_administracion }],
   });
@@ -162,35 +165,68 @@ export class EditTackingTableComponent implements OnInit {
     this.mostrarTabla = false
   }
 
+
+  onBlur(): void {
+    this.isTouched = true
+  }
+
   openCustomModalWithTemplate(template: TemplateRef<any>) {
+    if (this.isTouched === true) {
+      this.asuntoService.checkNameCarpetaInvestigacionUpdate(
+        this.updateTableForm
+      ).subscribe((res) => {
+        this.carpetaResultList = res;
+        if (this.carpetaResultList.length > 0) {
+          this.modalService.openCustomDialogWithTemplate({
+            template
+          })
+        }
+      })
+    } else {
+      if (this.carpetaResultList.length === 0) {
+        this.isavailable = true;
+        this.saveUpdateForm()
+      }
+    }
+  }
+
+
+  availability() {
     this.asuntoService.checkNameCarpetaInvestigacionUpdate(
       this.updateTableForm
     ).subscribe((res) => {
-
       this.carpetaResultList = res
-      if (this.carpetaResultList.length > 0) {
-        this.modalService.openCustomDialogWithTemplate({
-          template
-        })
-      }
-      // else if(this.carpetaResultList.length === 0){
-      //   this.isavailable = true;
-      // }
-    })
-  }
-
-  availability(){
-    this.asuntoService.checkNameCarpetaInvestigacionUpdate(
-      this.updateTableForm
-    ).subscribe((res)=>{
-      this.carpetaResultList=res
-      if(this.carpetaResultList.length === 0){
-       this.isavailable = true;
-       console.log(this.isavailable);
-       this.saveUpdateForm()
+      if (this.carpetaResultList.length === 0) {
+        this.isavailable = true;
+        this.saveUpdateForm()
       }
     })
   }
 
+  getRol(): string {
+    let sessionInfo = localStorage.getItem('sessionInfo');
+    if (sessionInfo !== null) {
+      let parse = JSON.parse(sessionInfo);
+      let rol = parse.roles;
+      return rol;
+    }
+    return "";
+  }
+
+  showInputAkambaUno() {
+    if (this.getRol() === "SIAT_AKAMBA_001_CAPTURA") {
+      this.showInput = true
+      this.updateTableForm.controls["carpeta_investigacion"].disable()
+      this.updateTableForm.controls["persona_relacionada"].disable()
+      this.updateTableForm.controls["folio_scanner"].disable()
+      this.updateTableForm.controls["volante_jefatura"].disable()
+      this.updateTableForm.controls["oficio"].disable()
+      this.updateTableForm.controls["autoridad_remitente"].disable()
+      this.updateTableForm.controls["folio_jupiter"].disable()
+      this.updateTableForm.controls["descripcion"].disable()
+      this.updateTableForm.controls["turno_jefatura"].disable()
+      this.updateTableForm.controls["administracion"].disable()
+    }
+  }
 
 }
