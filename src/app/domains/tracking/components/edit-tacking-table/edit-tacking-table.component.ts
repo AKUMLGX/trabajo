@@ -12,8 +12,6 @@ import { AsuntoService } from '../../../services/asunto.service';
 import { ModalService } from '../../../shared/services/modal.service';
 
 
-
-
 @Component({
   selector: 'app-edit-tacking-table',
   standalone: true,
@@ -48,6 +46,10 @@ export class EditTackingTableComponent implements OnInit {
 
   isTouched: boolean = false;
 
+  documentoEscaneadoNameTracking: string = "";
+
+  docuemntoEcaneadoFileTracking?:File;
+
   ngOnInit(): void {
     this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion)
     this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada)
@@ -60,8 +62,7 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls['turno_jefatura'].setValue(this.documents.turno_jefatura)
     // this.updateTableForm.controls['administracion'].setValue(this.documents.administracion)
     this.updateTableForm.controls["id_asunto_historico"].setValue(this.documents.id_asunto_historico)
-    this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo)
-
+    this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo),
     this.updateTableForm.controls["descargo"].setValue(this.documents.descargo), this.updateTableForm.controls["descargo"].disable()
     this.updateTableForm.controls["tipo_asunto"].setValue(this.documents.tipo_asunto), this.updateTableForm.controls["tipo_asunto"].disable()
     this.updateTableForm.controls["autor"].setValue(this.documents.autor), this.updateTableForm.controls["autor"].disable()
@@ -87,10 +88,7 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls["acuse"].setValue(this.documents.acuse), this.updateTableForm.controls["acuse"].disable()
     this.updateTableForm.controls["piezas_fgr_administracion"].setValue(this.documents.piezas_fgr_administracion), this.updateTableForm.controls["piezas_fgr_administracion"].disable()
     this.updateTableForm.controls["base_captura_administracion"].setValue(this.documents.base_captura_administracion), this.updateTableForm.controls["base_captura_administracion"].disable()
-
     this.btnEdita()
-
-
   }
 
   public updateTableForm: FormGroup = this.fb.group({
@@ -107,6 +105,8 @@ export class EditTackingTableComponent implements OnInit {
     administracion: ["null", [Validators.required]],
     id_asunto_historico: [["", Validators.required], { value: this.documents?.id_asunto_historico }],
     id_asunto_nuevo: [["", Validators.required], { value: this.documents?.id_asunto_historico }],
+    atencion:[[""],[],{value:this.documents.atencion}],
+    documento_escaneado:[["null"],{value:this.documents.documento_escaneado}],
     descargo: [["", Validators.required], { value: this.documents?.descargo }],
     tipo_asunto: [["", Validators.required], { value: this.documents?.tipo_asunto }],
     base_captura_administracion: [["", Validators.required], { value: this.documents?.base_captura_administracion }],
@@ -134,12 +134,20 @@ export class EditTackingTableComponent implements OnInit {
     piezas_fgr_administracion: [["", Validators.required], { value: this.documents?.piezas_fgr_administracion }],
   });
 
+  onFileSelected(event:any){
+    const file: File = event.target.files[0];
+    this.docuemntoEcaneadoFileTracking = file;
+    if (this.docuemntoEcaneadoFileTracking) {
+      this.documentoEscaneadoNameTracking = this.docuemntoEcaneadoFileTracking.name.toString().replaceAll(' ','_')
+    }
+  }
 
   saveUpdateForm(): void {
     this.showagain()
     if (this.updateTableForm.valid === true) {
       const update = this.updateTableForm.value;
-      this.updateSerivce.updateTrackingTable(update).subscribe(
+      const updateDocumentoEscaneado= this.updateTableForm.value.documento_escaneado;
+      this.updateSerivce.updateTrackingTable(update,updateDocumentoEscaneado).subscribe(
         response => {
           this.pdfAcuse.generatePDF(response)
         }
@@ -159,12 +167,10 @@ export class EditTackingTableComponent implements OnInit {
     this.botonHabilitado = this.updateTableForm.dirty && this.updateTableForm.valid
   }
 
-
   showagain() {
     this.showTable.emit()
     this.mostrarTabla = false
   }
-
 
   onBlur(): void {
     this.isTouched = true
@@ -189,7 +195,6 @@ export class EditTackingTableComponent implements OnInit {
       }
     }
   }
-
 
   availability() {
     this.asuntoService.checkNameCarpetaInvestigacionUpdate(

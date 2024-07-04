@@ -10,13 +10,17 @@ import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 })
 export class EditTackingTableService {
 
+
+
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
   constructor(private http: HttpClient) { }
 
-  updateTrackingTable(data:Asunto):Observable<string>{
+  updateTrackingTable(data:Asunto,selectedFile:File):Observable<string>{
+    const json = JSON.stringify(data)
+    const blob = new Blob([json])
     let  targetUrl  = environment.baseUrl
     if (data.id_asunto_historico !== null) {
       targetUrl =  environment.baseUrl +    environment.updateTableHistorico

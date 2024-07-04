@@ -21,6 +21,21 @@
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="carpeta_investigacion" value="">
             </div>
+
+            @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
+              <div class="wrapping-individual-container">
+                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                  Documento escaneado
+                </label>
+                <input type="file" placeholder="Documento escaneado"
+                class="input-field placeholder-blueGray-300"
+                 formControlName=""
+                 value="documento_escaneado"
+                 accept="pdf"
+                 (change)="onFileSelected($event)">
+              </div>
+            }
+
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Persona Relacionada
@@ -106,6 +121,23 @@
                 <option value="a_5">Administración 5</option>
               </select>
             </div>
+
+            <div class="wrapping-individual-container">
+                <label class="label-field flex text-blueGray-600"htmlfor="grid-password">
+                  Atención
+                </label>
+                <select
+                id=""
+                formControlName="atencion"
+                class="input-field">
+                <option [ngValue]="null" disabled>Elija una atención </option>
+                <option value="Total">Total</option>
+                <option value="Parcial">Parcial</option>
+                <option value="En tramite">En trámite</option>
+                <option value="No aplica">No aplica</option>
+              </select>
+            </div>
+
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Descargo:
