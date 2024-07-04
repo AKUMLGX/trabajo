@@ -3,7 +3,7 @@
 
         <mat-step label="Búsqueda"
                 [completed]= "
-                    isSearchBarResultsListEmpty() === true
+                    (isSearchBarResultsListEmpty() === true)
                     ? true
                     : isNextButtonFromSearchBarComponentEnabled()
                     "
