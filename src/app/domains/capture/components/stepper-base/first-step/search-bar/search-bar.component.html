@@ -71,9 +71,11 @@
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                             <div class="text-sm leading-5 text-wine text-center">
                                               <mat-checkbox
-                                                (change)="selectionModel.toggle(item)"
+                                                (change)="
+                                                  selectionModel.toggle(item);
+                                                  reactToCheck();
+                                                  "
                                                 [checked]="selectionModel.isSelected(item)"
-                                                (click)="reactToCheck()"
                                                 >
                                               </mat-checkbox>
                                             </div>
