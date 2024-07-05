@@ -39,11 +39,12 @@
                   class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
                   <div class="flex-auto px-4 lg:px-10 py-10">
                       <div class="overflow-x-auto">
-                          <table class="min-w-full border-collapse bg-white mb-8">
+                          <div class="max-h-72 overflow-y-auto">
+                            <table class="min-w-full border-collapse bg-white mb-8">
                               <thead>
                                   <tr>
-                                      <th class="table-head-item whitespace-nowrap">
-                                          <div>Seleccionar</div>
+                                      <th class="table-head-item whitespace-nowrap z-[1]">
+                                          Seleccionar
                                       </th>
                                       <th class="table-head-item whitespace-nowrap">
                                           {{ firstColumnHeader }}
@@ -114,6 +115,7 @@
                                   }
                               </tbody>
                           </table>
+                          </div>
                       </div>
                   </div>
               </div> 
