@@ -1,4 +1,4 @@
-<div class="dropdown inline-block relative mb-[22rem] xl:mb-[16rem]">
+<div class="dropdown inline-block relative mb-[22rem] md:mb-[16rem]">
 	<button class="w-72 bg-gray-300 text-[#691C32] text-sm uppercase border-[#691C32] border-2 font-medium py-2 px-4 rounded-md inline-flex justify-center items-center">
 		<div>
 			{{ selectedOption?.name || "Para continuar elija un asunto de la lista" }}
@@ -29,44 +29,44 @@
 					GENERALIDADES
 			</a>
 		  	@if(isSubmenuDeployed){
-				<ul class="dropdown-content text-sm xl:w-[19rem] xl:absolute xl:text-gray-700 xl:pl-5 xl:ml-64 xl:-mt-10">
+				<ul class="dropdown-content text-xs lg:w-[13rem] lg:absolute lg:text-gray-700 lg:pl-5 lg:ml-64 lg:-mt-10">
 					<li>
-						<a class="xl:rounded-t-md border-y-[#691C32] border-x-[#691C32] border-2 bg-white text-center xl:text-sm hover:bg-[#691C32] hover:text-white py-2 px-4 block whitespace-nowrap"
+						<a class="lg:rounded-t-md border-y-[#691C32] border-x-[#691C32] border-2 bg-white text-center lg:text-xs hover:bg-[#691C32] hover:text-white py-2 px-4 block whitespace-nowrap"
 							(click)="selectedOption = asuntos[2];
 							selectedOptionHandler()"
 						>
 							PENAL
 						</a>
 					<li>
-						<a class=" border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center xl:text-sm py-2 px-4 block whitespace-nowrap"
+						<a class=" border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center lg:text-xs py-2 px-4 block whitespace-nowrap"
 							(click)="selectedOption = asuntos[3];
 							selectedOptionHandler()"
 						>
 							CIVIL
 						</a>
 					<li>
-						<a class="border-y-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center xl:text-sm py-2 px-4 block whitespace-nowrap"
+						<a class="border-y-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center lg:text-xs py-2 px-4 block whitespace-nowrap"
 							(click)="selectedOption = asuntos[4];
 							selectedOptionHandler()"
 						>
 							LABORAL
 						</a>
 					<li>
-						<a class=" border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center xl:text-sm py-2 px-4 block whitespace-nowrap"
+						<a class=" border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center lg:text-xs py-2 px-4 block whitespace-nowrap"
 							(click)="selectedOption = asuntos[5];
 							selectedOptionHandler()"
 						>
 							JUICIO DE AMPARO
 						</a>
 					<li>
-						<a class="border-y-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center xl:text-sm py-2 px-4 block whitespace-nowrap"
+						<a class="border-y-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center lg:text-xs py-2 px-4 block whitespace-nowrap"
 							(click)="selectedOption = asuntos[6];
 							selectedOptionHandler()"
 						>
 							CONCURSO MERCANTIL
 						</a>
 					<li>
-						<a class="xl:rounded-b-md xl:border-b-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center xl:text-sm py-2 px-4 block whitespace-nowrap"
+						<a class="lg:rounded-b-md lg:border-b-[#691C32] border-x-[#691C32] border-2 bg-white hover:bg-[#691C32] hover:text-white text-center:text-xs py-2 px-4 block whitespace-nowrap"
 							(click)="selectedOption = asuntos[7];
 							selectedOptionHandler()"
 						>
@@ -83,5 +83,38 @@
 				RESPUESTA
 			</a>
 		</li> -->
+		<li>
+			<a 
+				class="w-72 bg-white border-x-[#691C32] border-y-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap"
+			  	(click)="
+				  	selectedOption = asuntos[8]; 
+					selectedOptionHandler()
+				"				
+			  >
+				  CIVIL
+			</a>
+		</li>
+		<li>
+			<a 
+				class="w-72 bg-white border-x-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap"
+			  	(click)="
+				  	selectedOption = asuntos[9]; 
+					selectedOptionHandler()
+				"				
+			  >
+				  PENAL
+			</a>
+		</li>
+		<li>
+			<a class="rounded-b-md bg-white border-y-[#691C32] border-x-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap"
+				(click)="
+					selectedOption = asuntos[10];
+					selectedOptionHandler()
+				"
+			>
+				CONCURSO MERCANTIL
+			</a>
+		</li>
+
 	</ul>
 </div>
