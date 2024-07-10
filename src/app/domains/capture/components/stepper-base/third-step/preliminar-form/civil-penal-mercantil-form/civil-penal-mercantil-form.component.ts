@@ -48,13 +48,12 @@ export class CivilPenalMercantilFormComponent {
     administracion: [null, [Validators.required]],
     fechaRecepcion: [null, [Validators.required]],
 
-    documentoEscaneadoField:[null, [Validators.required]], //ESTE QUE SHOW?
+    documentoEscaneadoField:[null, [Validators.required]],
 
-    documentoEuacape: [null,],    //ESTE QUE SHOW?
-    documentoOtros: [{value: 'Requerimiento', disabled: true},], //ESTE QUE SHOW?
+    documento: [null, [Validators.required]],
 
     descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
-    atencion: [{value: 'No aplica', disabled: true},],  //REDO
+    atencion: [null, [Validators.required]],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
     personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
@@ -67,7 +66,7 @@ export class CivilPenalMercantilFormComponent {
     volanteJefatura: [null, [Validators.maxLength(255)]],
   });
 
-  saveEuacapeForm(): void {
+  saveCivilPenalAndMercantilForm(): void {
   }
 
   getToday(): string {
