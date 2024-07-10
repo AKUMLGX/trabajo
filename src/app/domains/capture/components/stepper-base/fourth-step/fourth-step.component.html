@@ -1,4 +1,12 @@
 <div class="w-full h-full flex flex-col justify-center items-center bg-white rounded-xl border-2 border-[#691C32] p-4">
-    <app-form [dropdownChoice]="dropdownChoice" />
+    
+    @if (
+        dropdownChoice === 'CIVIL' || dropdownChoice === 'PENAL' 
+        || dropdownChoice === 'CONCURSO MERCANTIL'
+        ) {
+            <app-civil-penal-mercantil-form [dropdownChoice]="dropdownChoice" />
+        } @else {
+            <app-form [dropdownChoice]="dropdownChoice" />
+        }
 </div>
 
