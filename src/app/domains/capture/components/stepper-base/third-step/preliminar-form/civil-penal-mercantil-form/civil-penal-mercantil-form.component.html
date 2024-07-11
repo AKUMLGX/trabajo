@@ -316,7 +316,7 @@
                     <div class="flex justify-between items-center">
                         <button
                             [disabled]="!civilPenalAndMercantilForm.valid"
-                            
+                            (click)="openCustomModalWithTemplate(template1)"
                             [ngClass]=" !civilPenalAndMercantilForm.valid ? 'next-button-disabled' : 'next-button' "
                         >
                             Continuar

@@ -81,53 +81,50 @@ export class CivilPenalMercantilFormComponent {
     }
   }
 
-  // openCustomModalWithTemplate(template: TemplateRef<any>){
-  //   this.collectFormInfoService.updateEuacapeForm(
-  //     this.euacapeForm.value.administracion,
-  //     this.euacapeForm.value.fechaRecepcion,
-  //     // this.euacapeForm.value.documentoEscaneado,
-  //     this.documentoEscaneadoName,
-  //     this.documentoEscaneadoFile,
-  //     this.euacapeForm.value.documentoEuacape,
-  //     'Requerimiento',
-  //     this.euacapeForm.value.descripcion,
-  //     (this.dropdownChoice === 'EUACAPES' || this.dropdownChoice === 'Respuesta') 
-  //        ? 'Recibido' : 'No aplica',
-  //     this.euacapeForm.value.autoridadRemitente,
-  //     this.euacapeForm.value.turnoJefatura,
-  //     this.euacapeForm.value.personaRelacionada,
-  //   );
+  openCustomModalWithTemplate(template: TemplateRef<any>){
 
-  //   if(this.euacapeForm.value.plazoAtencionUrgente) {
-  //     this.collectFormInfoService.updatePlazoDeAtencionIfCheck();
-  //   }
+    //In this case we are NOT updating EUACAPES but Civil, Penal and Mercantil,
+    //though, we are using the updateEuacapeForm method because it is useful here
+    //and we can recycle it by implementing it for these paths too.
+    //Luis Alejandro 10.07.24 
 
-  //   if(
-  //     this.euacapeForm.value.plazoAtencionUrgente === false ||
-  //     this.euacapeForm.value.plazoAtencionUrgente === undefined
-  //   ) {
-  //     this.collectFormInfoService.updatePlazoDeAtencion(
-  //       this.euacapeForm.value.plazoAtencionHoras,
-  //       this.euacapeForm.value.plazoAtencionDias,
-  //       this.euacapeForm.value.plazoAtencionUrgente,
-  //     );
-  //   }
+    this.collectFormInfoService.updateEuacapeForm(
+      this.civilPenalAndMercantilForm.value.administracion,
+      this.civilPenalAndMercantilForm.value.fechaRecepcion,
+      this.documentoEscaneadoName,
+      this.documentoEscaneadoFile,
+      '',
+      this.civilPenalAndMercantilForm.value.documento,
+      this.civilPenalAndMercantilForm.value.descripcion,
+      this.civilPenalAndMercantilForm.value.atencion,
+      this.civilPenalAndMercantilForm.value.autoridadRemitente,
+      this.civilPenalAndMercantilForm.value.turnoJefatura,
+      this.civilPenalAndMercantilForm.value.personaRelacionada,
+    );
 
-  //   if (
-  //         this.dropdownChoice === 'Penal' || this.dropdownChoice === 'Civil'
-  //         || this.dropdownChoice === 'Laboral' || this.dropdownChoice === 'Juicio de Amparo'
-  //         || this.dropdownChoice === 'Concurso Mercantil' || this.dropdownChoice === 'Copia de Conocimiento'
-  //         || this.dropdownChoice === 'Respuesta'
-  //     ) {
-  //           this.collectFormInfoService.updateAdditionalInfoForGeneralidades(
-  //             this.euacapeForm.value.volanteJefatura,
-  //             this.euacapeForm.value.folioJupiter,
-  //           );
-  //   }
+    if(this.civilPenalAndMercantilForm.value.plazoAtencionUrgente) {
+      this.collectFormInfoService.updatePlazoDeAtencionIfCheck();
+    }
 
-  //   this.modalService.openCustomDialogWithTemplate({
-  //     template
-  //   })
-  // }
+    if(
+      this.civilPenalAndMercantilForm.value.plazoAtencionUrgente === false ||
+      this.civilPenalAndMercantilForm.value.plazoAtencionUrgente === undefined
+    ) {
+      this.collectFormInfoService.updatePlazoDeAtencion(
+        this.civilPenalAndMercantilForm.value.plazoAtencionHoras,
+        this.civilPenalAndMercantilForm.value.plazoAtencionDias,
+        this.civilPenalAndMercantilForm.value.plazoAtencionUrgente,
+      );
+    }
+
+    this.collectFormInfoService.updateAdditionalInfoForGeneralidades(
+      this.civilPenalAndMercantilForm.value.volanteJefatura,
+      this.civilPenalAndMercantilForm.value.folioJupiter,
+    );
+
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    })
+  }
 
 }
