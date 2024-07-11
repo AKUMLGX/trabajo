@@ -19,7 +19,9 @@
           dropdownChoice === 'Penal' || dropdownChoice === 'Civil'
           || dropdownChoice === 'Laboral' || dropdownChoice === 'Juicio de Amparo'
           || dropdownChoice === 'Concurso Mercantil' || dropdownChoice === 'Copia de Conocimiento'
-        ){
+          || dropdownChoice === 'PENAL' || dropdownChoice === 'CIVIL'
+          || dropdownChoice === 'CONCURSO MERCANTIL'
+          ){
             @for (row of GENERALIDADES_DATA; track row.name) {
               <tr>
                 <td> {{ row.name }} </td>
