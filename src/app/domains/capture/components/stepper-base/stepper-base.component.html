@@ -26,49 +26,11 @@
             <div>
                 @switch (dropdownChoice) {
 
-                    <!-- Comente los casos que ya NO se van a considerar -->
-
-                    <!-- @case ('Civil') {
-                        <mat-step label="Formulario Civil (parte I)"
-                            [completed]="thirdStepChild.preliminarForm.valid"
-                            [editable]="true">
-                                <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
-                                </div>
-                        </mat-step>
-
-                        <mat-step label="Formulario Civil (parte II)">
-                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
-                        </mat-step>
-                    } -->
-
-                    <!-- @case ('Penal') {
-                        <mat-step label="Formulario Penal (parte I)"
-                            [completed]="thirdStepChild.preliminarForm.valid"
-                            [editable]="true">
-                                <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
-                                </div>
-                        </mat-step>
-
-                        <mat-step label="Formulario Penal (parte II)">
-                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
-                        </mat-step>
-                    } -->
-
-                    <!-- @case ('Concurso mercantil') {
-                        <mat-step label="Formulario Concurso mercantil (parte I)"
-                            [completed]="thirdStepChild.preliminarForm.valid"
-                            [editable]="true">
-                                <div class="step-wrapper">
-                                    <app-preliminar-form #thirdStepChild />
-                                </div>
-                        </mat-step>
-
-                        <mat-step label="Formulario Concurso mercantil (parte II)">
-                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
-                        </mat-step>
-                    } -->
+                    <!-- CUANDO UN ASUNTO, EN PARTICULAR, SE ENCUENTRA ESCRITO
+                    EN MAYUSCULAS, ENTONCES SE TRATA DE UNA NO GENERALIDAD.
+                    CASO CONTRARIO, SI SE ESCRIBE LA PRIMER LETRA EN
+                    MAYUSCULAS Y LAS DEMAS EN MINUSCULAS ENTONCES SI
+                    QUE SE TRATA DE UNA GENERALIDAD. -->
 
                     @case ('EUACAPES') {
                         <mat-step label="Formulario EUACAPE (parte I)"
@@ -187,8 +149,8 @@
                         </mat-step>
                     }
 
-                    <!-- @case ('Generalidades') {
-                        <mat-step label="Formulario Generalidades (parte I)"
+                    @case ('CIVIL') {
+                        <mat-step label="Formulario Civil (parte I)"
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
                                 <div class="step-wrapper">
@@ -196,10 +158,38 @@
                                 </div>
                         </mat-step>
 
-                        <mat-step label="Formulario Generalidades (parte II)">
+                        <mat-step label="Formulario Civil (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
-                    } -->
+                    }
+                    
+                    @case ('PENAL') {
+                        <mat-step label="Formulario Penal (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+
+                        <mat-step label="Formulario Penal (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
+
+                    @case ('CONCURSO MERCANTIL') {
+                        <mat-step label="Formulario Concurso mercantil (parte I)"
+                            [completed]="thirdStepChild.preliminarForm.valid"
+                            [editable]="true">
+                                <div class="step-wrapper">
+                                    <app-preliminar-form #thirdStepChild />
+                                </div>
+                        </mat-step>
+
+                        <mat-step label="Formulario Concurso mercantil (parte II)">
+                            <app-fourth-step [dropdownChoice]="dropdownChoice" />
+                        </mat-step>
+                    }
                 }
             </div>
 

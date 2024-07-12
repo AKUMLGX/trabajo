@@ -10,6 +10,9 @@ import { SecondPiecesFormsObjectService } from '../../../../../../../shared/serv
 import { EuacapeSecondPieceService } from '../../../../../../../services/euacape-second-piece.service';
 import { GeneralidadesSecondPieceService } from '../../../../../../../services/generalidades-second-piece.service';
 import { RespuestaSecondPieceService } from '../../../../../../../services/respuesta-second-piece.service';
+import { CivilSecondPieceService } from '../../../../../../../services/civil-second-piece.service';
+import { PenalSecondPieceService } from '../../../../../../../services/penal-second-piece.service';
+import { ConcursoMercantilSecondPieceService } from '../../../../../../../services/concurso-mercantil-second-piece.service';
 
 export interface SecondPiecesTableBeforeSubmit {
   name: string;
@@ -32,6 +35,10 @@ export class SecondPiecesInfoTableComponent {
     private euacapeSecondPieceService: EuacapeSecondPieceService,
     private generalidadesSecondPieceService: GeneralidadesSecondPieceService,
     private respuestaSecondPieceService: RespuestaSecondPieceService,
+
+    private civilSecondPieceService: CivilSecondPieceService,
+    private penalSecondPieceService: PenalSecondPieceService,
+    private concursoMercantilSecondPieceService: ConcursoMercantilSecondPieceService,
   ){ }
 
   ADMINISTRACION = this.collectSecondPiecesInfoService.ADMON;
@@ -202,6 +209,75 @@ export class SecondPiecesInfoTableComponent {
       });
       this.respuestaSecondPieceService.insertSecondPieceRespuestaForm(
         this.secondPiecesFormsObjectService.respuestaFormObject(),
+        documentoEscaneadoFile!
+      );
+    } else if (this.TIPOASUNTO() === 'CIVIL') {
+      this.secondPiecesFormsObjectService.civilFormObject.set({
+          oficio:                oficio,
+          folio_scanner:         folioScanner,
+          carpeta_investigacion: carpetaInvestigacion,
+          documento_escaneado:   documentoEscaneado,
+          fecha_recepcion:       fechaRecepcion,
+          autoridad_remitente:   autoridadRemitente,
+          persona_relacionada:   personaRelacionada,
+          turno_jefatura:        turnoJefatura,
+          descripcion:           descripcion,
+          volante_jefatura:      volanteJefatura,
+          folio_jupiter:         folioJupiter,
+          administracion:        administracion,
+          plazo_atencion:        plazoAtencion,
+          documento:             documento,
+          atencion:              atencion,
+          tipo_asunto:           tipoAsunto,
+      });
+      this.civilSecondPieceService.insertSecondPieceCivilForm(
+        this.secondPiecesFormsObjectService.civilFormObject(),
+        documentoEscaneadoFile!
+      );
+    } else if (this.TIPOASUNTO() === 'PENAL') {
+      this.secondPiecesFormsObjectService.penalFormObject.set({
+          oficio:                oficio,
+          folio_scanner:         folioScanner,
+          carpeta_investigacion: carpetaInvestigacion,
+          documento_escaneado:   documentoEscaneado,
+          fecha_recepcion:       fechaRecepcion,
+          autoridad_remitente:   autoridadRemitente,
+          persona_relacionada:   personaRelacionada,
+          turno_jefatura:        turnoJefatura,
+          descripcion:           descripcion,
+          volante_jefatura:      volanteJefatura,
+          folio_jupiter:         folioJupiter,
+          administracion:        administracion,
+          plazo_atencion:        plazoAtencion,
+          documento:             documento,
+          atencion:              atencion,
+          tipo_asunto:           tipoAsunto,
+      });
+      this.penalSecondPieceService.insertSecondPiecePenalForm(
+        this.secondPiecesFormsObjectService.penalFormObject(),
+        documentoEscaneadoFile!
+      );
+    } else if (this.TIPOASUNTO() === 'CONCURSO MERCANTIL') {
+      this.secondPiecesFormsObjectService.concursoMercantilFormObject.set({
+          oficio:                oficio,
+          folio_scanner:         folioScanner,
+          carpeta_investigacion: carpetaInvestigacion,
+          documento_escaneado:   documentoEscaneado,
+          fecha_recepcion:       fechaRecepcion,
+          autoridad_remitente:   autoridadRemitente,
+          persona_relacionada:   personaRelacionada,
+          turno_jefatura:        turnoJefatura,
+          descripcion:           descripcion,
+          volante_jefatura:      volanteJefatura,
+          folio_jupiter:         folioJupiter,
+          administracion:        administracion,
+          plazo_atencion:        plazoAtencion,
+          documento:             documento,
+          atencion:              atencion,
+          tipo_asunto:           tipoAsunto,
+      });
+      this.concursoMercantilSecondPieceService.insertSecondPieceConcursoMercantilForm(
+        this.secondPiecesFormsObjectService.concursoMercantilFormObject(),
         documentoEscaneadoFile!
       );
     }
