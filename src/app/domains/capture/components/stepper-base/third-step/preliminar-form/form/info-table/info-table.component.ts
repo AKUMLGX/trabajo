@@ -7,7 +7,9 @@ import { EuacapeAperturaService } from '../../../../../../../services/euacape-ap
 import { FormsObjectService } from '../../../../../../../shared/services/forms-object.service';
 import { GeneralidadesAperturaService } from '../../../../../../../services/generalidades-apertura.service';
 import { RespuestaAperturaService } from '../../../../../../../services/respuesta-apertura.service';
-
+import { CivilAperturaService } from '../../../../../../../services/civil-apertura.service';
+import { PenalAperturaService } from '../../../../../../../services/penal-apertura.service';
+import { ConcursoMercantilAperturaService } from '../../../../../../../services/concurso-mercantil-apertura.service';
 
 export interface DataBeforeSubmit {
   name: string;
@@ -30,6 +32,10 @@ export class InfoTableComponent {
     private euacapeAperturaService: EuacapeAperturaService,
     private generalidadesAperturaService: GeneralidadesAperturaService,
     private respuestaAperturaService: RespuestaAperturaService,
+
+    private civilAperturaService: CivilAperturaService,
+    private penalAperturaService: PenalAperturaService,
+    private concursoMercantilAperturaService: ConcursoMercantilAperturaService,
 
   ){ }
 
@@ -227,8 +233,12 @@ export class InfoTableComponent {
           atencion:              atencion,
           tipo_asunto:           tipoAsunto,
         });
+        this.civilAperturaService.insertCivilForm(
+          this.formsObjectService.civilFormObject(),
+          documentoEscaneadoFile!
+        );
     } else if (this.dropdownChoice === 'PENAL') {
-        this.formsObjectService.civilFormObject.set({
+        this.formsObjectService.penalFormObject.set({
           oficio:                oficio,
           folio_scanner:         folioScanner,
           carpeta_investigacion: carpetaInvestigacion,
@@ -246,8 +256,12 @@ export class InfoTableComponent {
           atencion:              atencion,
           tipo_asunto:           tipoAsunto,
         });
+        this.penalAperturaService.insertPenalForm(
+          this.formsObjectService.penalFormObject(),
+          documentoEscaneadoFile!
+        );
     } else if (this.dropdownChoice === 'CONCURSO MERCANTIL') {
-        this.formsObjectService.civilFormObject.set({
+        this.formsObjectService.concursoMercantilFormObject.set({
           oficio:                oficio,
           folio_scanner:         folioScanner,
           carpeta_investigacion: carpetaInvestigacion,
@@ -265,7 +279,11 @@ export class InfoTableComponent {
           atencion:              atencion,
           tipo_asunto:           tipoAsunto,
         });
+        this.concursoMercantilAperturaService.insertConcursoMercantilForm(
+          this.formsObjectService.concursoMercantilFormObject(),
+          documentoEscaneadoFile!
+        );
     }
-    
+
   }
 }
