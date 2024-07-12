@@ -245,7 +245,24 @@ export class SecondPiecesInfoTableComponent {
       });
 
     } else if (this.TIPOASUNTO() === 'CONCURSO MERCANTIL') {
-
+      this.secondPiecesFormsObjectService.concursoMercantilFormObject.set({
+          oficio:                oficio,
+          folio_scanner:         folioScanner,
+          carpeta_investigacion: carpetaInvestigacion,
+          documento_escaneado:   documentoEscaneado,
+          fecha_recepcion:       fechaRecepcion,
+          autoridad_remitente:   autoridadRemitente,
+          persona_relacionada:   personaRelacionada,
+          turno_jefatura:        turnoJefatura,
+          descripcion:           descripcion,
+          volante_jefatura:      volanteJefatura,
+          folio_jupiter:         folioJupiter,
+          administracion:        administracion,
+          plazo_atencion:        plazoAtencion,
+          documento:             documento,
+          atencion:              atencion,
+          tipo_asunto:           tipoAsunto,
+      });
     }
 
   }
