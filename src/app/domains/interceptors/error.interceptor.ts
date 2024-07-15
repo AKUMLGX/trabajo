@@ -14,6 +14,7 @@ export const errorInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
   let matDialog = inject(MatDialog);
+  console.log("ErrorInterceptor");
   return next(request).pipe(
     catchError((err) => {
       if (err.status !== 401) {
