@@ -12,8 +12,6 @@ import { AsuntoService } from '../../../services/asunto.service';
 import { ModalService } from '../../../shared/services/modal.service';
 
 
-
-
 @Component({
   selector: 'app-edit-tacking-table',
   standalone: true,
@@ -34,6 +32,7 @@ export class EditTackingTableComponent implements OnInit {
     private pdfAcuse: PdfAcuseService,
     private asuntoService: AsuntoService,
     private modalService: ModalService,
+
   ) { }
   botonHabilitado: boolean = false
   mostrarTabla: boolean = true
@@ -48,6 +47,13 @@ export class EditTackingTableComponent implements OnInit {
 
   isTouched: boolean = false;
 
+  // documentoEscaneadoNameTracking: string = "";
+
+  // docuemntoEcaneadoFileTracking?: File;
+
+
+
+
   ngOnInit(): void {
     this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion)
     this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada)
@@ -58,10 +64,10 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls['folio_jupiter'].setValue(this.documents.folio_scanner)
     this.updateTableForm.controls['descripcion'].setValue(this.documents.descripcion)
     this.updateTableForm.controls['turno_jefatura'].setValue(this.documents.turno_jefatura)
-    // this.updateTableForm.controls['administracion'].setValue(this.documents.administracion)
+    this.updateTableForm.controls['administracion'].setValue(this.documents.administracion)
+    this.updateTableForm.controls['id_atencion_fk'].setValue( this.documents.atencion)
     this.updateTableForm.controls["id_asunto_historico"].setValue(this.documents.id_asunto_historico)
-    this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo)
-
+    this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo),
     this.updateTableForm.controls["descargo"].setValue(this.documents.descargo), this.updateTableForm.controls["descargo"].disable()
     this.updateTableForm.controls["tipo_asunto"].setValue(this.documents.tipo_asunto), this.updateTableForm.controls["tipo_asunto"].disable()
     this.updateTableForm.controls["autor"].setValue(this.documents.autor), this.updateTableForm.controls["autor"].disable()
@@ -87,26 +93,29 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls["acuse"].setValue(this.documents.acuse), this.updateTableForm.controls["acuse"].disable()
     this.updateTableForm.controls["piezas_fgr_administracion"].setValue(this.documents.piezas_fgr_administracion), this.updateTableForm.controls["piezas_fgr_administracion"].disable()
     this.updateTableForm.controls["base_captura_administracion"].setValue(this.documents.base_captura_administracion), this.updateTableForm.controls["base_captura_administracion"].disable()
-
-    this.btnEdita()
-
-
+    this.btnEdita();
+    // this.setVauleDefectAdministracion()
+      //  this.setVauleDefectAtencion()
   }
+
 
   public updateTableForm: FormGroup = this.fb.group({
     carpeta_investigacion: [["", Validators.required], { value: this.documents?.carpeta_investigacion }],
     persona_relacionada: [["", Validators.required], { value: this.documents?.persona_relacionada }],
     folio_scanner: [["", Validators.required], { value: this.documents?.folio_scanner }],
-    volante_jefatura: [["", Validators.required], { value: this.documents?.volante_jefatura }],
+    volante_jefatura: [["", Validators.required], {value: this.documents?.volante_jefatura}],
     oficio: [["", Validators.required], { value: this.documents?.oficio }],
     autoridad_remitente: [["", Validators.required], { value: this.documents?.autoridad_remitente }],
     folio_jupiter: [["", Validators.required], { value: this.documents?.folio_jupiter }],
-    descripcion: [["", Validators.required], { value: this.documents?.descripcion }],
-    turno_jefatura: [["", Validators.required], { value: this.documents?.turno_jefatura }],
-    // administracion:            [["", Validators.required], { value: this.documents?.administracion }],
-    administracion: ["null", [Validators.required]],
-    id_asunto_historico: [["", Validators.required], { value: this.documents?.id_asunto_historico }],
-    id_asunto_nuevo: [["", Validators.required], { value: this.documents?.id_asunto_historico }],
+    descripcion: [["", Validators.required], { value: this.documents?.descripcion}],
+    turno_jefatura: [["", Validators.required], { value: this.documents?.turno_jefatura}],
+    // administracion: [["", Validators.required], { value: this.documents?.administracion}],
+    administracion: [["", Validators.required]],
+    // atencion: [["", Validators.required], { value: this.documents?.atencion }],
+    id_atencion_fk: [["", Validators.required], { value: this.documents?.atencion }],
+    id_asunto_historico: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
+    id_asunto_nuevo: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
+    // documento_escaneado: [null, [Validators.required]],
     descargo: [["", Validators.required], { value: this.documents?.descargo }],
     tipo_asunto: [["", Validators.required], { value: this.documents?.tipo_asunto }],
     base_captura_administracion: [["", Validators.required], { value: this.documents?.base_captura_administracion }],
@@ -135,6 +144,28 @@ export class EditTackingTableComponent implements OnInit {
   });
 
 
+  // onFileSelected(event: any) {
+  //   const file: File = event.target.files[0];
+  //   this.docuemntoEcaneadoFileTracking = file;
+  //   if (this.docuemntoEcaneadoFileTracking) {
+  //     this.documentoEscaneadoNameTracking = this.docuemntoEcaneadoFileTracking.name.toString().replaceAll(' ', '_')
+  //   }
+  // }
+
+
+
+  // setVauleDefectAtencion(){
+  //   if (this.documents.atencion && ["TOTAL","PARCIAL","EN TRAMITE", "NO APLICA","RECIBIDO"].includes(this.documents.atencion)) {
+  //     this.updateTableForm.get("atencion")?.setValue(this.documents.atencion)
+  //   }
+  // }
+
+  // setVauleDefectAdministracion(){
+  //   if (this.documents?.administracion && [" ","a_1","a_2","a_3","a_4","a_5"].includes(this.documents.administracion)) {
+  //     this.updateTableForm.get("administracion")?.setValue(this.documents.administracion)
+  //   }
+  // }
+
   saveUpdateForm(): void {
     this.showagain()
     if (this.updateTableForm.valid === true) {
@@ -149,6 +180,7 @@ export class EditTackingTableComponent implements OnInit {
     }
   }
 
+
   btnEdita() {
     this.updateTableForm.valueChanges.subscribe(() => {
       const camposModificados = Object.keys(this.updateTableForm.controls)
@@ -159,12 +191,10 @@ export class EditTackingTableComponent implements OnInit {
     this.botonHabilitado = this.updateTableForm.dirty && this.updateTableForm.valid
   }
 
-
   showagain() {
     this.showTable.emit()
     this.mostrarTabla = false
   }
-
 
   onBlur(): void {
     this.isTouched = true
@@ -189,7 +219,6 @@ export class EditTackingTableComponent implements OnInit {
       }
     }
   }
-
 
   availability() {
     this.asuntoService.checkNameCarpetaInvestigacionUpdate(
@@ -217,6 +246,7 @@ export class EditTackingTableComponent implements OnInit {
     if (this.getRol() === "SIAT_AKAMBA_001_CAPTURA") {
       this.showInput = true
       this.updateTableForm.controls["carpeta_investigacion"].disable()
+      this.updateTableForm.controls["atencion"].disable()
       this.updateTableForm.controls["persona_relacionada"].disable()
       this.updateTableForm.controls["folio_scanner"].disable()
       this.updateTableForm.controls["volante_jefatura"].disable()
@@ -228,5 +258,4 @@ export class EditTackingTableComponent implements OnInit {
       this.updateTableForm.controls["administracion"].disable()
     }
   }
-
 }

@@ -3,7 +3,7 @@
   <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
     <div class="flex-auto px-4 lg:px-10 py-10 bg-[#D9BCA3]/30 rounded-lg pt-8">
       @if( getRol() === "SIAT_AKAMBA_002_SUPERVISA"){
-      <div class="flex justify-center items-center text-3xl mb-14 font-montserrat "> Se Actualizara la siguiente
+      <div class="flex justify-center items-center text-3xl mb-14 font-montserrat "> Se actualizará la siguiente
         información:</div>
       }@else if (getRol()=== "SIAT_AKAMBA_001_CAPTURA") {
       <div class="flex justify-center items-center text-3xl mb-14 font-montserrat ">El siguiente formulario es solo
@@ -21,6 +21,22 @@
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="carpeta_investigacion" value="">
             </div>
+
+            <!-- @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
+              <div class="wrapping-individual-container">
+                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                  Documento escaneado
+                </label>
+                <input type="file"
+                 placeholder="Documento escaneado"
+                class="input-field placeholder-blueGray-300"
+                 formControlName="documento_escaneado"
+                 value=""
+                 accept=".pdf"
+                 (change)="onFileSelected($event)">
+              </div>
+            } -->
+
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Persona Relacionada
@@ -98,7 +114,8 @@
               </label>
               <select id="administracion" formControlName="administracion"
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
-                <option [ngValue]="null" [selected]="true" disabled> Elija una administración</option>
+                <option [ngValue]="null"  disabled> Elija una administración</option>
+                <option value=" "> </option>
                 <option value="a_1">Administración 1</option>
                 <option value="a_2">Administración 2</option>
                 <option value="a_3">Administración 3</option>
@@ -106,6 +123,38 @@
                 <option value="a_5">Administración 5</option>
               </select>
             </div>
+
+
+
+
+             <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600"htmlfor="grid-password">
+                Atención
+              </label>
+              <select
+
+              formControlName="id_atencion_fk"
+              [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
+              <option [ngValue]="null" [selected]="true" ngValue="null"  disabled>Elija una atención </option>
+              <option  [ngValue]="1" >Total</option>
+              <option  [ngValue]="2">Parcial</option>
+              <option  [ngValue]="3">En trámite</option>
+              <option  [ngValue]="4">No aplica</option>
+              <option  [ngValue]="5">Recibido</option>
+
+            </select>
+          </div>
+
+
+
+            <!-- <div class="wrapping-individual-container">
+                <label class="label-field flex text-blueGray-600"htmlfor="grid-password">
+                  Atención
+                </label>
+                <input type="number" placeholder="Atención " class="input-field placeholder-blueGray-300"
+                formControlName="id_atencion_fk" value="">
+            </div> -->
+
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Descargo:
@@ -303,7 +352,7 @@
                                  :
                                  openCustomModalWithTemplate(templateCarpeta)
                             "
-                               (click)="availability()"   [disabled]="!botonHabilitado"
+                              (click)="availability()"   [disabled]="!botonHabilitado"
               [ngClass]=" !botonHabilitado ? 'next-button-disabled' : 'modal-right-button ml-1 '">
               Aceptar
             </button>
