@@ -11,5 +11,6 @@ export interface EuacapeApertura {
     administracion:        string;
     plazo_atencion:        number | null;
     documento:             string;
+    atencion:              string,
 }
 

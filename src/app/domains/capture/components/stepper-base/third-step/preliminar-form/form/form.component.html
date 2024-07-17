@@ -23,9 +23,9 @@
                             > -->
                           <input type="file" placeholder="Documento escaneado"
                             class="input-field placeholder-blueGray-300"
-                            formControlName="documentoEscaneadoField"   
-                            value="" 
-                            accept="*" 
+                            formControlName="documentoEscaneadoField"
+                            value=""
+                            accept="*"
                             (change)="onFileSelected($event)">
 
                             @if (euacapeForm.get('documentoEscaneadoField')?.errors?.['maxlength']) {
@@ -293,7 +293,7 @@
                             </div>
                         }
 
-                        <div class="wrapping-individual-container">
+                        <!-- <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
                                     Atención
@@ -301,12 +301,12 @@
                             @if(this.dropdownChoice === 'EUACAPES' || this.dropdownChoice === 'Respuesta'){
                                 <div class="disabled-input-field placeholder-blueGray-300">
                                     Recibido
-                                </div> 
+                                </div>
                             } @else {
                                 <div class="disabled-input-field placeholder-blueGray-300">
                                     No aplica
-                                </div> 
-                                <!-- Modificación sobre el campo atención hecha el 30.04.24
+                                </div>
+                                 Modificación sobre el campo atención hecha el 30.04.24
                                 Esta viene ahora precargada como "Recibido" y ya NO
                                 como "En trámite". Por lo tanto, tamb comenté el
                                 select de opciones de aquí abajo pues aparentemente
@@ -319,9 +319,34 @@
                                     <option value="Total">Total</option>
                                     <option value="Parcial">Parcial</option>
                                     <option value="En trámite">En trámite</option>
-                                </select>  -->
+                                </select>
                             }
-                        </div>
+                        </div> -->
+
+                        <div class="wrapping-individual-container">
+                          <label class="label-field text-blueGray-600"
+                              htmlfor="grid-password">
+                                  Atención
+                                  @if (euacapeForm.controls['atencion'].invalid && (euacapeForm.controls['atencion'].dirty || euacapeForm.controls['atencion'].touched)) {
+                                      @if(euacapeForm.get('atencion')?.errors?.['required']) {
+                                          <div class="text-wine ml-1">
+                                              <span>*</span>
+                                          </div>
+                                      }
+                                  }
+                          </label>
+                              <select
+                                  id="atencion"
+                                  formControlName="atencion"
+                                  class="input-field">
+                                      <option [ngValue]="null" disabled>Elija una atención</option>
+                                      <option value="Total">Total</option>
+                                      <option value="Parcial">Parcial</option>
+                                      <option value="En tramite">En trámite</option>
+                                      <option value="No aplica">No aplica</option>
+                              </select>
+                      </div>
+
 
                         <div class="wrapping-individual-container">
                             <label class="label-field text-blueGray-600"

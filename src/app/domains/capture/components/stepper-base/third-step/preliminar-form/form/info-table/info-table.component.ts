@@ -156,6 +156,7 @@ export class InfoTableComponent {
         administracion:        administracion,
         plazo_atencion:        plazoAtencion,
         documento:             documento,
+        atencion:              atencion,
       });
       this.euacapeAperturaService.insertEuacapeForm(
         this.formsObjectService.euacapeFormObject(),
@@ -170,6 +171,7 @@ export class InfoTableComponent {
         || this.dropdownChoice === 'Copia de Conocimiento'
       ) {
       this.formsObjectService.generalidadesFormObject.set({
+        atencion:              atencion,
         oficio:                oficio,
         folio_scanner:         folioScanner,
         carpeta_investigacion: carpetaInvestigacion,
@@ -185,6 +187,8 @@ export class InfoTableComponent {
         plazo_atencion:        plazoAtencion,
         documento:             documento,
         tipo_asunto:           tipoAsunto,
+
+
       });
       this.generalidadesAperturaService.insertGeneralidadesForm(
         this.formsObjectService.generalidadesFormObject(),
@@ -232,6 +236,7 @@ export class InfoTableComponent {
           documento:             documento,
           atencion:              atencion,
           tipo_asunto:           tipoAsunto,
+
         });
         this.civilAperturaService.insertCivilForm(
           this.formsObjectService.civilFormObject(),
