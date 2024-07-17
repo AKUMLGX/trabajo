@@ -25,7 +25,7 @@
                             class="input-field placeholder-blueGray-300"
                             formControlName="documentoEscaneadoField"
                             value=""
-                            accept="*"
+                            accept=".pdf"
                             (change)="onFileSelected($event)">
 
                             @if (euacapeForm.get('documentoEscaneadoField')?.errors?.['maxlength']) {
