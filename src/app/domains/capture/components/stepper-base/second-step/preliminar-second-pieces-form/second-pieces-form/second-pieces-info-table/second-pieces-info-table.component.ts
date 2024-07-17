@@ -96,9 +96,9 @@ export class SecondPiecesInfoTableComponent {
   EUACAPE_SECOND_ROUND: SecondPiecesTableBeforeSubmit[] = [
     {name: 'Administración', answer: this.ADMINISTRACION()},
     {name: 'Plazo de atención', answer: (this.PLAZOATENCION() !== null) ? ((this.PLAZOATENCION() === 0) ? 'Urgente' : `${ Math.floor(this.PLAZOATENCION()! /24)} días & ${(this.PLAZOATENCION()! %24)} hrs.`)  : '---' },
-    {name: 'Documento', answer: this.DOCUMENTO() },    
+    {name: 'Documento', answer: this.DOCUMENTO() },
     {name: 'Atención', answer: this.ATENCION()},
-    {name: 'Tipo asunto', answer: this.TIPOASUNTO()}, 
+    {name: 'Tipo asunto', answer: this.TIPOASUNTO()},
   ];
 
   EUACAPE_DATA: SecondPiecesTableBeforeSubmit[] = [
@@ -110,7 +110,7 @@ export class SecondPiecesInfoTableComponent {
     ...this.EUACAPE_FIRST_ROUND,
     {name: 'Volante jefatura', answer: (this.VOLANTEJEFATURA() !== null) ? this.VOLANTEJEFATURA() : '---'},
     {name: 'Folio Júpiter', answer: (this.FOLIOJUPITER() !== null) ? this.FOLIOJUPITER() : '---'},
-    ...this.EUACAPE_SECOND_ROUND,  
+    ...this.EUACAPE_SECOND_ROUND,
   ];
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-answer'];
@@ -151,13 +151,14 @@ export class SecondPiecesInfoTableComponent {
         administracion:        administracion,
         plazo_atencion:        plazoAtencion,
         documento:             documento,
+        atencion:              atencion,
       });
       this.euacapeSecondPieceService.insertSecondPieceEuacapeForm(
         this.secondPiecesFormsObjectService.euacapeFormObject(),
         documentoEscaneadoFile!
       );
     } else if (
-        this.TIPOASUNTO() === 'Penal' 
+        this.TIPOASUNTO() === 'Penal'
         || this.TIPOASUNTO() === 'Civil'
         || this.TIPOASUNTO() === 'Laboral'
         || this.TIPOASUNTO() === 'Juicio de Amparo'
@@ -181,6 +182,7 @@ export class SecondPiecesInfoTableComponent {
         plazo_atencion:        plazoAtencion,
         documento:             documento,
         tipo_asunto:           tipoAsunto,
+        atencion:              atencion,
       });
       this.generalidadesSecondPieceService.insertSecondPieceGeneralidadesForm(
         this.secondPiecesFormsObjectService.generalidadesFormObject(),
@@ -189,19 +191,19 @@ export class SecondPiecesInfoTableComponent {
     } else if (this.TIPOASUNTO() === 'Respuesta') {
       this.secondPiecesFormsObjectService.respuestaFormObject.set({
         folio_interno:         folioInterno,
-        oficio:                oficio,      
-        folio_scanner:         folioScanner, 
-        carpeta_investigacion: carpetaInvestigacion, 
-        documento_escaneado:   documentoEscaneado,   
-        fecha_recepcion:       fechaRecepcion,    
-        autoridad_remitente:   autoridadRemitente,  
-        persona_relacionada:   personaRelacionada, 
-        turno_jefatura:        turnoJefatura,     
-        descripcion:           descripcion,       
-        volante_jefatura:      volanteJefatura,   
-        folio_jupiter:         folioJupiter,       
-        administracion:        administracion,     
-        plazo_atencion:        plazoAtencion,       
+        oficio:                oficio,
+        folio_scanner:         folioScanner,
+        carpeta_investigacion: carpetaInvestigacion,
+        documento_escaneado:   documentoEscaneado,
+        fecha_recepcion:       fechaRecepcion,
+        autoridad_remitente:   autoridadRemitente,
+        persona_relacionada:   personaRelacionada,
+        turno_jefatura:        turnoJefatura,
+        descripcion:           descripcion,
+        volante_jefatura:      volanteJefatura,
+        folio_jupiter:         folioJupiter,
+        administracion:        administracion,
+        plazo_atencion:        plazoAtencion,
         documento:             documento,
         adminstracion:         administracion,
         atencion:              atencion,

@@ -27,6 +27,7 @@ export class SecondPiecesFormsObjectService {
     administracion:        '',
     plazo_atencion:        null,
     documento:             '',
+    atencion:              '',
   });
 
   generalidadesFormObject = signal<GeneralidadesSecondPiece>({
@@ -46,27 +47,29 @@ export class SecondPiecesFormsObjectService {
     plazo_atencion:        null,
     documento:             '',
     tipo_asunto:           '',
+    atencion:              '',
+
   });
 
   respuestaFormObject = signal<RespuestaSecondPiece>({
-    folio_interno:         '',     
-    oficio:                '',     
-    folio_scanner:         '',     
-    carpeta_investigacion: null,   
-    documento_escaneado:   '',     
-    fecha_recepcion:       '',     
-    autoridad_remitente:   '',     
-    persona_relacionada:   '',     
-    turno_jefatura:        null,   
-    descripcion:           '',     
-    volante_jefatura:      null,   
-    folio_jupiter:         null,   
-    administracion:        '',     
-    plazo_atencion:        null,   
+    folio_interno:         '',
+    oficio:                '',
+    folio_scanner:         '',
+    carpeta_investigacion: null,
+    documento_escaneado:   '',
+    fecha_recepcion:       '',
+    autoridad_remitente:   '',
+    persona_relacionada:   '',
+    turno_jefatura:        null,
+    descripcion:           '',
+    volante_jefatura:      null,
+    folio_jupiter:         null,
+    administracion:        '',
+    plazo_atencion:        null,
     documento:             '',
     adminstracion:         '',
     atencion:              '',
-    tipo_asunto:           '',     
+    tipo_asunto:           '',
   });
 
   civilFormObject = signal<CivilSecondPiece>({
@@ -125,5 +128,5 @@ export class SecondPiecesFormsObjectService {
     atencion:              '',
     tipo_asunto:           '',
   });
-  
+
 }

@@ -19,9 +19,9 @@
                             </label>
                             <input type="file" placeholder="Documento escaneado"
                                 class="input-field placeholder-blueGray-300"
-                                formControlName="documentoEscaneadoField" 
-                                value="" 
-                                accept="*" 
+                                formControlName="documentoEscaneadoField"
+                                value=""
+                                accept=".pdf"
                                 (change)="onFileSelected($event)">
                         </div>
 
@@ -164,7 +164,7 @@
                             </label>
                             <div class="disabled-input-field placeholder-blueGray-300">
                                 {{ this.preloadedAdministracion() }}
-                            </div> 
+                            </div>
                         </div>
 
                         <div class="wrapping-individual-container">

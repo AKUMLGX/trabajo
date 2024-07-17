@@ -15,6 +15,8 @@ export interface GeneralidadesSecondPiece{
     plazo_atencion:        number | null;
     documento:             string;
     tipo_asunto:           string;
+    atencion:              string,
+
 }
 
 //en insomnia sigue apareciendo autoridadad_solicitante
