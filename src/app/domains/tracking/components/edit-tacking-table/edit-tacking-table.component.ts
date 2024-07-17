@@ -246,7 +246,7 @@ export class EditTackingTableComponent implements OnInit {
     if (this.getRol() === "SIAT_AKAMBA_001_CAPTURA") {
       this.showInput = true
       this.updateTableForm.controls["carpeta_investigacion"].disable()
-      this.updateTableForm.controls["atencion"].disable()
+      this.updateTableForm.controls["id_atencion_fk"].disable()
       this.updateTableForm.controls["persona_relacionada"].disable()
       this.updateTableForm.controls["folio_scanner"].disable()
       this.updateTableForm.controls["volante_jefatura"].disable()

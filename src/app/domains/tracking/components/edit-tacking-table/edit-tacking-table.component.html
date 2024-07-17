@@ -17,7 +17,7 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Carpeta de investigación y/o juzgado
               </label>
-              <input  (blur)="onBlur()" type="text" placeholder=" Carpeta de investigación y/o juzgado"
+              <input (blur)="onBlur()" type="text" placeholder=" Carpeta de investigación y/o juzgado"
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="carpeta_investigacion" value="">
             </div>
@@ -114,7 +114,7 @@
               </label>
               <select id="administracion" formControlName="administracion"
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
-                <option [ngValue]="null"  disabled> Elija una administración</option>
+                <option [ngValue]="null" disabled> Elija una administración</option>
                 <option value=" "> </option>
                 <option value="a_1">Administración 1</option>
                 <option value="a_2">Administración 2</option>
@@ -123,38 +123,33 @@
                 <option value="a_5">Administración 5</option>
               </select>
             </div>
-
-
-
-
-             <div class="wrapping-individual-container">
-              <label class="label-field flex text-blueGray-600"htmlfor="grid-password">
+            @if (getRol()=="SIAT_AKAMBA_001_CAPTURA") {
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Atención
               </label>
-              <select
+              <input type="number" placeholder="Atención " class="input-field placeholder-blueGray-300"
+                formControlName="id_atencion_fk" value=""
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
+            </div>
 
-              formControlName="id_atencion_fk"
-              [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
-              <option [ngValue]="null" [selected]="true" ngValue="null"  disabled>Elija una atención </option>
-              <option  [ngValue]="1" >Total</option>
-              <option  [ngValue]="2">Parcial</option>
-              <option  [ngValue]="3">En trámite</option>
-              <option  [ngValue]="4">No aplica</option>
-              <option  [ngValue]="5">Recibido</option>
+            }@else {
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Atención
+              </label>
+              <select formControlName="id_atencion_fk"
+                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
+                <option [ngValue]="null" [selected]="true" ngValue="null" disabled>Elija una atención </option>
+                <option [ngValue]="1">Total</option>
+                <option [ngValue]="2">Parcial</option>
+                <option [ngValue]="3">En trámite</option>
+                <option [ngValue]="4">No aplica</option>
+                <option [ngValue]="5">Recibido</option>
 
-            </select>
-          </div>
-
-
-
-            <!-- <div class="wrapping-individual-container">
-                <label class="label-field flex text-blueGray-600"htmlfor="grid-password">
-                  Atención
-                </label>
-                <input type="number" placeholder="Atención " class="input-field placeholder-blueGray-300"
-                formControlName="id_atencion_fk" value="">
-            </div> -->
-
+              </select>
+            </div>
+            }
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Descargo:
@@ -351,8 +346,7 @@
                                  saveUpdateForm()
                                  :
                                  openCustomModalWithTemplate(templateCarpeta)
-                            "
-                              (click)="availability()"   [disabled]="!botonHabilitado"
+                            " (click)="availability()" [disabled]="!botonHabilitado"
               [ngClass]=" !botonHabilitado ? 'next-button-disabled' : 'modal-right-button ml-1 '">
               Aceptar
             </button>
