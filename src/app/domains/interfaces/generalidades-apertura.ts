@@ -14,4 +14,5 @@ export interface GeneralidadesApertura {
     plazo_atencion:        number | null;
     documento:             string;
     tipo_asunto:           string;
+    atencion:              string;
 }

@@ -82,14 +82,15 @@ export class PreliminarFormComponent {
           })
         }
         else if (this.carpetaResultList.length === 0) {
+          this.nextStep(this.stepper)
           this.canProceed = true;
           this.collectCarpetaStatusService.upadateCarpetaStatus(this.canProceed);
-          this.nextStep(this.stepper);
         }
       })
     } else {
       this.canProceed = true;
       this.collectCarpetaStatusService.upadateCarpetaStatus(this.canProceed);
+      this.nextStep(this.stepper);
     }
   }
 

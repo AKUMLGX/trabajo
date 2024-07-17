@@ -22,4 +22,5 @@ export interface GeneralidadesValue {
     documento:             string;
     atencion:              string;
     folio_interno:         string;
+
 }

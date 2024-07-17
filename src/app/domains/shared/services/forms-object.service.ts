@@ -26,6 +26,7 @@ export class FormsObjectService {
     administracion:        '',
     plazo_atencion:        null,
     documento:             '',
+    atencion:              ''
   });
 
   generalidadesFormObject = signal<GeneralidadesApertura>({
@@ -44,6 +45,7 @@ export class FormsObjectService {
     plazo_atencion:        null,
     documento:             '',
     tipo_asunto:           '',
+    atencion:              '',
   });
 
   respuestaFormObject = signal<RespuestaApertura>({
