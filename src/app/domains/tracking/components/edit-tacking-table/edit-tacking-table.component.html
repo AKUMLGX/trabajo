@@ -101,39 +101,22 @@
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="turno_jefatura" value="">
             </div>
-            <!-- <div class="wrapping-individual-container">
-              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                Administración
-              </label>
-              <input type="text" placeholder="Administración " class="input-field placeholder-blueGray-300"
-                formControlName="administracion" value="">
-            </div> -->
+
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Administración
               </label>
-              <select id="administracion" formControlName="administracion"
+              <select id="id_administracion_fk" formControlName="id_administracion_fk"
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
                 <option [ngValue]="null" disabled> Elija una administración</option>
-                <option value=" "> </option>
-                <option value="a_1">Administración 1</option>
-                <option value="a_2">Administración 2</option>
-                <option value="a_3">Administración 3</option>
-                <option value="a_4">Administración 4</option>
-                <option value="a_5">Administración 5</option>
+                <option [ngValue]="1">Administración 1</option>
+                <option [ngValue]="2">Administración 2</option>
+                <option [ngValue]="3">Administración 3</option>
+                <option [ngValue]="4">Administración 4</option>
+                <option [ngValue]="5">Administración 5</option>
               </select>
             </div>
-            @if (getRol()=="SIAT_AKAMBA_001_CAPTURA") {
-            <div class="wrapping-individual-container">
-              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                Atención
-              </label>
-              <input type="number" placeholder="Atención " class="input-field placeholder-blueGray-300"
-                formControlName="id_atencion_fk" value=""
-                [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
-            </div>
 
-            }@else {
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Atención
@@ -146,10 +129,9 @@
                 <option [ngValue]="3">En trámite</option>
                 <option [ngValue]="5">No aplica</option>
                 <option [ngValue]="4">Recibido</option>
-
               </select>
             </div>
-            }
+
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Descargo:

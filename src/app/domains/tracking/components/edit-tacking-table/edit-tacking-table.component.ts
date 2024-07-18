@@ -53,7 +53,6 @@ export class EditTackingTableComponent implements OnInit {
 
 
 
-
   ngOnInit(): void {
     this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion)
     this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada)
@@ -64,8 +63,8 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls['folio_jupiter'].setValue(this.documents.folio_scanner)
     this.updateTableForm.controls['descripcion'].setValue(this.documents.descripcion)
     this.updateTableForm.controls['turno_jefatura'].setValue(this.documents.turno_jefatura)
-    this.updateTableForm.controls['administracion'].setValue(this.documents.administracion)
-    this.updateTableForm.controls['id_atencion_fk'].setValue( this.documents.atencion)
+    this.updateTableForm.controls['id_administracion_fk'].setValue(this.getAdministracion(this.documents.administracion.toString()))
+    this.updateTableForm.controls['id_atencion_fk'].setValue(this.getAtencion(this.documents.atencion.toString()))
     this.updateTableForm.controls["id_asunto_historico"].setValue(this.documents.id_asunto_historico)
     this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo),
     this.updateTableForm.controls["descargo"].setValue(this.documents.descargo), this.updateTableForm.controls["descargo"].disable()
@@ -94,8 +93,6 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls["piezas_fgr_administracion"].setValue(this.documents.piezas_fgr_administracion), this.updateTableForm.controls["piezas_fgr_administracion"].disable()
     this.updateTableForm.controls["base_captura_administracion"].setValue(this.documents.base_captura_administracion), this.updateTableForm.controls["base_captura_administracion"].disable()
     this.btnEdita();
-    // this.setVauleDefectAdministracion()
-      //  this.setVauleDefectAtencion()
   }
 
 
@@ -109,9 +106,7 @@ export class EditTackingTableComponent implements OnInit {
     folio_jupiter: [["", Validators.required], { value: this.documents?.folio_jupiter }],
     descripcion: [["", Validators.required], { value: this.documents?.descripcion}],
     turno_jefatura: [["", Validators.required], { value: this.documents?.turno_jefatura}],
-    // administracion: [["", Validators.required], { value: this.documents?.administracion}],
-    administracion: [["", Validators.required]],
-    // atencion: [["", Validators.required], { value: this.documents?.atencion }],
+    id_administracion_fk: [["", Validators.required]],
     id_atencion_fk: [["", Validators.required], { value: this.documents?.atencion }],
     id_asunto_historico: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
     id_asunto_nuevo: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
@@ -144,25 +139,41 @@ export class EditTackingTableComponent implements OnInit {
   });
 
 
+  getAtencion(atencion: string) {
+    if(atencion === "TOTAL") {
+      return 1;
+    }else if (atencion === "PARCIAL") {
+      return 2
+    }else if(atencion === "EN TRAMITE"){
+      return 3
+    }else if (atencion === "NO APLICA"){
+      return 4
+    }else if(atencion === "RECIBIDO"){
+      return 5
+    }
+    return
+  }
+
+  getAdministracion(administracion:string){
+    if(administracion === "a_1") {
+      return 1;
+    }else if (administracion === "a_2") {
+      return 2
+    }else if(administracion === "a_3"){
+      return 3
+    }else if (administracion === "a_4"){
+      return 4
+    }else if(administracion === "a_5"){
+      return 5
+    }
+    return
+  }
+
   // onFileSelected(event: any) {
   //   const file: File = event.target.files[0];
   //   this.docuemntoEcaneadoFileTracking = file;
   //   if (this.docuemntoEcaneadoFileTracking) {
   //     this.documentoEscaneadoNameTracking = this.docuemntoEcaneadoFileTracking.name.toString().replaceAll(' ', '_')
-  //   }
-  // }
-
-
-
-  // setVauleDefectAtencion(){
-  //   if (this.documents.atencion && ["TOTAL","PARCIAL","EN TRAMITE", "NO APLICA","RECIBIDO"].includes(this.documents.atencion)) {
-  //     this.updateTableForm.get("atencion")?.setValue(this.documents.atencion)
-  //   }
-  // }
-
-  // setVauleDefectAdministracion(){
-  //   if (this.documents?.administracion && [" ","a_1","a_2","a_3","a_4","a_5"].includes(this.documents.administracion)) {
-  //     this.updateTableForm.get("administracion")?.setValue(this.documents.administracion)
   //   }
   // }
 
@@ -179,7 +190,6 @@ export class EditTackingTableComponent implements OnInit {
       this.updateTableForm.markAllAsTouched();
     }
   }
-
 
   btnEdita() {
     this.updateTableForm.valueChanges.subscribe(() => {
@@ -255,7 +265,7 @@ export class EditTackingTableComponent implements OnInit {
       this.updateTableForm.controls["folio_jupiter"].disable()
       this.updateTableForm.controls["descripcion"].disable()
       this.updateTableForm.controls["turno_jefatura"].disable()
-      this.updateTableForm.controls["administracion"].disable()
+      this.updateTableForm.controls["id_administracion_fk"].disable()
     }
   }
 }
