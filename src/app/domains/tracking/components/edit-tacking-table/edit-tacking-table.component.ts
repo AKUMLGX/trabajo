@@ -147,9 +147,9 @@ export class EditTackingTableComponent implements OnInit {
     }else if(atencion === "EN TRAMITE"){
       return 3
     }else if (atencion === "NO APLICA"){
-      return 4
-    }else if(atencion === "RECIBIDO"){
       return 5
+    }else if(atencion === "RECIBIDO"){
+      return 4
     }
     return
   }
