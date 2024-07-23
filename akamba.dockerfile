@@ -41,6 +41,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copiando la carpeta dist
 COPY --from=builder_modules /akamba/dist/acamba/browser /var/www/html
 COPY welcome.html /var/www/html/
+COPY ./home /var/www/html/home
 
 # Se cambian los ids por default del usuario nginx por lo que son validos en el Cluster
 RUN sed -i 's/101:101/117:119/g' /etc/passwd
