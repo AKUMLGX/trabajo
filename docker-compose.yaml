@@ -2,7 +2,7 @@ version: '3'
 services:
   akamba:
     image: nexusavl.sat.gob.mx:8093/akamba/${SERVICE_NAME}:${VERSION}
-    user: nginx
+    user: root
     ports:
       - 80:80
     restart: always
