@@ -29,6 +29,7 @@ ARG VERSION=0.0.1
 
 ENV COMMIT_SHA=${COMMIT_SHA}
 ENV commit_sha=${COMMIT_SHA}
+ENV TZ=America/Mexico_City
 
 
 USER root
