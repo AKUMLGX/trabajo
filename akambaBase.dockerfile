@@ -10,6 +10,7 @@ LABEL commit_sha = ${COMMIT_SHA}
 WORKDIR /akamba
 
 RUN apt-get update && apt-get install -y --no-install-recommends 
+ENV TZ=America/Mexico_City
 
 # Instalando Angular
 RUN npm install -g @angular/cli@17.1.3
