@@ -3,7 +3,6 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 
 import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -41,6 +40,7 @@ export class TrackingFormComponent {
   });
 
   public fecha = new FormControl('');
+  public administracion = new FormControl('');
 
   public fechaActual = '2018-11-11';
 
@@ -74,7 +74,6 @@ export class TrackingFormComponent {
 
   DetectInput(entering: boolean, campo: string): void {
     this.showCoincidencias[campo] = entering;
-
     if (!entering) {
       this.cleanCoincidencias();
     }
@@ -93,30 +92,25 @@ export class TrackingFormComponent {
       return;
     }
     const fomulario_control = this.consultForm.get(this.nombre_campo_input);
-
     if (!fomulario_control || fomulario_control.value === undefined) {
       return;
     }
     const valor_input = fomulario_control.value;
-
-
     if (this.nombre_campo_input === "carpetaInvertigacion") {
       this.nombre_campo_input = "carpetaInvestigacion";
     }
     this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
-
       this.coincidencias = coincidencias.slice(0, 5);
     });
   }
 
   descargarAcuse(): void {
     if (this.fecha.value)
-      this.asuntoService.generateAcuse(this.fecha.value);
+      this.asuntoService.generateAcuse(this.fecha.value, this.administracion.value);
   }
 
 
   selectCoincidencia(coincidencia: string): void {
-
     const formControl = this.consultForm.get(this.nombre_campo_input);
     if (formControl) {
       formControl.setValue(coincidencia);

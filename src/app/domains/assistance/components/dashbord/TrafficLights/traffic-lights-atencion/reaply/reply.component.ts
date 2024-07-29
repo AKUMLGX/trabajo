@@ -52,10 +52,6 @@ interface Datos {
 export class ReaplyComponent implements OnInit {
   @Input() datosFolio!: Datos;
 
-
-
-
-
   constructor(private fb: FormBuilder,private modalService:ModalService,
     private collectFormReplyInfo: CollectformReplyInfoService
   ) { }
@@ -63,9 +59,7 @@ export class ReaplyComponent implements OnInit {
     this.replyForm.controls['foliointerno'].setValue(this.datosFolio.folio_interno)
 
   }
-
-
-
+  
   public replyForm: FormGroup = this.fb.group({
     oficio: [null, [Validators.required]],
     fechaAtencion: [null, [Validators.required]],
