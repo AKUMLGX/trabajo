@@ -6,7 +6,6 @@ import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
-import { Router } from '@angular/router';
 import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-table.component';
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
 import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
@@ -32,12 +31,7 @@ export class TrackingTableComponent {
   public newTableIsRendered: boolean = false;
 
   public formUpdateIsRendered: boolean = false;
-
-  public labels = {
-    previousLabel: 'Anterior',
-    nextLabel: 'Siguiente',
-  };
-
+ 
   public fileIsOpen: boolean = false;
 
   public visualizarPdf: boolean = false;
@@ -54,9 +48,11 @@ export class TrackingTableComponent {
   public mostrarTabla: boolean = false;
   clickclose: boolean = false;
 
-
+  public labels = {
+    previousLabel: 'Anterior',
+    nextLabel: 'Siguiente',
+  };
   @ViewChild("edit-tacking-table") miComponente!: ElementRef;
-
 
   constructor(
     private asuntoService: AsuntoService,
@@ -153,6 +149,7 @@ export class TrackingTableComponent {
 
   openPdfViewer(folio: String, path: String): void {
     let fileName = this.getFileName(path).replaceAll(' ', '_');
+    if(folio === null) folio = "";
     this.fileService.updatePdfFile(folio.toString(), fileName);
     this.asuntoService.openPdf();
     this.visualizarPdf = true;

@@ -136,9 +136,13 @@ export class AsuntoService {
     )
   }
 
-  generateAcuse(date: string): void {
-    let url = environment.baseUrl + environment.generateAcuse + "/" + date;
-    this.httpClient.get(url, { responseType: "text" }).subscribe((acuse) => {
+  generateAcuse(date: string, administracion: string | null): void {
+    let url = environment.baseUrl + environment.generateAcuse;
+    let params = {
+      fecha: date,
+      administracion: administracion ? administracion : "",
+    };
+    this.httpClient.get(url, { params: params, responseType: "text" }).subscribe((acuse) => {
       const byteCharacters = atob(acuse);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -152,7 +156,6 @@ export class AsuntoService {
       link.click();
     });
   }
-
 
   openPdf(): void {
     this.fileIsOpen = true;
