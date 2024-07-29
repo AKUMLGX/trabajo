@@ -149,6 +149,7 @@ export class TrackingTableComponent {
 
   openPdfViewer(folio: String, path: String): void {
     let fileName = this.getFileName(path).replaceAll(' ', '_');
+    if(folio === null) folio = "";
     this.fileService.updatePdfFile(folio.toString(), fileName);
     this.asuntoService.openPdf();
     this.visualizarPdf = true;
