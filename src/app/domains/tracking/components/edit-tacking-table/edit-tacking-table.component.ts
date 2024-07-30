@@ -60,7 +60,7 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls['volante_jefatura'].setValue(this.documents.volante_jefatura)
     this.updateTableForm.controls['oficio'].setValue(this.documents.oficio)
     this.updateTableForm.controls['autoridad_remitente'].setValue(this.documents.autoridad_remitente)
-    this.updateTableForm.controls['folio_jupiter'].setValue(this.documents.folio_scanner)
+    this.updateTableForm.controls['folio_jupiter'].setValue(this.documents.folio_jupiter)
     this.updateTableForm.controls['descripcion'].setValue(this.documents.descripcion)
     this.updateTableForm.controls['turno_jefatura'].setValue(this.documents.turno_jefatura)
     this.updateTableForm.controls['id_administracion_fk'].setValue(this.getAdministracion(this.documents.administracion.toString()))
