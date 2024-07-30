@@ -24,7 +24,7 @@ export const authInterceptor: HttpInterceptorFn = (
     }
   }
   return next(request).pipe(catchError((err: HttpErrorResponse) => {
-    return throwError(() => new Error('Unauthorized Exception'));
+    return throwError(() => new Error('Exception'));
   }));
 };
 

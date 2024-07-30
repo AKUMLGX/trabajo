@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Asunto } from '../interfaces/asuntos.interfaces';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ParametrosAcuse } from '../interfaces/acuses';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -65,10 +67,7 @@ export class AsuntoService {
     searchEntryType: string,
     userInputForm: FormGroup
   ): Observable<Asunto[]> {
-
     this.tipoBusqueda = searchEntryType;
-
-
     let userInput = userInputForm.get('userInput')?.value;
     let carpetaInvestigacion: string = '';
     let personaRelacionada: string = '';
@@ -122,8 +121,6 @@ export class AsuntoService {
     )
   }
 
-
-
   checkNameCarpetaInvestigacionUpdate(
     userInputForm: FormGroup): Observable<Asunto[]> {
     let userInput = userInputForm.get('carpeta_investigacion')?.value
@@ -138,11 +135,12 @@ export class AsuntoService {
 
   generateAcuse(date: string, administracion: string | null): void {
     let url = environment.baseUrl + environment.generateAcuse;
-    let params = {
+    let params: ParametrosAcuse = {
       fecha: date,
-      administracion: administracion ? administracion : "",
+      administracion: administracion,
+      formato: 'Pdf'
     };
-    this.httpClient.get(url, { params: params, responseType: "text" }).subscribe((acuse) => {
+    this.httpClient.post(url, params, { responseType: "text" }).subscribe((acuse) => {
       const byteCharacters = atob(acuse);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {

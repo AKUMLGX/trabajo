@@ -7,7 +7,7 @@ export const environment = {
   asuntoEndpoint: 'asunto/',
   updateTableHistorico:"asunto/historico/update",
   updateTableNuevo: "asunto/nuevo/update",
-  generateAcuse: "asunto/nuevo/get_acuse",
+  generateAcuse: "asunto/nuevo/get_reporte_por_dia",
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
   getPdfEndpoint: 'getPdf',
