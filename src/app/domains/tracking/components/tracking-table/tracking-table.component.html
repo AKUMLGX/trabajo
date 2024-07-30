@@ -95,9 +95,9 @@
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Autoridad Solicitante" }}
                 </th> -->
-                <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Turno Jefatura" }}
-                </th> -->
+                </th>
 
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Correo Eléctronico" }}
@@ -106,9 +106,6 @@
                   {{ "Plazo de Atención" }}
                 </th>
 
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Jefatura" }}
-                </th>
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Que Solicita" }}
                 </th> -->
@@ -310,15 +307,32 @@
                   </div>
                 </td> -->
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm  leading-5 text-wine">
                     {{ document.atencion }}
                   </div>
                 </td>
+
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
-                     <!-- <div class=" overflow-y-auto text-center h-[10rem] w-[13rem]">{{ document.descripcion }}</div> -->
-                     <div [ngClass]="{'overflow-y-auto text-center  h-[10rem] w-[13rem] ml-20':!shortDescription,  'w-[30rem] ml-20':shortDescription}">{{ document.descripcion }}</div>
-                  </div>
+
+                      <p class="h-1">
+                        @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
+                            {{document.descripcion | slice: 0 : 25}}
+                            <strong class="points">...</strong>
+                            <button  class="button-read-more" (click)="toggleExpansion($index) ">Leer más</button>
+                          }
+                    </p>
+                      <p  class="overflow-y-auto h-[8rem] w-[8rem]" >
+                        @if ( document.descripcion !== null && document.descripcion.length >= 16  && index === $index){
+                          {{document.descripcion }}
+                          <button class="button-read-less" (click)="toggleExpansion(-1)">Leer menos</button>
+                        }@else if (
+                          document.descripcion !== null && document.descripcion.length <= 16
+                        ) {
+                          {{document.descripcion}}
+                        }
+                      </p>
+                    </div>
                 </td>
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
@@ -335,11 +349,11 @@
                     {{ document.autoridad_solicitante }}
                   </div>
                 </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
                     {{ document.turno_jefatura }}
                   </div>
-                </td> -->
+                </td>
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
                     {{ document.correo_electronico }}
@@ -351,11 +365,7 @@
                   </div>
                 </td>
 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.jefatura }}
-                  </div>
-                </td>
+
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
                     {{ document.que_solicita }}

@@ -62,6 +62,7 @@ Env_File_Creation:
     - /^config*/
     - /^feature*/
     - /^fix*/
+    - /^patch*/
   tags:
     - itzamnaQro-shell
   before_script:
@@ -78,7 +79,7 @@ check_dependencies:
   only:
     - desarrollo
     - /^config*/
-  image: 
+  image:
     name: node:20.11.0
   tags:
     - Develop
@@ -114,7 +115,7 @@ check_dependencies:
 # build_base_image:
 #   only:
 #     - desarrollo
-#   image: 
+#   image:
 #     name: node:16
 #   tags:
 #   # Runner docker
@@ -158,7 +159,7 @@ Build_image:
     GIT_SUBMODULE_STRATEGY: recursive
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: /certs
-  only: 
+  only:
     - desarrollo
     - desarrollo-test
     - /^fix*/
@@ -188,13 +189,13 @@ Build_image:
   after_script:
     - docker logout
 
-# This stage retag the las image as Release, the latter is the one that is going to be used in the next enviorments such as UAT and Production    
+# This stage retag the las image as Release, the latter is the one that is going to be used in the next enviorments such as UAT and Production
 Build_image_Release:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: /certs
-  only: 
+  only:
     - desarrollo
   image: docker:24.0.7
   services:
@@ -213,7 +214,7 @@ Build_image_Release:
     - echo $NEXUS_P | docker login $DOCKER_REGISTRY -u $NEXUS_USER --password-stdin
   script:
     - echo "Se genera version release"
-    - docker pull ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}   
+    - docker pull ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}
     - docker tag ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION} ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}-R
     - echo "docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}-R"
     - docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}-R
@@ -227,7 +228,7 @@ Build_image_Release:
 Deploy_DEV_A:
   variables:
     AKAMBA_FRONT_A: ${AKAMBA_DEV_FRONT_A}
-  only: 
+  only:
     - desarrollo
     - desarrollo-test
     - /^fix*/
@@ -263,7 +264,7 @@ Deploy_DEV_A:
 Deploy_DEV_B:
   variables:
     AKAMBA_FRONT_B: ${AKAMBA_DEV_FRONT_B}
-  only: 
+  only:
     - desarrollo
     - desarrollo-test
     - /^fix*/
@@ -302,7 +303,7 @@ Deploy_UAT:
     VERSION: ${VERSION}-R
     AKAMBA_FRONT_A: ${AKAMBA_UAT_FRONT_A}
     AKAMBA_FRONT_B: ${AKAMBA_UAT_FRONT_B}
-  only: 
+  only:
     - uat
     - uat-test
   image: docker:24.0.7
@@ -343,7 +344,7 @@ Deploy_PROD:
     VERSION: ${VERSION}-R
     AKAMBA_FRONT_A: ${AKAMBA_PRO_FRONT_A}
     AKAMBA_FRONT_B: ${AKAMBA_PRO_FRONT_B}
-  only: 
+  only:
     - produccion-test
     - produccion
   image: docker:24.0.7

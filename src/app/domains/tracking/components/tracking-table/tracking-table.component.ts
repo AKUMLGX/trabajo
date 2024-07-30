@@ -23,6 +23,8 @@ export class TrackingTableComponent {
   public documents: Asunto[] = [];
   public pages: Asunto[][] = [];
 
+  public description: Asunto[] =[]
+
   public pageSelected: number = 1;
 
   public itemsPerPage: number = 5;
@@ -48,10 +50,18 @@ export class TrackingTableComponent {
 
   shortDescription: boolean = false
 
+  isExpanded:boolean = false;
+
+  mostrarTodo = false;
+
+  index: number = -1;
+
+
 
   filaSeleccionada: any
 
   public mostrarTabla: boolean = false;
+
   clickclose: boolean = false;
 
 
@@ -111,6 +121,12 @@ export class TrackingTableComponent {
       this.newTableIsRendered = true;
     }
   }
+
+
+   toggleExpansion(index:number):void{
+    this.index = index
+     }
+
 
   getRol(): string {
     let sessionInfo = localStorage.getItem('sessionInfo');
