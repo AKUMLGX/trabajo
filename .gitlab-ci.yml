@@ -1,0 +1,380 @@
+variables:
+  DOCKER_AUTH_CONFIG: ${DOCKER_AUTH_CONFIG_8093}
+  DockerApps: nexusavl.sat.gob.mx:8084
+  DockerKubernetes: nexusavl.sat.gob.mx:8082
+  DOCKER_REGISTRY: ${DOCKER_REG}
+
+stages:
+  - Version_Check
+  - Env_File_Creation
+  - Dependencies
+  - Static_Security
+  - Build_Base
+  - Build
+  - Build_Release
+  - Azure_Retag_Dev
+  - Deploy_DEV
+  - Deploy_UAT
+  - Deploy_PROD
+
+version-check:
+  variables:
+  stage: Version_Check
+  only:
+    - desarrollo
+  image: docker:24.0.7
+  services:
+    - docker:dind
+  dependencies: []
+  tags:
+    - Develop
+  before_script:
+    - echo "uname -a"
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y)'
+    - apk add docker-compose
+    - eval $(ssh-agent -s)
+    - docker context create deploy-A --docker "host=tcp://${AKAMBA_DEV_FRONT_A}:2375"
+    - unset DOCKER_HOST
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+    - TXT_RED="\e[31m"
+    - TXT_PURPLE="\e[35m"
+    - TXT_GREEN="\e[32m"
+    - TXT_CLEAR="\e[0m"
+  script:
+    - echo "Deploying in ${AKAMBA_DEV_FRONT_A}"
+    #- docker-compose --context dev-A -f docker-compose.yaml ps
+    - docker --context deploy-A ps
+    - pivot=$(echo $(docker-compose --context deploy-A -f docker-compose.yaml ps) | sed -n 's/\(^.*:\)\([[:digit:]]\{1,3\}\.\{1\}[[:digit:]]\{1,3\}\.\{1\}[[:digit:]]\{1,3\}\)\(.*$\)/\2/p' | tr -d '.')
+    - deploy_version=$(expr ${pivot} + 0)
+    - pivot=$(echo ${VERSION} | tr -d '.')
+    - env_var_version=$(expr ${pivot} + 0)
+    - echo -e "${TXT_PURPLE} La version desplegada es -${deploy_version}-"
+    - echo -e "${TXT_PURPLE} La nueva version es -${env_var_version}-"
+    - is_version_ajusted=$((${deploy_version} ==  ${env_var_version})) && echo "${is_version_ajusted}"
+    - if [[ -z $(cat ./version_control.md | tr -d "." | grep "${env_var_version}") ]]; then echo -e "${TXT_RED} No se encontro la version a desplegar en el archivo version_control.md"; exit 1 ; else echo "$(cat ./version_control.md | tr -d "." | grep "${env_var_version}") " ; fi
+    - if [[ ${is_version_ajusted} -ne 0 ]]; then echo -e "${TXT_RED} ❌ Se requiere subir la versión en las variables de entorno. ❌"  ; exit 3 ; else echo "${TXT_GREEN}  Todo ok " ; fi
+
+Env_File_Creation:
+  stage: Env_File_Creation
+  only:
+    - desarrollo
+    - desarrollo-test
+    - /^config*/
+    - /^feature*/
+    - /^fix*/
+    - /^patch*/
+  tags:
+    - itzamnaQro-shell
+  before_script:
+    - echo "Se crea el archivo de variables de configuracion para la construccion del Front."
+  script:
+    - bash scripts/setEnvFileDev.sh
+    - cat src/environments/environment.ts
+  artifacts:
+    expire_in: 30min
+    paths:
+      - src/environments/environment.ts
+
+check_dependencies:
+  only:
+    - desarrollo
+    - /^config*/
+  image:
+    name: node:20.11.0
+  tags:
+    - Develop
+  stage: Dependencies
+  before_script:
+    - node -v
+  script:
+    - npm install
+  after_script:
+    - npm list
+  artifacts:
+    expire_in: 30min
+    paths:
+      - node_modules
+
+.sonarqube_check:
+  only:
+    - desarrollo
+  ###### WARNING Esta configuracion es temporal hasta que se nos proporcione un token nuevo
+  allow_failure: true
+  dependencies: []
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  stage: Static_Security
+  image:
+    name: nexusavl.sat.gob.mx:8084/sonar/sonar-scanner-cli:v1.0
+  tags:
+    - Develop
+  script:
+    - sonar-scanner -Dsonar.projectKey=$SONAR_PROYECTO -Dsonar.host.url="$SONAR_HOST_URL" -Dsonar.login=$SONAR_TOKEN
+
+# build_base_image:
+#   only:
+#     - desarrollo
+#   image:
+#     name: node:16
+#   tags:
+#   # Runner docker
+#     - runner_qb
+#   stage: Build
+#   dependencies:
+#     - check_dependencies
+#   before_script:
+#     - node -v
+#     - npm install -g @angular/cli@16.0.3
+#     - ng v
+#   script:
+#     - ng build
+#   artifacts:
+#     expire_in: 30min
+#     paths:
+#       - dist
+
+Build_base_image:
+  only:
+    - desarrollo
+    - /^config*/
+  dependencies: []
+  tags:
+  # Runner docker
+    - itzamnaQro-shell
+  stage: Build_Base
+  before_script:
+    - echo $NEXUS_P | docker login $DOCKER_REGISTRY -u $NEXUS_USER --password-stdin
+  script:
+    - echo "docker image build -f akambaBase.dockerfile -t {DOCKER_REGISTRY}akamba/${SERVICE_NAME}_base:${VERSION} . --build-arg VERSION=${VERSION} --build-arg COMMIT_SHA=${CI_COMMIT_SHA}"
+    - docker image build -f akambaBase.dockerfile -t ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}_base:${VERSION} . --build-arg VERSION=${VERSION} --build-arg COMMIT_SHA=${CI_COMMIT_SHA}
+    - echo "docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}_base:${VERSION}"
+    - docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}_base:${VERSION}
+  after_script:
+    - docker logout
+
+#Construccion de la imagen Docker
+Build_image:
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: /certs
+  only:
+    - desarrollo
+    - desarrollo-test
+    - /^fix*/
+    - /^feature*/
+    - /^patch*/
+    - /^config*/
+  image: docker:24.0.7
+  services:
+    - docker:dind
+  dependencies: ["Env_File_Creation"]
+  tags:
+    - Develop
+  stage: Build
+  retry: 2
+  before_script:
+    - echo ${DOCKER_REGISTRY}
+    - export DOCKER_TLS_VERIFY=0
+    - mkdir -p $HOME/.docker
+    - echo "$DOCKER_HOST"
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - echo "docker image build -f akamba.dockerfile -t ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION} . --build-arg VERSION=${VERSION} --build-arg COMMIT_SHA=${CI_COMMIT_SHA}"
+    - docker image build -f akamba.dockerfile -t ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION} . --build-arg VERSION=${VERSION} --build-arg COMMIT_SHA=${CI_COMMIT_SHA}
+    - echo "docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}"
+    - docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}
+    - docker image ls
+  after_script:
+    - docker logout
+
+# This stage retag the las image as Release, the latter is the one that is going to be used in the next enviorments such as UAT and Production
+Build_image_Release:
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: /certs
+  only:
+    - desarrollo
+  image: docker:24.0.7
+  services:
+    - docker:dind
+  dependencies: []
+  tags:
+    - Develop
+  stage: Build_Release
+  retry: 2
+  before_script:
+    - echo ${DOCKER_REGISTRY}
+    - export DOCKER_TLS_VERIFY=0
+    - mkdir -p $HOME/.docker
+    - echo "$DOCKER_HOST"
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+    - echo $NEXUS_P | docker login $DOCKER_REGISTRY -u $NEXUS_USER --password-stdin
+  script:
+    - echo "Se genera version release"
+    - docker pull ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}
+    - docker tag ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION} ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}-R
+    - echo "docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}-R"
+    - docker push ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}:${VERSION}-R
+  after_script:
+    - echo "docker image ls | grep ${DOCKER_REGISTRY}akamba/${SERVICE_NAME} | head -n 1"
+    - docker image ls | grep ${DOCKER_REGISTRY}akamba/${SERVICE_NAME} | head -n 1
+    - docker logout
+
+# Despliegue a desarrollo
+# TODO docker-compose.yaml file
+Deploy_DEV_A:
+  variables:
+    AKAMBA_FRONT_A: ${AKAMBA_DEV_FRONT_A}
+  only:
+    - desarrollo
+    - desarrollo-test
+    - /^fix*/
+    - /^feature*/
+    - /^patch*/
+    - /^config*/
+  image: docker:24.0.7
+  services:
+    - docker:dind
+  stage: Deploy_DEV
+  dependencies: []
+  tags:
+    - Develop
+  before_script:
+    - docker context create deploy-A --docker "host=tcp://${AKAMBA_FRONT_A}:2375"
+    - unset DOCKER_HOST
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - echo "Deploying in ${AKAMBA_FRONT_A}"
+    - docker-compose --context deploy-A -f docker-compose.yaml down
+    - docker --context deploy-A system prune -af
+    - docker --context deploy-A ps
+    - docker-compose --context deploy-A -f docker-compose.yaml pull
+    - docker-compose --context deploy-A -f docker-compose.yaml up -d
+    - docker-compose --context deploy-A -f docker-compose.yaml ps
+  after_script:
+    - docker logout
+  allow_failure: true  # Permitir que falle sin detener la pipeline
+  environment:
+    name: development
+
+
+Deploy_DEV_B:
+  variables:
+    AKAMBA_FRONT_B: ${AKAMBA_DEV_FRONT_B}
+  only:
+    - desarrollo
+    - desarrollo-test
+    - /^fix*/
+    - /^feature*/
+    - /^patch*/
+    - /^config*/
+  image: docker:24.0.7
+  services:
+    - docker:dind
+  stage: Deploy_DEV
+  dependencies: []
+  tags:
+    - Develop
+  before_script:
+    - docker context create deploy-B --docker "host=tcp://${AKAMBA_FRONT_B}:2375"
+    - unset DOCKER_HOST
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - echo "Deploying in ${AKAMBA_FRONT_B}"
+    - docker-compose --context deploy-B -f docker-compose.yaml down
+    - docker --context deploy-B system prune -af
+    - docker --context deploy-B ps
+    - docker-compose --context deploy-B -f docker-compose.yaml pull
+    - docker-compose --context deploy-B -f docker-compose.yaml up -d
+    - docker-compose --context deploy-B -f docker-compose.yaml ps
+  after_script:
+    - docker logout
+  allow_failure: true  # Permitir que falle sin detener la pipeline
+  environment:
+    name: development
+
+
+# Despliegue a UAT
+Deploy_UAT:
+  variables:
+    VERSION: ${VERSION}-R
+    AKAMBA_FRONT_A: ${AKAMBA_UAT_FRONT_A}
+    AKAMBA_FRONT_B: ${AKAMBA_UAT_FRONT_B}
+  only:
+    - uat
+    - uat-test
+  image: docker:24.0.7
+  services:
+    - docker:dind
+  stage: Deploy_UAT
+  dependencies: []
+  tags:
+    - Develop
+  before_script:
+    - docker context create deploy-A --docker "host=tcp://${AKAMBA_FRONT_A}:2375"
+    - docker context create deploy-B --docker "host=tcp://${AKAMBA_FRONT_B}:2375"
+    - unset DOCKER_HOST
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - echo "Deploying in ${AKAMBA_FRONT_A}"
+    - docker-compose --context deploy-A -f docker-compose.yaml down
+    - docker --context deploy-A system prune -af
+    - docker --context deploy-A ps
+    - docker-compose --context deploy-A -f docker-compose.yaml pull
+    - docker-compose --context deploy-A -f docker-compose.yaml up -d
+    - docker-compose --context deploy-A -f docker-compose.yaml ps
+    - echo "Deploying in ${AKAMBA_FRONT_B}"
+    - docker-compose --context deploy-B -f docker-compose.yaml down
+    - docker --context deploy-B system prune -af
+    - docker --context deploy-B ps
+    - docker-compose --context deploy-B -f docker-compose.yaml pull
+    - docker-compose --context deploy-B -f docker-compose.yaml up -d
+    - docker-compose --context deploy-B -f docker-compose.yaml ps
+  after_script:
+    - docker logout
+  environment:
+    name: uat
+
+# Despliegue a PRODUCCION
+Deploy_PROD:
+  variables:
+    VERSION: ${VERSION}-R
+    AKAMBA_FRONT_A: ${AKAMBA_PRO_FRONT_A}
+    AKAMBA_FRONT_B: ${AKAMBA_PRO_FRONT_B}
+  only:
+    - produccion-test
+    - produccion
+  image: docker:24.0.7
+  services:
+    - docker:dind
+  stage: Deploy_PROD
+  dependencies: []
+  tags:
+    - Develop
+  before_script:
+    - docker context create deploy-A --docker "host=tcp://${AKAMBA_FRONT_A}:2375"
+    - docker context create deploy-B --docker "host=tcp://${AKAMBA_FRONT_B}:2375"
+    - unset DOCKER_HOST
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - echo "Deploying in ${AKAMBA_FRONT_A}"
+    - docker-compose --context deploy-A -f docker-compose.yaml down
+    - docker --context deploy-A system prune -af
+    - docker --context deploy-A ps
+    - docker-compose --context deploy-A -f docker-compose.yaml pull
+    - docker-compose --context deploy-A -f docker-compose.yaml up -d
+    - docker-compose --context deploy-A -f docker-compose.yaml ps
+    - echo "Deploying in ${AKAMBA_FRONT_B}"
+    - docker-compose --context deploy-B -f docker-compose.yaml down
+    - docker --context deploy-B system prune -af
+    - docker --context deploy-B ps
+    - docker-compose --context deploy-B -f docker-compose.yaml pull
+    - docker-compose --context deploy-B -f docker-compose.yaml up -d
+    - docker-compose --context deploy-B -f docker-compose.yaml ps
+  after_script:
+    - docker logout
+  environment:
+    name: production
