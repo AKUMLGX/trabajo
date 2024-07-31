@@ -15,27 +15,25 @@
   text-align: center;
 }
 
-.is-expanded p {
+ .is-expanded p {
   display: inline;
 }
 
 
 .button-read-more {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
- .button:hover {
-  background-color: #0056b3;
+  @apply bg-[#2F722F] text-white
+   active:bg-pink-600
+    text-xs px-4 py-2 rounded
+   shadow hover:shadow-md outline-none
+   focus:outline-none
+   mr-1 ease-linear transition-all duration-150
 }
 
  .button-read-less {
-  background-color: #691C32;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
+  @apply bg-wine text-white
+   active:bg-pink-600
+     text-xs px-4 py-2 rounded
+    shadow hover:shadow-md outline-none
+   focus:outline-none mr-1 ease-linear
+   transition-all duration-150
  }
