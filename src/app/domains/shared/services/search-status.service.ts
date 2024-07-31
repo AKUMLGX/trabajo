@@ -21,6 +21,8 @@ export class SearchStatusService {
   folioInternoFromSelectedRow = signal('');
   carpetaInvestigacionFromSelectedRow = signal('');
   administracionFromSelectedRow = signal('');
+  personaRelacionadaFromSelectedRow = signal('');
+  tipoAsuntoFromSelectedRow = signal('');
 
   updateResultsListStatus(status: boolean) {
     this.isSearchResultsListEmpty.set(status);
@@ -35,6 +37,8 @@ export class SearchStatusService {
     this.folioInternoFromSelectedRow.set(this.selectedRow()[0].folio_interno);
     this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion);
     this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion);
+    this.personaRelacionadaFromSelectedRow.set(this.selectedRow()[0].persona_relacionada);
+    this.tipoAsuntoFromSelectedRow.set(this.selectedRow()[0].tipo_asunto);
   }
 
   manuallyRedirectToAperturas(redirectStatus: boolean) {

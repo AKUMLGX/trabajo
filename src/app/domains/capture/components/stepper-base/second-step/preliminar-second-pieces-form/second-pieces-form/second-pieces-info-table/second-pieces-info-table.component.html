@@ -16,12 +16,10 @@
           </tr>
         }
       } @else if (
-        TIPOASUNTO() === 'Penal' || TIPOASUNTO() === 'Civil'
-        || TIPOASUNTO() === 'Laboral' || TIPOASUNTO() === 'Juicio de Amparo'
-        || TIPOASUNTO() === 'Concurso Mercantil' || TIPOASUNTO() === 'Copia de Conocimiento'
+        TIPOASUNTO() === 'PENAL' || TIPOASUNTO() === 'CIVIL'
+        || TIPOASUNTO() === 'LABORAL' || TIPOASUNTO() === 'JUICIO DE AMPARO'
+        || TIPOASUNTO() === 'CONCURSO MERCANTIL' || TIPOASUNTO() === 'COPIA DE CONOCIMIENTO'
         || TIPOASUNTO() === 'Respuesta'
-        || TIPOASUNTO() === 'PENAL' || TIPOASUNTO() === 'CIVIL'
-        || TIPOASUNTO() === 'CONCURSO MERCANTIL'
       ){
           @for (row of GENERALIDADES_AND_RESPUESTA_DATA; track row.name) {
             <tr>

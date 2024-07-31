@@ -47,6 +47,9 @@ export class SecondPiecesFormComponent {
   ){}
 
   preloadedAdministracion = this.searchStatusService.administracionFromSelectedRow;
+  preloadedPersonaRelacionada = this.searchStatusService.personaRelacionadaFromSelectedRow;
+  preloadedTipoAsunto = this.searchStatusService.tipoAsuntoFromSelectedRow;
+
 
   public secondPiecesForm: FormGroup = this.fb.group({
     fechaRecepcion: [null, [Validators.required]],
@@ -58,8 +61,6 @@ export class SecondPiecesFormComponent {
     atencion: [null, [Validators.required]],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
-    personaRelacionada: ['', [Validators.required, Validators.maxLength(255)]],
-    tipoAsunto: [null, [Validators.required]],
     plazoAtencionHoras: [null, [Validators.min(1)]],
     plazoAtencionDias: [null, [Validators.min(0)]],
     plazoAtencionUrgente: [false],
@@ -96,8 +97,8 @@ export class SecondPiecesFormComponent {
       this.secondPiecesForm.value.atencion,
       this.secondPiecesForm.value.autoridadRemitente,
       this.secondPiecesForm.value.turnoJefatura,
-      this.secondPiecesForm.value.personaRelacionada,
-      this.secondPiecesForm.value.tipoAsunto,
+      this.preloadedPersonaRelacionada(),
+      this.preloadedTipoAsunto(),
       this.secondPiecesForm.value.volanteJefatura,
       this.secondPiecesForm.value.folioJupiter,
     );
