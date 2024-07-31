@@ -65,13 +65,13 @@ export class PreliminarFormComponent {
 
   openCustomModalWithTemplate(template: TemplateRef<any>) {
     if (this.tipo == "EUACAPES") {
-      if (this.preliminarForm.value.carpetaInvestigacion !== null) {
-        this.isCarpetaNull = false;
-        this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull);
-      } else {
-        this.isCarpetaNull = true;
-        this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull)
-      }
+      // if (this.preliminarForm.value.carpetaInvestigacion !== null) {
+      //   this.isCarpetaNull = false;
+      //   this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull);
+      // } else {
+      //   this.isCarpetaNull = true;
+      //   this.collectCarpetaStatusService.valideteIfCarpetaIsNull(this.isCarpetaNull)
+      // }
       this.asuntoService.checkNameCarpetaInvestigacion(
         this.preliminarForm
       ).subscribe((res) => {
