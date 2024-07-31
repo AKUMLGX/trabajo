@@ -121,10 +121,11 @@ export class TrackingTableComponent {
       this.newTableIsRendered = true;
     }
   }
-
-
    toggleExpansion(index:number):void{
     this.index = index
+    this.isExpanded = !this.isExpanded;
+    console.log("isExpanded", this.isExpanded);
+
      }
 
 
