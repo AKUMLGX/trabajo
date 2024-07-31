@@ -161,18 +161,34 @@
               Buscar
             </button>
             <div>
-              <label>Administración</label>
-              <div style="border: 2px solid #691C32;" class="mb-4">
-                <select id="administracion" [formControl]="administracion"
-                  style="background-color: transparent; width: 100%; height: 30px;">
-                  <option [ngValue]="null" disabled>Elija una administración</option>
-                  <option value=" ">&nbsp;</option>
-                  <option value="a_1">Administración 1</option>
-                  <option value="a_2">Administración 2</option>
-                  <option value="a_3">Administración 3</option>
-                  <option value="a_4">Administración 4</option>
-                  <option value="a_5">Administración 5</option>
-                </select>
+              <div class="flex flex-row justify-between">
+                <div>
+                  <p>Formato</p>
+                  <div style="border: 2px solid #691C32;" class="mb-4">
+                    <select id="formato" [formControl]="formato"
+                      style="background-color: transparent; width: 100%; height: 30px;">
+                      <option value="pdf">pdf</option>
+                      <option value="csv">csv</option>
+                      <option value="xlsx">xlsx</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <p>Administración</p>
+                  <div style="border: 2px solid #691C32;" class="mb-4">
+                    <select id="administracion" [formControl]="administracion"
+                      style="background-color: transparent; width: 100%; height: 30px;">
+                      <option [ngValue]="null" disabled>Elija una administración</option>
+                      <option value=" ">&nbsp;</option>
+                      <option value="a_1">Administración 1</option>
+                      <option value="a_2">Administración 2</option>
+                      <option value="a_3">Administración 3</option>
+                      <option value="a_4">Administración 4</option>
+                      <option value="a_5">Administración 5</option>
+                    </select>
+                  </div>
+                </div>
+               
               </div>
               <div>
                 <input type="date" class="mr-10 date mb-4 md:mb-0" value="2024-11-11" [formControl]="fecha" required />

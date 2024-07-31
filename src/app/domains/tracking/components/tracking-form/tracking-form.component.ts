@@ -41,6 +41,7 @@ export class TrackingFormComponent {
 
   public fecha = new FormControl('');
   public administracion = new FormControl('');
+  public formato = new FormControl('');
 
   public fechaActual = '2018-11-11';
 
@@ -106,7 +107,7 @@ export class TrackingFormComponent {
 
   descargarAcuse(): void {
     if (this.fecha.value)
-      this.asuntoService.generateAcuse(this.fecha.value, this.administracion.value);
+      this.asuntoService.generateAcuse(this.fecha.value, this.administracion.value, this.formato.value);
   }
 
 
