@@ -133,12 +133,13 @@ export class AsuntoService {
     )
   }
 
-  generateAcuse(date: string, administracion: string | null): void {
+  generateAcuse(date: string, administracion: string | null, formato: string | null): void {
     let url = environment.baseUrl + environment.generateAcuse;
+    if (formato === null) formato = 'pdf';
     let params: ParametrosAcuse = {
       fecha: date,
       administracion: administracion,
-      formato: 'Pdf'
+      formato: formato
     };
     this.httpClient.post(url, params, { responseType: "text" }).subscribe((acuse) => {
       const byteCharacters = atob(acuse);
@@ -146,11 +147,19 @@ export class AsuntoService {
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
+      let type;
+      if (formato === 'csv') {
+        type = 'text/csv';
+      } else if (formato === 'pdf') {
+        type = 'application/pdf';
+      } else {
+        type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      }
       const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.download = 'Acuse.pdf';
+      link.download = `Acuse.${formato}`;
       link.click();
     });
   }
