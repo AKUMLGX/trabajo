@@ -69,23 +69,10 @@
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                                     Persona relacionada
-                                    @if (secondPiecesForm.controls['personaRelacionada'].invalid && (secondPiecesForm.controls['personaRelacionada'].dirty || secondPiecesForm.controls['personaRelacionada'].touched)) {
-                                        @if(secondPiecesForm.get('personaRelacionada')?.errors?.['required']) {
-                                            <div class="text-wine ml-1">
-                                                <span>*</span>
-                                            </div>
-                                        }
-                                    }
                             </label>
-                            <input type="text" placeholder="Persona relacionada"
-                                class="input-field placeholder-blueGray-300"
-                                formControlName="personaRelacionada" value=""
-                            >
-                            @if (secondPiecesForm.get('personaRelacionada')?.errors?.['maxlength']) {
-                                <div class="text-sm text-wine mt-1.5">
-                                    <span >Máximo 255 caracteres</span>
-                                </div>
-                            }
+                            <div class="disabled-input-field placeholder-blueGray-300">
+                                {{ this.preloadedPersonaRelacionada() }}
+                            </div>
                         </div>
 
                         <div class="wrapping-individual-container">
@@ -280,31 +267,10 @@
                             <label class="label-field text-blueGray-600"
                                 htmlfor="grid-password">
                                     Tipo asunto
-                                    @if (secondPiecesForm.controls['tipoAsunto'].invalid && (secondPiecesForm.controls['tipoAsunto'].dirty || secondPiecesForm.controls['tipoAsunto'].touched)) {
-                                        @if(secondPiecesForm.get('tipoAsunto')?.errors?.['required']) {
-                                            <div class="text-wine ml-1">
-                                                <span>*</span>
-                                            </div>
-                                        }
-                                    }
                             </label>
-                            <select
-                                    id="tipoAsunto"
-                                    formControlName="tipoAsunto"
-                                    class="input-field">
-                                        <option [ngValue]="null" disabled>Elija una asunto</option>
-                                        <option value="EUACAPES">EUACAPES</option>
-                                        <option value="CIVIL">CIVIL</option>
-                                        <option value="PENAL">PENAL</option>
-                                        <option value="Respuesta">Respuesta</option>
-                                        <option [ngValue]="null" disabled>GENERALIDADES</option>
-                                        <option value="Penal">Penal</option>
-                                        <option value="Civil">Civil</option>
-                                        <option value="Laboral">Laboral</option>
-                                        <option value="Juicio de Amparo">Juicio de Amparo</option>
-                                        <option value="Concurso Mercantil">Concurso Mercantil</option>
-                                        <option value="Copia de Conocimiento">Copia de Conocimiento</option>
-                                </select>
+                            <div class="disabled-input-field placeholder-blueGray-300">
+                                {{ this.preloadedTipoAsunto() }}
+                            </div>
                         </div>
 
                     </div>
@@ -323,20 +289,17 @@
                                 ||  (secondPiecesForm.controls['documentoEscaneadoField'].invalid && (secondPiecesForm.controls['documentoEscaneadoField'].dirty || secondPiecesForm.controls['documentoEscaneadoField'].touched))
                                 ||  (secondPiecesForm.controls['descripcion'].invalid && (secondPiecesForm.controls['descripcion'].dirty || secondPiecesForm.controls['descripcion'].touched))
                                 ||  (secondPiecesForm.controls['autoridadRemitente'].invalid && (secondPiecesForm.controls['autoridadRemitente'].dirty || secondPiecesForm.controls['autoridadRemitente'].touched))
-                                ||  (secondPiecesForm.controls['personaRelacionada'].invalid && (secondPiecesForm.controls['personaRelacionada'].dirty || secondPiecesForm.controls['personaRelacionada'].touched))
+                                
                                 ||  (secondPiecesForm.controls['documento'].invalid && (secondPiecesForm.controls['documento'].dirty || secondPiecesForm.controls['documento'].touched))
                                 ||  (secondPiecesForm.controls['atencion'].invalid && (secondPiecesForm.controls['atencion'].dirty || secondPiecesForm.controls['atencion'].touched))
-                                ||  (secondPiecesForm.controls['tipoAsunto'].invalid && (secondPiecesForm.controls['tipoAsunto'].dirty || secondPiecesForm.controls['tipoAsunto'].touched))
                                 ) {
                                 @if (
                                         (secondPiecesForm.get('fechaRecepcion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('documentoEscaneadoField')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('descripcion')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('autoridadRemitente')?.errors?.['required'])
-                                    ||  (secondPiecesForm.get('personaRelacionada')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('documento')?.errors?.['required'])
                                     ||  (secondPiecesForm.get('atencion')?.errors?.['required'])
-                                    ||  (secondPiecesForm.get('tipoAsunto')?.errors?.['required'])
                                 ) {
                                     <div class="text-wine text-base p-3 flex gap-3">
                                         <span>REQUERIDO</span>

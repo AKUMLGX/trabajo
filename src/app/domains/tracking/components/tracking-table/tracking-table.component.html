@@ -55,9 +55,9 @@
                   {{ "Administración" }}
                 </th>
 
-                <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio Jupiter" }}
-                </th> -->
+                </th>
 
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Orden" }}
@@ -272,11 +272,11 @@
                   </div>
                 </td>
 
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
                     {{ document.folio_jupiter }}
                   </div>
-                </td> -->
+                </td>
 
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
@@ -314,24 +314,23 @@
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
-
-                      <p class="h-1">
-                        @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
-                            {{document.descripcion | slice: 0 : 25}}
-                            <strong class="points">...</strong>
-                            <button  class="button-read-more" (click)="toggleExpansion($index) ">Leer más</button>
-                          }
-                    </p>
-                      <p  class="overflow-y-auto h-[8rem] w-[8rem]" >
-                        @if ( document.descripcion !== null && document.descripcion.length >= 16  && index === $index){
-                          {{document.descripcion }}
-                          <button class="button-read-less" (click)="toggleExpansion(-1)">Leer menos</button>
-                        }@else if (
-                          document.descripcion !== null && document.descripcion.length <= 16
-                        ) {
-                          {{document.descripcion}}
-                        }
-                      </p>
+                          <p [ngClass]="{'overflow-y-auto': !isExpanded, 'overflow-visible': isExpanded}">
+                              @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
+                                {{document.descripcion | slice: 0 : 25}}
+                                <strong class="points">...</strong>
+                                <button  class="button-read-more" (click)="toggleExpansion($index) ">Leer más</button>
+                              }@else if (document.descripcion !== null && document.descripcion.length <= 24){
+                                   <p  >
+                                     {{document.descripcion}}
+                                     </p>
+                              }
+                        </p>
+                          <p [ngClass]="{'h-20 w-32': isExpanded, 'hidden': !isExpanded}" [ngStyle]="{'overflow-y': isExpanded ? 'auto' : 'visible', 'height': isExpanded ? '100px' : 'auto'}" >
+                            @if ( document.descripcion !== null && document.descripcion.length >= 16  && index === $index){
+                              {{document.descripcion }}
+                              <button class="button-read-less" (click)="toggleExpansion(-1)">Leer menos</button>
+                            }
+                          </p>
                     </div>
                 </td>
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">

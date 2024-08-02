@@ -158,12 +158,12 @@ export class SecondPiecesInfoTableComponent {
         documentoEscaneadoFile!
       );
     } else if (
-        this.TIPOASUNTO() === 'Penal'
-        || this.TIPOASUNTO() === 'Civil'
-        || this.TIPOASUNTO() === 'Laboral'
-        || this.TIPOASUNTO() === 'Juicio de Amparo'
-        || this.TIPOASUNTO() === 'Concurso Mercantil'
-        || this.TIPOASUNTO() === 'Copia de Conocimiento'
+        this.TIPOASUNTO() === 'PENAL'
+        || this.TIPOASUNTO() === 'CIVIL'
+        || this.TIPOASUNTO() === 'LABORAL'
+        || this.TIPOASUNTO() === 'JUICIO DE AMPARO'
+        || this.TIPOASUNTO() === 'CONCURSO MERCANTIL'
+        || this.TIPOASUNTO() === 'COPIA DE CONOCIMIENTO'
       ) {
       this.secondPiecesFormsObjectService.generalidadesFormObject.set({
         folio_interno:         folioInterno,
@@ -213,76 +213,77 @@ export class SecondPiecesInfoTableComponent {
         this.secondPiecesFormsObjectService.respuestaFormObject(),
         documentoEscaneadoFile!
       );
-    } else if (this.TIPOASUNTO() === 'CIVIL') {
-      this.secondPiecesFormsObjectService.civilFormObject.set({
-          oficio:                oficio,
-          folio_scanner:         folioScanner,
-          carpeta_investigacion: carpetaInvestigacion,
-          documento_escaneado:   documentoEscaneado,
-          fecha_recepcion:       fechaRecepcion,
-          autoridad_remitente:   autoridadRemitente,
-          persona_relacionada:   personaRelacionada,
-          turno_jefatura:        turnoJefatura,
-          descripcion:           descripcion,
-          volante_jefatura:      volanteJefatura,
-          folio_jupiter:         folioJupiter,
-          administracion:        administracion,
-          plazo_atencion:        plazoAtencion,
-          documento:             documento,
-          atencion:              atencion,
-          tipo_asunto:           tipoAsunto,
-      });
-      this.civilSecondPieceService.insertSecondPieceCivilForm(
-        this.secondPiecesFormsObjectService.civilFormObject(),
-        documentoEscaneadoFile!
-      );
-    } else if (this.TIPOASUNTO() === 'PENAL') {
-      this.secondPiecesFormsObjectService.penalFormObject.set({
-          oficio:                oficio,
-          folio_scanner:         folioScanner,
-          carpeta_investigacion: carpetaInvestigacion,
-          documento_escaneado:   documentoEscaneado,
-          fecha_recepcion:       fechaRecepcion,
-          autoridad_remitente:   autoridadRemitente,
-          persona_relacionada:   personaRelacionada,
-          turno_jefatura:        turnoJefatura,
-          descripcion:           descripcion,
-          volante_jefatura:      volanteJefatura,
-          folio_jupiter:         folioJupiter,
-          administracion:        administracion,
-          plazo_atencion:        plazoAtencion,
-          documento:             documento,
-          atencion:              atencion,
-          tipo_asunto:           tipoAsunto,
-      });
-      this.penalSecondPieceService.insertSecondPiecePenalForm(
-        this.secondPiecesFormsObjectService.penalFormObject(),
-        documentoEscaneadoFile!
-      );
-    } else if (this.TIPOASUNTO() === 'CONCURSO MERCANTIL') {
-      this.secondPiecesFormsObjectService.concursoMercantilFormObject.set({
-          oficio:                oficio,
-          folio_scanner:         folioScanner,
-          carpeta_investigacion: carpetaInvestigacion,
-          documento_escaneado:   documentoEscaneado,
-          fecha_recepcion:       fechaRecepcion,
-          autoridad_remitente:   autoridadRemitente,
-          persona_relacionada:   personaRelacionada,
-          turno_jefatura:        turnoJefatura,
-          descripcion:           descripcion,
-          volante_jefatura:      volanteJefatura,
-          folio_jupiter:         folioJupiter,
-          administracion:        administracion,
-          plazo_atencion:        plazoAtencion,
-          documento:             documento,
-          atencion:              atencion,
-          tipo_asunto:           tipoAsunto,
-      });
-      this.concursoMercantilSecondPieceService.insertSecondPieceConcursoMercantilForm(
-        this.secondPiecesFormsObjectService.concursoMercantilFormObject(),
-        documentoEscaneadoFile!
-      );
     }
+    //  else if (this.TIPOASUNTO() === 'CIVIL') {
+    //   this.secondPiecesFormsObjectService.civilFormObject.set({
+    //       oficio:                oficio,
+    //       folio_scanner:         folioScanner,
+    //       carpeta_investigacion: carpetaInvestigacion,
+    //       documento_escaneado:   documentoEscaneado,
+    //       fecha_recepcion:       fechaRecepcion,
+    //       autoridad_remitente:   autoridadRemitente,
+    //       persona_relacionada:   personaRelacionada,
+    //       turno_jefatura:        turnoJefatura,
+    //       descripcion:           descripcion,
+    //       volante_jefatura:      volanteJefatura,
+    //       folio_jupiter:         folioJupiter,
+    //       administracion:        administracion,
+    //       plazo_atencion:        plazoAtencion,
+    //       documento:             documento,
+    //       atencion:              atencion,
+    //       tipo_asunto:           tipoAsunto,
+    //   });
+    //   this.civilSecondPieceService.insertSecondPieceCivilForm(
+    //     this.secondPiecesFormsObjectService.civilFormObject(),
+    //     documentoEscaneadoFile!
+    //   );
+    // } else if (this.TIPOASUNTO() === 'PENAL') {
+    //   this.secondPiecesFormsObjectService.penalFormObject.set({
+    //       oficio:                oficio,
+    //       folio_scanner:         folioScanner,
+    //       carpeta_investigacion: carpetaInvestigacion,
+    //       documento_escaneado:   documentoEscaneado,
+    //       fecha_recepcion:       fechaRecepcion,
+    //       autoridad_remitente:   autoridadRemitente,
+    //       persona_relacionada:   personaRelacionada,
+    //       turno_jefatura:        turnoJefatura,
+    //       descripcion:           descripcion,
+    //       volante_jefatura:      volanteJefatura,
+    //       folio_jupiter:         folioJupiter,
+    //       administracion:        administracion,
+    //       plazo_atencion:        plazoAtencion,
+    //       documento:             documento,
+    //       atencion:              atencion,
+    //       tipo_asunto:           tipoAsunto,
+    //   });
+    //   this.penalSecondPieceService.insertSecondPiecePenalForm(
+    //     this.secondPiecesFormsObjectService.penalFormObject(),
+    //     documentoEscaneadoFile!
+    //   );
+    // } else if (this.TIPOASUNTO() === 'CONCURSO MERCANTIL') {
+    //   this.secondPiecesFormsObjectService.concursoMercantilFormObject.set({
+    //       oficio:                oficio,
+    //       folio_scanner:         folioScanner,
+    //       carpeta_investigacion: carpetaInvestigacion,
+    //       documento_escaneado:   documentoEscaneado,
+    //       fecha_recepcion:       fechaRecepcion,
+    //       autoridad_remitente:   autoridadRemitente,
+    //       persona_relacionada:   personaRelacionada,
+    //       turno_jefatura:        turnoJefatura,
+    //       descripcion:           descripcion,
+    //       volante_jefatura:      volanteJefatura,
+    //       folio_jupiter:         folioJupiter,
+    //       administracion:        administracion,
+    //       plazo_atencion:        plazoAtencion,
+    //       documento:             documento,
+    //       atencion:              atencion,
+    //       tipo_asunto:           tipoAsunto,
+    //   });
+    //   this.concursoMercantilSecondPieceService.insertSecondPieceConcursoMercantilForm(
+    //     this.secondPiecesFormsObjectService.concursoMercantilFormObject(),
+    //     documentoEscaneadoFile!
+    //   );
+    // }
 
   }
 }
