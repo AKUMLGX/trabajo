@@ -210,9 +210,11 @@
 
             } @else if(preloadedTipoAsunto() === '') {
 
-                <div>
-                    This component is intended to harbour an independent II Part Form containing a selectable Tipo Asunto (rather than a preloaded one).
-                </div>
+                <mat-step label="Formulario Segunda Pieza (Parte II)">
+                    <div class="step-wrapper">
+                        <app-plazo-atencion-nullable-second-pieces-form />
+                    </div>
+                </mat-step>
             }
 
             

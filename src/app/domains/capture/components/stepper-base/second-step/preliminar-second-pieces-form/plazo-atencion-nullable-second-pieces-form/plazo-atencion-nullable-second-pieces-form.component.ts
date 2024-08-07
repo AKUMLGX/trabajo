@@ -64,6 +64,7 @@ export class PlazoAtencionNullableSecondPiecesFormComponent {
     atencion: [null, [Validators.required]],
     autoridadRemitente: ['', [Validators.required, Validators.maxLength(255)]],
     turnoJefatura: [null, [Validators.maxLength(255)]],
+    tipoAsunto: [null, [Validators.required]],
     plazoAtencionHoras: [null, [Validators.min(1)]],
     plazoAtencionDias: [null, [Validators.min(0)]],
     plazoAtencionUrgente: [false],
@@ -101,7 +102,7 @@ export class PlazoAtencionNullableSecondPiecesFormComponent {
       this.plazoAtencionNullableSecondPiecesForm.value.autoridadRemitente,
       this.plazoAtencionNullableSecondPiecesForm.value.turnoJefatura,
       this.preloadedPersonaRelacionada(),
-      this.preloadedTipoAsunto(),
+      this.plazoAtencionNullableSecondPiecesForm.value.tipoAsunto,
       this.plazoAtencionNullableSecondPiecesForm.value.volanteJefatura,
       this.plazoAtencionNullableSecondPiecesForm.value.folioJupiter,
     );

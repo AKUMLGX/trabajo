@@ -12,6 +12,7 @@ import { CollectFormInfoService } from '../../../shared/services/collect-form-in
 import { SearchStatusService } from '../../../shared/services/search-status.service';
 import { CollectCarpetaStatusService } from './../../../shared/collect-carpeta-status.service';
 import { CivilPenalMercantilFormComponent } from './third-step/preliminar-form/civil-penal-mercantil-form/civil-penal-mercantil-form.component';
+import { PlazoAtencionNullableSecondPiecesFormComponent } from './second-step/preliminar-second-pieces-form/plazo-atencion-nullable-second-pieces-form/plazo-atencion-nullable-second-pieces-form.component';
 
 @Component({
   selector: 'app-stepper-base',
@@ -27,6 +28,7 @@ import { CivilPenalMercantilFormComponent } from './third-step/preliminar-form/c
     PreliminarSecondPiecesFormComponent,
     SecondPiecesFormComponent,
     CivilPenalMercantilFormComponent,
+    PlazoAtencionNullableSecondPiecesFormComponent,
   ],
   templateUrl: './stepper-base.component.html',
   styleUrl: './stepper-base.component.css'
