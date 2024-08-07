@@ -111,7 +111,7 @@ export class EditTackingTableComponent implements OnInit {
     id_asunto_historico: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
     id_asunto_nuevo: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
     // documento_escaneado: [null, [Validators.required]],
-    descargo: [["", Validators.required], { value: this.documents?.descargo }],
+    descargo: [["", Validators.required], { value: this.documents ? this.documents.descargo : ""}],
     tipo_asunto: [["", Validators.required], { value: this.documents?.tipo_asunto }],
     base_captura_administracion: [["", Validators.required], { value: this.documents?.base_captura_administracion }],
     autor: [["", Validators.required], { value: this.documents?.autor }],
