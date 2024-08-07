@@ -23,6 +23,21 @@
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio Scanner" }}
                 </th> -->
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Oficio" }}
+                </th>
+
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Atención" }}
+                </th>
+
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Administración" }}
+                </th>
+
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Volante Jefatura" }}
                 </th>
@@ -42,18 +57,13 @@
                 </th> -->
 
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Oficio" }}
-                </th>
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Autoridad remitente" }}
                 </th>
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio" }}
                 </th> -->
 
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Administración" }}
-                </th>
+
 
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio Jupiter" }}
@@ -78,9 +88,7 @@
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Documento" }}
                 </th> -->
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Atención" }}
-                </th>
+
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Descripción" }}
                 </th>
@@ -201,18 +209,18 @@
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.folio_interno }}
 
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.carpeta_investigacion }}
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.persona_relacionada }}
                   </div>
                 </td>
@@ -221,13 +229,32 @@
                     {{ document.folio_scanner }}
                   </div>
                 </td> -->
+
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine ">
+                    {{ document.oficio }}
+                  </div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm  leading-5 text-wine text-center">
+                    {{ document.atencion }}
+                  </div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-center">
+                    {{ document.administracion }}
+                  </div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.volante_jefatura }}
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.fecha_captura }}
                   </div>
                 </td>
@@ -250,13 +277,9 @@
                   </div>
                 </td> -->
 
+
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.oficio }}
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.autoridad_remitente }}
                   </div>
                 </td>
@@ -266,14 +289,10 @@
                   </div>
                 </td> -->
 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.administracion }}
-                  </div>
-                </td>
+
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.folio_jupiter }}
                   </div>
                 </td>
@@ -285,7 +304,7 @@
                 </td> -->
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.fecha_recepcion }}
                   </div>
                 </td>
@@ -297,7 +316,7 @@
                 </td> -->
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.documento_escaneado }}
                   </div>
                 </td>
@@ -306,11 +325,7 @@
                     {{ document.documento }}
                   </div>
                 </td> -->
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm  leading-5 text-wine">
-                    {{ document.atencion }}
-                  </div>
-                </td>
+
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
@@ -349,7 +364,7 @@
                   </div>
                 </td> -->
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.turno_jefatura }}
                   </div>
                 </td>
@@ -359,7 +374,7 @@
                   </div>
                 </td> -->
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.plazo_atencion }}
                   </div>
                 </td>
@@ -419,7 +434,7 @@
                 </td> -->
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
+                  <div class="text-sm leading-5 text-wine text-center">
                     {{ document.respuesta }}
                   </div>
                 </td>
