@@ -54,21 +54,21 @@ export class EditTackingTableComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion)
-    this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada)
-    this.updateTableForm.controls['folio_scanner'].setValue(this.documents.folio_scanner)
-    this.updateTableForm.controls['volante_jefatura'].setValue(this.documents.volante_jefatura)
-    this.updateTableForm.controls['oficio'].setValue(this.documents.oficio)
-    this.updateTableForm.controls['autoridad_remitente'].setValue(this.documents.autoridad_remitente)
-    this.updateTableForm.controls['folio_jupiter'].setValue(this.documents.folio_jupiter)
-    this.updateTableForm.controls['descripcion'].setValue(this.documents.descripcion)
-    this.updateTableForm.controls['turno_jefatura'].setValue(this.documents.turno_jefatura)
-    this.updateTableForm.controls['id_administracion_fk'].setValue(this.getAdministracion(this.documents.administracion.toString()))
-    this.updateTableForm.controls['id_atencion_fk'].setValue(this.getAtencion(this.documents.atencion.toString()))
-    this.updateTableForm.controls["id_asunto_historico"].setValue(this.documents.id_asunto_historico)
-    this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo),
+    this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion !== null ? this.documents.carpeta_investigacion : "")
+    this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada !== null ? this.documents.persona_relacionada : "")
+    this.updateTableForm.controls['folio_scanner'].setValue(this.documents.folio_scanner !== null ? this.documents.folio_scanner : "")
+    this.updateTableForm.controls['volante_jefatura'].setValue(this.documents.volante_jefatura !== null ? this.documents.volante_jefatura : "")
+    this.updateTableForm.controls['oficio'].setValue(this.documents.oficio !== null ? this.documents.oficio : "")
+    this.updateTableForm.controls['autoridad_remitente'].setValue(this.documents.autoridad_remitente !== null ? this.documents.autoridad_remitente : "")
+    this.updateTableForm.controls['folio_jupiter'].setValue(this.documents.folio_jupiter !== null ? this.documents.folio_jupiter : "")
+    this.updateTableForm.controls['descripcion'].setValue(this.documents.descripcion !== null ? this.documents.descripcion : "")
+    this.updateTableForm.controls['turno_jefatura'].setValue(this.documents.turno_jefatura !== null ? this.documents.turno_jefatura : "")
+    this.updateTableForm.controls['id_administracion_fk'].setValue(this.getAdministracion(this.documents.administracion.toString()) !== null ? this.getAdministracion(this.documents.administracion.toString()) : "" )
+    this.updateTableForm.controls['id_atencion_fk'].setValue(this.getAtencion(this.documents.atencion.toString()) !== null ? this.getAtencion(this.documents.atencion.toString()):"")
     this.updateTableForm.controls["descargo"].setValue(this.documents.descargo), this.updateTableForm.controls["descargo"].disable()
     this.updateTableForm.controls["tipo_asunto"].setValue(this.documents.tipo_asunto), this.updateTableForm.controls["tipo_asunto"].disable()
+    this.updateTableForm.controls["id_asunto_historico"].setValue(this.documents.id_asunto_historico)
+    this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo)
     this.updateTableForm.controls["autor"].setValue(this.documents.autor), this.updateTableForm.controls["autor"].disable()
     this.updateTableForm.controls["folio"].setValue(this.documents.folio), this.updateTableForm.controls["folio"].disable()
     this.updateTableForm.controls["orden"].setValue(this.documents.orden), this.updateTableForm.controls["orden"].disable()
@@ -97,45 +97,45 @@ export class EditTackingTableComponent implements OnInit {
 
 
   public updateTableForm: FormGroup = this.fb.group({
-    carpeta_investigacion: [["", Validators.required], { value: this.documents?.carpeta_investigacion }],
-    persona_relacionada: [["", Validators.required], { value: this.documents?.persona_relacionada }],
-    folio_scanner: [["", Validators.required], { value: this.documents?.folio_scanner }],
-    volante_jefatura: [["", Validators.required], {value: this.documents?.volante_jefatura}],
-    oficio: [["", Validators.required], { value: this.documents?.oficio }],
-    autoridad_remitente: [["", Validators.required], { value: this.documents?.autoridad_remitente }],
-    folio_jupiter: [["", Validators.required], { value: this.documents?.folio_jupiter }],
-    descripcion: [["", Validators.required], { value: this.documents?.descripcion}],
-    turno_jefatura: [["", Validators.required], { value: this.documents?.turno_jefatura}],
-    id_administracion_fk: [["", Validators.required]],
-    id_atencion_fk: [["", Validators.required], { value: this.documents?.atencion }],
-    id_asunto_historico: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
-    id_asunto_nuevo: [["", Validators.required], { value: this.documents?.id_asunto_historico}],
+    carpeta_investigacion: [[""], {  value: this.documents?.carpeta_investigacion !== null ? this.documents?.carpeta_investigacion : ""  }],
+    persona_relacionada: [[""], { value: this.documents?.persona_relacionada !== null ? this.documents?.persona_relacionada : "" }],
+    folio_scanner: [[""], {  value: this.documents?.folio_scanner !== null ? this.documents?.folio_scanner : "" }],
+    volante_jefatura: [[""], { value: this.documents?.volante_jefatura !== null ? this.documents?.volante_jefatura : "" }],
+    oficio: [[""], {  value: this.documents?.oficio !== null ? this.documents?.oficio : "" }],
+    autoridad_remitente: [[""], {  value: this.documents?.autoridad_remitente !== null ? this.documents?.autoridad_remitente : "" }],
+    folio_jupiter: [[""], {  value: this.documents?.folio_jupiter !== null ? this.documents?.folio_jupiter : ""  }],
+    descripcion: [[""], {  value: this.documents?.descripcion !== null ? this.documents?.descripcion : "" }],
+    turno_jefatura: [["",], {  value: this.documents?.turno_jefatura !== null ? this.documents?.turno_jefatura : "" }],
+    id_administracion_fk: [[""],{ value: this.documents?.administracion !== null ? this.documents?.administracion: "" }],
+    id_atencion_fk: [[""], {value: this.documents?.atencion !== null ? this.documents?.atencion : ""  }],
+    id_asunto_historico: [[""], { value: this.documents?.id_asunto_historico}],
+    id_asunto_nuevo: [[""], { value: this.documents?.id_asunto_historico}],
     // documento_escaneado: [null, [Validators.required]],
-    descargo: [["", Validators.required], { value: this.documents?.descargo }],
-    tipo_asunto: [["", Validators.required], { value: this.documents?.tipo_asunto }],
-    base_captura_administracion: [["", Validators.required], { value: this.documents?.base_captura_administracion }],
-    autor: [["", Validators.required], { value: this.documents?.autor }],
-    folio: [["", Validators.required], { value: this.documents?.folio }],
-    fecha_atencion: [["", Validators.required], { value: this.documents?.fecha_atencion }],
-    orden: [["", Validators.required], { value: this.documents?.orden }],
-    documento: [["", Validators.required], { value: this.documents?.documento }],
-    areas_pendientes: [["", Validators.required], { value: this.documents?.areas_pendientes }],
-    area_pendiente: [["", Validators.required], { value: this.documents?.area_pendiente }],
-    autoridad_solicitante: [["", Validators.required], { value: this.documents?.autoridad_solicitante }],
-    correo_electronico: [["", Validators.required], { value: this.documents?.correo_electronico }],
-    que_solicita: [["", Validators.required], { value: this.documents?.que_solicita }],
-    fecha_numero_oficio_atencion: [["", Validators.required], { value: this.documents?.fecha_numero_oficio_atencion }],
-    asuntos_enviados_correo_mara: [["", Validators.required], { value: this.documents?.asuntos_enviados_correo_mara }],
-    atentas_notas_respuestas: [["", Validators.required], { value: this.documents?.atentas_notas_respuestas }],
-    fecha_turnado: [["", Validators.required], { value: this.documents?.fecha_turnado }],
-    hora_recepcion: [["", Validators.required], { value: this.documents?.hora_recepcion }],
-    tipo: [["", Validators.required], { value: this.documents?.tipo }],
-    unidad_administrativa_autoridad: [["", Validators.required], { value: this.documents?.unidad_administrativa_autoridad }],
-    fecha_descargo: [["", Validators.required], { value: this.documents?.fecha_descargo }],
-    fecha_oficio: [["", Validators.required], { value: this.documents?.fecha_oficio }],
-    reporte: [["", Validators.required], { value: this.documents?.reporte }],
-    acuse: [["", Validators.required], { value: this.documents?.acuse }],
-    piezas_fgr_administracion: [["", Validators.required], { value: this.documents?.piezas_fgr_administracion }],
+    descargo: [[""], { value: this.documents?.descargo }],
+    tipo_asunto: [[""], { value: this.documents?.tipo_asunto }],
+    base_captura_administracion: [[""], { value: this.documents?.base_captura_administracion }],
+    autor: [[""], { value: this.documents?.autor }],
+    folio: [[""], { value: this.documents?.folio }],
+    fecha_atencion: [[""], { value: this.documents?.fecha_atencion }],
+    orden: [[""], { value: this.documents?.orden }],
+    documento: [[""], { value: this.documents?.documento }],
+    areas_pendientes: [[""], { value: this.documents?.areas_pendientes }],
+    area_pendiente: [[""], { value: this.documents?.area_pendiente }],
+    autoridad_solicitante: [[""], { value: this.documents?.autoridad_solicitante }],
+    correo_electronico: [[""], { value: this.documents?.correo_electronico }],
+    que_solicita: [[""], { value: this.documents?.que_solicita }],
+    fecha_numero_oficio_atencion: [[""], { value: this.documents?.fecha_numero_oficio_atencion }],
+    asuntos_enviados_correo_mara: [[""], { value: this.documents?.asuntos_enviados_correo_mara }],
+    atentas_notas_respuestas: [[""], { value: this.documents?.atentas_notas_respuestas }],
+    fecha_turnado: [[""], { value: this.documents?.fecha_turnado }],
+    hora_recepcion: [[""], { value: this.documents?.hora_recepcion }],
+    tipo: [[""], { value: this.documents?.tipo }],
+    unidad_administrativa_autoridad: [[""], { value: this.documents?.unidad_administrativa_autoridad }],
+    fecha_descargo: [[""], { value: this.documents?.fecha_descargo }],
+    fecha_oficio: [[""], { value: this.documents?.fecha_oficio }],
+    reporte: [[""], { value: this.documents?.reporte }],
+    acuse: [[""], { value: this.documents?.acuse }],
+    piezas_fgr_administracion: [[""], { value: this.documents?.piezas_fgr_administracion }],
   });
 
 
@@ -210,37 +210,37 @@ export class EditTackingTableComponent implements OnInit {
     this.isTouched = true
   }
 
-  openCustomModalWithTemplate(template: TemplateRef<any>) {
-    if (this.isTouched === true) {
-      this.asuntoService.checkNameCarpetaInvestigacionUpdate(
-        this.updateTableForm
-      ).subscribe((res) => {
-        this.carpetaResultList = res;
-        if (this.carpetaResultList.length > 0) {
-          this.modalService.openCustomDialogWithTemplate({
-            template
-          })
-        }
-      })
-    } else {
-      if (this.carpetaResultList.length === 0) {
-        this.isavailable = true;
-        this.saveUpdateForm()
-      }
-    }
-  }
+  // openCustomModalWithTemplate(template: TemplateRef<any>) {
+  //   if (this.isTouched === true) {
+  //     this.asuntoService.checkNameCarpetaInvestigacionUpdate(
+  //       this.updateTableForm
+  //     ).subscribe((res) => {
+  //       this.carpetaResultList = res;
+  //       if (this.carpetaResultList.length > 0) {
+  //         this.modalService.openCustomDialogWithTemplate({
+  //           template
+  //         })
+  //       }
+  //     })
+  //   } else {
+  //     if (this.carpetaResultList.length === 0) {
+  //       this.isavailable = true;
+  //       this.saveUpdateForm()
+  //     }
+  //   }
+  // }
 
-  availability() {
-    this.asuntoService.checkNameCarpetaInvestigacionUpdate(
-      this.updateTableForm
-    ).subscribe((res) => {
-      this.carpetaResultList = res
-      if (this.carpetaResultList.length === 0) {
-        this.isavailable = true;
-        this.saveUpdateForm()
-      }
-    })
-  }
+  // availability() {
+  //   this.asuntoService.checkNameCarpetaInvestigacionUpdate(
+  //     this.updateTableForm
+  //   ).subscribe((res) => {
+  //     this.carpetaResultList = res
+  //     if (this.carpetaResultList.length === 0) {
+  //       this.isavailable = true;
+  //       this.saveUpdateForm()
+  //     }
+  //   })
+  // }
 
   getRol(): string {
     let sessionInfo = localStorage.getItem('sessionInfo');

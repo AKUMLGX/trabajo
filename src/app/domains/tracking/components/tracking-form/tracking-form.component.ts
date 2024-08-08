@@ -41,7 +41,7 @@ export class TrackingFormComponent {
 
   public fecha = new FormControl('');
   public administracion = new FormControl('');
-  public formato = new FormControl('');
+  public formato = new FormControl('pdf');
 
   public fechaActual = '2018-11-11';
 
@@ -120,4 +120,9 @@ export class TrackingFormComponent {
     }
     this.cleanCoincidencias();
   }
+
+  getToday(): string {
+    return new Date().toISOString().split('T')[0]
+  }
+
 }
