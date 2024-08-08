@@ -35,22 +35,22 @@ export class SearchStatusService {
   updateSelectedRow(row: any) {
     this.selectedRow.set(row);
     if(this.selectedRow()[0].folio_interno === null) {
-      this.folioInternoFromSelectedRow.set('');
+      this.folioInternoFromSelectedRow.set('CARLOS');
     } else {
       this.folioInternoFromSelectedRow.set(this.selectedRow()[0].folio_interno);
     }
     if(this.selectedRow()[0].carpeta_investigacion === null) {
-      this.carpetaInvestigacionFromSelectedRow.set('');
+      this.carpetaInvestigacionFromSelectedRow.set('CARLOS');
     } else {
       this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion);
     }
     if(this.selectedRow()[0].administracion === null) {
-      this.administracionFromSelectedRow.set('');
+      this.administracionFromSelectedRow.set('CARLOS');
     } else {
       this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion);
     }
     if(this.selectedRow()[0].persona_relacionada === null) {
-      this.personaRelacionadaFromSelectedRow.set('');
+      this.personaRelacionadaFromSelectedRow.set('CARLOS');
     } else {
       this.personaRelacionadaFromSelectedRow.set(this.selectedRow()[0].persona_relacionada);
     }
