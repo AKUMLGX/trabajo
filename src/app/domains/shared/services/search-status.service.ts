@@ -34,21 +34,31 @@ export class SearchStatusService {
 
   updateSelectedRow(row: any) {
     this.selectedRow.set(row);
-    (this.selectedRow()[0].folio_interno !== null) 
-          ? this.folioInternoFromSelectedRow.set(this.selectedRow()[0].folio_interno)
-          : this.folioInternoFromSelectedRow();
-    (this.selectedRow()[0].carpeta_investigacion !== null)
-          ? this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion) 
-          : this.carpetaInvestigacionFromSelectedRow();
-    (this.selectedRow()[0].administracion !== null)
-          ? this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion)    
-          : this.administracionFromSelectedRow();
-    (this.selectedRow()[0].persona_relacionada !== null)
-          ? this.personaRelacionadaFromSelectedRow.set(this.selectedRow()[0].persona_relacionada)
-          : this.personaRelacionadaFromSelectedRow();    
-    (this.selectedRow()[0].tipo_asunto !== null)
-          ? this.tipoAsuntoFromSelectedRow.set(this.selectedRow()[0].tipo_asunto)
-          : this.tipoAsuntoFromSelectedRow();
+    if(this.selectedRow()[0].folio_interno === null) {
+      this.folioInternoFromSelectedRow.set('');
+    } else {
+      this.folioInternoFromSelectedRow.set(this.selectedRow()[0].folio_interno);
+    }
+    if(this.selectedRow()[0].carpeta_investigacion === null) {
+      this.carpetaInvestigacionFromSelectedRow.set('');
+    } else {
+      this.carpetaInvestigacionFromSelectedRow.set(this.selectedRow()[0].carpeta_investigacion);
+    }
+    if(this.selectedRow()[0].administracion === null) {
+      this.administracionFromSelectedRow.set('');
+    } else {
+      this.administracionFromSelectedRow.set(this.selectedRow()[0].administracion);
+    }
+    if(this.selectedRow()[0].persona_relacionada === null) {
+      this.personaRelacionadaFromSelectedRow.set('');
+    } else {
+      this.personaRelacionadaFromSelectedRow.set(this.selectedRow()[0].persona_relacionada);
+    }
+    if(this.selectedRow()[0].tipo_asunto === null) {
+      this.tipoAsuntoFromSelectedRow.set('');
+    } else {
+      this.tipoAsuntoFromSelectedRow.set(this.selectedRow()[0].tipo_asunto);
+    }
   }
 
   manuallyRedirectToAperturas(redirectStatus: boolean) {

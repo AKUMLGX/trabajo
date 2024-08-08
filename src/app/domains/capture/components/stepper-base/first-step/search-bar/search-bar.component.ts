@@ -106,6 +106,10 @@ export class SearchBarComponent {
     console.log('selectionMOdel-array', this.selectionModel.selected);
     this.selectedRow = this.selectionModel.selected;
     this.searchStatusService.updateSelectedRow(this.selectedRow);
+    console.log(this.searchStatusService.carpetaInvestigacionFromSelectedRow());
+    console.log(this.searchStatusService.tipoAsuntoFromSelectedRow());
+    console.log(typeof(this.searchStatusService.carpetaInvestigacionFromSelectedRow()));
+    console.log(typeof(this.searchStatusService.tipoAsuntoFromSelectedRow()));
   }
 
   reactToCheck() {
