@@ -200,11 +200,25 @@
                 </div>
             </mat-step>
 
-            <mat-step label="Formulario Segunda Pieza (Parte II)">
-                <div class="step-wrapper">
-                    <app-second-pieces-form />
-                </div>
-            </mat-step>
+            @if(preloadedTipoAsunto() === '') {
+
+                <mat-step label="Formulario Segunda Pieza (Parte II)">
+                    <div class="step-wrapper">
+                        <app-plazo-atencion-nullable-second-pieces-form />
+                    </div>
+                </mat-step>
+
+            } @else {
+
+                <mat-step label="Formulario Segunda Pieza (Parte II)">
+                    <div class="step-wrapper">
+                        <app-second-pieces-form />
+                    </div>
+                </mat-step>
+                
+            }
+
+            
         }
 
     </mat-vertical-stepper>

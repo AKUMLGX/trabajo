@@ -324,11 +324,8 @@
               Cancelar
             </button>
             <button (click)="
-                                isavailable === true ?
-                                 saveUpdateForm()
-                                 :
-                                 openCustomModalWithTemplate(templateCarpeta)
-                            " (click)="availability()" [disabled]="!botonHabilitado"
+                              saveUpdateForm()
+                               " [disabled]="!botonHabilitado"
               [ngClass]=" !botonHabilitado ? 'next-button-disabled' : 'modal-right-button ml-1 '">
               Aceptar
             </button>
@@ -340,7 +337,7 @@
   </div>
 </div>
 
-<ng-template #templateCarpeta>
+<!-- <ng-template #templateCarpeta>
   <div class="bg-[#D9BCA3]/30">
     <h2 mat-dialog-title class="text-center"> Carpeta de Investigación no disponible</h2>
     <mat-dialog-content>
@@ -356,6 +353,6 @@
       </mat-dialog-actions>
     </div>
   </div>
-</ng-template>
+</ng-template> -->
 
 }
