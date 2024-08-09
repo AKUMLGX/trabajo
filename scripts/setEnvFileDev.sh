@@ -40,9 +40,7 @@ export const environment = {
 EOF
 
 cat >> ${destination_path} << EOF
-  baseUrl: '${ENV_DEV_baseUrl}',
   oauthParametersEndpoint: '${ENV_DEV_oauthParametersEndpoint}',
-  layoutUrl: '${ENV_DEV_layoutUrl}',
   tokenValidationEndpoint: '${ENV_DEV_tokenValidationEndpoint}',
   refreshTokenEndpoint: '${ENV_DEV_refreshTokenEndpoint}',
   asuntoEndpoint: '${ENV_DEV_asuntoEndpoint}',
@@ -54,10 +52,14 @@ cat >> ${destination_path} << EOF
   getPdfEndpoint: '${ENV_DEV_getPdfEndpoint}',
   getMsgEndpoint: '${ENV_DEV_getMsgEndpoint}',
   base: '${ENV_DEV_base}',
-  loginUrl: '${ENV_DEV_loginUrl}',
-  logoutUrl: '${ENV_DEV_logoutUrl}',
-  hash: '222222',
-  environment: 'nodeberia'
+  environment:(window as {[key:string]:any})["env"]["environment"],
+  hash: (window as {[key:string]:any})["env"]["hash"],
+  baseUrl:(window as {[key:string]:any})["env"]["baseUrl"],
+  layoutUrl:(window as {[key:string]:any})["env"]["layoutUrl"],
+  loginUrl:(window as {[key:string]:any})["env"]["loginUrl"],
+  logoutUrl:(window as {[key:string]:any})["env"]["logoutUrl"],
+
+
 EOF
 
 cat >> ${destination_path}  << EOF
