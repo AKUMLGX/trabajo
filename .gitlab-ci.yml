@@ -147,7 +147,7 @@ Build_image:
   image: docker:24.0.7
   services:
     - docker:dind
-  dependencies: ["Env_File_Creation"]
+  dependencies: []
   tags:
     - Develop
   stage: Build
