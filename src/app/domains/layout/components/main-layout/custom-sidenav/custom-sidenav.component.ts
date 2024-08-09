@@ -58,7 +58,8 @@ export class CustomSidenavComponent {
 
   date = this.pipe.transform(new Date(), 'YYYY');
 
-  commit_sha = `${environment.hash}`
+  commit_sha = `${environment.hash}`.substring(0,8)
 
+  envrionment =  `${environment.environment}`
 
 }

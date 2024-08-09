@@ -1,4 +1,7 @@
 <div class="sidenav-background">
+  <div class="text-small" >
+    <span> {{commit_sha}}{{envrionment}}</span>
+  </div>
     <div class="sidenav-header flex flex-col justify-center items-center">
         @if(collapsed) {
             <div class="w-12 h-12 mt-8 flex justify-center items-center bg-white rounded-lg">
@@ -51,11 +54,6 @@
             }
         </a>
         </mat-nav-list>
-
-        <div class="text">
-          <span class="leading-8">D. R. &#169; Servicio de Administración Tributaria {{ date }}</span>
-          <span> {{commit_sha}}</span>
-        </div>
     </div>
 </div>
 

@@ -37,3 +37,7 @@
     height: 0px;
 }
 
+.text-small{
+  font-size: 10px;
+  opacity: 0.2;
+}

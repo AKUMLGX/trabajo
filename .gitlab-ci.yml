@@ -228,6 +228,12 @@ Build_image_Release:
 Deploy_DEV_A:
   variables:
     AKAMBA_FRONT_A: ${AKAMBA_DEV_FRONT_A}
+    HASH: ${CI_COMMIT_SHA}
+    ENVIRONMENT: ${ENV_DEV_ENVIRONMENT}
+    BASEURL: ${ENV_DEV_BASEURL}
+    LAYOUTURL: ${ENV_DEV_LAYOUTURL}
+    LOGINURL: ${ENV_DEV_LOGINURL}
+    LOGOUTURL: ${ENV_DEV_LOGOUTURL}
   only:
     - desarrollo
     - desarrollo-test
@@ -264,6 +270,12 @@ Deploy_DEV_A:
 Deploy_DEV_B:
   variables:
     AKAMBA_FRONT_B: ${AKAMBA_DEV_FRONT_B}
+    HASH: ${CI_COMMIT_SHA}
+    ENVIRONMENT: ${ENV_DEV_ENVIRONMENT}
+    BASEURL: ${ENV_DEV_BASEURL}
+    LAYOUTURL: ${ENV_DEV_LAYOUTURL}
+    LOGINURL: ${ENV_DEV_LOGINURL}
+    LOGOUTURL: ${ENV_DEV_LOGOUTURL}
   only:
     - desarrollo
     - desarrollo-test
@@ -341,9 +353,12 @@ Deploy_UAT:
 # Despliegue a PRODUCCION
 Deploy_PROD:
   variables:
-    VERSION: ${VERSION}-R
-    AKAMBA_FRONT_A: ${AKAMBA_PRO_FRONT_A}
-    AKAMBA_FRONT_B: ${AKAMBA_PRO_FRONT_B}
+   HASH:  ${CI_COMMIT_SHA}
+   ENVIRONMENT: ${ENV_PROD_ENVIRONMENT}
+   BASEURL: ${ENV_PROD_BASEURL}
+   LAYOUTURL: ${ENV_PROD_LAYOUTURL}
+   LOGINURL: ${ENV_PROD_LOGINURL}
+   LOGOUTURL: ${ENV_PROD_LOGOUTURL}
   only:
     - produccion-test
     - produccion

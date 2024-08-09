@@ -52,6 +52,7 @@ RUN sed -i 's/101:/119:/g' /etc/group
 RUN touch /run/nginx.pid &&  chown -R nginx:nginx /run/nginx.pid
 #RUN chown -R nginx:nginx /var/cache/nginx
 RUN chown -R nginx:nginx  /var/cache/nginx /var/www/html
+RUN ls src\environments\env-template.js
 
 # Archivos de configuración
 COPY ./nginx/ /etc/nginx
@@ -59,3 +60,4 @@ COPY ./nginx/ /etc/nginx
 # Puertos de exposición para nginx
 EXPOSE 80
 CMD [ "/bin/sh", "-c", "exec nginx -g 'daemon off;'"]
+CMD [ "/bin/sh", "-c", "envsubst < src\environments\env-template.js > /var/www/assets/env.js && exec nginx -p 4200:4200 -g 'daemon off;'"]

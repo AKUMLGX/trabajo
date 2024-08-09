@@ -24,7 +24,7 @@
 
 
 export const environment={
-  // environment:(window as {[key:string]:any})["env"]["environment"],
+  environment:(window as {[key:string]:any})["env"]["environment"],
   hash: (window as {[key:string]:any})["env"]["hash"],
 
   baseUrl:(window as {[key:string]:any})["env"]["baseUrl"],
