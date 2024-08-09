@@ -14,6 +14,10 @@ export const environment = {
   getMsgEndpoint: 'getMsg',
   base: '/akamba',
   loginUrl: 'http://localhost:4200/login',
-  logoutUrl: 'https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout'
+  logoutUrl: 'https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout',
+
+  environment:"DEVELOPMENT",
+  hash: "1111111",
+
 };
 

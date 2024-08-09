@@ -2,18 +2,18 @@
     <div class="sidenav-header flex flex-col justify-center items-center">
         @if(collapsed) {
             <div class="w-12 h-12 mt-8 flex justify-center items-center bg-white rounded-lg">
-                <img 
-                    [width]="profilePicSize()" 
-                    [height]="profilePicSize()" 
-                    src="{{environment.base}}/assets/images/avatar.png" 
+                <img
+                    [width]="profilePicSize()"
+                    [height]="profilePicSize()"
+                    src="{{environment.base}}/assets/images/avatar.png"
                 />
             </div>
         } @else {
             <div class="w-32 h-32 bg-white flex justify-center items-center rounded-lg">
-                <img 
-                    [width]="profilePicSize()" 
-                    [height]="profilePicSize()" 
-                    src="{{environment.base}}/assets/images/logo-sat.png" 
+                <img
+                    [width]="profilePicSize()"
+                    [height]="profilePicSize()"
+                    src="{{environment.base}}/assets/images/logo-sat.png"
                 />
             </div>
         }
@@ -25,8 +25,8 @@
     <div class="mt-6">
         <mat-nav-list>
             @for (item of menuItems(); track item.label) {
-                <a 
-                    mat-list-item 
+                <a
+                    mat-list-item
                     [routerLink]="item.route"
                     routerLinkActive
                     #rla="routerLinkActive"
@@ -37,10 +37,10 @@
                         <span matListItemTitle class="text-white">{{ item.label }}</span>
                     }
                 </a>
-            }   
-            <a 
+            }
+            <a
             mat-list-item
-            (click)="logout()" 
+            (click)="logout()"
             routerLinkActive
             #rla="routerLinkActive"
             [activated]="rla.isActive"
@@ -51,6 +51,11 @@
             }
         </a>
         </mat-nav-list>
+
+        <div class="text">
+          <span class="leading-8">D. R. &#169; Servicio de Administración Tributaria {{ date }}</span>
+          <span> {{commit_sha}}</span>
+        </div>
     </div>
 </div>
 

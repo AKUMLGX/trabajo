@@ -150,6 +150,8 @@ export class EditTackingTableComponent implements OnInit {
       return 5
     }else if(atencion === "RECIBIDO"){
       return 4
+    }else if(atencion === ""){
+      return ""
     }
     return
   }
@@ -165,6 +167,8 @@ export class EditTackingTableComponent implements OnInit {
       return 4
     }else if(administracion === "a_5"){
       return 5
+    }else if(administracion === ""){
+       return ""
     }
     return
   }

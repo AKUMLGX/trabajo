@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterModule } from '@angular/router';
 import { LogoutService } from '../../../../services/logout.service';
 import { environment } from '../../../../../../environments/environment';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-custom-sidenav',
@@ -21,9 +22,9 @@ export class CustomSidenavComponent {
 
   constructor(private logoutService: LogoutService) {}
   @Input() collapsed: boolean = false;
-  
+
   public environment = environment;
-  
+
   menuItems = signal<MenuItem[]>([
     {
       icon: 'dvr',
@@ -52,4 +53,12 @@ export class CustomSidenavComponent {
   logout() {
     this.logoutService.logout();
   }
+
+  pipe = new DatePipe('en-US');
+
+  date = this.pipe.transform(new Date(), 'YYYY');
+
+  commit_sha = `${environment.hash}`
+
+
 }
