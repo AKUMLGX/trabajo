@@ -61,4 +61,4 @@ COPY ./nginx/ /etc/nginx
 # Puertos de exposición para nginx
 EXPOSE 80
 CMD [ "/bin/sh", "-c", "exec nginx -g 'daemon off;'"]
-CMD [ "/bin/sh", "-c", "envsubst < /var/env-template.js > /var/www/assets/env.js && exec nginx -p 4200:4200 -g 'daemon off;'"]
+CMD [ "/bin/sh", "-c", "envsubst < /var/env-template.js > /var/www/html/assets/env.js && exec nginx -p 4200:4200 -g 'daemon off;'"]
