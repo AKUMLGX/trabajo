@@ -6,7 +6,6 @@ variables:
 
 stages:
   - Version_Check
-  - Env_File_Creation
   - Dependencies
   - Static_Security
   - Build_Base
@@ -53,27 +52,6 @@ version-check:
     - is_version_ajusted=$((${deploy_version} ==  ${env_var_version})) && echo "${is_version_ajusted}"
     - if [[ -z $(cat ./version_control.md | tr -d "." | grep "${env_var_version}") ]]; then echo -e "${TXT_RED} No se encontro la version a desplegar en el archivo version_control.md"; exit 1 ; else echo "$(cat ./version_control.md | tr -d "." | grep "${env_var_version}") " ; fi
     - if [[ ${is_version_ajusted} -ne 0 ]]; then echo -e "${TXT_RED} ❌ Se requiere subir la versión en las variables de entorno. ❌"  ; exit 3 ; else echo "${TXT_GREEN}  Todo ok " ; fi
-
-Env_File_Creation:
-  stage: Env_File_Creation
-  only:
-    - desarrollo
-    - desarrollo-test
-    - /^config*/
-    - /^feature*/
-    - /^fix*/
-    - /^patch*/
-  tags:
-    - itzamnaQro-shell
-  before_script:
-    - echo "Se crea el archivo de variables de configuracion para la construccion del Front."
-  script:
-    - bash scripts/setEnvFileDev.sh
-    - cat src/environments/environment.ts
-  artifacts:
-    expire_in: 30min
-    paths:
-      - src/environments/environment.ts
 
 check_dependencies:
   only:
