@@ -55,7 +55,7 @@ cat >> ${destination_path} << EOF
   getMsgEndpoint: '${ENV_DEV_getMsgEndpoint}',
   base: '${ENV_DEV_base}',
   loginUrl: '${ENV_DEV_loginUrl}',
-  logoutUrl: '${ENV_DEV_logoutUrl}'
+  logoutUrl: '${ENV_DEV_logoutUrl}',
   hash: '222222',
   environment: 'nodeberia'
 EOF
