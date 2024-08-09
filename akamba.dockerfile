@@ -43,6 +43,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=builder_modules /akamba/dist/acamba/browser /var/www/html
 COPY welcome.html /var/www/html/
 COPY ./home /var/www/html/home
+COPY src/environments/env-template.js /var/
 
 # Se cambian los ids por default del usuario nginx por lo que son validos en el Cluster
 RUN sed -i 's/101:101/117:119/g' /etc/passwd
@@ -52,7 +53,7 @@ RUN sed -i 's/101:/119:/g' /etc/group
 RUN touch /run/nginx.pid &&  chown -R nginx:nginx /run/nginx.pid
 #RUN chown -R nginx:nginx /var/cache/nginx
 RUN chown -R nginx:nginx  /var/cache/nginx /var/www/html
-RUN ls src/environments/env-template.js
+RUN ls /var/env-template.js
 
 # Archivos de configuración
 COPY ./nginx/ /etc/nginx
@@ -60,4 +61,4 @@ COPY ./nginx/ /etc/nginx
 # Puertos de exposición para nginx
 EXPOSE 80
 CMD [ "/bin/sh", "-c", "exec nginx -g 'daemon off;'"]
-CMD [ "/bin/sh", "-c", "envsubst < src/environments/env-template.js > /var/www/assets/env.js && exec nginx -p 4200:4200 -g 'daemon off;'"]
+CMD [ "/bin/sh", "-c", "envsubst < /var/env-template.js > /var/www/assets/env.js && exec nginx -p 4200:4200 -g 'daemon off;'"]
