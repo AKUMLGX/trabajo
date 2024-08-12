@@ -5,6 +5,7 @@ ARG VERSION=0.0.0
 FROM --platform=arm64 ${DOCKER_REGISTRY}akamba/${SERVICE_NAME}_base:${VERSION} AS builder_modules
 
 ARG COMMIT_SHA=00000000
+ARG VERSION=0.0.1
 
 # Copiando el código fuente
 COPY . .
@@ -15,6 +16,9 @@ RUN ng build
 
 FROM nginx:1.26.1
 
+ARG COMMIT_SHA=00000000
+ARG VERSION=0.0.1
+
 LABEL proyecto "querybuilder-itzamná"
 LABEL dependencia-gubernamental = "SAT"
 LABEL administracion-general = "AGCTI"
@@ -24,13 +28,8 @@ LABEL servicio = "spa"
 LABEL version = ${VERSION}
 LABEL commit_sha = ${COMMIT_SHA}
 
-ARG COMMIT_SHA=00000000
-ARG VERSION=0.0.1
-
 ENV COMMIT_SHA=${COMMIT_SHA}
-ENV commit_sha=${COMMIT_SHA}
 ENV TZ=America/Mexico_City
-
 
 USER root
 RUN rm /etc/nginx/conf.d/default.conf

@@ -2,7 +2,7 @@
 (function(window){
   window["env"] = window["env"] || {};
 
-  window["env"]["hash"]= "000000";
+  window["env"]["COMMIT_SHA"]= "000000";
   window["env"]["environment"] ="LH"
   window["env"]["baseUrl"]= "http://localhost:8090/akamba/api/v1/";
   window["env"]["layoutUrl"]= "http://localhost:4200/akamba/layout/capture";
