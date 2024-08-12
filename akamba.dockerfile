@@ -24,7 +24,7 @@ LABEL servicio = "spa"
 LABEL version = ${VERSION}
 LABEL commit_sha = ${COMMIT_SHA}
 
-
+ARG COMMIT_SHA=00000000
 ARG VERSION=0.0.1
 
 ENV COMMIT_SHA=${COMMIT_SHA}
