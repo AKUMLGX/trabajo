@@ -287,51 +287,12 @@ Deploy_DEV_B:
     name: development
 
 
-# Despliegue a UAT
-Deploy_UAT:
-  variables:
-    VERSION: ${VERSION}-R
-    AKAMBA_FRONT_A: ${AKAMBA_UAT_FRONT_A}
-    AKAMBA_FRONT_B: ${AKAMBA_UAT_FRONT_B}
-  only:
-    - uat
-    - uat-test
-  image: docker:24.0.7
-  services:
-    - docker:dind
-  stage: Deploy_UAT
-  dependencies: []
-  tags:
-    - Develop
-  before_script:
-    - docker context create deploy-A --docker "host=tcp://${AKAMBA_FRONT_A}:2375"
-    - docker context create deploy-B --docker "host=tcp://${AKAMBA_FRONT_B}:2375"
-    - unset DOCKER_HOST
-    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-  script:
-    - echo "Deploying in ${AKAMBA_FRONT_A}"
-    - docker-compose --context deploy-A -f docker-compose.yaml down
-    - docker --context deploy-A system prune -af
-    - docker --context deploy-A ps
-    - docker-compose --context deploy-A -f docker-compose.yaml pull
-    - docker-compose --context deploy-A -f docker-compose.yaml up -d
-    - docker-compose --context deploy-A -f docker-compose.yaml ps
-    - echo "Deploying in ${AKAMBA_FRONT_B}"
-    - docker-compose --context deploy-B -f docker-compose.yaml down
-    - docker --context deploy-B system prune -af
-    - docker --context deploy-B ps
-    - docker-compose --context deploy-B -f docker-compose.yaml pull
-    - docker-compose --context deploy-B -f docker-compose.yaml up -d
-    - docker-compose --context deploy-B -f docker-compose.yaml ps
-  after_script:
-    - docker logout
-  environment:
-    name: uat
-
 # Despliegue a PRODUCCION
 Deploy_PROD:
   variables:
+  AKAMBA_FRONT_A: ${AKAMBA_PROD_FRONT_A}
    HASH:  ${CI_COMMIT_SHA}
+   VERSION: ${VERSION}-R
    ENVIRONMENT: ${ENV_PROD_ENVIRONMENT}
    BASEURL: ${ENV_PROD_BASEURL}
    LAYOUTURL: ${ENV_PROD_LAYOUTURL}
