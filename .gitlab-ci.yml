@@ -177,6 +177,11 @@ Build_image_Release:
   rules:
     - if: $CI_COMMIT_BRANCH == "desarrollo"
       when: always
+    - changes:
+        - package.json
+      when: always
+    # No ejecutar el job si no se cumplen las condiciones anteriores
+    - when: never
   image: docker:24.0.7
   services:
     - docker:dind
