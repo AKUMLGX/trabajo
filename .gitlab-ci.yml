@@ -13,7 +13,6 @@ stages:
   - Build_Release
   - Azure_Retag_Dev
   - Deploy_DEV
-  - Deploy_UAT
   - Deploy_PROD
 
 version-check:
@@ -173,8 +172,14 @@ Build_image_Release:
     GIT_SUBMODULE_STRATEGY: recursive
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: /certs
-  only:
-    - desarrollo
+  rules:
+    - if: $CI_COMMIT_BRANCH == "desarrollo"
+      when: always
+    - changes:
+        - requirements.txt
+      when: always
+    # No ejecutar el job si no se cumplen las condiciones anteriores
+    - when: never
   image: docker:24.0.7
   services:
     - docker:dind
@@ -205,13 +210,13 @@ Build_image_Release:
 # TODO docker-compose.yaml file
 Deploy_DEV_A:
   variables:
-    AKAMBA_FRONT_A: ${AKAMBA_DEV_FRONT_A}
+    AKAMBA_FRONT_A: ${AKAMBA_FRONT_A}
     HASH: ${CI_COMMIT_SHA}
-    ENVIRONMENT: ${ENV_DEV_ENVIRONMENT}
-    BASEURL: ${ENV_DEV_BASEURL}
-    LAYOUTURL: ${ENV_DEV_LAYOUTURL}
-    LOGINURL: ${ENV_DEV_LOGINURL}
-    LOGOUTURL: ${ENV_DEV_LOGOUTURL}
+    ENVIRONMENT: ${ENV_ENVIRONMENT}
+    BASEURL: ${ENV_BASEURL}
+    LAYOUTURL: ${ENV_LAYOUTURL}
+    LOGINURL: ${ENV_LOGINURL}
+    LOGOUTURL: ${ENV_LOGOUTURL}
   only:
     - desarrollo
     - desarrollo-test
@@ -247,13 +252,13 @@ Deploy_DEV_A:
 
 Deploy_DEV_B:
   variables:
-    AKAMBA_FRONT_B: ${AKAMBA_DEV_FRONT_B}
+    AKAMBA_FRONT_B: ${AKAMBA_FRONT_B}
     HASH: ${CI_COMMIT_SHA}
-    ENVIRONMENT: ${ENV_DEV_ENVIRONMENT}
-    BASEURL: ${ENV_DEV_BASEURL}
-    LAYOUTURL: ${ENV_DEV_LAYOUTURL}
-    LOGINURL: ${ENV_DEV_LOGINURL}
-    LOGOUTURL: ${ENV_DEV_LOGOUTURL}
+    ENVIRONMENT: ${ENV_ENVIRONMENT}
+    BASEURL: ${ENV_BASEURL}
+    LAYOUTURL: ${ENV_LAYOUTURL}
+    LOGINURL: ${ENV_LOGINURL}
+    LOGOUTURL: ${ENV_LOGOUTURL}
   only:
     - desarrollo
     - desarrollo-test
@@ -287,56 +292,17 @@ Deploy_DEV_B:
     name: development
 
 
-# Despliegue a UAT
-Deploy_UAT:
-  variables:
-    VERSION: ${VERSION}-R
-    AKAMBA_FRONT_A: ${AKAMBA_UAT_FRONT_A}
-    AKAMBA_FRONT_B: ${AKAMBA_UAT_FRONT_B}
-  only:
-    - uat
-    - uat-test
-  image: docker:24.0.7
-  services:
-    - docker:dind
-  stage: Deploy_UAT
-  dependencies: []
-  tags:
-    - Develop
-  before_script:
-    - docker context create deploy-A --docker "host=tcp://${AKAMBA_FRONT_A}:2375"
-    - docker context create deploy-B --docker "host=tcp://${AKAMBA_FRONT_B}:2375"
-    - unset DOCKER_HOST
-    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-  script:
-    - echo "Deploying in ${AKAMBA_FRONT_A}"
-    - docker-compose --context deploy-A -f docker-compose.yaml down
-    - docker --context deploy-A system prune -af
-    - docker --context deploy-A ps
-    - docker-compose --context deploy-A -f docker-compose.yaml pull
-    - docker-compose --context deploy-A -f docker-compose.yaml up -d
-    - docker-compose --context deploy-A -f docker-compose.yaml ps
-    - echo "Deploying in ${AKAMBA_FRONT_B}"
-    - docker-compose --context deploy-B -f docker-compose.yaml down
-    - docker --context deploy-B system prune -af
-    - docker --context deploy-B ps
-    - docker-compose --context deploy-B -f docker-compose.yaml pull
-    - docker-compose --context deploy-B -f docker-compose.yaml up -d
-    - docker-compose --context deploy-B -f docker-compose.yaml ps
-  after_script:
-    - docker logout
-  environment:
-    name: uat
-
 # Despliegue a PRODUCCION
 Deploy_PROD:
   variables:
+   AKAMBA_FRONT_A: ${AKAMBA_FRONT_A}
    HASH:  ${CI_COMMIT_SHA}
-   ENVIRONMENT: ${ENV_PROD_ENVIRONMENT}
-   BASEURL: ${ENV_PROD_BASEURL}
-   LAYOUTURL: ${ENV_PROD_LAYOUTURL}
-   LOGINURL: ${ENV_PROD_LOGINURL}
-   LOGOUTURL: ${ENV_PROD_LOGOUTURL}
+   VERSION: ${VERSION}-R
+   ENVIRONMENT: ${ENV_ENVIRONMENT}
+   BASEURL: ${ENV_BASEURL}
+   LAYOUTURL: ${ENV_LAYOUTURL}
+   LOGINURL: ${ENV_LOGINURL}
+   LOGOUTURL: ${ENV_LOGOUTURL}
   only:
     - produccion-test
     - produccion
