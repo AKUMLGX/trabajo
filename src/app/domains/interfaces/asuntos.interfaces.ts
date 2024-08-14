@@ -4,12 +4,12 @@ export interface Asunto {
   oficio: String;
   autoridad_remitente: String;
   folio: String;
-  administracion: String;
+  administracion: String | null;
   folio_jupiter: String;
   orden: number;
   fecha_recepcion: Date;
   documento_escaneado: String;
-  atencion: String;
+  atencion: String | null ;
   descripcion: string;
   documento: String;
   areas_pendientes: String;
@@ -34,7 +34,7 @@ export interface Asunto {
   piezas_fgr_administracion: String;
   base_captura_administracion: String;
   folio_interno: String;
-  carpeta_investigacion: String;
+  carpeta_investigacion: String ;
   persona_relacionada: String;
   folio_scanner: String;
   volante_jefatura: String;
