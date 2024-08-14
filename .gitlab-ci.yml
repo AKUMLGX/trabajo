@@ -31,7 +31,7 @@ version-check:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y)'
     - apk add docker-compose
     - eval $(ssh-agent -s)
-    - docker context create deploy-A --docker "host=tcp://${AKAMBA_DEV_FRONT_A}:2375"
+    - docker context create deploy-A --docker "host=tcp://${AKAMBA_FRONT_A}:2375"
     - unset DOCKER_HOST
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
     - TXT_RED="\e[31m"
@@ -39,7 +39,7 @@ version-check:
     - TXT_GREEN="\e[32m"
     - TXT_CLEAR="\e[0m"
   script:
-    - echo "Deploying in ${AKAMBA_DEV_FRONT_A}"
+    - echo "Deploying in ${AKAMBA_FRONT_A}"
     #- docker-compose --context dev-A -f docker-compose.yaml ps
     - docker --context deploy-A ps
     - pivot=$(echo $(docker-compose --context deploy-A -f docker-compose.yaml ps) | sed -n 's/\(^.*:\)\([[:digit:]]\{1,3\}\.\{1\}[[:digit:]]\{1,3\}\.\{1\}[[:digit:]]\{1,3\}\)\(.*$\)/\2/p' | tr -d '.')
@@ -51,6 +51,8 @@ version-check:
     - is_version_ajusted=$((${deploy_version} ==  ${env_var_version})) && echo "${is_version_ajusted}"
     - if [[ -z $(cat ./version_control.md | tr -d "." | grep "${env_var_version}") ]]; then echo -e "${TXT_RED} No se encontro la version a desplegar en el archivo version_control.md"; exit 1 ; else echo "$(cat ./version_control.md | tr -d "." | grep "${env_var_version}") " ; fi
     - if [[ ${is_version_ajusted} -ne 0 ]]; then echo -e "${TXT_RED} ❌ Se requiere subir la versión en las variables de entorno. ❌"  ; exit 3 ; else echo "${TXT_GREEN}  Todo ok " ; fi
+  environment:
+    name: development
 
 check_dependencies:
   only:
@@ -175,11 +177,6 @@ Build_image_Release:
   rules:
     - if: $CI_COMMIT_BRANCH == "desarrollo"
       when: always
-    - changes:
-        - requirements.txt
-      when: always
-    # No ejecutar el job si no se cumplen las condiciones anteriores
-    - when: never
   image: docker:24.0.7
   services:
     - docker:dind
