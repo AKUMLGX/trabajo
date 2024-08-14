@@ -13,7 +13,6 @@ stages:
   - Build_Release
   - Azure_Retag_Dev
   - Deploy_DEV
-  - Deploy_UAT
   - Deploy_PROD
 
 version-check:
@@ -290,7 +289,7 @@ Deploy_DEV_B:
 # Despliegue a PRODUCCION
 Deploy_PROD:
   variables:
-  AKAMBA_FRONT_A: ${AKAMBA_PROD_FRONT_A}
+   AKAMBA_FRONT_A: ${AKAMBA_PROD_FRONT_A}
    HASH:  ${CI_COMMIT_SHA}
    VERSION: ${VERSION}-R
    ENVIRONMENT: ${ENV_PROD_ENVIRONMENT}
