@@ -4,11 +4,11 @@ services:
     image: nexusavl.sat.gob.mx:8093/akamba/${SERVICE_NAME}:${VERSION}
     environment:
       - hash=${HASH}
-      - environment=${ENVIRONMENT}
-      - baseUrl=${BASEURL}
-      - layoutUrl=${LAYOUTURL}
-      - loginUrl=${LOGINURL}
-      - logoutUrl=${LOGOUTURL}
+      - environment=${ENV_ENVIRONMENT}
+      - baseUrl=${ENV_BASEURL}
+      - layoutUrl=${ENV_LAYOUTURL}
+      - loginUrl=${ENV_LOGINURL}
+      - logoutUrl=${ENV_LOGOUTURL}
     user: root
     ports:
       - 80:80
