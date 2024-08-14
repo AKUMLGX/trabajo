@@ -1,8 +1,8 @@
-import { 
-  Component, 
-  EventEmitter, 
-  Input, 
-  Output, 
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
   TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -103,26 +103,26 @@ export class SearchBarComponent {
   }
 
   tryNext() {
-    console.log('selectionMOdel-array', this.selectionModel.selected);
+    // console.log('selectionMOdel-array', this.selectionModel.selected);
     this.selectedRow = this.selectionModel.selected;
     this.searchStatusService.updateSelectedRow(this.selectedRow);
-    console.log(this.searchStatusService.carpetaInvestigacionFromSelectedRow());
-    console.log(this.searchStatusService.tipoAsuntoFromSelectedRow());
-    console.log(typeof(this.searchStatusService.carpetaInvestigacionFromSelectedRow()));
-    console.log(typeof(this.searchStatusService.tipoAsuntoFromSelectedRow()));
+    // console.log(this.searchStatusService.carpetaInvestigacionFromSelectedRow());
+    // console.log(this.searchStatusService.tipoAsuntoFromSelectedRow());
+    // console.log(typeof(this.searchStatusService.carpetaInvestigacionFromSelectedRow()));
+    // console.log(typeof(this.searchStatusService.tipoAsuntoFromSelectedRow()));
   }
 
   reactToCheck() {
     if(this.selectionModel.selected.length===1) {
       this.selectedRow = this.selectionModel.selected;
     }
-    
+
     if(this.selectedRow) {
       this.searchStatusService.updateSelectedRow(this.selectedRow);
     }
-    
+
     if( this.selectionModel.selected.length===1 ) {
-      this.isNextButtonEnabled = true;  
+      this.isNextButtonEnabled = true;
     } else {
       this.isNextButtonEnabled = false;
     }
