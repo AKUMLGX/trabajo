@@ -33,7 +33,7 @@ export class TrackingTableComponent {
   public newTableIsRendered: boolean = false;
 
   public formUpdateIsRendered: boolean = false;
- 
+
   public fileIsOpen: boolean = false;
 
   public visualizarPdf: boolean = false;
@@ -120,7 +120,7 @@ export class TrackingTableComponent {
    toggleExpansion(index:number):void{
     this.index = index
     this.isExpanded = !this.isExpanded;
-    console.log("isExpanded", this.isExpanded);
+    // console.log("isExpanded", this.isExpanded);
 
      }
 
@@ -189,14 +189,14 @@ export class TrackingTableComponent {
   }
 
   updateTable(fila: any) {
-    console.log("Entro");
+    // console.log("Entro");
     this.editar = true;
     this.mostrarTabla = false;
     this.filaSeleccionada = fila;
   }
 
   seleccionarFila(fila: any) {
-    console.log("Fila");
+    // console.log("Fila");
     this.filaSeleccionada = fila;
   }
 
