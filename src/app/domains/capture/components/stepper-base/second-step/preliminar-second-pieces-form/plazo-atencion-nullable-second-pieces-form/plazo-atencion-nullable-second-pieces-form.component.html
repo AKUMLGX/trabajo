@@ -289,7 +289,7 @@
                                 id="tipoAsunto"
                                 formControlName="tipoAsunto"
                                 class="input-field">
-                                    <option [ngValue]="null" disabled>Elija una asunto</option>
+                                    <option [ngValue]="null" disabled>Elija un asunto</option>
                                     <option value="EUACAPES">EUACAPES</option>
                                     <option [ngValue]="null" disabled>GENERALIDADES</option>
                                     <option value="PENAL">Penal</option>
@@ -316,10 +316,10 @@
                                     (plazoAtencionNullableSecondPiecesForm.controls['fechaRecepcion'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['fechaRecepcion'].dirty || plazoAtencionNullableSecondPiecesForm.controls['fechaRecepcion'].touched))
                                 ||  (plazoAtencionNullableSecondPiecesForm.controls['documentoEscaneadoField'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['documentoEscaneadoField'].dirty || plazoAtencionNullableSecondPiecesForm.controls['documentoEscaneadoField'].touched))
                                 ||  (plazoAtencionNullableSecondPiecesForm.controls['descripcion'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['descripcion'].dirty || plazoAtencionNullableSecondPiecesForm.controls['descripcion'].touched))
-                                ||  (plazoAtencionNullableSecondPiecesForm.controls['autoridadRemitente'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['autoridadRemitente'].dirty || plazoAtencionNullableSecondPiecesForm.controls['autoridadRemitente'].touched))                                
+                                ||  (plazoAtencionNullableSecondPiecesForm.controls['autoridadRemitente'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['autoridadRemitente'].dirty || plazoAtencionNullableSecondPiecesForm.controls['autoridadRemitente'].touched))
                                 ||  (plazoAtencionNullableSecondPiecesForm.controls['documento'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['documento'].dirty || plazoAtencionNullableSecondPiecesForm.controls['documento'].touched))
                                 ||  (plazoAtencionNullableSecondPiecesForm.controls['atencion'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['atencion'].dirty || plazoAtencionNullableSecondPiecesForm.controls['atencion'].touched))
-                                ||  (plazoAtencionNullableSecondPiecesForm.controls['tipoAsunto'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['tipoAsunto'].dirty || plazoAtencionNullableSecondPiecesForm.controls['tipoAsunto'].touched))                              
+                                ||  (plazoAtencionNullableSecondPiecesForm.controls['tipoAsunto'].invalid && (plazoAtencionNullableSecondPiecesForm.controls['tipoAsunto'].dirty || plazoAtencionNullableSecondPiecesForm.controls['tipoAsunto'].touched))
                                 ) {
                                 @if (
                                         (plazoAtencionNullableSecondPiecesForm.get('fechaRecepcion')?.errors?.['required'])
@@ -328,7 +328,7 @@
                                     ||  (plazoAtencionNullableSecondPiecesForm.get('autoridadRemitente')?.errors?.['required'])
                                     ||  (plazoAtencionNullableSecondPiecesForm.get('documento')?.errors?.['required'])
                                     ||  (plazoAtencionNullableSecondPiecesForm.get('atencion')?.errors?.['required'])
-                                    ||  (plazoAtencionNullableSecondPiecesForm.get('tipoAsunto')?.errors?.['required'])                                
+                                    ||  (plazoAtencionNullableSecondPiecesForm.get('tipoAsunto')?.errors?.['required'])
                                     ) {
                                     <div class="text-wine text-base p-3 flex gap-3">
                                         <span>REQUERIDO</span>
