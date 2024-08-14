@@ -210,13 +210,7 @@ Build_image_Release:
 # TODO docker-compose.yaml file
 Deploy_DEV_A:
   variables:
-    AKAMBA_FRONT_A: ${AKAMBA_FRONT_A}
     HASH: ${CI_COMMIT_SHA}
-    ENVIRONMENT: ${ENV_ENVIRONMENT}
-    BASEURL: ${ENV_BASEURL}
-    LAYOUTURL: ${ENV_LAYOUTURL}
-    LOGINURL: ${ENV_LOGINURL}
-    LOGOUTURL: ${ENV_LOGOUTURL}
   only:
     - desarrollo
     - desarrollo-test
@@ -252,13 +246,7 @@ Deploy_DEV_A:
 
 Deploy_DEV_B:
   variables:
-    AKAMBA_FRONT_B: ${AKAMBA_FRONT_B}
     HASH: ${CI_COMMIT_SHA}
-    ENVIRONMENT: ${ENV_ENVIRONMENT}
-    BASEURL: ${ENV_BASEURL}
-    LAYOUTURL: ${ENV_LAYOUTURL}
-    LOGINURL: ${ENV_LOGINURL}
-    LOGOUTURL: ${ENV_LOGOUTURL}
   only:
     - desarrollo
     - desarrollo-test
