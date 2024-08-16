@@ -1,7 +1,7 @@
 (function(window){
   window["env"] = window["window"] || {};
   window["env"]["environment"] = "${environment}";
-  window["env"]["hash"] = "${hash}";
+  window["env"]["hash"] = "${COMMIT_SHA}";
   window["env"]["baseUrl"] = "${baseUrl}";
   window["env"]["layoutUrl"] = "${layoutUrl}";
   window["env"]["loginUrl"] = "${loginUrl}";
@@ -16,7 +16,7 @@ function getEnvParam(parameter){
       document.getElementById("linkAuth").href="${authInfo}";
       break;
       case "hash":
-      document.getElementById("lblHash").innerHTML="${hash}";
+      document.getElementById("lblHash").innerHTML="${COMMIT_SHA}";
       break;
     default:
       return "nonexist"
