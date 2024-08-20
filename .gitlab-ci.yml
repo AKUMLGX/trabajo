@@ -90,28 +90,7 @@ check_dependencies:
     - Develop
   script:
     - sonar-scanner -Dsonar.projectKey=$SONAR_PROYECTO -Dsonar.host.url="$SONAR_HOST_URL" -Dsonar.login=$SONAR_TOKEN
-
-# build_base_image:
-#   only:
-#     - desarrollo
-#   image:
-#     name: node:16
-#   tags:
-#   # Runner docker
-#     - runner_qb
-#   stage: Build
-#   dependencies:
-#     - check_dependencies
-#   before_script:
-#     - node -v
-#     - npm install -g @angular/cli@16.0.3
-#     - ng v
-#   script:
-#     - ng build
-#   artifacts:
-#     expire_in: 30min
-#     paths:
-#       - dist
+       - dist
 
 Build_base_image:
   only:

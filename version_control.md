@@ -7,3 +7,4 @@
 |  0.0.6 | Se soluciona el issue de atención y administración en la bandeja de seguimiento al momento de editar los asuntos historicos y se cambia el estilo de letra a nivel global de la aplicación|
 |  0.0.7 | Se implementan las variables de entorno por ambiente anadiendo este atributo al pipeline|
 |  0.0.71 | Se implementa la lectura de variables de entorno por ambiente, pero se anade la lectura desde la pagina inicial. |
+| 0.0.8| Se hacen cambios en pipeline |
