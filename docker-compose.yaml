@@ -9,6 +9,7 @@ services:
       - layoutUrl=${ENV_LAYOUTURL}
       - loginUrl=${ENV_LOGINURL}
       - logoutUrl=${ENV_LOGOUTURL}
+      - authInfo=${ENV_AUTHINFO}
     user: root
     ports:
       - 80:80

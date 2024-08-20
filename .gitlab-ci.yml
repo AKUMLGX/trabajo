@@ -175,13 +175,11 @@ Build_image_Release:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: /certs
   rules:
-    - if: $CI_COMMIT_BRANCH == "desarrollo"
-      when: always
-    - changes:
-        - package.json
-      when: always
-    # No ejecutar el job si no se cumplen las condiciones anteriores
-    - when: never
+  - if: $CI_COMMIT_BRANCH == "desarrollo"
+    when: on_success
+  - changes:
+      - package.json
+    when: on_success
   image: docker:24.0.7
   services:
     - docker:dind
@@ -285,17 +283,11 @@ Deploy_DEV_B:
 # Despliegue a PRODUCCION
 Deploy_PROD:
   variables:
-   AKAMBA_FRONT_A: ${AKAMBA_FRONT_A}
    HASH:  ${CI_COMMIT_SHA}
    VERSION: ${VERSION}-R
-   ENVIRONMENT: ${ENV_ENVIRONMENT}
-   BASEURL: ${ENV_BASEURL}
-   LAYOUTURL: ${ENV_LAYOUTURL}
-   LOGINURL: ${ENV_LOGINURL}
-   LOGOUTURL: ${ENV_LOGOUTURL}
-  only:
-    - produccion-test
-    - produccion
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH =~ /produccion-*/
+      when: on_success
   image: docker:24.0.7
   services:
     - docker:dind
