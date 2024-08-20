@@ -265,8 +265,8 @@ Deploy_PROD:
    HASH:  ${CI_COMMIT_SHA}
    VERSION: ${VERSION}-R
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH =~ /produccion-*/
-      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH =~ /produccion*/
+      when: manual
   image: docker:24.0.7
   services:
     - docker:dind
