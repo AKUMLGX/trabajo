@@ -267,7 +267,7 @@ Deploy_PROD:
    HASH:  ${CI_COMMIT_SHA}
    VERSION: ${VERSION}-R
   rules:
-    - if: $CI_COMMIT_BRANCH == /produccion*/
+    - if: $CI_COMMIT_BRANCH =~ /^produccion*/
       when: on_success
   image: docker:24.0.7
   services:
