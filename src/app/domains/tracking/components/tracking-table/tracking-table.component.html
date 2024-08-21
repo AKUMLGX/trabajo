@@ -50,9 +50,7 @@
                   {{ "Tipo de Asunto" }}
                 </th>
 
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Volante Jefatura" }}
-                </th>
+
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Fecha de Captura" }}
                 </th>
@@ -72,12 +70,6 @@
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio" }}
                 </th> -->
-
-
-
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Folio Jupiter" }}
-                </th>
 
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Orden" }}
@@ -169,6 +161,14 @@
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Base de Captura de Administración" }}
                 </th> -->
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Folio Jupiter" }}
+                </th>
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Volante Jefatura" }}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -274,11 +274,7 @@
                 </td>
 
 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-center">
-                    {{ document.volante_jefatura }}
-                  </div>
-                </td>
+
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-center">
                     {{ document.fecha_captura }}
@@ -317,11 +313,6 @@
 
 
 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-center">
-                    {{ document.folio_jupiter }}
-                  </div>
-                </td>
 
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
@@ -472,6 +463,18 @@
                     {{ document.base_captura_administracion }}
                   </div>
                 </td> -->
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-center">
+                    {{ document.folio_jupiter }}
+                  </div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-center">
+                    {{ document.volante_jefatura }}
+                  </div>
+                </td>
+
               </tr>
               }
             </tbody>
