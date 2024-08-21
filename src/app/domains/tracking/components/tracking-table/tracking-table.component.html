@@ -38,40 +38,43 @@
                   {{ "Administración" }}
                 </th>
 
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Documento Escaneado" }}
+                </th> -->
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Documento" }}
                 </th>
 
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Volante Jefatura" }}
+                  {{ "Tipo de Asunto" }}
                 </th>
+
+
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Fecha de Captura" }}
                 </th>
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ " Fecha De Captura Histórico" }}
+                </th>
+
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Descargo" }}
                 </th> -->
 
-                <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Tipo de Asunto" }}
-                </th> -->
+
 
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Autor" }}
                 </th> -->
 
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Autoridad remitente" }}
+                  {{ "Autoridad Remitente" }}
                 </th>
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio" }}
                 </th> -->
-
-
-
-                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Folio Jupiter" }}
-                </th>
 
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Orden" }}
@@ -87,9 +90,7 @@
 
 
 
-                <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Documento" }}
-                </th> -->
+
 
                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Descripción" }}
@@ -165,6 +166,14 @@
                 <!-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Base de Captura de Administración" }}
                 </th> -->
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Folio Jupiter" }}
+                </th>
+
+                <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Volante Jefatura" }}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -250,20 +259,36 @@
                   </div>
                 </td>
 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-center">
                     {{ document.documento_escaneado }}
+                  </div>
+                </td> -->
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine  text-center">
+                    {{ document.documento }}
+                  </div>
+                </td>
+
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine  text-center">
+                    {{ document.tipo }}
+                  </div>
+                </td>
+
+
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-center">
+                    {{ document.fecha_captura }}
                   </div>
                 </td>
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-center">
-                    {{ document.volante_jefatura }}
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-center">
-                    {{ document.fecha_captura }}
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.fecha_numero_oficio_atencion }}
                   </div>
                 </td>
 
@@ -299,11 +324,6 @@
 
 
 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-center">
-                    {{ document.folio_jupiter }}
-                  </div>
-                </td>
 
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
@@ -324,11 +344,6 @@
                 </td> -->
 
 
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.documento }}
-                  </div>
-                </td> -->
 
 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
@@ -389,11 +404,7 @@
                     {{ document.que_solicita }}
                   </div>
                 </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.fecha_numero_oficio_atencion }}
-                  </div>
-                </td> -->
+
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
                     {{ document.asuntos_enviados_correo_mara }}
@@ -414,11 +425,7 @@
                     {{ document.hora_recepcion }}
                   </div>
                 </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.tipo }}
-                  </div>
-                </td> -->
+
 
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
@@ -463,6 +470,18 @@
                     {{ document.base_captura_administracion }}
                   </div>
                 </td> -->
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-center">
+                    {{ document.folio_jupiter }}
+                  </div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-center">
+                    {{ document.volante_jefatura }}
+                  </div>
+                </td>
+
               </tr>
               }
             </tbody>

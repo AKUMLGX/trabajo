@@ -93,9 +93,14 @@ check_dependencies:
        - dist
 
 Build_base_image:
-  only:
-    - desarrollo
-    - /^config*/
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^feature-/ || $CI_COMMIT_BRANCH =~ /^fix-/ || $CI_COMMIT_BRANCH =~ /^patch-/ || $CI_COMMIT_BRANCH =~ /^config-/ || $CI_COMMIT_BRANCH == "desarrollo"
+      changes:
+        compare_to: 'refs/heads/desarrollo'
+        paths:
+          - 'angular.json'
+    - if: $CI_COMMIT_BRANCH == "desarrollo"
+      when: on_success
   dependencies: []
   tags:
   # Runner docker
@@ -155,9 +160,6 @@ Build_image_Release:
     DOCKER_TLS_CERTDIR: /certs
   rules:
   - if: $CI_COMMIT_BRANCH == "desarrollo"
-    when: on_success
-  - changes:
-      - package.json
     when: on_success
   image: docker:24.0.7
   services:
@@ -265,7 +267,7 @@ Deploy_PROD:
    HASH:  ${CI_COMMIT_SHA}
    VERSION: ${VERSION}-R
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH =~ /produccion-*/
+    - if: $CI_COMMIT_BRANCH =~ /^produccion*/
       when: on_success
   image: docker:24.0.7
   services:

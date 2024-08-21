@@ -26,7 +26,7 @@ export class TrackingTableComponent {
 
   public pageSelected: number = 1;
 
-  public itemsPerPage: number = 5;
+  public itemsPerPage: number = 20;
 
   public tipoBusqueda: string = '';
 
