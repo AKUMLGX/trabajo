@@ -343,30 +343,29 @@
                   </div>
                 </td> -->
 
-
-
-
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
-                    <p [ngClass]="{'overflow-y-auto': !isExpanded, 'overflow-visible': isExpanded}">
+                    <p >
                       @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
                       {{document.descripcion | slice: 0 : 25}}
                       <strong class="points">...</strong>
                       <button class="button-read-more" (click)="toggleExpansion($index) ">Leer más</button>
-                      }@else if (document.descripcion !== null && document.descripcion.length <= 24){ <p>
+                      }@else if (document.descripcion !== null && document.descripcion.length <= 24){
+                        <p>
                         {{document.descripcion}}
-                    </p>
+                        </p>
                     }
                     </p>
                     <p [ngClass]="{'h-20 w-32': isExpanded, 'hidden': !isExpanded}"
-                      [ngStyle]="{'overflow-y': isExpanded ? 'auto' : 'visible', 'height': isExpanded ? '100px' : 'auto'}">
-                      @if ( document.descripcion !== null && document.descripcion.length >= 16 && index === $index){
-                      {{document.descripcion }}
-                      <button class="button-read-less" (click)="toggleExpansion(-1)">Leer menos</button>
+                      [ngStyle]="{'overflow-y': isExpanded ? 'auto' : 'visible', 'height': isExpanded ? '200px' : 'auto'}">
+                      @if ( document.descripcion !== null && document.descripcion.length >= 24 && index === $index){
+                      {{document.descripcion   }}
+                      <button class="button-read-less" (click)="closeExpansion(-1)">Leer menos</button>
                       }
                     </p>
                   </div>
                 </td>
+
                 <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
                     {{ document.areas_pendientes }}
