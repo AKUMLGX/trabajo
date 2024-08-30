@@ -22,7 +22,7 @@ export class TrackingTableComponent {
   public documents: Asunto[] = [];
   public pages: Asunto[][] = [];
 
-  public description: Asunto[] =[]
+  public description: Asunto[] = []
 
   public pageSelected: number = 1;
 
@@ -42,13 +42,9 @@ export class TrackingTableComponent {
 
   editar: boolean = false
 
-  shortDescription: boolean = false
+  isExpanded: boolean = false;
 
-  isExpanded:boolean = false;
-
-  mostrarTodo = false;
-
-  index: number = -1;
+  index: number = 0;
 
 
 
@@ -117,11 +113,19 @@ export class TrackingTableComponent {
       this.newTableIsRendered = true;
     }
   }
-   toggleExpansion(index:number):void{
-    this.index = index
-    this.isExpanded = !this.isExpanded;
-    // console.log("isExpanded", this.isExpanded);
 
+  toggleExpansion(index:number):void{
+    this.index = index
+    this.isExpanded = true;
+    // console.log("isExpanded", this.isExpanded);
+    // console.log("INDEX",this.index);
+     }
+
+     closeExpansion(index:number):void{
+      this.index = index
+      this.isExpanded = false;
+      // console.log("isExpanded", this.isExpanded);
+      // console.log("INDEX",this.index);
      }
 
 
@@ -166,7 +170,7 @@ export class TrackingTableComponent {
 
   openPdfViewer(folio: String, path: String): void {
     let fileName = this.getFileName(path).replaceAll(' ', '_');
-    if(folio === null) folio = "sinasignar";
+    if (folio === null) folio = "sinasignar";
     this.fileService.updatePdfFile(folio.toString(), fileName);
     this.asuntoService.openPdf();
     this.visualizarPdf = true;
