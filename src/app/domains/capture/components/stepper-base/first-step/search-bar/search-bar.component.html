@@ -64,6 +64,15 @@
                                       <th class="table-head-item whitespace-nowrap">
                                         {{ sixthColumnHeader }}
                                       </th>
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ seventhColumnHeader }}
+                                      </th>
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ eighthColumnHeader }}
+                                      </th>
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ ninthColumnHeader }}
+                                      </th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -109,6 +118,21 @@
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
                                                 {{ item.persona_relacionada }}
+                                              </div>
+                                          </td>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.documento }}
+                                              </div>
+                                          </td>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.tipo_asunto }}
+                                              </div>
+                                          </td>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                              <div class="text-sm leading-5 text-wine text-center">
+                                                {{ item.fecha_recepcion }}
                                               </div>
                                           </td>
                                       </tr>
