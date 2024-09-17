@@ -46,6 +46,13 @@
                   {{ "Documento" }}
                 </th>
 
+
+                        <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Tipo" }}
+                </th>
+
+
+
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Tipo de Asunto" }}
                 </th>
@@ -135,9 +142,7 @@
                 <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Hora de Recepción" }}
                 </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Tipo" }}
-                </th> -->
+
 
                 <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Unidad Administrativa de Autoridad" }}
@@ -278,6 +283,11 @@
                   </div>
                 </td>
 
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.tipo_asunto }}
+                  </div>
+                </td>
 
 
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
@@ -298,11 +308,6 @@
                   </div>
                 </td> -->
 
-                <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.tipo_asunto }}
-                  </div>
-                </td> -->
 
                 <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">

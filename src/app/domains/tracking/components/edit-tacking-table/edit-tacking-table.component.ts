@@ -47,9 +47,9 @@ export class EditTackingTableComponent implements OnInit {
 
   isTouched: boolean = false;
 
-  // documentoEscaneadoNameTracking: string = "";
+  documentoEscaneadoNameTracking: string = "";
 
-  // docuemntoEcaneadoFileTracking?: File;
+  docuemntoEcaneadoFileTracking!: File;
 
 
 
@@ -69,11 +69,12 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls["tipo_asunto"].setValue(this.documents.tipo_asunto), this.updateTableForm.controls["tipo_asunto"].disable()
     this.updateTableForm.controls["id_asunto_historico"].setValue(this.documents.id_asunto_historico)
     this.updateTableForm.controls["id_asunto_nuevo"].setValue(this.documents.id_asunto_nuevo)
+    this.updateTableForm.controls["id_tipo"].setValue(this.getTipo(this.documents.tipo)!== null ? this.getTipo(this.documents.tipo):null)
+    this.updateTableForm.controls["id_documento"].setValue(this.getDocumento(this.documents.documento) !== null ? this.getDocumento(this.documents.documento): null)
     this.updateTableForm.controls["autor"].setValue(this.documents.autor), this.updateTableForm.controls["autor"].disable()
     this.updateTableForm.controls["folio"].setValue(this.documents.folio), this.updateTableForm.controls["folio"].disable()
     this.updateTableForm.controls["orden"].setValue(this.documents.orden), this.updateTableForm.controls["orden"].disable()
     this.updateTableForm.controls["fecha_atencion"].setValue(this.documents.fecha_atencion), this.updateTableForm.controls["fecha_atencion"].disable()
-    this.updateTableForm.controls["documento"].setValue(this.documents.documento), this.updateTableForm.controls["documento"].disable()
     this.updateTableForm.controls["areas_pendientes"].setValue(this.documents.areas_pendientes), this.updateTableForm.controls["areas_pendientes"].disable()
     this.updateTableForm.controls["area_pendiente"].setValue(this.documents.area_pendiente), this.updateTableForm.controls["area_pendiente"].disable()
     this.updateTableForm.controls["autoridad_solicitante"].setValue(this.documents.autoridad_solicitante), this.updateTableForm.controls["autoridad_solicitante"].disable()
@@ -84,7 +85,6 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls["atentas_notas_respuestas"].setValue(this.documents.atentas_notas_respuestas), this.updateTableForm.controls["atentas_notas_respuestas"].disable()
     this.updateTableForm.controls["fecha_turnado"].setValue(this.documents.fecha_turnado), this.updateTableForm.controls["fecha_turnado"].disable()
     this.updateTableForm.controls["hora_recepcion"].setValue(this.documents.hora_recepcion), this.updateTableForm.controls["hora_recepcion"].disable()
-    this.updateTableForm.controls["tipo"].setValue(this.documents.tipo), this.updateTableForm.controls["tipo"].disable()
     this.updateTableForm.controls["unidad_administrativa_autoridad"].setValue(this.documents.unidad_administrativa_autoridad), this.updateTableForm.controls["unidad_administrativa_autoridad"].disable()
     this.updateTableForm.controls["fecha_descargo"].setValue(this.documents.fecha_descargo), this.updateTableForm.controls["fecha_descargo"].disable()
     this.updateTableForm.controls["fecha_oficio"].setValue(this.documents.fecha_oficio), this.updateTableForm.controls["fecha_oficio"].disable()
@@ -95,22 +95,23 @@ export class EditTackingTableComponent implements OnInit {
     this.btnEdita();
   }
 
-
   public updateTableForm: FormGroup = this.fb.group({
     carpeta_investigacion: [[""], {  value: this.documents?.carpeta_investigacion !== null ? this.documents?.carpeta_investigacion : ""  }],
     persona_relacionada: [[""], { value: this.documents?.persona_relacionada !== null ? this.documents?.persona_relacionada : "" }],
     folio_scanner: [[""], {  value: this.documents?.folio_scanner !== null ? this.documents?.folio_scanner : "" }],
-    volante_jefatura: [[""], { value: this.documents?.volante_jefatura !== null ? this.documents?.volante_jefatura : "" }],
-    oficio: [[""], {  value: this.documents?.oficio !== null ? this.documents?.oficio : "" }],
-    autoridad_remitente: [[""], {  value: this.documents?.autoridad_remitente !== null ? this.documents?.autoridad_remitente : "" }],
-    folio_jupiter: [[""], {  value: this.documents?.folio_jupiter !== null ? this.documents?.folio_jupiter : ""  }],
-    descripcion: [[""], {  value: this.documents?.descripcion !== null ? this.documents?.descripcion : "" }],
+    volante_jefatura: [[""], {value: this.documents?.volante_jefatura !== null ? this.documents?.volante_jefatura : "" }],
+    oficio: [[""], {value: this.documents?.oficio !== null ? this.documents?.oficio : "" }],
+    autoridad_remitente: [[""], {value: this.documents?.autoridad_remitente !== null ? this.documents?.autoridad_remitente : "" }],
+    folio_jupiter: [[""], {value: this.documents?.folio_jupiter !== null ? this.documents?.folio_jupiter : ""  }],
+    descripcion: [[""], {value: this.documents?.descripcion !== null ? this.documents?.descripcion : "" }],
     turno_jefatura: [["",], {  value: this.documents?.turno_jefatura !== null ? this.documents?.turno_jefatura : "" }],
+    documento_escaneado: [null, {value:this.documents?.documento_escaneado  ? this.documents?.documento_escaneado : ""} ],
+    id_documento: [[""], {value: this.documents?.documento}],
+    id_tipo:[[""], { value: this.documents?.tipo}],
     id_administracion_fk: [[""],{ value: this.documents?.administracion}],
     id_atencion_fk: [[""], {value: this.documents?.atencion}],
     id_asunto_historico: [[""], { value: this.documents?.id_asunto_historico}],
     id_asunto_nuevo: [[""], { value: this.documents?.id_asunto_historico}],
-    // documento_escaneado: [null, [Validators.required]],
     descargo: [[""], { value: this.documents?.descargo }],
     tipo_asunto: [[""], { value: this.documents?.tipo_asunto }],
     base_captura_administracion: [[""], { value: this.documents?.base_captura_administracion }],
@@ -118,7 +119,6 @@ export class EditTackingTableComponent implements OnInit {
     folio: [[""], { value: this.documents?.folio }],
     fecha_atencion: [[""], { value: this.documents?.fecha_atencion }],
     orden: [[""], { value: this.documents?.orden }],
-    documento: [[""], { value: this.documents?.documento }],
     areas_pendientes: [[""], { value: this.documents?.areas_pendientes }],
     area_pendiente: [[""], { value: this.documents?.area_pendiente }],
     autoridad_solicitante: [[""], { value: this.documents?.autoridad_solicitante }],
@@ -129,7 +129,6 @@ export class EditTackingTableComponent implements OnInit {
     atentas_notas_respuestas: [[""], { value: this.documents?.atentas_notas_respuestas }],
     fecha_turnado: [[""], { value: this.documents?.fecha_turnado }],
     hora_recepcion: [[""], { value: this.documents?.hora_recepcion }],
-    tipo: [[""], { value: this.documents?.tipo }],
     unidad_administrativa_autoridad: [[""], { value: this.documents?.unidad_administrativa_autoridad }],
     fecha_descargo: [[""], { value: this.documents?.fecha_descargo }],
     fecha_oficio: [[""], { value: this.documents?.fecha_oficio }],
@@ -156,7 +155,6 @@ if(atencion !== null){
   }
 }
 return  null
-
   }
 
   getAdministracion(administracion:String | null):number | null{
@@ -174,23 +172,54 @@ return  null
     return null
   }
 
-  // onFileSelected(event: any) {
-  //   const file: File = event.target.files[0];
-  //   this.docuemntoEcaneadoFileTracking = file;
-  //   if (this.docuemntoEcaneadoFileTracking) {
-  //     this.documentoEscaneadoNameTracking = this.docuemntoEcaneadoFileTracking.name.toString().replaceAll(' ', '_')
-  //   }
-  // }
+  getDocumento(documento:String | null):number | null{
+    if(documento === "REQUERIMIENTO") {
+      return 2;
+    }else if (documento === "SOLICITUD INTERNA") {
+      return 4
+    }else if(documento === "RESPUESTA INTERNA"){
+      return 5
+    }else if (documento === "RESPUESTA A FGR"){
+      return 6
+    }else if(documento === "ALCANCE"){
+      return 7
+    }
+    return null
+  }
+
+  getTipo(tipo: String | null):number| null {
+    if(tipo !== null){
+      if(tipo === "SEGUNDA PIEZA") {
+        return 1;
+      }else if (tipo === "APERTURA") {
+        return 2
+      }
+    }
+    return  null
+      }
+
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    this.docuemntoEcaneadoFileTracking = file;
+    if (this.docuemntoEcaneadoFileTracking) {
+      this.documentoEscaneadoNameTracking = this.docuemntoEcaneadoFileTracking.name.toString().replaceAll(' ', '_')
+    }
+  }
 
   saveUpdateForm(): void {
     this.showagain()
     if (this.updateTableForm.valid === true) {
       const update = this.updateTableForm.value;
-      this.updateSerivce.updateTrackingTable(update).subscribe(
+      this.updateSerivce.updateTrackingTable(update,).subscribe(
         response => {
           this.pdfAcuse.generatePDF(response)
+          console.log(response,"RESPONSE");
         }
       )
+      console.log(update,"UPADATE");
+
+
     } else {
       this.updateTableForm.markAllAsTouched();
     }
