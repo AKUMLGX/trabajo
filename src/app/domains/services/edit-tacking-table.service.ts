@@ -30,6 +30,38 @@ export class EditTackingTableService {
 
   }
 
+  // updateDocumentoEscaneado(selectedFile: File, data: Asunto):Observable<any> {
+  //     const type = "application/json"
+  //     const json = JSON.stringify(data);
+  //     const blob = new Blob([json], {
+  //       type: type
+  //     });
+  //     const formData = new FormData()
+  //     formData.append("data", blob);
+  //     formData.append("file", selectedFile, selectedFile.name)
+
+  //     let targetUrlDoc = environment.baseUrl + environment.updateDocumentoEscaneado
+  //     return this.http.post(targetUrlDoc,formData,{ responseType:"text"})
+
+  //   }
+
+  updateDocumento( data: Asunto,selectedFile: File,): Observable<string> {
+    const type = 'application/json'
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], {
+      type: type
+    });
+
+    const formData = new FormData();
+
+    formData.append('data', blob);
+    formData.append('file', selectedFile, selectedFile.name);
+
+    const targetUrlDoc = `${environment.baseUrl}${environment.updateDocumentoEscaneado}`;
+    return this.http.post(targetUrlDoc, formData, { responseType: 'text' });
+  }
+
+
    }
 
 

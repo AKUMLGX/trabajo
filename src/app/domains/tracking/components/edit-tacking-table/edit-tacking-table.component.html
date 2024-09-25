@@ -17,25 +17,44 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Carpeta de investigación y/o juzgado:
               </label>
-              <input (blur)="onBlur()" type="text" placeholder=" Carpeta de investigación y/o juzgado"
+              <input  type="text" placeholder=" Carpeta de investigación y/o juzgado"
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="carpeta_investigacion" value="">
             </div>
 
-             @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
-              <div class="wrapping-individual-container">
-                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                  Documento escaneado:
-                </label>
-                <input type="file"
-                 placeholder="Documento escaneado"
-                class="input-field placeholder-blueGray-300"
-                 formControlName="documento_escaneado"
-                 value=""
-                 accept=".pdf"
-                 (change)="onFileSelected($event)">
-              </div>
-            }
+
+            <!-- @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
+             <div class="wrapping-individual-container">
+               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                 Documento escaneado:
+               </label>
+               <input type="file"
+                placeholder="Documento escaneado"
+               class="input-field placeholder-blueGray-300"
+                formControlName="documento_escaneado"
+                value=""
+                accept=".pdf"
+                (blur)="onBlur()"
+                (change)="onFileSelected($event)"
+                >
+             </div>
+           } -->
+            @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
+             <div class="wrapping-individual-container">
+               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                 Documento escaneado:
+               </label>
+               <input type="file"
+                placeholder="Documento escaneado"
+               class="input-field placeholder-blueGray-300"
+                formControlName="documento_escaneado"
+                value=""
+                accept=".pdf"
+                (blur)="onBlur()"
+                (change)="onFileChanged($event)"
+                >
+             </div>
+           }
 
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
@@ -136,7 +155,7 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Documento:
               </label>
-              <select formControlName="id_documento"
+              <select formControlName="id_documento_fk"
 
               [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
              >
@@ -152,7 +171,7 @@
                 <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                   Tipo:
                 </label>
-                <select id="id_tipo" formControlName="id_tipo"
+                <select id="id_tipo_fk" formControlName="id_tipo_fk"
                   [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
                   <option [ngValue]="null" disabled> Elija un Tipo</option>
                   <option [ngValue]="1">Segunda Pieza</option>
