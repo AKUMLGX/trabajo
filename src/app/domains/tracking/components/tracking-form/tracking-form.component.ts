@@ -3,16 +3,21 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
 import { dynamicHeight } from '../../../shared/animacion/dynamicHeight.trigger';
 import { AsuntoService } from '../../../services/asunto.service';
+
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormsModule} from '@angular/forms';
 @Component({
   selector: 'app-tracking-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MatIcon, MatListModule, CommonModule],
+  imports: [ReactiveFormsModule, MatIcon, MatListModule, CommonModule,MatInputModule,MatFormFieldModule,FormsModule,MatDialogModule],
   templateUrl: './tracking-form.component.html',
   styleUrl: './tracking-form.component.css',
   animations: [
@@ -44,6 +49,8 @@ export class TrackingFormComponent {
   public formato = new FormControl('pdf');
 
   public fechaActual = '2018-11-11';
+
+  selecionarOpcion:string=''
 
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: { [key: string]: boolean } = {};
@@ -124,5 +131,11 @@ export class TrackingFormComponent {
   getToday(): string {
     return new Date().toISOString().split('T')[0]
   }
+
+
+  onSelectedOption(event: Event){
+    const target = event.target as HTMLSelectElement
+    this.selecionarOpcion = target.value
+}
 
 }
