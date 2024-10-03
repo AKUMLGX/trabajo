@@ -1,6 +1,3 @@
-import { transition } from '@angular/animations';
-
-
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { FormComponent } from '../../../capture/components/stepper-base/third-step/preliminar-form/form/form.component';
@@ -57,10 +54,15 @@ export class EditTackingTableComponent implements OnInit {
   selectedFile!: File ;
 
 
+  cade: string = "esto es un .pdf"
+
+
+
 
   ngOnInit(): void {
     this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion !== null ? this.documents.carpeta_investigacion : "")
-    // this.updateTableForm.controls['documento_escaneado'].setValue(this.documents. documento_escaneado !== null ? this.documents. documento_escaneado : "")
+    //this.updateTableForm.controls['documento_escaneado'].setValue(this.documents.documento_escaneado)
+   this.updateTableForm.controls['documento_escaneado_name'].setValue(this.documents.documento_escaneado), this.updateTableForm.controls["documento_escaneado_name"].disable()
     this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada !== null ? this.documents.persona_relacionada : "")
     this.updateTableForm.controls['folio_scanner'].setValue(this.documents.folio_scanner !== null ? this.documents.folio_scanner : "")
     this.updateTableForm.controls['volante_jefatura'].setValue(this.documents.volante_jefatura !== null ? this.documents.volante_jefatura : "")
@@ -99,11 +101,17 @@ export class EditTackingTableComponent implements OnInit {
     this.updateTableForm.controls["piezas_fgr_administracion"].setValue(this.documents.piezas_fgr_administracion), this.updateTableForm.controls["piezas_fgr_administracion"].disable()
     this.updateTableForm.controls["base_captura_administracion"].setValue(this.documents.base_captura_administracion), this.updateTableForm.controls["base_captura_administracion"].disable()
     this.btnEdita();
+
+
+
     console.log(this.documents.documento_escaneado,"DOC_ESC");
+
+
   }
 
   public updateTableForm: FormGroup = this.fb.group({
-    carpeta_investigacion: [[""], { value: this.documents?.carpeta_investigacion !== null ? this.documents?.carpeta_investigacion : "" }],
+    carpeta_investigacion: [[""], {  value: this.documents?.carpeta_investigacion !== null ? this.documents?.carpeta_investigacion : ""  }],
+    documento_escaneado_name: [[""]],
     persona_relacionada: [[""], { value: this.documents?.persona_relacionada !== null ? this.documents?.persona_relacionada : "" }],
     folio_scanner: [[""], { value: this.documents?.folio_scanner !== null ? this.documents?.folio_scanner : "" }],
     volante_jefatura: [[""], { value: this.documents?.volante_jefatura !== null ? this.documents?.volante_jefatura : "" }],
@@ -112,7 +120,7 @@ export class EditTackingTableComponent implements OnInit {
     folio_jupiter: [[""], { value: this.documents?.folio_jupiter !== null ? this.documents?.folio_jupiter : "" }],
     descripcion: [[""], { value: this.documents?.descripcion !== null ? this.documents?.descripcion : "" }],
     turno_jefatura: [["",], { value: this.documents?.turno_jefatura !== null ? this.documents?.turno_jefatura : "" }],
-    documento_escaneado: [null,],
+    documento_escaneado: [[],  ],
     id_documento_fk: [[""], { value: this.documents?.documento }],
     id_tipo_fk: [[""], { value: this.documents?.tipo }],
     id_administracion_fk: [[""], { value: this.documents?.administracion }],
@@ -252,41 +260,44 @@ export class EditTackingTableComponent implements OnInit {
   }
 
 
-  // getFormData(formValue:{
-  //   carpeta_investigacion:String;
-  //   persona_relacionada:String;
-  //   folio_scanner:String;
-  //   volante_jefatura:String;
-  //   oficio: String;
-  //   autoridad_remitente: String;
-  //   folio_jupiter: String;
-  //   descripcion: string;
-  //   turno_jefatura: String
-  //   documento_escaneado: string;
-  //   documento: String;
-  //   tipo: string;
-  //   administracion: String;
-  //   atencion:String;
-  //   id_asunto_historico: number
-  //   id_asunto_nuevo:number
-  // }){
-  // carpeta_investigacion: this.updateTableForm.value.carpeta_investigacion,
-  //       persona_relacionada: this.updateTableForm.value.persona_relacionada,
-  //       folio_scanner: this.updateTableForm.value.folio_scanner,
-  //       volante_jefatura: this.updateTableForm.value.volante_jefatura,
-  //       oficio: this.updateTableForm.value.oficio,
-  //       autoridad_remitente: this.updateTableForm.value.autoridad_remitente,
-  //       folio_jupiter: this.updateTableForm.value.folio_jupiter,
-  //       descripcion: this.updateTableForm.value.descripcion,
-  //       turno_jefatura: this.updateTableForm.value.turno_jefatura,
-  //       documento_escaneado: this.updateTableForm.value.documento_escaneado,
-  //       documento: this.updateTableForm.value.id_documento_fk,
-  //       tipo: this.updateTableForm.value.id_tipo_fk,
-  //       administracion: this.updateTableForm.value.id_administracion_fk,
-  //       atencion: this.updateTableForm.value.id_atencion_fk,
-  //       id_asunto_historico: this.updateTableForm.value.id_asunto_historico,
-  //       id_asunto_nuevo: this
-  // }
+
+ getFormData(formValue:{
+  carpeta_investigacion:String;
+  persona_relacionada:String;
+  folio_scanner:String;
+  volante_jefatura:String;
+  oficio: String;
+  autoridad_remitente: String;
+  folio_jupiter: String;
+  descripcion: string;
+  turno_jefatura: String
+  documento_escaneado: String;
+  documento: String | null;
+  tipo: String | null;
+  administracion: String | null;
+  atencion:String|null;
+  id_asunto_historico: number | null ;
+  id_asunto_nuevo:number | null  ;
+})  { return{
+  carpeta_investigacion:    formValue.  carpeta_investigacion,
+  persona_relacionada:      formValue. persona_relacionada,
+  folio_scanner:            formValue.folio_scanner,
+  volante_jefatura:         formValue.volante_jefatura,
+  oficio:                   formValue.oficio,
+  autoridad_remitente:      formValue.autoridad_remitente,
+  folio_jupiter:            formValue.folio_jupiter,
+  descripcion:              formValue.descripcion,
+  turno_jefatura:           formValue.turno_jefatura,
+  documento_escaneado:      formValue.documento_escaneado,
+  documento:                formValue.documento,
+  tipo:                     formValue.tipo,
+  administracion:           formValue.administracion,
+  atencion:                 formValue.atencion,
+  id_asunto_historico:      formValue.id_asunto_historico,
+  id_asunto_nuevo:          formValue.id_asunto_nuevo
+}
+}
+
 
   onSubmit():void{
     if ( this.selectedFile  && this.updateTableForm.valid === true ) {
@@ -308,6 +319,28 @@ export class EditTackingTableComponent implements OnInit {
         id_asunto_historico: this.updateTableForm.value.id_asunto_historico,
         id_asunto_nuevo: this.updateTableForm.value.id_asunto_nuevo
       };
+
+     //const data = this.getFormData(this.updateTableForm.value)
+
+      // const data : Asunto = {
+      //   carpeta_investigacion: this.updateTableForm.value.carpeta_investigacion,
+      //   persona_relacionada: this.updateTableForm.value.persona_relacionada,
+      //   folio_scanner: this.updateTableForm.value.folio_scanner,
+      //   volante_jefatura: this.updateTableForm.value.volante_jefatura,
+      //   oficio: this.updateTableForm.value.oficio,
+      //   autoridad_remitente: this.updateTableForm.value.autoridad_remitente,
+      //   folio_jupiter: this.updateTableForm.value.folio_jupiter,
+      //   descripcion: this.updateTableForm.value.descripcion,
+      //   turno_jefatura: this.updateTableForm.value.turno_jefatura,
+      //   documento_escaneado: this.updateTableForm.value.documento_escaneado,
+      //   documento: this.updateTableForm.value.id_documento_fk,
+      //   tipo: this.updateTableForm.value.id_tipo_fk,
+      //   administracion: this.updateTableForm.value.id_administracion_fk,
+      //   atencion: this.updateTableForm.value.id_atencion_fk,
+      //   id_asunto_historico: this.updateTableForm.value.id_asunto_historico,
+      //   id_asunto_nuevo: this.updateTableForm.value.id_asunto_nuevo
+
+      // }
 
 
       this.updateSerivce.updateDocumento(data,this.selectedFile!).subscribe(

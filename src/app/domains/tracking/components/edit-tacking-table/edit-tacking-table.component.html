@@ -23,32 +23,19 @@
             </div>
 
 
-            <!-- @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
-             <div class="wrapping-individual-container">
-               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                 Documento escaneado:
-               </label>
-               <input type="file"
-                placeholder="Documento escaneado"
-               class="input-field placeholder-blueGray-300"
-                formControlName="documento_escaneado"
-                value=""
-                accept=".pdf"
-                (blur)="onBlur()"
-                (change)="onFileSelected($event)"
-                >
-             </div>
-           } -->
             @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
              <div class="wrapping-individual-container">
-               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+               <label class="label-field flex text-blueGray-600 mb-0" htmlfor="grid-password">
                  Documento escaneado:
                </label>
+                 <div class="ml-1 text-xs">
+                  {{this.documents.documento_escaneado}}
+              </div>
                <input type="file"
                 placeholder="Documento escaneado"
                class="input-field placeholder-blueGray-300"
                 formControlName="documento_escaneado"
-                value=""
+                value="true"
                 accept=".pdf"
                 (blur)="onBlur()"
                 (change)="onFileChanged($event)"
