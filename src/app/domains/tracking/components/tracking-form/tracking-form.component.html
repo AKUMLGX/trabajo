@@ -155,7 +155,8 @@
             </div>
           </div>
           <br />
-          <div class="flex flex-col md:flex-row md:justify-between"> <button
+          <div class="flex flex-col md:flex-row md:justify-evenly">
+            <button
               class="h-9 mt-2 mb-4 md:mb-0 bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
               type="submit">
               Buscar
@@ -163,77 +164,120 @@
             <div class="text-center">
               <mat-dialog-content>
                 <div class="flex justify-center items-center mt-2">
-                  <select class="bg-gray-50 border-[#691C32] text-center text-gray-900 mb-6 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" (change)="onSelectedOption($event)" >
+                  <select
+                    class="bg-gray-50 border-[#691C32] text-center text-gray-900 mb-6 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    (change)="onSelectedOption($event)">
                     <option disabled selected value="">Selecciona una opción</option>
                     <option value="administracion">Descargar por Administración</option>
                     <option value="folio">Descargar por Folio Scanner </option>
                   </select>
                 </div>
-             @if(selecionarOpcion === "administracion"){
-
-              <div>
-                <div class="flex flex-row justify-between">
-                  <div>
-                    <p>Formato</p>
-                    <div style="border: 2px solid #691C32;" class="mb-4">
-                      <select id="formato" [formControl]="formato"
-                        style="background-color: transparent; width: 100%; height: 30px;">
-                        <option value="pdf">pdf</option>
-                        <option value="csv">csv</option>
-                        <option value="xlsx">xlsx</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <p>Administración</p>
-                    <div style="border: 2px solid #691C32;" class="mb-4">
-                      <select id="administracion" [formControl]="administracion"
-                        style="background-color: transparent; width: 100%; height: 30px;">
-                        <option [ngValue]="null" disabled>Elija una administración</option>
-                        <option value=" ">&nbsp;</option>
-                        <option value="a_1">Administración 1</option>
-                        <option value="a_2">Administración 2</option>
-                        <option value="a_3">Administración 3</option>
-                        <option value="a_4">Administración 4</option>
-                        <option value="a_5">Administración 5</option>
-                      </select>
-                    </div>
-                  </div>
-
-                </div>
+                @if(selecionarOpcion === "administracion"){
                 <div>
-                  <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0" value="2024-11-11" [formControl]="fecha" required />
-                  <button type="button" (click)="descargarAcuse()"
-                    class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
-                    Descargar acuse
-                  </button>
-                </div>
-              </div>
-
-             }@else if (selecionarOpcion === "folio") {
-              <form class="example-form">
-                <div class="grid grid-cols-2 grid-rows-2 gap-5">
-                  <div>
-                    <mat-form-field class="example-full-width">
-                      <mat-label>Folio 1 : </mat-label>
-                      <input type="number" matInput placeholder="000000">
-                    </mat-form-field>
+                  <div class="flex flex-row justify-between">
+                    <div>
+                      <p>Formato</p>
+                      <div style="border: 2px solid #691C32;" class="mb-4">
+                        <select id="formato" [formControl]="formato"
+                          style="background-color: transparent; width: 100%; height: 30px;">
+                          <option value="pdf">pdf</option>
+                          <option value="csv">csv</option>
+                          <option value="xlsx">xlsx</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div>
+                      <p>Administración</p>
+                      <div style="border: 2px solid #691C32;" class="mb-4">
+                        <select id="administracion" [formControl]="administracion"
+                          style="background-color: transparent; width: 100%; height: 30px;">
+                          <option [ngValue]="null" disabled>Elija una administración</option>
+                          <option value=" ">&nbsp;</option>
+                          <option value="a_1">Administración 1</option>
+                          <option value="a_2">Administración 2</option>
+                          <option value="a_3">Administración 3</option>
+                          <option value="a_4">Administración 4</option>
+                          <option value="a_5">Administración 5</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   <div>
-                    <mat-form-field class="example-full-width">
-                      <mat-label>Folio 2 :</mat-label>
-                      <input type="number" matInput placeholder="00000">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-span-2 text-center">
-                    <button type="button"
+                    <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0" value="2024-11-11"
+                      [formControl]="fecha" required />
+                    <button type="button" (click)="descargarAcuse()"
                       class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
                       Descargar acuse
                     </button>
                   </div>
                 </div>
-              </form>
-             }
+                }@else if (selecionarOpcion === "folio") {
+                  <form [formGroup]="downloadByFolioScan" >
+                    <div class="grid grid-cols-2 grid-rows-3 gap-2">
+                      <div class="col-span-2">
+                        <p>Formato</p>
+                        <div style="border: 2px solid #691C32;" class="mb-4">
+                          <select id="formato" [formControl]="formato"
+                            style="background-color: transparent; width: 100%; height: 30px;">
+                            <option value="pdf">pdf</option>
+                            <option value="csv">csv</option>
+                            <option value="xlsx">xlsx</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <div>
+                          <mat-form-field>
+                            <mat-label>Folio 1 : </mat-label>
+                            <!-- @if (downloadByFolioScan.controls["input_one"].invalid &&(downloadByFolioScan.controls["input_one"].dirty|| downloadByFolioScan.controls["input_one"].touched)){
+                              @if (downloadByFolioScan.get("input_one")?.errors?.["required"]) {
+                                <div class="bg-rojo-Akamba ml-1">
+                                    <span>*</span>
+                                </div>
+                              }
+                            } -->
+                            <input formControlName="input_one" type="text" matInput placeholder="Folio 1">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div>
+                        <mat-form-field >
+                          <mat-label>Folio 2 :</mat-label>
+                          <input formControlName="input_two" type="text" matInput placeholder="Folio 2">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-span-2">
+                        <!-- <button type="button"
+                          class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                          Descargar acuse
+                        </button> -->
+                        <button type="button"
+
+                        [disabled]="!downloadByFolioScan.valid"
+                        [ngClass]=" !downloadByFolioScan.valid ? 'next-button-disabled' : 'next-button' "
+                          class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                          (click)="acusebyfolioScanc()">
+                          Descargar acuse
+                        </button>
+                        <div class="bg-white border-2 rounded border-wine">
+                          @if (
+                                    (downloadByFolioScan.controls['input_one'].invalid && (downloadByFolioScan.controls['input_one'].dirty || downloadByFolioScan.controls['input_one'].touched))
+                        ){
+                            @if (
+                                        (downloadByFolioScan.get('input_one')?.errors?.['required'])
+                        ){
+                            <div class="text-wine text-base p-3 flex gap-3">
+                              <span>REQUERIDO</span>
+                              <mat-icon>error</mat-icon>
+                          </div>
+                        }
+                        }
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                }
               </mat-dialog-content>
             </div>
           </div>

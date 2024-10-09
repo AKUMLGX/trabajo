@@ -164,6 +164,14 @@ export class AsuntoService {
     });
   }
 
+
+  generateAcuseFolioScan(
+
+
+  ):void{
+
+  }
+
   openPdf(): void {
     this.fileIsOpen = true;
     this.fileIsOpenUpdated.emit(true);

@@ -1,5 +1,5 @@
 import { trigger, style, transition, animate } from '@angular/animations';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -79,6 +79,15 @@ export class TrackingFormComponent {
   nombre_campo_input: string = "";
   mostrar_coincidencias?: boolean;
 
+public downloadByFolioScan:FormGroup = this.fb.group({
+  input_one:[null,[Validators.required]],
+  input_two:[null,[Validators.required]]
+})
+
+acusebyfolioScanc():void{
+  console.log(this.downloadByFolioScan.value);
+
+}
 
   DetectInput(entering: boolean, campo: string): void {
     this.showCoincidencias[campo] = entering;
