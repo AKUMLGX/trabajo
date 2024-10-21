@@ -16,50 +16,55 @@ export class EditTackingTableService {
 
   constructor(private http: HttpClient) { }
 
-  updateTrackingTable(data:Asunto):Observable<string>{
-    let  targetUrl  = environment.baseUrl
+  updateTrackingTable(data:Asunto, selectedFile:File ):Observable<string>{
+    let  targetUrl  =  environment.baseUrl
     if (data.id_asunto_historico !== null) {
       targetUrl =  environment.baseUrl +    environment.updateTableHistorico
-    }else if(data.id_asunto_nuevo !==null){
+    }else if(data.id_asunto_nuevo !== null){
       targetUrl= environment.baseUrl +  environment.updateTableNuevo
     }
-    // console.log("DATA",data);
-
-     return this.http.patch(targetUrl,
-      data, { responseType: 'text'} );
-
-  }
-
-  // updateDocumentoEscaneado(selectedFile: File, data: Asunto):Observable<any> {
-  //     const type = "application/json"
-  //     const json = JSON.stringify(data);
-  //     const blob = new Blob([json], {
-  //       type: type
-  //     });
-  //     const formData = new FormData()
-  //     formData.append("data", blob);
-  //     formData.append("file", selectedFile, selectedFile.name)
-
-  //     let targetUrlDoc = environment.baseUrl + environment.updateDocumentoEscaneado
-  //     return this.http.post(targetUrlDoc,formData,{ responseType:"text"})
-
-  //   }
-
-  updateDocumento( data: Asunto,selectedFile: File,): Observable<string> {
+debugger
     const type = 'application/json'
     const json = JSON.stringify(data);
-    const blob = new Blob([json], {
+    const blob = new Blob([json],
+       {
       type: type
     });
 
     const formData = new FormData();
 
     formData.append('data', blob);
-    formData.append('file', selectedFile, selectedFile.name);
 
-    const targetUrlDoc = `${environment.baseUrl}${environment.updateDocumentoEscaneado}`;
-    return this.http.post(targetUrlDoc, formData, { responseType: 'text' });
+// formData.append('file', selectedFile, selectedFile.name);
+
+
+
+
+
+    // console.log("DATA",data);
+
+     return this.http.patch(targetUrl,
+      formData, { responseType: 'text'} );
+
   }
+
+
+
+  // updateDocumento( data: Asunto,selectedFile: File,): Observable<string> {
+  //   const type = 'application/json'
+  //   const json = JSON.stringify(data);
+  //   const blob = new Blob([json], {
+  //     type: type
+  //   });
+
+  //   const formData = new FormData();
+
+  //   formData.append('data', blob);
+  //   formData.append('file', selectedFile, selectedFile.name);
+
+  //   const targetUrlDoc = `${environment.baseUrl}${environment.updateDocumentoEscaneado}`;
+  //   return this.http.post(targetUrlDoc, formData, { responseType: 'text' });
+  // }
 
 
    }

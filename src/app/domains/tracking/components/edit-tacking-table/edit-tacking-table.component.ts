@@ -54,7 +54,7 @@ export class EditTackingTableComponent implements OnInit {
   selectedFile!: File ;
 
 
-  cade: string = "esto es un .pdf"
+
 
 
 
@@ -235,12 +235,14 @@ export class EditTackingTableComponent implements OnInit {
 
   saveUpdateForm(): void {
     this.showagain()
-    if (this.updateTableForm.valid === true) {
+
+    if (this.updateTableForm.valid === true ) {
       const update = this.updateTableForm.value;
-      this.updateSerivce.updateTrackingTable(update).subscribe(
+      this.updateSerivce.updateTrackingTable(update,this.selectedFile!).subscribe(
         response => {
+
           this.pdfAcuse.generatePDF(response)
-    //      console.log(response, "RESPONSE");
+       console.log(response, "RESPONSE");
         }
       )
       console.log(update, "UPADATE");
@@ -254,102 +256,102 @@ export class EditTackingTableComponent implements OnInit {
     //    this.saveDocEsca();
     // }
 
-    if(this.isTouched === true){
-      this.onSubmit()
-    }
+    // if(this.isTouched === true){
+    //   this.onSubmit()
+    // }
   }
 
 
 
- getFormData(formValue:{
-  carpeta_investigacion:String;
-  persona_relacionada:String;
-  folio_scanner:String;
-  volante_jefatura:String;
-  oficio: String;
-  autoridad_remitente: String;
-  folio_jupiter: String;
-  descripcion: string;
-  turno_jefatura: String
-  documento_escaneado: String;
-  documento: String | null;
-  tipo: String | null;
-  administracion: String | null;
-  atencion:String|null;
-  id_asunto_historico: number | null ;
-  id_asunto_nuevo:number | null  ;
-})  { return{
-  carpeta_investigacion:    formValue.  carpeta_investigacion,
-  persona_relacionada:      formValue. persona_relacionada,
-  folio_scanner:            formValue.folio_scanner,
-  volante_jefatura:         formValue.volante_jefatura,
-  oficio:                   formValue.oficio,
-  autoridad_remitente:      formValue.autoridad_remitente,
-  folio_jupiter:            formValue.folio_jupiter,
-  descripcion:              formValue.descripcion,
-  turno_jefatura:           formValue.turno_jefatura,
-  documento_escaneado:      formValue.documento_escaneado,
-  documento:                formValue.documento,
-  tipo:                     formValue.tipo,
-  administracion:           formValue.administracion,
-  atencion:                 formValue.atencion,
-  id_asunto_historico:      formValue.id_asunto_historico,
-  id_asunto_nuevo:          formValue.id_asunto_nuevo
-}
-}
+//  getFormData(formValue:{
+//   carpeta_investigacion:String;
+//   persona_relacionada:String;
+//   folio_scanner:String;
+//   volante_jefatura:String;
+//   oficio: String;
+//   autoridad_remitente: String;
+//   folio_jupiter: String;
+//   descripcion: string;
+//   turno_jefatura: String
+//   documento_escaneado: String;
+//   documento: String | null;
+//   tipo: String | null;
+//   administracion: String | null;
+//   atencion:String|null;
+//   id_asunto_historico: number | null ;
+//   id_asunto_nuevo:number | null  ;
+// })  { return{
+//   carpeta_investigacion:    formValue.  carpeta_investigacion,
+//   persona_relacionada:      formValue. persona_relacionada,
+//   folio_scanner:            formValue.folio_scanner,
+//   volante_jefatura:         formValue.volante_jefatura,
+//   oficio:                   formValue.oficio,
+//   autoridad_remitente:      formValue.autoridad_remitente,
+//   folio_jupiter:            formValue.folio_jupiter,
+//   descripcion:              formValue.descripcion,
+//   turno_jefatura:           formValue.turno_jefatura,
+//   documento_escaneado:      formValue.documento_escaneado,
+//   documento:                formValue.documento,
+//   tipo:                     formValue.tipo,
+//   administracion:           formValue.administracion,
+//   atencion:                 formValue.atencion,
+//   id_asunto_historico:      formValue.id_asunto_historico,
+//   id_asunto_nuevo:          formValue.id_asunto_nuevo
+// }
+// }
 
 
-  onSubmit():void{
-    if ( this.selectedFile  && this.updateTableForm.valid === true ) {
-      const data: any = {
-        carpeta_investigacion: this.updateTableForm.value.carpeta_investigacion,
-        persona_relacionada: this.updateTableForm.value.persona_relacionada,
-        folio_scanner: this.updateTableForm.value.folio_scanner,
-        volante_jefatura: this.updateTableForm.value.volante_jefatura,
-        oficio: this.updateTableForm.value.oficio,
-        autoridad_remitente: this.updateTableForm.value.autoridad_remitente,
-        folio_jupiter: this.updateTableForm.value.folio_jupiter,
-        descripcion: this.updateTableForm.value.descripcion,
-        turno_jefatura: this.updateTableForm.value.turno_jefatura,
-        documento_escaneado: this.updateTableForm.value.documento_escaneado,
-        documento: this.updateTableForm.value.id_documento_fk,
-        tipo: this.updateTableForm.value.id_tipo_fk,
-        administracion: this.updateTableForm.value.id_administracion_fk,
-        atencion: this.updateTableForm.value.id_atencion_fk,
-        id_asunto_historico: this.updateTableForm.value.id_asunto_historico,
-        id_asunto_nuevo: this.updateTableForm.value.id_asunto_nuevo
-      };
+  // onSubmit():void{
+  //   if ( this.selectedFile  && this.updateTableForm.valid === true ) {
+  //     const data: any = {
+  //       carpeta_investigacion: this.updateTableForm.value.carpeta_investigacion,
+  //       persona_relacionada: this.updateTableForm.value.persona_relacionada,
+  //       folio_scanner: this.updateTableForm.value.folio_scanner,
+  //       volante_jefatura: this.updateTableForm.value.volante_jefatura,
+  //       oficio: this.updateTableForm.value.oficio,
+  //       autoridad_remitente: this.updateTableForm.value.autoridad_remitente,
+  //       folio_jupiter: this.updateTableForm.value.folio_jupiter,
+  //       descripcion: this.updateTableForm.value.descripcion,
+  //       turno_jefatura: this.updateTableForm.value.turno_jefatura,
+  //       documento_escaneado: this.updateTableForm.value.documento_escaneado,
+  //       documento: this.updateTableForm.value.id_documento_fk,
+  //       tipo: this.updateTableForm.value.id_tipo_fk,
+  //       administracion: this.updateTableForm.value.id_administracion_fk,
+  //       atencion: this.updateTableForm.value.id_atencion_fk,
+  //       id_asunto_historico: this.updateTableForm.value.id_asunto_historico,
+  //       id_asunto_nuevo: this.updateTableForm.value.id_asunto_nuevo
+  //     };
 
-     //const data = this.getFormData(this.updateTableForm.value)
+  //    //const data = this.getFormData(this.updateTableForm.value)
 
-      // const data : Asunto = {
-      //   carpeta_investigacion: this.updateTableForm.value.carpeta_investigacion,
-      //   persona_relacionada: this.updateTableForm.value.persona_relacionada,
-      //   folio_scanner: this.updateTableForm.value.folio_scanner,
-      //   volante_jefatura: this.updateTableForm.value.volante_jefatura,
-      //   oficio: this.updateTableForm.value.oficio,
-      //   autoridad_remitente: this.updateTableForm.value.autoridad_remitente,
-      //   folio_jupiter: this.updateTableForm.value.folio_jupiter,
-      //   descripcion: this.updateTableForm.value.descripcion,
-      //   turno_jefatura: this.updateTableForm.value.turno_jefatura,
-      //   documento_escaneado: this.updateTableForm.value.documento_escaneado,
-      //   documento: this.updateTableForm.value.id_documento_fk,
-      //   tipo: this.updateTableForm.value.id_tipo_fk,
-      //   administracion: this.updateTableForm.value.id_administracion_fk,
-      //   atencion: this.updateTableForm.value.id_atencion_fk,
-      //   id_asunto_historico: this.updateTableForm.value.id_asunto_historico,
-      //   id_asunto_nuevo: this.updateTableForm.value.id_asunto_nuevo
+  //     // const data : Asunto = {
+  //     //   carpeta_investigacion: this.updateTableForm.value.carpeta_investigacion,
+  //     //   persona_relacionada: this.updateTableForm.value.persona_relacionada,
+  //     //   folio_scanner: this.updateTableForm.value.folio_scanner,
+  //     //   volante_jefatura: this.updateTableForm.value.volante_jefatura,
+  //     //   oficio: this.updateTableForm.value.oficio,
+  //     //   autoridad_remitente: this.updateTableForm.value.autoridad_remitente,
+  //     //   folio_jupiter: this.updateTableForm.value.folio_jupiter,
+  //     //   descripcion: this.updateTableForm.value.descripcion,
+  //     //   turno_jefatura: this.updateTableForm.value.turno_jefatura,
+  //     //   documento_escaneado: this.updateTableForm.value.documento_escaneado,
+  //     //   documento: this.updateTableForm.value.id_documento_fk,
+  //     //   tipo: this.updateTableForm.value.id_tipo_fk,
+  //     //   administracion: this.updateTableForm.value.id_administracion_fk,
+  //     //   atencion: this.updateTableForm.value.id_atencion_fk,
+  //     //   id_asunto_historico: this.updateTableForm.value.id_asunto_historico,
+  //     //   id_asunto_nuevo: this.updateTableForm.value.id_asunto_nuevo
 
-      // }
+  //     // }
 
 
-      this.updateSerivce.updateDocumento(data,this.selectedFile!).subscribe(
-        result => {
-          console.log(result,"result");
-        }
-      );
-  }
-  }
+  //     this.updateSerivce.updateDocumento(data,this.selectedFile!).subscribe(
+  //       result => {
+  //         console.log(result,"result");
+  //       }
+  //     );
+  // }
+  // }
 
 
 // saveDocEsca():void{
