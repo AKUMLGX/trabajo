@@ -16,35 +16,75 @@ export class EditTackingTableService {
 
   constructor(private http: HttpClient) { }
 
-  updateTrackingTable(data:Asunto, selectedFile:File ):Observable<string>{
+  // updateTrackingTable(data:Asunto, selectedFile:File ):Observable<string>{
+  //   let  targetUrl  =  environment.baseUrl
+  //   if (data.id_asunto_historico !== null) {
+  //     targetUrl =  environment.baseUrl +    environment.updateTableHistorico
+  //   }else if(data.id_asunto_nuevo !== null){
+  //     targetUrl= environment.baseUrl +  environment.updateTableNuevo
+  //   }
+
+
+
+  //   const type = 'application/json'
+  //   const json = JSON.stringify(data);
+  //   const blob = new Blob([json],
+
+  //      {
+  //     type: type
+  //   });
+
+  //   const formData = new FormData();
+
+  //   formData.append('data', blob);
+
+
+  //   if (selectedFile && selectedFile.size > 0 ) {
+  //   formData.append('file', selectedFile, selectedFile.name);
+
+  //   }
+
+
+
+
+  //   // console.log("DATA",data);
+
+  //    return this.http.patch(targetUrl,
+  //     formData, { responseType: 'text'} );
+
+  // }
+
+  updateTrackingTable(data:Asunto, selectedFile? :File  ):Observable<string>{
+
     let  targetUrl  =  environment.baseUrl
     if (data.id_asunto_historico !== null) {
       targetUrl =  environment.baseUrl +    environment.updateTableHistorico
     }else if(data.id_asunto_nuevo !== null){
       targetUrl= environment.baseUrl +  environment.updateTableNuevo
     }
-debugger
+
     const type = 'application/json'
     const json = JSON.stringify(data);
-    const blob = new Blob([json],
-       {
-      type: type
-    });
 
-    const formData = new FormData();
+    let formData: FormData;
+    if (selectedFile) {
+        const blob = new Blob([json],
+          {type}
+        );
+        formData = new FormData();
+        formData.append('data', blob);
+        formData.append('file', selectedFile, selectedFile.name);
+    }else{
+      formData = new FormData();
+      formData.append('data', json);
+    }
 
-    formData.append('data', blob);
-
-// formData.append('file', selectedFile, selectedFile.name);
-
-
-
-
-
-    // console.log("DATA",data);
-
-     return this.http.patch(targetUrl,
+        return this.http.patch(targetUrl,
       formData, { responseType: 'text'} );
+
+  }
+
+
 
   }
 
@@ -67,6 +107,6 @@ debugger
   // }
 
 
-   }
+
 
 

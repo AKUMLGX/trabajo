@@ -227,7 +227,6 @@ export class EditTackingTableComponent implements OnInit {
 
   onFileChanged(event: any) {
     const element = event.target as HTMLInputElement;
-    // this.selectedFile = element.files ? element.files[0] : null;
     this.selectedFile = event.target.files[0]
     if(this.selectedFile)
       this.updateTableForm.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ','_')
@@ -235,10 +234,9 @@ export class EditTackingTableComponent implements OnInit {
 
   saveUpdateForm(): void {
     this.showagain()
-
     if (this.updateTableForm.valid === true ) {
       const update = this.updateTableForm.value;
-      this.updateSerivce.updateTrackingTable(update,this.selectedFile!).subscribe(
+      this.updateSerivce.updateTrackingTable(update, this.selectedFile ).subscribe(
         response => {
 
           this.pdfAcuse.generatePDF(response)
