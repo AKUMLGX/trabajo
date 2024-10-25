@@ -62,7 +62,7 @@ export class EditTackingTableComponent implements OnInit {
   ngOnInit(): void {
     this.updateTableForm.controls['carpeta_investigacion'].setValue(this.documents.carpeta_investigacion !== null ? this.documents.carpeta_investigacion : "")
     //this.updateTableForm.controls['documento_escaneado'].setValue(this.documents.documento_escaneado)
-   this.updateTableForm.controls['documento_escaneado_name'].setValue(this.documents.documento_escaneado), this.updateTableForm.controls["documento_escaneado_name"].disable()
+  //  this.updateTableForm.controls['documento_escaneado_name'].setValue(this.documents.documento_escaneado), this.updateTableForm.controls["documento_escaneado_name"].disable()
     this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada !== null ? this.documents.persona_relacionada : "")
     this.updateTableForm.controls['folio_scanner'].setValue(this.documents.folio_scanner !== null ? this.documents.folio_scanner : "")
     this.updateTableForm.controls['volante_jefatura'].setValue(this.documents.volante_jefatura !== null ? this.documents.volante_jefatura : "")
@@ -107,11 +107,12 @@ export class EditTackingTableComponent implements OnInit {
     console.log(this.documents.documento_escaneado,"DOC_ESC");
 
 
+
   }
 
   public updateTableForm: FormGroup = this.fb.group({
     carpeta_investigacion: [[""], {  value: this.documents?.carpeta_investigacion !== null ? this.documents?.carpeta_investigacion : ""  }],
-    documento_escaneado_name: [[""]],
+    // documento_escaneado_name: [[""]],
     persona_relacionada: [[""], { value: this.documents?.persona_relacionada !== null ? this.documents?.persona_relacionada : "" }],
     folio_scanner: [[""], { value: this.documents?.folio_scanner !== null ? this.documents?.folio_scanner : "" }],
     volante_jefatura: [[""], { value: this.documents?.volante_jefatura !== null ? this.documents?.volante_jefatura : "" }],
@@ -236,7 +237,8 @@ export class EditTackingTableComponent implements OnInit {
     this.showagain()
     if (this.updateTableForm.valid === true ) {
       const update = this.updateTableForm.value;
-      this.updateSerivce.updateTrackingTable(update, this.selectedFile ).subscribe(
+      const selectedFile = this.selectedFile;
+      this.updateSerivce.updateTrackingTable(update,selectedFile).subscribe(
         response => {
 
           this.pdfAcuse.generatePDF(response)
