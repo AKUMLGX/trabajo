@@ -43,6 +43,19 @@
              </div>
            }
 
+
+           <div class="wrapping-individual-container">
+            <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+              Fecha de Captura:
+            </label>
+            <input type="date"
+              [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
+              formControlName="fecha_captura"
+               lang="es-MX"
+                placeholder="dd-MM-yyyy"
+                [max]="getToday()" value="">
+          </div>
+
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Persona Relacionada:

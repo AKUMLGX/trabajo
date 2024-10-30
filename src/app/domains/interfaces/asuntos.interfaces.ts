@@ -8,7 +8,7 @@ export interface Asunto {
   folio_jupiter: String;
   orden: number;
   fecha_recepcion: Date;
-  documento_escaneado: String;
+  documento_escaneado: String | null;
   atencion: String | null ;
   descripcion: string;
   documento: String | null;

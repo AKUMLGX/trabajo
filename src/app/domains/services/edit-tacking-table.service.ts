@@ -76,7 +76,9 @@ export class EditTackingTableService {
         formData.append('file', selectedFile, selectedFile.name);
     }else  {
       formData = new FormData();
+
         formData.append('data', json);
+
 
     }
 

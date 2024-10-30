@@ -64,6 +64,7 @@ export class EditTackingTableComponent implements OnInit {
     //this.updateTableForm.controls['documento_escaneado'].setValue(this.documents.documento_escaneado)
   //  this.updateTableForm.controls['documento_escaneado_name'].setValue(this.documents.documento_escaneado), this.updateTableForm.controls["documento_escaneado_name"].disable()
     this.updateTableForm.controls['persona_relacionada'].setValue(this.documents.persona_relacionada !== null ? this.documents.persona_relacionada : "")
+    this.updateTableForm.controls['fecha_captura'].setValue(this.documents.fecha_captura !== null ? this.documents.fecha_captura : "")
     this.updateTableForm.controls['folio_scanner'].setValue(this.documents.folio_scanner !== null ? this.documents.folio_scanner : "")
     this.updateTableForm.controls['volante_jefatura'].setValue(this.documents.volante_jefatura !== null ? this.documents.volante_jefatura : "")
     this.updateTableForm.controls['oficio'].setValue(this.documents.oficio !== null ? this.documents.oficio : "")
@@ -112,8 +113,8 @@ export class EditTackingTableComponent implements OnInit {
 
   public updateTableForm: FormGroup = this.fb.group({
     carpeta_investigacion: [[""], {  value: this.documents?.carpeta_investigacion !== null ? this.documents?.carpeta_investigacion : ""  }],
-    // documento_escaneado_name: [[""]],
     persona_relacionada: [[""], { value: this.documents?.persona_relacionada !== null ? this.documents?.persona_relacionada : "" }],
+    fecha_captura: [[""], { value: this.documents?.fecha_captura !== null ? this.documents?.fecha_captura : "" }],
     folio_scanner: [[""], { value: this.documents?.folio_scanner !== null ? this.documents?.folio_scanner : "" }],
     volante_jefatura: [[""], { value: this.documents?.volante_jefatura !== null ? this.documents?.volante_jefatura : "" }],
     oficio: [[""], { value: this.documents?.oficio !== null ? this.documents?.oficio : "" }],
@@ -121,7 +122,7 @@ export class EditTackingTableComponent implements OnInit {
     folio_jupiter: [[""], { value: this.documents?.folio_jupiter !== null ? this.documents?.folio_jupiter : "" }],
     descripcion: [[""], { value: this.documents?.descripcion !== null ? this.documents?.descripcion : "" }],
     turno_jefatura: [["",], { value: this.documents?.turno_jefatura !== null ? this.documents?.turno_jefatura : "" }],
-    documento_escaneado: [[],  ],
+    documento_escaneado: [null],
     id_documento_fk: [[""], { value: this.documents?.documento }],
     id_tipo_fk: [[""], { value: this.documents?.tipo }],
     id_administracion_fk: [[""], { value: this.documents?.administracion }],
@@ -371,7 +372,9 @@ export class EditTackingTableComponent implements OnInit {
 // }
 
 
-
+getToday(): string {
+  return new Date().toISOString().split('T')[0]
+}
 
 
   btnEdita() {
