@@ -27,10 +27,10 @@
              <div class="wrapping-individual-container">
                <label class="label-field flex text-blueGray-600 mb-0" htmlfor="grid-password">
                  Documento escaneado:
+                 <span class="" title="{{this.documents.documento_escaneado}}">
+                  <mat-icon class=""
+                 >remove_red_eye</mat-icon></span>
                </label>
-                 <div class="ml-1 text-xs">
-                  {{this.documents.documento_escaneado}}
-              </div>
                <input type="file"
                 placeholder="Documento escaneado"
                class="input-field placeholder-blueGray-300"
@@ -46,11 +46,11 @@
 
            <div class="wrapping-individual-container">
             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-              Fecha de Captura:
+              Fecha de Recepcion:
             </label>
             <input type="date"
               [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
-              formControlName="fecha_captura"
+              formControlName="fecha_recepcion"
                lang="es-MX"
                 placeholder="dd-MM-yyyy"
                 [max]="getToday()" value="">

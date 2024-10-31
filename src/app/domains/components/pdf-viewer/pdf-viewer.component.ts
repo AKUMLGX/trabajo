@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AsuntoService } from '../../services/asunto.service';
@@ -13,6 +13,9 @@ import { AsuntoService } from '../../services/asunto.service';
 })
 export class PdfViewerComponent {
   pdfUrl: string = '';
+
+  @Output() showTable = new EventEmitter<void>()
+  mostrarTabla: boolean = true
 
   constructor(private fileService: FileService) {  }
 
@@ -29,4 +32,13 @@ export class PdfViewerComponent {
       this.pdfUrl = blobURL;
     });
   }
+
+showAgain(){
+  this.showTable.emit()
+  this.mostrarTabla=false
+
+  console.log(this.mostrarTabla);
+
+}
+
 }

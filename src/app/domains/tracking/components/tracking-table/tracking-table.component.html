@@ -545,8 +545,8 @@
 @if (editar && filaSeleccionada ) {
 <app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
 }
-@if (visualizarPdf ) {
-<app-pdf-viewer></app-pdf-viewer>
+@if (visualizarPdf )  {
+<app-pdf-viewer (showTable)="showAgainTable()"></app-pdf-viewer>
 }
 @if (visualizarMsg ) {
 <app-msg-reader></app-msg-reader>

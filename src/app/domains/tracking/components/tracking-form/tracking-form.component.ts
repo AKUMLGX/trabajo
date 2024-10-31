@@ -41,7 +41,7 @@ export class TrackingFormComponent {
 
   public fecha = new FormControl('');
   public administracion = new FormControl('');
-  public formato = new FormControl('pdf');
+  public formato = new FormControl('xlsx');
 
   public fechaActual = '2018-11-11';
 
