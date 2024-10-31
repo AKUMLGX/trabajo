@@ -14,6 +14,10 @@
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio Interno" }}
                 </th>
+
+                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "DOC" }}
+                </th> -->
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Carpeta de Investigación" }}
                 </th>
@@ -45,6 +49,13 @@
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Documento" }}
                 </th>
+
+
+                        <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                  {{ "Tipo" }}
+                </th>
+
+
 
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Tipo de Asunto" }}
@@ -135,9 +146,7 @@
                 <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Hora de Recepción" }}
                 </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Tipo" }}
-                </th> -->
+
 
                 <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Unidad Administrativa de Autoridad" }}
@@ -224,7 +233,12 @@
                     {{ document.folio_interno }}
 
                   </div>
-                </td>
+                <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">
+                    {{ document.documento_escaneado }}
+
+                  </div>
+                </td> -->
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.carpeta_investigacion }}
@@ -278,6 +292,11 @@
                   </div>
                 </td>
 
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine">
+                    {{ document.tipo_asunto }}
+                  </div>
+                </td>
 
 
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
@@ -298,11 +317,6 @@
                   </div>
                 </td> -->
 
-                <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.tipo_asunto }}
-                  </div>
-                </td> -->
 
                 <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
@@ -531,8 +545,8 @@
 @if (editar && filaSeleccionada ) {
 <app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
 }
-@if (visualizarPdf ) {
-<app-pdf-viewer></app-pdf-viewer>
+@if (visualizarPdf )  {
+<app-pdf-viewer (showTable)="showAgainTable()"></app-pdf-viewer>
 }
 @if (visualizarMsg ) {
 <app-msg-reader></app-msg-reader>

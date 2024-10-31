@@ -17,25 +17,44 @@
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Carpeta de investigación y/o juzgado:
               </label>
-              <input (blur)="onBlur()" type="text" placeholder=" Carpeta de investigación y/o juzgado"
+              <input  type="text" placeholder=" Carpeta de investigación y/o juzgado"
                 [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="carpeta_investigacion" value="">
             </div>
 
-            <!-- @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
-              <div class="wrapping-individual-container">
-                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                  Documento escaneado
-                </label>
-                <input type="file"
-                 placeholder="Documento escaneado"
-                class="input-field placeholder-blueGray-300"
-                 formControlName="documento_escaneado"
-                 value=""
-                 accept=".pdf"
-                 (change)="onFileSelected($event)">
-              </div>
-            } -->
+
+            @if (getRol()=== "SIAT_AKAMBA_002_SUPERVISA") {
+             <div class="wrapping-individual-container">
+               <label class="label-field flex text-blueGray-600 mb-0" htmlfor="grid-password">
+                 Documento escaneado:
+                 <span class="" title="{{this.documents.documento_escaneado}}">
+                  <mat-icon class=""
+                 >remove_red_eye</mat-icon></span>
+               </label>
+               <input type="file"
+                placeholder="Documento escaneado"
+               class="input-field placeholder-blueGray-300"
+                formControlName="documento_escaneado"
+                value="true"
+                accept=".pdf"
+                (blur)="onBlur()"
+                (change)="onFileChanged($event)"
+                >
+             </div>
+           }
+
+
+           <div class="wrapping-individual-container">
+            <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+              Fecha de Recepcion:
+            </label>
+            <input type="date"
+              [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
+              formControlName="fecha_recepcion"
+               lang="es-MX"
+                placeholder="dd-MM-yyyy"
+                [max]="getToday()" value="">
+          </div>
 
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
@@ -131,6 +150,35 @@
                 <option [ngValue]="4">Recibido</option>
               </select>
             </div>
+
+            <div class="wrapping-individual-container">
+              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                Documento:
+              </label>
+              <select formControlName="id_documento_fk"
+
+              [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
+             >
+             <option [ngValue]="null" [selected]="true" ngValue="null" disabled>Elija un Documento</option>
+              <option [ngValue]="2">Requerimiento</option>
+              <option [ngValue]="4">Solicitud Interna</option>
+              <option [ngValue]="5">Respuesta Interna</option>
+              <option [ngValue]="6">Respuesta a FGR</option>
+              <option [ngValue]="7">Alcance</option>
+              </select>
+              </div>
+              <div class="wrapping-individual-container">
+                <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+                  Tipo:
+                </label>
+                <select id="id_tipo_fk" formControlName="id_tipo_fk"
+                  [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'">
+                  <option [ngValue]="null" disabled> Elija un Tipo</option>
+                  <option [ngValue]="1">Segunda Pieza</option>
+                  <option [ngValue]="2">Apertura</option>
+
+                </select>
+              </div>
 <!--
             <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
@@ -174,13 +222,7 @@
               <input type="text" placeholder="fecha de atención" class="disabled-input-field placeholder-blueGray-300"
                 formControlName="fecha_atencion" value="">
             </div> -->
-            <div class="wrapping-individual-container">
-              <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                Documento:
-              </label>
-              <input type="text" placeholder="Documento" class="disabled-input-field placeholder-blueGray-300"
-                formControlName="documento" value="">
-            </div>
+
             <!-- <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Areas pendientes:
@@ -254,13 +296,15 @@
               <input type="text" placeholder="hora de recepción" class="disabled-input-field placeholder-blueGray-300"
                 formControlName="hora_recepcion" value="">
             </div> -->
-            <div class="wrapping-individual-container">
+            <!-- <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Tipo:
               </label>
-              <input type="text" placeholder="Tipo" class="disabled-input-field placeholder-blueGray-300"
+              <input type="text" placeholder="Tipo"
+               [ngClass]=" showInput === true ? 'disabled-input-field placeholder-blueGray-300':'input-field placeholder-blueGray-300'"
                 formControlName="tipo" value="">
             </div>
+             -->
             <!-- <div class="wrapping-individual-container">
               <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
                 Unidad administrativa de autoridad:

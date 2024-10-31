@@ -16,20 +16,100 @@ export class EditTackingTableService {
 
   constructor(private http: HttpClient) { }
 
-  updateTrackingTable(data:Asunto):Observable<string>{
-    let  targetUrl  = environment.baseUrl
+  // updateTrackingTable(data:Asunto, selectedFile:File ):Observable<string>{
+  //   let  targetUrl  =  environment.baseUrl
+  //   if (data.id_asunto_historico !== null) {
+  //     targetUrl =  environment.baseUrl +    environment.updateTableHistorico
+  //   }else if(data.id_asunto_nuevo !== null){
+  //     targetUrl= environment.baseUrl +  environment.updateTableNuevo
+  //   }
+
+
+
+  //   const type = 'application/json'
+  //   const json = JSON.stringify(data);
+  //   const blob = new Blob([json],
+
+  //      {
+  //     type: type
+  //   });
+
+  //   const formData = new FormData();
+
+  //   formData.append('data', blob);
+
+
+  //   if (selectedFile && selectedFile.size > 0 ) {
+  //   formData.append('file', selectedFile, selectedFile.name);
+
+  //   }
+
+
+
+
+  //   // console.log("DATA",data);
+
+  //    return this.http.patch(targetUrl,
+  //     formData, { responseType: 'text'} );
+
+  // }
+
+  updateTrackingTable(data:Asunto, selectedFile? :File  ):Observable<string>{
+
+    let  targetUrl  =  environment.baseUrl
     if (data.id_asunto_historico !== null) {
       targetUrl =  environment.baseUrl +    environment.updateTableHistorico
-    }else if(data.id_asunto_nuevo !==null){
+    }else if(data.id_asunto_nuevo !== null){
       targetUrl= environment.baseUrl +  environment.updateTableNuevo
     }
-    // console.log("DATA",data);
 
-     return this.http.patch(targetUrl,
-      data, { responseType: 'text'} );
+    const type = 'application/json'
+    const json = JSON.stringify(data);
+
+    let formData: FormData;
+    if (selectedFile) {
+        const blob = new Blob([json],
+          {type}
+        );
+        formData = new FormData();
+        formData.append('data', blob);
+        formData.append('file', selectedFile, selectedFile.name);
+    }else  {
+      formData = new FormData();
+
+        formData.append('data', json);
+
+
+    }
+
+        return this.http.patch(targetUrl,
+      formData, { responseType: 'text'} );
 
   }
 
-   }
+
+
+  }
+
+
+
+  // updateDocumento( data: Asunto,selectedFile: File,): Observable<string> {
+  //   const type = 'application/json'
+  //   const json = JSON.stringify(data);
+  //   const blob = new Blob([json], {
+  //     type: type
+  //   });
+
+  //   const formData = new FormData();
+
+  //   formData.append('data', blob);
+  //   formData.append('file', selectedFile, selectedFile.name);
+
+  //   const targetUrlDoc = `${environment.baseUrl}${environment.updateDocumentoEscaneado}`;
+  //   return this.http.post(targetUrlDoc, formData, { responseType: 'text' });
+  // }
+
+
+
 
 

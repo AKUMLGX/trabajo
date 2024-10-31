@@ -24,6 +24,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
         if (event instanceof HttpResponse) {
           if (event.status === 200) {
             matDialog_.open(LoginDialogComponent, {
+              disableClose:true,
               data: {
                 msjTitle: "Exito",
                 msjDescription: "Login Exitoso"
@@ -36,6 +37,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
           if (event instanceof HttpResponse) {
             if (event.status === 200) {
               matDialog_.open(SuccessfulDialogComponent, {
+                disableClose:true,
                 data: {
                   msjTitle: "Exito",
                   msjDescription: "Acción realizada con exito"

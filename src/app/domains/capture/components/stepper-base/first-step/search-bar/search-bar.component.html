@@ -53,17 +53,32 @@
                                           {{ secondColumnHeader }}
                                       </th>
                                       <th class="table-head-item whitespace-nowrap">
+                                        {{ sixthColumnHeader }}
+                                      </th>
+                                      <th class="table-head-item whitespace-nowrap">
                                           {{ thirdColumnHeader }}
                                       </th>
                                       <th class="table-head-item whitespace-nowrap">
-                                          {{ fourthColumnHeader }}
+                                          {{ tenthColumnHeader }}
                                       </th>
+
                                       <th class="table-head-item whitespace-nowrap">
                                         {{ fifthColumnHeader }}
                                       </th>
+
                                       <th class="table-head-item whitespace-nowrap">
-                                        {{ sixthColumnHeader }}
+                                        {{ seventhColumnHeader }}
                                       </th>
+
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ ninthColumnHeader }}
+                                      </th>
+
+                                      <th class="table-head-item whitespace-nowrap">
+                                        {{ fourthColumnHeader }}
+                                    </th>
+
+
                                   </tr>
                               </thead>
                               <tbody>
@@ -92,13 +107,18 @@
                                               </div>
                                           </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                            <div class="text-sm leading-5 text-wine text-center">
+                                              {{ item.persona_relacionada }}
+                                            </div>
+                                        </td>
+                                          <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
                                                 {{ item.oficio }}
                                               </div>
                                           </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
-                                                {{ item.autoridad_remitente }}
+                                                {{ item.atencion }}
                                               </div>
                                           </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
@@ -106,9 +126,19 @@
                                                 {{ item.administracion }}
                                             </div>
                                         </td>
+                                        <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                          <div class="text-sm leading-5 text-wine text-center">
+                                            {{ item.documento }}
+                                          </div>
+                                      </td>
+                                      <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
+                                        <div class="text-sm leading-5 text-wine text-center">
+                                          {{ item.fecha_recepcion }}
+                                        </div>
+                                    </td>
                                           <td class="px-6 py-4 border-b border-gray-500 whitespace-nowrap">
                                               <div class="text-sm leading-5 text-wine text-center">
-                                                {{ item.persona_relacionada }}
+                                                {{ item.autoridad_remitente }}
                                               </div>
                                           </td>
                                       </tr>
