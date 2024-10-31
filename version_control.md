@@ -11,3 +11,4 @@
 | 0.0.9| Se modifica la bandeja de seguimiento, para cuando se realice la búsqueda,   muestre en la tabla  20 resultados y  en la tabla se añade  el campo de "Documento" y se oculta "Documento Escaneado".|
 | 0.0.10| Se hacen modificaciones  en la bandeja de seguimiento, en la sección de editar, se ocultan los inputs  que no se utilizaban. |
 | 0.0.11| Se hace modificaciones en la bandeja de seguimiento en la tabla  al campo de descripción.
+| 0.0.12 | Se añade la nueva funcionalidad para que se pueda editar un nuevo documento escaneado y una fecha de captura y añade un botón para cerrar el visualizador de PDF.  

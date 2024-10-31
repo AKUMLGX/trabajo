@@ -158,6 +158,9 @@ export class SearchBarComponent {
   fourthColumnHeader: string = 'Autoridad remitente';
   fifthColumnHeader: string = 'Administración'
   sixthColumnHeader: string = 'Persona relacionada';
+  seventhColumnHeader: string = 'Documento'
+  ninthColumnHeader: string = 'Fecha de Recepción'
+  tenthColumnHeader: string = "Atención"
 
   //Dummy data, formerly used to feed table.
   // SEARCH_RESULTS = [

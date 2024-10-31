@@ -8,10 +8,10 @@ export interface Asunto {
   folio_jupiter: String;
   orden: number;
   fecha_recepcion: Date;
-  documento_escaneado: String;
+  documento_escaneado: String | null;
   atencion: String | null ;
   descripcion: string;
-  documento: String;
+  documento: String | null;
   areas_pendientes: String;
   autoridad_solicitante: String;
   turno_jefatura: String;
@@ -24,7 +24,7 @@ export interface Asunto {
   atentas_notas_respuestas: String;
   fecha_turnado: String;
   hora_recepcion: Date;
-  tipo: String;
+  tipo: String | null;
   unidad_administrativa_autoridad: String;
   fecha_descargo: Date;
   fecha_oficio: Date;
