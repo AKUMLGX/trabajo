@@ -102,11 +102,44 @@
 
 <div class="h-full   text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
 
-  <div class="flex justify-center h-screen ">
-    <div class="flex h-[40%] w-full m-[20rem]">
-      <p class="text-center font-montserrat">Trabajamos para ti, modulo en construcción.</p>
-    </div>
+
+  <div class="flex h-auto w-auto justify-center pb-8 pt-8 " >
+         <p> Descargar por fecha. </p>
   </div>
+
+<form  class="flex justify-center items-center   h-[360px] w-auto" action="">
+
+  <div class="wrapping-individual-container">
+    <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+            Fecha uno:
+    </label>
+    <input type="date" placeholder="dd-MM-yyyy"
+        class="input-field placeholder-blueGray-300"
+        formControlName="fechaRecepcion" value=""
+
+        lang="es-MX"
+    >
+</div>
+  <div class="wrapping-individual-container">
+    <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+            Fecha dos:
+    </label>
+    <input type="date" placeholder="dd-MM-yyyy"
+        class="input-field placeholder-blueGray-300"
+        formControlName="fechaRecepcion" value=""
+
+        lang="es-MX"
+    >
+</div>
+
+
+
+</form>
+<div class="flex justify-center">
+  <button class="modal-right-button "> Consultar  </button>
+</div>
+
+
 
 </div>
 
