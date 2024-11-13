@@ -9,13 +9,13 @@ export const environment = {
   updateTableHistorico:"asunto/historico/update",
   updateTableNuevo: "asunto/nuevo/update",
   generateAcuse: "asunto/nuevo/get_reporte_por_dia",
+  chartPieEstaditicos:"asunto/get_estadisticas_atencion",
   asuntoNuevoEndpoint: 'asunto/nuevo/',
   getPdfEndpoint: 'getPdf',
   getMsgEndpoint: 'getMsg',
   base: '/akamba',
   loginUrl: 'http://localhost:4200/login',
   logoutUrl: 'https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout',
-
   environment:"DEVELOPMENT",
   hash: "1111111",
 

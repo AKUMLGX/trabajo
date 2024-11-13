@@ -101,46 +101,69 @@
  </div> -->
 
 <div class="h-full   text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
-
-
   <div class="flex h-auto w-auto justify-center pb-8 pt-8 " >
-         <p> Descargar por fecha. </p>
+         <p> Estadisticos  </p>
   </div>
+@if (!mostrarChart) {
+  <form  class="flex justify-center  h-auto w-auto"
+  [formGroup]="repotByDay">
 
-<form  class="flex justify-center items-center   h-[360px] w-auto" action="">
+    <div class="wrapping-individual-container">
+      <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+              Fecha Inicial:
+      </label>
+      <input type="date" placeholder="dd-MM-yyyy"
+          class="input-field placeholder-blueGray-300"
+          formControlName="fecha_inicial" value=""
+          lang="es-MX"
+      >
+  </div>
+    <div class="wrapping-individual-container">
+      <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
+              Fecha Final:
+      </label>
+      <input type="date" placeholder="dd-MM-yyyy"
+          class="input-field placeholder-blueGray-300"
+          formControlName="fecha_final" value=""
+          lang="es-MX"
+      >
+  </div>
+  </form>
 
-  <div class="wrapping-individual-container">
-    <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-            Fecha uno:
-    </label>
-    <input type="date" placeholder="dd-MM-yyyy"
-        class="input-field placeholder-blueGray-300"
-        formControlName="fechaRecepcion" value=""
-
-        lang="es-MX"
-    >
+<div class="flex justify-center h-auto w-auto pt-1 pb-16 ">
+  <button
+  (click)="estadisticosReport()"
+  [disabled]="!repotByDay.valid"
+  [ngClass]=" !repotByDay.valid ? 'next-button-disabled' : 'modal-right-button ml-1'">
+  Consultar
+</button>
 </div>
-  <div class="wrapping-individual-container">
-    <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-            Fecha dos:
-    </label>
-    <input type="date" placeholder="dd-MM-yyyy"
-        class="input-field placeholder-blueGray-300"
-        formControlName="fechaRecepcion" value=""
+}
 
-        lang="es-MX"
-    >
-</div>
+@if (mostrarChart) {
+  <div class="flex justify-center ">
+    <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+      <div class="flex justify-between pb-9" ><p class="text-base uppercase text-black pl-48"> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
 
 
+        <button (click)="goBack()"><img src="../../../../../assets/images/goBack.svg" alt=""></button>
+      </div>
 
-</form>
-<div class="flex justify-center">
-  <button class="modal-right-button "> Consultar  </button>
-</div>
-
-
-
+     <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de requerimientos: <span>{{total+enTramite+parcial}}</span> </p></div>
+      <apx-chart
+      [series]="series"
+      [chart]="chart"
+      [responsive]="responsive"
+      [labels]="labels"
+      [colors]="colors"
+      >
+      </apx-chart >
+      <button class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md
+      outline-none focus:outline-none mr-1
+       ease-linear transition-all duration-150">Descargar</button>
+      </div>
+  </div>
+}
 </div>
 
 
