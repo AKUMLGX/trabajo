@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, NgApexchartsModule } from 'ng-apexcharts';
-import { EstadisticoService,  } from '../../../services/estadistico.service';
+import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexTooltip, NgApexchartsModule,  } from 'ng-apexcharts';
+import { EstadisticoService  } from '../../../services/estadistico.service';
 import { EstadisticosResponse } from '../../../interfaces/estadisticosResponse.interface';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-init-template',
@@ -25,15 +26,11 @@ export class InitTemplateComponent {
   }
 
 
+  public environment =  environment;
+
   mostrarChart:boolean= false;
   fecha_Incial: string = ""
   fecha_Final: string  = ""
-  // estadisticosresp: EstadisticosResponse ={
-  //     en_tramite: 0,
-  //     parcial: 0,
-  //     no_aplica: 0,
-  //     total: 0,
-  //     recibido: 0}
 
 estadisticosRes : EstadisticosResponse ={
   total:0,
@@ -57,8 +54,6 @@ public repotByDay: FormGroup = this.fb.group({
   fecha_final:[null,[Validators.required]]
 })
 
-
-
 estadisticosReport():void{
   if (this.repotByDay.valid === true) {
     this.mostrarChart = true
@@ -69,13 +64,9 @@ estadisticosReport():void{
        this.estadisticosRes = res;
       this.series = [res.total, res.parcial,res.en_tramite]
 
-
       this.total = res.total;
       this.enTramite = res.en_tramite;
      this.parcial = res.parcial
-
-
-
       }
     )
     this.obtnerNombre()
@@ -102,11 +93,38 @@ estadisticosReport():void{
 
   public labels = ["Total","Parcial","En tramite",];
 
+
   public chart: ApexChart = {
     height: 350,
     width: 850,
-    type: "pie"
+    type: "pie",
+    toolbar:{
+      show:true,
+      offsetX: 0,
+      offsetY: 0,
+      tools:{
+        download: true,
+        selection: true,
+          zoom: true,
+          zoomin: true,
+          zoomout: true,
+          pan: true,
+
+          customIcons: []
+
+      },
+      export:{
+      png:{
+        filename: "Grafico"
+      }
+      }
+    }
   };
+
+  public tooltip: ApexTooltip = {
+
+    }
+
 
   goBack():void{
     this.mostrarChart = false
@@ -119,13 +137,5 @@ estadisticosReport():void{
     this.fecha_Incial = fechaIncial
     this.fecha_Final = fechaFinal
   }
-
-
-
-
-  downloadChart():void{
-
-  }
-
 
 }
