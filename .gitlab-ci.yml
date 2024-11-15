@@ -52,7 +52,7 @@ version-check:
     - if [[ -z $(cat ./version_control.md | tr -d "." | grep "${env_var_version}") ]]; then echo -e "${TXT_RED} No se encontro la version a desplegar en el archivo version_control.md"; exit 1 ; else echo "$(cat ./version_control.md | tr -d "." | grep "${env_var_version}") " ; fi
     - if [[ ${is_version_ajusted} -ne 0 ]]; then echo -e "${TXT_RED} ❌ Se requiere subir la versión en las variables de entorno. ❌"  ; exit 3 ; else echo "${TXT_GREEN}  Todo ok " ; fi
   environment:
-    name: development
+    name: production
 
 check_dependencies:
   only:
