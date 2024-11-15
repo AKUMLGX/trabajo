@@ -36,6 +36,7 @@ export const environment={
   tokenValidationEndpoint: 'login/token_validation',
   refreshTokenEndpoint: 'login/refresh_token',
   asuntoEndpoint: 'asunto/',
+  chartPieEstaditicos:"asunto/get_estadisticas_atencion",
   updateTableHistorico:"asunto/historico/update",
   updateTableNuevo: "asunto/nuevo/update",
   updateDocumentoEscaneado: "asunto/nuevo/updatearchivo",

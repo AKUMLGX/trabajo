@@ -9,16 +9,17 @@ LABEL commit_sha = ${COMMIT_SHA}
 # Estableciendo el directorio de trabajo
 WORKDIR /akamba
 
-RUN apt-get update && apt-get install -y --no-install-recommends 
+RUN apt-get update && apt-get install -y --no-install-recommends
 ENV TZ=America/Mexico_City
 
 # Instalando Angular
 RUN npm install -g @angular/cli@17.1.3
-RUN ng v 
+RUN ng v
 
 #Copiando las configuraciones
 
 COPY package.json /akamba/
-
+COPY package-lock.json /akamba/
+RUN cat /akamba/package.json
 # Instalando los módulos de node
-RUN npm install 
+RUN npm install

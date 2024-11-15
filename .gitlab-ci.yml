@@ -99,6 +99,7 @@ Build_base_image:
         compare_to: 'refs/heads/desarrollo'
         paths:
           - 'angular.json'
+          - 'package.json'
     - if: $CI_COMMIT_BRANCH == "desarrollo"
       when: on_success
   dependencies: []
