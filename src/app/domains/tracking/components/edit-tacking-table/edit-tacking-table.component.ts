@@ -22,7 +22,7 @@ import { MatIcon } from '@angular/material/icon';
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
-    FormComponent,
+
     MatIcon,
   ],
   templateUrl: './edit-tacking-table.component.html',
