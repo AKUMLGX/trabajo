@@ -203,8 +203,17 @@
                     </div>
                   </div>
                   <div>
-                    <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0" value="2024-11-11"
-                      [formControl]="fecha" required />
+                    <div class="flex flex-col items-start ">
+                      <div class="mb-3">
+                        <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0" value="2024-11-11"
+                        [formControl]="fecha" required />
+                      </div>
+                        <div class="mb-3">
+                          <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0" value="2024-11-11"
+                          [formControl]="fecha" required />
+                        </div>
+
+                    </div>
                     <button type="button" (click)="descargarAcuse()"
                       class="bg-verde-Akamba text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
                       Descargar acuse

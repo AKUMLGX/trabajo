@@ -116,9 +116,9 @@ acusebyfolioScanc():void{
     if (this.nombre_campo_input === "carpetaInvertigacion") {
       this.nombre_campo_input = "carpetaInvestigacion";
     }
-    this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
-      this.coincidencias = coincidencias.slice(0, 5);
-    });
+    // this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
+    //   this.coincidencias = coincidencias.slice(0, 5);
+    // });
   }
 
   descargarAcuse(): void {
@@ -139,6 +139,11 @@ acusebyfolioScanc():void{
 
   getToday(): string {
     return new Date().toISOString().split('T')[0]
+  }
+
+
+  getBeforeDay(): string {
+  return new Date().toDateString()
   }
 
 
