@@ -131,6 +131,7 @@
 
               </div>
             </div>
+
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'volante_jefatura')"
                 (mouseleave)="DetectInput(false, 'volante_jefatura')">
@@ -143,6 +144,31 @@
                   formControlName="volante_jefatura" value="" [(ngModel)]="campoValor['volante_jefatura']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
                 <mat-list *ngIf="showCoincidencias['volante_jefatura']  && coincidencias.length > 0"
+                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  [@fadeInOut]>
+                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
+                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
+                    {{ coincidencia }}
+                    <hr style="background-color: #783246;  padding: 1px 0;" />
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'turno_jefatura')"
+                (mouseleave)="DetectInput(false, 'turno_jefatura')">
+                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
+                 Turno Jefatura
+                  <span title=" Registro que se asigna a los asuntos que llegan a la jefatura para su seguimiento."><mat-icon class="icon-display">help_outline</mat-icon></span>
+                </label>
+                <input type="text" placeholder="Turno Jefatura"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine
+                   bg-white rounded text-sm shadow focus:outline-none focus:ring
+                    ring-wine w-full ease-linear transition-all duration-150"
+                  formControlName="turno_jefatura" value="" [(ngModel)]="campoValor['turno_jefatura']"
+                  (ngModelChange)="getValueInput()" #InputFormulario />
+                <mat-list *ngIf="showCoincidencias['turno_jefatura']  && coincidencias.length > 0"
                   class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   [@fadeInOut]>
                   <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
