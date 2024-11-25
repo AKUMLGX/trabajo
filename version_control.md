@@ -12,4 +12,5 @@
 | 0.0.10| Se hacen modificaciones  en la bandeja de seguimiento, en la sección de editar, se ocultan los inputs  que no se utilizaban. |
 | 0.0.11| Se hace modificaciones en la bandeja de seguimiento en la tabla  al campo de descripción.
 | 0.0.12 | Se añade la nueva funcionalidad para que se pueda editar un nuevo documento escaneado y una fecha de captura y añade un botón para cerrar el visualizador de PDF.  
-| 0.0.13 | Se añade la nueva funcionalidad de estadisticos  en bandeja de reportes
+| 0.0.13 | Se añade la nueva funcionalidad de estadisticos  en bandeja de reportes.
+| 0.0.14 | Se añade un nuevo filtro en la bandeja de seguimiento , "Turno Jefatura".  
