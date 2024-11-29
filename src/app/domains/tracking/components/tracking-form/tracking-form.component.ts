@@ -36,7 +36,8 @@ export class TrackingFormComponent {
     autoridadRemitente: new FormControl(''),
     personaRelacionada: new FormControl(''),
     volante_jefatura: new FormControl(''),
-    tipoBusqueda: new FormControl('Nuevos')
+    tipoBusqueda: new FormControl('Nuevos'),
+    turno_jefatura: new FormControl(''),
   });
 
   public fecha = new FormControl('');
@@ -59,7 +60,8 @@ export class TrackingFormComponent {
       oficio: '',
       autoridadRemitente: '',
       personaRelacionada: '',
-      volante_jefatura: ''
+      volante_jefatura: '',
+      turno_jefatura: '',
     };
     let date = new Date();
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);

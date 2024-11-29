@@ -30,6 +30,7 @@ export class AsuntoService {
     let autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
     let personaRelacionada = consultForm.get('personaRelacionada')?.value;
     let volante_jefatura = consultForm.get('volante_jefatura')?.value;
+    let turno_jefatura = consultForm.get('turno_jefatura')?.value;
     let url = environment.baseUrl + environment.asuntoEndpoint;
     let params = {
       folio_interno: folioInterno,
@@ -37,7 +38,8 @@ export class AsuntoService {
       oficio: oficio,
       autoridad_remitente: autoridadRemitente,
       persona_relacionada: personaRelacionada,
-      volante_jefatura
+      volante_jefatura:volante_jefatura ,
+      turno_jefatura:turno_jefatura,
     };
     this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
       this.documentList = data;
@@ -75,6 +77,7 @@ export class AsuntoService {
     let oficio: string = '';
     let autoridadRemitente: string = '';
     let volante_jefatura: string = '';
+    let turno_jefatura : string= '';
     switch (this.tipoBusqueda) {
       case "CARPETA DE INVESTIGACIÓN": {
         carpetaInvestigacion = userInput;
@@ -92,6 +95,10 @@ export class AsuntoService {
         oficio = userInput;
         break;
       }
+      case "TURNO JEFATURA  ":{
+        turno_jefatura = userInput
+        break;
+      }
     }
 
     let url = environment.baseUrl + environment.asuntoEndpoint;
@@ -101,7 +108,8 @@ export class AsuntoService {
       oficio: oficio,
       autoridad_remitente: autoridadRemitente,
       persona_relacionada: personaRelacionada,
-      volante_jefatura
+      volante_jefatura:volante_jefatura,
+      turno_jefatura : turno_jefatura
     };
 
     return this.httpClient.get<Asunto[]>(
