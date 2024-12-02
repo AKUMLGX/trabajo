@@ -44,11 +44,16 @@ export class TrackingFormComponent {
     tipoBusqueda: new FormControl('Nuevos')
   });
 
-  public fecha = new FormControl('');
+  public fecha_inicial = new FormControl('');
   public administracion = new FormControl('');
   public formato = new FormControl('pdf');
+  public fecha_final = new FormControl('');
 
   public fechaActual = '2018-11-11';
+
+  input_one  = ""
+  input_two = ""
+
 
   selecionarOpcion:string=''
 
@@ -68,26 +73,31 @@ export class TrackingFormComponent {
       personaRelacionada: '',
       volante_jefatura: ''
     };
+
     let date = new Date();
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
     let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
     let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
     this.fechaActual = `${year}-${month}-${day}`;
-    this.fecha.setValue(this.fechaActual);
+    this.fecha_inicial .setValue(this.fechaActual);
+
+    this.fecha_final.setValue(this.fechaActual)
+
+
+    // console.log("FI",this.fecha.value);
+    // console.log("FF",this.fechaFinal.value);
+
   }
   coincidencias: string[] = [];
   nombre_campo_input: string = "";
   mostrar_coincidencias?: boolean;
+
 
 public downloadByFolioScan:FormGroup = this.fb.group({
   input_one:[null,[Validators.required]],
   input_two:[null,[Validators.required]]
 })
 
-acusebyfolioScanc():void{
-  console.log(this.downloadByFolioScan.value);
-
-}
 
   DetectInput(entering: boolean, campo: string): void {
     this.showCoincidencias[campo] = entering;
@@ -122,10 +132,20 @@ acusebyfolioScanc():void{
   }
 
   descargarAcuse(): void {
-    if (this.fecha.value)
-      this.asuntoService.generateAcuse(this.fecha.value, this.administracion.value, this.formato.value);
+    if (this.fecha_inicial .value && this.fecha_final.value  )
+      this.asuntoService.generateAcuse(this.fecha_inicial .value, this.fecha_final.value ,  this.administracion.value, this.formato.value );
   }
 
+  descargarAcuseFolio():void{
+  let folioOne = this.downloadByFolioScan.get("input_one")?.value;
+    let folioTwo = this.downloadByFolioScan.get("input_two")?.value;
+    this.input_one=folioOne
+    this.input_two=folioTwo
+    if (this.input_one && this.input_two) {
+    this.asuntoService.generateAcuseFolioScan(this.input_one,
+    this.input_two , this.administracion.value, this.formato.value)
+    }
+}
 
   selectCoincidencia(coincidencia: string): void {
     const formControl = this.consultForm.get(this.nombre_campo_input);
@@ -140,12 +160,6 @@ acusebyfolioScanc():void{
   getToday(): string {
     return new Date().toISOString().split('T')[0]
   }
-
-
-  getBeforeDay(): string {
-  return new Date().toDateString()
-  }
-
 
   onSelectedOption(event: Event){
     const target = event.target as HTMLSelectElement

@@ -5,7 +5,7 @@ import { Asunto } from '../interfaces/asuntos.interfaces';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ParametrosAcuse } from '../interfaces/acuses';
+import { ParametrosAcuse, ParametrosAcuseFolio } from '../interfaces/acuses';
 
 @Injectable({
   providedIn: 'root',
@@ -133,13 +133,14 @@ export class AsuntoService {
     )
   }
 
-  generateAcuse(date: string, administracion: string | null, formato: string | null): void {
+  generateAcuse(date: string,   dateFinal:string, administracion: string | null, formato: string | null): void {
     let url = environment.baseUrl + environment.generateAcuse;
     if (formato === null) formato = 'pdf';
     let params: ParametrosAcuse = {
-      fecha: date,
+      fecha_inicial: date,
       administracion: administracion,
-      formato: formato
+      formato: formato,
+      fecha_final: dateFinal,
     };
     this.httpClient.post(url, params, { responseType: "text" }).subscribe((acuse) => {
       const byteCharacters = atob(acuse);
@@ -165,11 +166,36 @@ export class AsuntoService {
   }
 
 
-  generateAcuseFolioScan(
-
-
-  ):void{
-
+  generateAcuseFolioScan(folio_inicial:string, folio_final:string,administracion: string | null, formato: string | null){
+    let url = environment.baseUrl + environment.generateAcuse;
+    if (formato === null) formato = 'pdf';
+    let params: ParametrosAcuseFolio ={
+      folio_inicial : folio_inicial,
+      folio_final : folio_final,
+      administracion : administracion,
+      formato : formato
+    }
+    this.httpClient.post(url,params,{responseType:"text"}).subscribe((acuse)=>{
+      const byteCharacters = atob(acuse);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      let type;
+      if (formato === 'csv') {
+        type = 'text/csv';
+      } else if (formato === 'pdf') {
+        type = 'application/pdf';
+      } else {
+        type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: type });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `Acuse.${formato}`;
+      link.click();
+    });
   }
 
   openPdf(): void {
