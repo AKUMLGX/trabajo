@@ -1,18 +1,23 @@
 import { trigger, style, transition, animate } from '@angular/animations';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
 import { dynamicHeight } from '../../../shared/animacion/dynamicHeight.trigger';
 import { AsuntoService } from '../../../services/asunto.service';
+
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormsModule} from '@angular/forms';
 @Component({
   selector: 'app-tracking-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MatIcon, MatListModule, CommonModule],
+  imports: [ReactiveFormsModule, MatIcon, MatListModule, CommonModule,MatInputModule,MatFormFieldModule,FormsModule,MatDialogModule],
   templateUrl: './tracking-form.component.html',
   styleUrl: './tracking-form.component.css',
   animations: [
@@ -40,11 +45,17 @@ export class TrackingFormComponent {
     turno_jefatura: new FormControl(''),
   });
 
-  public fecha = new FormControl('');
+  public fecha_inicial = new FormControl('');
   public administracion = new FormControl('');
   public formato = new FormControl('xlsx');
 
   public fechaActual = '2018-11-11';
+
+  input_one  = ""
+  input_two = ""
+
+
+  selecionarOpcion:string=''
 
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: { [key: string]: boolean } = {};
@@ -63,16 +74,30 @@ export class TrackingFormComponent {
       volante_jefatura: '',
       turno_jefatura: '',
     };
+
     let date = new Date();
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
     let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
     let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
     this.fechaActual = `${year}-${month}-${day}`;
-    this.fecha.setValue(this.fechaActual);
+    this.fecha_inicial .setValue(this.fechaActual);
+
+    this.fecha_final.setValue(this.fechaActual)
+
+
+    // console.log("FI",this.fecha.value);
+    // console.log("FF",this.fechaFinal.value);
+
   }
   coincidencias: string[] = [];
   nombre_campo_input: string = "";
   mostrar_coincidencias?: boolean;
+
+
+public downloadByFolioScan:FormGroup = this.fb.group({
+  input_one:[null,[Validators.required]],
+  input_two:[null,[Validators.required]]
+})
 
 
   DetectInput(entering: boolean, campo: string): void {
@@ -102,16 +127,26 @@ export class TrackingFormComponent {
     if (this.nombre_campo_input === "carpetaInvertigacion") {
       this.nombre_campo_input = "carpetaInvestigacion";
     }
-    this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
-      this.coincidencias = coincidencias.slice(0, 5);
-    });
+    // this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
+    //   this.coincidencias = coincidencias.slice(0, 5);
+    // });
   }
 
   descargarAcuse(): void {
-    if (this.fecha.value)
-      this.asuntoService.generateAcuse(this.fecha.value, this.administracion.value, this.formato.value);
+    if (this.fecha_inicial .value && this.fecha_final.value  )
+      this.asuntoService.generateAcuse(this.fecha_inicial .value, this.fecha_final.value ,  this.administracion.value, this.formato.value );
   }
 
+  descargarAcuseFolio():void{
+  let folioOne = this.downloadByFolioScan.get("input_one")?.value;
+    let folioTwo = this.downloadByFolioScan.get("input_two")?.value;
+    this.input_one=folioOne
+    this.input_two=folioTwo
+    if (this.input_one && this.input_two) {
+    this.asuntoService.generateAcuseFolioScan(this.input_one,
+    this.input_two , this.administracion.value, this.formato.value)
+    }
+}
 
   selectCoincidencia(coincidencia: string): void {
     const formControl = this.consultForm.get(this.nombre_campo_input);
@@ -126,5 +161,10 @@ export class TrackingFormComponent {
   getToday(): string {
     return new Date().toISOString().split('T')[0]
   }
+
+  onSelectedOption(event: Event){
+    const target = event.target as HTMLSelectElement
+    this.selecionarOpcion = target.value
+}
 
 }
