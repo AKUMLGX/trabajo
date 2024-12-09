@@ -178,7 +178,7 @@
               Buscar
             </button>
               <mat-dialog-content >
-                <div class="flex w-auto mt-2">
+                <div class="flex  mt-2">
                   <select
                     class="bg-gray-50 border-[#691C32] text-center
                      text-gray-900 mb-6 text-md rounded-lg focus:ring-blue-500
@@ -193,7 +193,7 @@
                 </div>
                 @if(selecionarOpcion === "fecha"){
                 <div class="flex w-1/2  justify-center  flex-wrap">
-                  <div class="w-1/2 p-2 mb-4 ">
+                  <div class="w-full p-2 mb-4 ">
                     <p>Formato</p>
                     <div style="border: 2px solid #691C32;" class="mb-4">
                       <select id="formato" [formControl]="formato"
@@ -204,7 +204,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="w-1/2 p-2 mb-4">
+                  <div class="w-full p-2 mb-4">
                     <p>Administración</p>
                     <div style="border: 2px solid #691C32;" class="mb-4">
                       <select id="administracion" [formControl]="administracion"
@@ -219,24 +219,42 @@
                       </select>
                     </div>
                   </div>
-                  <div class="w-1/2 p-2 mb-4">
+                  <!-- <div class="w-full p-2 mb-4">
                       <p>Fecha Inicial:</p>
                       <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0"
                       [formControl]="fecha_inicial" required />
+                  </div> -->
+                  <div class="w-full p-2 mb-4">
+                    <p>Fecha Inicial:</p>
+                    <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0"
+                    [formControl]="fecha_inicial" required />
                   </div>
-                  <div class="w-1/2 p-2 mb-4 ">
+                  <div class="w-full p-2 mb-4">
                     <p>Fecha Final:</p>
-                    <input type="date" [min]="getToday()"  class="mr-10 date mb-4 md:mb-0"
+                    <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0"
                     [formControl]="fecha_final" required />
                   </div>
-                  <div class="p-2 mt-4  w-1/2">
+                  <div class="w-full p-2 mb-4">
                     <button type="button" (click)="descargarAcuse()"
                     class="bg-verde-Akamba text-white active:bg-pink-600
                     font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
                     focus:outline-none mr-1 ease-linear transition-all duration-150">
                     Descargar acuse
                   </button>
-                </div>
+                  </div>
+                  <!-- <div class="w-full p-2 mb-4 ">
+                    <p>Fecha Final:</p>
+                    <input type="date"  class="mr-10 date mb-4 md:mb-0"
+                    [formControl]="fecha_final" required />
+                  </div>
+                  <div class="p-2 mt-4  w-full">
+                    <button type="button" (click)="descargarAcuse()"
+                    class="bg-verde-Akamba text-white active:bg-pink-600
+                    font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
+                    focus:outline-none mr-1 ease-linear transition-all duration-150">
+                    Descargar acuse
+                  </button>
+                </div> -->
                   </div>
                 }@else if (selecionarOpcion === "folio") {
                   <form [formGroup]="downloadByFolioScan" >
