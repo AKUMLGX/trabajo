@@ -14,3 +14,4 @@
 | 0.0.12 | Se añade la nueva funcionalidad para que se pueda editar un nuevo documento escaneado y una fecha de captura y añade un botón para cerrar el visualizador de PDF.  
 | 0.0.13 | Se añade la nueva funcionalidad de estadisticos  en bandeja de reportes.
 | 0.0.14 | Se añade un nuevo filtro en la bandeja de seguimiento , "Turno Jefatura".  
+|0.0.15 | Se añade una sección de descarga de fecha inicial y fecha final en la bandeja de seguimineto. 

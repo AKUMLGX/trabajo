@@ -156,11 +156,13 @@ export class SearchBarComponent {
   secondColumnHeader: string = 'Carpeta de Investigación';
   thirdColumnHeader: string = 'Oficio';
   fourthColumnHeader: string = 'Autoridad remitente';
-  fifthColumnHeader: string = 'Administración'
+  fifthColumnHeader: string = 'Administración';
   sixthColumnHeader: string = 'Persona relacionada';
-  seventhColumnHeader: string = 'Documento'
-  ninthColumnHeader: string = 'Fecha de Recepción'
-  tenthColumnHeader: string = "Atención"
+  seventhColumnHeader: string = 'Documento';
+  ninthColumnHeader: string = 'Fecha de Recepción';
+  tenthColumnHeader: string = "Atención";
+  eleventhColumnHeader: string = "Turno Jefatura";
+  twelfthColumnHeader: string = "Folio Scanner";
 
   //Dummy data, formerly used to feed table.
   // SEARCH_RESULTS = [
