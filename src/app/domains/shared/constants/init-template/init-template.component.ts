@@ -23,6 +23,7 @@ export class InitTemplateComponent {
   ngOnInit():void{
   // this.btnEdita()
   // this.obtnerNombre()
+
   }
 
 
@@ -31,6 +32,10 @@ export class InitTemplateComponent {
   mostrarChart:boolean= false;
   fecha_Incial: string = ""
   fecha_Final: string  = ""
+
+  download = "REQUERIMIENTO"
+  formato = "xlsx"
+  administracion = ""
 
 estadisticosRes : EstadisticosResponse ={
   total:0,
@@ -70,7 +75,12 @@ estadisticosReport():void{
       }
     )
     this.obtnerNombre()
+
   }
+ }
+
+ getDownloadExcel():void{
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download,this.formato,this.administracion)
  }
 
   public responsive: ApexResponsive[] = [
@@ -136,6 +146,9 @@ estadisticosReport():void{
     let fechaFinal = this.repotByDay.get("fecha_final")?.value;
     this.fecha_Incial = fechaIncial
     this.fecha_Final = fechaFinal
+    console.log("1",fechaIncial);
+    console.log("2",fechaFinal);
+
   }
 
 }
