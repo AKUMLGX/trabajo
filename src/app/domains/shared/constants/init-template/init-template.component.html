@@ -38,7 +38,6 @@
       >
   </div>
   </form>
-
 <div class="flex justify-center h-auto w-auto pt-1 pb-16 ">
   <button
   (click)="estadisticosReport()"
@@ -48,7 +47,6 @@
 </button>
 </div>
 }
-
 @if (mostrarChart) {
   <div class="flex justify-center ">
     <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
@@ -63,6 +61,9 @@
       [colors]="colors"
       >
       </apx-chart >
+      <div class="flex justify-end">
+        <button class="download" (click)="getDownloadExcel()" >Descargar Excel</button>
+      </div>
       </div>
   </div>
 }
