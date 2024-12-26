@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -11,13 +11,30 @@ import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.co
 import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
 
 
+import 'lib-itsi'
+
+
 @Component({
   selector: 'app-tracking-table',
   standalone: true,
-  imports: [PdfViewerModule, MatIcon, NgxPaginationModule, CommonModule, EditTackingTableComponent, PdfViewerComponent, MsgReaderComponent],
+  imports: [
+    PdfViewerModule,
+    MatIcon,
+    NgxPaginationModule,
+    CommonModule,
+    EditTackingTableComponent,
+    PdfViewerComponent,
+    MsgReaderComponent,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
+
+
+
 export class TrackingTableComponent {
   public documents: Asunto[] = [];
   public pages: Asunto[][] = [];
@@ -31,6 +48,8 @@ export class TrackingTableComponent {
   public tipoBusqueda: string = '';
 
   public newTableIsRendered: boolean = false;
+
+  public pdfIsRendered: boolean = false;
 
   public formUpdateIsRendered: boolean = false;
 
@@ -69,6 +88,7 @@ export class TrackingTableComponent {
     this.asuntoService.fileIsOpenUpdated.subscribe((fileIsOpen) => {
       this.editar = false;
       this.fileIsOpen = fileIsOpen;
+
     });
     this.asuntoService.documentsUpdated.subscribe((documents) => {
       this.fileIsOpen = false;
@@ -78,6 +98,7 @@ export class TrackingTableComponent {
       this.editar = false;
       this.tipoBusqueda = this.asuntoService.tipoBusqueda;
       this.newTableIsRendered = false;
+      this.pdfIsRendered = false;
       this.formUpdateIsRendered = false;
       this.documents = documents;
       let index = 0;
@@ -100,33 +121,44 @@ export class TrackingTableComponent {
   scrollToTable(): void {
     const element = document.getElementById('sectionTable');
     if (element !== null && !this.newTableIsRendered) {
-      const checkEvery = 100;
-      setTimeout(() => {
-        if (window.scrollY !== element.offsetTop) {
-          element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest',
-          });
-        }
-      }, checkEvery);
+      this.scrolltoElement(element, 100);
       this.newTableIsRendered = true;
     }
   }
+  scrollToPDF(): void {
+    const element = document.getElementById('sectionPDF');
+    if (element !== null && !this.pdfIsRendered) {
+      this.scrolltoElement(element, 1000);
+      this.pdfIsRendered = true;
+    }
+  }
 
-  toggleExpansion(index:number):void{
+  scrolltoElement(element: HTMLElement, checkEvery: number): void {
+    setTimeout(() => {
+      if (window.scrollY !== element.offsetTop) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        });
+      }
+    }, checkEvery);
+  }
+
+
+  toggleExpansion(index: number): void {
     this.index = index
     this.isExpanded = true;
     // console.log("isExpanded", this.isExpanded);
     // console.log("INDEX",this.index);
-     }
+  }
 
-     closeExpansion(index:number):void{
-      this.index = index
-      this.isExpanded = false;
-      // console.log("isExpanded", this.isExpanded);
-      // console.log("INDEX",this.index);
-     }
+  closeExpansion(index: number): void {
+    this.index = index
+    this.isExpanded = false;
+    // console.log("isExpanded", this.isExpanded);
+    // console.log("INDEX",this.index);
+  }
 
 
   getRol(): string {
@@ -137,23 +169,6 @@ export class TrackingTableComponent {
       return rol;
     }
     return "";
-  }
-
-  scrollToTableUpdate(): void {
-    const element = document.getElementById("sectionUpdate");
-    if (element !== null && !this.formUpdateIsRendered) {
-      const checkEvery = 100
-      setTimeout(() => {
-        if (window.scrollY !== element.offsetTop) {
-          element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'end',
-            inline: 'nearest',
-          });
-        }
-      }, checkEvery);
-    }
-    this.formUpdateIsRendered = true;
   }
 
 
@@ -208,6 +223,11 @@ export class TrackingTableComponent {
     this.mostrarTabla = true;
     this.editar = false
   }
+
+  mostrarTable() {
+    this.mostrarTabla = true;
+    this.visualizarPdf = false;
+    this.fileIsOpen = false;
+  }
+
 }
-
-

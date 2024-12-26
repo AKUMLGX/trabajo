@@ -14,10 +14,10 @@ import { AsuntoService } from '../../services/asunto.service';
 export class PdfViewerComponent {
   pdfUrl: string = '';
 
-  @Output() showTable = new EventEmitter<void>()
-  mostrarTabla: boolean = true
+  @Output() showTablePDF = new EventEmitter<void>()
+  mostrarTablaPDF: boolean = true
 
-  constructor(private fileService: FileService) {  }
+  constructor(private fileService: FileService) { }
 
   ngOnInit(): void {
     this.fileService.pdfUpdated.subscribe((file) => {
@@ -32,13 +32,8 @@ export class PdfViewerComponent {
       this.pdfUrl = blobURL;
     });
   }
-
-showAgain(){
-  this.showTable.emit()
-  this.mostrarTabla=false
-
-  console.log(this.mostrarTabla);
-
-}
-
+  showAgain() {
+    this.showTablePDF.emit()
+    this.mostrarTablaPDF = false
+  }
 }
