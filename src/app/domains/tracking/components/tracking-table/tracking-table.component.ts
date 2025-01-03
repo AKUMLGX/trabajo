@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -11,7 +11,7 @@ import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.co
 import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
 
 
-import 'lib-itsi'
+
 
 
 @Component({
@@ -26,9 +26,7 @@ import 'lib-itsi'
     PdfViewerComponent,
     MsgReaderComponent,
   ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
+
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
 })
