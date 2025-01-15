@@ -1,12 +1,12 @@
 
-<div class="h-full   text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
+<div class="h-full  border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
   <div class="flex h-auto w-auto justify-center pb-8 pt-8 " >
  @if (!mostrarChart) {
-          <p> Estadísticos</p>
+          <p class="text-3xl"> Estadísticos</p>
  }
             @if (mostrarChart) {
               <div class="w-[20%] pl-[340px] ">
-                <p> Estadísticos</p>
+                <p class="text-3xl"> Estadísticos</p>
               </div>
               <div class="flex justify-end w-[50%] ">
                   <button (click)="goBack()"><img src="{{environment.base}}/assets/images/goBack.svg" alt=""></button>
@@ -48,24 +48,57 @@
 </div>
 }
 @if (mostrarChart) {
-  <div class="flex justify-center ">
-    <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-      <div class="flex justify-center pb-9" ><p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
-      </div>
-     <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de requerimientos: <span>{{total+enTramite+parcial}}</span> </p></div>
-      <apx-chart
-      [series]="series"
-      [chart]="chart"
-      [responsive]="responsive"
-      [labels]="labels"
-      [colors]="colors"
-      >
-      </apx-chart >
+    <mat-dialog-content>
       <div class="flex justify-end">
-        <button class="download" (click)="getDownloadExcel()" >Descargar Excel</button>
+        <div class="w-[85%] ">
+          <select class= "select" (change)="onSelectedOption($event)" >
+            <option disabled selected value="">Selecciona una opción</option>
+            <option  value="requerimiento">Requerimiento</option>
+            <option  value="respuesta">Respuesta</option>
+          </select>
+        </div>
       </div>
-      </div>
-  </div>
+      @if (selecionarOpcion === "requerimiento") {
+        <div class="flex justify-center ">
+          <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+            <div class="flex justify-center pb-9" ><p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+            </div>
+           <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de requerimientos: <span>{{total_requerimiento + enTramite_requerimiento + parcial_requerimiento }}</span> </p></div>
+            <apx-chart
+            [series]="series_requerimiento"
+            [chart]="chart"
+            [responsive]="responsive"
+            [labels]="labels"
+            [colors]="colors"
+            >
+            </apx-chart >
+            <div class="flex justify-end">
+              <button class="download" (click)="getDownloadExcelRequerimientos()" > Descargar  requerimiento </button>
+            </div>
+            </div>
+        </div>
+      }
+      @else if (selecionarOpcion === "respuesta")  {
+        <div class="flex justify-center ">
+          <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+            <div class="flex justify-center pb-9" ><p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+            </div>
+           <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de respuestas: <span>{{total_respuesta  +   enTramite_respuesta  + parcial_respuesta  }}</span> </p></div>
+            <apx-chart
+            [series]="series_respuesta"
+            [chart]="chart"
+            [responsive]="responsive"
+            [labels]="labels"
+            [colors]="colors"
+            >
+            </apx-chart >
+            <div class="flex justify-end">
+              <button class="download" (click)="getDownloadExcelRespuesta()" > Descargar  respuesta</button>
+            </div>
+            </div>
+        </div>
+      }
+        </mat-dialog-content>
 }
 </div>
 

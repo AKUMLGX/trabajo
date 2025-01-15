@@ -1,13 +1,9 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, } from '@angular/common/http';
-import { Observable } from 'rxjs';
-// import { environment } from '../../../environments/environment.development';
 import { environment } from '../../../environments/environment';
 import { DownloadExcel, EstadisticosRequest} from '../interfaces/estadisticosRequest.interface';
 import { EstadisticosResponse } from '../interfaces/estadisticosResponse.interface';
-import { ParametrosAcuse } from '../interfaces/acuses';
-
 
 @Injectable({
 providedIn: 'root'
@@ -18,14 +14,10 @@ export class EstadisticoService {
   getQuerybyDay(data:EstadisticosRequest)
   {
     let targetUrl = environment.baseUrl + environment.chartPieEstaditicos
-    return this.http.post<EstadisticosResponse>(targetUrl,data,
-      )
+    return this.http.post<EstadisticosResponse ['data']>(targetUrl,data)
   }
 
   donwnloadExcel(startDate:string,endDate:string,documento:string, formato:string, administracion:string ){
-    // let envBase = environment.baseUrl;
-    // let envGenerate = environment.generateAcuse;
-    // let url = `${envBase} + ${envGenerate} `;
     let url = environment.baseUrl + environment.generateAcuse;
     let params: DownloadExcel = {
       fecha_inicial: startDate,
@@ -49,7 +41,6 @@ export class EstadisticoService {
       link.download = `Acuse.${formato}`;
       link.click();
    })
-
   }
 
 }
