@@ -17,3 +17,4 @@
 |0.0.15 | Se añade una sección de descarga de fecha inicial y fecha final en la bandeja de seguimineto.
 |0.0.16 | Se añade un nuevo botón de descarga de Excel en la bodega de reportes.| 
 |0.0.17 | Se soluciona el problema del  botón de  regresar del visualizador de PDF. |
+|0.0.18 | Se agrega la nueva funcionalidad de visualizar un gráfico de pastel y poderla descargar un Excel. | 
