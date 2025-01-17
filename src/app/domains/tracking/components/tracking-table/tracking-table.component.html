@@ -1,4 +1,4 @@
-@if (documents.length > 0 && !fileIsOpen && mostrarTabla) {
+@if (documents.length > 0 && !fileIsOpen && mostrarTabla ) {
 <div class="flex justify-center items-center text-xl mt-2">Resultados </div>
 <section class="py-1 bg-blueGray-50" id="sectionTable">
   <div class="w-full lg:w-12/12 mx-auto mt-2">
@@ -14,10 +14,6 @@
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio Interno" }}
                 </th>
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "DOC" }}
-                </th> -->
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Carpeta de Investigación" }}
                 </th>
@@ -27,174 +23,39 @@
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Persona Relacionada" }}
                 </th>
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Documento" }}
                 </th>
-
-
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Atención" }}
                 </th>
-
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Administración" }}
                 </th>
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Fecha Recepción" }}
                 </th>
-
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Fecha Captura" }}
                 </th>
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Descripción" }}
                 </th>
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Autoridad Remitente" }}
                 </th>
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Documento Escaneado" }}
-                </th> -->
-
-
-
-                        <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Tipo" }}
                 </th>
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Turno Jefatura" }}
                 </th>
-
-
-                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Folio Scanner" }}
                 </th>
-
-
                 <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
                   {{ "Plazo de Atención" }}
                 </th>
-
-
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Tipo de Asunto" }}
-                </th> -->
-
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ " Fecha  Captura Histórico" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Descargo" }}
-                </th> -->
-
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Autor" }}
-                </th> -->
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Folio" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Orden" }}
-                </th> -->
-
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Fecha Atención" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Areas Pendientes" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Area Pendiente" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Autoridad Solicitante" }}
-                </th> -->
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Correo Eléctronico" }}
-                </th> -->
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Que Solicita" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Fecha Número Oficio Atención" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Asuntos Enviados Correo Mara" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Atentas Notas Respuestas" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Fecha de Turnado" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Hora de Recepción" }}
-                </th> -->
-
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Unidad Administrativa de Autoridad" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Fecha de Descargo" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Fecha de Oficio" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Respuesta" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Reporte" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Acuse" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Piezas FGR de Administración" }}
-                </th> -->
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Base de Captura de Administración" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Folio Jupiter" }}
-                </th> -->
-
-                <!-- <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                  {{ "Volante Jefatura" }}
-                </th> -->
               </tr>
             </thead>
             <tbody>
@@ -245,18 +106,11 @@
                     {{ document.folio_interno }}
 
                   </div>
-                <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
-                    {{ document.documento_escaneado }}
-
-                  </div>
-                </td> -->
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.carpeta_investigacion }}
                   </div>
                 </td>
-
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left ">
                     {{ document.oficio }}
@@ -267,266 +121,77 @@
                     {{ document.persona_relacionada }}
                   </div>
                 </td>
-
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine  text-left">
                     {{ document.documento }}
                   </div>
                 </td>
-
-
-
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm  leading-5 text-wine text-left">
                     {{ document.atencion }}
                   </div>
                 </td>
-
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.administracion }}
                   </div>
                 </td>
-
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.fecha_recepcion }}
                   </div>
                 </td>
-
-
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.fecha_captura }}
                   </div>
                 </td>
-
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 " >
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 ">
                   <div class="text-sm leading-5 text-wine text-left ">
                     <p>
                       @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
-                          {{document.descripcion | slice: 0 : 25}}
-                      <button class="button-read-more  font-semibold " (click)="toggleExpansion($index) "> Leer más   <strong class="points " >...</strong> </button>
-                      }@else if (document.descripcion !== null && document.descripcion.length <= 24){
-                        <p>
-                          {{document.descripcion}}
-                          </p>
+                      {{document.descripcion | slice: 0 : 25}}
+                      <button class="button-read-more  font-semibold " (click)="toggleExpansion($index) "> Leer más
+                        <strong class="points ">...</strong> </button>
+                      }@else if (document.descripcion !== null && document.descripcion.length <= 24){ <p>
+                        {{document.descripcion}}
+                    </p>
                     }
-                  </p>
-                      @if ( document.descripcion !== null && document.descripcion.length >= 24 && index === $index){
-                        <p [ngClass]="{'h-20 w-[30rem]': isExpanded, 'hidden': !isExpanded} "
-                        [ngStyle]="{'overflow-y': isExpanded ? 'auto' : 'visible', 'height': isExpanded ? '200px' : 'auto'}">
-                          {{document.descripcion}}
-                        </p>
-                      <button class="button-read-more  font-semibold "  (click)="closeExpansion(-1)">Leer menos</button>
-                      }
+                    </p>
+                    @if ( document.descripcion !== null && document.descripcion.length >= 24 && index === $index){
+                    <p [ngClass]="{'h-20 w-[30rem]': isExpanded, 'hidden': !isExpanded} "
+                      [ngStyle]="{'overflow-y': isExpanded ? 'auto' : 'visible', 'height': isExpanded ? '200px' : 'auto'}">
+                      {{document.descripcion}}
+                    </p>
+                    <button class="button-read-more  font-semibold " (click)="closeExpansion(-1)">Leer menos</button>
+                    }
                   </div>
                 </td>
-
-
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.autoridad_remitente }}
                   </div>
                 </td>
-
-
-                <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-center">
-                    {{ document.documento_escaneado }}
-                  </div>
-                </td> -->
-
-
-
-
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine  text-left">
                     {{ document.tipo }}
                   </div>
                 </td>
-
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.turno_jefatura }}
                   </div>
                 </td>
-
-                       <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine">
                     {{ document.folio_scanner }}
                   </div>
                 </td>
-
-
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.plazo_atencion }}
                   </div>
                 </td>
-
-<!--
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.tipo_asunto }}
-                  </div>
-                </td> -->
-
-
-
-<!--
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
-                    {{ document.fecha_numero_oficio_atencion }}
-                  </div>
-                </td> -->
-
-                <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.descargo }}
-                  </div>
-                </td> -->
-
-
-                <!-- <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.autor }}
-                  </div>
-                </td> -->
-
-
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.folio }}
-                  </div>
-                </td> -->
-
-
-
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.orden }}
-                  </div>
-                </td> -->
-
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.fecha_atencion }}
-                  </div>
-                </td> -->
-
-
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.areas_pendientes }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.area_pendiente }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.autoridad_solicitante }}
-                  </div>
-                </td> -->
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.correo_electronico }}
-                  </div>
-                </td> -->
-
-
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.que_solicita }}
-                  </div>
-                </td> -->
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.asuntos_enviados_correo_mara }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.atentas_notas_respuestas }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.fecha_turnado }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.hora_recepcion }}
-                  </div>
-                </td> -->
-
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.unidad_administrativa_autoridad }}
-                  </div>
-                </td> -->
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.fecha_descargo }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.fecha_oficio }}
-                  </div>
-                </td> -->
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left ">
-                    {{ document.respuesta }}
-                  </div>
-                </td> -->
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.reporte }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.acuse }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.piezas_fgr_administracion }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine">
-                    {{ document.base_captura_administracion }}
-                  </div>
-                </td> -->
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
-                    {{ document.folio_jupiter }}
-                  </div>
-                </td> -->
-
-                <!-- <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
-                    {{ document.volante_jefatura }}
-                  </div>
-                </td> -->
-
               </tr>
               }
             </tbody>
@@ -575,11 +240,12 @@
 }@else if(!fileIsOpen && mostrarTabla) {
 <div class="empty">No se encontraron resultados</div>
 }
-@if (editar && filaSeleccionada ) {
-<app-edit-tacking-table id="sectionUpdate" (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
+@if (visualizarPdf) {
+<app-pdf-viewer id="sectionPDF" (showTablePDF)="mostrarTable()" />
+{{ scrollToPDF() }}
 }
-@if (visualizarPdf )  {
-<app-pdf-viewer (showTable)="showAgainTable()"></app-pdf-viewer>
+@if (editar && filaSeleccionada ) {
+<app-edit-tacking-table   (showTable)="showAgainTable()" [documents]="filaSeleccionada" />
 }
 @if (visualizarMsg ) {
 <app-msg-reader></app-msg-reader>
