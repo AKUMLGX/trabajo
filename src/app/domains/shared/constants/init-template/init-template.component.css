@@ -7,11 +7,15 @@
 }
 
 .input-field {
-  @apply border-0 px-3 py-3 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
+  @apply border-0 px-3 py-3 text-wine
+   bg-white rounded text-sm shadow focus:outline-none focus:ring
+  ring-wine w-full ease-linear transition-all duration-150;
 }
 
 .disabled-input-field {
-  @apply border-0 px-3 py-3 text-gray-400 bg-gray-100/30 rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
+  @apply border-0 px-3 py-3 text-gray-400 bg-gray-100/30 rounded text-sm
+  shadow focus:outline-none focus:ring ring-wine w-full ease-linear
+   transition-all duration-150;
 }
 
 .next-button {
@@ -32,4 +36,12 @@
  @apply bg-verde-Akamba text-white active:bg-pink-600
         font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
         focus:outline-none mr-1 ease-linear transition-all duration-150
+}
+
+.select{
+  @apply bg-gray-50 border-[#691C32] text-center
+          text-gray-900 mb-6  rounded-lg focus:ring-blue-500
+          focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700
+          dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+          dark:focus:ring-blue-500 dark:focus:border-blue-500
 }

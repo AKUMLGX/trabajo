@@ -3,29 +3,24 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexTooltip, NgApexchartsModule,  } from 'ng-apexcharts';
 import { EstadisticoService  } from '../../../services/estadistico.service';
-import { EstadisticosResponse } from '../../../interfaces/estadisticosResponse.interface';
+import { EstadisticosResponse, Estado } from '../../../interfaces/estadisticosResponse.interface';
 import { environment } from '../../../../../environments/environment';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-init-template',
   standalone: true,
   imports: [
-    NgApexchartsModule,
+    CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    CommonModule
+    NgApexchartsModule,
+    MatDialogModule,
   ],
   templateUrl: './init-template.component.html',
   styleUrl: './init-template.component.css'
 })
 export class InitTemplateComponent {
-
-  ngOnInit():void{
-  // this.btnEdita()
-  // this.obtnerNombre()
-
-  }
-
 
   public environment =  environment;
 
@@ -33,21 +28,41 @@ export class InitTemplateComponent {
   fecha_Incial: string = ""
   fecha_Final: string  = ""
 
-  download = "REQUERIMIENTO"
+  download_requerimiento = "REQUERIMIENTO"
+  download_respuesta = "RESPUESTA"
   formato = "xlsx"
   administracion = ""
 
-estadisticosRes : EstadisticosResponse ={
-  total:0,
-  parcial:0,
-  no_aplica:0,
-  recibido:0,
-  en_tramite:0
-}
 
-total: number = 0
-enTramite:number=0
-parcial:number=0
+  selecionarOpcion: string = ''
+
+
+
+  estadisticos: EstadisticosResponse['data'] = [];
+
+  requerimiento: Estado  ={
+    total:     0,
+    parcial:   0,
+    recibido:  0,
+    en_tramite:0,
+    no_aplica: 0
+  }  ;
+  respuesta: Estado  = {
+    total:     0,
+    parcial:   0,
+    recibido:  0,
+    en_tramite:0,
+    no_aplica: 0
+  };
+
+total_requerimiento: number = 0
+enTramite_requerimiento:number=0
+parcial_requerimiento:number=0
+
+
+total_respuesta: number = 0
+enTramite_respuesta:number=0
+parcial_respuesta:number=0
 
 constructor(
  private fb: FormBuilder,
@@ -65,22 +80,45 @@ estadisticosReport():void{
     let data = this.repotByDay.value
     this.chartPie.getQuerybyDay(data).subscribe(
       res=>{
-        console.log(res);
-       this.estadisticosRes = res;
-      this.series = [res.total, res.parcial,res.en_tramite]
+       this.procesarDatos(res)
+        this.series_requerimiento = [this.requerimiento.total,
+        this.requerimiento.parcial,
+        this.requerimiento.en_tramite];
+        this.series_respuesta = [this.respuesta.total,
+        this.respuesta.parcial,
+        this.respuesta.en_tramite];
 
-      this.total = res.total;
-      this.enTramite = res.en_tramite;
-     this.parcial = res.parcial
+      this.total_requerimiento = this.requerimiento.total ;
+      this.enTramite_requerimiento = this.requerimiento.parcial;
+      this.parcial_requerimiento = this.requerimiento.en_tramite;
+
+      this.total_respuesta = this.respuesta.total ;
+      this.enTramite_respuesta = this.respuesta.parcial;
+      this.parcial_respuesta = this.respuesta.en_tramite;
       }
     )
     this.obtnerNombre()
-
+    this.selecionarOpcion= ""
   }
  }
 
- getDownloadExcel():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download,this.formato,this.administracion)
+  procesarDatos(data: EstadisticosResponse['data']): void {
+  const requerimientoObj = data.find(item => 'REQUERIMIENTO' in item) as { REQUERIMIENTO: Estado };
+    if (requerimientoObj) {
+      this.requerimiento = requerimientoObj.REQUERIMIENTO;
+    }
+    const respuestaObj = data.find(item => 'RESPUESTA' in item) as { RESPUESTA: Estado };
+    if (respuestaObj) {
+      this.respuesta = respuestaObj.RESPUESTA;
+    }
+ }
+
+
+ getDownloadExcelRequerimientos():void{
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_requerimiento,this.formato,this.administracion)
+ }
+ getDownloadExcelRespuesta():void{
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta ,this.formato,this.administracion)
  }
 
   public responsive: ApexResponsive[] = [
@@ -97,13 +135,11 @@ this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download,th
     }
   ];
 
-  public series: ApexNonAxisChartSeries = [this.estadisticosRes.total,this.estadisticosRes.parcial,this.estadisticosRes.en_tramite ];
+  public series_requerimiento: ApexNonAxisChartSeries = [this.requerimiento.total , this.requerimiento.parcial, this.requerimiento.en_tramite];
+  public series_respuesta: ApexNonAxisChartSeries = [this.respuesta.total, this.respuesta.parcial, this.respuesta.en_tramite];
 
   public colors = ["#691C32", "#235B4E", "#BC955C", ];
-
   public labels = ["Total","Parcial","En tramite",];
-
-
   public chart: ApexChart = {
     height: 350,
     width: 850,
@@ -131,11 +167,6 @@ this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download,th
     }
   };
 
-  public tooltip: ApexTooltip = {
-
-    }
-
-
   goBack():void{
     this.mostrarChart = false
     this.repotByDay.reset()
@@ -146,9 +177,10 @@ this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download,th
     let fechaFinal = this.repotByDay.get("fecha_final")?.value;
     this.fecha_Incial = fechaIncial
     this.fecha_Final = fechaFinal
-    console.log("1",fechaIncial);
-    console.log("2",fechaFinal);
-
   }
 
+  onSelectedOption(event: Event) {
+    const target = event.target as HTMLSelectElement
+    this.selecionarOpcion = target.value
+  }
 }
