@@ -41,6 +41,7 @@
 <div class="flex justify-center h-auto w-auto pt-1 pb-16 ">
   <button
   (click)="estadisticosReport()"
+
   [disabled]="!repotByDay.valid"
   [ngClass]=" !repotByDay.valid ? 'next-button-disabled' : 'modal-right-button ml-1'">
   Consultar
@@ -55,6 +56,8 @@
             <option disabled selected value="">Selecciona una opción</option>
             <option  value="requerimiento">Requerimiento</option>
             <option  value="respuesta">Respuesta</option>
+            <option  value="respuestaFGR">Respuesta FGR</option>
+            <!-- <option  value="conteoDia">Conteo</option> -->
           </select>
         </div>
       </div>
@@ -63,7 +66,7 @@
           <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
             <div class="flex justify-center pb-9" ><p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
             </div>
-           <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de requerimientos: <span>{{total_requerimiento + enTramite_requerimiento + parcial_requerimiento }}</span> </p></div>
+           <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de requerimientos: <span>{{total_requerimiento + enTramite_requerimiento + parcial_requerimiento }}</span> </p> </div>
             <apx-chart
             [series]="series_requerimiento"
             [chart]="chart"
@@ -83,9 +86,9 @@
           <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
             <div class="flex justify-center pb-9" ><p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
             </div>
-           <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de respuestas: <span>{{total_respuesta  +   enTramite_respuesta  + parcial_respuesta  }}</span> </p></div>
+           <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de respuestas: <span>{{total_respuesta_INTERNA  +   enTramite_respuesta_INTERNA  + parcial_respuesta_INTERNA  }}</span> </p></div>
             <apx-chart
-            [series]="series_respuesta"
+            [series]="series_respuesta_interna"
             [chart]="chart"
             [responsive]="responsive"
             [labels]="labels"
@@ -93,11 +96,74 @@
             >
             </apx-chart >
             <div class="flex justify-end">
-              <button class="download" (click)="getDownloadExcelRespuesta()" > Descargar  respuesta</button>
+              <button class="download" (click)="getDownloadExcelRespuestaInterna()" > Descargar  respuesta interna </button>
             </div>
             </div>
         </div>
       }
+      @else if ( selecionarOpcion === "respuestaFGR") {
+ <div class="flex justify-center ">
+  <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+    <div class="flex justify-center pb-9" ><p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+    </div>
+   <div class="flex justify-center pb-8"><p class="text-base uppercase text-black">Totalidad de respuestas de FGR: <span>{{total_respuesta_FGR  +   enTramite_respuesta_FGR  + parcial_respuesta_FGR  }}</span> </p></div>
+    <apx-chart
+    [series]="series_respuesta_FGR"
+    [chart]="chart"
+    [responsive]="responsive"
+    [labels]="labels"
+    [colors]="colors"
+    >
+    </apx-chart >
+    <div class="flex justify-end">
+      <button class="download" (click)="getDownloadExcelRespuestaFGR()" > Descargar  respuesta de FGR</button>
+    </div>
+    </div>
+</div>
+      }
+      <!-- @else if (selecionarOpcion === "conteoDia") {
+        <div class="flex justify-center ">
+        <div class="  h-[65%] w-[85%]  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+          <table class="min-w-full border-collapse bg-white">
+            <thead>
+              <tr>
+                <th  class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Dia
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Número de conteo
+                </th>
+
+              </tr>
+            </thead>
+            @for (item of dias; track $index) {
+            <tbody>
+              <tr>
+                  <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                    <p>{{item.fecha}}</p>
+                  </th>
+                  <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                    <p>{{item.valor}}</p>
+                  </th>
+                </tr>
+              </tbody>
+            }
+              <tr>
+                <th></th>
+                <th>
+                  <p>  Total: <span>246</span>  </p>
+                </th>
+              </tr>
+          </table>
+          </div>
+        </div>
+        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+          <div class="has-text-centered">
+            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+              [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+          </div>
+        </div>
+      } -->
         </mat-dialog-content>
 }
 </div>
