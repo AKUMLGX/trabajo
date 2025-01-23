@@ -148,9 +148,9 @@ estadisticosReport():void{
       this.enTramite_respuesta_INTERNA = this.respuesta.parcial;
       this.parcial_respuesta_INTERNA = this.respuesta.en_tramite;
 
-      this.total_respuesta_FGR = this.respuesta.total ;
-      this.enTramite_respuesta_FGR = this.respuesta.parcial;
-      this.parcial_respuesta_FGR = this.respuesta.en_tramite;
+      this.total_respuesta_FGR = this.respuesta_FGR.total ;
+      this.enTramite_respuesta_FGR = this.respuesta_FGR.parcial;
+      this.parcial_respuesta_FGR = this.respuesta_FGR.en_tramite;
       }
     )
     this.obtnerNombre()
