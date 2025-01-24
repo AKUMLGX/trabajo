@@ -18,3 +18,4 @@
 |0.0.16 | Se añade un nuevo botón de descarga de Excel en la bodega de reportes.| 
 |0.0.17 | Se soluciona el problema del  botón de  regresar del visualizador de PDF. |
 |0.0.18 | Se agrega la nueva funcionalidad de visualizar un gráfico de pastel y poderla descargar un Excel. | 
+|0.0.19 | Se implementa los reportes por repuesta interna y respuesta a FGR y se muestra la tabla del  conteo por días, pero se muestra sin datos .| 

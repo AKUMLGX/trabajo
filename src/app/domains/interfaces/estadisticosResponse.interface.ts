@@ -12,9 +12,13 @@ interface Requerimiento {
 
 
 interface Respuesta {
-  RESPUESTA: Estado;
+  RESPUESTA_INTERNA: Estado;
+}
+
+interface Respuesta_A_FGR {
+  RESPUESTA_A_FGR: Estado;
 }
 
 export interface EstadisticosResponse {
-  data: (Requerimiento | Respuesta)[];
+  data: (Requerimiento | Respuesta | Respuesta_A_FGR )[];
 }
