@@ -47,10 +47,10 @@ export class InitTemplateComponent {
 
 
   pages : Dias [][]=[]
-
+  public documents: Dias[] = [];
  pageSelected: number = 1;
 
- itemsPerPage: number = 20
+ itemsPerPage: number = 5
 
    labelsPaginator = {
   previousLabel: 'Anterior',
@@ -159,12 +159,14 @@ estadisticosReport():void{
  }
 
  estaditicasPorDia():void{
-
   if (this.repotByDay.valid === true) {
     let data = this.repotByDay.value
     this.chartPie.getConteoDia(data).subscribe(
       resDias=>{
         console.log(resDias);
+
+
+
 
       }
     )
