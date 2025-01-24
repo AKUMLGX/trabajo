@@ -4,6 +4,7 @@ import { HttpClient, } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { DownloadExcel, EstadisticosRequest} from '../interfaces/estadisticosRequest.interface';
 import { EstadisticosResponse } from '../interfaces/estadisticosResponse.interface';
+import { EstadisticasDiarias } from '../interfaces/estadisticosTableResponse.interface';
 
 @Injectable({
 providedIn: 'root'
@@ -16,6 +17,12 @@ export class EstadisticoService {
     let targetUrl = environment.baseUrl + environment.chartPieEstaditicos
     return this.http.post<EstadisticosResponse ['data']>(targetUrl,data)
   }
+
+  getConteoDia(data:EstadisticosRequest){
+    let targetUrl = environment.baseUrl + environment.tableEstaditicas_Diarias
+    return this.http.post<EstadisticasDiarias>(targetUrl,data)
+  }
+
 
   donwnloadExcel(startDate:string,endDate:string,documento:string, formato:string, administracion:string ){
     let url = environment.baseUrl + environment.generateAcuse;

@@ -6,6 +6,13 @@ import { EstadisticoService  } from '../../../services/estadistico.service';
 import { EstadisticosResponse, Estado } from '../../../interfaces/estadisticosResponse.interface';
 import { environment } from '../../../../../environments/environment';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NgxPaginationModule } from 'ngx-pagination';
+
+interface Dias{
+  dias_contado : Date;
+  valor_dias:   number;
+}
+
 
 @Component({
   selector: 'app-init-template',
@@ -16,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     FormsModule,
     NgApexchartsModule,
     MatDialogModule,
+    NgxPaginationModule,
   ],
   templateUrl: './init-template.component.html',
   styleUrl: './init-template.component.css'
@@ -29,7 +37,8 @@ export class InitTemplateComponent {
   fecha_Final: string  = ""
 
   download_requerimiento = "REQUERIMIENTO"
-  download_respuesta = "RESPUESTA"
+  download_respuesta_interna = "RESPUESTA INTERNA"
+  download_respuesta_fgr = "RESPUESTA A FGR"
   formato = "xlsx"
   administracion = ""
 
@@ -37,8 +46,27 @@ export class InitTemplateComponent {
   selecionarOpcion: string = ''
 
 
+  pages : Dias [][]=[]
+  public documents: Dias[] = [];
+ pageSelected: number = 1;
 
-  estadisticos: EstadisticosResponse['data'] = [];
+ itemsPerPage: number = 5
+
+   labelsPaginator = {
+  previousLabel: 'Anterior',
+  nextLabel: 'Siguiente',
+};
+
+dias =  [
+  { fecha: '2025-01-16', valor: 45 },
+  { fecha: '2025-01-17', valor: 89 },
+  { fecha: '2025-01-18', valor: 23 },
+  { fecha: '2025-01-19', valor: 77 },
+  { fecha: '2025-01-20', valor: 12 }
+]
+
+
+estadisticos: EstadisticosResponse['data'] = [];
 
   requerimiento: Estado  ={
     total:     0,
@@ -46,8 +74,15 @@ export class InitTemplateComponent {
     recibido:  0,
     en_tramite:0,
     no_aplica: 0
-  }  ;
+  };
   respuesta: Estado  = {
+    total:     0,
+    parcial:   0,
+    recibido:  0,
+    en_tramite:0,
+    no_aplica: 0
+  };
+  respuesta_FGR: Estado  = {
     total:     0,
     parcial:   0,
     recibido:  0,
@@ -60,9 +95,13 @@ enTramite_requerimiento:number=0
 parcial_requerimiento:number=0
 
 
-total_respuesta: number = 0
-enTramite_respuesta:number=0
-parcial_respuesta:number=0
+total_respuesta_FGR: number = 0
+enTramite_respuesta_FGR:number=0
+parcial_respuesta_FGR:number=0
+
+total_respuesta_INTERNA: number = 0
+enTramite_respuesta_INTERNA:number=0
+parcial_respuesta_INTERNA:number=0
 
 constructor(
  private fb: FormBuilder,
@@ -80,25 +119,59 @@ estadisticosReport():void{
     let data = this.repotByDay.value
     this.chartPie.getQuerybyDay(data).subscribe(
       res=>{
-       this.procesarDatos(res)
+        console.log("RES",res);
+        this.procesarDatos(res)
+
+        //#region  Series REQUERIMIENTO
         this.series_requerimiento = [this.requerimiento.total,
         this.requerimiento.parcial,
         this.requerimiento.en_tramite];
-        this.series_respuesta = [this.respuesta.total,
+        //#endregion
+
+        //#region  Series RESPUESTA_INTERNA
+        this.series_respuesta_interna = [this.respuesta.total,
         this.respuesta.parcial,
         this.respuesta.en_tramite];
+        //#endregion
+
+        //#region RESPUESTA_A_FGR
+        this.series_respuesta_FGR = [this.respuesta_FGR.total,
+        this.respuesta_FGR.parcial,
+        this.respuesta_FGR.en_tramite];
+        //#endregion
 
       this.total_requerimiento = this.requerimiento.total ;
       this.enTramite_requerimiento = this.requerimiento.parcial;
       this.parcial_requerimiento = this.requerimiento.en_tramite;
 
-      this.total_respuesta = this.respuesta.total ;
-      this.enTramite_respuesta = this.respuesta.parcial;
-      this.parcial_respuesta = this.respuesta.en_tramite;
+      this.total_respuesta_INTERNA = this.respuesta.total ;
+      this.enTramite_respuesta_INTERNA = this.respuesta.parcial;
+      this.parcial_respuesta_INTERNA = this.respuesta.en_tramite;
+
+      this.total_respuesta_FGR = this.respuesta_FGR.total ;
+      this.enTramite_respuesta_FGR = this.respuesta_FGR.parcial;
+      this.parcial_respuesta_FGR = this.respuesta_FGR.en_tramite;
       }
     )
     this.obtnerNombre()
     this.selecionarOpcion= ""
+  }
+ }
+
+ estaditicasPorDia():void{
+  if (this.repotByDay.valid === true) {
+    let data = this.repotByDay.value
+    this.chartPie.getConteoDia(data).subscribe(
+      resDias=>{
+        console.log(resDias);
+
+
+
+
+      }
+    )
+
+
   }
  }
 
@@ -107,9 +180,14 @@ estadisticosReport():void{
     if (requerimientoObj) {
       this.requerimiento = requerimientoObj.REQUERIMIENTO;
     }
-    const respuestaObj = data.find(item => 'RESPUESTA' in item) as { RESPUESTA: Estado };
-    if (respuestaObj) {
-      this.respuesta = respuestaObj.RESPUESTA;
+
+    const respuestaInternaObj =  data.find(item => 'RESPUESTA_INTERNA' in item) as { RESPUESTA_INTERNA : Estado}
+    if (respuestaInternaObj) {
+      this.respuesta = respuestaInternaObj.RESPUESTA_INTERNA;
+    }
+    const respuestaFrgObj = data.find(item => 'RESPUESTA_A_FGR' in item) as { RESPUESTA_A_FGR: Estado };
+    if (respuestaFrgObj) {
+      this.respuesta_FGR = respuestaFrgObj.RESPUESTA_A_FGR;
     }
  }
 
@@ -117,8 +195,11 @@ estadisticosReport():void{
  getDownloadExcelRequerimientos():void{
 this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_requerimiento,this.formato,this.administracion)
  }
- getDownloadExcelRespuesta():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta ,this.formato,this.administracion)
+ getDownloadExcelRespuestaInterna():void{
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_interna ,this.formato,this.administracion)
+ }
+ getDownloadExcelRespuestaFGR():void{
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_fgr ,this.formato,this.administracion)
  }
 
   public responsive: ApexResponsive[] = [
@@ -135,8 +216,17 @@ this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_re
     }
   ];
 
-  public series_requerimiento: ApexNonAxisChartSeries = [this.requerimiento.total , this.requerimiento.parcial, this.requerimiento.en_tramite];
-  public series_respuesta: ApexNonAxisChartSeries = [this.respuesta.total, this.respuesta.parcial, this.respuesta.en_tramite];
+  public series_requerimiento: ApexNonAxisChartSeries = [this.requerimiento.total ,
+                                                        this.requerimiento.parcial,
+                                                         this.requerimiento.en_tramite];
+
+  public series_respuesta_interna: ApexNonAxisChartSeries = [this.respuesta.total,
+                                                             this.respuesta.parcial,
+                                                              this.respuesta.en_tramite];
+
+  public series_respuesta_FGR: ApexNonAxisChartSeries = [this.respuesta_FGR.total,
+                                                         this.respuesta_FGR.parcial,
+                                                          this.respuesta_FGR.en_tramite];
 
   public colors = ["#691C32", "#235B4E", "#BC955C", ];
   public labels = ["Total","Parcial","En tramite",];
