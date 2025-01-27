@@ -41,7 +41,7 @@ export const environment={
   updateTableHistorico:"asunto/historico/update",
   updateTableNuevo: "asunto/nuevo/update",
   updateDocumentoEscaneado: "asunto/nuevo/updatearchivo",
-  generateAcuse: "asunto/nuevo/get_reporte_por_dia",
+  generateAcuse: "asunto/get_estadistico_por_dia",
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
   getPdfEndpoint: 'getPdf',

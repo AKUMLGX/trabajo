@@ -193,13 +193,13 @@ estadisticosReport():void{
 
 
  getDownloadExcelRequerimientos():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_requerimiento,this.formato,this.administracion)
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_requerimiento,this.administracion)
  }
  getDownloadExcelRespuestaInterna():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_interna ,this.formato,this.administracion)
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_interna ,this.administracion)
  }
  getDownloadExcelRespuestaFGR():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_fgr ,this.formato,this.administracion)
+this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_fgr ,this.administracion)
  }
 
   public responsive: ApexResponsive[] = [

@@ -24,13 +24,13 @@ export class EstadisticoService {
   }
 
 
-  donwnloadExcel(startDate:string,endDate:string,documento:string, formato:string, administracion:string ){
+  donwnloadExcel(startDate:string,endDate:string,documento:string, administracion:string ){
     let url = environment.baseUrl + environment.generateAcuse;
     let params: DownloadExcel = {
       fecha_inicial: startDate,
       fecha_final: endDate,
       documento:documento,
-      formato: formato,
+
       administracion:administracion
     }
 
@@ -45,7 +45,7 @@ export class EstadisticoService {
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.download = `Acuse.${formato}`;
+      // link.download = `Acuse.${formato}`;
       link.click();
    })
   }
