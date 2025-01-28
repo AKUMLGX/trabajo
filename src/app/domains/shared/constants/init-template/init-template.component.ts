@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexTooltip, NgApexchartsModule,  } from 'ng-apexcharts';
+import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexTooltip, NgApexchartsModule,ApexDataLabels } from 'ng-apexcharts';
 import { EstadisticoService  } from '../../../services/estadistico.service';
 import { EstadisticosResponse, Estado } from '../../../interfaces/estadisticosResponse.interface';
 import { environment } from '../../../../../environments/environment';
@@ -254,8 +254,17 @@ this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_re
         filename: "Grafico"
       }
       }
-    }
+    },
   };
+
+  dataLabels: ApexDataLabels= {
+    enabled:true,
+    formatter: (val: number, opts: any) => {
+      const total = opts.w.config.series.reduce((a: number, b: number) => a + b, 0); // Calcular el total
+      const value = opts.w.config.series[opts.seriesIndex]; // Obtener el valor específico
+      return `${value} (${val.toFixed(1)}%)`;// Mostrar cantidad y porcentaje
+    }
+  }
 
   goBack():void{
     this.mostrarChart = false
