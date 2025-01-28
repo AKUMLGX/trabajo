@@ -25,7 +25,7 @@ export class EstadisticoService {
 
 
   donwnloadExcel(startDate:string,endDate:string,documento:string, administracion:string ){
-    let url = environment.baseUrl + environment.generateAcuse;
+    let url = environment.baseUrl + environment.generateEstadistico;
     let params: DownloadExcel = {
       fecha_inicial: startDate,
       fecha_final: endDate,
@@ -45,7 +45,7 @@ export class EstadisticoService {
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      // link.download = `Acuse.${formato}`;
+      link.download = `Estadistico.xlsx`;
       link.click();
    })
   }
