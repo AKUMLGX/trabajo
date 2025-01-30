@@ -7,6 +7,7 @@ import { EstadisticosResponse, Estado } from '../../../interfaces/estadisticosRe
 import { environment } from '../../../../../environments/environment';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { EstadisticasDiarias } from '../../../interfaces/estadisticosTableResponse.interface';
 
 interface Dias{
   dias_contado : Date;
@@ -46,8 +47,8 @@ export class InitTemplateComponent {
   selecionarOpcion: string = ''
 
 
-  pages : Dias [][]=[]
-  public documents: Dias[] = [];
+  pages : EstadisticasDiarias [][]=[]
+  public documents: EstadisticasDiarias[] = [];
  pageSelected: number = 1;
 
  itemsPerPage: number = 5
@@ -164,9 +165,6 @@ estadisticosReport():void{
     this.chartPie.getConteoDia(data).subscribe(
       resDias=>{
         console.log(resDias);
-
-
-
 
       }
     )
