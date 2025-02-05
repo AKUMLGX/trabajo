@@ -164,6 +164,7 @@ estadisticosReport():void{
     let data = this.repotByDay.value
     this.chartPie.getConteoDia(data).subscribe(
       resDias=>{
+        this.documents = resDias
         console.log(resDias);
 
       }

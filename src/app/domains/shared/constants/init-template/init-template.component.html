@@ -140,24 +140,25 @@
 
                 </tr>
               </thead>
-              @for (item of dias; track $index) {
+              @for (item of documents; track $index) {
               <tbody>
                 <tr>
-                    <!-- <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                      <p>{{item.fecha}}</p>
+                    <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                      <p>{{item.fecha_recepcion}}</p>
                     </th>
                     <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                      <p>{{item.valor}}</p>
-                    </th> -->
+                      <p>{{item.total_requerimientos}}</p>
+                    </th>
                   </tr>
                 </tbody>
-              }
+
                 <tr>
                   <th></th>
                   <th>
-                    <!-- <p>  Total: <span>246</span>  </p> -->
+                    <p>  Total: <span>{{item.total}}</span>  </p>
                   </th>
                 </tr>
+              }
             </table>
           </div>
           <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">

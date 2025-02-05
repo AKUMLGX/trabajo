@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { DownloadExcel, EstadisticosRequest} from '../interfaces/estadisticosRequest.interface';
 import { EstadisticosResponse } from '../interfaces/estadisticosResponse.interface';
 import { EstadisticasDiarias } from '../interfaces/estadisticosTableResponse.interface';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
 providedIn: 'root'
@@ -18,9 +19,17 @@ export class EstadisticoService {
     return this.http.post<EstadisticosResponse ['data']>(targetUrl,data)
   }
 
-  getConteoDia(data:EstadisticosRequest){
+  getConteoDia(data:EstadisticosRequest):Observable <EstadisticasDiarias[]>{
     let targetUrl = environment.baseUrl + environment.tableEstaditicas_Diarias
-    return this.http.post<EstadisticasDiarias>(targetUrl,data)
+    return this.http.post<{Datos:[]}>(targetUrl,data).pipe(
+      map(resp=>
+        resp.Datos.map(item =>({
+          fecha_recepcion: item[0] ?? 'Sin fecha',
+          total_requerimientos: item[1],
+          total: item[1]
+        }))
+      )
+    )
   }
 
 
