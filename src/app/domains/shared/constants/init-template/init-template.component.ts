@@ -161,16 +161,16 @@ estadisticosReport():void{
 
  estaditicasPorDia():void{
   if (this.repotByDay.valid === true) {
+    this.mostrarChart = true
     let data = this.repotByDay.value
     this.chartPie.getConteoDia(data).subscribe(
-      resDias=>{
-        this.documents = resDias
-        console.log(resDias);
-
+      res=>{
+        this.documents = res
+        console.log(res);
       }
     )
-
-
+     this.obtnerNombre()
+     this.selecionarOpcion= ""
   }
  }
 
