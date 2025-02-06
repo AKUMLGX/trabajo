@@ -9,12 +9,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EstadisticasDiarias } from '../../../interfaces/estadisticosTableResponse.interface';
 
-interface Dias{
-  dias_contado : Date;
-  valor_dias:   number;
-}
-
-
 @Component({
   selector: 'app-init-template',
   standalone: true,
@@ -31,44 +25,26 @@ interface Dias{
 })
 export class InitTemplateComponent {
 
-  public environment =  environment;
-
+  environment =  environment;
   mostrarChart:boolean= false;
   fecha_Incial: string = ""
   fecha_Final: string  = ""
-
   download_requerimiento = "REQUERIMIENTO"
   download_respuesta_interna = "RESPUESTA INTERNA"
   download_respuesta_fgr = "RESPUESTA A FGR"
   formato = "xlsx"
   administracion = ""
-
-
   selecionarOpcion: string = ''
-
-
   pages : EstadisticasDiarias [][]=[]
-  public documents: EstadisticasDiarias[] = [];
- pageSelected: number = 1;
-
- itemsPerPage: number = 5
-
-   labelsPaginator = {
+  documents: EstadisticasDiarias[] = [];
+  pageSelected: number = 1;
+  itemsPerPage: number = 5
+  labelsPaginator = {
   previousLabel: 'Anterior',
   nextLabel: 'Siguiente',
 };
 
-dias =  [
-  { fecha: '2025-01-16', valor: 45 },
-  { fecha: '2025-01-17', valor: 89 },
-  { fecha: '2025-01-18', valor: 23 },
-  { fecha: '2025-01-19', valor: 77 },
-  { fecha: '2025-01-20', valor: 12 }
-]
-
-
 estadisticos: EstadisticosResponse['data'] = [];
-
   requerimiento: Estado  ={
     total:     0,
     parcial:   0,
@@ -104,9 +80,12 @@ total_respuesta_INTERNA: number = 0
 enTramite_respuesta_INTERNA:number=0
 parcial_respuesta_INTERNA:number=0
 
+totalDeConteo:number = 0
+
 constructor(
  private fb: FormBuilder,
  private chartPie : EstadisticoService,
+ private tableConteo: EstadisticoService
 ){}
 
 public repotByDay: FormGroup = this.fb.group({
@@ -158,21 +137,46 @@ estadisticosReport():void{
     this.selecionarOpcion= ""
   }
  }
-
  estaditicasPorDia():void{
-  if (this.repotByDay.valid === true) {
-    this.mostrarChart = true
-    let data = this.repotByDay.value
-    this.chartPie.getConteoDia(data).subscribe(
-      res=>{
-        this.documents = res
-        console.log(res);
+  if(this.repotByDay.valid  === true){
+    this.mostrarChart = true;
+    let dataConteo= this.repotByDay.value
+this.tableConteo.getConteoDia(dataConteo).subscribe(
+  res=>{
+    this.documents = res.registros.map(([fecha, totalRequerimineto, total])=>({
+      fecha_recepcion: fecha,
+      total_requerimientos: totalRequerimineto,
+      total:total
+    }))
+
+    const totalDeFechas = this.documents.find(i=>i.fecha_recepcion === null);
+    if (totalDeFechas) {
+       this.totalDeConteo = totalDeFechas.total_requerimientos
+    }
+    this.documents = this.documents.filter(i=>i.fecha_recepcion !== null);
+
+    // console.log(res);
+    let indexPage=0;
+    let page : EstadisticasDiarias [] = [];
+    this.pages=[]
+    this.pageSelected =1;
+    this.documents.forEach((doc)=>{
+      page.push(doc);
+      indexPage +=1;
+      if (indexPage === this.itemsPerPage) {
+        this.pages.push(page);
+        indexPage=0
+        page=[]
       }
-    )
-     this.obtnerNombre()
-     this.selecionarOpcion= ""
+    })
+      if(page.length !==0) this.pages.push(page)
+  }
+)
+    this.obtnerNombre()
+    this.selecionarOpcion= ""
   }
  }
+
 
   procesarDatos(data: EstadisticosResponse['data']): void {
   const requerimientoObj = data.find(item => 'REQUERIMIENTO' in item) as { REQUERIMIENTO: Estado };
@@ -189,7 +193,6 @@ estadisticosReport():void{
       this.respuesta_FGR = respuestaFrgObj.RESPUESTA_A_FGR;
     }
  }
-
 
  getDownloadExcelRequerimientos():void{
 this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_requerimiento,this.administracion)

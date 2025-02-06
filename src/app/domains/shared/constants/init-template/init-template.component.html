@@ -140,7 +140,7 @@
 
                 </tr>
               </thead>
-              @for (item of documents; track $index) {
+              @for (item of pages[pageSelected-1]; track $index) {
               <tbody>
                 <tr>
                     <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
@@ -151,14 +151,12 @@
                     </th>
                   </tr>
                 </tbody>
-
-                <tr>
-                  <th></th>
-                  <th>
-                    <p>  Total: <span>{{item.total}}</span>  </p>
-                  </th>
-                </tr>
               }
+              <div class="w-auto">
+                <div class="flex w-[240%] justify-end">
+                  <p>Total: <span>{{totalDeConteo}}</span></p>
+                </div>
+              </div>
             </table>
           </div>
           <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
@@ -198,9 +196,7 @@
           </div>
           </div>
         </div>
-
       }
-
         </mat-dialog-content>
 }
 </div>

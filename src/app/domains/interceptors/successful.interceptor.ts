@@ -33,19 +33,19 @@ export const successfullInterceptor: HttpInterceptorFn = (
           }
         }
       }else{
-        if (request.method !== "GET" && !request.url.includes("get_estadisticas_atencion")) {
-          if (event instanceof HttpResponse) {
-            if (event.status === 200) {
-              matDialog_.open(SuccessfulDialogComponent, {
-                disableClose:true,
-                data: {
-                  msjTitle: "Exito",
-                  msjDescription: "Acción realizada con exito"
-                }
-              })
-            }
-          }
-        }
+        // if (request.method !== "GET" && !request.url.includes("get_estadisticas_atencion")) {
+        //   if (event instanceof HttpResponse) {
+        //     if (event.status === 200) {
+        //       matDialog_.open(SuccessfulDialogComponent, {
+        //         disableClose:true,
+        //         data: {
+        //           msjTitle: "Exito",
+        //           msjDescription: "Acción realizada con exito"
+        //         }
+        //       })
+        //     }
+        //   }
+        // }
       }
       return event;
     })
