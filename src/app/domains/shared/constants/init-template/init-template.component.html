@@ -57,7 +57,7 @@
             <option  value="requerimiento">Requerimiento</option>
             <option  value="respuesta">Respuesta Interna</option>
             <option  value="respuestaFGR">Respuesta a FGR</option>
-            <option  value="conteoDia">Conteo</option>
+
           </select>
         </div>
       </div>
@@ -76,11 +76,84 @@
             [dataLabels]="dataLabels"
             >
             </apx-chart >
-            <div class="flex justify-end">
-              <button class="download" (click)="getDownloadExcelRequerimientos()" > Descargar  requerimiento </button>
-            </div>
+
             </div>
         </div>
+
+        <div class="flex justify-center mt-4 ">
+          <div class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+            <div class="overflow-x-auto">
+              <table class="min-w-full border-collapse bg-white">
+                <thead>
+                  <tr>
+                    <th  class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                      Dia
+                    </th>
+                    <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                      Número de conteo
+                    </th>
+
+                  </tr>
+                </thead>
+                @for (item of pages[pageSelected-1]; track $index) {
+                <tbody>
+                  <tr>
+                      <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <p>{{item.fecha_recepcion}}</p>
+                      </th>
+                      <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                        <p>{{item.total_requerimientos}}</p>
+                      </th>
+                    </tr>
+                  </tbody>
+                }
+                <div class="w-auto">
+                  <div class="flex w-[240%] justify-end">
+                    <p>Total: <span>{{totalDeConteo}}</span></p>
+                  </div>
+                </div>
+              </table>
+            </div>
+            <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+              <div>
+                @if (pages.length > 0) {
+                <ul>
+                  <li *ngFor="
+                          let document of documents
+                            | paginate
+                              : {
+                                  itemsPerPage: itemsPerPage,
+                                  currentPage: pageSelected
+                                }
+                        "></li>
+                </ul>
+                <div class="has-text-centered">
+                  <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+                  [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+                </div>
+                }
+              </div>
+            </div>
+            <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
+              <p class="text-sm leading-5 text-wine">
+                Mostrando
+                <span class="font-medium">{{
+                  (pageSelected - 1) * itemsPerPage + 1
+                  }}</span>
+                a
+                <span class="font-medium">{{
+                  (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage +
+                    itemsPerPage : documents.length }}</span>
+                    de
+                    <span class="font-medium">{{ documents.length }}</span>
+                    resultados
+              </p>
+            </div>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button class="download" (click)="getDownloadExcelRequerimientos()" > Descargar  requerimiento </button>
+          </div>
       }
       @else if (selecionarOpcion === "respuesta")  {
         <div class="flex justify-center ">
@@ -124,79 +197,7 @@
     </div>
 </div>
       }
-      @else if (selecionarOpcion === "conteoDia") {
-        <div class="flex justify-center ">
-        <div class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-          <div class="overflow-x-auto">
-            <table class="min-w-full border-collapse bg-white">
-              <thead>
-                <tr>
-                  <th  class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                    Dia
-                  </th>
-                  <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                    Número de conteo
-                  </th>
 
-                </tr>
-              </thead>
-              @for (item of pages[pageSelected-1]; track $index) {
-              <tbody>
-                <tr>
-                    <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                      <p>{{item.fecha_recepcion}}</p>
-                    </th>
-                    <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                      <p>{{item.total_requerimientos}}</p>
-                    </th>
-                  </tr>
-                </tbody>
-              }
-              <div class="w-auto">
-                <div class="flex w-[240%] justify-end">
-                  <p>Total: <span>{{totalDeConteo}}</span></p>
-                </div>
-              </div>
-            </table>
-          </div>
-          <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
-            <div>
-              @if (pages.length > 0) {
-              <ul>
-                <li *ngFor="
-                        let document of documents
-                          | paginate
-                            : {
-                                itemsPerPage: itemsPerPage,
-                                currentPage: pageSelected
-                              }
-                      "></li>
-              </ul>
-              <div class="has-text-centered">
-                <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
-                [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
-              </div>
-              }
-            </div>
-          </div>
-          <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
-            <p class="text-sm leading-5 text-wine">
-              Mostrando
-              <span class="font-medium">{{
-                (pageSelected - 1) * itemsPerPage + 1
-                }}</span>
-              a
-              <span class="font-medium">{{
-                (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage +
-                  itemsPerPage : documents.length }}</span>
-                  de
-                  <span class="font-medium">{{ documents.length }}</span>
-                  resultados
-            </p>
-          </div>
-          </div>
-        </div>
-      }
         </mat-dialog-content>
 }
 </div>

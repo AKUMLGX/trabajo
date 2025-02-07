@@ -37,6 +37,7 @@ export const environment={
   refreshTokenEndpoint: 'login/refresh_token',
   asuntoEndpoint: 'asunto/',
   asuntoEndpointC: 'asunto/consulta',
+  asuntoDescargaTablaBusqueda: 'asunto/descargarconsulta',
   chartPieEstaditicos:"asunto/get_estadisticas_atencion",
   tableEstaditicas_Diarias:"asunto/get_estadisticas_diarias",
   updateTableHistorico:"asunto/historico/update",

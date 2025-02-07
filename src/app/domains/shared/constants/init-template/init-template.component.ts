@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexTooltip, NgApexchartsModule,ApexDataLabels } from 'ng-apexcharts';
-import { EstadisticoService  } from '../../../services/estadistico.service';
+import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexTooltip, NgApexchartsModule, ApexDataLabels } from 'ng-apexcharts';
+import { EstadisticoService } from '../../../services/estadistico.service';
 import { EstadisticosResponse, Estado } from '../../../interfaces/estadisticosResponse.interface';
 import { environment } from '../../../../../environments/environment';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -25,166 +25,167 @@ import { EstadisticasDiarias } from '../../../interfaces/estadisticosTableRespon
 })
 export class InitTemplateComponent {
 
-  environment =  environment;
-  mostrarChart:boolean= false;
+  environment = environment;
+  mostrarChart: boolean = false;
+  mostrarTable: boolean = false
   fecha_Incial: string = ""
-  fecha_Final: string  = ""
+  fecha_Final: string = ""
   download_requerimiento = "REQUERIMIENTO"
   download_respuesta_interna = "RESPUESTA INTERNA"
   download_respuesta_fgr = "RESPUESTA A FGR"
   formato = "xlsx"
   administracion = ""
   selecionarOpcion: string = ''
-  pages : EstadisticasDiarias [][]=[]
+  pages: EstadisticasDiarias[][] = []
   documents: EstadisticasDiarias[] = [];
   pageSelected: number = 1;
   itemsPerPage: number = 5
   labelsPaginator = {
-  previousLabel: 'Anterior',
-  nextLabel: 'Siguiente',
-};
-
-estadisticos: EstadisticosResponse['data'] = [];
-  requerimiento: Estado  ={
-    total:     0,
-    parcial:   0,
-    recibido:  0,
-    en_tramite:0,
-    no_aplica: 0
-  };
-  respuesta: Estado  = {
-    total:     0,
-    parcial:   0,
-    recibido:  0,
-    en_tramite:0,
-    no_aplica: 0
-  };
-  respuesta_FGR: Estado  = {
-    total:     0,
-    parcial:   0,
-    recibido:  0,
-    en_tramite:0,
-    no_aplica: 0
+    previousLabel: 'Anterior',
+    nextLabel: 'Siguiente',
   };
 
-total_requerimiento: number = 0
-enTramite_requerimiento:number=0
-parcial_requerimiento:number=0
+  estadisticos: EstadisticosResponse['data'] = [];
+  requerimiento: Estado = {
+    total: 0,
+    parcial: 0,
+    recibido: 0,
+    en_tramite: 0,
+    no_aplica: 0
+  };
+  respuesta: Estado = {
+    total: 0,
+    parcial: 0,
+    recibido: 0,
+    en_tramite: 0,
+    no_aplica: 0
+  };
+  respuesta_FGR: Estado = {
+    total: 0,
+    parcial: 0,
+    recibido: 0,
+    en_tramite: 0,
+    no_aplica: 0
+  };
+
+  total_requerimiento: number = 0
+  enTramite_requerimiento: number = 0
+  parcial_requerimiento: number = 0
 
 
-total_respuesta_FGR: number = 0
-enTramite_respuesta_FGR:number=0
-parcial_respuesta_FGR:number=0
+  total_respuesta_FGR: number = 0
+  enTramite_respuesta_FGR: number = 0
+  parcial_respuesta_FGR: number = 0
 
-total_respuesta_INTERNA: number = 0
-enTramite_respuesta_INTERNA:number=0
-parcial_respuesta_INTERNA:number=0
+  total_respuesta_INTERNA: number = 0
+  enTramite_respuesta_INTERNA: number = 0
+  parcial_respuesta_INTERNA: number = 0
 
-totalDeConteo:number = 0
+  totalDeConteo: number = 0
 
-constructor(
- private fb: FormBuilder,
- private chartPie : EstadisticoService,
- private tableConteo: EstadisticoService
-){}
+  constructor(
+    private fb: FormBuilder,
+    private chartPie: EstadisticoService,
+    private tableConteo: EstadisticoService
+  ) { }
 
-public repotByDay: FormGroup = this.fb.group({
-  fecha_inicial:[null,[Validators.required]],
-  fecha_final:[null,[Validators.required]]
-})
+  public repotByDay: FormGroup = this.fb.group({
+    fecha_inicial: [null, [Validators.required]],
+    fecha_final: [null, [Validators.required]]
+  })
 
-estadisticosReport():void{
-  if (this.repotByDay.valid === true) {
-    this.mostrarChart = true
-    let data = this.repotByDay.value
-    this.chartPie.getQuerybyDay(data).subscribe(
-      res=>{
-        console.log("RES",res);
-        this.procesarDatos(res)
+  estadisticosReport(): void {
+    if (this.repotByDay.valid === true) {
+      this.mostrarChart = true
+      let data = this.repotByDay.value
+      this.chartPie.getQuerybyDay(data).subscribe(
+        res => {
+          console.log("RES", res);
+          this.procesarDatos(res)
 
-        //#region  Series REQUERIMIENTO
-        this.series_requerimiento = [this.requerimiento.total,
-        this.requerimiento.parcial,
-        this.requerimiento.en_tramite];
-        //#endregion
+          //#region  Series REQUERIMIENTO
+          this.series_requerimiento = [this.requerimiento.total,
+          this.requerimiento.parcial,
+          this.requerimiento.en_tramite];
+          //#endregion
 
-        //#region  Series RESPUESTA_INTERNA
-        this.series_respuesta_interna = [this.respuesta.total,
-        this.respuesta.parcial,
-        this.respuesta.en_tramite];
-        //#endregion
+          //#region  Series RESPUESTA_INTERNA
+          this.series_respuesta_interna = [this.respuesta.total,
+          this.respuesta.parcial,
+          this.respuesta.en_tramite];
+          //#endregion
 
-        //#region RESPUESTA_A_FGR
-        this.series_respuesta_FGR = [this.respuesta_FGR.total,
-        this.respuesta_FGR.parcial,
-        this.respuesta_FGR.en_tramite];
-        //#endregion
+          //#region RESPUESTA_A_FGR
+          this.series_respuesta_FGR = [this.respuesta_FGR.total,
+          this.respuesta_FGR.parcial,
+          this.respuesta_FGR.en_tramite];
+          //#endregion
 
-      this.total_requerimiento = this.requerimiento.total ;
-      this.enTramite_requerimiento = this.requerimiento.parcial;
-      this.parcial_requerimiento = this.requerimiento.en_tramite;
+          this.total_requerimiento = this.requerimiento.total;
+          this.enTramite_requerimiento = this.requerimiento.parcial;
+          this.parcial_requerimiento = this.requerimiento.en_tramite;
 
-      this.total_respuesta_INTERNA = this.respuesta.total ;
-      this.enTramite_respuesta_INTERNA = this.respuesta.parcial;
-      this.parcial_respuesta_INTERNA = this.respuesta.en_tramite;
+          this.total_respuesta_INTERNA = this.respuesta.total;
+          this.enTramite_respuesta_INTERNA = this.respuesta.parcial;
+          this.parcial_respuesta_INTERNA = this.respuesta.en_tramite;
 
-      this.total_respuesta_FGR = this.respuesta_FGR.total ;
-      this.enTramite_respuesta_FGR = this.respuesta_FGR.parcial;
-      this.parcial_respuesta_FGR = this.respuesta_FGR.en_tramite;
-      }
-    )
-    this.obtnerNombre()
-    this.selecionarOpcion= ""
-  }
- }
- estaditicasPorDia():void{
-  if(this.repotByDay.valid  === true){
-    this.mostrarChart = true;
-    let dataConteo= this.repotByDay.value
-this.tableConteo.getConteoDia(dataConteo).subscribe(
-  res=>{
-    this.documents = res.registros.map(([fecha, totalRequerimineto, total])=>({
-      fecha_recepcion: fecha,
-      total_requerimientos: totalRequerimineto,
-      total:total
-    }))
-
-    const totalDeFechas = this.documents.find(i=>i.fecha_recepcion === null);
-    if (totalDeFechas) {
-       this.totalDeConteo = totalDeFechas.total_requerimientos
+          this.total_respuesta_FGR = this.respuesta_FGR.total;
+          this.enTramite_respuesta_FGR = this.respuesta_FGR.parcial;
+          this.parcial_respuesta_FGR = this.respuesta_FGR.en_tramite;
+        }
+      )
+      this.obtnerNombre()
+      this.selecionarOpcion = ""
     }
-    this.documents = this.documents.filter(i=>i.fecha_recepcion !== null);
+  }
+  estaditicasPorDia(): void {
+    if (this.repotByDay.valid === true) {
+      this.mostrarTable=true
+      let dataConteo = this.repotByDay.value
+      this.tableConteo.getConteoDia(dataConteo).subscribe(
+        res => {
+          this.documents = res.registros.map(([fecha, totalRequerimineto, total]) => ({
+            fecha_recepcion: fecha,
+            total_requerimientos: totalRequerimineto,
+            total: total
+          }))
 
-    // console.log(res);
-    let indexPage=0;
-    let page : EstadisticasDiarias [] = [];
-    this.pages=[]
-    this.pageSelected =1;
-    this.documents.forEach((doc)=>{
-      page.push(doc);
-      indexPage +=1;
-      if (indexPage === this.itemsPerPage) {
-        this.pages.push(page);
-        indexPage=0
-        page=[]
-      }
-    })
-      if(page.length !==0) this.pages.push(page)
+          const totalDeFechas = this.documents.find(i => i.fecha_recepcion === null);
+          if (totalDeFechas) {
+            this.totalDeConteo = totalDeFechas.total_requerimientos
+          }
+          this.documents = this.documents.filter(i => i.fecha_recepcion !== null);
+
+          // console.log(res);
+          let indexPage = 0;
+          let page: EstadisticasDiarias[] = [];
+          this.pages = []
+          this.pageSelected = 1;
+          this.documents.forEach((doc) => {
+            page.push(doc);
+            indexPage += 1;
+            if (indexPage === this.itemsPerPage) {
+              this.pages.push(page);
+              indexPage = 0
+              page = []
+            }
+          })
+          if (page.length !== 0) this.pages.push(page)
+        }
+      )
+      this.obtnerNombre()
+      this.selecionarOpcion = ""
+    }
   }
-)
-    this.obtnerNombre()
-    this.selecionarOpcion= ""
-  }
- }
 
 
   procesarDatos(data: EstadisticosResponse['data']): void {
-  const requerimientoObj = data.find(item => 'REQUERIMIENTO' in item) as { REQUERIMIENTO: Estado };
+    const requerimientoObj = data.find(item => 'REQUERIMIENTO' in item) as { REQUERIMIENTO: Estado };
     if (requerimientoObj) {
       this.requerimiento = requerimientoObj.REQUERIMIENTO;
     }
 
-    const respuestaInternaObj =  data.find(item => 'RESPUESTA_INTERNA' in item) as { RESPUESTA_INTERNA : Estado}
+    const respuestaInternaObj = data.find(item => 'RESPUESTA_INTERNA' in item) as { RESPUESTA_INTERNA: Estado }
     if (respuestaInternaObj) {
       this.respuesta = respuestaInternaObj.RESPUESTA_INTERNA;
     }
@@ -192,17 +193,17 @@ this.tableConteo.getConteoDia(dataConteo).subscribe(
     if (respuestaFrgObj) {
       this.respuesta_FGR = respuestaFrgObj.RESPUESTA_A_FGR;
     }
- }
+  }
 
- getDownloadExcelRequerimientos():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_requerimiento,this.administracion)
- }
- getDownloadExcelRespuestaInterna():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_interna ,this.administracion)
- }
- getDownloadExcelRespuestaFGR():void{
-this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_respuesta_fgr ,this.administracion)
- }
+  getDownloadExcelRequerimientos(): void {
+    this.chartPie.donwnloadExcel(this.fecha_Incial, this.fecha_Final, this.download_requerimiento, this.administracion)
+  }
+  getDownloadExcelRespuestaInterna(): void {
+    this.chartPie.donwnloadExcel(this.fecha_Incial, this.fecha_Final, this.download_respuesta_interna, this.administracion)
+  }
+  getDownloadExcelRespuestaFGR(): void {
+    this.chartPie.donwnloadExcel(this.fecha_Incial, this.fecha_Final, this.download_respuesta_fgr, this.administracion)
+  }
 
   public responsive: ApexResponsive[] = [
     {
@@ -218,49 +219,49 @@ this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_re
     }
   ];
 
-  public series_requerimiento: ApexNonAxisChartSeries = [this.requerimiento.total ,
-                                                        this.requerimiento.parcial,
-                                                         this.requerimiento.en_tramite];
+  public series_requerimiento: ApexNonAxisChartSeries = [this.requerimiento.total,
+  this.requerimiento.parcial,
+  this.requerimiento.en_tramite];
 
   public series_respuesta_interna: ApexNonAxisChartSeries = [this.respuesta.total,
-                                                             this.respuesta.parcial,
-                                                              this.respuesta.en_tramite];
+  this.respuesta.parcial,
+  this.respuesta.en_tramite];
 
   public series_respuesta_FGR: ApexNonAxisChartSeries = [this.respuesta_FGR.total,
-                                                         this.respuesta_FGR.parcial,
-                                                          this.respuesta_FGR.en_tramite];
+  this.respuesta_FGR.parcial,
+  this.respuesta_FGR.en_tramite];
 
-  public colors = ["#691C32", "#235B4E", "#BC955C", ];
-  public labels = ["Total","Parcial","En tramite",];
+  public colors = ["#691C32", "#235B4E", "#BC955C",];
+  public labels = ["Total", "Parcial", "En tramite",];
   public chart: ApexChart = {
     height: 350,
     width: 850,
     type: "pie",
-    toolbar:{
-      show:true,
+    toolbar: {
+      show: true,
       offsetX: 0,
       offsetY: 0,
-      tools:{
+      tools: {
         download: true,
         selection: true,
-          zoom: true,
-          zoomin: true,
-          zoomout: true,
-          pan: true,
+        zoom: true,
+        zoomin: true,
+        zoomout: true,
+        pan: true,
 
-          customIcons: []
+        customIcons: []
 
       },
-      export:{
-      png:{
-        filename: "Grafico"
-      }
+      export: {
+        png: {
+          filename: "Grafico"
+        }
       }
     },
   };
 
-  dataLabels: ApexDataLabels= {
-    enabled:true,
+  dataLabels: ApexDataLabels = {
+    enabled: true,
     formatter: (val: number, opts: any) => {
       const total = opts.w.config.series.reduce((a: number, b: number) => a + b, 0); // Calcular el total
       const value = opts.w.config.series[opts.seriesIndex]; // Obtener el valor específico
@@ -268,12 +269,12 @@ this.chartPie.donwnloadExcel(this.fecha_Incial,this.fecha_Final,this.download_re
     }
   }
 
-  goBack():void{
+  goBack(): void {
     this.mostrarChart = false
     this.repotByDay.reset()
   }
 
-  obtnerNombre(){
+  obtnerNombre() {
     let fechaIncial = this.repotByDay.get("fecha_inicial")?.value;
     let fechaFinal = this.repotByDay.get("fecha_final")?.value;
     this.fecha_Incial = fechaIncial
