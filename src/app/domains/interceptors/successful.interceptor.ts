@@ -33,7 +33,8 @@ export const successfullInterceptor: HttpInterceptorFn = (
           }
         }
       }else{
-        if (request.method !== "GET" && !request.url.includes("get_estadisticas_atencion")) {
+        if (request.method !== "GET" && !request.url.includes("get_estadisticas_atencion")
+           && !request.url.includes("get_estadisticas_diarias")) {
           if (event instanceof HttpResponse) {
             if (event.status === 200) {
               matDialog_.open(SuccessfulDialogComponent, {

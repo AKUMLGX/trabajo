@@ -31,7 +31,7 @@ export class AsuntoService {
     let personaRelacionada = consultForm.get('personaRelacionada')?.value;
     let volante_jefatura = consultForm.get('volante_jefatura')?.value;
     let turno_jefatura = consultForm.get('turno_jefatura')?.value;
-    let url = environment.baseUrl + environment.asuntoEndpoint;
+    let url = environment.baseUrl + environment.asuntoEndpointC;
     let params = {
       folio_interno: folioInterno,
       carpeta_investigacion: carpetaInvertigacion,

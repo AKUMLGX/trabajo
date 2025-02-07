@@ -104,8 +104,8 @@
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.folio_interno }}
-
                   </div>
+                </td>
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">
                     {{ document.carpeta_investigacion }}
@@ -231,7 +231,12 @@
                 <span class="font-medium">{{ documents.length }}</span>
                 resultados
           </p>
-        </div>
+          </div>
+
+            <div class="flex flex-col items-end  p-4">
+              <div class=" p-4"> <button class="download"> Descargar. </button></div>
+            </div>
+
       </div>
     </div>
     {{ scrollToTable() }}
