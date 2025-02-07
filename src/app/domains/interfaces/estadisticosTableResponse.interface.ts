@@ -1,4 +1,5 @@
 export interface EstadisticasDiarias{
-fecha_recepcion: String;
-total_requerimientos: Number;
+fecha_recepcion: string | null;
+total_requerimientos: number;
+ total: number;
 }
