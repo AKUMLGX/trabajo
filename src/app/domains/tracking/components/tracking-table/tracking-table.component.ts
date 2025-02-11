@@ -1,16 +1,18 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
+import   '../../../../../../node_modules/lib-itsi/src/components/button/button.js';
+import   '../../../../../../node_modules/lib-itsi/src/components/button-image/button-image.js';
+import   '../../../../../../node_modules/lib-itsi/src/components/select/select.js';
+
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
 import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-table.component';
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
 import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
-
-
 
 
 
@@ -25,10 +27,14 @@ import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.co
     EditTackingTableComponent,
     PdfViewerComponent,
     MsgReaderComponent,
+
   ],
 
   templateUrl: './tracking-table.component.html',
   styleUrl: './tracking-table.component.css',
+  schemas:[
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
 
 
