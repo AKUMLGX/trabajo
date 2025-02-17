@@ -1,4 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+
+import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Asunto } from '../interfaces/asuntos.interfaces';
@@ -6,6 +7,7 @@ import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ParametrosAcuse, ParametrosAcuseFolio } from '../interfaces/acuses';
+
 
 @Injectable({
   providedIn: 'root',
@@ -38,8 +40,8 @@ export class AsuntoService {
       oficio: oficio,
       autoridad_remitente: autoridadRemitente,
       persona_relacionada: personaRelacionada,
-      volante_jefatura:volante_jefatura ,
-      turno_jefatura:turno_jefatura,
+      volante_jefatura: volante_jefatura,
+      turno_jefatura: turno_jefatura,
     };
     this.httpClient.get<Asunto[]>(url, { params: params }).subscribe((data) => {
       this.documentList = data;
@@ -47,6 +49,40 @@ export class AsuntoService {
     });
   }
 
+  downloadExcelTable(
+    folio_interno: string,
+    carpeta_investigacion: string,
+    oficio: string,
+    autoridad_remitente: string,
+    persona_relacionada: string,
+    volante_jefatura: string,
+    turno_jefatura: string,
+  ) {
+    let url = environment.baseUrl + environment.asuntoDescargaTablaBusqueda;
+    let params = {
+      folio_interno: folio_interno,
+      carpeta_investigacion: carpeta_investigacion,
+      oficio: oficio,
+      autoridad_remitente: autoridad_remitente,
+      persona_relacionada: persona_relacionada,
+      volante_jefatura: volante_jefatura,
+      turno_jefatura: turno_jefatura
+    }
+    this.httpClient.get(url, { params: params, responseType: "text" }).subscribe((data) => {
+      const byteCharacters = atob(data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: type });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `Busqueda de Tabla.xlsx`;
+      link.click();
+    });
+  }
 
   searchBarCoincidencesIlike(consulta: string, campo: string): Observable<string[]> {
     let url = environment.baseUrl + environment.asuntoEndpoint;
@@ -77,7 +113,7 @@ export class AsuntoService {
     let oficio: string = '';
     let autoridadRemitente: string = '';
     let volante_jefatura: string = '';
-    let turno_jefatura : string= '';
+    let turno_jefatura: string = '';
     switch (this.tipoBusqueda) {
       case "CARPETA DE INVESTIGACIÓN": {
         carpetaInvestigacion = userInput;
@@ -95,7 +131,7 @@ export class AsuntoService {
         oficio = userInput;
         break;
       }
-      case "TURNO JEFATURA  ":{
+      case "TURNO JEFATURA  ": {
         turno_jefatura = userInput
         break;
       }
@@ -108,8 +144,8 @@ export class AsuntoService {
       oficio: oficio,
       autoridad_remitente: autoridadRemitente,
       persona_relacionada: personaRelacionada,
-      volante_jefatura:volante_jefatura,
-      turno_jefatura : turno_jefatura
+      volante_jefatura: volante_jefatura,
+      turno_jefatura: turno_jefatura
     };
 
     return this.httpClient.get<Asunto[]>(
@@ -141,7 +177,7 @@ export class AsuntoService {
     )
   }
 
-  generateAcuse(date: string,   dateFinal:string, administracion: string | null, formato: string | null): void {
+  generateAcuse(date: string, dateFinal: string, administracion: string | null, formato: string | null): void {
     let url = environment.baseUrl + environment.generateAcuse;
     if (formato === null) formato = 'pdf';
     let params: ParametrosAcuse = {
@@ -174,16 +210,16 @@ export class AsuntoService {
   }
 
 
-  generateAcuseFolioScan(folio_inicial:string, folio_final:string,administracion: string | null, formato: string | null){
+  generateAcuseFolioScan(folio_inicial: string, folio_final: string, administracion: string | null, formato: string | null) {
     let url = environment.baseUrl + environment.generateAcuse;
     if (formato === null) formato = 'pdf';
-    let params: ParametrosAcuseFolio ={
-      folio_inicial : folio_inicial,
-      folio_final : folio_final,
-      administracion : administracion,
-      formato : formato
+    let params: ParametrosAcuseFolio = {
+      folio_inicial: folio_inicial,
+      folio_final: folio_final,
+      administracion: administracion,
+      formato: formato
     }
-    this.httpClient.post(url,params,{responseType:"text"}).subscribe((acuse)=>{
+    this.httpClient.post(url, params, { responseType: "text" }).subscribe((acuse) => {
       const byteCharacters = atob(acuse);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, ViewChild } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -9,6 +9,7 @@ import { FileService } from '../../../services/file.service';
 import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-table.component';
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
 import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
+import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
 
 
 
@@ -77,10 +78,30 @@ export class TrackingTableComponent {
   };
   @ViewChild("edit-tacking-table") miComponente!: ElementRef;
 
+
+  folio_interno: string= ""
+  carpeta_investigacion: string= ""
+  oficio: string= ""
+  autoridad_remitente: string= ""
+  persona_relacionada: string= ""
+  volante_jefatura: string= ""
+  turno_jefatura: string= ""
+
   constructor(
     private asuntoService: AsuntoService,
     private fileService: FileService,
-  ) { }
+  ) {
+    effect(()=>{
+      const datos = this.sharedDataService.formData();
+      this.folio_interno= datos.folio_interno;
+      this.carpeta_investigacion= datos.carpeta_investigacion;
+      this.oficio= datos.oficio;
+      this.autoridad_remitente= datos.autoridad_remitente;
+      this.persona_relacionada= datos.persona_relacionada
+      this.volante_jefatura= datos.volante_jefatura;
+     this.turno_jefatura= datos.turno_jefatura;
+    })
+   }
 
   ngOnInit() {
     this.asuntoService.fileIsOpenUpdated.subscribe((fileIsOpen) => {
@@ -228,4 +249,20 @@ export class TrackingTableComponent {
     this.fileIsOpen = false;
   }
 
+  private sharedDataService = inject(SharedDataFormService);
+  datos = computed(()=> this.sharedDataService.formData())
+
+
+
+  getDownloadExcel():void{
+      this.asuntoService.downloadExcelTable(
+      this.folio_interno,
+      this.carpeta_investigacion,
+      this.oficio,
+      this.autoridad_remitente,
+      this.persona_relacionada,
+      this.volante_jefatura,
+     this.turno_jefatura
+      )
+  }
 }

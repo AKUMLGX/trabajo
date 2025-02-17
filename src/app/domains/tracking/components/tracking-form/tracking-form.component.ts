@@ -11,6 +11,7 @@ import { AsuntoService } from '../../../services/asunto.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
 
 @Component({
   selector: 'app-tracking-form',
@@ -65,6 +66,7 @@ export class TrackingFormComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
+    private shareData: SharedDataFormService
   ) {
     this.campoValor = {
       folioInterno: '',
@@ -107,6 +109,21 @@ export class TrackingFormComponent {
   onSave(): void {
     this.asuntoService.filterDocuments(this.consultForm);
   }
+
+  formData= {
+    folio_interno:"",
+    carpeta_investigacion:"",
+    oficio:"",
+    autoridad_remitente:"",
+    persona_relacionada:"",
+    volante_jefatura:"",
+    turno_jefatura:""
+  }
+
+  sendDatos():void{
+    this.shareData.updateFormData(this.formData)
+  }
+
 
   getValueInput(): void {
     this.coincidencias = [];
