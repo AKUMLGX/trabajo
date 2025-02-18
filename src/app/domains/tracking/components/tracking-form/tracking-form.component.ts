@@ -53,8 +53,8 @@ export class TrackingFormComponent {
 
   public fechaActual = '2018-11-11';
 
-  input_one = ""
-  input_two = ""
+  input_one = 0
+  input_two = 0
 
 
   selecionarOpcion: string = ''
@@ -155,6 +155,7 @@ export class TrackingFormComponent {
     this.input_one = folioOne
     this.input_two = folioTwo
     if (this.input_one && this.input_two) {
+
       this.asuntoService.generateAcuseFolioScan(this.input_one,
         this.input_two, this.administracion.value, this.formato.value)
     }

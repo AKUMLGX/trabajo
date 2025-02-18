@@ -51,35 +51,41 @@ export class InitTemplateComponent {
     parcial: 0,
     recibido: 0,
     en_tramite: 0,
-    no_aplica: 0
+    no_aplica: 0,
+    documento:0
   };
   respuesta: Estado = {
     total: 0,
     parcial: 0,
     recibido: 0,
     en_tramite: 0,
-    no_aplica: 0
+    no_aplica: 0,
+    documento:0,
   };
   respuesta_FGR: Estado = {
     total: 0,
     parcial: 0,
     recibido: 0,
     en_tramite: 0,
-    no_aplica: 0
+    no_aplica: 0,
+    documento:0,
   };
 
   total_requerimiento: number = 0
   enTramite_requerimiento: number = 0
   parcial_requerimiento: number = 0
+  documento_respuesta_requerimiento: number=0
 
 
   total_respuesta_FGR: number = 0
   enTramite_respuesta_FGR: number = 0
   parcial_respuesta_FGR: number = 0
+  documento_respuesta_FGR: number=0
 
   total_respuesta_INTERNA: number = 0
   enTramite_respuesta_INTERNA: number = 0
   parcial_respuesta_INTERNA: number = 0
+  documento_respuesta_Interna: number=0
 
   totalDeConteo: number = 0
 
@@ -124,14 +130,17 @@ export class InitTemplateComponent {
           this.total_requerimiento = this.requerimiento.total;
           this.enTramite_requerimiento = this.requerimiento.parcial;
           this.parcial_requerimiento = this.requerimiento.en_tramite;
+          this.documento_respuesta_requerimiento = this.requerimiento.documento
 
           this.total_respuesta_INTERNA = this.respuesta.total;
           this.enTramite_respuesta_INTERNA = this.respuesta.parcial;
           this.parcial_respuesta_INTERNA = this.respuesta.en_tramite;
+          this.documento_respuesta_Interna =  this.respuesta.documento
 
           this.total_respuesta_FGR = this.respuesta_FGR.total;
           this.enTramite_respuesta_FGR = this.respuesta_FGR.parcial;
           this.parcial_respuesta_FGR = this.respuesta_FGR.en_tramite;
+          this.documento_respuesta_FGR = this.respuesta_FGR.documento
         }
       )
       this.obtnerNombre()
