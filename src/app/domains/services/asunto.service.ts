@@ -210,7 +210,7 @@ export class AsuntoService {
   }
 
 
-  generateAcuseFolioScan(folio_inicial: string, folio_final: string, administracion: string | null, formato: string | null) {
+  generateAcuseFolioScan(folio_inicial: number, folio_final: number, administracion: string | null, formato: string | null) {
     let url = environment.baseUrl + environment.generateAcuse;
     if (formato === null) formato = 'pdf';
     let params: ParametrosAcuseFolio = {
