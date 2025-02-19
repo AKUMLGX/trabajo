@@ -106,7 +106,7 @@ export class InitTemplateComponent {
       let data = this.repotByDay.value
       this.chartPie.getQuerybyDay(data).subscribe(
         res => {
-          console.log("RES", res);
+          // console.log("RES", res);
           this.procesarDatos(res)
 
           //#region  Series REQUERIMIENTO
@@ -153,10 +153,14 @@ export class InitTemplateComponent {
       let dataConteo = this.repotByDay.value
       this.tableConteo.getConteoDia(dataConteo).subscribe(
         res => {
-          this.documents = res.registros.map(([fecha, totalRequerimineto, total]) => ({
+
+          this.documents = res.registros.map(([fecha, totalRequerimineto,total_estatus, parcial_estatus,trmite
+             ]) => ({
             fecha_recepcion: fecha,
             total_requerimientos: totalRequerimineto,
-            total: total
+            total_estatus:total_estatus,
+            parcial_estatus:parcial_estatus,
+            en_tramite_estatus:trmite,
           }))
 
           const totalDeFechas = this.documents.find(i => i.fecha_recepcion === null);
@@ -164,8 +168,6 @@ export class InitTemplateComponent {
             this.totalDeConteo = totalDeFechas.total_requerimientos
           }
           this.documents = this.documents.filter(i => i.fecha_recepcion !== null);
-
-          // console.log(res);
           let indexPage = 0;
           let page: EstadisticasDiarias[] = [];
           this.pages = []
