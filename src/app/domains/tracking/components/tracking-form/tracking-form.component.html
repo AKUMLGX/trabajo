@@ -3,7 +3,7 @@
     <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div class="rounded-t bg-white mb-0 px-6 py-6"></div>
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <form [formGroup]="consultForm" (ngSubmit)="onSave()">
+        <form [formGroup]="consultForm" (ngSubmit)="onSave()" (ngSubmit)="sendDatos()">
           <div class="flex flex-wrap">
             <div class="w-full lg:w-6/12 px-4" (mouseenter)="DetectInput(true, 'folioInterno')"
               (mouseleave)="DetectInput(false, 'folioInterno')">
@@ -13,7 +13,7 @@
                   <span title="Clave interna asignada al asunto para su seguimiento interno."><mat-icon
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input type="text" placeholder="Folio interno"
+                <input [(ngModel)]="formData.folio_interno" type="text" placeholder="Folio interno"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="folioInterno" value="" [(ngModel)]="campoValor['folioInterno']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
@@ -36,7 +36,7 @@
                   <span title="Número de la carpeta de investigación asociada al asunto. "><mat-icon
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input type="text" placeholder="Carpeta de investigación"
+                <input [(ngModel)]="formData.carpeta_investigacion" type="text" placeholder="Carpeta de investigación"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="carpetaInvertigacion" value="" [(ngModel)]="campoValor['carpetaInvertigacion']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
@@ -60,7 +60,7 @@
                   <span title="Número de oficio asignado al documento."><mat-icon
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input type="text" placeholder="Oficio"
+                <input [(ngModel)]="formData.oficio" type="text" placeholder="Oficio"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="oficio" value="" [(ngModel)]="campoValor['oficio']" (ngModelChange)="getValueInput()"
                   #InputFormulario />
@@ -83,7 +83,7 @@
                   <span title="Autoridad que remite el asunto o documento."><mat-icon
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input type="text" placeholder="Autoridad remitente"
+                <input [(ngModel)]="formData.autoridad_remitente" type="text" placeholder="Autoridad remitente"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="autoridadRemitente" value="" [(ngModel)]="campoValor['autoridadRemitente']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
@@ -99,14 +99,14 @@
               </div>
             </div>
             <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'personaRelacionada')"
+              <div class="relative w-full mb-3"  (mouseenter)="DetectInput(true, 'personaRelacionada')"
                 (mouseleave)="DetectInput(false, 'personaRelacionada')">
                 <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
                   Persona relacionada
                   <span title="Nombre de la persona vinculada al asunto."><mat-icon
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input type="text" placeholder="Persona relacionada"
+                <input [(ngModel)]="formData.persona_relacionada" type="text" placeholder="Persona relacionada"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="personaRelacionada" value="" [(ngModel)]="campoValor['personaRelacionada']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
@@ -129,7 +129,7 @@
                   Volante Jefatura
                   <span title="Volante"><mat-icon class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input type="text" placeholder="Volante Jefatura"
+                <input [(ngModel)]="formData.volante_jefatura" type="text" placeholder="Volante Jefatura"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   formControlName="volante_jefatura" value="" [(ngModel)]="campoValor['volante_jefatura']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
@@ -154,7 +154,7 @@
                     title=" Registro que se asigna a los asuntos que llegan a la jefatura para su seguimiento."><mat-icon
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input type="text" placeholder="Turno Jefatura" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine
+                <input  [(ngModel)]="formData.turno_jefatura"  type="text" placeholder="Turno Jefatura" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine
                    bg-white rounded text-sm shadow focus:outline-none focus:ring
                     ring-wine w-full ease-linear transition-all duration-150" formControlName="turno_jefatura" value=""
                   [(ngModel)]="campoValor['turno_jefatura']" (ngModelChange)="getValueInput()" #InputFormulario />
@@ -281,14 +281,14 @@
                                 </div>
                               }
                             } -->
-                        <input formControlName="input_one" type="text" matInput placeholder="Folio Inicial">
+                        <input formControlName="input_one" type="number" matInput placeholder="Folio Inicial">
                       </mat-form-field>
                     </div>
                   </div>
                   <div>
                     <mat-form-field>
                       <mat-label>Folio 2 :</mat-label>
-                      <input formControlName="input_two" type="text" matInput placeholder="Folio Final">
+                      <input formControlName="input_two" type="number" matInput placeholder="Folio Final">
                     </mat-form-field>
                   </div>
                   <div class="col-span-2">

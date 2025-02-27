@@ -11,6 +11,7 @@ import { AsuntoService } from '../../../services/asunto.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
 
 @Component({
   selector: 'app-tracking-form',
@@ -52,8 +53,8 @@ export class TrackingFormComponent {
 
   public fechaActual = '2018-11-11';
 
-  input_one = ""
-  input_two = ""
+  input_one = 0
+  input_two = 0
 
 
   selecionarOpcion: string = ''
@@ -65,6 +66,7 @@ export class TrackingFormComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
+    private shareData: SharedDataFormService
   ) {
     this.campoValor = {
       folioInterno: '',
@@ -108,6 +110,21 @@ export class TrackingFormComponent {
     this.asuntoService.filterDocuments(this.consultForm);
   }
 
+  formData= {
+    folio_interno:"",
+    carpeta_investigacion:"",
+    oficio:"",
+    autoridad_remitente:"",
+    persona_relacionada:"",
+    volante_jefatura:"",
+    turno_jefatura:""
+  }
+
+  sendDatos():void{
+    this.shareData.updateFormData(this.formData)
+  }
+
+
   getValueInput(): void {
     this.coincidencias = [];
     this.nombre_campo_input = document.activeElement?.getAttribute('formControlName') ?? '';
@@ -138,6 +155,7 @@ export class TrackingFormComponent {
     this.input_one = folioOne
     this.input_two = folioTwo
     if (this.input_one && this.input_two) {
+
       this.asuntoService.generateAcuseFolioScan(this.input_one,
         this.input_two, this.administracion.value, this.formato.value)
     }
