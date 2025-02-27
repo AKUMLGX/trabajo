@@ -25,25 +25,26 @@ import { EstadisticasDiarias } from '../../../interfaces/estadisticosTableRespon
 })
 export class InitTemplateComponent {
 
+  pages: EstadisticasDiarias[][] = []
+  documents: EstadisticasDiarias[] = [];
   environment = environment;
   mostrarChart: boolean = false;
   mostrarTable: boolean = false
+  selecionarOpcion: string = ''
   fecha_Incial: string = ""
   fecha_Final: string = ""
+  administracion = ""
   download_requerimiento = "REQUERIMIENTO"
   download_respuesta_interna = "RESPUESTA INTERNA"
   download_respuesta_fgr = "RESPUESTA A FGR"
   formato = "xlsx"
-  administracion = ""
-  selecionarOpcion: string = ''
-  pages: EstadisticasDiarias[][] = []
-  documents: EstadisticasDiarias[] = [];
-  pageSelected: number = 1;
   itemsPerPage: number = 5
+  pageSelected: number = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
   };
+
 
   estadisticos: EstadisticosResponse['data'] = [];
   requerimiento: Estado = {
