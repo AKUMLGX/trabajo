@@ -6,8 +6,8 @@ export interface ParametrosAcuse {
 }
 
 export interface ParametrosAcuseFolio{
-  folio_inicial:string,
-  folio_final:string,
+  folio_inicial:number,
+  folio_final:number,
   formato: string,
   administracion: string | null
 }

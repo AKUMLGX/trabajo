@@ -18,9 +18,15 @@ export class EstadisticoService {
   }
 
 
-  getConteoDia(data:EstadisticosRequest): Observable <{ registros: [string , number,number][] }> {
+  getConteoDia(data:EstadisticosRequest): Observable <{ registros:
+     [string , number,number,number,number][] }> {
     let targetUrl = environment.baseUrl + environment.tableEstaditicas_Diarias
-    return this.http.post<{ registros: [string , number,number][] }>(targetUrl,data)
+    return this.http.post<{ registros: [string,number,number,number,number][]}>(targetUrl,data)
+  }
+
+  getconteoDIas(data:EstadisticoService){
+    let targetUrl = environment.baseUrl + environment.tableEstaditicas_Diarias
+    return this.http.post<EstadisticoService>(targetUrl,data)
   }
 
   donwnloadExcel(startDate:string,endDate:string,documento:string, administracion:string ){
@@ -29,9 +35,9 @@ export class EstadisticoService {
       fecha_inicial: startDate,
       fecha_final: endDate,
       documento:documento,
-
       administracion:administracion
     }
+
 
    this.http.post(url,params,{responseType:"text"}).subscribe((e)=>{
     const byteCharacters = atob(e);

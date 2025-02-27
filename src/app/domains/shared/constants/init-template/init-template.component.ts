@@ -25,25 +25,26 @@ import { EstadisticasDiarias } from '../../../interfaces/estadisticosTableRespon
 })
 export class InitTemplateComponent {
 
+  pages: EstadisticasDiarias[][] = []
+  documents: EstadisticasDiarias[] = [];
   environment = environment;
   mostrarChart: boolean = false;
   mostrarTable: boolean = false
+  selecionarOpcion: string = ''
   fecha_Incial: string = ""
   fecha_Final: string = ""
+  administracion = ""
   download_requerimiento = "REQUERIMIENTO"
   download_respuesta_interna = "RESPUESTA INTERNA"
   download_respuesta_fgr = "RESPUESTA A FGR"
   formato = "xlsx"
-  administracion = ""
-  selecionarOpcion: string = ''
-  pages: EstadisticasDiarias[][] = []
-  documents: EstadisticasDiarias[] = [];
-  pageSelected: number = 1;
   itemsPerPage: number = 5
+  pageSelected: number = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
   };
+
 
   estadisticos: EstadisticosResponse['data'] = [];
   requerimiento: Estado = {
@@ -51,35 +52,41 @@ export class InitTemplateComponent {
     parcial: 0,
     recibido: 0,
     en_tramite: 0,
-    no_aplica: 0
+    no_aplica: 0,
+    documento:0
   };
   respuesta: Estado = {
     total: 0,
     parcial: 0,
     recibido: 0,
     en_tramite: 0,
-    no_aplica: 0
+    no_aplica: 0,
+    documento:0,
   };
   respuesta_FGR: Estado = {
     total: 0,
     parcial: 0,
     recibido: 0,
     en_tramite: 0,
-    no_aplica: 0
+    no_aplica: 0,
+    documento:0,
   };
 
   total_requerimiento: number = 0
   enTramite_requerimiento: number = 0
   parcial_requerimiento: number = 0
+  documento_respuesta_requerimiento: number=0
 
 
   total_respuesta_FGR: number = 0
   enTramite_respuesta_FGR: number = 0
   parcial_respuesta_FGR: number = 0
+  documento_respuesta_FGR: number=0
 
   total_respuesta_INTERNA: number = 0
   enTramite_respuesta_INTERNA: number = 0
   parcial_respuesta_INTERNA: number = 0
+  documento_respuesta_Interna: number=0
 
   totalDeConteo: number = 0
 
@@ -100,7 +107,7 @@ export class InitTemplateComponent {
       let data = this.repotByDay.value
       this.chartPie.getQuerybyDay(data).subscribe(
         res => {
-          console.log("RES", res);
+          // console.log("RES", res);
           this.procesarDatos(res)
 
           //#region  Series REQUERIMIENTO
@@ -124,14 +131,17 @@ export class InitTemplateComponent {
           this.total_requerimiento = this.requerimiento.total;
           this.enTramite_requerimiento = this.requerimiento.parcial;
           this.parcial_requerimiento = this.requerimiento.en_tramite;
+          this.documento_respuesta_requerimiento = this.requerimiento.documento
 
           this.total_respuesta_INTERNA = this.respuesta.total;
           this.enTramite_respuesta_INTERNA = this.respuesta.parcial;
           this.parcial_respuesta_INTERNA = this.respuesta.en_tramite;
+          this.documento_respuesta_Interna =  this.respuesta.documento
 
           this.total_respuesta_FGR = this.respuesta_FGR.total;
           this.enTramite_respuesta_FGR = this.respuesta_FGR.parcial;
           this.parcial_respuesta_FGR = this.respuesta_FGR.en_tramite;
+          this.documento_respuesta_FGR = this.respuesta_FGR.documento
         }
       )
       this.obtnerNombre()
@@ -144,10 +154,14 @@ export class InitTemplateComponent {
       let dataConteo = this.repotByDay.value
       this.tableConteo.getConteoDia(dataConteo).subscribe(
         res => {
-          this.documents = res.registros.map(([fecha, totalRequerimineto, total]) => ({
+
+          this.documents = res.registros.map(([fecha, totalRequerimineto,total_estatus, parcial_estatus,trmite
+             ]) => ({
             fecha_recepcion: fecha,
             total_requerimientos: totalRequerimineto,
-            total: total
+            total_estatus:total_estatus,
+            parcial_estatus:parcial_estatus,
+            en_tramite_estatus:trmite,
           }))
 
           const totalDeFechas = this.documents.find(i => i.fecha_recepcion === null);
@@ -155,8 +169,6 @@ export class InitTemplateComponent {
             this.totalDeConteo = totalDeFechas.total_requerimientos
           }
           this.documents = this.documents.filter(i => i.fecha_recepcion !== null);
-
-          // console.log(res);
           let indexPage = 0;
           let page: EstadisticasDiarias[] = [];
           this.pages = []

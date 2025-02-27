@@ -4,6 +4,7 @@ export interface  Estado {
   parcial: number;
   recibido: number;
   total: number;
+  documento: number;
 }
 
 interface Requerimiento {
