@@ -6,7 +6,7 @@ export interface RespuestaAperturaResponse {
 
 export interface RespuestaValue{
     folio_interno:         string;
-    folio_scanner:         string;
+    folio_scanner:         number;
     oficio:                string;
     turno_jefatura:        string;
     documento_escaneado:   string;

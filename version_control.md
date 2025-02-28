@@ -19,5 +19,6 @@
 |0.0.17 | Se soluciona el problema del  botón de  regresar del visualizador de PDF. |
 |0.0.18 | Se agrega la nueva funcionalidad de visualizar un gráfico de pastel y poderla descargar un Excel. | 
 |0.0.19 | Se implementa los reportes por repuesta interna y respuesta a FGR y se muestra la tabla del  conteo por días, pero se muestra sin datos .| 
-!0.0.20  |Se añaden los datos a la tabla de conteo por día.  | 
+|0.0.20  |Se añaden los datos a la tabla de conteo por día.  | 
 |0.0.21 | Se añade la nueva funcionalidad de descargar la tabla de bandeja de seguimiento, se añade la funcionalidad para hacer una descarga por folio scaner,  se añaden las nuevas columnas a la tabla estadística  de status  por día. |
+|0.0.22| Se cambia de forma global el tipo de dato de Folio Scanner de tipo "string" a tipo "number". |

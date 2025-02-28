@@ -17,7 +17,7 @@ export class CollectformReplyInfoService {
   //ATENENCION = signal('')
   DESCRIPCION = signal('')
    TIPORES = signal('')
-  FOLIOSCAN = signal('')
+  FOLIOSCAN = signal(0)
 
 
 
@@ -28,7 +28,7 @@ updateReplyFrom(
  // atencion:string,
   descripcion:string,
   tipoRespuesta:string,
-  folioScan:string,
+  folioScan:number,
   folioInterno:string,
 ){
   this.OFICIO.set(oficio)

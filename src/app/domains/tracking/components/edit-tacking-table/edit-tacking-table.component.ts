@@ -109,6 +109,7 @@ export class EditTackingTableComponent implements OnInit {
 
 
     console.log(this.documents.documento_escaneado,"DOC_ESC");
+    console.log(this.documents.folio_scanner,"Scanner");
 
 
 
@@ -118,7 +119,7 @@ export class EditTackingTableComponent implements OnInit {
     carpeta_investigacion: [[""], {  value: this.documents?.carpeta_investigacion !== null ? this.documents?.carpeta_investigacion : ""  }],
     persona_relacionada: [[""], { value: this.documents?.persona_relacionada !== null ? this.documents?.persona_relacionada : "" }],
     fecha_recepcion: [[""], { value: this.documents?.fecha_recepcion !== null ? this.documents?.fecha_recepcion : "" }],
-    folio_scanner: [[""], { value: this.documents?.folio_scanner !== null ? this.documents?.folio_scanner : "" }],
+    folio_scanner: [[], { value: this.documents?.folio_scanner !== null ? this.documents?.folio_scanner : "" }],
     volante_jefatura: [[""], { value: this.documents?.volante_jefatura !== null ? this.documents?.volante_jefatura : "" }],
     oficio: [[""], { value: this.documents?.oficio !== null ? this.documents?.oficio : "" }],
     autoridad_remitente: [[""], { value: this.documents?.autoridad_remitente !== null ? this.documents?.autoridad_remitente : "" }],

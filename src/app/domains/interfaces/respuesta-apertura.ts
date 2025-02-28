@@ -1,7 +1,7 @@
 export interface RespuestaApertura {
     folio_interno:         string;
     oficio:                string;
-    folio_scanner:         string;
+    folio_scanner:         number;
     carpeta_investigacion: string | null;
     documento_escaneado:   string;
     fecha_recepcion:       string;

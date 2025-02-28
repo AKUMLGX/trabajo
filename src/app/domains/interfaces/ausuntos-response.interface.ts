@@ -10,7 +10,7 @@ export interface Value {
   administracion:        String;
   oficio:                String;
   documento_escaneado:   String;
-  folio_scanner:         String;
+  folio_scanner:         number;
   descripcion:           String;
   turno_jefatura:        String;
   plazo_atencion:        String;

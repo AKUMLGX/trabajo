@@ -12,7 +12,7 @@ export class CollectSecondPiecesInfoService {
   OFICIO = signal('');
   CARPETAINV = signal<null | string>(null);
   FOLIOINT = signal('');
-  FOLIOSCAN = signal('');
+  FOLIOSCAN = signal(0);
 
   updatePreliminarSecondPiecesForm(
     oficioEntry: string,
@@ -23,7 +23,7 @@ export class CollectSecondPiecesInfoService {
     this.OFICIO.set(oficioEntry);
     this.CARPETAINV.set(carpetaInv);
     this.FOLIOINT.set(folioInt);
-    this.FOLIOSCAN.set(folioScan);
+    this.FOLIOSCAN.set(0);
   }
 
    //Info from Second Pieces Form
@@ -42,7 +42,7 @@ export class CollectSecondPiecesInfoService {
 
    VOLANTEJEFATURA = signal<null | string>(null);
    FOLIOJUPITER = signal<null | string>(null);
- 
+
    updateSecondPiecesForm(
      admon: string,
      fechaRec: null | Date,
@@ -57,7 +57,7 @@ export class CollectSecondPiecesInfoService {
      tipoAsunto: string,
      volanteJefatura: string | null,
      folioJupiter: string | null,
-     
+
    ){
      this.ADMON.set(admon);
      this.FECHAREC.set(fechaRec);
@@ -85,7 +85,7 @@ export class CollectSecondPiecesInfoService {
   updatePlazoDeAtencionIfCheck() {
     this.PLAZOATENCION.set(0);
   }
-  
+
   updatePlazoDeAtencion(
     plazoAtHrs: number | null,
     plazoAtDias: number | null,
@@ -93,7 +93,7 @@ export class CollectSecondPiecesInfoService {
   ){
     let plazoInHours: number;
     if (plazoAtHrs !== null && plazoAtDias !== null ) {
-      plazoInHours = (plazoAtHrs + (plazoAtDias * 24)); 
+      plazoInHours = (plazoAtHrs + (plazoAtDias * 24));
       return this.PLAZOATENCION.set(plazoInHours);
     } else if (plazoAtHrs === null && plazoAtDias !== null ) {
       plazoInHours = (plazoAtDias * 24);
@@ -103,7 +103,7 @@ export class CollectSecondPiecesInfoService {
       return this.PLAZOATENCION.set(plazoInHours);
     } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === undefined )){
       return this.PLAZOATENCION.set(null);
-    } 
-  }  
+    }
+  }
 
 }
