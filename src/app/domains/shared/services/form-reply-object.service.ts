@@ -16,7 +16,7 @@ export class FormReplyObjectService {
     //atencion:'',
      tipoRespuesta:'',
     documento_escaneado:'',
-    folioScanner:'',
+    folioScanner:0,
     folioInterno:'',
   })
 
