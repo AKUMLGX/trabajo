@@ -36,7 +36,7 @@ export interface Asunto {
   folio_interno: String;
   carpeta_investigacion: String ;
   persona_relacionada: String;
-  folio_scanner: String;
+  folio_scanner: number;
   volante_jefatura: String;
   descargo: String;
   tipo_asunto: String;

@@ -11,12 +11,12 @@ export class CollectFormInfoService {
 
   OFICIO = signal('');
   CARPETAINV = signal<null | string>(null);
-  FOLIOSCAN = signal('');
+  FOLIOSCAN = signal(0);
 
   updatePreliminarEuacapeForm(
     oficioEntry: string,
     carpetaInv: string | null,
-    folioScan: string
+    folioScan: number
   ){
     this.OFICIO.set(oficioEntry);
     this.CARPETAINV.set(carpetaInv);
@@ -87,7 +87,7 @@ export class CollectFormInfoService {
   //TIPO DE ASUNTO STORE
 
   TIPOASUNTO = signal('');
-  
+
   dropdownChoice(choice: string){
     this.TIPOASUNTO.set(choice);
   }
@@ -100,7 +100,7 @@ export class CollectFormInfoService {
   updatePlazoDeAtencionIfCheck() {
     this.PLAZOATENCION.set(0);
   }
-  
+
   updatePlazoDeAtencion(
     plazoAtHrs: number | null,
     plazoAtDias: number | null,
@@ -108,7 +108,7 @@ export class CollectFormInfoService {
   ){
     let plazoInHours: number;
     if (plazoAtHrs !== null && plazoAtDias !== null ) {
-      plazoInHours = (plazoAtHrs + (plazoAtDias * 24)); 
+      plazoInHours = (plazoAtHrs + (plazoAtDias * 24));
       return this.PLAZOATENCION.set(plazoInHours);
     } else if (plazoAtHrs === null && plazoAtDias !== null ) {
       plazoInHours = (plazoAtDias * 24);
@@ -118,7 +118,7 @@ export class CollectFormInfoService {
       return this.PLAZOATENCION.set(plazoInHours);
     } else if (plazoAtHrs === null && plazoAtDias === null && (plazoAtUrgente === false || plazoAtUrgente === undefined )){
       return this.PLAZOATENCION.set(null);
-    } 
-  }  
+    }
+  }
 
 }

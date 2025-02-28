@@ -5,7 +5,7 @@ export interface GeneralidadesAperturaResponse {
 }
 
 export interface GeneralidadesValue {
-    folio_scanner:         string;
+    folio_scanner:         number;
     oficio:                string;
     turno_jefatura:        string;
     documento_escaneado:   string;

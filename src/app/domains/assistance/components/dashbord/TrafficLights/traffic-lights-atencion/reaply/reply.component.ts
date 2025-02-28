@@ -17,7 +17,7 @@ interface Datos {
   oficio: number;
   turno_Jefatura: number;
   folio_interno: string;
-  folio_scanner: string;
+  folio_scanner: number;
   administracion: string;
   documento_escaneado: string;
   descripcion: string;
@@ -59,7 +59,7 @@ export class ReaplyComponent implements OnInit {
     this.replyForm.controls['foliointerno'].setValue(this.datosFolio.folio_interno)
 
   }
-  
+
   public replyForm: FormGroup = this.fb.group({
     oficio: [null, [Validators.required]],
     fechaAtencion: [null, [Validators.required]],
