@@ -57,7 +57,7 @@ export class InfotableReplyComponent {
     descripcion: string,
   //  atentencion:string,
     tipoRespuesta:string,
-    folioScanner: string,
+    folioScanner: number,
     folioInterno: string,
   )
 {

@@ -5,6 +5,6 @@ export interface ReplyForm{
   descripcion:string;
  // atencion:string;
   tipoRespuesta:string
-  folioScanner:string;
+  folioScanner:number;
   folioInterno:string;
 }

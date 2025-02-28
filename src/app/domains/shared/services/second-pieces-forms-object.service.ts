@@ -16,7 +16,7 @@ export class SecondPiecesFormsObjectService {
   euacapeFormObject = signal<EuacapeSecondPiece>({
     folio_interno:         '',
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -33,7 +33,7 @@ export class SecondPiecesFormsObjectService {
   generalidadesFormObject = signal<GeneralidadesSecondPiece>({
     folio_interno:         '',
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -54,7 +54,7 @@ export class SecondPiecesFormsObjectService {
   respuestaFormObject = signal<RespuestaSecondPiece>({
     folio_interno:         '',
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -74,7 +74,7 @@ export class SecondPiecesFormsObjectService {
 
   civilFormObject = signal<CivilSecondPiece>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -93,7 +93,7 @@ export class SecondPiecesFormsObjectService {
 
   penalFormObject = signal<PenalSecondPiece>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -112,7 +112,7 @@ export class SecondPiecesFormsObjectService {
 
   concursoMercantilFormObject = signal<ConcursoMercantilSecondPiece>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
