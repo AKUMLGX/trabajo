@@ -15,7 +15,7 @@ export class FormsObjectService {
 
   euacapeFormObject = signal<EuacapeApertura>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -31,7 +31,7 @@ export class FormsObjectService {
 
   generalidadesFormObject = signal<GeneralidadesApertura>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -51,7 +51,7 @@ export class FormsObjectService {
   respuestaFormObject = signal<RespuestaApertura>({
     folio_interno:         '',
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -69,7 +69,7 @@ export class FormsObjectService {
 
   civilFormObject = signal<CivilApertura>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -88,7 +88,7 @@ export class FormsObjectService {
 
   penalFormObject = signal<PenalApertura>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',
@@ -107,7 +107,7 @@ export class FormsObjectService {
 
   concursoMercantilFormObject = signal<ConcursoMercantilApertura>({
     oficio:                '',
-    folio_scanner:         '',
+    folio_scanner:         0,
     carpeta_investigacion: null,
     documento_escaneado:   '',
     fecha_recepcion:       '',

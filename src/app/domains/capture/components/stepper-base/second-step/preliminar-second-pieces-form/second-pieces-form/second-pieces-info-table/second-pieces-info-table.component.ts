@@ -118,7 +118,7 @@ export class SecondPiecesInfoTableComponent {
 
   confirmData(
     folioInterno: string,
-    folioScanner: string,
+    folioScanner: number,
     oficio: string,
     documentoEscaneado: string,
     documentoEscaneadoFile: undefined | File,
