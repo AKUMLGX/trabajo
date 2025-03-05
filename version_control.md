@@ -22,3 +22,4 @@
 |0.0.20  |Se añaden los datos a la tabla de conteo por día.  | 
 |0.0.21 | Se añade la nueva funcionalidad de descargar la tabla de bandeja de seguimiento, se añade la funcionalidad para hacer una descarga por folio scaner,  se añaden las nuevas columnas a la tabla estadística  de status  por día. |
 |0.0.22| Se cambia de forma global el tipo de dato de Folio Scanner de tipo "string" a tipo "number". |
+|0.0.23| Se corrige el error del  formulario de segundas piezas para el folio scanner y se sube la librería de  Itsi componentes. |

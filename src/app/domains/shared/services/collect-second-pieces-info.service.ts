@@ -18,12 +18,12 @@ export class CollectSecondPiecesInfoService {
     oficioEntry: string,
     carpetaInv: string | null,
     folioInt: string,
-    folioScan: string
+    folioScan: number
   ){
     this.OFICIO.set(oficioEntry);
     this.CARPETAINV.set(carpetaInv);
     this.FOLIOINT.set(folioInt);
-    this.FOLIOSCAN.set(0);
+    this.FOLIOSCAN.set(folioScan);
   }
 
    //Info from Second Pieces Form
