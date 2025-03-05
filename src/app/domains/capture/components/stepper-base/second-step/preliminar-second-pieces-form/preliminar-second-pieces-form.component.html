@@ -12,21 +12,21 @@
                             </label>
                             <div class="disabled-input-field placeholder-blueGray-300">
                                 {{ this.preloadedFolioInterno() }}
-                            </div>     
+                            </div>
                         </div>
 
                         <div class="wrapping-individual-container">
                             <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-                                Oficio  
+                                Oficio
                                 @if (secondPiecesPreliminarForm.controls['oficio'].invalid && (secondPiecesPreliminarForm.controls['oficio'].dirty || secondPiecesPreliminarForm.controls['oficio'].touched)) {
                                     @if(secondPiecesPreliminarForm.get('oficio')?.errors?.['required']) {
                                         <div class="text-wine ml-1">
                                             <span>*</span>
                                         </div>
                                     }
-                                } 
+                                }
                             </label>
-                            <input 
+                            <input
                                 type="text" placeholder="Oficio"
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="oficio" value=""
@@ -34,8 +34,8 @@
                             @if (secondPiecesPreliminarForm.get('oficio')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
-                                </div> 
-                            }   
+                                </div>
+                            }
                         </div>
 
                         <div class="wrapping-individual-container">
@@ -49,14 +49,14 @@
                                         }
                                     }
                             </label>
-                            <input type="text" placeholder="Folio scanner"
+                            <input type="number" placeholder="Folio scanner"
                                 class="input-field placeholder-blueGray-300"
                                 formControlName="folioScanner" value=""
                             >
                             @if (secondPiecesPreliminarForm.get('folioScanner')?.errors?.['maxlength']) {
                                 <div class="text-sm text-wine mt-1.5">
                                     <span >Máximo 255 caracteres</span>
-                                </div>   
+                                </div>
                             }
                         </div>
 
@@ -67,9 +67,9 @@
                             </label>
                             <div class="disabled-input-field placeholder-blueGray-300">
                                 {{ this.preloadedCarpetaInvestigacion() }}
-                            </div> 
-                        </div>                       
-                        
+                            </div>
+                        </div>
+
                     </div>
                     <br>
                     <div class="flex justify-between items-center">
@@ -83,7 +83,7 @@
                         <div class="bg-white border-2 rounded border-wine">
                             @if (
                                     (secondPiecesPreliminarForm.controls['oficio'].invalid && (secondPiecesPreliminarForm.controls['oficio'].dirty || secondPiecesPreliminarForm.controls['oficio'].touched))
-                                ||  (secondPiecesPreliminarForm.controls['folioScanner'].invalid && (secondPiecesPreliminarForm.controls['folioScanner'].dirty || secondPiecesPreliminarForm.controls['folioScanner'].touched))  
+                                ||  (secondPiecesPreliminarForm.controls['folioScanner'].invalid && (secondPiecesPreliminarForm.controls['folioScanner'].dirty || secondPiecesPreliminarForm.controls['folioScanner'].touched))
                             ) {
                                 @if (
                                         (secondPiecesPreliminarForm.get('oficio')?.errors?.['required'])
@@ -94,7 +94,7 @@
                                         <mat-icon>error</mat-icon>
                                     </div>
                                 }
-                            } 
+                            }
                         </div>
                     </div>
                 </form>
