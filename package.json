@@ -30,10 +30,11 @@
     "lib-itsi": "^0.0.14",
     "ng-apexcharts": "^1.10.0",
     "ng2-pdf-viewer": "^10.0.0",
-    "ngx-extended-pdf-viewer": "^19.2.1",
+    "ngx-extended-pdf-viewer": "^19.7.1",
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.2"
   },
   "devDependencies": {

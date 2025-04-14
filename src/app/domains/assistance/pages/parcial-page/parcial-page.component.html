@@ -1,0 +1,203 @@
+<!-- Header con el título y botón de regreso -->
+<div class="h-full w-full border-2 rounded-lg bg-[#691C32] border-rojo-Akamba overflow-auto">
+  <!-- Cabecera -->
+  <div class="flex items-center px-6 py-4 text-white">
+    <button routerLink="/akamba/assistance" class="text-white mr-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+    </button>
+    <h1 class="text-2xl font-bold">Asuntos atendidos de forma parcial</h1>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="bg-[#F3EAE4] p-4">
+    <!-- Filtros avanzados -->
+    <div class="bg-white p-4 rounded-lg shadow mb-4">
+      <div class="flex flex-wrap gap-4">
+        <!-- Filtro por año -->
+        <div class="flex items-center">
+          <span class="text-sm font-medium mr-2">Año:</span>
+          <select 
+            class="border rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#691C32]"
+            [(ngModel)]="anioFiltro"
+            (change)="aplicarFiltros()"
+          >
+            <option value="todos">Todos los años</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+          </select>
+        </div>
+
+        <!-- Filtro por folio interno -->
+        <div class="flex items-center">
+          <span class="text-sm font-medium mr-2">Folio Interno:</span>
+          <input 
+            type="text" 
+            class="border rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#691C32]" 
+            placeholder="Ej. AP-2024-0001"
+            [(ngModel)]="filtroFolio"
+            (input)="aplicarFiltros()"
+          >
+        </div>
+
+        <!-- Filtro por dictaminador -->
+        <div class="flex items-center">
+          <span class="text-sm font-medium mr-2">Dictaminador:</span>
+          <input 
+            type="text" 
+            class="border rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#691C32]" 
+            placeholder="Nombre del dictaminador"
+            [(ngModel)]="filtroDictaminador"
+            (input)="aplicarFiltros()"
+          >
+        </div>
+
+        <!-- Filtro por persona relacionada -->
+        <div class="flex items-center">
+          <span class="text-sm font-medium mr-2">Persona Relacionada:</span>
+          <input 
+            type="text" 
+            class="border rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#691C32]" 
+            placeholder="Nombre de la persona"
+            [(ngModel)]="filtroPersonaRelacionada"
+            (input)="aplicarFiltros()"
+          >
+        </div>
+      </div>
+
+      <!-- Segunda fila de filtros -->
+      <div class="flex flex-wrap gap-4 mt-3 justify-between">
+        <!-- Filtros de fecha -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center">
+            <span class="text-sm font-medium mr-2">Desde:</span>
+            <input 
+              type="date" 
+              class="border rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#691C32]" 
+              [(ngModel)]="filtroFechaInicio"
+              (change)="aplicarFiltros()"
+            >
+          </div>
+          <div class="flex items-center">
+            <span class="text-sm font-medium mr-2">Hasta:</span>
+            <input 
+              type="date" 
+              class="border rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#691C32]" 
+              [(ngModel)]="filtroFechaFin"
+              (change)="aplicarFiltros()"
+            >
+          </div>
+        </div>
+
+        <!-- Botones de acciones -->
+        <div class="flex gap-2">
+          <button 
+            (click)="limpiarFiltros()" 
+            class="px-3 py-2 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Limpiar filtros
+          </button>
+          <button 
+            (click)="exportarExcel()" 
+            class="flex items-center px-3 py-2 border border-[#691C32] text-[#691C32] rounded-md hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Descargar Excel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contador de resultados -->
+    <div class="text-right mb-2 text-sm font-medium text-gray-600">
+      Mostrando {{ (paginaActual - 1) * elementosPorPagina + 1 }} a {{ Math.min(paginaActual * elementosPorPagina, asuntosFiltrados.length) }} de {{ asuntosFiltrados.length }} asuntos parciales
+    </div>
+
+    <!-- Tabla de datos -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-[#691C32] text-white">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio Interno</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Carpeta de Investigación</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona Relacionada</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Dictaminador</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Oficio</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Documento</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Recepción</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Plazo Atención</th>
+            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Acción</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <!-- Mensaje si no hay resultados -->
+          <tr *ngIf="asuntosPaginados.length === 0" class="hover:bg-gray-50">
+            <td colspan="9" class="px-6 py-10 text-center text-gray-500">
+              No se encontraron asuntos parciales
+            </td>
+          </tr>
+          
+          <!-- Filas de datos -->
+          <tr *ngFor="let asunto of asuntosPaginados" class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ asunto.folio }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CI-{{ 70000 + asunto.id }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.personaRelacionada }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.dictaminador }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">OF-{{ 1000 + asunto.id }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Respuesta Parcial {{ asunto.id % 5 + 1 }}.pdf</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.fechaRecepcion }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ 5 + (asunto.id % 15) }} días</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <button class="px-3 py-1 bg-[#691C32] text-white rounded hover:bg-[#4a1423] focus:outline-none">
+                Revisar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Paginación -->
+    <div class="mt-4 flex justify-end">
+      <div class="flex border border-gray-300 rounded-md overflow-hidden">
+        <button 
+          (click)="cambiarPagina(paginaActual - 1)" 
+          [disabled]="paginaActual === 1"
+          [class.opacity-50]="paginaActual === 1"
+          class="px-3 py-1 bg-white border-r border-gray-300 hover:bg-gray-100"
+        >
+          Anterior
+        </button>
+        
+        <ng-container *ngFor="let pagina of getPaginasVisibles(); let i = index">
+          <button 
+            (click)="cambiarPagina(pagina)" 
+            [class.bg-[#691C32]]="paginaActual === pagina"
+            [class.text-white]="paginaActual === pagina"
+            [class.bg-white]="paginaActual !== pagina"
+            class="px-3 py-1 border-r border-gray-300"
+          >
+            {{ pagina }}
+          </button>
+        </ng-container>
+        
+        <button 
+          (click)="cambiarPagina(paginaActual + 1)" 
+          [disabled]="paginaActual === totalPaginas || totalPaginas === 0"
+          [class.opacity-50]="paginaActual === totalPaginas || totalPaginas === 0"
+          class="px-3 py-1 bg-white hover:bg-gray-100"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

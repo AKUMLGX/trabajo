@@ -1,0 +1,176 @@
+<div class="h-full border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto font-['Noto_Sans']">
+  <!-- Título principal con botón de regreso -->
+  <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] text-white py-4 px-6 mb-5 rounded-t-lg shadow-md flex items-center">
+    <button (click)="volver()" class="mr-4 hover:text-gray-200 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+    </button>
+    <h1 class="text-2xl font-bold text-center">
+      {{ asuntoId.startsWith('EUACAPE') ? 'Detalle de Asunto Finalizado' : 'Detalle de Asunto en Trámite' }}
+    </h1>
+  </div>
+  
+  <!-- Contenido principal -->
+  <div class="px-6 pb-6">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+      <!-- Encabezado de la sección -->
+      <div class="flex justify-between items-center p-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-[#691C32]">Información del Asunto</h2>
+        <div class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
+          Estado: {{ asunto.estado }}
+        </div>
+      </div>
+      
+      <!-- Contenido del formulario -->
+      <div class="p-4 grid grid-cols-2 gap-4">
+        <!-- Columna izquierda -->
+        <div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Folio Interno:</label>
+            <input type="text" [value]="asunto.folioInterno" 
+                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Oficio:</label>
+            <input type="text" [value]="asunto.oficio" 
+                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Recepción:</label>
+            <input type="text" [value]="asunto.fechaRecepcion" 
+                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Dictaminador Asignado:</label>
+            <input type="text" [value]="asunto.dictaminadorAsignado" 
+                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+          </div>
+        </div>
+        
+        <!-- Columna derecha -->
+        <div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Carpeta de Investigación:</label>
+            <input type="text" [value]="asunto.carpetaInvestigacion" 
+                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Documento Principal:</label>
+            <input type="text" [value]="asunto.documentoPrincipal" 
+                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Plazo de Atención (días):</label>
+            <input type="text" [value]="asunto.plazoAtencion" 
+                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+          </div>
+        </div>
+        
+        <!-- Observaciones (span de dos columnas) -->
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Observaciones:</label>
+          <textarea [value]="asunto.observaciones" rows="4" 
+                    class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 resize-none" readonly></textarea>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sección de documentos asociados -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-[#691C32]">Documentos Asociados</h2>
+      </div>
+      
+      <!-- Tabla de documentos -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-[#691C32] text-white">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Documento</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha de Carga</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let documento of documentos; let i = index" 
+                [class]="i % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ documento.nombre }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ documento.fechaCarga }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <div class="flex justify-center space-x-2">
+                  <button (click)="verDocumento(documento.nombre)" 
+                          class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#691C32] hover:bg-[#4a1423] focus:outline-none">
+                    Ver
+                  </button>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Mensaje si no hay documentos -->
+            <tr *ngIf="documentos.length === 0">
+              <td colspan="3" class="px-6 py-8 text-center text-sm text-gray-500">No hay documentos asociados a este asunto</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de visor de PDF -->
+  <div *ngIf="mostrarPDFViewer" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl w-11/12 h-5/6 max-w-screen-xl">
+      <!-- Encabezado del modal -->
+      <div class="flex justify-between items-center p-4 border-b">
+        <h3 class="text-lg font-semibold text-[#691C32]">{{ pdfTitulo }}</h3>
+        <button (click)="cerrarPDFViewer()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Controles del visor -->
+      <div class="flex justify-between items-center p-2 bg-gray-100">
+        <div>
+          <span class="text-sm p-1">Visualizando documento</span>
+        </div>
+        <div>
+          <button (click)="descargarDocumento(pdfTitulo)" class="inline-flex items-center px-3 py-1 border border-[#691C32] text-xs font-medium rounded shadow-sm text-[#691C32] bg-white hover:bg-gray-50 focus:outline-none">
+            Descargar
+          </button>
+        </div>
+      </div>
+      
+      <!-- Visor de PDF usando ngx-extended-pdf-viewer -->
+      <div class="h-full p-2 bg-gray-100">
+        <!-- Indicador de carga -->
+        <div *ngIf="pdfCargando" class="h-full flex flex-col items-center justify-center">
+          <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
+          <p class="mt-4 text-gray-600">Cargando documento...</p>
+        </div>
+        
+        <!-- PDF Viewer -->
+        <div *ngIf="!pdfCargando" class="h-full">
+          <ngx-extended-pdf-viewer 
+            *ngIf="pdfUrl" 
+            [src]="pdfUrl"
+            [height]="'80vh'" 
+            [useBrowserLocale]="true"
+            [showOpenFileButton]="false"
+            [showPrintButton]="false"
+            [showDownloadButton]="false"
+            [showBookmarkButton]="false"
+            [showSecondaryToolbarButton]="false"
+            [zoom]="zoom">
+          </ngx-extended-pdf-viewer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,128 +1,381 @@
-<!-- <div class="h-auto   text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
-  <div class="flex justify-center items-center text-3xl mt-10 font-montserrat ">Atención de Requerimientos. </div>
-  <div class=" flex  items-center justify-center mt-16">
-    <div class="flex gap-2">
-      En tramite
-      <div class="bg-white shadow-md rounded-lg p-4 flex  flex-row items-center justify-between ">
-        <div class="flex-1">
-          <h2 class="text-lg font-semibold mb-2 font-montserrat"> En trámite: </h2>
-          <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 250 </h2>
+<div class="h-full text-3xl border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto font-['Noto_Sans']">
+  <!-- Título principal con estilo mejorado -->
+  <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] text-white py-4 px-6 mb-5 rounded-t-lg shadow-md">
+    <h1 class="text-2xl font-bold text-center">Asuntos asignados a la administración N</h1>
+  </div>
+  
+  
+  <!-- Tarjetas de estado - versión mejorada -->
+  <div class="grid grid-cols-4 gap-6 mb-6 px-12 mt-8">
+    <!-- Tarjeta En Trámite -->
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
+         (click)="mostrarDetalle('nuevos')">
+      <div class="flex justify-center mb-2">
+        <div class="w-20 h-20 rounded-full flex items-center justify-center">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28.018 55.4654C43.214 55.4654 55.533 43.5827 55.533 28.9246C55.533 14.2665 43.214 2.3838 28.018 2.3838C12.8221 2.3838 0.5032 14.2665 0.5032 28.9246C0.5032 43.5827 12.8221 55.4654 28.018 55.4654Z" stroke="#0F60BD" stroke-width="3" stroke-miterlimit="10"/>
+            <path d="M12.5182 32.6602C14.6569 32.6602 16.3907 30.9878 16.3907 28.9248C16.3907 26.8618 14.6569 25.1895 12.5182 25.1895C10.3795 25.1895 8.6458 26.8618 8.6458 28.9248C8.6458 30.9878 10.3795 32.6602 12.5182 32.6602Z" stroke="#0F60BD" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M28.018 32.6602C30.157 32.6602 31.891 30.9878 31.891 28.9248C31.891 26.8618 30.157 25.1895 28.018 25.1895C25.8795 25.1895 24.1458 26.8618 24.1458 28.9248C24.1458 30.9878 25.8795 32.6602 28.018 32.6602Z" stroke="#0F60BD" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M43.518 32.6602C45.657 32.6602 47.391 30.9878 47.391 28.9248C47.391 26.8618 45.657 25.1895 43.518 25.1895C41.38 25.1895 39.646 26.8618 39.646 28.9248C39.646 30.9878 41.38 32.6602 43.518 32.6602Z" stroke="#0F60BD" stroke-width="3" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <div class="flex flex-col items-center justify-center">
-          <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
-            <mat-icon>restore_page</mat-icon>
+      </div>
+      <div class="text-3xl font-bold text-gray-800 mb-1">120</div>
+      <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">En Trámite</div>
           </div>
-          <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none  " [routerLink]="['/layout/tramite-card']"
-            routerLinkActive="active">Ver detalles. <mat-icon>info</mat-icon></button>
+    
+    <!-- Tarjeta Parcial -->
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
+         (click)="mostrarDetalle('pendientes')">
+      <div class="flex justify-center mb-2">
+        <div class="w-20 h-20 rounded-full flex items-center justify-center">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.155 52.6403C16.927 52.149 15.758 51.5694 14.628 50.9111" stroke="#FC6815" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.134 45.5761C3.988 40.8996 1.473 34.7396 1.473 28C1.473 13.3515 13.351 1.4736 28 1.4736C28.825 1.4736 29.64 1.5129 30.446 1.5817" stroke="#FC6815" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7"/>
+            <path d="M34.602 2.2988C35.879 2.623 37.127 3.0455 38.325 3.5564" stroke="#FC6815" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M38.325 3.5566C47.845 7.5847 54.526 17.0065 54.526 28.0002C54.526 42.6486 42.648 54.5265 28 54.5265C24.522 54.5265 21.201 53.8584 18.155 52.6402" stroke="#FC6815" stroke-width="3" stroke-miterlimit="10"/>
+            <path d="M18.44 21.752L26.997 30.319H40.506" stroke="#FC6815" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-                        hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat  "
-          [routerLink]="['/layout/tramite-card']" routerLinkActive="active">Ver detalles.
-          <mat-icon>info</mat-icon></button>
+      </div>
+      <div class="text-3xl font-bold text-gray-800 mb-1">20</div>
+      <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">Parcial</div>
+    </div>
+    
+    <!-- Tarjeta Total -->
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
+         (click)="mostrarDetalle('total')">
+      <div class="flex justify-center mb-2">
+        <div class="w-20 h-20 rounded-full flex items-center justify-center">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28 54.5263C42.65 54.5263 54.526 42.65 54.526 27.9999C54.526 13.3499 42.65 1.4736 28 1.4736C13.349 1.4736 1.473 13.3499 1.473 27.9999C1.473 42.65 13.349 54.5263 28 54.5263Z" stroke="#5BA300" stroke-width="3" stroke-miterlimit="10"/>
+            <path d="M43.169 21.319L24.649 39.8383L12.83 28.0096L17.988 22.7829L24.649 29.4439L37.932 16.1611L43.169 21.319Z" stroke="#5BA300" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="text-3xl font-bold text-gray-800 mb-1">230</div>
+      <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">Total</div>
+    </div>
+
+    <!-- Nueva Tarjeta para Asuntos por Asignar -->
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
+         (click)="irAAsignacion()">
+      <div class="flex justify-center mb-2">
+        <div class="w-20 h-20 rounded-full flex items-center justify-center">
+          <svg width="56" height="56" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_1426_514)">
+              <path d="M35.9999 65.8197C19.5599 65.8197 6.17993 52.4397 6.17993 35.9997C6.17993 19.5597 19.5599 6.17969 35.9999 6.17969C52.4399 6.17969 65.8199 19.5597 65.8199 35.9997C65.8199 52.4397 52.4399 65.8197 35.9999 65.8197ZM35.9999 10.6797C22.0499 10.6797 10.6799 22.0497 10.6799 35.9997C10.6799 49.9497 22.0499 61.3197 35.9999 61.3197C49.9499 61.3197 61.3199 49.9497 61.3199 35.9997C61.3199 22.0497 49.9499 10.6797 35.9999 10.6797Z" fill="#FC9D15"/>
+              <path d="M35.9999 41.3699C37.6799 41.3699 39.0599 39.9899 39.0599 38.3099V21.4799C39.0599 19.7999 37.6799 18.4199 35.9999 18.4199C34.3199 18.4199 32.9399 19.7999 32.9399 21.4799V38.3099C32.9399 39.9899 34.3199 41.3699 35.9999 41.3699Z" fill="#FC9D15"/>
+              <path d="M38.73 48.7802C38.04 48.0602 37.11 47.7002 36 47.7002C34.89 47.7002 33.96 48.0602 33.27 48.7802C32.55 49.5002 32.22 50.4002 32.22 51.5402C32.22 52.5602 32.58 53.4302 33.27 54.0902C33.99 54.7802 34.89 55.1102 36 55.1102C37.11 55.1102 38.04 54.7502 38.73 54.0602C39.42 53.3402 39.78 52.4702 39.78 51.4202C39.78 50.3702 39.42 49.4702 38.73 48.7802Z" fill="#FC9D15"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_1426_514">
+                <rect width="72" height="72" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+      </div>
+      <div class="text-3xl font-bold text-gray-800 mb-1">130</div>
+      <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">Asignar</div>
+    </div>
+  </div>
+  
+  <!-- Indicadores de resumen - versión mejorada -->
+  <div class="flex justify-center gap-16 mb-8">
+    <div class="flex items-center bg-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+      <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <span class="text-sm font-medium text-gray-700">56 Asuntos urgentes por atender</span>
+    </div>
+  </div>
+  
+  <!-- Tabla de asuntos - versión mejorada y funcional -->
+  <div class="bg-white rounded-lg shadow-md overflow-hidden mx-6 mb-6">
+    <div class="p-4 border-b border-gray-200">
+      <h2 class="text-xl font-semibold text-[#691C32] mb-4">Asuntos por dictaminar</h2>
+      
+      <div class="flex justify-center items-center">
+        <!-- Selector de dictaminador más compacto y estético -->
+        <div class="w-56 relative">
+          <div class="flex items-center">
+            <label class="text-sm text-gray-600 font-medium mr-2">Dictaminador:</label>
+            <select #selectDictaminador (change)="cambiarDictaminador(selectDictaminador.value)" 
+                  class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32] appearance-none">
+              <option value="">Todos</option>
+              <option value="1">María Hernández</option>
+              <option value="2">Juan Rodríguez</option>
+              <option value="3">Carlos Sánchez</option>
+              <option value="4">Ana González</option>
+              <option value="5">Luis Torres</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    Parcial
-    <div class="bg-white shadow-md rounded-lg p-4 flex flex-row items-center justify-between">
-      <div class="flex-1 ">
-        <h2 class="text-lg font-semibold mb-2 font-montserrat"> Parcial: </h2>
-        <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 120 </h2>
-      </div>
-      <div class="flex flex-col items-center justify-center">
-        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
-          <mat-icon>incomplete_circle</mat-icon>
-        </div>
-        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-          hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat "
-          [routerLink]="['/layout/parcial-card']" routerLinkActive="active"> Ver detalles.
-          <mat-icon>info</mat-icon></button>
-      </div>
+    
+    <!-- Tabla mejorada -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-[#691C32] text-white">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio Interno</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Autoridad solicitante</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Recepción</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Dictaminador</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <!-- Filas filtradas -->
+          @for (asunto of asuntosFiltrados; track asunto.folio) {
+            <tr [class]="asuntosFiltrados.indexOf(asunto) % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'" 
+                class="cursor-pointer" 
+                (click)="seleccionarFila(asunto.folio)">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.folio}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.autoridad}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.fecha}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.dictaminador}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
+                <div class="flex justify-center space-x-2">
+                  <!-- Botón para ver detalle -->
+                  <button (click)="verDetalle(asunto.folio, $event)" 
+                          class="text-white bg-[#691C32] hover:bg-[#4a1423] p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32] tooltip"
+                          title="Ver detalle">
+                    <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0_1406_282)">
+                        <path d="M16 26.6004C8.73334 26.6004 3.09334 16.8804 2.85334 16.4671L2.58667 16.0004L2.85334 15.5337C3.09334 15.1204 8.73334 5.40039 16 5.40039C23.2667 5.40039 28.9067 15.1204 29.1467 15.5337L29.4133 16.0004L29.1467 16.4671C28.9067 16.8804 23.2667 26.6004 16 26.6004ZM4.76 16.0004C5.93334 17.8671 10.6267 24.7337 16 24.7337C21.3733 24.7337 26.0667 17.8671 27.24 16.0004C26.0667 14.1337 21.3733 7.26706 16 7.26706C10.6267 7.26706 5.93334 14.1337 4.76 16.0004Z" fill="white"/>
+                        <path d="M16 21.6004C12.9067 21.6004 10.4 19.0937 10.4 16.0004C10.4 12.9071 12.9067 10.4004 16 10.4004C19.0934 10.4004 21.6 12.9071 21.6 16.0004C21.6 19.0937 19.0934 21.6004 16 21.6004ZM16 12.2671C13.9467 12.2671 12.2667 13.9471 12.2667 16.0004C12.2667 18.0537 13.9467 19.7337 16 19.7337C18.0534 19.7337 19.7334 18.0537 19.7334 16.0004C19.7334 13.9471 18.0534 12.2671 16 12.2671Z" fill="white"/>
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_1406_282">
+                          <rect width="32" height="32" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">No se encontraron asuntos que coincidan con el filtro</td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
-    Finalizado
-    <div class="bg-white shadow-md rounded p-4 flex flex-row items-center justify-between">
-      <div class="flex-1">
-        <h2 class="text-lg font-semibold mb-2 font-montserrat"> Finalizado: </h2>
-        <h2 class="text-lg text-center font-light mr-2 font-montserrat"> 360 </h2>
-      </div>
-      <div class="flex flex-col items-center justify-center">
-        <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2  ">
-          <mat-icon>done</mat-icon>
-        </div>
-        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-         hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat "
-          [routerLink]="['/layout/finalizado-card']" routerLinkActive="active">Ver detalles.
-          <mat-icon>info</mat-icon></button>
+    
+    <!-- Paginación mejorada -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+      <div class="flex-1 flex justify-center">
+        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+          <!-- Botón Anterior -->
+          <button (click)="cambiarPagina('anterior')" 
+                  class="relative inline-flex items-center px-2 py-1.5 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">
+            <span class="sr-only">Anterior</span>
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          
+          <!-- Números de página -->
+          <button (click)="cambiarPagina(1)" 
+                  class="relative inline-flex items-center px-3 py-1.5 border border-[#691C32] bg-[#691C32] text-sm font-medium text-white focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">1</button>
+          <button (click)="cambiarPagina(2)" 
+                  class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">2</button>
+          <button (click)="cambiarPagina(3)" 
+                  class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">3</button>
+          
+          <!-- Botón Siguiente -->
+          <button (click)="cambiarPagina('siguiente')" 
+                  class="relative inline-flex items-center px-2 py-1.5 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">
+            <span class="sr-only">Siguiente</span>
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </nav>
       </div>
     </div>
   </div>
-</div>
-<div class="flex justify-center items-end ">
+  
+  <!-- Botón de prueba -->
+  <div class="mx-6 mb-3 flex justify-end">
+    <button (click)="verPDF('TEST', $event)" 
+          class="text-xs text-gray-500 bg-gray-100 hover:bg-gray-200 py-1 px-2 rounded transition-colors">
+      Probar visor PDF
+    </button>
+  </div>
 
-  <div class="flex w-auto p-4">
-    <div class="w-full ">
-      <div class="bg-white shadow-md rounded-lg p-4 ">
-        <h2 class="text-lg font-semibold mb-2 text-center font-montserrat  ">Gráfico de Calor</h2>
-        <div class="flex">
-          <div class="w-1/2">
-            <div class="flex justify-center w-full">
-              <div class="flex flex-col items-center justify-center ">
-                <div class="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mt-3 mb-2 ">
-                  <mat-icon>traffic</mat-icon>
+  <!-- Modal de detalles del asunto -->
+  <div *ngIf="mostrarDetalleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-2xl">
+      <!-- Encabezado del modal -->
+      <div class="flex justify-between items-center p-3 border-b border-gray-200 bg-[#691C32]">
+        <h3 class="text-lg font-semibold text-white">Detalle del Asunto</h3>
+        <button (click)="cerrarDetalle()" class="text-white hover:text-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+</div>
+      
+      <!-- Contenido del modal -->
+      <div class="p-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-2">
+            <div>
+              <label class="text-xs font-medium text-gray-500">Folio</label>
+              <p class="text-sm font-semibold text-gray-900">{{asuntoSeleccionado?.folio}}</p>
                 </div>
-                <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-verde-Akamba rounded-lg
-                        hover:bg-rojo-Akamba focus:ring-4 focus:outline-none font-montserrat  "
-                  [routerLink]="['/layout/semaforo']" routerLinkActive="active">Ver detalles.
-                  <mat-icon>info</mat-icon></button>
+            <div>
+              <label class="text-xs font-medium text-gray-500">Autoridad Solicitante</label>
+              <p class="text-sm text-gray-900">{{asuntoSeleccionado?.autoridad}}</p>
               </div>
+            <div>
+              <label class="text-xs font-medium text-gray-500">Dictaminador</label>
+              <p class="text-sm text-gray-900">{{asuntoSeleccionado?.dictaminador}}</p>
             </div>
           </div>
-          <div class="w-1/2">
-            <div class=" flex justify-center items-center flex-col gap-12">
-                        <div class="bg-[#D9BCA3]/30  shadow-md rounded-lg p-4 ">
-                              <p class="text-sm  mb-2" >Mayor a 15 dias </p>
+          <div class="space-y-2">
+            <div>
+              <label class="text-xs font-medium text-gray-500">Fecha</label>
+              <p class="text-sm text-gray-900">{{asuntoSeleccionado?.fecha}}</p>
                         </div>
-                        <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
-                              <p class="text-sm">De 5 a 15 dias</p>
+            <div>
+              <label class="text-xs font-medium text-gray-500">Fecha de Captura</label>
+              <p class="text-sm text-gray-900">{{asuntoSeleccionado?.fechaCaptura}}</p>
                         </div>
-                        <div class="bg-[#D9BCA3]/30  shadow-md rounded-md p-4">
-                              <p class="text-sm"> primeros 4 dias</p>
-                        </div>
+            <div>
+              <label class="text-xs font-medium text-gray-500">Estado</label>
+              <p class="text-sm text-gray-900">En Trámite</p>
                       </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex w-1/2  p-4">
-    <div class="w-full ">
-      <div class="bg-white shadow-md rounded-lg p-4">
-        <h2 class="text-lg font-semibold mb-2 text-center">Gráfica</h2>
-        <div class="flex justify-center mt-5 mb-5 ">
-          <app-cardsgraphic />
+        
+        <!-- Acciones del modal -->
+        <div class="mt-4 flex justify-end space-x-2">
+          <button (click)="verPDF(asuntoSeleccionado?.folio || '', $event)" 
+                  class="bg-[#691C32] text-white px-3 py-1.5 text-sm rounded hover:bg-[#4a1423] transition-colors">
+            Ver PDF
+          </button>
+          <button (click)="descargarPDF(asuntoSeleccionado?.folio || '', $event)" 
+                  class="bg-[#691C32] text-white px-3 py-1.5 text-sm rounded hover:bg-[#4a1423] transition-colors">
+            Descargar PDF
+          </button>
+          <button (click)="cerrarDetalle()" 
+                  class="bg-gray-200 text-gray-700 px-3 py-1.5 text-sm rounded hover:bg-gray-300 transition-colors">
+            Cerrar
+          </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Visualizador de PDF - Inicialmente oculto -->
+  <div *ngIf="mostrarPDFViewer" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-5xl h-5/6 flex flex-col">
+      <div class="flex justify-between items-center p-3 border-b border-gray-200 bg-[#691C32]">
+        <h3 class="text-xl font-semibold text-white">{{pdfTitulo}}</h3>
+        <button (click)="cerrarPDF()" class="text-white hover:text-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Controles del PDF -->
+      <div class="bg-gray-100 p-2 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <button (click)="paginaAnterior()" class="bg-[#691C32] text-white p-1.5 rounded hover:bg-[#4a1423] transition-colors" title="Página anterior">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <span class="text-sm font-medium">Página <span class="font-bold">{{paginaActual}}</span></span>
+          <button (click)="paginaSiguiente()" class="bg-[#691C32] text-white p-1.5 rounded hover:bg-[#4a1423] transition-colors" title="Página siguiente">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button (click)="aumentarZoom()" class="bg-[#691C32] text-white p-1.5 rounded hover:bg-[#4a1423] transition-colors" title="Acercar">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6" />
+            </svg>
+          </button>
+          <button (click)="disminuirZoom()" class="bg-[#691C32] text-white p-1.5 rounded hover:bg-[#4a1423] transition-colors" title="Alejar">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+            </svg>
+          </button>
+          <button (click)="pantallaCompleta()" class="bg-[#691C32] text-white p-1.5 rounded hover:bg-[#4a1423] transition-colors" title="Ajustar a pantalla">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Contenedor del PDF -->
+      <div class="flex-1 bg-gray-200 overflow-auto">
+        <!-- Indicador de carga -->
+        <div *ngIf="pdfCargando" class="h-full flex flex-col items-center justify-center">
+          <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
+          <p class="mt-4 text-gray-600">Cargando documento...</p>
+        </div>
+        
+        <!-- PDF Viewer -->
+        <div *ngIf="!pdfCargando" class="h-full flex flex-col items-center justify-center">
+          <!-- Fallback en caso de que no se pueda cargar el iframe -->
+          <div *ngIf="!pdfUrl" class="text-center p-10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <p class="text-gray-600">No se pudo cargar el documento.</p>
+            <button (click)="descargarPDFActual()" class="mt-4 bg-[#691C32] text-white px-4 py-2 rounded hover:bg-[#4a1423] transition-colors">
+              Descargar PDF
+            </button>
+    </div>
+          
+          <!-- Iframe para mostrar PDF -->
+          <iframe 
+            *ngIf="pdfUrl"
+            [src]="pdfUrl | safe" 
+            style="width: 100%; height: 100%; border: none;"
+            type="application/pdf"
+            id="pdfViewer">
+            <p class="text-center py-10 text-gray-500">
+              Tu navegador no puede mostrar este PDF. 
+              <a [href]="pdfUrl" class="text-[#691C32] hover:underline" target="_blank">
+                Haz clic aquí para abrirlo en otra ventana
+              </a>
+            </p>
+          </iframe>
+  </div>
 </div>
-<div class="flex justify-end  ">
-  <div class="flex w-screen  p-4 justify-end">
-    <div class="w-full">
-      <div class="bg-white shadow-md rounded-lg p-4 content-center">
-         <h2 class="text-lg font-semibold mb-2 text-center">Gráfica Vertical</h2>
-        <app-graphic-administracion />
+      
+      <div class="p-3 border-t border-gray-200 flex justify-end space-x-2 bg-gray-100">
+        <button (click)="descargarPDFActual()" class="bg-[#691C32] text-white px-4 py-1.5 rounded-md flex items-center hover:bg-[#4a1423] transition-colors text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Descargar
+        </button>
+        <button (click)="cerrarPDF()" class="bg-gray-300 text-gray-700 px-4 py-1.5 rounded-md hover:bg-gray-400 transition-colors text-sm">
+          Cerrar
+        </button>
       </div>
     </div>
   </div>
-</div> -->
-
-
-<div class="h-full   text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
-
-  <div class="flex justify-center h-screen ">
-    <div class="flex h-[40%] w-full m-[20rem]">
-      <p class="text-center font-montserrat">Trabajamos para ti, modulo en construcción.</p>
-    </div>
-  </div>
-
 </div>

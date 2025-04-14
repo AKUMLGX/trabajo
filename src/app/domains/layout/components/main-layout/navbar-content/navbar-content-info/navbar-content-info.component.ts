@@ -24,6 +24,9 @@ export class NavbarContentInfoComponent {
           } else if(this.path === '/layout/assistance') {
             this.path = 'Bandeja de atención';
             this.moduleDescription = 'Funcionalidades para la atención de asuntos';
+          } else if(this.path === '/layout/asignacion') {
+            this.path = 'Asuntos por asignar';
+            this.moduleDescription = 'Funcionalidades para la asignación de asuntos';
           } else if(this.path === '/layout/tracking') {
             this.path = 'Bandeja de seguimiento';
             this.moduleDescription = 'Funcionalidades para la consulta de las bandejas de captura y atención';

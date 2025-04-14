@@ -1,0 +1,324 @@
+<!-- Componente de Asignación de Asuntos -->
+<div class="h-full text-3xl border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto font-['Noto_Sans']">
+  <!-- Título principal con botón de regreso -->
+  <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] text-white py-4 px-6 mb-5 rounded-t-lg shadow-md flex items-center">
+    <button (click)="volver()" class="mr-4 hover:text-gray-200 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+    </button>
+    <h1 class="text-2xl font-bold text-center">Asuntos por Asignar {{yearActual}}</h1>
+  </div>
+
+  <!-- Panel de filtros mejorado -->
+  <div class="px-6 pb-5">
+    <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-[#691C32]">Filtros de Búsqueda</h2>
+        <button (click)="exportarExcel()" 
+                class="flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Exportar a Excel
+        </button>
+      </div>
+      
+      <!-- Formulario de filtros -->
+      <div class="p-4 bg-gray-50 mt-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          <!-- Filtro por folio -->
+          <div>
+            <label for="filtroFolio" class="block text-sm font-medium text-gray-700 mb-1">Folio:</label>
+            <input type="text" id="filtroFolio" [(ngModel)]="filtroFolio" 
+                   (keyup.enter)="aplicarFiltros()"
+                   class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm" 
+                   placeholder="Buscar por folio...">
+          </div>
+          
+          <!-- Filtro por autoridad -->
+          <div>
+            <label for="filtroAutoridad" class="block text-sm font-medium text-gray-700 mb-1">Autoridad:</label>
+            <select id="filtroAutoridad" [(ngModel)]="filtroAutoridad" 
+                    (change)="aplicarFiltros()" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
+              <option value="">Todas las autoridades</option>
+              <option *ngFor="let autoridad of autoridades" [value]="autoridad">{{autoridad}}</option>
+            </select>
+          </div>
+          
+          <!-- Filtro por estado -->
+          <div>
+            <label for="filtroEstado" class="block text-sm font-medium text-gray-700 mb-1">Estado:</label>
+            <select id="filtroEstado" [(ngModel)]="filtroEstado" 
+                    (change)="aplicarFiltros()" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="en_proceso">En Proceso</option>
+              <option value="asignado">Asignado</option>
+            </select>
+          </div>
+          
+          <!-- Filtro por tipo -->
+          <div>
+            <label for="filtroTipo" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Asunto:</label>
+            <select id="filtroTipo" [(ngModel)]="filtroTipo" 
+                    (change)="aplicarFiltros()" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
+              <option value="">Todos los tipos</option>
+              <option *ngFor="let tipo of tiposAsunto" [value]="tipo">{{tipo}}</option>
+            </select>
+          </div>
+          
+          <!-- Filtro por urgencia -->
+          <div>
+            <label for="filtroUrgencia" class="block text-sm font-medium text-gray-700 mb-1">Urgencia:</label>
+            <select id="filtroUrgencia" [(ngModel)]="filtroUrgencia" 
+                    (change)="aplicarFiltros()" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
+              <option value="">Todas las urgencias</option>
+              <option *ngFor="let urgencia of urgencias" [value]="urgencia">{{urgencia}}</option>
+            </select>
+          </div>
+          
+          <!-- Filtro por fecha (desde) -->
+          <div>
+            <label for="filtroFechaDesde" class="block text-sm font-medium text-gray-700 mb-1">Fecha desde:</label>
+            <input type="date" id="filtroFechaDesde" [(ngModel)]="filtroFechaDesde" 
+                   class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
+          </div>
+          
+          <!-- Filtro por fecha (hasta) -->
+          <div>
+            <label for="filtroFechaHasta" class="block text-sm font-medium text-gray-700 mb-1">Fecha hasta:</label>
+            <input type="date" id="filtroFechaHasta" [(ngModel)]="filtroFechaHasta" 
+                   class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
+          </div>
+        </div>
+        
+        <!-- Botones de acción -->
+        <div class="mt-4 flex justify-end space-x-2">
+          <button (click)="limpiarFiltros()" 
+                  class="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            Limpiar
+          </button>
+          <button (click)="aplicarFiltros()" 
+                  class="px-4 py-2 bg-[#691C32] hover:bg-[#4a1423] text-white rounded-md text-sm transition-colors">
+            Aplicar filtros
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Contador de asuntos -->
+    <div class="bg-white rounded-lg shadow-sm p-3 mb-4 text-center">
+      <span class="text-sm font-medium text-gray-700">Mostrando {{ rangoElementosMostrados }} asuntos por asignar</span>
+    </div>
+  </div>
+
+  <!-- Tabla de Asuntos -->
+  <div class="px-6 pb-6">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-[#691C32] text-white">
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Autoridad</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Tipo</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Urgencia</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Límite</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Estado</th>
+              <th scope="col" class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let asunto of asuntosPaginados; let i = index" 
+                [class]="i % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'"
+                class="cursor-pointer">
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{asunto.folio}}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{asunto.autoridad}}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{asunto.tipo}}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm">
+                <span [ngClass]="{
+                  'bg-red-100 text-red-800': asunto.urgencia === 'Alta',
+                  'bg-yellow-100 text-yellow-800': asunto.urgencia === 'Media',
+                  'bg-green-100 text-green-800': asunto.urgencia === 'Baja'
+                }" class="px-2 py-1 rounded-full text-xs">
+                  {{asunto.urgencia}}
+                </span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{asunto.fecha}}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{asunto.fechaLimite}}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm">
+                <span [class]="getEstadoClass(asunto.estado)" class="px-2 py-1 rounded-full text-xs">
+                  {{asunto.estado}}
+                </span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-center text-sm">
+                <div class="flex justify-center space-x-2">
+                  <!-- Botón Ver -->
+                  <button (click)="verDetalle(asunto.folio, $event)" 
+                          class="text-white bg-[#691C32] hover:bg-[#4a1423] p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32] tooltip"
+                          title="Ver detalle">
+                    <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0_1406_282)">
+                        <path d="M16 26.6004C8.73334 26.6004 3.09334 16.8804 2.85334 16.4671L2.58667 16.0004L2.85334 15.5337C3.09334 15.1204 8.73334 5.40039 16 5.40039C23.2667 5.40039 28.9067 15.1204 29.1467 15.5337L29.4133 16.0004L29.1467 16.4671C28.9067 16.8804 23.2667 26.6004 16 26.6004ZM4.76 16.0004C5.93334 17.8671 10.6267 24.7337 16 24.7337C21.3733 24.7337 26.0667 17.8671 27.24 16.0004C26.0667 14.1337 21.3733 7.26706 16 7.26706C10.6267 7.26706 5.93334 14.1337 4.76 16.0004Z" fill="white"/>
+                        <path d="M16 21.6004C12.9067 21.6004 10.4 19.0937 10.4 16.0004C10.4 12.9071 12.9067 10.4004 16 10.4004C19.0934 10.4004 21.6 12.9071 21.6 16.0004C21.6 19.0937 19.0934 21.6004 16 21.6004ZM16 12.2671C13.9467 12.2671 12.2667 13.9471 12.2667 16.0004C12.2667 18.0537 13.9467 19.7337 16 19.7337C18.0534 19.7337 19.7334 18.0537 19.7334 16.0004C19.7334 13.9471 18.0534 12.2671 16 12.2671Z" fill="white"/>
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_1406_282">
+                          <rect width="32" height="32" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </button>
+
+                  <!-- Botón Descargar -->
+                  <button (click)="descargarPDF(asunto.folio, $event)" 
+                          class="text-white bg-[#834655] hover:bg-[#6e3a47] p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32] tooltip"
+                          title="Descargar PDF">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="white">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                  </button>
+
+                  <!-- Botón Asignar -->
+                  <button (click)="abrirModalAsignacion(asunto, $event)" 
+                          class="text-white bg-[#9A526B] hover:bg-[#7E425B] p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32] tooltip"
+                          title="Asignar asunto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="white">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Mensaje si no hay resultados -->
+            <tr *ngIf="asuntosFiltrados.length === 0">
+              <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">No se encontraron asuntos para asignar con los filtros seleccionados</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Paginación mejorada -->
+      <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+        <div class="flex-1 flex justify-center">
+          <div class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+            <!-- Botón Anterior -->
+            <button (click)="cambiarPagina('anterior')" 
+                    [disabled]="paginaActual === 1"
+                    [class.opacity-50]="paginaActual === 1"
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+              <span class="sr-only">Anterior</span>
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            
+            <!-- Páginas -->
+            <ng-container *ngFor="let num of [].constructor(totalPaginas > 5 ? 5 : totalPaginas); let i = index">
+              <button *ngIf="mostrarPagina(i + 1)"
+                      (click)="cambiarPagina(getPaginaNumero(i))" 
+                      [class]="paginaActual === getPaginaNumero(i) ? 'relative inline-flex items-center px-4 py-2 border border-[#691C32] bg-[#691C32] text-sm font-medium text-white' : 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50'">
+                {{ getPaginaNumero(i) }}
+              </button>
+            </ng-container>
+            
+            <!-- Botón Siguiente -->
+            <button (click)="cambiarPagina('siguiente')" 
+                    [disabled]="paginaActual >= totalPaginas"
+                    [class.opacity-50]="paginaActual >= totalPaginas"
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+              <span class="sr-only">Siguiente</span>
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Asignación -->
+  <div *ngIf="mostrarModalAsignacion" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-md">
+      <div class="flex justify-between items-center p-3 border-b border-gray-200 bg-[#691C32]">
+        <h3 class="text-lg font-semibold text-white">Asignar Asunto</h3>
+        <button (click)="cerrarModalAsignacion()" class="text-white hover:text-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="p-4">
+        <div class="mb-4">
+          <p class="text-sm text-gray-600 mb-3">
+            <span class="font-semibold">Folio:</span> {{ asuntoSeleccionado?.folio }}
+          </p>
+          <p class="text-sm text-gray-600 mb-3">
+            <span class="font-semibold">Autoridad:</span> {{ asuntoSeleccionado?.autoridad }}
+          </p>
+          <p class="text-sm text-gray-600 mb-3">
+            <span class="font-semibold">Tipo:</span> {{ asuntoSeleccionado?.tipo }}
+          </p>
+          <p class="text-sm text-gray-600 mb-5">
+            <span class="font-semibold">Urgencia:</span> {{ asuntoSeleccionado?.urgencia }}
+          </p>
+          
+          <label class="block text-sm font-medium text-gray-700 mb-2">Seleccionar Dictaminador</label>
+          <select [(ngModel)]="dictaminadorSeleccionado" 
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]">
+            <option value="">Seleccione un dictaminador</option>
+            <option *ngFor="let dictaminador of dictaminadores" [value]="dictaminador.id">
+              {{dictaminador.nombre}} (Carga actual: {{dictaminador.carga}} | {{dictaminador.especialidad}})
+            </option>
+          </select>
+        </div>
+
+        <div class="flex justify-end space-x-2">
+          <button (click)="cerrarModalAsignacion()" 
+                  class="bg-gray-200 text-gray-700 px-3 py-1.5 text-sm rounded hover:bg-gray-300 transition-colors">
+            Cancelar
+          </button>
+          <button (click)="asignarAsunto()" 
+                  class="bg-[#691C32] text-white px-3 py-1.5 text-sm rounded hover:bg-[#4a1423] transition-colors">
+            Asignar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de visualización de PDF -->
+  <div *ngIf="mostrarDetallePDF" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-4xl h-[80vh]">
+      <div class="flex justify-between items-center p-3 border-b border-gray-200 bg-[#691C32]">
+        <h3 class="text-lg font-semibold text-white">Visualización de documento</h3>
+        <button (click)="mostrarDetallePDF = false" class="text-white hover:text-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="p-4 h-full flex flex-col">
+        <div class="bg-gray-100 p-4 rounded-lg h-full flex items-center justify-center">
+          <div class="text-center text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p class="text-lg font-medium mb-2">Visualizador de documentos</p>
+            <p class="text-sm">Esta es una simulación de vista de PDF. En un entorno real, aquí se mostraría el documento del asunto.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
