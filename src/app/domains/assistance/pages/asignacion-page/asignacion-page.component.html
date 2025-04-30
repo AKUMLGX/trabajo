@@ -1,4 +1,122 @@
 <!-- Página de Asignación -->
 <div class="h-full">
-  <app-asignacion-card></app-asignacion-card>
+  <div class="p-6">
+    <div class="flex items-center mb-6">
+      <button (click)="regresar()" class="text-[#691C32] mr-4">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="text-2xl font-bold text-[#691C32]">Asuntos por asignar  2024 !!!!!!!!</h1>
+    </div>
+
+    <div class="flex justify-end mb-4">
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-gray-500">
+          <mat-icon>search</mat-icon>
+        </span>
+        <input type="text"
+               [(ngModel)]="searchTerm"
+               placeholder="Buscar..."
+               class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#691C32]">
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-[#691C32] text-white">
+            <th class="py-2 px-3 text-left">Ind.</th>
+            <th class="py-2 px-3 text-left">Folio Interno</th>
+            <th class="py-2 px-3 text-left">Carpeta de Investigación</th>
+            <th class="py-2 px-3 text-left">Oficio</th>
+            <th class="py-2 px-3 text-left">Persona Relacionada</th>
+            <th class="py-2 px-3 text-left">Fecha Recepción</th>
+            <th class="py-2 px-3 text-left">Plazo Atención</th>
+            <th class="py-2 px-3 text-left">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let asunto of tablePorAsignarIndicador"
+              class="border-b hover:bg-gray-50 even:bg-gray-50">
+            <td class="py-2 px-3">
+              <!-- <div [class]="'w-3 h-3 rounded-full ' + getColorSemaforo(asunto)"></div> -->
+            </td>
+            <td class="py-2 px-3">{{asunto.folio_interno}}</td>
+            <td class="py-2 px-3">{{asunto.carpeta_investigacion}}</td>
+            <td class="py-2 px-3">{{asunto.oficio}}</td>
+            <td class="py-2 px-3">{{asunto.persona_relacionada}}</td>
+            <td class="py-2 px-3">{{asunto.fecha_recepcion}}</td>
+            <td class="py-2 px-3">{{asunto.fecha_recepcion}}</td>
+
+            <td class="py-2 px-3 space-x-2">
+              <button
+                      class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C]">
+                Detalle
+              </button>
+              <button
+                      class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C]">
+                Ver
+              </button>
+              <button
+                      class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C]">
+                Asignar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="flex justify-between items-center p-4 bg-gray-50">
+        <div class="text-sm text-gray-600">
+          Mostrando {{startIndex + 1}} a {{endIndex}} de {{asuntosFiltrados.length}} registros
+        </div>
+        <div class="flex items-center space-x-2">
+          <button class="px-3 py-1 border rounded hover:bg-gray-100"
+                  [disabled]="currentPage === 1"
+                  [class.opacity-50]="currentPage === 1"
+                  (click)="irAPagina(1)">
+            Primero
+          </button>
+          <button class="px-3 py-1 border rounded hover:bg-gray-100"
+                  [disabled]="currentPage === 1"
+                  [class.opacity-50]="currentPage === 1"
+                  (click)="irAPagina(currentPage - 1)">
+            Anterior
+          </button>
+          <span class="px-3 py-1 border rounded bg-[#691C32] text-white">
+            {{currentPage}} / {{totalPages}}
+          </span>
+          <button class="px-3 py-1 border rounded hover:bg-gray-100"
+                  [disabled]="currentPage === totalPages"
+                  [class.opacity-50]="currentPage === totalPages"
+                  (click)="irAPagina(currentPage + 1)">
+            Siguiente
+          </button>
+          <button class="px-3 py-1 border rounded hover:bg-gray-100"
+                  [disabled]="currentPage === totalPages"
+                  [class.opacity-50]="currentPage === totalPages"
+                  (click)="irAPagina(totalPages)">
+            Último
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 bg-white rounded-lg shadow-md p-4 inline-block">
+      <div class="text-base font-medium text-[#691C32] mb-3">Indicadores de antigüedad:</div>
+      <div class="flex items-center space-x-8">
+        <div class="flex items-center">
+          <div class="w-4 h-4 rounded-full bg-green-500 mr-3 shadow-sm"></div>
+          <span class="text-sm font-medium">Menor a 4 días</span>
+        </div>
+        <div class="flex items-center">
+          <div class="w-4 h-4 rounded-full bg-yellow-500 mr-3 shadow-sm"></div>
+          <span class="text-sm font-medium">Entre 5 y 15 días</span>
+        </div>
+        <div class="flex items-center">
+          <div class="w-4 h-4 rounded-full bg-red-500 mr-3 shadow-sm"></div>
+          <span class="text-sm font-medium">Mayor a 15 días</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

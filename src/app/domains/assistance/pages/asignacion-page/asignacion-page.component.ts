@@ -6,6 +6,8 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
+import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 
 interface Asunto {
   folioInterno: string;
@@ -34,8 +36,9 @@ interface Abogado {
     FormsModule,
     PdfViewerModule
   ],
+  templateUrl:'./asignacion-page.component.html',
+  // src\app\domains\assistance\pages\asignacion-page\asignacion-page.component.html
   template: `
-    <div class="p-6">
       <div class="flex items-center mb-6">
         <button (click)="regresar()" class="text-[#691C32] mr-4">
           <mat-icon>arrow_back</mat-icon>
@@ -48,13 +51,13 @@ interface Abogado {
           <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-gray-500">
             <mat-icon>search</mat-icon>
           </span>
-          <input type="text" 
+          <input type="text"
                  [(ngModel)]="searchTerm"
-                 placeholder="Buscar..." 
+                 placeholder="Buscar..."
                  class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#691C32]">
         </div>
       </div>
-      
+
       <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <table class="w-full">
           <thead>
@@ -70,7 +73,7 @@ interface Abogado {
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let asunto of asuntosOrdenados" 
+            <tr *ngFor="let asunto of asuntosOrdenados"
                 class="border-b hover:bg-gray-50 even:bg-gray-50">
               <td class="py-2 px-3">
                 <div [class]="'w-3 h-3 rounded-full ' + getColorSemaforo(asunto)"></div>
@@ -82,11 +85,11 @@ interface Abogado {
               <td class="py-2 px-3">{{asunto.fechaRecepcion}}</td>
               <td class="py-2 px-3">{{asunto.plazoAtencion}}</td>
               <td class="py-2 px-3 space-x-2">
-                <button (click)="verDetalle(asunto)" 
+                <button (click)="verDetalle(asunto)"
                         class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C]">
                   Detalle
                 </button>
-                <button (click)="verPDF(asunto)" 
+                <button (click)="verPDF(asunto)"
                         class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C]">
                   Ver
                 </button>
@@ -104,14 +107,14 @@ interface Abogado {
             Mostrando {{startIndex + 1}} a {{endIndex}} de {{asuntosFiltrados.length}} registros
           </div>
           <div class="flex items-center space-x-2">
-            <button class="px-3 py-1 border rounded hover:bg-gray-100" 
+            <button class="px-3 py-1 border rounded hover:bg-gray-100"
                     [disabled]="currentPage === 1"
                     [class.opacity-50]="currentPage === 1"
                     (click)="irAPagina(1)">
               Primero
             </button>
-            <button class="px-3 py-1 border rounded hover:bg-gray-100" 
-                    [disabled]="currentPage === 1" 
+            <button class="px-3 py-1 border rounded hover:bg-gray-100"
+                    [disabled]="currentPage === 1"
                     [class.opacity-50]="currentPage === 1"
                     (click)="irAPagina(currentPage - 1)">
               Anterior
@@ -119,13 +122,13 @@ interface Abogado {
             <span class="px-3 py-1 border rounded bg-[#691C32] text-white">
               {{currentPage}} / {{totalPages}}
             </span>
-            <button class="px-3 py-1 border rounded hover:bg-gray-100" 
-                    [disabled]="currentPage === totalPages" 
+            <button class="px-3 py-1 border rounded hover:bg-gray-100"
+                    [disabled]="currentPage === totalPages"
                     [class.opacity-50]="currentPage === totalPages"
                     (click)="irAPagina(currentPage + 1)">
               Siguiente
             </button>
-            <button class="px-3 py-1 border rounded hover:bg-gray-100" 
+            <button class="px-3 py-1 border rounded hover:bg-gray-100"
                     [disabled]="currentPage === totalPages"
                     [class.opacity-50]="currentPage === totalPages"
                     (click)="irAPagina(totalPages)">
@@ -152,10 +155,9 @@ interface Abogado {
           </div>
         </div>
       </div>
-    </div>
-
+    </div> -
     <!-- Modal de Asignación -->
-    <div *ngIf="asuntoSeleccionado" 
+    <div *ngIf="asuntoSeleccionado"
          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
       <div class="bg-white rounded-lg shadow-xl w-[480px] transform transition-all overflow-hidden">
         <!-- Encabezado del modal -->
@@ -165,7 +167,7 @@ interface Abogado {
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        
+
         <!-- Cuerpo del modal -->
         <div class="p-6">
           <!-- Información del asunto -->
@@ -193,14 +195,14 @@ interface Abogado {
               </div>
             </div>
           </div>
-          
+
           <!-- Selección de abogado -->
           <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">
               Seleccione un abogado para asignar
             </label>
             <div class="relative">
-              <select [(ngModel)]="abogadoSeleccionado" 
+              <select [(ngModel)]="abogadoSeleccionado"
                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white">
                 <option value="">Seleccione...</option>
                 <optgroup label="Administración 1">
@@ -220,7 +222,7 @@ interface Abogado {
             </div>
           </div>
         </div>
-        
+
         <!-- Pie del modal -->
         <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
           <button (click)="cancelarAsignacion()"
@@ -239,7 +241,7 @@ interface Abogado {
     </div>
 
     <!-- Modal de Visualización de PDF -->
-    <div *ngIf="mostrarPDFViewer" 
+    <div *ngIf="mostrarPDFViewer"
          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
       <div class="bg-white rounded-lg shadow-xl w-[85%] h-[85%] max-h-[90vh] max-w-6xl transform transition-all overflow-hidden flex flex-col my-4 mx-auto">
         <!-- Encabezado del modal -->
@@ -249,7 +251,7 @@ interface Abogado {
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        
+
         <!-- Cuerpo del modal -->
         <div class="flex-1 overflow-auto bg-gray-100 p-4 relative">
           <pdf-viewer
@@ -260,7 +262,7 @@ interface Abogado {
             style="display: block; width: 100%; height: 100%;"
           ></pdf-viewer>
         </div>
-        
+
         <!-- Pie del modal -->
         <div class="bg-gray-50 px-6 py-3 flex justify-end space-x-3 border-t sticky bottom-0 z-10">
           <button (click)="descargarPDFActual()"
@@ -277,7 +279,7 @@ interface Abogado {
     </div>
 
     <!-- Modal de Visualización de Detalle -->
-    <div *ngIf="asuntoDetalle" 
+    <div *ngIf="asuntoDetalle"
          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
       <div class="bg-white rounded-lg shadow-xl w-[600px] transform transition-all overflow-hidden">
         <!-- Encabezado del modal -->
@@ -287,7 +289,7 @@ interface Abogado {
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        
+
         <!-- Cuerpo del modal -->
         <div class="p-6">
           <!-- Información básica del asunto -->
@@ -296,33 +298,33 @@ interface Abogado {
               <div [class]="'w-5 h-5 rounded-full mr-3 ' + getColorSemaforo(asuntoDetalle)"></div>
               <h3 class="text-lg font-bold text-[#691C32]">{{asuntoDetalle.personaRelacionada}}</h3>
             </div>
-            
+
             <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
               <div class="flex flex-col">
                 <div class="text-sm text-gray-500">Folio Interno</div>
                 <div class="font-medium">{{asuntoDetalle.folioInterno}}</div>
               </div>
-              
+
               <div class="flex flex-col">
                 <div class="text-sm text-gray-500">Carpeta de Investigación</div>
                 <div class="font-medium">{{asuntoDetalle.carpetaInvestigacion}}</div>
               </div>
-              
+
               <div class="flex flex-col">
                 <div class="text-sm text-gray-500">Oficio</div>
                 <div class="font-medium">{{asuntoDetalle.oficio}}</div>
               </div>
-              
+
               <div class="flex flex-col">
                 <div class="text-sm text-gray-500">Fecha de Recepción</div>
                 <div class="font-medium">{{asuntoDetalle.fechaRecepcion}}</div>
               </div>
-              
+
               <div class="flex flex-col">
                 <div class="text-sm text-gray-500">Plazo de Atención</div>
                 <div class="font-medium">{{asuntoDetalle.plazoAtencion}}</div>
               </div>
-              
+
               <div class="flex flex-col">
                 <div class="text-sm text-gray-500">Días de Antigüedad</div>
                 <div class="font-medium">
@@ -333,17 +335,17 @@ interface Abogado {
               </div>
             </div>
           </div>
-          
+
           <!-- Sección de acciones rápidas -->
           <div class="border-t pt-4 mt-4">
             <h4 class="text-sm font-medium text-gray-700 mb-3">Acciones rápidas</h4>
             <div class="flex space-x-3">
-              <button (click)="verDocumentoDesdeDetalle(asuntoDetalle)" 
+              <button (click)="verDocumentoDesdeDetalle(asuntoDetalle)"
                       class="flex items-center justify-center px-4 py-2 bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm text-sm">
                 <mat-icon class="mr-1">visibility</mat-icon>
                 Ver documento
               </button>
-              <button (click)="abrirModalAsignacion(asuntoDetalle); cerrarDetalle()" 
+              <button (click)="abrirModalAsignacion(asuntoDetalle); cerrarDetalle()"
                       class="flex items-center justify-center px-4 py-2 bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm text-sm">
                 <mat-icon class="mr-1">assignment_ind</mat-icon>
                 Asignar
@@ -351,7 +353,7 @@ interface Abogado {
             </div>
           </div>
         </div>
-        
+
         <!-- Pie del modal -->
         <div class="bg-gray-50 px-6 py-4 flex justify-end border-t">
           <button (click)="cerrarDetalle()"
@@ -368,11 +370,11 @@ interface Abogado {
       height: 100%;
       background-color: #F3EAE4;
     }
-    
+
     .animate-fade-in {
       animation: fadeIn 0.2s ease-in-out;
     }
-    
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -384,7 +386,7 @@ interface Abogado {
       display: flex;
       justify-content: center;
     }
-    
+
     ::ng-deep .page {
       margin: 10px auto !important;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -393,6 +395,7 @@ interface Abogado {
 })
 export class AsignacionPageComponent implements OnInit {
   asuntos: Asunto[] = [];
+  tablePorAsignarIndicador : tableAsuntosPorDictaminar[]= []
   searchTerm: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 10; // Número de elementos por página
@@ -420,7 +423,16 @@ export class AsignacionPageComponent implements OnInit {
     { nombre: 'Edgar Alan Carmona Trejo', cargo: 'Jefe de Departamento', administracion: 2 }
   ];
 
-  constructor(private router: Router) {}
+
+  asignadosTable:boolean= false
+  documento:string='REQUERIMIENTO'
+
+    porAsignarDataTable :porAsignarRequest ={
+    documento : this.documento,
+    asignados: this.asignadosTable
+  }
+
+  constructor(private router: Router ,  private cards:CardsInfoBandejadeAtencionService ) {}
 
   ngOnInit() {
     // Datos de ejemplo que reflejan las reglas del semáforo
@@ -534,12 +546,23 @@ export class AsignacionPageComponent implements OnInit {
         diasAntiguedad: 12
       }
     ];
+    this.tablePorAsignar()
+
   }
+
+  tablePorAsignar(){
+    this.cards.tablePorAsignar(this.porAsignarDataTable).subscribe({
+      next: (res)=>{
+         this.tablePorAsignarIndicador = res
+      }
+    }
+    )
+   }
 
   get asuntosFiltrados() {
     // Filtrar por persona relacionada si hay término de búsqueda
-    return this.asuntos.filter(asunto => 
-      this.searchTerm === '' || 
+    return this.asuntos.filter(asunto =>
+      this.searchTerm === '' ||
       asunto.personaRelacionada.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
@@ -563,15 +586,15 @@ export class AsignacionPageComponent implements OnInit {
       // Primero ordenar por prioridad (rojo > amarillo > verde)
       const prioridadA = this.getPrioridad(a.diasAntiguedad);
       const prioridadB = this.getPrioridad(b.diasAntiguedad);
-      
+
       if (prioridadA !== prioridadB) {
         return prioridadB - prioridadA;
       }
-      
+
       // Si tienen la misma prioridad, ordenar por días de antigüedad
       return b.diasAntiguedad - a.diasAntiguedad;
     });
-    
+
     // Luego tomamos solo los que corresponden a la página actual
     return allOrdered.slice(this.startIndex, this.endIndex);
   }
@@ -590,7 +613,7 @@ export class AsignacionPageComponent implements OnInit {
 
   getColorSemaforo(asunto: Asunto): string {
     const dias = asunto.diasAntiguedad;
-    
+
     if (dias > 15) {
       return 'bg-red-500';
     } else if (dias >= 5 && dias <= 15) {
@@ -608,14 +631,14 @@ export class AsignacionPageComponent implements OnInit {
     this.asuntoParaDescargar = asunto;
     this.mostrarPDFViewer = true;
   }
-  
+
   cerrarPDF() {
     this.mostrarPDFViewer = false;
     this.pdfSrc = '';
     this.pdfTitulo = '';
     this.asuntoParaDescargar = null;
   }
-  
+
   descargarPDFActual() {
     if (this.asuntoParaDescargar) {
       this.descargarPDF(this.asuntoParaDescargar);
@@ -625,7 +648,7 @@ export class AsignacionPageComponent implements OnInit {
   descargarPDF(asunto: Asunto) {
     // Simulación de descarga de PDF usando la API de Blob
     const pdfUrl = this.obtenerURLPDF(asunto);
-    
+
     // Crear un elemento invisible para descargar
     fetch(pdfUrl)
       .then(response => response.blob())
@@ -640,12 +663,12 @@ export class AsignacionPageComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       });
   }
-  
+
   // Método para simular la obtención de URL de PDF (en producción esto vendría del backend)
   private obtenerURLPDF(asunto: Asunto): string {
     // Para el ejemplo, usamos URLs de PDFs de ejemplo según el tipo de documento
     // En producción, aquí consultarías tu API para obtener el PDF real
-    
+
     // PDF de ejemplo para pruebas
     return 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
   }
@@ -683,7 +706,7 @@ export class AsignacionPageComponent implements OnInit {
 
   getBackgroundColor(asunto: Asunto): string {
     const dias = asunto.diasAntiguedad;
-    
+
     if (dias > 15) {
       return 'bg-red-500';
     } else if (dias >= 5 && dias <= 15) {
@@ -696,7 +719,7 @@ export class AsignacionPageComponent implements OnInit {
   verDocumentoDesdeDetalle(asunto: Asunto) {
     // Cerrar el modal de detalle primero
     this.cerrarDetalle();
-    
+
     // Luego mostrar el PDF
     setTimeout(() => {
       this.verPDF(asunto);
