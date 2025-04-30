@@ -86,7 +86,7 @@ export class CardsComponent implements OnInit {
   }
 
   documento:string='REQUERIMIENTO'
-  asignados:boolean= false
+  asignados:boolean= true
   porAsignarTotal:number=0
 
   tablePorDictaminar : tableAsuntosPorDictaminar[]= []
@@ -96,6 +96,7 @@ export class CardsComponent implements OnInit {
     documento : this.documento,
     asignados: this.asignados
   }
+
   porAsignarDataResponse: porAsignarResponse={
     total: this.porAsignarTotal
   }
@@ -161,9 +162,9 @@ export class CardsComponent implements OnInit {
     // Calcular conteo de asuntos por dictaminador
     this.calcularConteoAsuntos();
 
-    this.mostrarCards()
     this.mostarCardPorAsignar()
     this.asuntosPorDictaminar()
+    this.mostrarCards()
   }
   mostrarCards(){
     this.cards.cardsInfo().subscribe(res=>{
@@ -182,6 +183,7 @@ export class CardsComponent implements OnInit {
   }
   )
  }
+
 
  asuntosPorDictaminar(){
   this.cards.asutosPorDictaminar(this.porAsignarData).subscribe({

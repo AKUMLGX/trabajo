@@ -11,15 +11,6 @@ interface Requerimiento {
   REQUERIMIENTO: Cards;
 }
 
-
-interface Respuesta {
-  RESPUESTA_INTERNA: Cards;
-}
-
-interface Respuesta_A_FGR {
-  RESPUESTA_A_FGR: Cards;
-}
-
 export interface CardsResponse {
   data: (Requerimiento  )[];
 }
