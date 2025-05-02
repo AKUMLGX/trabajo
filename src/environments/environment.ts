@@ -50,6 +50,7 @@ export const environment={
   cardsInfoPorAsignar:'asunto/get_asunto_por_asignacion/total',
   asuntosPorDictaminar: 'asunto/get_asunto_por_asignacion',
   asuntosPorAsignarTable: 'asunto/get_asunto_por_asignacion',
+  usuariosPorAdministracion:'asunto/usuarios_por_administracion ',
   //#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',

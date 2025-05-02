@@ -35,7 +35,6 @@ export const successfullInterceptor: HttpInterceptorFn = (
           }
         }
       }else{
-        // debugger
         if (request.method === "GET"  ){
           if (event instanceof HttpResponse) {
             if (event.status === 200) {

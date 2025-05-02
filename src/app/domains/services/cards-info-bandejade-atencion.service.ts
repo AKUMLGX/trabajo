@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { asutosPorDictaminador, porAsignarRequest, tableAsuntosPorDictaminar } from '../interfaces/porAsignarRequest.interface';
 import { porAsignarResponse } from '../interfaces/porAsignarResponse.interface';
 import { Cards, CardsResponse } from '../interfaces/datosCards.interface';
+import { usuariosPorAdministracion } from '../interfaces/usuarios-Por-administracion.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,11 @@ return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl ,data)
 asutosPorDictaminar(data:asutosPorDictaminador):Observable<tableAsuntosPorDictaminar[]>{
   let tarjetUrl = environment.baseUrl + environment.asuntosPorDictaminar
   return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl,data)
+}
+
+usuariosPorAdminitracion(){
+  const tarjetURL = environment.baseUrl + environment.usuariosPorAdministracion;
+  return this.http.get<usuariosPorAdministracion[]>(tarjetURL)
 }
 
 }

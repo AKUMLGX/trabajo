@@ -21,7 +21,8 @@ export interface tableAsuntosPorDictaminar{
   turno_jefatura: string,
   autoridad_remitente: string,
   id_asunto: number,
-  es_historico: true
+  es_historico: true,
+  plazo_atencion:number
 }
 
 export interface tableAsuntosPorAsignar{

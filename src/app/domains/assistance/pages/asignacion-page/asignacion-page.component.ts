@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
+import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
+import { ModalService } from '../../../shared/services/modal.service';
 
 interface Asunto {
   folioInterno: string;
@@ -43,7 +45,7 @@ interface Abogado {
         <button (click)="regresar()" class="text-[#691C32] mr-4">
           <mat-icon>arrow_back</mat-icon>
         </button>
-        <h1 class="text-2xl font-bold text-[#691C32]">Asuntos por asignar 2024</h1>
+        <h1 class="text-2xl font-bold text-[#691C32]">Asuntos por asignar 2024 ddddddd</h1>
       </div>
 
       <div class="flex justify-end mb-4">
@@ -157,88 +159,7 @@ interface Abogado {
       </div>
     </div> -
     <!-- Modal de Asignación -->
-    <div *ngIf="asuntoSeleccionado"
-         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
-      <div class="bg-white rounded-lg shadow-xl w-[480px] transform transition-all overflow-hidden">
-        <!-- Encabezado del modal -->
-        <div class="bg-[#691C32] text-white py-4 px-6 flex items-center justify-between">
-          <h2 class="text-xl font-bold">Asignar asunto</h2>
-          <button (click)="cancelarAsignacion()" class="text-white hover:text-gray-200 focus:outline-none">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
 
-        <!-- Cuerpo del modal -->
-        <div class="p-6">
-          <!-- Información del asunto -->
-          <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <div class="flex items-center gap-2 mb-2">
-              <div [class]="'w-3 h-3 rounded-full ' + getColorSemaforo(asuntoSeleccionado)"></div>
-              <span class="font-semibold text-gray-700">Asunto a asignar</span>
-            </div>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-              <div>
-                <span class="text-gray-500">Folio:</span>
-                <span class="ml-1 font-medium">{{asuntoSeleccionado.folioInterno}}</span>
-              </div>
-              <div>
-                <span class="text-gray-500">Carpeta de Investigación:</span>
-                <span class="ml-1 font-medium">{{asuntoSeleccionado.carpetaInvestigacion}}</span>
-              </div>
-              <div>
-                <span class="text-gray-500">Persona Relacionada:</span>
-                <span class="ml-1 font-medium">{{asuntoSeleccionado.personaRelacionada}}</span>
-              </div>
-              <div>
-                <span class="text-gray-500">Antigüedad:</span>
-                <span class="ml-1 font-medium">{{asuntoSeleccionado.diasAntiguedad}} días</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Selección de abogado -->
-          <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Seleccione un abogado para asignar
-            </label>
-            <div class="relative">
-              <select [(ngModel)]="abogadoSeleccionado"
-                      class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white">
-                <option value="">Seleccione...</option>
-                <optgroup label="Administración 1">
-                  <option *ngFor="let abogado of abogadosAdmon1" [value]="abogado.nombre">
-                    {{abogado.nombre}} - {{abogado.cargo}}
-                  </option>
-                </optgroup>
-                <optgroup label="Administración 2">
-                  <option *ngFor="let abogado of abogadosAdmon2" [value]="abogado.nombre">
-                    {{abogado.nombre}} - {{abogado.cargo}}
-                  </option>
-                </optgroup>
-              </select>
-              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">
-                <mat-icon>arrow_drop_down</mat-icon>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pie del modal -->
-        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
-          <button (click)="cancelarAsignacion()"
-                  class="px-5 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700 font-medium">
-            Cancelar
-          </button>
-          <button (click)="confirmarAsignacion()"
-                  class="px-5 py-2 bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium"
-                  [disabled]="!abogadoSeleccionado"
-                  [class.opacity-50]="!abogadoSeleccionado"
-                  [class.cursor-not-allowed]="!abogadoSeleccionado">
-            Asignar
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- Modal de Visualización de PDF -->
     <div *ngIf="mostrarPDFViewer"
@@ -426,13 +347,17 @@ export class AsignacionPageComponent implements OnInit {
 
   asignadosTable:boolean= false
   documento:string='REQUERIMIENTO'
+  usuariosAsignar: usuariosPorAdministracion [] =[]
+
 
     porAsignarDataTable :porAsignarRequest ={
     documento : this.documento,
     asignados: this.asignadosTable
   }
 
-  constructor(private router: Router ,  private cards:CardsInfoBandejadeAtencionService ) {}
+  constructor(private router: Router,
+              private cards:CardsInfoBandejadeAtencionService,
+              private modalService: ModalService) {}
 
   ngOnInit() {
     // Datos de ejemplo que reflejan las reglas del semáforo
@@ -548,6 +473,7 @@ export class AsignacionPageComponent implements OnInit {
     ];
     this.tablePorAsignar()
 
+
   }
 
   tablePorAsignar(){
@@ -555,9 +481,10 @@ export class AsignacionPageComponent implements OnInit {
       next: (res)=>{
          this.tablePorAsignarIndicador = res
       }
-    }
-    )
+    });
    }
+
+
 
   get asuntosFiltrados() {
     // Filtrar por persona relacionada si hay término de búsqueda
@@ -673,9 +600,21 @@ export class AsignacionPageComponent implements OnInit {
     return 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
   }
 
-  abrirModalAsignacion(asunto: Asunto) {
-    this.asuntoSeleccionado = asunto;
-    this.abogadoSeleccionado = '';
+  usuariosPorAdministracion(){
+    this.cards.usuariosPorAdminitracion().subscribe((res:usuariosPorAdministracion[])=>{
+      this.usuariosAsignar = res
+    })
+   }
+
+
+  abrirModalAsignacion(template: TemplateRef<any>) {
+    console.log("Asignacion");
+    this.usuariosPorAdministracion()
+this.modalService.openCustomDialogWithTemplate({
+  template
+})
+
+
   }
 
   cancelarAsignacion() {
