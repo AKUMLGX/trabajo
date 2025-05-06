@@ -25,6 +25,13 @@ export interface tableAsuntosPorDictaminar{
   plazo_atencion:number
 }
 
+ export interface modalItem{
+  folio_interno: string,
+  persona_relacionada: string,
+  carpeta_investigacion: string,
+  plazo_atencion:number,
+ }
+
 export interface tableAsuntosPorAsignar{
   folio_interno: string,
   folio_scanner: number,

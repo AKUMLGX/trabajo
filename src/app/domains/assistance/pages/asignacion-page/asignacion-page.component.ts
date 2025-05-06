@@ -6,7 +6,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
+import { modalItem, porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
 import { ModalService } from '../../../shared/services/modal.service';
@@ -328,33 +328,15 @@ export class AsignacionPageComponent implements OnInit {
   pdfTitulo: string = '';
   asuntoParaDescargar: Asunto | null = null;
 
-  abogadosAdmon1: Abogado[] = [
-    { nombre: 'Maritza Obdulia González Mota', cargo: 'Administradora', administracion: 1 },
-    { nombre: 'Edgar Mondragón Marcelo', cargo: 'Subadministrador', administracion: 1 },
-    { nombre: 'María De la Luz Miranda Rivas', cargo: 'Jefe de Departamento', administracion: 1 },
-    { nombre: 'Juan Pablo Herrera Díaz', cargo: 'Jefe de Departamento', administracion: 1 },
-    { nombre: 'Alfredo Romero Meza', cargo: 'Jefe de Departamento', administracion: 1 }
-  ];
-
-  abogadosAdmon2: Abogado[] = [
-    { nombre: 'Luis Ángel Rodriguez Fonseca', cargo: 'Administrador', administracion: 2 },
-    { nombre: 'Marcela Flores Cruz Meyer', cargo: 'Subadministradora', administracion: 2 },
-    { nombre: 'Jesús Daniel González Berber', cargo: 'Enlace', administracion: 2 },
-    { nombre: 'Roberto Bonifacio Mazon García', cargo: 'Jefe de Departamento', administracion: 2 },
-    { nombre: 'Edgar Alan Carmona Trejo', cargo: 'Jefe de Departamento', administracion: 2 }
-  ];
-
-
   asignadosTable:boolean= false
   documento:string='REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion [] =[]
-
+  itemDeFilaSelecionada : modalItem | null = null
 
     porAsignarDataTable :porAsignarRequest ={
     documento : this.documento,
     asignados: this.asignadosTable
   }
-
   constructor(private router: Router,
               private cards:CardsInfoBandejadeAtencionService,
               private modalService: ModalService) {}
@@ -606,13 +588,12 @@ export class AsignacionPageComponent implements OnInit {
     })
    }
 
-
-  abrirModalAsignacion(template: TemplateRef<any>) {
-    console.log("Asignacion");
+  abrirModalAsignacion(template: TemplateRef<any>, item :modalItem) {
+    this.itemDeFilaSelecionada = item
     this.usuariosPorAdministracion()
-this.modalService.openCustomDialogWithTemplate({
-  template
-})
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    })
 
 
   }
@@ -654,6 +635,8 @@ this.modalService.openCustomDialogWithTemplate({
       return 'bg-green-500';
     }
   }
+
+
 
   verDocumentoDesdeDetalle(asunto: Asunto) {
     // Cerrar el modal de detalle primero
