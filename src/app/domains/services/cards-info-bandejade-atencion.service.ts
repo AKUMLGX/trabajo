@@ -6,6 +6,7 @@ import { asutosPorDictaminador, porAsignarRequest, tableAsuntosPorDictaminar } f
 import { porAsignarResponse } from '../interfaces/porAsignarResponse.interface';
 import { Cards, CardsResponse } from '../interfaces/datosCards.interface';
 import { usuariosPorAdministracion } from '../interfaces/usuarios-Por-administracion.interface';
+import { AsignarAsuntoRequest } from '../interfaces/asiganar-AsuntoRequest.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -40,4 +41,8 @@ usuariosPorAdminitracion(){
   return this.http.get<usuariosPorAdministracion[]>(tarjetURL)
 }
 
+asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
+  const tarjetURL = environment.baseUrl+environment.asignarAsunto;
+  return this.http.post(tarjetURL,data,{responseType:"text"})
+ }
 }

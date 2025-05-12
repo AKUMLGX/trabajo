@@ -14,7 +14,7 @@ export interface tableAsuntosPorDictaminar{
   carpeta_investigacion: string,
   oficio: string,
   persona_relacionada: string,
-  fecha_recepcion: Date,
+  fecha_recepcion: '',
   id_administracion_fk: number,
   id_documento_fk: number,
   id_atencion_fk: number,
@@ -47,5 +47,3 @@ export interface tableAsuntosPorAsignar{
   id_asunto: number,
   es_historico: true
 }
-
-

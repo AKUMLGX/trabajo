@@ -51,6 +51,7 @@ export const environment={
   asuntosPorDictaminar: 'asunto/get_asunto_por_asignacion',
   asuntosPorAsignarTable: 'asunto/get_asunto_por_asignacion',
   usuariosPorAdministracion:'asunto/usuarios_por_administracion ',
+  asignarAsunto:'asunto/asignar_asunto',
   //#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
