@@ -1,8 +1,11 @@
+import { AsuntoPorAtencionParcialRequest } from './../../../interfaces/asuntoPorAtencion.interface';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AsuntoPorAsigacionResponseParcial } from '../../../interfaces/asuntoPorAtencionResponse.interface';
+import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 
 interface Asunto {
   id: string;
@@ -30,36 +33,52 @@ export class ParcialDetalleComponent implements OnInit {
   paginaActual: number = 1;
   itemsPorPagina: number = 8;
   totalAsuntos: number = 20;
-  
+
+  tableparcialRequest: AsuntoPorAtencionParcialRequest={
+     atencion:"PARCIAL",
+    documento:"REQUERIMIENTO",
+  }
+  tableParcialResponse: AsuntoPorAsigacionResponseParcial[]=[];
+
+
   // Nuevos filtros
   filtroFolio: string = '';
   filtroCarpeta: string = '';
   filtroOficio: string = '';
   filtroFechaInicio: string = '';
   filtroFechaFin: string = '';
-  
+
   // Propiedades para usar en el template
   Math = Math;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cards:CardsInfoBandejadeAtencionService) {}
 
   ngOnInit(): void {
     // Cargar datos de ejemplo para la tabla
     this.cargarDatosEjemplo();
     this.filtrarAsuntos();
+    this.tablePracial()
+  }
+
+  tablePracial(){
+    this.cards.parcialTableCard(this.tableparcialRequest).subscribe(res=>{
+      this.tableParcialResponse=res
+    })
   }
 
   cargarDatosEjemplo(): void {
     const personasRelacionadas = [
-      'Juan Pérez García', 'María González López', 'Roberto Martínez Sánchez', 
-      'Laura Rodríguez Díaz', 'Carlos Hernández Cruz', 'Patricia Flores Torres', 
-      'Miguel Ángel Ramírez', 'Sofía López Mendoza', 'Ricardo Torres Vega', 
+      'Juan Pérez García', 'María González López', 'Roberto Martínez Sánchez',
+      'Laura Rodríguez Díaz', 'Carlos Hernández Cruz', 'Patricia Flores Torres',
+      'Miguel Ángel Ramírez', 'Sofía ', 'Ricardo Torres Vega',
       'Diana Fernández Castro', 'Fernando Ríos Vargas', 'Ana Castillo Morales',
       'José Luis Mendoza', 'Carmen Ortega Blanco', 'Eduardo Silva Gómez',
       'Isabel Jiménez Rosas', 'David Vargas Nava', 'Mónica Cruz Soto',
       'Alejandro Medina Ruiz', 'Verónica Navarro Ochoa'
     ];
-    
+
+
+
     this.asuntos = [
       { id: 'EUACAPE-0021', ci: 'CI-78945', oficio: 'OF-1234', documento: 'Respuesta Parcial 1.pdf', fecha: '01/03/2024', dias: 12, personaRelacionada: personasRelacionadas[0] },
       { id: 'EUACAPE-0032', ci: 'CI-89056', oficio: 'OF-2345', documento: 'Respuesta Parcial 2.pdf', fecha: '15/02/2024', dias: 8, personaRelacionada: personasRelacionadas[1] },
@@ -112,11 +131,11 @@ export class ParcialDetalleComponent implements OnInit {
     const folioNormalizado = this.normalizarTexto(this.filtroFolio);
     const carpetaNormalizada = this.normalizarTexto(this.filtroCarpeta);
     const oficioNormalizado = this.normalizarTexto(this.filtroOficio);
-    
+
     // Convertir fechas a formato comparable si existen
     let fechaInicio = this.filtroFechaInicio ? this.convertirFechaParaComparar(this.filtroFechaInicio) : null;
     let fechaFin = this.filtroFechaFin ? this.convertirFechaParaComparar(this.filtroFechaFin) : null;
-    
+
     this.asuntosFiltrados = this.asuntos.filter(asunto => {
       // Filtro por año seleccionado
       let coincideAnio = true;
@@ -125,19 +144,19 @@ export class ParcialDetalleComponent implements OnInit {
         const anioAsunto = parseInt(fechaPartes[2]);
         coincideAnio = anioAsunto === parseInt(this.anioSeleccionado);
       }
-      
+
       // Filtro por folio interno
-      const coincideFolio = folioNormalizado === '' || 
+      const coincideFolio = folioNormalizado === '' ||
                            this.normalizarTexto(asunto.id).includes(folioNormalizado);
-      
+
       // Filtro por carpeta de investigación
-      const coincideCarpeta = carpetaNormalizada === '' || 
+      const coincideCarpeta = carpetaNormalizada === '' ||
                              this.normalizarTexto(asunto.ci).includes(carpetaNormalizada);
-      
+
       // Filtro por oficio
-      const coincideOficio = oficioNormalizado === '' || 
+      const coincideOficio = oficioNormalizado === '' ||
                             this.normalizarTexto(asunto.oficio).includes(oficioNormalizado);
-      
+
       // Filtro por fecha
       let coincideFecha = true;
       if (fechaInicio || fechaFin) {
@@ -150,15 +169,15 @@ export class ParcialDetalleComponent implements OnInit {
           coincideFecha = fechaAsunto <= fechaFin;
         }
       }
-      
+
       // Aplicar todos los filtros en conjunto
       return coincideAnio && coincideFolio && coincideCarpeta && coincideOficio && coincideFecha;
     });
-    
+
     this.totalAsuntos = this.asuntosFiltrados.length;
     this.paginaActual = 1;
   }
-  
+
   // Convierte una fecha en formato dd/mm/yyyy a un objeto Date para comparar
   convertirFechaParaComparar(fecha: string): Date {
     // Si el formato es dd/mm/yyyy
@@ -202,9 +221,7 @@ export class ParcialDetalleComponent implements OnInit {
   }
 
   // Métodos para descargar Excel
-  descargarExcel(): void {
-    console.log('Descargando Excel...');
-    // Aquí se implementaría la lógica para descargar el Excel
-    alert('Descargando Excel con ' + this.asuntosFiltrados.length + ' asuntos filtrados');
+  descargarExcel() {
+    this.cards.descargarExcelParcial(this.tableparcialRequest)
   }
 }

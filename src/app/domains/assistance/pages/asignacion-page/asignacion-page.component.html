@@ -171,13 +171,11 @@
        <select [(ngModel)]="abogadoSeleccionado"
                class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white">
          <option value="">Seleccione...</option>
-         <optgroup label="Administración 1">
           @for (user of usuariosAsignar; track $index) {
             <option>
               {{user.nombre}}
              </option>
           }
-         </optgroup>
        </select>
        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">
          <mat-icon>arrow_drop_down</mat-icon>

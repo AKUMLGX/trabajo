@@ -16,6 +16,7 @@ import { CardsInfoBandejadeAtencionService } from '../../../../services/cards-in
 import { Cards,CardsResponse } from '../../../../interfaces/datosCards.interface';
 import { porAsignarRequest } from '../../../../interfaces/porAsignarRequest.interface';
 import { porAsignarResponse } from '../../../../interfaces/porAsignarResponse.interface';
+import { usuariosPorAdministracion } from '../../../../interfaces/usuarios-Por-administracion.interface';
 
 @Component({
   selector: 'app-cards',
@@ -101,6 +102,8 @@ export class CardsComponent implements OnInit {
     total: this.porAsignarTotal
   }
 
+    usuariosAsignar: usuariosPorAdministracion[] = []
+
  constructor(private router:Router, private cards:CardsInfoBandejadeAtencionService){}
 // @Output() oucultar = new EventEmitter<void>()
 
@@ -165,6 +168,7 @@ export class CardsComponent implements OnInit {
     this.mostarCardPorAsignar()
     this.asuntosPorDictaminar()
     this.mostrarCards()
+    this.usuariosPorAdministracion()
   }
   mostrarCards(){
     this.cards.cardsInfo().subscribe(res=>{
@@ -209,6 +213,12 @@ export class CardsComponent implements OnInit {
       this.requerimiento = cardsData.REQUERIMIENTO
     }
   }
+
+  usuariosPorAdministracion() {
+      this.cards.usuariosPorAdminitracion().subscribe((res: usuariosPorAdministracion[]) => {
+        this.usuariosAsignar = res
+      })
+    }
 
   // Método para calcular conteo de asuntos por dictaminador
   calcularConteoAsuntos(): void {

@@ -52,6 +52,12 @@ export const environment={
   asuntosPorAsignarTable: 'asunto/get_asunto_por_asignacion',
   usuariosPorAdministracion:'asunto/usuarios_por_administracion ',
   asignarAsunto:'asunto/asignar_asunto',
+  enTramiteTableCard:'asunto/get_asunto_por_atencion',
+  parcialTableCard:'asunto/get_asunto_por_atencion',
+  totalTableCard:'asunto/get_asunto_por_atencion',
+  downloadExecelEnTramite:'asunto/descargar_asunto_por_atencion',
+  downloadExecelParcial:'asunto/descargar_asunto_por_atencion',
+  downloadExecelTotal:'asunto/descargar_asunto_por_atencion',
   //#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',

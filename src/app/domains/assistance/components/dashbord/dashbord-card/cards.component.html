@@ -80,11 +80,11 @@
             <select #selectDictaminador (change)="cambiarDictaminador(selectDictaminador.value)"
                   class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32] appearance-none">
               <option value="">Todos</option>
-              <option value="1">María Hernández</option>
-              <option value="2">Juan Rodríguez</option>
-              <option value="3">Carlos Sánchez</option>
-              <option value="4">Ana González</option>
-              <option value="5">Luis Torres</option>
+              @for(user of usuariosAsignar; track $index){
+                  <option>
+                    {{user.nombre}}
+                  </option>
+              }
             </select>
             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
               <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

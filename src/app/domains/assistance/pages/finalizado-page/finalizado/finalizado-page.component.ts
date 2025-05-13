@@ -1,9 +1,12 @@
+import { AsuntoPorAsigacionResponseTotal } from './../../../../interfaces/asuntoPorAtencionResponse.interface';
 import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { AsuntoPorAtencionTotalRequest } from '../../../../interfaces/asuntoPorAtencion.interface';
+import { CardsInfoBandejadeAtencionService } from '../../../../services/cards-info-bandejade-atencion.service';
 
 interface AsuntoFinalizado {
   folio: string;
@@ -24,73 +27,73 @@ interface AsuntoFinalizado {
 export class FinalizadoComponent implements OnInit {
   // Datos de la tabla
   asuntos: AsuntoFinalizado[] = [
-    { 
-      folio: 'EUACAPE/01', 
-      tipoRespuesta: 'Requerimiento', 
-      documento: 'Documento de Respuesta', 
+    {
+      folio: 'EUACAPE/01',
+      tipoRespuesta: 'Requerimiento',
+      documento: 'Documento de Respuesta',
       fechaFinalizacion: '10/04/2024',
       dictaminador: 'María Hernández',
       autoridad: 'Servicio de Administración Tributaria',
       observaciones: 'Finalizado con requerimiento de información adicional'
     },
-    { 
-      folio: 'EUACAPE/02', 
-      tipoRespuesta: 'Requerimiento', 
-      documento: 'Solicitud de Documentos', 
+    {
+      folio: 'EUACAPE/02',
+      tipoRespuesta: 'Requerimiento',
+      documento: 'Solicitud de Documentos',
       fechaFinalizacion: '08/04/2024',
       dictaminador: 'Juan Rodríguez',
       autoridad: 'Secretaría de Finanzas',
       observaciones: 'Pendiente de respuesta del contribuyente'
     },
-    { 
-      folio: 'EUACAPE/03', 
-      tipoRespuesta: 'Requerimiento', 
-      documento: 'Notificación', 
+    {
+      folio: 'EUACAPE/03',
+      tipoRespuesta: 'Requerimiento',
+      documento: 'Notificación',
       fechaFinalizacion: '05/04/2024',
       dictaminador: 'Carlos Sánchez',
       autoridad: 'Procuraduría Fiscal',
       observaciones: 'Finalizado con observaciones'
     },
-    { 
-      folio: 'EUACAPE/04', 
-      tipoRespuesta: 'Respuesta Completa', 
-      documento: 'Dictamen', 
+    {
+      folio: 'EUACAPE/04',
+      tipoRespuesta: 'Respuesta Completa',
+      documento: 'Dictamen',
       fechaFinalizacion: '04/04/2024',
       dictaminador: 'Ana González',
       autoridad: 'Servicio de Administración Tributaria',
       observaciones: 'Finalizado satisfactoriamente'
     },
-    { 
-      folio: 'EUACAPE/05', 
-      tipoRespuesta: 'Respuesta Parcial', 
-      documento: 'Dictamen Parcial', 
+    {
+      folio: 'EUACAPE/05',
+      tipoRespuesta: 'Respuesta Parcial',
+      documento: 'Dictamen Parcial',
       fechaFinalizacion: '03/04/2024',
       dictaminador: 'Luis Torres',
       autoridad: 'Unidad de Inteligencia Financiera',
       observaciones: 'Pendiente de resolución final'
     },
-    { 
-      folio: 'EUACAPE/06', 
-      tipoRespuesta: 'Respuesta Completa', 
-      documento: 'Oficio de Respuesta', 
+    {
+      folio: 'EUACAPE/06',
+      tipoRespuesta: 'Respuesta Completa',
+      documento: 'Oficio de Respuesta',
       fechaFinalizacion: '01/04/2024',
       dictaminador: 'María Hernández',
       autoridad: 'Comisión Nacional Bancaria',
       observaciones: 'Finalizado con observaciones menores'
     },
-    { 
-      folio: 'EUACAPE/07', 
-      tipoRespuesta: 'Desechado', 
-      documento: 'Notificación de Rechazo', 
+    {
+      folio: 'EUACAPE/07',
+      tipoRespuesta: 'Desechado',
+      documento: 'Notificación de Rechazo',
       fechaFinalizacion: '30/03/2024',
       dictaminador: 'Juan Rodríguez',
       autoridad: 'Secretaría de Hacienda',
       observaciones: 'Desechado por falta de información'
     },
-    { 
-      folio: 'EUACAPE/08', 
-      tipoRespuesta: 'Respuesta Completa', 
-      documento: 'Oficio de Resolución', 
+    {
+      folio: 'EUACAPE/08',
+      tipoRespuesta: 'Respuesta Completa',
+      documento: 'Oficio de Resolución',
       fechaFinalizacion: '28/03/2024',
       dictaminador: 'Carlos Sánchez',
       autoridad: 'Instituto Fiscal',
@@ -110,36 +113,52 @@ export class FinalizadoComponent implements OnInit {
 
   // Asuntos filtrados para mostrar en la tabla
   asuntosFiltrados: AsuntoFinalizado[] = [];
-  
+
+    tableRequest: AsuntoPorAtencionTotalRequest={
+      atencion:"TOTAL",
+      documento:"REQUERIMIENTO",
+    }
+    tableResponse: AsuntoPorAsigacionResponseTotal[]=[];
+
   // Filtros
   filtroFolio: string = '';
   filtroFechaInicio: string = '';
   filtroFechaFin: string = '';
   filtroDictaminador: string = '';
-  
+
   // Paginación
   paginaActual: number = 1;
   itemsPorPagina: number = 5;
   totalPaginas: number = 1;
-  
-  constructor() {}
-  
+
+  constructor(private cards:CardsInfoBandejadeAtencionService) {}
+
   ngOnInit(): void {
     // Inicializar tabla con todos los datos, sin filtros aplicados
     this.asuntosFiltrados = [...this.asuntos];
     this.calcularPaginacion();
+    this.tableTotal();
   }
-  
+
+tableTotal(){
+  this.cards.totalTableCard(this.tableRequest).subscribe(res=>{
+    this.tableResponse=res;
+    console.log(this.tableResponse);
+
+  })
+}
+
+
   // Función para normalizar texto (eliminar acentos y convertir a minúsculas)
   normalizarTexto(texto: string): string {
     if (!texto) return '';
-    
+
     return texto
       .toLowerCase()
       .normalize('NFD') // Normalización Unicode (descompone los caracteres acentuados)
       .replace(/[\u0300-\u036f]/g, ''); // Elimina diacríticos (acentos, diéresis, etc.)
   }
-  
+
   // Formatear fecha a YYYY-MM-DD para inputs date
   formatearFecha(fecha: Date): string {
     const año = fecha.getFullYear();
@@ -147,13 +166,13 @@ export class FinalizadoComponent implements OnInit {
     const dia = fecha.getDate().toString().padStart(2, '0');
     return `${año}-${mes}-${dia}`;
   }
-  
+
   // Convertir fecha de DD/MM/YYYY a objeto Date
   parsearFecha(fechaStr: string): Date {
     const [dia, mes, anio] = fechaStr.split('/').map(Number);
     return new Date(anio, mes - 1, dia);
   }
-  
+
   // Aplicar filtros a la tabla
   aplicarFiltros(): void {
     console.log('Aplicando filtros...');
@@ -161,15 +180,15 @@ export class FinalizadoComponent implements OnInit {
     console.log('Persona relacionada:', this.filtroDictaminador);
     console.log('Fecha inicio:', this.filtroFechaInicio);
     console.log('Fecha fin:', this.filtroFechaFin);
-    
+
     // Empezar con todos los asuntos
     let resultados = [...this.asuntos];
-    
+
     // Filtrar por folio (búsqueda parcial, insensible a mayúsculas/minúsculas y acentos)
     if (this.filtroFolio && this.filtroFolio.trim() !== '') {
       const folioNormalizado = this.normalizarTexto(this.filtroFolio);
       console.log('Folio normalizado:', folioNormalizado);
-      
+
       resultados = resultados.filter(asunto => {
         const asuntoFolioNormalizado = this.normalizarTexto(asunto.folio);
         const incluye = asuntoFolioNormalizado.includes(folioNormalizado);
@@ -177,12 +196,12 @@ export class FinalizadoComponent implements OnInit {
         return incluye;
       });
     }
-    
+
     // Filtrar por persona relacionada (búsqueda parcial, insensible a mayúsculas/minúsculas y acentos)
     if (this.filtroDictaminador && this.filtroDictaminador.trim() !== '') {
       const dictaminadorNormalizado = this.normalizarTexto(this.filtroDictaminador);
       console.log('Dictaminador normalizado:', dictaminadorNormalizado);
-      
+
       resultados = resultados.filter(asunto => {
         const asuntoDictaminadorNormalizado = this.normalizarTexto(asunto.dictaminador);
         const incluye = asuntoDictaminadorNormalizado.includes(dictaminadorNormalizado);
@@ -190,18 +209,18 @@ export class FinalizadoComponent implements OnInit {
         return incluye;
       });
     }
-    
+
     // Filtrar por rango de fechas (solo si ambas fechas están definidas)
     if (this.filtroFechaInicio && this.filtroFechaFin) {
       const fechaInicio = new Date(this.filtroFechaInicio);
       const fechaFin = new Date(this.filtroFechaFin);
-      
+
       // Ajustar fecha fin para incluir todo el día
       fechaFin.setHours(23, 59, 59);
-      
+
       console.log('Fecha inicio:', fechaInicio);
       console.log('Fecha fin:', fechaFin);
-      
+
       resultados = resultados.filter(asunto => {
         try {
           const fechaAsunto = this.parsearFecha(asunto.fechaFinalizacion);
@@ -214,25 +233,25 @@ export class FinalizadoComponent implements OnInit {
         }
       });
     }
-    
+
     console.log('Resultados finales:', resultados.length);
     this.asuntosFiltrados = resultados;
     this.calcularPaginacion();
     this.paginaActual = 1; // Resetear a la primera página cuando se filtran resultados
   }
-  
+
   // Limpiar filtros
   limpiarFiltros(): void {
     this.filtroFolio = '';
     this.filtroFechaInicio = '';
     this.filtroFechaFin = '';
     this.filtroDictaminador = '';
-    
+
     this.asuntosFiltrados = [...this.asuntos];
     this.calcularPaginacion();
     this.paginaActual = 1;
   }
-  
+
   // Calcular paginación
   calcularPaginacion(): void {
     this.totalPaginas = Math.ceil(this.asuntosFiltrados.length / this.itemsPorPagina);
@@ -240,76 +259,32 @@ export class FinalizadoComponent implements OnInit {
       this.paginaActual = 1;
     }
   }
-  
+
   // Obtener elementos para la página actual
   get asuntosPaginados(): AsuntoFinalizado[] {
     const inicio = (this.paginaActual - 1) * this.itemsPorPagina;
     const fin = inicio + this.itemsPorPagina;
     return this.asuntosFiltrados.slice(inicio, fin);
   }
-  
+
   // Cambiar página
   cambiarPagina(pagina: number): void {
     if (pagina >= 1 && pagina <= this.totalPaginas) {
       this.paginaActual = pagina;
     }
   }
-  
+
   // Exportar a Excel
-  exportarExcel(): void {
-    try {
-      // Obtener datos a exportar (los que estén filtrados actualmente)
-      const datosParaExportar = this.asuntosFiltrados.map(asunto => ({
-        'Folio': asunto.folio,
-        'Tipo de Respuesta': asunto.tipoRespuesta,
-        'Documento': asunto.documento,
-        'Fecha Finalización': asunto.fechaFinalizacion,
-        'Persona relacionada': asunto.dictaminador,
-        'Autoridad': asunto.autoridad,
-        'Observaciones': asunto.observaciones
-      }));
-      
-      // Crear hoja de trabajo (worksheet)
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(datosParaExportar);
-      
-      // Definir anchos de columnas para mejor presentación
-      const wscols = [
-        { wch: 15 }, // Folio
-        { wch: 20 }, // Tipo de Respuesta
-        { wch: 20 }, // Documento
-        { wch: 18 }, // Fecha Finalización
-        { wch: 25 }, // Persona relacionada
-        { wch: 30 }, // Autoridad
-        { wch: 40 }  // Observaciones
-      ];
-      
-      ws['!cols'] = wscols;
-      
-      // Crear libro de trabajo (workbook)
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Asuntos Finalizados');
-      
-      // Generar nombre del archivo con fecha actual
-      const fechaActual = new Date();
-      const fechaStr = fechaActual.toISOString().split('T')[0]; // YYYY-MM-DD
-      const nombreArchivo = `Asuntos_Finalizados_${fechaStr}.xlsx`;
-      
-      // Guardar archivo
-      XLSX.writeFile(wb, nombreArchivo);
-      
-      console.log('Excel exportado exitosamente:', nombreArchivo);
-    } catch (error) {
-      console.error('Error al exportar a Excel:', error);
-      alert('Error al exportar a Excel. Por favor intente nuevamente.');
-    }
+  exportarExcel() {
+   this.cards.descargarExcelTotal(this.tableRequest);
   }
-  
+
   // Obtener el rango de elementos que se están mostrando
   get rangoElementosMostrados(): string {
     if (this.asuntosFiltrados.length === 0) {
       return '0 de 0';
     }
-    
+
     const inicio = (this.paginaActual - 1) * this.itemsPorPagina + 1;
     const fin = Math.min(inicio + this.itemsPorPagina - 1, this.asuntosFiltrados.length);
     return `${inicio}-${fin} de ${this.asuntosFiltrados.length}`;
