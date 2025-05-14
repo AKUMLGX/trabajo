@@ -13,7 +13,7 @@ export interface Value {
   folio_scanner:         number;
   descripcion:           String;
   turno_jefatura:        String;
-  plazo_atencion:        String;
+  plazo_atencion:        number;
   fecha_recepcion:      Date;
   autoridad_remitente:   String;
   carpeta_investigacion: String;
