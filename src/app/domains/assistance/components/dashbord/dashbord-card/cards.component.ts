@@ -1,3 +1,4 @@
+
 import { tableAsuntosPorDictaminar } from './../../../../interfaces/porAsignarRequest.interface';
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +14,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { FormsModule } from '@angular/forms';
 import { SafePipe } from '../../../../../shared/pipes/safe.pipe';
 import { CardsInfoBandejadeAtencionService } from '../../../../services/cards-info-bandejade-atencion.service';
-import { Cards,CardsResponse } from '../../../../interfaces/datosCards.interface';
+import {  AdministracionResponse, Cards,CardsResponse, } from '../../../../interfaces/datosCards.interface';
 import { porAsignarRequest } from '../../../../interfaces/porAsignarRequest.interface';
 import { porAsignarResponse } from '../../../../interfaces/porAsignarResponse.interface';
 import { usuariosPorAdministracion } from '../../../../interfaces/usuarios-Por-administracion.interface';
@@ -172,18 +173,25 @@ export class CardsComponent implements OnInit {
   }
   mostrarCards(){
     this.cards.cardsInfo().subscribe(res=>{
+     //  debugger
+      console.log("CARDS",res);
         this.dataCards(res)
-        this.requerimiento.total
-        this.requerimiento.en_tramite
+        // this.requerimiento.total
+        // this.requerimiento.en_tramite
         this.requerimiento.parcial
+         this.administracion.Administracion
+
+         console.log("Entramite", this.requerimiento.en_tramite);
+          console.log("ADM", this.administracion.Administracion);
+
+
     })
   }
 
  mostarCardPorAsignar(){
   this.cards.cardInfoPorAsignar(this.porAsignarData).subscribe( res=>{
-    console.log(res);
      this.porAsignarDataResponse = res;
-      this.porAsignarDataResponse.total
+    // this.porAsignarDataResponse.total
   }
   )
  }
@@ -204,14 +212,26 @@ export class CardsComponent implements OnInit {
     recibido: 0,
     en_tramite: 0,
     no_aplica: 0,
-    documento:0
+    documento:0,
   }
 
+    administracion: AdministracionResponse={
+    Administracion: 0,
+    }
+
+
   dataCards(data:CardsResponse['data']):void{
-    const cardsData = data.find(i=>'REQUERIMIENTO'in i) as {REQUERIMIENTO:Cards}
+    const cardsData = data.find(i=>'REQUERIMIENTO'in i) as {REQUERIMIENTO:Cards};
     if (cardsData) {
       this.requerimiento = cardsData.REQUERIMIENTO
     }
+    const administracionObj = data.find(i=>'Administracion' in i) as  { Administracion: AdministracionResponse} ;
+if (administracionObj ) {
+    this.administracion = administracionObj.Administracion;
+    console.log('Administración encontrada:', this.administracion);
+  } else {
+    console.log('No se encontró la propiedad "Administracion"');
+  }
   }
 
   usuariosPorAdministracion() {

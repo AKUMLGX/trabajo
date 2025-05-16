@@ -5,12 +5,21 @@ export interface Cards {
   recibido: number;
   total: number;
   documento: number;
+
 }
+export interface AdministracionResponse{
+   Administracion: number;
+}
+
 
 interface Requerimiento {
   REQUERIMIENTO: Cards;
 }
 
+interface  Administracion{
+  Administracion: AdministracionResponse
+}
+
 export interface CardsResponse {
-  data: (Requerimiento  )[];
+  data: (Requerimiento|Administracion)[];
 }
