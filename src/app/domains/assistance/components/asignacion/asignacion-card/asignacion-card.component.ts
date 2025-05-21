@@ -121,7 +121,6 @@ export class AsignacionCardComponent implements OnInit {
 
   tablePorAsignar(){
     this.cards.tablePorAsignar(this.porAsignarDataTable).subscribe(res =>{
-      console.log( "PORASINAR", res);
     })
    }
 
