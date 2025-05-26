@@ -31,7 +31,7 @@
     </div>
   </form>
   <div class="flex justify-center h-auto w-auto pt-1 pb-16 ">
-    <button (click)="estadisticosReport()" (click)="estaditicasPorDia()" [disabled]="!repotByDay.valid"
+    <button (click)="tableApertura()" (click)="tableSecondPices()" (click)="estadisticosReport()" (click)="estaditicasPorDia()" [disabled]="!repotByDay.valid"
       [ngClass]=" !repotByDay.valid ? 'next-button-disabled' : 'modal-right-button ml-1'">
       Consultar
     </button>
@@ -39,18 +39,24 @@
   }
   @if (mostrarChart) {
   <mat-dialog-content>
-    <div class="flex justify-end">
-      <div class="w-[85%] ">
+    <div class="flex justify-around w-11/12">
         <select class="select" (change)="onSelectedOption($event)">
           <option disabled selected value="">Selecciona una opción</option>
-          <option value="requerimiento">Requerimiento</option>
+          <option value="requerimiento_">Requerimiento</option>
           <option value="respuesta">Respuesta Interna</option>
           <option value="respuestaFGR">Respuesta a FGR</option>
-
         </select>
+        @if (selecionarOpcion === 'requerimiento_') {
+      <select class="select" (change)="onSelectedOptionSe($event)">
+        <option disabled selected value="">Selecciona una opción</option>
+        <option value="Requerimiento">TODOS</option>
+        <option value="aperturas">APERTURAS</option>
+        <option value="segundas_Piezas">SEGUNDAS PIEZAS</option>
+      </select>
+    }
       </div>
-    </div>
-    @if (selecionarOpcion === "requerimiento") {
+
+    @if (selecionarOpcion2 === "Requerimiento") {
     <div class="flex justify-center ">
       <div
         class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
@@ -63,7 +69,6 @@
         <apx-chart [series]="series_requerimiento" [chart]="chart" [responsive]="responsive" [labels]="labels"
           [colors]="colors" [dataLabels]="dataLabels">
         </apx-chart>
-
       </div>
     </div>
     <div class="flex h-auto w-auto justify-center pb-8 pt-8 ">
@@ -207,6 +212,236 @@
           <button class="download" (click)="getDownloadExcelRespuestaFGR()"> Descargar respuesta de FGR</button>
         </div>
       </div>
+    </div>
+    }
+     @else if (selecionarOpcion2 === "segundas_Piezas") {
+    <div class="flex justify-center ">
+      <div
+        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+        <div class="flex justify-center pb-9">
+          <p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+        </div>
+        <div class="flex justify-center pb-8">
+          <p class="text-base uppercase text-black">Totalidad de Segunda Pieza:
+            <span>{{documento_segunda_pieza}}</span>
+          </p>
+        </div>
+        <apx-chart [series]="series_segundapieza" [chart]="chart" [responsive]="responsive" [labels]="labels"
+          [colors]="colors" [dataLabels]="dataLabels">
+        </apx-chart>
+      </div>
+    </div>
+           <div class="flex h-auto w-auto justify-center pb-8 pt-8 ">
+      <p class="text-3xl">Tabla de estatus de conteo por día.</p>
+    </div>
+     <div class="flex justify-center mt-4 ">
+      <div
+        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse bg-white">
+            <thead>
+              <tr>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Dia
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Número de conteo
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                 Total
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Parcial
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  En tramite
+                </th>
+
+              </tr>
+            </thead>
+            @for (item of pagesSegundaPieza[pageSelected-1]; track $index) {
+            <tbody>
+              <tr>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.fecha_recepcion}}</p>
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.total_requerimientos}}</p>
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.total_estatus}}</p>
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.parcial_estatus}}</p>
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.en_tramite_estatus}}</p>
+                </th>
+              </tr>
+            </tbody>
+            }
+            <div class="w-auto">
+              <div class="flex w-[240%] justify-end">
+                <p>Total de conteo de dias: <span>{{totalDeConteoSegundaPieza}}</span></p>
+              </div>
+            </div>
+          </table>
+        </div>
+        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+          <div>
+            @if (pagesSegundaPieza.length > 0) {
+            <ul>
+              <li *ngFor="
+                          let document of documentsSegundaPieza
+                            | paginate
+                              : {
+                                  itemsPerPage: itemsPerPage,
+                                  currentPage: pageSelected
+                                }
+                        "></li>
+            </ul>
+            <div class="has-text-centered">
+              <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+                [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+            </div>
+            }
+          </div>
+        </div>
+        <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
+          <p class="text-sm leading-5 text-wine">
+            Mostrando
+            <span class="font-medium">{{
+              (pageSelected - 1) * itemsPerPage + 1
+              }}</span>
+            a
+            <span class="font-medium">{{
+              (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsSegundaPieza.length ? (pageSelected - 1) * itemsPerPage +
+                itemsPerPage : documentsSegundaPieza.length }}</span>
+                de
+                <span class="font-medium">{{ documentsSegundaPieza.length }}</span>
+                resultados
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end pb-8 pr-20 ">
+      <button class="download" (click)="getDownloadExcelSegundaPieza()"> Descargar Segunda Pieza</button>
+    </div>
+
+    }
+    @else if (selecionarOpcion2 === "aperturas") {
+    <div class="flex justify-center ">
+      <div
+        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+        <div class="flex justify-center pb-9">
+          <p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+        </div>
+        <div class="flex justify-center pb-8">
+          <p class="text-base uppercase text-black">Totalidad de aperturas:
+            <span>{{documento_apertura}}</span>
+          </p>
+        </div>
+        <apx-chart [series]="series_aperturas" [chart]="chart" [responsive]="responsive" [labels]="labels"
+          [colors]="colors" [dataLabels]="dataLabels">
+        </apx-chart>
+      </div>
+    </div>
+       <div class="flex h-auto w-auto justify-center pb-8 pt-8 ">
+      <p class="text-3xl">Tabla de estatus de conteo por día.</p>
+    </div>
+     <div class="flex justify-center mt-4 ">
+      <div
+        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse bg-white">
+            <thead>
+              <tr>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Dia
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Número de conteo
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                 Total
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  Parcial
+                </th>
+                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
+                  En tramite
+                </th>
+
+              </tr>
+            </thead>
+            @for (item of pagesAperturas[pageSelected-1]; track $index) {
+              <tbody>
+              <tr>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.fecha_recepcion}}</p>
+
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.total_requerimientos}}</p>
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.total_estatus}}</p>
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.parcial_estatus}}</p>
+                </th>
+                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <p>{{item.en_tramite_estatus}}</p>
+                </th>
+              </tr>
+            </tbody>
+            }
+            <div class="w-auto">
+              <div class="flex w-[240%] justify-end">
+                <p>Total de conteo de dias: <span>{{totalDeConteoAperturas}}</span></p>
+              </div>
+            </div>
+          </table>
+        </div>
+        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+          <div>
+            @if (pagesAperturas.length > 0) {
+            <ul>
+              <li *ngFor="
+                          let document of documentsApertura
+                            | paginate
+                              : {
+                                  itemsPerPage: itemsPerPage,
+                                  currentPage: pageSelected
+                                }
+                        "></li>
+            </ul>
+            <div class="has-text-centered">
+              <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+                [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+            </div>
+            }
+          </div>
+        </div>
+        <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
+          <p class="text-sm leading-5 text-wine">
+            Mostrando
+            <span class="font-medium">{{
+              (pageSelected - 1) * itemsPerPage + 1
+              }}</span>
+            a
+            <span class="font-medium">{{
+              (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsApertura.length ? (pageSelected - 1) * itemsPerPage +
+                itemsPerPage : documentsApertura.length }}</span>
+                de
+                <span class="font-medium">{{ documentsApertura.length }}</span>
+                resultados
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end pb-8 pr-20 ">
+      <button class="download" (click)="getDownloadExcelApertura()"> Descargar aperturas</button>
     </div>
     }
   </mat-dialog-content>
