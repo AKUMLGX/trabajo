@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { DownloadExcel, EstadisticosRequest} from '../interfaces/estadisticosRequest.interface';
+import { DownloadExcel, DownloadExcelAperturaYSgundaPieza, EstadisticosRequest} from '../interfaces/estadisticosRequest.interface';
 import { EstadisticosResponse } from '../interfaces/estadisticosResponse.interface';
 import { Observable } from 'rxjs';
 
@@ -24,9 +24,11 @@ export class EstadisticoService {
     return this.http.post<{ registros: [string,number,number,number,number][]}>(targetUrl,data)
   }
 
-  getconteoDIas(data:EstadisticoService){
-    let targetUrl = environment.baseUrl + environment.tableEstaditicas_Diarias
-    return this.http.post<EstadisticoService>(targetUrl,data)
+
+  getConteoDiasAperturaSegundas(data:EstadisticosRequest):Observable <{ registros:
+     [string , number,number,number,number][] }>{
+   let targetUrl = environment.baseUrl + environment.tableEstaditicas_DiariasAperturas_Segunda
+    return this.http.post<{ registros: [string,number,number,number,number][]}>(targetUrl,data)
   }
 
   donwnloadExcel(startDate:string,endDate:string,documento:string, administracion:string ){
@@ -37,8 +39,6 @@ export class EstadisticoService {
       documento:documento,
       administracion:administracion
     }
-
-
    this.http.post(url,params,{responseType:"text"}).subscribe((e)=>{
     const byteCharacters = atob(e);
       const byteNumbers = new Array(byteCharacters.length);
@@ -54,5 +54,28 @@ export class EstadisticoService {
       link.click();
    })
   }
-
+  donwnloadExcelAS(startDate:string,endDate:string,tipo:string,documento:string, administracion:string ){
+    let url = environment.baseUrl + environment.generateEstadistico;
+    let params: DownloadExcelAperturaYSgundaPieza = {
+      fecha_inicial: startDate,
+      fecha_final: endDate,
+      documento:documento,
+      tipo:tipo,
+      administracion:administracion
+    }
+   this.http.post(url,params,{responseType:"text"}).subscribe((e)=>{
+    const byteCharacters = atob(e);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: type });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `Estadistico.xlsx`;
+      link.click();
+   })
+  }
 }

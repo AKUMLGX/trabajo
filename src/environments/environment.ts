@@ -40,6 +40,7 @@ export const environment={
   asuntoDescargaTablaBusqueda: 'asunto/descargarconsulta',
   chartPieEstaditicos:"asunto/get_estadisticas_atencion",
   tableEstaditicas_Diarias:"asunto/get_estadisticas_diarias",
+  tableEstaditicas_DiariasAperturas_Segunda:"asunto/get_estadisticas_diarias_por_tipo",
   updateTableHistorico:"asunto/historico/update",
   updateTableNuevo: "asunto/nuevo/update",
   updateDocumentoEscaneado: "asunto/nuevo/updatearchivo",

@@ -10,8 +10,6 @@ export interface  Estado {
 interface Requerimiento {
   REQUERIMIENTO: Estado;
 }
-
-
 interface Respuesta {
   RESPUESTA_INTERNA: Estado;
 }
@@ -20,6 +18,14 @@ interface Respuesta_A_FGR {
   RESPUESTA_A_FGR: Estado;
 }
 
+interface Apertura{
+  APERTURA:Estado
+}
+
+interface Segunda_Pieza{
+SEGUNDA_PIEZA:Estado
+}
+
 export interface EstadisticosResponse {
-  data: (Requerimiento | Respuesta | Respuesta_A_FGR )[];
+  data: (Requerimiento | Respuesta | Respuesta_A_FGR | Apertura | Segunda_Pieza)[];
 }
