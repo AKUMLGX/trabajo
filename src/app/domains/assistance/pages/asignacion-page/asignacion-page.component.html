@@ -13,10 +13,11 @@
         <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-gray-500">
           <mat-icon>search</mat-icon>
         </span>
-        <input type="search"
+        <!-- <input type="search"
                [(ngModel)]="searchTerm"
                placeholder="Buscar por persona relacionada"
-               class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#691C32]">
+               class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#691C32]"> -->
+       <input type="text" [formControl]="buscador" placeholder="Buscar por nombre" />
       </div>
     </div>
 

@@ -4,13 +4,17 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+
+import { FormControl, FormsModule,  ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { modalItem, porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
 import { ModalService } from '../../../shared/services/modal.service';
+import { BuscadorService } from '../../../shared/services/buscador.service';
+import { startWith,map, Observable, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+
 
 
 interface Asunto {
@@ -38,7 +42,8 @@ interface Abogado {
     MatButtonModule,
     MatDialogModule,
     FormsModule,
-    PdfViewerModule
+    PdfViewerModule,
+    ReactiveFormsModule
   ],
   templateUrl: './asignacion-page.component.html',
   // src\app\domains\assistance\pages\asignacion-page\asignacion-page.component.html
@@ -75,7 +80,7 @@ export class AsignacionPageComponent implements OnInit {
   asuntos: Asunto[] = [];
   tablePorAsignarIndicador: tableAsuntosPorDictaminar[] = []
 
-
+buscador = new FormControl('');
 
   searchTerm: string = '';
   currentPage: number = 1;
@@ -100,18 +105,15 @@ export class AsignacionPageComponent implements OnInit {
     asignados: this.asignadosTable
   }
 
-  //  date: Date =  new Date
-
-  //  asignarAsuntoUser:  AsignarAsuntoRequest = {
-
-  //  }
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
-    private modalService: ModalService) { }
+    private modalService: ModalService,
+   private buscadorService:BuscadorService) { }
 
   ngOnInit() {
     this.tablePorAsignar()
     console.log(this.searchTerm);
+    this.buscar()
 
   }
 
@@ -119,8 +121,26 @@ export class AsignacionPageComponent implements OnInit {
     this.cards.tablePorAsignar(this.porAsignarDataTable).subscribe({
       next: (res) => {
         this.tablePorAsignarIndicador = res
-      }
+        this.buscar()
+      },
+
+
     });
+
+  }
+
+  asignarIndicador : Observable<tableAsuntosPorDictaminar[]>= new Observable
+
+  buscar(){
+this.asignarIndicador = this.buscador.valueChanges.pipe(
+  startWith(""),
+  debounceTime(300),
+  distinctUntilChanged(),
+  map(valor=>valor ?? ''),
+  switchMap(term=>
+    this.buscadorService.buscar(this.tablePorAsignarIndicador,term,'persona_relacionada')
+  )
+)
   }
 
   usuariosPorAdministracion() {
@@ -178,14 +198,11 @@ export class AsignacionPageComponent implements OnInit {
     }
 
     this.cards.asignarAsunto(jsonRequest).subscribe({
-      next: (res) => {
+      next: () => {
         window.location.reload()
       }
     })
   }
-
-
-
 
   abrirModalAsignacion(template: TemplateRef<any>, item: modalItem) {
     this.itemDeFilaSelecionada = item
@@ -197,11 +214,9 @@ export class AsignacionPageComponent implements OnInit {
     })
   }
 
-
   get asuntosFiltrados() {
     // Filtrar por persona relacionada si hay término de búsqueda
     return this.tablePorAsignarIndicador.filter(asunto =>
-
       asunto.persona_relacionada.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
