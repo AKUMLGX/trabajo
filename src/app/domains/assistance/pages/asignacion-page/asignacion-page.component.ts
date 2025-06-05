@@ -3,8 +3,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-
+import { MatDialogModule} from '@angular/material/dialog';
 import { FormControl, FormsModule,  ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -13,19 +12,8 @@ import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-
 import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
 import { ModalService } from '../../../shared/services/modal.service';
 import { BuscadorService } from '../../../shared/services/buscador.service';
-import { startWith,map, Observable, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Observable,of } from 'rxjs';
 
-
-
-interface Asunto {
-  folioInterno: string;
-  carpetaInvestigacion: string;
-  oficio: string;
-  personaRelacionada: string;
-  fechaRecepcion: string;
-  plazoAtencion: string;
-  diasAntiguedad: number;
-}
 
 interface Abogado {
   nombre: string;
@@ -77,7 +65,7 @@ interface Abogado {
   `]
 })
 export class AsignacionPageComponent implements OnInit {
-  asuntos: Asunto[] = [];
+  // asuntos: Asunto[] = [];
   tablePorAsignarIndicador: tableAsuntosPorDictaminar[] = []
 
 buscador = new FormControl('');
@@ -85,13 +73,11 @@ buscador = new FormControl('');
   searchTerm: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 10; // Número de elementos por página
-  asuntoSeleccionado: Asunto | null = null;
-  asuntoDetalle: Asunto | null = null;
   abogadoSeleccionado: string = '';
-  mostrarPDFViewer: boolean = false;
-  pdfSrc: string = '';
-  pdfTitulo: string = '';
-  asuntoParaDescargar: Asunto | null = null;
+  // mostrarPDFViewer: boolean = false;
+  // pdfSrc: string = '';
+  // pdfTitulo: string = '';
+  // asuntoParaDescargar: Asunto | null = null;
 
   asignadosTable: boolean = false
   documento: string = 'REQUERIMIENTO'
@@ -108,40 +94,39 @@ buscador = new FormControl('');
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
     private modalService: ModalService,
-   private buscadorService:BuscadorService) { }
+   private buscadorService:BuscadorService<tableAsuntosPorDictaminar>) { }
 
   ngOnInit() {
     this.tablePorAsignar()
-    console.log(this.searchTerm);
-    this.buscar()
-
   }
 
   tablePorAsignar() {
     this.cards.tablePorAsignar(this.porAsignarDataTable).subscribe({
       next: (res) => {
-        this.tablePorAsignarIndicador = res
-        this.buscar()
+        // this.tablePorAsignarIndicador = res
+        this.allData = res
+        this.buscadorService.setData(this.allData)
       },
-
-
     });
 
   }
 
+  onDearchChange(value:string){
+    this.buscadorService.setSearchTerm(value)
+  }
+
+
+  filtrarIndicador = (item: tableAsuntosPorDictaminar, term: string): boolean => {
+  return item.persona_relacionada?.toLowerCase().includes(term.toLocaleLowerCase());
+  };
+
   asignarIndicador : Observable<tableAsuntosPorDictaminar[]>= new Observable
 
-  buscar(){
-this.asignarIndicador = this.buscador.valueChanges.pipe(
-  startWith(""),
-  debounceTime(300),
-  distinctUntilChanged(),
-  map(valor=>valor ?? ''),
-  switchMap(term=>
-    this.buscadorService.buscar(this.tablePorAsignarIndicador,term,'persona_relacionada')
-  )
-)
-  }
+
+ searchText: string = '';
+  results$: Observable<string[]> = of([]);
+ filteredData$: Observable<tableAsuntosPorDictaminar[]> = this.buscadorService.getFilteredData(this.filtrarIndicador);
+ allData: tableAsuntosPorDictaminar[] = [];
 
   usuariosPorAdministracion() {
     this.cards.usuariosPorAdminitracion().subscribe((res: usuariosPorAdministracion[]) => {
@@ -221,9 +206,7 @@ this.asignarIndicador = this.buscador.valueChanges.pipe(
     );
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.asuntosFiltrados.length / this.itemsPerPage);
-  }
+
 
   get startIndex(): number {
     return (this.currentPage - 1) * this.itemsPerPage;
@@ -253,11 +236,6 @@ this.asignarIndicador = this.buscador.valueChanges.pipe(
     return allOrdered.slice(this.startIndex, this.endIndex);
   }
 
-  irAPagina(pagina: number): void {
-    if (pagina >= 1 && pagina <= this.totalPages) {
-      this.currentPage = pagina;
-    }
-  }
 
   getPrioridad(dias: number): number {
     if (dias > 15 )  return 3; // Rojo
@@ -276,103 +254,103 @@ this.asignarIndicador = this.buscador.valueChanges.pipe(
     }
   }
 
-  verPDF(asunto: Asunto) {
-    // En producción, aquí obtendrías la URL del archivo PDF del backend
-    // Para el ejemplo, usamos un PDF de prueba
-    this.pdfSrc = this.obtenerURLPDF(asunto);
-    this.pdfTitulo = `Documento de ${asunto.personaRelacionada}`;
-    this.asuntoParaDescargar = asunto;
-    this.mostrarPDFViewer = true;
-  }
+  // verPDF(asunto: Asunto) {
+  //   // En producción, aquí obtendrías la URL del archivo PDF del backend
+  //   // Para el ejemplo, usamos un PDF de prueba
+  //   this.pdfSrc = this.obtenerURLPDF(asunto);
+  //   this.pdfTitulo = `Documento de ${asunto.personaRelacionada}`;
+  //   this.asuntoParaDescargar = asunto;
+  //   this.mostrarPDFViewer = true;
+  // }
 
-  cerrarPDF() {
-    this.mostrarPDFViewer = false;
-    this.pdfSrc = '';
-    this.pdfTitulo = '';
-    this.asuntoParaDescargar = null;
-  }
+  // cerrarPDF() {
+  //   this.mostrarPDFViewer = false;
+  //   this.pdfSrc = '';
+  //   this.pdfTitulo = '';
+  //   this.asuntoParaDescargar = null;
+  // }
 
-  descargarPDFActual() {
-    if (this.asuntoParaDescargar) {
-      this.descargarPDF(this.asuntoParaDescargar);
-    }
-  }
+  // descargarPDFActual() {
+  //   if (this.asuntoParaDescargar) {
+  //     this.descargarPDF(this.asuntoParaDescargar);
+  //   }
+  // }
 
-  descargarPDF(asunto: Asunto) {
-    // Simulación de descarga de PDF usando la API de Blob
-    const pdfUrl = this.obtenerURLPDF(asunto);
+  // descargarPDF(asunto: Asunto) {
+  //   // Simulación de descarga de PDF usando la API de Blob
+  //   const pdfUrl = this.obtenerURLPDF(asunto);
 
-    // Crear un elemento invisible para descargar
-    fetch(pdfUrl)
-      .then(response => response.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = asunto.personaRelacionada;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      });
-  }
+  //   // Crear un elemento invisible para descargar
+  //   fetch(pdfUrl)
+  //     .then(response => response.blob())
+  //     .then(blob => {
+  //       const url = window.URL.createObjectURL(blob);
+  //       const link = document.createElement('a');
+  //       link.href = url;
+  //       link.download = asunto.personaRelacionada;
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       document.body.removeChild(link);
+  //       window.URL.revokeObjectURL(url);
+  //     });
+  // }
 
-  // Método para simular la obtención de URL de PDF (en producción esto vendría del backend)
-  private obtenerURLPDF(asunto: Asunto): string {
-    // Para el ejemplo, usamos URLs de PDFs de ejemplo según el tipo de documento
-    // En producción, aquí consultarías tu API para obtener el PDF real
+  // // Método para simular la obtención de URL de PDF (en producción esto vendría del backend)
+  // private obtenerURLPDF(asunto: Asunto): string {
+  //   // Para el ejemplo, usamos URLs de PDFs de ejemplo según el tipo de documento
+  //   // En producción, aquí consultarías tu API para obtener el PDF real
 
-    // PDF de ejemplo para pruebas
-    return 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
-  }
+  //   // PDF de ejemplo para pruebas
+  //   return 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+  // }
 
-  cancelarAsignacion() {
-    this.asuntoSeleccionado = null;
-    this.abogadoSeleccionado = '';
-  }
+  // cancelarAsignacion() {
+  //   this.asuntoSeleccionado = null;
+  //   this.abogadoSeleccionado = '';
+  // }
 
-  confirmarAsignacion() {
-    if (this.asuntoSeleccionado && this.abogadoSeleccionado) {
-      console.log('Asignando asunto:', this.asuntoSeleccionado.folioInterno, 'a:', this.abogadoSeleccionado);
-      // Aquí implementar la lógica de asignación
-      this.asuntoSeleccionado = null;
-      this.abogadoSeleccionado = '';
-    }
-  }
+  // confirmarAsignacion() {
+  //   if (this.asuntoSeleccionado && this.abogadoSeleccionado) {
+  //     console.log('Asignando asunto:', this.asuntoSeleccionado.folioInterno, 'a:', this.abogadoSeleccionado);
+  //     // Aquí implementar la lógica de asignación
+  //     this.asuntoSeleccionado = null;
+  //     this.abogadoSeleccionado = '';
+  //   }
+  // }
 
   regresar() {
     this.router.navigate(['/layout/assistance']);
   }
 
-  verDetalle(asunto: Asunto) {
-    this.asuntoDetalle = asunto;
-  }
+  // verDetalle(asunto: Asunto) {
+  //   this.asuntoDetalle = asunto;
+  // }
 
-  cerrarDetalle() {
-    this.asuntoDetalle = null;
-  }
+  // cerrarDetalle() {
+  //   this.asuntoDetalle = null;
+  // }
 
-  getBackgroundColor(asunto: Asunto): string {
-    const dias = asunto.diasAntiguedad;
+  // getBackgroundColor(asunto: Asunto): string {
+  //   const dias = asunto.diasAntiguedad;
 
-    if (dias > 15) {
-      return 'bg-red-500';
-    } else if (dias >= 5 && dias <= 15) {
-      return 'bg-yellow-500';
-    } else {
-      return 'bg-green-500';
-    }
-  }
+  //   if (dias > 15) {
+  //     return 'bg-red-500';
+  //   } else if (dias >= 5 && dias <= 15) {
+  //     return 'bg-yellow-500';
+  //   } else {
+  //     return 'bg-green-500';
+  //   }
+  // }
 
 
 
-  verDocumentoDesdeDetalle(asunto: Asunto) {
-    // Cerrar el modal de detalle primero
-    this.cerrarDetalle();
+  // verDocumentoDesdeDetalle(asunto: Asunto) {
+  //   // Cerrar el modal de detalle primero
+  //   this.cerrarDetalle();
 
-    // Luego mostrar el PDF
-    setTimeout(() => {
-      this.verPDF(asunto);
-    }, 100);
-  }
+  //   // Luego mostrar el PDF
+  //   setTimeout(() => {
+  //     this.verPDF(asunto);
+  //   }, 100);
+  // }
 }

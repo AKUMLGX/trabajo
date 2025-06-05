@@ -14,7 +14,7 @@
     <div class="bg-white rounded-lg shadow-md p-4 mb-4">
       <!-- Fila superior con filtro de año y botón de Excel -->
       <div class="flex flex-wrap justify-between items-center mb-4">
-        <div class="flex items-center">
+        <!-- <div class="flex items-center">
           <label class="text-sm text-gray-600 font-medium mr-2">Filtrar por año:</label>
           <select [(ngModel)]="anioSeleccionado" (change)="filtrarPorAnio(anioSeleccionado)"
                 class="px-3 py-2 text-sm border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]">
@@ -23,7 +23,7 @@
             <option value="2023">2023</option>
             <option value="2022">2022</option>
           </select>
-        </div>
+        </div> -->
 
         <button (click)="descargarExcel()"
                           class="flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm transition-colors">
@@ -38,11 +38,11 @@
       <div class="pt-4 border-t grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="flex flex-col">
           <label class="text-xs font-medium text-gray-600 mb-1">Folio Interno</label>
-          <input type="text" [(ngModel)]="filtroFolio" (input)="filtrarAsuntos()"
+          <input type="text" [(ngModel)]="searchText" (ngModelChange)="onDearchChange($event)"
                  class="px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
                  placeholder="Buscar por folio...">
         </div>
-
+<!--
         <div class="flex flex-col">
           <label class="text-xs font-medium text-gray-600 mb-1">Carpeta de Investigación</label>
           <input type="text" [(ngModel)]="filtroCarpeta" (input)="filtrarAsuntos()"
@@ -52,7 +52,7 @@
 
         <div class="flex flex-col">
           <label class="text-xs font-medium text-gray-600 mb-1">Oficio</label>
-          <input type="text" [(ngModel)]="filtroOficio" (input)="filtrarAsuntos()"
+          <input type="text"
                  class="px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
                  placeholder="Buscar por oficio...">
         </div>
@@ -68,13 +68,13 @@
           <input type="date" [(ngModel)]="filtroFechaFin" (change)="filtrarAsuntos()"
                  class="px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]">
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Contador de asuntos -->
-    <div class="bg-white rounded-lg shadow-sm p-3 mb-4 text-center">
+    <!-- <div class="bg-white rounded-lg shadow-sm p-3 mb-4 text-center">
       <span class="text-sm font-medium text-gray-700">Mostrando {{ asuntosFiltrados.length > 0 ? (paginaActual-1)*itemsPorPagina + 1 : 0 }} a {{ Math.min(paginaActual*itemsPorPagina, asuntosFiltrados.length) }} de {{ totalAsuntos }} asuntos parciales</span>
-    </div>
+    </div> -->
   </div>
 
   <!-- Tabla de asuntos -->
@@ -96,16 +96,16 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <!-- Filas de datos - Mostramos solo los elementos de la página actual -->
-          <ng-container *ngFor="let asunto of tableParcialResponse.slice((paginaActual-1)*itemsPorPagina, paginaActual*itemsPorPagina); let i = index">
+          <ng-container *ngFor="let asunto of filteredData$ | async; let i = index">
             <tr [class]="i % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'"
                 class="cursor-pointer"
                 >
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.folio_interno }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.carpeta_investigacion }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.oficio }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.persona_relacionada }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.fecha_recepcion }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.plazo_atencion }} días</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.fecha_recepcion }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.persona_relacionada }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-center">
                 <!-- <button (click)="revisarAsunto(asunto.id, $event)"
                         class="text-white bg-[#691C32] hover:bg-[#4a1423] px-3 py-1.5 text-xs rounded transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">
@@ -116,9 +116,9 @@
           </ng-container>
 
           <!-- Mensaje si no hay resultados -->
-          <tr *ngIf="asuntosFiltrados.length === 0">
+          <!-- <tr *ngIf="asuntosFiltrados.length === 0">
             <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">No se encontraron asuntos parciales para el filtro seleccionado</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
 
@@ -127,7 +127,7 @@
         <div class="flex-1 flex justify-center">
           <div class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
             <!-- Botón Anterior -->
-            <button (click)="cambiarPagina('anterior')"
+            <!-- <button (click)="cambiarPagina('anterior')"
                     [disabled]="paginaActual === 1"
                     [class.opacity-50]="paginaActual === 1"
                     class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
@@ -135,19 +135,19 @@
               <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
               </svg>
-            </button>
+            </button> -->
 
             <!-- Botones de página -->
             <ng-container *ngFor="let pagina of [1, 2, 3, 4, 5]; let i = index">
-              <button *ngIf="pagina <= Math.ceil(totalAsuntos / itemsPorPagina)"
+              <!-- <button *ngIf="pagina <= Math.ceil(totalAsuntos / itemsPorPagina)"
                       (click)="cambiarPagina(pagina)"
                       [class]="paginaActual === pagina ? 'relative inline-flex items-center px-4 py-2 border border-[#691C32] bg-[#691C32] text-sm font-medium text-white' : 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50'">
                 {{ pagina }}
-              </button>
+              </button> -->
             </ng-container>
 
             <!-- Botón Siguiente -->
-            <button (click)="cambiarPagina('siguiente')"
+            <!-- <button (click)="cambiarPagina('siguiente')"
                     [disabled]="paginaActual >= Math.ceil(totalAsuntos / itemsPorPagina)"
                     [class.opacity-50]="paginaActual >= Math.ceil(totalAsuntos / itemsPorPagina)"
                     class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
@@ -155,23 +155,13 @@
               <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
               </svg>
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
 
       <!-- Botón de desplazamiento -->
-      <div class="bg-[#F3EAE4] py-2 flex justify-center">
-        <button class="text-[#691C32] flex items-center text-xs hover:text-[#4a1423] transition-colors focus:outline-none">
-          <span>Desliza para ver toda la información</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+
     </div>
   </div>
 </div>

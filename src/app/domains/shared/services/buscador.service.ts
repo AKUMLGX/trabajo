@@ -1,47 +1,41 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
+import {
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map
+} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BuscadorService {
+export class BuscadorService<T> {
 
   constructor() { }
 
-  // buscador<T>(term: Observable<string>, datos: T[], clave: keyof T): Observable<T[]> {
-  //   return term.pipe(
-  //     debounceTime(300),
-  //     distinctUntilChanged(),
-  //     map(busq => {
-  //       const lower = busq.toLocaleLowerCase();
-  //       return datos.filter(item => {
-  //         const value = String(item[clave]).toLowerCase();
-  //         return value.includes(lower)
-  //       })
-  //     })
-  //   )
-  // }
-
-// dummyData: { name: string; }[] = [];
-
-//   buscar(data:string):Observable<string[]>{
-//  const filteredSuggestions =this.dummyData
-//       .map(item => item.name)
-//       .filter(name => name.toLowerCase().includes(data.toLowerCase()));
-//       return filteredSuggestions.length >8 ? of(filteredSuggestions.slice(0, 8)) : of(filteredSuggestions);
-//   }
+  private data$ = new BehaviorSubject<T[]>([]);
+  private searchTerm$ = new BehaviorSubject<string>('');
 
 
- buscar<T>(items: T[], termino: string, campo: keyof T): Observable<T[]> {
-    if (!termino.trim()) return of(items);
+  setData(data: T[]) {
+    this.data$.next(data);
+  }
 
-    const filtro = termino.toLowerCase();
-    return of(items).pipe(
-      map(datos => datos.filter(item =>
-        item[campo]?.toString().toLowerCase().includes(filtro)
-      ))
+  setSearchTerm(term: string) {
+    this.searchTerm$.next(term);
+  }
+  getFilteredData(predicate: (item: T, term: string) => boolean): Observable<T[]> {
+    return combineLatest([
+      this.data$,
+      this.searchTerm$.pipe(debounceTime(300), distinctUntilChanged())
+    ]).pipe(
+      map(([data, term]) =>
+        data.filter(item => predicate(item, term))
+      )
     );
   }
 }
+
+

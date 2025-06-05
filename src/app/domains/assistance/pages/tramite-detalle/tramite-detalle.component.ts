@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { SafePipe } from '../../../../shared/pipes/safe.pipe';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { AsuntoPorAtencionEnTramiteRequest } from '../../../interfaces/asuntoPorAtencion.interface';
+import { BuscadorService } from '../../../shared/services/buscador.service';
+import { Observable, of } from 'rxjs';
 
 interface Asunto {
   id: string;
@@ -22,7 +24,7 @@ interface Asunto {
 @Component({
   selector: 'app-tramite-detalle',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, SafePipe],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './tramite-detalle.component.html',
   styleUrls: ['./tramite-detalle.component.css']
 })
@@ -69,7 +71,10 @@ export class TramiteDetalleComponent implements OnInit {
   }
   tableResponse: AsuntoPorAsigacionResponseEnTramite[]=[];
 
-  constructor(private router: Router, private cards:CardsInfoBandejadeAtencionService) {}
+  constructor(private router: Router,
+     private cards:CardsInfoBandejadeAtencionService,
+    private buscadorService: BuscadorService<AsuntoPorAsigacionResponseEnTramite>
+   ) {}
 
   ngOnInit(): void {
     this.filtrarAsuntos();
@@ -78,11 +83,25 @@ export class TramiteDetalleComponent implements OnInit {
 
   tableEnTramite(){
   this.cards.enTramiteTableCard(this.tableRequest).subscribe(res=>{
-    this.tableResponse = res;
+    // this.tableResponse = res;
+    this.allData=res
+    this.buscadorService.setData(this.allData)
     })
   }
+  onDearchChange(value:string){
+    this.buscadorService.setSearchTerm(value)
+  }
 
+  filterIndicador=(item:AsuntoPorAsigacionResponseEnTramite, term:string):boolean=>{
+    return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
+  }
 
+  asignarIndicador : Observable<AsuntoPorAsigacionResponseEnTramite[]>= new Observable;
+
+  searchText:string='';
+  // result$: Observable<string[]> = of ([]);
+  filteredData$: Observable<AsuntoPorAsigacionResponseEnTramite[]> = this.buscadorService.getFilteredData(this.filterIndicador) ;
+  allData: AsuntoPorAsigacionResponseEnTramite[]=[]
 
   // Función para normalizar texto (eliminar acentos y convertir a minúsculas)
   normalizarTexto(texto: string): string {

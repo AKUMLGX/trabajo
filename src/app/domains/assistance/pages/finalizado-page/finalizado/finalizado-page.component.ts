@@ -1,12 +1,13 @@
-import { AsuntoPorAsigacionResponseTotal } from './../../../../interfaces/asuntoPorAtencionResponse.interface';
 import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import * as XLSX from 'xlsx';
 import { AsuntoPorAtencionTotalRequest } from '../../../../interfaces/asuntoPorAtencion.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../../services/cards-info-bandejade-atencion.service';
+import { AsuntoPorAsigacionResponseTotal } from './../../../../interfaces/asuntoPorAtencionResponse.interface';
+import { BuscadorService } from '../../../../shared/services/buscador.service';
+import { Observable } from 'rxjs';
 
 interface AsuntoFinalizado {
   folio: string;
@@ -131,7 +132,10 @@ export class FinalizadoComponent implements OnInit {
   itemsPorPagina: number = 5;
   totalPaginas: number = 1;
 
-  constructor(private cards:CardsInfoBandejadeAtencionService) {}
+  constructor(
+    private cards:CardsInfoBandejadeAtencionService ,
+    private buscadorService: BuscadorService <AsuntoPorAsigacionResponseTotal>
+  ) {}
 
   ngOnInit(): void {
     // Inicializar tabla con todos los datos, sin filtros aplicados
@@ -140,13 +144,30 @@ export class FinalizadoComponent implements OnInit {
     this.tableTotal();
   }
 
+ onDearchChange(value:string){
+    this.buscadorService.setSearchTerm(value)
+  }
+
+  filterIndicador=(item:AsuntoPorAsigacionResponseTotal, term:string):boolean=>{
+      return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
+    }
+
+   asignarIndicador : Observable<AsuntoPorAsigacionResponseTotal[]>= new Observable;
+     searchText:string='';
+      filteredData$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredData(this.filterIndicador) ;
+       allData: AsuntoPorAsigacionResponseTotal[]=[]
+
 tableTotal(){
   this.cards.totalTableCard(this.tableRequest).subscribe(res=>{
-    this.tableResponse=res;
-    console.log(this.tableResponse);
+    // this.tableResponse=res;
+
+    this.allData = res;
+    this.buscadorService.setData(this.allData)
 
   })
 }
+
+
 
 
   // Función para normalizar texto (eliminar acentos y convertir a minúsculas)

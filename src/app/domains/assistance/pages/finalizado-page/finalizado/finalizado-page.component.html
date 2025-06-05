@@ -35,40 +35,41 @@
           <!-- Filtro por folio -->
           <div>
             <label for="filtroFolio" class="block text-sm font-medium text-gray-700 mb-1">Folio:</label>
-            <input type="text" id="filtroFolio" [(ngModel)]="filtroFolio"
-                   (keyup.enter)="aplicarFiltros()"
+            <input type="search"
+            [(ngModel)]="searchText"
+               (ngModelChange)="onDearchChange($event)"
                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
                    placeholder="Buscar por folio...">
           </div>
 
           <!-- Filtro por dictaminador (persona relacionada) -->
-          <div>
+          <!-- <div>
             <label for="filtroDictaminador" class="block text-sm font-medium text-gray-700 mb-1">Persona relacionada:</label>
             <input type="text" id="filtroDictaminador" [(ngModel)]="filtroDictaminador"
                    (keyup.enter)="aplicarFiltros()"
                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
                    placeholder="Buscar por nombre o apellido...">
-          </div>
+          </div> -->
 
           <!-- Filtro por fecha (desde) -->
-          <div>
+          <!-- <div>
             <label for="filtroFechaInicio" class="block text-sm font-medium text-gray-700 mb-1">Fecha desde:</label>
             <input type="date" id="filtroFechaInicio" [(ngModel)]="filtroFechaInicio"
                    (change)="aplicarFiltros()"
                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
-          </div>
+          </div> -->
 
           <!-- Filtro por fecha (hasta) -->
-          <div>
+          <!-- <div>
             <label for="filtroFechaFin" class="block text-sm font-medium text-gray-700 mb-1">Fecha hasta:</label>
             <input type="date" id="filtroFechaFin" [(ngModel)]="filtroFechaFin"
                    (change)="aplicarFiltros()"
                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
-          </div>
+          </div> -->
         </div>
 
         <!-- Botones de acción -->
-        <div class="mt-4 flex justify-end space-x-2">
+        <!-- <div class="mt-4 flex justify-end space-x-2">
           <button (click)="limpiarFiltros()"
                   class="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
             Limpiar
@@ -77,16 +78,16 @@
                   class="px-4 py-2 bg-[#691C32] hover:bg-[#4a1423] text-white rounded-md text-sm transition-colors">
             Aplicar filtros
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
 
     <!-- Tabla mejorada de asuntos finalizados -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <div class="p-4 border-b border-gray-200">
+      <!-- <div class="p-4 border-b border-gray-200">
         <h2 class="text-xl font-semibold text-[#691C32]">Listado de Asuntos Finalizados</h2>
         <p class="text-sm text-gray-500 mt-1">Mostrando {{ rangoElementosMostrados }} asuntos</p>
-      </div>
+      </div> -->
 
       <!-- Tabla de asuntos -->
       <div class="overflow-x-auto">
@@ -104,7 +105,7 @@
                   </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <ng-container *ngIf="asuntosPaginados.length > 0; else sinResultados">
-              <tr *ngFor="let asunto of tableResponse; let i = index"
+              <tr *ngFor="let asunto of filteredData$ |async; let i = index"
                   [class]="i % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'">
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ asunto.folio_interno }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.id_documento_fk }}</td>
@@ -152,7 +153,7 @@
         <div class="flex-1 flex justify-center">
           <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
             <!-- Botón Anterior -->
-            <button (click)="cambiarPagina(paginaActual - 1)"
+            <!-- <button (click)="cambiarPagina(paginaActual - 1)"
                     [disabled]="paginaActual <= 1"
                     [class.opacity-50]="paginaActual <= 1"
                     class="relative inline-flex items-center px-2 py-1.5 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">
@@ -160,56 +161,56 @@
               <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
               </svg>
-            </button>
+            </button> -->
 
             <!-- Números de página (generados dinámicamente) -->
             <ng-container *ngIf="totalPaginas <= 5; else paginacionRecortada">
-              <button *ngFor="let pagina of [].constructor(totalPaginas); let i = index"
+              <!-- <button *ngFor="let pagina of [].constructor(totalPaginas); let i = index"
                       (click)="cambiarPagina(i + 1)"
                       class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium"
                       [class]="paginaActual === i + 1 ? 'z-10 border-[#691C32] bg-[#691C32] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'">
                 {{ i + 1 }}
-              </button>
+              </button> -->
             </ng-container>
 
             <ng-template #paginacionRecortada>
               <!-- Primera página -->
-              <button (click)="cambiarPagina(1)"
+              <!-- <button (click)="cambiarPagina(1)"
                       class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium"
                       [class]="paginaActual === 1 ? 'z-10 border-[#691C32] bg-[#691C32] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'">
                 1
-              </button>
+              </button> -->
 
               <!-- Puntos suspensivos al inicio si es necesario -->
-              <span *ngIf="paginaActual > 3" class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+              <!-- <span *ngIf="paginaActual > 3" class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700">
                 ...
-              </span>
+              </span> -->
 
               <!-- Páginas alrededor de la actual -->
               <ng-container *ngFor="let offset of [-1, 0, 1]">
-                <button *ngIf="paginaActual + offset > 1 && paginaActual + offset < totalPaginas"
+                <!-- <button *ngIf="paginaActual + offset > 1 && paginaActual + offset < totalPaginas"
                         (click)="cambiarPagina(paginaActual + offset)"
                         class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium"
                         [class]="paginaActual === paginaActual + offset ? 'z-10 border-[#691C32] bg-[#691C32] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'">
                   {{ paginaActual + offset }}
-                </button>
+                </button> -->
               </ng-container>
 
               <!-- Puntos suspensivos al final si es necesario -->
-              <span *ngIf="paginaActual < totalPaginas - 2" class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+              <!-- <span *ngIf="paginaActual < totalPaginas - 2" class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700">
                 ...
-              </span>
+              </span> -->
 
               <!-- Última página -->
-              <button (click)="cambiarPagina(totalPaginas)"
+              <!-- <button (click)="cambiarPagina(totalPaginas)"
                       class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium"
                       [class]="paginaActual === totalPaginas ? 'z-10 border-[#691C32] bg-[#691C32] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'">
                 {{ totalPaginas }}
-              </button>
+              </button> -->
             </ng-template>
 
             <!-- Botón Siguiente -->
-            <button (click)="cambiarPagina(paginaActual + 1)"
+            <!-- <button (click)="cambiarPagina(paginaActual + 1)"
                     [disabled]="paginaActual >= totalPaginas"
                     [class.opacity-50]="paginaActual >= totalPaginas"
                     class="relative inline-flex items-center px-2 py-1.5 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">
@@ -217,7 +218,7 @@
               <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
               </svg>
-            </button>
+            </button> -->
           </nav>
         </div>
       </div>
