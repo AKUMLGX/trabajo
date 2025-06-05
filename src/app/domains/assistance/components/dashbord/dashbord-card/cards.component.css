@@ -1,0 +1,132 @@
+* Estilos globales de tipografía */
+* {
+  font-family: 'Noto Sans', sans-serif !important;
+}
+
+/* Contenedor principal con efecto 3D */
+.urgent-matters-container {
+  perspective: 1000px;
+}
+
+.urgent-matters-3d {
+  transform-style: preserve-3d;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estilos para la marquesina */
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-text {
+  display: flex;
+  animation: marquee 15s linear infinite;
+  white-space: nowrap;
+  gap: 50px; /* Espacio entre las repeticiones del texto */
+}
+
+.marquee-text p {
+  padding-right: 50px; /* Espacio adicional después de cada texto */
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+}
+
+/* Pausa la animación cuando el usuario pasa el mouse por encima */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Efecto de rotación y desplazamiento */
+@keyframes rotateAndMove {
+  0% {
+    transform: translateX(-100%) rotateY(0deg);
+  }
+  25% {
+    transform: translateX(-50%) rotateY(90deg);
+  }
+  50% {
+    transform: translateX(0%) rotateY(180deg);
+  }
+  75% {
+    transform: translateX(50%) rotateY(270deg);
+  }
+  100% {
+    transform: translateX(100%) rotateY(360deg);
+  }
+}
+
+/* Efecto de brillo giratorio */
+.urgent-3d-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 217, 46, 0.2) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 217, 46, 0.2) 100%
+  );
+  animation: rotateAndMove 8s linear infinite;
+  pointer-events: none;
+}
+
+/* Animación del icono de urgente */
+.urgent-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Efecto hover mejorado */
+.urgent-matters-3d:hover {
+  animation-play-state: paused;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.urgent-matters-3d:hover .urgent-3d-effect {
+  animation-play-state: paused;
+}
+
+.urgent-matters-3d:hover .urgent-icon {
+  animation-play-state: paused;
+}
+
+/* Asegurarse que el contenido esté por encima del efecto */
+.urgent-content {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 252, 203, 0.9);
+  width: 100%;
+}
+
+/* Mejora la transición del texto */
+.urgent-text {
+  display: inline-block;
+  padding-right: 2rem;
+}

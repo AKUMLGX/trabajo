@@ -9,12 +9,12 @@
       <mat-icon>menu</mat-icon>
     </button>
     <!-- se comenta -->
-    <!-- <button mat-icon-button class="text-white">
-      <mat-icon>person</mat-icon>
+    <button mat-icon-button class="text-white" (click)="openModal(userInfoModal)">
+      <mat-icon>person</mat-icon >
     </button>
     <button mat-icon-button class="text-white">
       <mat-icon>pageview</mat-icon>
-    </button> -->
+    </button>
   </div>
   <app-navbar-content-info></app-navbar-content-info>
   <app-navbar-content></app-navbar-content>
@@ -32,4 +32,108 @@
     <router-outlet />
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #userInfoModal>
+  <div class="bg-white rounded-md overflow-hidden shadow-lg">
+    <!-- Encabezado con fondo burdeos -->
+    <div class="bg-[#691C32] py-4 px-6 flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3">
+          <mat-icon style="color: #691C32;">person</mat-icon>
+        </div>
+        <h2 class="text-white text-xl font-medium">Información del Usuario</h2>
+      </div>
+      <button mat-icon-button class="text-white" (click)="closeModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="p-6">
+      <!-- Información principal del usuario con fondo decorativo -->
+      <div class="text-center border-b border-gray-200 pb-6 mb-6 relative">
+        <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-[#691C32]/10 to-[#691C32]/5 -z-10 rounded-t-lg"></div>
+        <div class="w-20 h-20 mx-auto bg-[#691C32] rounded-full flex items-center justify-center mb-3 border-4 border-white shadow-md">
+          <span class="text-white text-xl font-bold">{{nombreUsuario.charAt(0)}}</span>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800 mb-1">{{nombreUsuario}}</h2>
+        <p class="text-[#691C32] font-medium">{{puestoUsuario}}</p>
+        <p class="text-gray-600 text-sm mt-1">RFC: {{rfcUsuario}}</p>
+      </div>
+
+      <!-- Información de contacto y detalles -->
+      <div class="space-y-6 bg-gray-50 p-4 rounded-lg">
+        <!-- Correo electrónico -->
+        <div class="flex items-center">
+          <div class="flex-shrink-0 mr-4 text-[#691C32]">
+            <mat-icon class="text-[#691C32]">email</mat-icon>
+          </div>
+          <div>
+            <div class="uppercase text-xs font-semibold text-gray-500 tracking-wider">CORREO ELECTRÓNICO</div>
+            <div class="text-gray-800">{{correoUsuario}}</div>
+          </div>
+        </div>
+
+        <!-- Administración Adscrita -->
+        <div class="flex items-center">
+          <div class="flex-shrink-0 mr-4">
+            <mat-icon class="text-[#691C32]">business</mat-icon>
+          </div>
+          <div>
+            <div class="uppercase text-xs font-semibold text-gray-500 tracking-wider">ADMINISTRACIÓN ADSCRITA</div>
+            <div class="text-gray-800">Administración {{numeroAdministracion}}</div>
+          </div>
+        </div>
+
+        <!-- Número de empleado -->
+        <div class="flex items-center">
+          <div class="flex-shrink-0 mr-4">
+            <mat-icon class="text-[#691C32]">badge</mat-icon>
+          </div>
+          <div>
+            <div class="uppercase text-xs font-semibold text-gray-500 tracking-wider">NÚMERO DE EMPLEADO</div>
+            <div class="text-gray-800">{{numeroEmpleado}}</div>
+          </div>
+        </div>
+
+        <!-- Usuario desde -->
+        <div class="flex items-center">
+          <div class="flex-shrink-0 mr-4">
+            <mat-icon class="text-[#691C32]">calendar_today</mat-icon>
+          </div>
+          <div>
+            <div class="uppercase text-xs font-semibold text-gray-500 tracking-wider">USUARIO DESDE</div>
+            <div class="text-gray-800">{{fechaRegistro}}</div>
+          </div>
+        </div>
+
+        <!-- Rol del sistema -->
+        <div class="flex items-center">
+          <div class="flex-shrink-0 mr-4">
+            <mat-icon class="text-[#691C32]">admin_panel_settings</mat-icon>
+          </div>
+          <div>
+            <div class="uppercase text-xs font-semibold text-gray-500 tracking-wider">ROL EN EL SISTEMA</div>
+            <div class="text-gray-800">{{rolUsuario}}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información adicional -->
+      <div class="mt-6 border-t border-gray-200 pt-4">
+        <div class="text-xs text-gray-500 text-center">
+          Para actualizar tu información, contacta al administrador del sistema
+        </div>
+      </div>
+
+      <!-- Botón de cerrar centrado -->
+      <div class="flex justify-center mt-6">
+        <button class="bg-[#691C32] text-white py-2 px-10 rounded hover:bg-[#4a1423] transition-colors font-medium shadow-md" (click)="closeModal()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
 

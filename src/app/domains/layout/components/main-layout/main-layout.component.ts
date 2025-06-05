@@ -8,7 +8,7 @@ import { NavbarContentComponent } from './navbar-content/navbar-content.componen
 import { NavbarContentInfoComponent } from './navbar-content/navbar-content-info/navbar-content-info.component';
 import { RouterModule } from '@angular/router';
 import { ModalService } from './../../../shared/services/modal.service';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { Oauth2Service } from '../../../services/ouath2.service';
@@ -40,6 +40,8 @@ import { LoadAnimationComponent } from '../../../components/load-animation/load-
 })
 export class MainLayoutComponent {
 
+
+
   showErrorDialog = false;
 
   constructor(private oauth2Service: Oauth2Service, private modalService: ModalService) { }
@@ -60,6 +62,44 @@ export class MainLayoutComponent {
     this.modalService.showError.subscribe((show) => {
       this.showErrorDialog = show;
     });
+  }
+
+
+  private dialogRef: MatDialogRef<any> | null = null;
+
+  isExpanded = true;
+  showSubmenu: boolean = false;
+  isShowing = false;
+  showSubSubMenu: boolean = false;
+  isLogged: boolean = false;
+  public token: any;
+  public isOpen = false;
+  public user: any;
+  public isExpandedUser = false;
+  public isExpandedNotificacion = false;
+  public isExpandedAyuda = false;
+  public isExpandedConfig = false;
+  public isExpandedBusqueda = false;
+  public isExpandedCerrar = false;
+
+  // Información del usuario para el modal
+  nombreUsuario: string = '';
+  puestoUsuario: string = '';
+  rfcUsuario: string = '';
+  correoUsuario: string = '';
+  numeroAdministracion: string = '';
+  numeroEmpleado: string = '';
+  fechaRegistro: string = '';
+  rolUsuario: string = '';
+
+  // Contador de notificaciones
+  contadorNotificaciones: number = 0;
+
+   closeModal() {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+      this.dialogRef = null;
+    }
   }
 
   getToken(): void {
