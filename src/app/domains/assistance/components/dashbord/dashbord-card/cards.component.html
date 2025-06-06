@@ -4,13 +4,10 @@
     <h1 class="text-2xl font-bold text-center">Asuntos asignados a la administración {{this.administracion}} </h1>
   </div>
 
-
   <!-- Tarjetas de estado - versión mejorada -->
-
-  <div class="grid grid-cols-4 gap-6 mb-6 px-12 mt-8">
-
- <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow inter"
-         >
+  <div class="flex flex-row flex-nowrap justify-between mb-6 px-6 mt-8 overflow-x-auto">
+    <!-- Card Por Asignar -->
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow inter flex-shrink-0 mx-2 min-w-[180px] w-[200px]">
       <div class="flex justify-center mb-2">
         <div class="w-15 h-20 rounded-full flex items-center justify-center">
           <img src="{{environment.base}}/assets/images/A_porasignar.svg" width="59px" height="57px"
@@ -22,7 +19,7 @@
     </div>
 
     <!-- Tarjeta En Trámite -->
-    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow ">
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow flex-shrink-0 mx-2 min-w-[180px] w-[200px]">
       <div class="flex justify-center mb-2">
         <div class="w-15 h-20 rounded-full flex items-center justify-center">
           <img src="{{environment.base}}/assets/images/Entramite.png" width="59px" height="57px"
@@ -31,13 +28,10 @@
       </div>
       <div class="text-3xl font-bold text-gray-800 mb-1">{{requerimiento.en_tramite}}</div>
       <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block"><button (click)="mostrarDetalle('nuevos')">En Trámite</button></div>
-          </div>
-
-
+    </div>
 
     <!-- Tarjeta Parcial -->
-    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow inter"
-         >
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow inter flex-shrink-0 mx-2 min-w-[180px] w-[200px]">
       <div class="flex justify-center mb-2">
         <div class="w-15 h-20 rounded-full flex items-center justify-center ">
           <img src="{{environment.base}}/assets/images/Parcial.svg " width="59px" height="57px">
@@ -48,8 +42,7 @@
     </div>
 
     <!-- Tarjeta Total -->
-    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow inter"
-         >
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow inter flex-shrink-0 mx-2 min-w-[180px] w-[200px]">
       <div class="flex justify-center mb-2">
         <div class="w-20 h-20 rounded-full flex items-center justify-center">
           <img src="{{environment.base}}/assets/images/Finalizado.svg"width="59px" height="57px" alt="finalizado">
@@ -58,48 +51,45 @@
       <div class="text-3xl font-bold text-gray-800 mb-1">{{requerimiento.total}}</div>
       <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block"><button (click)="mostrarDetalle('total')">Total</button></div>
     </div>
-  <div class="bg-white p-3 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer"
-           >
-        <div class="flex justify-center mb-2">
-          <div class="w-15 h-20 rounded-full flex items-center justify-center">
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M28 54.5265C42.648 54.5265 54.526 42.6486 54.526 28.0002C54.526 13.3517 42.648 1.47388 28 1.47388C13.352 1.47388 1.474 13.3517 1.474 28.0002C1.474 42.6486 13.352 54.5265 28 54.5265Z" stroke="#ef4444" stroke-width="3" stroke-miterlimit="10"/>
-              <path d="M35 21L21 35" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 21L35 35" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-        <div class="text-3xl font-bold text-gray-800 mb-1">0</div>
-        <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">Rechazados</div>
-      </div>
 
+    <!-- Tarjeta Rechazados -->
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer flex-shrink-0 mx-2 min-w-[180px] w-[200px]">
+      <div class="flex justify-center mb-2">
+        <div class="w-15 h-20 rounded-full flex items-center justify-center">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28 54.5265C42.648 54.5265 54.526 42.6486 54.526 28.0002C54.526 13.3517 42.648 1.47388 28 1.47388C13.352 1.47388 1.474 13.3517 1.474 28.0002C1.474 42.6486 13.352 54.5265 28 54.5265Z" stroke="#ef4444" stroke-width="3" stroke-miterlimit="10"/>
+            <path d="M35 21L21 35" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 21L35 35" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="text-3xl font-bold text-gray-800 mb-1">0</div>
+      <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">Rechazados</div>
+    </div>
   </div>
 
-  <!-- Indicadores de resumen - versión mejorada -->
- <div class="mb-6">
-      <div class="bg-[#FFFCCB] relative overflow-hidden rounded-lg shadow-lg">
-        <div class="urgent-content flex items-center justify-between p-4">
-          <div class="flex items-center space-x-4 w-full">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3">
-              <img src="{{environment.base}}/assets/images/A_urgentes.svg" alt="Asignar">
-            </div>
-            <div class="flex-1">
-              <h3 class="text-[#2D2A26] text-xl font-bold tracking-wide">Asuntos Urgentes</h3>
-              <div class="overflow-hidden">
-                <div class="animate-marquee">
-                  <span class="urgent-text text-[#FF003F] text-2xl font-semibold">56 asuntos requieren atención inmediata</span>
-                  <span class="urgent-text text-[#FF003F] text-2xl font-semibold">56 asuntos requieren atención inmediata</span>
-                </div>
-              </div>
+  <!-- Indicadores de resumen - versión mejorada con ancho completo -->
+  <div class="mb-6 mx-6">
+    <div class="bg-[#FFFCCB] relative overflow-hidden rounded-lg shadow-lg w-full">
+      <div class="urgent-content flex items-center p-4">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3">
+          <img src="{{environment.base}}/assets/images/A_urgentes.svg" alt="Asignar">
+        </div>
+        <div class="flex-1">
+          <h3 class="text-[#2D2A26] text-xl font-bold tracking-wide">Asuntos Urgentes</h3>
+          <div class="overflow-hidden">
+            <div class="animate-marquee whitespace-nowrap">
+              <span class="text-[#FF003F] text-2xl font-semibold">56 asuntos requieren atención inmediata</span>
+              <span class="text-[#FF003F] text-2xl font-semibold ml-12">56 asuntos requieren atención inmediata</span>
             </div>
           </div>
-          <div class="absolute left-0 top-0 h-full w-3 bg-[#FFD92E]"></div>
         </div>
+        <div class="absolute left-0 top-0 h-full w-3 bg-[#FFD92E]"></div>
       </div>
     </div>
+  </div>
 
-
-  <!-- Tabla de asuntos - versión mejorada y funcional -->
+  <!-- Tabla de asuntos - versión mejorada con ancho completo -->
   <div class="bg-white rounded-lg shadow-md overflow-hidden mx-6 mb-6">
     <div class="p-4 border-b border-gray-200">
       <h2 class="text-xl font-semibold text-[#691C32] mb-4">Asuntos por dictaminar</h2>
@@ -233,7 +223,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-</div>
+      </div>
 
       <!-- Contenido del modal -->
       <div class="p-4">
@@ -242,11 +232,11 @@
             <div>
               <label class="text-xs font-medium text-gray-500">Folio</label>
               <p class="text-sm font-semibold text-gray-900">{{asuntoSeleccionado?.folio}}</p>
-                </div>
+            </div>
             <div>
               <label class="text-xs font-medium text-gray-500">Autoridad Solicitante</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.autoridad}}</p>
-              </div>
+            </div>
             <div>
               <label class="text-xs font-medium text-gray-500">Dictaminador</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.dictaminador}}</p>
@@ -256,15 +246,15 @@
             <div>
               <label class="text-xs font-medium text-gray-500">Fecha</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.fecha}}</p>
-                        </div>
+            </div>
             <div>
               <label class="text-xs font-medium text-gray-500">Fecha de Captura</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.fechaCaptura}}</p>
-                        </div>
+            </div>
             <div>
               <label class="text-xs font-medium text-gray-500">Estado</label>
               <p class="text-sm text-gray-900">En Trámite</p>
-                      </div>
+            </div>
           </div>
         </div>
 
@@ -352,7 +342,7 @@
             <button (click)="descargarPDFActual()" class="mt-4 bg-[#691C32] text-white px-4 py-2 rounded hover:bg-[#4a1423] transition-colors">
               Descargar PDF
             </button>
-    </div>
+          </div>
 
           <!-- Iframe para mostrar PDF -->
           <iframe
@@ -368,9 +358,8 @@
               </a>
             </p>
           </iframe>
-  </div>
-</div>
-
+        </div>
+      </div>
 
       <div class="p-3 border-t border-gray-200 flex justify-end space-x-2 bg-gray-100">
         <button (click)="descargarPDFActual()" class="bg-[#691C32] text-white px-4 py-1.5 rounded-md flex items-center hover:bg-[#4a1423] transition-colors text-sm">
@@ -385,8 +374,28 @@
       </div>
     </div>
   </div>
-
-
-
-
 </div>
+
+<style>
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+  display: inline-block;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
