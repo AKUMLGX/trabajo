@@ -1,0 +1,76 @@
+<p>rechazados-table works!</p>
+
+<!-- Modal de Lista de Asuntos Rechazados -->
+<div *ngIf="mostrarTablaRechazadosModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-4xl">
+    <!-- Encabezado del modal -->
+    <div class="flex justify-between items-center p-3 border-b border-gray-200 bg-[#691C32]">
+      <h3 class="text-lg font-semibold text-white">Asuntos Rechazados</h3>
+      <button (click)="cerrarTabla()" class="text-white hover:text-gray-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contenido del modal -->
+    <div class="p-4">
+      <!-- Tabla de asuntos rechazados -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-[#691C32] text-white">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Autoridad</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Rechazo</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Dictaminador</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Motivo</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- Filas de asuntos rechazados -->
+            @for (asunto of asuntosRechazados; track asunto.folio) {
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.folio}}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{asunto.autoridad}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.fechaRechazo}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.dictaminador}}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">
+                  <div class="max-w-xs truncate" title="{{asunto.motivo}}">
+                    {{asunto.motivo}}
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
+                  <button (click)="seleccionarAsunto(asunto)" 
+                          class="text-white bg-[#691C32] hover:bg-[#4a1423] px-3 py-1.5 text-xs rounded transition-colors">
+                    Reasignar
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="px-6 py-10 text-center text-sm text-gray-500">
+                  <div class="flex flex-col items-center justify-center">
+                    <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p>No hay asuntos rechazados</p>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pie del modal -->
+    <div class="bg-gray-50 px-4 py-3 flex justify-end space-x-2 border-t border-gray-200">
+      <button (click)="cerrarTabla()" 
+              class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition-colors text-sm">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>

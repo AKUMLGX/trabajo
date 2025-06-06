@@ -1,4 +1,3 @@
-
 import { tableAsuntosPorDictaminar } from './../../../../interfaces/porAsignarRequest.interface';
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +17,8 @@ import {  AdministracionResponse, Cards,CardsResponse, } from '../../../../inter
 import { porAsignarRequest } from '../../../../interfaces/porAsignarRequest.interface';
 import { porAsignarResponse } from '../../../../interfaces/porAsignarResponse.interface';
 import { usuariosPorAdministracion } from '../../../../interfaces/usuarios-Por-administracion.interface';
+import { RechazadosTableComponent, AsuntoRechazado } from '../rechazados-table/rechazados-table.component';
+import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/rechazados-gestion.component';
 
 @Component({
   selector: 'app-cards',
@@ -33,7 +34,9 @@ import { usuariosPorAdministracion } from '../../../../interfaces/usuarios-Por-a
     // TrafficLightsAtencionComponent,
     NgxExtendedPdfViewerModule,
     FormsModule,
-    SafePipe
+    SafePipe,
+    RechazadosTableComponent,
+    RechazadosGestionComponent
   ],
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
@@ -157,6 +160,27 @@ export class CardsComponent implements OnInit {
   // Propiedades para el modal de detalles
   mostrarDetalleModal: boolean = false;
   asuntoSeleccionado: any = null;
+
+  // Propiedades para manejar asuntos rechazados
+  mostrarTablaRechazadosModal: boolean = false;
+  mostrarModalRechazados: boolean = false;
+  mostrarConfirmacionReasignacion: boolean = false;
+  asuntoRechazado: AsuntoRechazado | null = null;
+  
+  // Datos de ejemplo para asuntos rechazados
+  asuntosRechazados: AsuntoRechazado[] = [
+    { folio: 'R001', autoridad: 'Servicio de Administración Tributaria', fechaRechazo: '05/04/2024', dictaminador: 'María Hernández', motivo: 'Información incompleta en el expediente. Se requiere documentación adicional.' },
+    { folio: 'R002', autoridad: 'Secretaría de Finanzas', fechaRechazo: '03/04/2024', dictaminador: 'Juan Rodríguez', motivo: 'No corresponde a esta área. Debe ser reasignado a otra administración.' }
+  ];
+
+  // Dictaminadores disponibles para reasignación
+  dictaminadoresDisponibles: Dictaminador[] = [
+    { id: '1', nombre: 'María Hernández' },
+    { id: '2', nombre: 'Juan Rodríguez' },
+    { id: '3', nombre: 'Carlos Sánchez' },
+    { id: '4', nombre: 'Ana González' },
+    { id: '5', nombre: 'Luis Torres' }
+  ];
 
   ngOnInit(): void {
     // Al iniciar, mostrar todos los asuntos
@@ -510,4 +534,54 @@ if (administracionObj ) {
       this.pdfCargando = false;
     }, 1500);
 }
+
+  // Métodos para gestionar asuntos rechazados
+  mostrarTablaRechazados(): void {
+    this.mostrarTablaRechazadosModal = true;
+  }
+
+  cerrarTablaRechazados(): void {
+    this.mostrarTablaRechazadosModal = false;
+  }
+
+  seleccionarAsuntoRechazado(asunto: AsuntoRechazado): void {
+    this.asuntoRechazado = asunto;
+    this.mostrarTablaRechazadosModal = false;
+    this.mostrarModalRechazados = true;
+  }
+
+  cerrarModalRechazados(): void {
+    this.mostrarModalRechazados = false;
+  }
+
+  manejarReasignacion(dictaminadorId: string): void {
+    // Aquí mostrarías confirmación 
+    this.mostrarConfirmacionReasignacion = true;
+  }
+
+  confirmarReasignacion(): void {
+    // Aquí se realizaría la llamada al servicio para reasignar el asunto
+    setTimeout(() => {
+      // Simular respuesta exitosa
+      this.mostrarMensaje('Asunto reasignado exitosamente');
+      // Actualizar la lista de asuntos rechazados (quitar el asunto reasignado)
+      if (this.asuntoRechazado) {
+        this.asuntosRechazados = this.asuntosRechazados.filter(a => a.folio !== this.asuntoRechazado?.folio);
+      }
+      this.mostrarConfirmacionReasignacion = false;
+      this.mostrarModalRechazados = false;
+      this.asuntoRechazado = null;
+    }, 1000);
+  }
+
+  cancelarConfirmacionReasignacion(): void {
+    this.mostrarConfirmacionReasignacion = false;
+  }
+
+  // Método para crear un componente de revisión de dictamen
+  revisarDictamen(folio: string, event: Event): void {
+    event.stopPropagation();
+    // Aquí iría la lógica para abrir el modal de revisión
+    this.mostrarMensaje('Abriendo revisión de dictamen: ' + folio);
+  }
 }
