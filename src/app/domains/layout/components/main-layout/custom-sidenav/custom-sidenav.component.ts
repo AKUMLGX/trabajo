@@ -37,11 +37,6 @@ export class CustomSidenavComponent {
       route: '/layout/assistance',
     },
     {
-      icon: 'assignment',
-      label: 'Asuntos por asignar',
-      route: '/layout/asignacion',
-    },
-    {
       icon: 'gavel',
       label: 'Bandeja de dictaminador',
       route: '/layout/dictaminador',

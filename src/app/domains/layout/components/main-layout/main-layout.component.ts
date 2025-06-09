@@ -28,12 +28,9 @@ import { LoadAnimationComponent } from '../../../components/load-animation/load-
     NavbarContentComponent,
     NavbarContentInfoComponent,
     LoadAnimationComponent,
-    MatDialogModule,
     RouterModule,
     CommonModule,
     NotificationsComponent,
-    LoadAnimationComponent,
-
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css',
@@ -51,9 +48,9 @@ export class MainLayoutComponent {
   sidenavWidth = computed(() => (this.collapsed() ? '65px' : '270px'));
 
   openModal(template: TemplateRef<any>) {
-    this.modalService.openCustomDialogWithTemplate({
+    this.dialogRef = this.modalService.openCustomDialogWithTemplate({
       template
-    })
+    });
   }
 
 
@@ -96,10 +93,7 @@ export class MainLayoutComponent {
   contadorNotificaciones: number = 0;
 
    closeModal() {
-    if (this.dialogRef) {
-      this.dialogRef.close();
-      this.dialogRef = null;
-    }
+    this.modalService.closeAllDialogs();
   }
 
   getToken(): void {
