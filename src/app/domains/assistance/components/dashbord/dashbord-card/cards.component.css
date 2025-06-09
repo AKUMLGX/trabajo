@@ -1,6 +1,6 @@
-* Estilos globales de tipografía */
-* {
-  font-family: 'Noto Sans', sans-serif !important;
+/* Estilos globales de tipografía */
+.font-sans {
+  font-family: 'Noto Sans', sans-serif;
 }
 
 /* Contenedor principal con efecto 3D */

@@ -2,6 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+export interface Dictaminador {
+  id: string;
+  nombre: string;
+}
+
 @Component({
   selector: 'app-rechazados-gestion',
   standalone: true,

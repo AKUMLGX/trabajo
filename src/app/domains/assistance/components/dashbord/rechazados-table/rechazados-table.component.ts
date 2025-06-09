@@ -3,6 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SafePipe } from '../../../../../shared/pipes/safe.pipe';
 
+export interface AsuntoRechazado {
+  folio: string;
+  autoridad: string;
+  fechaRechazo: string;
+  dictaminador: string;
+  motivo: string;
+  dictaminadorAnterior?: string;
+}
+
 @Component({
   selector: 'app-rechazados-table',
   standalone: true,

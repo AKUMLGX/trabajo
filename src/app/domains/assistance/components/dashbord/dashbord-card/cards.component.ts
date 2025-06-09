@@ -554,9 +554,11 @@ if (administracionObj ) {
     this.mostrarModalRechazados = false;
   }
 
-  manejarReasignacion(dictaminadorId: string): void {
-    // Aquí mostrarías confirmación 
-    this.mostrarConfirmacionReasignacion = true;
+  manejarReasignacion(event: { asunto: any, nuevoDictaminadorId: string, observaciones: string, notificar: boolean }): void {
+    // Implementar la lógica para reasignar el asunto rechazado a un nuevo dictaminador
+    console.log('Reasignando asunto', event);
+    this.mostrarMensaje(`Asunto reasignado a ${this.dictaminadoresMap[event.nuevoDictaminadorId]}`);
+    this.cerrarModalRechazados();
   }
 
   confirmarReasignacion(): void {
