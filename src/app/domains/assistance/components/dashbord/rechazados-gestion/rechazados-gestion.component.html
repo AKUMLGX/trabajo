@@ -1,108 +1,197 @@
-<!-- Modal de Gestión de Asuntos Rechazados -->
-<div *ngIf="mostrarModalRechazados" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-md modal-container">
+<!-- Modal para Gestión de Asuntos Rechazados -->
+<div *ngIf="mostrarModalRechazados" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center z-50 p-8 overflow-auto font-['Noto_Sans']" style="padding-top: 100px;">
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-5xl max-h-[85vh] flex flex-col animate-fadeIn mt-10">
     <!-- Encabezado del modal -->
-    <div class="flex justify-between items-center p-3 border-b border-gray-200 bg-[#691C32] relative">
-      <h3 class="text-base font-semibold text-white mx-auto">Reasignar Asunto Rechazado</h3>
-      <button (click)="cerrarModal()" class="text-white hover:text-gray-200 transition-colors absolute right-3">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
+    <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] p-3 rounded-t-lg">
+      <div class="flex justify-between items-center">
+        <h3 class="text-base font-medium text-white flex items-center">
+          <svg class="w-5 h-5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Gestión de Asunto Rechazado
+        </h3>
+        <button (click)="cerrarModalRechazados()" class="text-white hover:text-gray-200 transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Contenido del modal -->
-    <div class="p-4">
+    <div class="p-4 overflow-y-auto">
       <!-- Información del asunto -->
       <div class="mb-4">
-        <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3 rounded-md mb-3 rounded-container shadow-sm">
-          <!-- Columna izquierda -->
-          <div>
-            <div class="mb-3">
-              <p class="field-label text-[#691C32]">Folio</p>
-              <p class="field-value">{{asuntoRechazado?.folio}}</p>
-            </div>
-            <div>
-              <p class="field-label text-[#691C32]">Fecha de rechazo</p>
-              <p class="field-value">{{asuntoRechazado?.fechaRechazo}}</p>
-            </div>
+        <h4 class="text-sm font-medium text-[#691C32] mb-2">Información del Asunto</h4>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-gray-50 p-2 rounded-md">
+            <label class="text-xs font-medium text-gray-500">Folio</label>
+            <p class="text-sm text-gray-900">{{asuntoRechazado?.folio}}</p>
           </div>
-          <!-- Columna derecha -->
-          <div>
-            <div class="mb-3">
-              <p class="field-label text-[#691C32]">Dictaminador anterior</p>
-              <p class="field-value">{{asuntoRechazado?.dictaminador}}</p>
-            </div>
-            <div>
-              <p class="field-label text-[#691C32]">Autoridad</p>
-              <p class="field-value autoridad-texto">{{asuntoRechazado?.autoridad}}</p>
-            </div>
+          <div class="bg-gray-50 p-2 rounded-md">
+            <label class="text-xs font-medium text-gray-500">Fecha de Rechazo</label>
+            <p class="text-sm text-gray-900">{{asuntoRechazado?.fechaRechazo | date:'dd/MM/yyyy HH:mm'}}</p>
           </div>
-        </div>
-      </div>
-
-      <!-- Motivo del rechazo -->
-      <div class="mb-4">
-        <h4 class="text-sm font-medium text-[#691C32] mb-2">Motivo del rechazo</h4>
-        <div class="bg-red-50 border border-red-200 rounded-md p-3 rounded-container shadow-sm">
-          <p class="text-xs text-gray-700 motivo-texto">{{asuntoRechazado?.motivo}}</p>
+          <div class="bg-gray-50 p-2 rounded-md col-span-2">
+            <label class="text-xs font-medium text-gray-500">Autoridad Solicitante</label>
+            <p class="text-sm text-gray-900">{{asuntoRechazado?.autoridad}}</p>
+          </div>
+          <div class="bg-gray-50 p-2 rounded-md col-span-2">
+            <label class="text-xs font-medium text-gray-500">Dictaminador Anterior</label>
+            <p class="text-sm text-gray-900">{{asuntoRechazado?.dictaminadorAnterior}}</p>
+          </div>
+          <div class="bg-gray-50 p-2 rounded-md col-span-2">
+            <label class="text-xs font-medium text-gray-500">Motivo del Rechazo</label>
+            <p class="text-sm text-gray-900 whitespace-pre-line">{{asuntoRechazado?.motivoRechazo}}</p>
+          </div>
         </div>
       </div>
 
       <!-- Formulario de reasignación -->
       <div class="mb-4">
-        <h4 class="text-sm font-medium text-[#691C32] mb-2">Reasignar a nuevo dictaminador</h4>
-        <div class="w-full relative">
-          <select #selectDictaminador class="w-full text-sm px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32] appearance-none pr-8">
-            <option value="" disabled selected>Seleccionar dictaminador</option>
-            @for (dictaminador of dictaminadoresDisponibles; track dictaminador.id) {
-              <option [value]="dictaminador.id">{{dictaminador.nombre}}</option>
-            }
+        <h4 class="text-sm font-medium text-[#691C32] mb-2">Reasignación de Asunto</h4>
+        
+        <!-- Selector de nuevo dictaminador -->
+        <div class="mb-3">
+          <label class="block text-xs font-medium text-gray-700 mb-1">
+            Seleccionar Nuevo Dictaminador
+          </label>
+          <select 
+            [(ngModel)]="nuevoDictaminadorId"
+            class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#691C32] focus:border-[#691C32]">
+            <option value="">Seleccione un dictaminador</option>
+            <option *ngFor="let dictaminador of dictaminadoresDisponibles" [value]="dictaminador.id">
+              {{dictaminador.nombre}}
+            </option>
           </select>
-          <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
         </div>
-      </div>
 
-      <!-- Confirmación de reasignación -->
-      <div *ngIf="mostrarConfirmacionReasignacion" class="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4 confirmation-animation shadow-sm">
-        <div class="flex items-start">
-          <svg class="w-4 h-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <p class="text-xs font-medium text-blue-800">¿Está seguro que desea reasignar este asunto?</p>
-            <p class="text-xs text-blue-600 mt-1">Esta acción no se puede deshacer.</p>
-            
-            <div class="flex space-x-2 mt-2">
-              <button (click)="confirmarReasignacion()" 
-                      class="bg-blue-600 text-white text-xs px-2 py-1 rounded hover:bg-blue-700 btn">
-                Confirmar
-              </button>
-              <button (click)="cancelarConfirmacion()" 
-                      class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 btn">
-                Cancelar
-              </button>
-            </div>
-          </div>
+        <!-- Campo para observaciones -->
+        <div class="mb-3">
+          <label class="block text-xs font-medium text-gray-700 mb-1">
+            Observaciones para el Dictaminador
+            <span class="text-red-500">*</span>
+          </label>
+          <textarea 
+            [(ngModel)]="observacionesReasignacion"
+            rows="3"
+            class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#691C32] focus:border-[#691C32]"
+            placeholder="Ingrese las observaciones o instrucciones para el nuevo dictaminador..."></textarea>
+        </div>
+
+        <!-- Checkbox para notificación -->
+        <div class="flex items-center mb-3">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="notificarDictaminador"
+            id="notificar-dictaminador"
+            class="h-3 w-3 text-[#691C32] focus:ring-[#691C32] border-gray-300 rounded">
+          <label for="notificar-dictaminador" class="ml-2 block text-xs text-gray-700">
+            Notificar al dictaminador por correo electrónico
+          </label>
         </div>
       </div>
     </div>
 
-    <!-- Pie del modal -->
-    <div class="bg-gray-50 px-4 py-2 flex justify-end space-x-2 border-t border-gray-200">
-      <button (click)="cerrarModal()" 
-              class="bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs hover:bg-gray-300 transition-colors btn">
+    <!-- Pie del modal con botones de acción -->
+    <div class="bg-gray-50 px-4 py-3 rounded-b-lg border-t border-gray-200 flex justify-end space-x-2">
+      <button 
+        (click)="cerrarModalRechazados()" 
+        class="px-3 py-1 text-xs border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
         Cancelar
       </button>
-      <button (click)="reasignarAsunto(selectDictaminador.value)" 
-              class="bg-[#691C32] text-white px-3 py-1.5 rounded text-xs hover:bg-[#4a1423] transition-colors btn"
-              [disabled]="mostrarConfirmacionReasignacion">
-        Reasignar
+      <button 
+        (click)="reasignarAsunto()" 
+        [disabled]="!nuevoDictaminadorId || !observacionesReasignacion"
+        [ngClass]="{'opacity-50 cursor-not-allowed': !nuevoDictaminadorId || !observacionesReasignacion}"
+        class="px-3 py-1 text-xs bg-[#691C32] text-white rounded-md hover:bg-[#4a1423] transition-colors flex items-center">
+        <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        Reasignar Asunto
       </button>
     </div>
   </div>
 </div>
+
+<!-- Modal de Confirmación de Reasignación -->
+<div *ngIf="mostrarConfirmacionReasignacion" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center z-[60] p-8 overflow-auto font-['Noto_Sans']" style="padding-top: 100px;">
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg animate-fadeIn mt-10">
+    <!-- Encabezado -->
+    <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] p-3 rounded-t-lg">
+      <div class="flex justify-between items-center">
+        <h3 class="text-base font-medium text-white flex items-center">
+          <svg class="w-5 h-5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Confirmar Reasignación
+        </h3>
+      </div>
+    </div>
+
+    <!-- Contenido -->
+    <div class="p-4">
+      <div class="mb-4">
+        <p class="text-sm text-gray-700 mb-3">
+          ¿Está seguro que desea reasignar el asunto <span class="font-semibold">{{asuntoRechazado?.folio}}</span> al dictaminador <span class="font-semibold">{{obtenerNombreDictaminador(nuevoDictaminadorId)}}</span>?
+        </p>
+        <div class="bg-amber-50 border-l-4 border-amber-400 p-3">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-4 w-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-xs text-amber-700">
+                Esta acción notificará al nuevo dictaminador y no podrá ser revertida.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen de la reasignación -->
+      <div class="bg-gray-50 p-3 rounded-md mb-4">
+        <h4 class="text-xs font-medium text-gray-700 mb-2">Detalles de la reasignación:</h4>
+        <ul class="space-y-1 text-xs text-gray-600">
+          <li><span class="font-medium">Asunto:</span> {{asuntoRechazado?.folio}}</li>
+          <li><span class="font-medium">Dictaminador anterior:</span> {{asuntoRechazado?.dictaminadorAnterior}}</li>
+          <li><span class="font-medium">Nuevo dictaminador:</span> {{obtenerNombreDictaminador(nuevoDictaminadorId)}}</li>
+          <li class="pt-1 border-t border-gray-200">
+            <span class="font-medium">Observaciones:</span>
+            <p class="mt-1 text-xs whitespace-pre-line">{{observacionesReasignacion}}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pie del modal con botones -->
+    <div class="bg-gray-50 px-4 py-3 rounded-b-lg border-t border-gray-200 flex justify-end space-x-2">
+      <button 
+        (click)="cancelarConfirmacionReasignacion()" 
+        class="px-3 py-1 text-xs border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+        Cancelar
+      </button>
+      <button 
+        (click)="confirmarReasignacion()" 
+        class="px-3 py-1 text-xs bg-[#691C32] text-white rounded-md hover:bg-[#4a1423] transition-colors flex items-center">
+        <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Confirmar
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+</style>

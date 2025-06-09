@@ -12,327 +12,491 @@
     </div>
   </div>
 
-  <!-- Panel de estadísticas -->
-  <div class="grid grid-cols-6 gap-4 mb-6">
-    <!-- Total Asignados -->
-    <div class="bg-white rounded-lg p-4 flex items-center">
-      <div class="bg-blue-50 rounded-full p-2 mr-3">
-        <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">Total Asignados</p>
-        <p class="text-xl font-semibold">{{estadisticas.totalAsignados}}</p>
-      </div>
-    </div>
-
-    <!-- Pendientes -->
-    <div class="bg-white rounded-lg p-4 flex items-center">
-      <div class="bg-yellow-50 rounded-full p-2 mr-3">
-        <svg class="w-6 h-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">Pendientes</p>
-        <p class="text-xl font-semibold">{{estadisticas.pendientes}}</p>
-      </div>
-    </div>
-
-    <!-- En Proceso -->
-    <div class="bg-white rounded-lg p-4 flex items-center">
-      <div class="bg-blue-50 rounded-full p-2 mr-3">
-        <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">En Proceso</p>
-        <p class="text-xl font-semibold">{{estadisticas.enProceso}}</p>
-      </div>
-    </div>
-
-    <!-- Completados -->
-    <div class="bg-white rounded-lg p-4 flex items-center">
-      <div class="bg-green-50 rounded-full p-2 mr-3">
-        <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">Completados</p>
-        <p class="text-xl font-semibold">{{estadisticas.completados}}</p>
-      </div>
-    </div>
-
-    <!-- Prioridad Alta -->
-    <div class="bg-white rounded-lg p-4 flex items-center">
-      <div class="bg-red-50 rounded-full p-2 mr-3">
-        <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">Prioridad Alta</p>
-        <p class="text-xl font-semibold">{{estadisticas.prioridadAlta}}</p>
-      </div>
-    </div>
-
-    <!-- Por Vencer -->
-    <div class="bg-white rounded-lg p-4 flex items-center">
-      <div class="bg-orange-50 rounded-full p-2 mr-3">
-        <svg class="w-6 h-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">Por Vencer</p>
-        <p class="text-xl font-semibold">{{estadisticas.vencimientoProximo}}</p>
-      </div>
-    </div>
+  <!-- Pestañas de navegación -->
+  <div class="mb-6 border-b border-gray-200">
+    <ul class="flex -mb-px">
+      <li class="mr-1">
+        <button 
+          (click)="cambiarPestana('asignados')" 
+          class="inline-block px-6 py-3 font-medium text-sm rounded-t-lg"
+          [class.text-[#691C32]]="pestanaActual === 'asignados'"
+          [class.border-[#691C32]]="pestanaActual === 'asignados'"
+          [class.border-b-2]="pestanaActual === 'asignados'"
+          [class.bg-white]="pestanaActual === 'asignados'"
+          [class.text-gray-500]="pestanaActual !== 'asignados'"
+          [class.hover:text-gray-700]="pestanaActual !== 'asignados'"
+          [class.hover:border-gray-300]="pestanaActual !== 'asignados'"
+        >
+          Asuntos Asignados
+        </button>
+      </li>
+      <li class="mr-1">
+        <button 
+          (click)="cambiarPestana('rechazados')" 
+          class="inline-block px-6 py-3 font-medium text-sm rounded-t-lg relative"
+          [class.text-[#691C32]]="pestanaActual === 'rechazados'"
+          [class.border-[#691C32]]="pestanaActual === 'rechazados'"
+          [class.border-b-2]="pestanaActual === 'rechazados'"
+          [class.bg-white]="pestanaActual === 'rechazados'"
+          [class.text-gray-500]="pestanaActual !== 'rechazados'"
+          [class.hover:text-gray-700]="pestanaActual !== 'rechazados'"
+          [class.hover:border-gray-300]="pestanaActual !== 'rechazados'"
+        >
+          Asuntos Rechazados
+          <span *ngIf="asuntosRechazados.length > 0" class="ml-2 bg-red-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+            {{asuntosRechazados.length}}
+          </span>
+        </button>
+      </li>
+    </ul>
   </div>
 
-  <!-- Filtros -->
-  <div class="flex justify-between items-center mb-6">
-    <div class="flex gap-4">
-      <div>
-        <label class="text-sm text-gray-600 block mb-1">Estado</label>
-        <select [(ngModel)]="filtroEstado" (change)="aplicarFiltros()" 
-                class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
-          <option value="Todos">Todos los estados</option>
-          <option value="Pendiente">Pendiente</option>
-          <option value="En Proceso">En Proceso</option>
-          <option value="Atendido">Atendido</option>
-        </select>
-      </div>
-      <div>
-        <label class="text-sm text-gray-600 block mb-1">Prioridad</label>
-        <select [(ngModel)]="filtroPrioridad" (change)="aplicarFiltros()"
-                class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
-          <option value="Todas">Todas las prioridades</option>
-          <option value="Alta">Alta</option>
-          <option value="Media">Media</option>
-          <option value="Baja">Baja</option>
-        </select>
-      </div>
-    </div>
-    <div class="flex items-center gap-4">
-      <label class="flex items-center gap-2">
-        <input type="checkbox" [(ngModel)]="mostrarCompletados" (change)="aplicarFiltros()"
-               class="rounded border-gray-300">
-        <span class="text-sm text-gray-600">Mostrar completados</span>
-      </label>
-      <div class="flex gap-2">
-        <button (click)="cambiarVista('tarjetas')" 
-                class="p-1.5 rounded hover:bg-gray-100">
-          <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tarjetas'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+  <!-- SECCIÓN DE ASUNTOS ASIGNADOS -->
+  <div *ngIf="pestanaActual === 'asignados'">
+    <!-- Panel de estadísticas -->
+    <div class="grid grid-cols-5 gap-4 mb-6">
+      <!-- Total Asignados -->
+      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-blue-50 rounded-full p-2 mr-3">
+          <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-        </button>
-        <button (click)="cambiarVista('tabla')"
-                class="p-1.5 rounded hover:bg-gray-100">
-          <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tabla'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Lista de Asuntos -->
-  <!-- Vista de Tarjetas -->
-  <div *ngIf="vistaActual === 'tarjetas'" class="grid grid-cols-3 gap-4">
-    <div *ngFor="let asunto of asuntosFiltrados" 
-         class="bg-white rounded-lg overflow-hidden">
-      <!-- Barra de estado superior -->
-      <div [class]="{'bg-red-500': asunto.prioridadVisual === 'rojo',
-                     'bg-yellow-500': asunto.prioridadVisual === 'amarillo',
-                     'bg-green-500': asunto.prioridadVisual === 'verde'}"
-           class="h-1"></div>
-
-      <div class="p-4">
-        <!-- Encabezado -->
-        <div class="mb-4">
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="text-lg font-medium">{{asunto.folio}}</h3>
-              <p class="text-sm text-gray-500">{{asunto.carpetaInvestigacion}}</p>
-            </div>
-            <div class="text-right">
-              <p class="text-sm">{{asunto.diasTranscurridos}} días transcurridos</p>
-            </div>
-          </div>
         </div>
+        <div>
+          <p class="text-sm text-gray-500">Total Asignados</p>
+          <p class="text-xl font-semibold">{{estadisticas.totalAsignados}}</p>
+        </div>
+      </div>
 
-        <!-- Información principal -->
-        <div class="space-y-3">
-          <div>
-            <p class="text-sm text-gray-500">Persona Relacionada</p>
-            <p class="text-sm font-medium">{{asunto.personaRelacionada}}</p>
-          </div>
+      <!-- Pendientes -->
+      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-yellow-50 rounded-full p-2 mr-3">
+          <svg class="w-6 h-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Pendientes</p>
+          <p class="text-xl font-semibold">{{estadisticas.pendientes}}</p>
+        </div>
+      </div>
 
-          <div class="flex justify-between">
-            <div>
-              <p class="text-sm text-gray-500">Fecha Recepción</p>
-              <p class="text-sm">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</p>
-            </div>
-            <div class="text-right">
-              <p class="text-sm text-gray-500">Fecha Límite</p>
-              <p class="text-sm">{{asunto.fechaLimite | date:'dd/MM/yyyy'}}</p>
-            </div>
-          </div>
+      <!-- En Proceso -->
+      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-blue-50 rounded-full p-2 mr-3">
+          <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">En Proceso</p>
+          <p class="text-xl font-semibold">{{estadisticas.enProceso}}</p>
+        </div>
+      </div>
 
-          <div>
-            <p class="text-sm text-gray-500">Estado de Atención</p>
-            <p class="text-sm font-medium text-[#691C32]">{{asunto.estadoAtencion}}</p>
-            <div class="mt-1 bg-gray-200 rounded-full h-1">
-              <div class="bg-[#691C32] h-1 rounded-full" 
-                   [style.width]="asunto.porcentajeAvance + '%'"></div>
-            </div>
-            <p class="text-xs text-right mt-1 text-gray-500">{{asunto.porcentajeAvance}}% completado</p>
-          </div>
+      <!-- Completados -->
+      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-green-50 rounded-full p-2 mr-3">
+          <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Completados</p>
+          <p class="text-xl font-semibold">{{estadisticas.completados}}</p>
+        </div>
+      </div>
 
-          <!-- Etiquetas -->
-          <div class="flex gap-2">
-            <span *ngIf="asunto.plazoUrgente" 
-                  class="px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded-full">
-              Urgente
-            </span>
-            <span class="px-2 py-0.5 text-xs rounded-full"
-                  [class]="{'bg-red-100 text-red-800': asunto.prioridad === 'Alta',
-                           'bg-yellow-100 text-yellow-800': asunto.prioridad === 'Media',
-                           'bg-green-100 text-green-800': asunto.prioridad === 'Baja'}">
-              Prioridad {{asunto.prioridad}}
-            </span>
-          </div>
-
-          <!-- Botones -->
-          <div class="flex gap-2 mt-4">
-            <button (click)="atenderAsunto(asunto.id)"
-                    class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm">
-              Atender
-            </button>
-            <button (click)="verDetalle(asunto.id)"
-                    class="flex-1 border border-[#691C32] text-[#691C32] px-4 py-2 rounded text-sm">
-              Ver Detalle
-            </button>
-          </div>
+      <!-- Prioridad Alta -->
+      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-red-50 rounded-full p-2 mr-3">
+          <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Prioridad Alta</p>
+          <p class="text-xl font-semibold">{{estadisticas.prioridadAlta}}</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Vista de Tabla -->
-  <div *ngIf="vistaActual === 'tabla'" class="bg-white rounded-lg overflow-hidden">
-    <table class="min-w-full">
-      <thead class="bg-[#691C32] text-white">
-        <tr>
-          <th class="w-8 px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Prioridad</th>
-          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio / Expediente</th>
-          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona Relacionada</th>
-          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Fechas</th>
-          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Estado</th>
-          <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Progreso</th>
-          <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-        <tr *ngFor="let asunto of asuntosFiltrados" 
-            [class]="{'bg-red-50': asunto.prioridadVisual === 'rojo',
-                     'bg-yellow-50': asunto.prioridadVisual === 'amarillo',
-                     'bg-green-50': asunto.prioridadVisual === 'verde'}">
-          <td class="px-4 py-3">
-            <div class="flex justify-center">
-              <div class="w-3 h-3 rounded-full" 
-                   [class]="{'bg-red-500': asunto.prioridadVisual === 'rojo',
-                            'bg-yellow-500': asunto.prioridadVisual === 'amarillo',
-                            'bg-green-500': asunto.prioridadVisual === 'verde'}"
-                   [title]="'Prioridad: ' + (asunto.prioridadVisual === 'rojo' ? 'Alta' : 
-                                            asunto.prioridadVisual === 'amarillo' ? 'Media' : 'Baja')">
-              </div>
-            </div>
-          </td>
-          <td class="px-4 py-3">
-            <div class="flex items-center">
+    <!-- Filtros -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex gap-4">
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">Estado</label>
+          <select [(ngModel)]="filtroEstado" (change)="aplicarFiltros()" 
+                  class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
+            <option value="Todos">Todos los estados</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="En Proceso">En Proceso</option>
+            <option value="Atendido">Atendido</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">Prioridad</label>
+          <select [(ngModel)]="filtroPrioridad" (change)="aplicarFiltros()"
+                  class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
+            <option value="Todas">Todas las prioridades</option>
+            <option value="Alta">Alta</option>
+            <option value="Media">Media</option>
+            <option value="Baja">Baja</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" [(ngModel)]="mostrarCompletados" (change)="aplicarFiltros()"
+                 class="rounded border-gray-300">
+          <span class="text-sm text-gray-600">Mostrar completados</span>
+        </label>
+        <div class="flex gap-2">
+          <button (click)="cambiarVista('tarjetas')" 
+                  class="p-1.5 rounded hover:bg-gray-100">
+            <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tarjetas'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          </button>
+          <button (click)="cambiarVista('tabla')"
+                  class="p-1.5 rounded hover:bg-gray-100">
+            <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tabla'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Asuntos -->
+    <!-- Vista de Tarjetas -->
+    <div *ngIf="vistaActual === 'tarjetas'" class="grid grid-cols-3 gap-4">
+      <div *ngFor="let asunto of asuntosFiltrados" 
+           class="bg-white rounded-lg overflow-hidden">
+        <!-- Barra de estado superior -->
+        <div [class]="{'bg-red-500': asunto.prioridadVisual === 'rojo',
+                       'bg-yellow-500': asunto.prioridadVisual === 'amarillo',
+                       'bg-green-500': asunto.prioridadVisual === 'verde'}"
+             class="h-1"></div>
+
+        <div class="p-4">
+          <!-- Encabezado -->
+          <div class="mb-4">
+            <div class="flex justify-between items-start">
               <div>
-                <div class="text-sm font-medium">{{asunto.folio}}</div>
-                <div class="text-sm text-gray-500">{{asunto.carpetaInvestigacion}}</div>
+                <h3 class="text-lg font-medium">{{asunto.folio}}</h3>
+                <p class="text-sm text-gray-500">{{asunto.carpetaInvestigacion}}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm">{{asunto.diasTranscurridos}} días transcurridos</p>
               </div>
             </div>
-          </td>
-          <td class="px-4 py-3">
-            <div class="text-sm">{{asunto.personaRelacionada}}</div>
-          </td>
-          <td class="px-4 py-3">
-            <div class="text-sm">
-              <div>Recepción: {{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</div>
-              <div class="text-gray-500">Límite: {{asunto.fechaLimite | date:'dd/MM/yyyy'}}</div>
-              <div class="text-xs text-gray-500">{{asunto.diasTranscurridos}} días transcurridos</div>
+          </div>
+
+          <!-- Información principal -->
+          <div class="space-y-3">
+            <div>
+              <p class="text-sm text-gray-500">Persona Relacionada</p>
+              <p class="text-sm font-medium">{{asunto.personaRelacionada}}</p>
             </div>
-          </td>
-          <td class="px-4 py-3">
-            <div class="flex flex-col gap-1">
-              <span class="text-sm font-medium text-[#691C32]">{{asunto.estadoAtencion}}</span>
-              <div class="flex gap-1">
-                <span *ngIf="asunto.plazoUrgente" 
-                      class="px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded-full">
-                  Urgente
-                </span>
-                <span class="px-2 py-0.5 text-xs rounded-full"
-                      [class]="{'bg-red-100 text-red-800': asunto.prioridad === 'Alta',
-                               'bg-yellow-100 text-yellow-800': asunto.prioridad === 'Media',
-                               'bg-green-100 text-green-800': asunto.prioridad === 'Baja'}">
-                  Prioridad {{asunto.prioridad}}
-                </span>
+
+            <div class="flex justify-between">
+              <div>
+                <p class="text-sm text-gray-500">Fecha Recepción</p>
+                <p class="text-sm">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-500">Fecha Límite</p>
+                <p class="text-sm">{{asunto.fechaLimite | date:'dd/MM/yyyy'}}</p>
               </div>
             </div>
-          </td>
-          <td class="px-4 py-3">
-            <div class="flex items-center gap-2">
-              <div class="flex-1">
-                <div class="bg-gray-200 rounded-full h-1">
-                  <div class="bg-[#691C32] h-1 rounded-full" 
-                       [style.width]="asunto.porcentajeAvance + '%'"></div>
+
+            <div>
+              <p class="text-sm text-gray-500">Estado de Atención</p>
+              <div class="flex mt-1 items-center">
+                <div class="rounded-full w-3 h-3 mr-2"
+                     [ngClass]="{
+                       'bg-yellow-500': asunto.estadoAtencion === 'Tramite',
+                       'bg-blue-500': asunto.estadoAtencion === 'Parcial',
+                       'bg-green-500': asunto.estadoAtencion === 'Total'
+                     }">
                 </div>
+                <span class="text-sm font-medium text-[#691C32]" 
+                      [ngClass]="{
+                        'bg-yellow-100 px-2 py-0.5 rounded-md': asunto.estadoAtencion === 'Tramite',
+                        'bg-blue-100 px-2 py-0.5 rounded-md': asunto.estadoAtencion === 'Parcial',
+                        'bg-green-100 px-2 py-0.5 rounded-md': asunto.estadoAtencion === 'Total'
+                      }">
+                  {{asunto.estadoAtencion === 'Tramite' ? 'En Trámite' : 
+                    asunto.estadoAtencion === 'Parcial' ? 'Atención Parcial' : 'Atención Total'}}
+                </span>
               </div>
-              <span class="text-xs text-gray-500 min-w-[3rem] text-right">
-                {{asunto.porcentajeAvance}}%
+            </div>
+
+            <!-- Etiquetas -->
+            <div class="flex gap-2">
+              <span *ngIf="asunto.plazoUrgente" 
+                    class="px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded-full">
+                Urgente
+              </span>
+              <span class="px-2 py-0.5 text-xs rounded-full"
+                    [class]="{'bg-red-100 text-red-800': asunto.prioridad === 'Alta',
+                             'bg-yellow-100 text-yellow-800': asunto.prioridad === 'Media',
+                             'bg-green-100 text-green-800': asunto.prioridad === 'Baja'}">
+                Prioridad {{asunto.prioridad}}
               </span>
             </div>
-          </td>
-          <td class="px-4 py-3 text-right">
-            <div class="flex justify-end gap-2">
+
+            <!-- Botones -->
+            <div class="flex gap-2 mt-4">
               <button (click)="atenderAsunto(asunto.id)"
-                      class="bg-[#691C32] text-white px-3 py-1 rounded text-xs">
+                      class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm">
                 Atender
               </button>
               <button (click)="verDetalle(asunto.id)"
-                      class="border border-[#691C32] text-[#691C32] px-3 py-1 rounded text-xs">
+                      class="flex-1 border border-[#691C32] text-[#691C32] px-4 py-2 rounded text-sm">
                 Ver Detalle
               </button>
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Leyenda del semáforo -->
-    <div class="p-4 border-t border-gray-200">
-      <p class="text-sm text-gray-600 mb-2">Indicadores de prioridad:</p>
-      <div class="flex gap-6">
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-red-500"></div>
-          <span class="text-sm text-gray-600">Alta (>15 días)</span>
+    <!-- Vista de Tabla -->
+    <div *ngIf="vistaActual === 'tabla'" class="bg-white rounded-lg overflow-hidden">
+      <table class="min-w-full">
+        <thead class="bg-[#691C32] text-white">
+          <tr>
+            <th class="w-8 px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Prioridad</th>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio / Expediente</th>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona Relacionada</th>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Fechas</th>
+            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Estado</th>
+            <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr *ngFor="let asunto of asuntosFiltrados" 
+              [class]="{'bg-red-50': asunto.prioridadVisual === 'rojo',
+                       'bg-yellow-50': asunto.prioridadVisual === 'amarillo',
+                       'bg-green-50': asunto.prioridadVisual === 'verde'}">
+            <td class="px-4 py-3">
+              <div class="flex justify-center">
+                <div class="w-3 h-3 rounded-full" 
+                     [class]="{'bg-red-500': asunto.prioridadVisual === 'rojo',
+                              'bg-yellow-500': asunto.prioridadVisual === 'amarillo',
+                              'bg-green-500': asunto.prioridadVisual === 'verde'}"
+                     [title]="'Prioridad: ' + (asunto.prioridadVisual === 'rojo' ? 'Alta' : 
+                                              asunto.prioridadVisual === 'amarillo' ? 'Media' : 'Baja')">
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center">
+                <div>
+                  <div class="text-sm font-medium">{{asunto.folio}}</div>
+                  <div class="text-sm text-gray-500">{{asunto.carpetaInvestigacion}}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <div class="text-sm">{{asunto.personaRelacionada}}</div>
+            </td>
+            <td class="px-4 py-3">
+              <div class="text-sm">
+                <div>Recepción: {{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</div>
+                <div class="text-gray-500">Límite: {{asunto.fechaLimite | date:'dd/MM/yyyy'}}</div>
+                <div class="text-xs text-gray-500">{{asunto.diasTranscurridos}} días transcurridos</div>
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center">
+                  <div class="rounded-full w-3 h-3 mr-2"
+                       [ngClass]="{
+                         'bg-yellow-500': asunto.estadoAtencion === 'Tramite',
+                         'bg-blue-500': asunto.estadoAtencion === 'Parcial',
+                         'bg-green-500': asunto.estadoAtencion === 'Total'
+                       }">
+                  </div>
+                  <span class="text-sm font-medium" 
+                        [ngClass]="{
+                          'text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-md': asunto.estadoAtencion === 'Tramite',
+                          'text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md': asunto.estadoAtencion === 'Parcial',
+                          'text-green-700 bg-green-100 px-2 py-0.5 rounded-md': asunto.estadoAtencion === 'Total'
+                        }">
+                    {{asunto.estadoAtencion === 'Tramite' ? 'En Trámite' : 
+                      asunto.estadoAtencion === 'Parcial' ? 'Atención Parcial' : 'Atención Total'}}
+                  </span>
+                </div>
+                <div class="flex gap-1">
+                  <span *ngIf="asunto.plazoUrgente" 
+                        class="px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded-full">
+                    Urgente
+                  </span>
+                  <span class="px-2 py-0.5 text-xs rounded-full"
+                        [class]="{'bg-red-100 text-red-800': asunto.prioridad === 'Alta',
+                                 'bg-yellow-100 text-yellow-800': asunto.prioridad === 'Media',
+                                 'bg-green-100 text-green-800': asunto.prioridad === 'Baja'}">
+                    Prioridad {{asunto.prioridad}}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-right">
+              <div class="flex justify-end gap-2">
+                <button (click)="atenderAsunto(asunto.id)"
+                        class="bg-[#691C32] text-white px-3 py-1 rounded text-xs">
+                  Atender
+                </button>
+                <button (click)="verDetalle(asunto.id)"
+                        class="border border-[#691C32] text-[#691C32] px-3 py-1 rounded text-xs flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  Ver
+                </button>
+                <button (click)="revisarAsunto(asunto.id)"
+                        class="border border-purple-600 text-purple-600 px-3 py-1 rounded text-xs flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Revisar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Leyenda del semáforo -->
+      <div class="p-4 border-t border-gray-200">
+        <p class="text-sm text-gray-600 mb-2">Indicadores de prioridad:</p>
+        <div class="flex gap-6">
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+            <span class="text-sm text-gray-600">Alta (>15 días)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <span class="text-sm text-gray-600">Media (5-15 días)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            <span class="text-sm text-gray-600">Baja (<5 días)</span>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-          <span class="text-sm text-gray-600">Media (5-15 días)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN DE ASUNTOS RECHAZADOS -->
+  <div *ngIf="pestanaActual === 'rechazados'">
+    <!-- Filtro para asuntos rechazados -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex gap-4">
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">Prioridad</label>
+          <select [(ngModel)]="filtroPrioridad" (change)="aplicarFiltrosRechazados()"
+                  class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
+            <option value="Todas">Todas las prioridades</option>
+            <option value="Alta">Alta</option>
+            <option value="Media">Media</option>
+            <option value="Baja">Baja</option>
+          </select>
         </div>
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-green-500"></div>
-          <span class="text-sm text-gray-600">Baja (<5 días)</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+          <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          {{asuntosRechazados.length}} asuntos rechazados
         </div>
+      </div>
+    </div>
+
+    <!-- Lista de Asuntos Rechazados -->
+    <div class="grid grid-cols-1 gap-6">
+      <div *ngFor="let asunto of asuntosRechazadosFiltrados" 
+           class="bg-white rounded-lg overflow-hidden shadow-md border-l-4"
+           [class.border-red-500]="asunto.prioridadVisual === 'rojo'"
+           [class.border-yellow-500]="asunto.prioridadVisual === 'amarillo'"
+           [class.border-green-500]="asunto.prioridadVisual === 'verde'">
+        
+        <div class="p-5">
+          <!-- Cabecera con información principal -->
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <div class="flex items-center">
+                <h3 class="text-lg font-medium text-gray-800">{{asunto.folio}}</h3>
+                <span *ngIf="asunto.plazoUrgente" 
+                      class="ml-2 px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded-full">
+                  Urgente
+                </span>
+              </div>
+              <p class="text-sm text-gray-500">{{asunto.carpetaInvestigacion}}</p>
+            </div>
+            <div class="bg-gray-100 px-3 py-1 rounded-full text-sm">
+              Rechazado el {{asunto.fechaRechazo | date:'dd/MM/yyyy'}}
+            </div>
+          </div>
+          
+          <!-- Información del rechazo -->
+          <div class="grid grid-cols-2 gap-6 mb-4">
+            <div>
+              <p class="text-sm text-gray-500">Persona Relacionada</p>
+              <p class="text-sm font-medium">{{asunto.personaRelacionada}}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Rechazado por</p>
+              <p class="text-sm font-medium">{{asunto.rechazadoPor}}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Motivo de Rechazo</p>
+              <p class="text-sm font-medium text-red-600">{{asunto.motivo}}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Fecha Recepción</p>
+              <p class="text-sm">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}} ({{asunto.diasTranscurridos}} días)</p>
+            </div>
+          </div>
+          
+          <!-- Vista previa de observaciones -->
+          <div class="bg-gray-50 p-3 rounded-md mb-4">
+            <p class="text-sm text-gray-500 mb-1">Observaciones:</p>
+            <p class="text-sm line-clamp-2">{{asunto.observaciones}}</p>
+          </div>
+          
+          <!-- Acciones -->
+          <div class="flex justify-end gap-3">
+            <button (click)="verDetallesRechazo(asunto.id)"
+                    class="bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded text-sm font-medium flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Ver detalles
+            </button>
+            <button (click)="atenderAsuntoRechazado(asunto.id)"
+                    class="bg-[#691C32] text-white hover:bg-[#4a1423] px-4 py-2 rounded text-sm font-medium flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Atender
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mensaje cuando no hay asuntos rechazados -->
+      <div *ngIf="asuntosRechazadosFiltrados.length === 0" class="bg-white rounded-lg p-8 text-center">
+        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        <h3 class="text-lg font-medium text-gray-800 mb-2">No hay asuntos rechazados</h3>
+        <p class="text-gray-500">No tienes asuntos rechazados con los filtros seleccionados.</p>
       </div>
     </div>
   </div>
@@ -376,53 +540,31 @@
           </div>
         </div>
 
-        <!-- Estado de atención -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Estado de Atención
-          </label>
-          <select formControlName="estadoAtencion" 
-                  class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#691C32]">
-            <option value="Tramite">En Trámite</option>
-            <option value="Parcial">Atención Parcial</option>
-            <option value="Total">Atención Total</option>
-          </select>
-        </div>
-
-        <!-- Porcentaje de avance -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Porcentaje de Avance
-          </label>
-          <div class="flex items-center gap-4">
-            <input type="range" formControlName="porcentajeAvance" 
-                   class="w-full" min="0" max="100" step="10">
-            <span class="text-sm text-gray-600 min-w-[4rem]">
-              {{formularioAtencion.get('porcentajeAvance')?.value}}%
-            </span>
-          </div>
-        </div>
-
         <!-- Observaciones -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
             Observaciones
           </label>
-          <textarea formControlName="observaciones" rows="4"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#691C32]"
+          <textarea formControlName="observaciones" rows="5"
+                    class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#691C32]"
                     placeholder="Ingrese sus observaciones sobre la atención del asunto..."></textarea>
         </div>
 
         <!-- Documentos adjuntos -->
-        <div class="mb-6">
-          <label class="block text-sm font-medium text-gray-700 mb-1">
+        <div class="mb-8">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
             Documentos Adjuntos
           </label>
-          <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+          <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
             <input type="file" multiple class="hidden" #fileInput
                    (change)="onFileSelected($event)">
+            <div class="mb-2">
+              <svg class="w-10 h-10 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h7.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
             <button type="button" (click)="fileInput.click()"
-                    class="text-[#691C32] hover:text-[#4a1423] text-sm">
+                    class="text-[#691C32] hover:text-[#4a1423] text-sm font-medium">
               Seleccionar archivos
             </button>
             <p class="text-xs text-gray-500 mt-1">
@@ -430,13 +572,18 @@
             </p>
           </div>
           <!-- Lista de archivos seleccionados -->
-          <div *ngIf="archivosSeleccionados.length > 0" class="mt-2">
+          <div *ngIf="archivosSeleccionados.length > 0" class="mt-4 border rounded-lg overflow-hidden">
             <div *ngFor="let archivo of archivosSeleccionados" 
-                 class="flex items-center justify-between py-1">
-              <span class="text-sm text-gray-600">{{archivo.name}}</span>
+                 class="flex items-center justify-between py-2 px-3 border-b last:border-b-0 hover:bg-gray-50">
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="text-sm text-gray-700">{{archivo.name}}</span>
+              </div>
               <button type="button" (click)="eliminarArchivo(archivo)"
                       class="text-red-600 hover:text-red-800">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -447,15 +594,93 @@
         <!-- Botones de acción -->
         <div class="flex justify-end gap-3">
           <button type="button" (click)="cerrarFormularioAtencion()"
-                  class="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50">
+                  class="px-5 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
             Cancelar
           </button>
           <button type="submit"
-                  class="px-4 py-2 bg-[#691C32] text-white rounded-md text-sm hover:bg-[#4a1423]">
+                  class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-medium hover:bg-[#4a1423] transition-colors shadow-sm">
             Guardar Atención
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Detalles de Rechazo -->
+<div *ngIf="mostrarDetallesRechazo" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg w-[600px] max-h-[80vh] overflow-y-auto">
+    <!-- Encabezado del modal -->
+    <div class="bg-[#691C32] text-white px-6 py-4 rounded-t-lg flex justify-between items-center">
+      <h2 class="text-lg font-medium">Detalles del Rechazo</h2>
+      <button (click)="cerrarDetallesRechazo()" class="text-white hover:text-gray-200">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contenido del modal -->
+    <div class="p-6" *ngIf="asuntoRechazadoSeleccionado">
+      <!-- Información del asunto -->
+      <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-500">Folio</p>
+            <p class="font-medium">{{asuntoRechazadoSeleccionado.folio}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Carpeta de Investigación</p>
+            <p class="font-medium">{{asuntoRechazadoSeleccionado.carpetaInvestigacion}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Persona Relacionada</p>
+            <p class="font-medium">{{asuntoRechazadoSeleccionado.personaRelacionada}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Fecha Recepción</p>
+            <p class="font-medium">{{asuntoRechazadoSeleccionado.fechaRecepcion | date:'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información del rechazo -->
+      <div class="mb-6">
+        <h3 class="text-md font-medium text-gray-800 mb-3">Información del Rechazo</h3>
+        
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <p class="text-sm text-gray-500">Rechazado por</p>
+            <p class="font-medium">{{asuntoRechazadoSeleccionado.rechazadoPor}}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Fecha de Rechazo</p>
+            <p class="font-medium">{{asuntoRechazadoSeleccionado.fechaRechazo | date:'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <p class="text-sm text-gray-500">Motivo del Rechazo</p>
+          <p class="font-medium text-red-600">{{asuntoRechazadoSeleccionado.motivo}}</p>
+        </div>
+        
+        <div class="bg-gray-50 p-4 rounded-md">
+          <p class="text-sm text-gray-500 mb-2">Observaciones Detalladas:</p>
+          <p class="text-sm whitespace-pre-line">{{asuntoRechazadoSeleccionado.observaciones}}</p>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="flex justify-end gap-3">
+        <button type="button" (click)="cerrarDetallesRechazo()"
+                class="px-5 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          Cerrar
+        </button>
+        <button type="button" (click)="atenderAsuntoRechazado(asuntoRechazadoSeleccionado.id); cerrarDetallesRechazo()"
+                class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-medium hover:bg-[#4a1423] transition-colors shadow-sm">
+          Atender Asunto
+        </button>
+      </div>
     </div>
   </div>
 </div> 

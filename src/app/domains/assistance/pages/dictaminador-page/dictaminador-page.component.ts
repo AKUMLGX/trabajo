@@ -22,10 +22,25 @@ interface AsuntoDictaminador {
   estadoAtencion: 'Tramite' | 'Parcial' | 'Total';
   prioridad: 'Alta' | 'Media' | 'Baja';
   prioridadVisual: 'rojo' | 'amarillo' | 'verde';
-  porcentajeAvance: number;
   diasTranscurridos: number;
   plazoUrgente: boolean;
   observaciones?: string;
+}
+
+interface AsuntoRechazado {
+  id: string;
+  folio: string;
+  carpetaInvestigacion: string;
+  personaRelacionada: string;
+  fechaRecepcion: string;
+  fechaRechazo: string;
+  motivo: string;
+  observaciones: string;
+  rechazadoPor: string;
+  prioridad: 'Alta' | 'Media' | 'Baja';
+  prioridadVisual: 'rojo' | 'amarillo' | 'verde';
+  diasTranscurridos: number;
+  plazoUrgente: boolean;
 }
 
 interface Estadisticas {
@@ -34,7 +49,6 @@ interface Estadisticas {
   enProceso: number;
   completados: number;
   prioridadAlta: number;
-  vencimientoProximo: number;
 }
 
 @Component({
@@ -53,30 +67,35 @@ export class DictaminadorPageComponent implements OnInit {
 
   asuntos: AsuntoDictaminador[] = [];
   asuntosFiltrados: AsuntoDictaminador[] = [];
+  asuntosRechazados: AsuntoRechazado[] = [];
+  asuntosRechazadosFiltrados: AsuntoRechazado[] = [];
+  
   estadisticas: Estadisticas = {
     totalAsignados: 0,
     pendientes: 0,
     enProceso: 0,
     completados: 0,
-    prioridadAlta: 0,
-    vencimientoProximo: 0
+    prioridadAlta: 0
   };
 
   filtroEstado: string = 'Todos';
   filtroPrioridad: string = 'Todas';
   mostrarCompletados: boolean = false;
   vistaActual: 'tarjetas' | 'tabla' = 'tarjetas';
+  pestanaActual: 'asignados' | 'rechazados' = 'asignados';
 
   // Nuevas variables para el formulario
   mostrarFormularioAtencion: boolean = false;
   formularioAtencion: FormGroup;
   asuntoSeleccionado: any = null;
   archivosSeleccionados: File[] = [];
+  
+  // Variable para mostrar detalles del rechazo
+  mostrarDetallesRechazo: boolean = false;
+  asuntoRechazadoSeleccionado: AsuntoRechazado | null = null;
 
   constructor(private router: Router, private fb: FormBuilder) {
     this.formularioAtencion = this.fb.group({
-      estadoAtencion: ['Tramite', Validators.required],
-      porcentajeAvance: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       observaciones: ['', Validators.required]
     });
   }
@@ -84,8 +103,10 @@ export class DictaminadorPageComponent implements OnInit {
   ngOnInit() {
     // Simular carga de datos del backend
     this.cargarDatosEjemplo();
+    this.cargarDatosRechazadosEjemplo();
     this.actualizarEstadisticas();
     this.aplicarFiltros();
+    this.aplicarFiltrosRechazados();
   }
 
   calcularDiasTranscurridos(fechaRecepcion: string): number {
@@ -95,7 +116,7 @@ export class DictaminadorPageComponent implements OnInit {
     return Math.floor(diferencia / (1000 * 60 * 60 * 24));
   }
 
-  calcularPrioridadVisual(asunto: AsuntoDictaminador): 'rojo' | 'amarillo' | 'verde' {
+  calcularPrioridadVisual(asunto: AsuntoDictaminador | AsuntoRechazado): 'rojo' | 'amarillo' | 'verde' {
     const diasTranscurridos = this.calcularDiasTranscurridos(asunto.fechaRecepcion);
     
     if (asunto.plazoUrgente) {
@@ -115,8 +136,7 @@ export class DictaminadorPageComponent implements OnInit {
       pendientes: this.asuntos.filter(a => a.estado === 'Pendiente').length,
       enProceso: this.asuntos.filter(a => a.estado === 'En Proceso').length,
       completados: this.asuntos.filter(a => a.estado === 'Atendido').length,
-      prioridadAlta: this.asuntos.filter(a => a.prioridadVisual === 'rojo').length,
-      vencimientoProximo: this.asuntos.filter(a => a.prioridadVisual === 'amarillo').length
+      prioridadAlta: this.asuntos.filter(a => a.prioridadVisual === 'rojo').length
     };
   }
 
@@ -127,6 +147,22 @@ export class DictaminadorPageComponent implements OnInit {
       if (this.filtroPrioridad !== 'Todas' && asunto.prioridad !== this.filtroPrioridad) return false;
       return true;
     });
+  }
+  
+  aplicarFiltrosRechazados() {
+    this.asuntosRechazadosFiltrados = this.asuntosRechazados.filter(asunto => {
+      if (this.filtroPrioridad !== 'Todas' && asunto.prioridad !== this.filtroPrioridad) return false;
+      return true;
+    });
+  }
+
+  cambiarPestana(pestana: 'asignados' | 'rechazados') {
+    this.pestanaActual = pestana;
+    if (pestana === 'rechazados') {
+      this.aplicarFiltrosRechazados();
+    } else {
+      this.aplicarFiltros();
+    }
   }
 
   cargarDatosEjemplo() {
@@ -143,7 +179,6 @@ export class DictaminadorPageComponent implements OnInit {
         estadoAtencion: 'Tramite',
         prioridad: 'Alta',
         prioridadVisual: 'rojo',
-        porcentajeAvance: 0,
         diasTranscurridos: 20,
         plazoUrgente: true,
         observaciones: 'Caso prioritario'
@@ -159,7 +194,6 @@ export class DictaminadorPageComponent implements OnInit {
         estadoAtencion: 'Parcial',
         prioridad: 'Media',
         prioridadVisual: 'amarillo',
-        porcentajeAvance: 50,
         diasTranscurridos: 10,
         plazoUrgente: false,
         observaciones: 'En revisión'
@@ -175,7 +209,6 @@ export class DictaminadorPageComponent implements OnInit {
         estadoAtencion: 'Tramite',
         prioridad: 'Baja',
         prioridadVisual: 'verde',
-        porcentajeAvance: 0,
         diasTranscurridos: 3,
         plazoUrgente: false
       }
@@ -183,6 +216,63 @@ export class DictaminadorPageComponent implements OnInit {
 
     // Calcular prioridad visual para cada asunto
     this.asuntos = ejemplos.map(asunto => ({
+      ...asunto,
+      prioridadVisual: this.calcularPrioridadVisual(asunto)
+    }));
+  }
+  
+  cargarDatosRechazadosEjemplo() {
+    const fechaActual = new Date();
+    const ejemplosRechazados: AsuntoRechazado[] = [
+      {
+        id: '101',
+        folio: 'EUACAPE-0101',
+        carpetaInvestigacion: 'CI-79001',
+        personaRelacionada: 'Luis Mendoza García',
+        fechaRecepcion: new Date(fechaActual.getTime() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+        fechaRechazo: new Date(fechaActual.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        motivo: 'Información incompleta',
+        observaciones: 'El dictamen carece de fundamento jurídico en los artículos 145 y 146 del Código Fiscal. Se requiere completar la información y volver a presentar.',
+        rechazadoPor: 'Ana Martínez - Coordinadora',
+        prioridad: 'Alta',
+        prioridadVisual: 'rojo',
+        diasTranscurridos: 15,
+        plazoUrgente: true
+      },
+      {
+        id: '102',
+        folio: 'EUACAPE-0102',
+        carpetaInvestigacion: 'CI-79002',
+        personaRelacionada: 'Roberto Vázquez Luna',
+        fechaRecepcion: new Date(fechaActual.getTime() - 25 * 24 * 60 * 60 * 1000).toISOString(),
+        fechaRechazo: new Date(fechaActual.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        motivo: 'Error en el cálculo',
+        observaciones: 'Se detectaron errores en el cálculo de los accesorios. Por favor, revisar los importes y actualizar las cantidades según la normativa vigente.',
+        rechazadoPor: 'Carlos Jiménez - Administrador',
+        prioridad: 'Media',
+        prioridadVisual: 'amarillo',
+        diasTranscurridos: 25,
+        plazoUrgente: false
+      },
+      {
+        id: '103',
+        folio: 'EUACAPE-0103',
+        carpetaInvestigacion: 'CI-79003',
+        personaRelacionada: 'Elena Torres Montes',
+        fechaRecepcion: new Date(fechaActual.getTime() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+        fechaRechazo: new Date(fechaActual.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        motivo: 'Documentación faltante',
+        observaciones: 'Falta anexar la documentación probatoria mencionada en el punto 3 del dictamen. Es necesario incluir los comprobantes fiscales y la declaración complementaria.',
+        rechazadoPor: 'Sergio Rodríguez - Supervisor',
+        prioridad: 'Baja',
+        prioridadVisual: 'verde',
+        diasTranscurridos: 8,
+        plazoUrgente: false
+      }
+    ];
+
+    // Calcular prioridad visual para cada asunto rechazado
+    this.asuntosRechazados = ejemplosRechazados.map(asunto => ({
       ...asunto,
       prioridadVisual: this.calcularPrioridadVisual(asunto)
     }));
@@ -196,8 +286,6 @@ export class DictaminadorPageComponent implements OnInit {
       
       // Inicializar formulario
       this.formularioAtencion.patchValue({
-        estadoAtencion: this.asuntoSeleccionado.estadoAtencion,
-        porcentajeAvance: this.asuntoSeleccionado.porcentajeAvance || 0,
         observaciones: ''
       });
       
@@ -206,10 +294,39 @@ export class DictaminadorPageComponent implements OnInit {
       this.aplicarFiltros();
     }
   }
+  
+  atenderAsuntoRechazado(id: string): void {
+    // Navegar a la página de detalle con información adicional para saber que es un asunto rechazado
+    this.router.navigate(['/layout/dictaminador/detalle', id], { 
+      queryParams: { 
+        origen: 'rechazado',
+        revision: 'true'  // Para que se abra el modal de revisión automáticamente
+      }
+    });
+  }
+  
+  verDetallesRechazo(id: string): void {
+    this.asuntoRechazadoSeleccionado = this.asuntosRechazados.find(asunto => asunto.id === id) || null;
+    if (this.asuntoRechazadoSeleccionado) {
+      this.mostrarDetallesRechazo = true;
+    }
+  }
+  
+  cerrarDetallesRechazo(): void {
+    this.mostrarDetallesRechazo = false;
+    this.asuntoRechazadoSeleccionado = null;
+  }
 
   verDetalle(id: string) {
     // Navegar a la página de detalle del asunto
     this.router.navigate(['/layout/dictaminador/detalle', id]);
+  }
+
+  revisarAsunto(id: string) {
+    // Navegar a la página de detalle con el modal de revisión activado
+    this.router.navigate(['/layout/dictaminador/detalle', id], { 
+      queryParams: { revision: 'true' } 
+    });
   }
 
   cambiarVista(vista: 'tarjetas' | 'tabla') {
@@ -221,8 +338,6 @@ export class DictaminadorPageComponent implements OnInit {
     this.asuntoSeleccionado = null;
     this.archivosSeleccionados = [];
     this.formularioAtencion.reset({
-      estadoAtencion: 'Tramite',
-      porcentajeAvance: 0,
       observaciones: ''
     });
   }
@@ -281,8 +396,7 @@ export class DictaminadorPageComponent implements OnInit {
         if (index !== -1) {
           this.asuntosFiltrados[index] = {
             ...this.asuntosFiltrados[index],
-            estadoAtencion: datosAtencion.estadoAtencion,
-            porcentajeAvance: datosAtencion.porcentajeAvance
+            estado: 'En Proceso'
           };
         }
 
