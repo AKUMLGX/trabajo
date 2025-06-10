@@ -13,14 +13,6 @@ import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-admi
 import { ModalService } from '../../../shared/services/modal.service';
 import { BuscadorService } from '../../../shared/services/buscador.service';
 import { Observable,of } from 'rxjs';
-
-
-interface Abogado {
-  nombre: string;
-  cargo: string;
-  administracion: number;
-}
-
 @Component({
   selector: 'app-asignacion-page',
   standalone: true,
@@ -150,16 +142,16 @@ buscador = new FormControl('');
             es_historico: true,
             plazo_atencion: 0
   }
-
   itemRFC: string =''
 
   AsisgnarJSON=  {}
 
   asignarAsunto() {
     this.usuariosAsignar.forEach((item) => {
+      debugger
        this.itemRFC =  item.rfc
     });
-    this.tablePorAsignarIndicador.forEach((item) => {
+    this.allData.forEach((item) => {
        this.itemJson = {
             folio_interno: item.folio_interno,
             folio_scanner: item.folio_scanner,
@@ -192,7 +184,6 @@ buscador = new FormControl('');
   abrirModalAsignacion(template: TemplateRef<any>, item: modalItem) {
     this.itemDeFilaSelecionada = item
     console.log(item);
-
     this.usuariosPorAdministracion()
     this.modalService.openCustomDialogWithTemplate({
       template
