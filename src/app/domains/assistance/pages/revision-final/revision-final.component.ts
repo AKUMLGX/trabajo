@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 
 import { AsuntosPendientesTableComponent } from './components/asuntos-pendientes-table/asuntos-pendientes-table.component';
 import { AsuntosRevisadosTableComponent } from './components/asuntos-revisados-table/asuntos-revisados-table.component';
@@ -80,7 +80,10 @@ export class RevisionFinalComponent implements OnInit {
   filtroPrioridad: string = 'Todas';
   filtroText: string = '';
 
-  constructor() {}
+  // Propiedades para la vista de asuntos pendientes
+  vistaPendientes: string = 'tabla'; // 'tabla', 'grid' o 'kanban'
+
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {
     // Cargar datos de ejemplo
@@ -256,5 +259,89 @@ export class RevisionFinalComponent implements OnInit {
   
   onFiltroTextChange(filtro: string): void {
     this.filtroText = filtro;
+  }
+
+  openRevisionDetalleModal(asunto: Asunto): void {
+    const dialogRef = this.dialog.open(RevisionDetalleModalComponent, {
+      data: { asunto }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.accion === 'aprobar') {
+          this.aprobarAsunto(result.asunto);
+        } else if (result.accion === 'rechazar') {
+          this.rechazarAsunto(result.asunto);
+        }
+      }
+    });
+  }
+
+  // Métodos para las vistas alternativas de asuntos pendientes
+  getAsuntosPendientesFiltered(): Asunto[] {
+    let asuntosFiltrados = [...this.asuntosPendientes];
+    
+    // Aplicar filtro de prioridad
+    if (this.filtroPrioridad !== 'Todas') {
+      asuntosFiltrados = asuntosFiltrados.filter(a => a.prioridad === this.filtroPrioridad);
+    }
+    
+    // Aplicar filtro de texto
+    if (this.filtroText) {
+      const textoBusqueda = this.filtroText.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        a.folio.toLowerCase().includes(textoBusqueda) ||
+        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
+        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
+        a.dictaminador.toLowerCase().includes(textoBusqueda)
+      );
+    }
+    
+    return asuntosFiltrados;
+  }
+  
+  getAsuntosPendientesByPrioridad(prioridad: string): Asunto[] {
+    let asuntos = this.asuntosPendientes.filter(a => a.prioridad === prioridad);
+    
+    // Aplicar filtro de texto
+    if (this.filtroText) {
+      const textoBusqueda = this.filtroText.toLowerCase();
+      asuntos = asuntos.filter(a => 
+        a.folio.toLowerCase().includes(textoBusqueda) ||
+        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
+        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
+        a.dictaminador.toLowerCase().includes(textoBusqueda)
+      );
+    }
+    
+    return asuntos;
+  }
+  
+  getAsuntosPendientesPorDias(minDias: number, maxDias: number): Asunto[] {
+    let asuntos = this.asuntosPendientes.filter(a => 
+      a.diasTranscurridos >= minDias && a.diasTranscurridos <= maxDias
+    );
+    
+    // Aplicar filtro de texto
+    if (this.filtroText) {
+      const textoBusqueda = this.filtroText.toLowerCase();
+      asuntos = asuntos.filter(a => 
+        a.folio.toLowerCase().includes(textoBusqueda) ||
+        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
+        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
+        a.dictaminador.toLowerCase().includes(textoBusqueda)
+      );
+    }
+    
+    // Aplicar filtro de prioridad
+    if (this.filtroPrioridad !== 'Todas') {
+      asuntos = asuntos.filter(a => a.prioridad === this.filtroPrioridad);
+    }
+    
+    return asuntos;
+  }
+  
+  formatDate(date: Date): string {
+    return date ? new Date(date).toLocaleDateString('es-MX') : '';
   }
 } 

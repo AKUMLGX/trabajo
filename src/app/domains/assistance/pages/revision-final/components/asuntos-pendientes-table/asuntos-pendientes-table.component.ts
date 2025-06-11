@@ -46,6 +46,7 @@ export class AsuntosPendientesTableComponent implements OnInit {
   
   @Output() aprobar = new EventEmitter<Asunto>();
   @Output() rechazar = new EventEmitter<Asunto>();
+  @Output() verDetalleClick = new EventEmitter<Asunto>();
   
   displayedColumns: string[] = ['folio', 'carpetaInvestigacion', 'personaRelacionada', 'dictaminador', 'fechaRecepcion', 'fechaLimite', 'diasTranscurridos', 'prioridad', 'acciones'];
   dataSource = new MatTableDataSource<Asunto>([]);
@@ -112,9 +113,6 @@ export class AsuntosPendientesTableComponent implements OnInit {
   }
   
   verDetalle(asunto: Asunto): void {
-    this.dialog.open(RevisionDetalleModalComponent, {
-      width: '800px',
-      data: { asunto }
-    });
+    this.verDetalleClick.emit(asunto);
   }
 } 
