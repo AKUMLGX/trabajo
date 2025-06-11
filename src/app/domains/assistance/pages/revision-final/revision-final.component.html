@@ -1,0 +1,166 @@
+<!-- Contenedor principal -->
+<div class="h-full bg-[#F3EAE4] p-6">
+  <!-- Encabezado con información -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-xl font-medium text-[#691C32]">Revisión Final de Asuntos</h1>
+      <p class="text-sm text-gray-600">Panel de revisión y aprobación de asuntos dictaminados</p>
+    </div>
+    <div class="text-right">
+      <p class="text-sm text-[#691C32]">Área de Revisión</p>
+      <p class="text-sm text-gray-600">{{estadisticas.totalPendientes + estadisticas.totalRevisados}} asuntos en total</p>
+    </div>
+  </div>
+
+  <!-- Panel de estadísticas -->
+  <div class="grid grid-cols-6 gap-4 mb-6">
+    <!-- Total Pendientes -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-blue-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-blue-600">assignment</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Pendientes</p>
+        <p class="text-xl font-semibold">{{estadisticas.totalPendientes}}</p>
+      </div>
+    </div>
+
+    <!-- Pendientes Hoy -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-yellow-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-yellow-600">today</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Pendientes Hoy</p>
+        <p class="text-xl font-semibold">{{estadisticas.pendientesHoy}}</p>
+      </div>
+    </div>
+
+    <!-- Urgentes -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-red-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-red-600">priority_high</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Urgentes</p>
+        <p class="text-xl font-semibold">{{estadisticas.pendientesUrgentes}}</p>
+      </div>
+    </div>
+
+    <!-- Total Revisados -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-purple-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-purple-600">checklist</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Total Revisados</p>
+        <p class="text-xl font-semibold">{{estadisticas.totalRevisados}}</p>
+      </div>
+    </div>
+
+    <!-- Aprobados -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-green-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-green-600">check_circle</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Aprobados</p>
+        <p class="text-xl font-semibold">{{estadisticas.aprobados}}</p>
+      </div>
+    </div>
+
+    <!-- Rechazados -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-red-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-red-600">cancel</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Rechazados</p>
+        <p class="text-xl font-semibold">{{estadisticas.rechazados}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pestañas de navegación -->
+  <mat-tab-group animationDuration="0ms" class="bg-white rounded-lg shadow-sm mb-6">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="flex items-center py-2">
+          <mat-icon class="mr-2 text-[#691C32]">pending_actions</mat-icon>
+          <span>Pendientes de Revisión</span>
+          <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+            {{asuntosPendientes.length}}
+          </span>
+        </div>
+      </ng-template>
+      
+      <!-- Contenido de la pestaña Pendientes -->
+      <div class="p-6">
+        <!-- Filtros -->
+        <div class="flex justify-between items-center mb-6">
+          <div class="flex gap-4">
+            <div>
+              <label class="text-sm text-gray-600 block mb-1">Prioridad</label>
+              <select [(ngModel)]="filtroPrioridad" 
+                      class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
+                <option value="Todas">Todas las prioridades</option>
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-sm text-gray-600 block mb-1">Buscar</label>
+              <div class="relative">
+                <input type="text" [(ngModel)]="filtroText" placeholder="Buscar por folio, persona..." 
+                      class="border border-gray-300 rounded pl-9 pr-3 py-1 text-sm min-w-[300px]">
+                <mat-icon class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tabla de asuntos pendientes -->
+        <app-asuntos-pendientes-table 
+          [asuntos]="asuntosPendientes"
+          [filtroText]="filtroText"
+          [filtroPrioridad]="filtroPrioridad"
+          (aprobar)="aprobarAsunto($event)"
+          (rechazar)="rechazarAsunto($event)">
+        </app-asuntos-pendientes-table>
+      </div>
+    </mat-tab>
+    
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="flex items-center py-2">
+          <mat-icon class="mr-2 text-[#691C32]">history</mat-icon>
+          <span>Asuntos Revisados</span>
+          <span *ngIf="asuntosRevisados.length > 0" class="ml-2 bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+            {{asuntosRevisados.length}}
+          </span>
+        </div>
+      </ng-template>
+      
+      <!-- Contenido de la pestaña Revisados -->
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <label class="text-sm text-gray-600 block mb-1">Buscar</label>
+            <div class="relative">
+              <input type="text" [(ngModel)]="filtroText" placeholder="Buscar por folio, persona..." 
+                    class="border border-gray-300 rounded pl-9 pr-3 py-1 text-sm min-w-[300px]">
+              <mat-icon class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tabla de asuntos revisados -->
+        <app-asuntos-revisados-table 
+          [asuntos]="asuntosRevisados"
+          [filtroText]="filtroText">
+        </app-asuntos-revisados-table>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div> 

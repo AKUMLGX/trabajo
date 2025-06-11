@@ -3,6 +3,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CustomSidenavComponent } from './custom-sidenav/custom-sidenav.component';
 import { NavbarContentComponent } from './navbar-content/navbar-content.component';
 import { NavbarContentInfoComponent } from './navbar-content/navbar-content-info/navbar-content-info.component';
@@ -24,6 +25,7 @@ import { LoadAnimationComponent } from '../../../components/load-animation/load-
     MatIconModule,
     MatSidenavModule,
     MatDialogModule,
+    MatTooltipModule,
     CustomSidenavComponent,
     NavbarContentComponent,
     NavbarContentInfoComponent,

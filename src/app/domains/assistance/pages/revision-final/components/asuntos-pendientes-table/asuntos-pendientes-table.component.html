@@ -1,0 +1,94 @@
+<div class="bg-white rounded-lg shadow overflow-hidden">
+  <table mat-table [dataSource]="dataSource" matSort class="w-full">
+    
+    <!-- Folio Column -->
+    <ng-container matColumnDef="folio">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Folio </th>
+      <td mat-cell *matCellDef="let asunto"> 
+        <div class="font-medium text-[#691C32]">{{asunto.folio}}</div>
+      </td>
+    </ng-container>
+    
+    <!-- Carpeta Investigación Column -->
+    <ng-container matColumnDef="carpetaInvestigacion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Carpeta </th>
+      <td mat-cell *matCellDef="let asunto"> {{asunto.carpetaInvestigacion}} </td>
+    </ng-container>
+    
+    <!-- Persona Relacionada Column -->
+    <ng-container matColumnDef="personaRelacionada">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Persona </th>
+      <td mat-cell *matCellDef="let asunto"> {{asunto.personaRelacionada}} </td>
+    </ng-container>
+    
+    <!-- Dictaminador Column -->
+    <ng-container matColumnDef="dictaminador">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Dictaminador </th>
+      <td mat-cell *matCellDef="let asunto"> {{asunto.dictaminador}} </td>
+    </ng-container>
+    
+    <!-- Fecha Recepción Column -->
+    <ng-container matColumnDef="fechaRecepcion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Fecha Recepción </th>
+      <td mat-cell *matCellDef="let asunto"> {{formatDate(asunto.fechaRecepcion)}} </td>
+    </ng-container>
+    
+    <!-- Fecha Límite Column -->
+    <ng-container matColumnDef="fechaLimite">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Fecha Límite </th>
+      <td mat-cell *matCellDef="let asunto"> {{formatDate(asunto.fechaLimite)}} </td>
+    </ng-container>
+    
+    <!-- Días Transcurridos Column -->
+    <ng-container matColumnDef="diasTranscurridos">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Días </th>
+      <td mat-cell *matCellDef="let asunto"> 
+        <span [ngClass]="{'text-red-600': asunto.diasTranscurridos > 15, 'text-yellow-600': asunto.diasTranscurridos > 7 && asunto.diasTranscurridos <= 15, 'text-green-600': asunto.diasTranscurridos <= 7}">
+          {{asunto.diasTranscurridos}}
+        </span> 
+      </td>
+    </ng-container>
+    
+    <!-- Prioridad Column -->
+    <ng-container matColumnDef="prioridad">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> Prioridad </th>
+      <td mat-cell *matCellDef="let asunto"> 
+        <div class="flex items-center">
+          <span class="w-2 h-2 rounded-full mr-2" [ngClass]="getColorPrioridad(asunto.prioridad)"></span>
+          {{asunto.prioridad}}
+        </div>
+      </td>
+    </ng-container>
+    
+    <!-- Acciones Column -->
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef class="bg-gray-50"> Acciones </th>
+      <td mat-cell *matCellDef="let asunto" class="whitespace-nowrap">
+        <div class="flex gap-2">
+          <button mat-icon-button color="primary" matTooltip="Ver Detalle" (click)="verDetalle(asunto)" class="action-button">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" matTooltip="Aprobar" (click)="aprobarAsunto(asunto)" class="action-button">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" matTooltip="Rechazar" (click)="rechazarAsunto(asunto)" class="action-button">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+    
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+        class="hover:bg-gray-50 transition-colors cursor-pointer"></tr>
+    
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell py-4 text-center text-gray-500" [attr.colspan]="displayedColumns.length">
+        No se encontraron asuntos que coincidan con el filtro.
+      </td>
+    </tr>
+  </table>
+  
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+</div> 

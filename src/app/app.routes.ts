@@ -20,6 +20,7 @@ import { ParcialDetalleComponent } from './domains/assistance/pages/parcial-deta
 import { AsuntoParcialComponent } from './domains/assistance/pages/asunto-parcial/asunto-parcial.component';
 import { DictaminadorPageComponent } from './domains/assistance/pages/dictaminador-page/dictaminador-page.component';
 import { DictaminadorDetalleComponent } from './domains/assistance/pages/dictaminador-detalle/dictaminador-detalle.component';
+import { RevisionFinalComponent } from './domains/assistance/pages/revision-final/revision-final.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -109,6 +110,10 @@ export const routes: Routes = [
       {
         path: 'dictaminador/detalle/:id',
         component: DictaminadorDetalleComponent
+      },
+      {
+        path: 'revision-final',
+        component: RevisionFinalComponent
       }
     ]
   },

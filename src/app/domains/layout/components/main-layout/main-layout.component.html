@@ -12,8 +12,8 @@
     <button mat-icon-button class="text-white" (click)="openModal(userInfoModal)">
       <mat-icon>person</mat-icon >
     </button>
-    <button mat-icon-button class="text-white">
-      <mat-icon>pageview</mat-icon>
+    <button mat-icon-button class="text-white" [matTooltip]="'Revisión Final de Asuntos'" [routerLink]="'/layout/revision-final'">
+      <mat-icon>approval</mat-icon>
     </button>
   </div>
   <app-navbar-content-info></app-navbar-content-info>
