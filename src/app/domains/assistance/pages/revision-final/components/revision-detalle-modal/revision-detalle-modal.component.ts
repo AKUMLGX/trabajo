@@ -60,15 +60,20 @@ export class RevisionDetalleModalComponent implements OnInit {
   soloLectura: boolean = false;
   motivoForm: FormGroup;
   tipoAtencion: string = 'total';
-  documentoSeleccionado: string | null = null;
+  documentoSeleccionado: string = '';
   pdfCargando: boolean = false;
   modoComparacion: boolean = false;
+  expandido: boolean = false;
   
   // URLs de ejemplo para documentos PDF
   documentosPDF: { [key: string]: string } = {
     'Dictamen_Técnico.pdf': 'assets/pdfs/dictamen_tecnico_ejemplo.pdf',
-    'Análisis_Fiscal.pdf': 'assets/pdfs/analisis_fiscal_ejemplo.pdf'
+    'Análisis_Fiscal.pdf': 'assets/pdfs/analisis_fiscal_ejemplo.pdf',
+    'Evidencia_Documental.pdf': 'assets/pdfs/evidencia_documental_ejemplo.pdf'
   };
+  
+  // Documento para comparación
+  documentoComparacion: string = 'Evidencia_Documental.pdf';
   
   motivosRechazo: string[] = [
     'Información incompleta',
@@ -144,7 +149,6 @@ export class RevisionDetalleModalComponent implements OnInit {
   toggleComparacion(): void {
     this.modoComparacion = !this.modoComparacion;
     console.log(`Modo comparación: ${this.modoComparacion ? 'Activado' : 'Desactivado'}`);
-    // En una implementación real, aquí se abriría una vista de comparación de documentos
   }
 
   setTipoAtencion(tipo: string): void {
@@ -173,5 +177,63 @@ export class RevisionDetalleModalComponent implements OnInit {
         tipoAtencion: this.tipoAtencion
       });
     }
+  }
+
+  /**
+   * Verifica si una fecha está próxima a vencer (menos de 3 días)
+   * @param fecha Fecha a verificar
+   * @returns true si está próxima a vencer
+   */
+  esFechaProxima(fecha: Date): boolean {
+    if (!fecha) return false;
+    
+    const fechaLimite = new Date(fecha);
+    const hoy = new Date();
+    
+    // Calcular diferencia en días
+    const diffTime = fechaLimite.getTime() - hoy.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    return diffDays <= 3 && diffDays >= 0;
+  }
+
+  /**
+   * Calcula el porcentaje de progreso entre la fecha de recepción y la fecha límite
+   * @param fechaRecepcion Fecha de recepción del asunto
+   * @param fechaLimite Fecha límite del asunto
+   * @returns Porcentaje de tiempo transcurrido (0-100)
+   */
+  calcularProgreso(fechaRecepcion: Date, fechaLimite: Date): number {
+    if (!fechaRecepcion || !fechaLimite) return 0;
+    
+    const fechaInicio = new Date(fechaRecepcion).getTime();
+    const fechaFin = new Date(fechaLimite).getTime();
+    const hoy = new Date().getTime();
+    
+    // Si ya pasó la fecha límite, retornar 100%
+    if (hoy > fechaFin) return 100;
+    
+    // Si la fecha de inicio es mayor a hoy (caso inusual), retornar 0%
+    if (fechaInicio > hoy) return 0;
+    
+    // Calcular el porcentaje de tiempo transcurrido
+    const tiempoTotal = fechaFin - fechaInicio;
+    const tiempoTranscurrido = hoy - fechaInicio;
+    
+    return Math.min(Math.round((tiempoTranscurrido / tiempoTotal) * 100), 100);
+  }
+
+  /**
+   * Alterna el modo de expansión del visualizador de PDF
+   */
+  toggleExpansion(): void {
+    this.expandido = !this.expandido;
+  }
+
+  /**
+   * Obtiene la URL del documento para comparación
+   */
+  obtenerUrlDocumentoComparacion(): string {
+    return this.documentosPDF[this.documentoComparacion] || 'assets/pdfs/documento_default.pdf';
   }
 } 

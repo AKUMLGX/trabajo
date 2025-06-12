@@ -11,9 +11,19 @@
       </div>
     </div>
     <div class="header-actions">
-      <span class="priority-badge" [ngClass]="{'alta': asunto.prioridad === 'Alta', 'media': asunto.prioridad === 'Media', 'baja': asunto.prioridad === 'Baja'}">
-        {{asunto.prioridad}}
-      </span>
+      <div class="header-status">
+        <div class="dias-badge" [ngClass]="{
+          'bg-red-500': asunto.diasTranscurridos > 15,
+          'bg-yellow-500': asunto.diasTranscurridos > 7 && asunto.diasTranscurridos <= 15,
+          'bg-green-500': asunto.diasTranscurridos <= 7
+        }">
+          <mat-icon class="icon-small">schedule</mat-icon>
+          <span>{{asunto.diasTranscurridos}} días</span>
+        </div>
+        <span class="priority-badge" [ngClass]="{'alta': asunto.prioridad === 'Alta', 'media': asunto.prioridad === 'Media', 'baja': asunto.prioridad === 'Baja'}">
+          {{asunto.prioridad}}
+        </span>
+      </div>
       <button mat-icon-button class="close-button" (click)="cerrar()">
         <mat-icon>close</mat-icon>
       </button>
@@ -33,7 +43,17 @@
       </div>
       <div class="info-item">
         <label>Estado</label>
-        <span class="estado">{{asunto.estadoAtencion}}</span>
+        <span class="estado" [ngClass]="{
+          'text-green-600': asunto.estadoAtencion === 'Aprobado',
+          'text-red-600': asunto.estadoAtencion === 'Rechazado',
+          'text-blue-600': asunto.estadoAtencion === 'Finalizado'
+        }">
+          <mat-icon class="text-sm inline-block align-middle mr-1">{{
+            asunto.estadoAtencion === 'Aprobado' ? 'check_circle' : 
+            asunto.estadoAtencion === 'Rechazado' ? 'cancel' : 'pending'
+          }}</mat-icon>
+          {{asunto.estadoAtencion}}
+        </span>
       </div>
       <div class="info-item">
         <label>Fecha Recepción</label>
@@ -41,11 +61,14 @@
       </div>
       <div class="info-item">
         <label>Fecha Límite</label>
-        <span>{{formatDate(asunto.fechaLimite)}}</span>
+        <span [ngClass]="{'text-red-600 font-medium': esFechaProxima(asunto.fechaLimite)}">
+          {{formatDate(asunto.fechaLimite)}}
+          <mat-icon *ngIf="esFechaProxima(asunto.fechaLimite)" class="text-sm inline-block align-middle ml-1">warning</mat-icon>
+        </span>
       </div>
       <div class="info-item">
-        <label>Días</label>
-        <span class="dias">{{asunto.diasTranscurridos}} días</span>
+        <label>Tiempo de proceso</label>
+        <span class="text-gray-700">{{asunto.diasTranscurridos}} días</span>
       </div>
     </div>
   </div>
@@ -66,6 +89,22 @@
           </ng-template>
           
           <div class="tab-content">
+            <!-- Resumen de acciones rápidas -->
+            <div class="action-summary">
+              <div class="action-card" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
+                <mat-icon>visibility</mat-icon>
+                <span>Ver dictamen</span>
+              </div>
+              <div class="action-card" (click)="mostrarDocumento('Análisis_Fiscal.pdf')">
+                <mat-icon>assessment</mat-icon>
+                <span>Ver análisis</span>
+              </div>
+              <div class="action-card" (click)="mostrarDocumento('Evidencia_Documental.pdf')">
+                <mat-icon>folder</mat-icon>
+                <span>Ver evidencias</span>
+              </div>
+            </div>
+            
             <div class="section">
               <h2>Resumen del Asunto</h2>
               <p class="text-content">
@@ -110,36 +149,41 @@
               </p>
             </div>
             
-            <!-- Sección para documentación adjunta (links) -->
+            <!-- Sección para documentación adjunta (cards) -->
             <div class="section">
               <h2>Documentación Adjunta</h2>
-              <div class="pdf-list">
-                <div class="pdf-item" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
-                  <div class="pdf-icon">
+              <div class="documents-grid">
+                <div class="document-card" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
+                  <div class="document-icon">
                     <mat-icon>picture_as_pdf</mat-icon>
                   </div>
-                  <div class="pdf-info">
-                    <span class="pdf-name">Dictamen_Técnico.pdf</span>
-                    <span class="pdf-size">1.2 MB</span>
+                  <div class="document-info">
+                    <h4>Dictamen Técnico</h4>
+                    <p>Análisis detallado del caso</p>
+                    <span class="document-meta">PDF · 1.2 MB</span>
                   </div>
-                  <button mat-button color="primary" class="pdf-button">
-                    <mat-icon>visibility</mat-icon>
-                    Ver
-                  </button>
                 </div>
                 
-                <div class="pdf-item" (click)="mostrarDocumento('Análisis_Fiscal.pdf')">
-                  <div class="pdf-icon">
+                <div class="document-card" (click)="mostrarDocumento('Análisis_Fiscal.pdf')">
+                  <div class="document-icon">
                     <mat-icon>picture_as_pdf</mat-icon>
                   </div>
-                  <div class="pdf-info">
-                    <span class="pdf-name">Análisis_Fiscal.pdf</span>
-                    <span class="pdf-size">3.5 MB</span>
+                  <div class="document-info">
+                    <h4>Análisis Fiscal</h4>
+                    <p>Estudio de cumplimiento de obligaciones</p>
+                    <span class="document-meta">PDF · 3.5 MB</span>
                   </div>
-                  <button mat-button color="primary" class="pdf-button">
-                    <mat-icon>visibility</mat-icon>
-                    Ver
-                  </button>
+                </div>
+                
+                <div class="document-card" (click)="mostrarDocumento('Evidencia_Documental.pdf')">
+                  <div class="document-icon">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                  </div>
+                  <div class="document-info">
+                    <h4>Evidencia Documental</h4>
+                    <p>Pruebas y anexos del caso</p>
+                    <span class="document-meta">PDF · 5.8 MB</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -165,12 +209,18 @@
             <div class="section">
               <h2>Tipo de Atención</h2>
               <div class="atencion-options">
-                <div class="radio-option">
-                  <mat-radio-button value="total" [checked]="tipoAtencion === 'total'" (change)="setTipoAtencion('total')">Atención Total</mat-radio-button>
+                <div class="radio-option" [class.selected]="tipoAtencion === 'total'" (click)="setTipoAtencion('total')">
+                  <div class="radio-header">
+                    <mat-radio-button value="total" [checked]="tipoAtencion === 'total'" (change)="setTipoAtencion('total')"></mat-radio-button>
+                    <h3>Atención Total</h3>
+                  </div>
                   <p class="option-description">El asunto fue atendido completamente y no requiere seguimiento adicional</p>
                 </div>
-                <div class="radio-option">
-                  <mat-radio-button value="parcial" [checked]="tipoAtencion === 'parcial'" (change)="setTipoAtencion('parcial')">Atención Parcial</mat-radio-button>
+                <div class="radio-option" [class.selected]="tipoAtencion === 'parcial'" (click)="setTipoAtencion('parcial')">
+                  <div class="radio-header">
+                    <mat-radio-button value="parcial" [checked]="tipoAtencion === 'parcial'" (change)="setTipoAtencion('parcial')"></mat-radio-button>
+                    <h3>Atención Parcial</h3>
+                  </div>
                   <p class="option-description">El asunto fue atendido parcialmente y requiere seguimiento posterior</p>
                 </div>
               </div>
@@ -240,19 +290,36 @@
     <div class="right-panel">
       <div class="pdf-viewer">
         <div class="pdf-viewer-header">
-          <h2>Visualizador de Documentos</h2>
-          <div *ngIf="documentoSeleccionado" class="document-info">
-            <mat-icon>picture_as_pdf</mat-icon>
-            <span>{{documentoSeleccionado}}</span>
+          <div class="viewer-title">
+            <h2>Visualizador de Documentos</h2>
+            <div *ngIf="documentoSeleccionado" class="document-info">
+              <mat-icon>picture_as_pdf</mat-icon>
+              <span>{{documentoSeleccionado}}</span>
+            </div>
+          </div>
+          <div class="viewer-actions">
+            <button mat-icon-button matTooltip="Descargar documento" *ngIf="documentoSeleccionado" (click)="descargarDocumento()">
+              <mat-icon>file_download</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Comparar documentos" *ngIf="documentoSeleccionado" (click)="toggleComparacion()">
+              <mat-icon>compare</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Expandir visualizador" *ngIf="documentoSeleccionado" (click)="toggleExpansion()">
+              <mat-icon>fullscreen</mat-icon>
+            </button>
           </div>
         </div>
         
         <!-- Contenido del visor de PDF maximizado -->
-        <div class="pdf-viewer-content">
+        <div class="pdf-viewer-content" [ngClass]="{'expanded': expandido}">
           <!-- Mensaje cuando no hay documento seleccionado -->
           <div *ngIf="!documentoSeleccionado" class="empty-viewer-message">
             <mat-icon>info</mat-icon>
             <p>Selecciona un documento para visualizarlo</p>
+            <button mat-stroked-button color="primary" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
+              <mat-icon class="mr-2">description</mat-icon>
+              Ver dictamen técnico
+            </button>
           </div>
           
           <!-- Indicador de carga -->
@@ -266,7 +333,7 @@
             <!-- Modo comparación -->
             <div *ngIf="modoComparacion" class="comparison-view">
               <div class="comparison-header">
-                <h4>Modo Comparación</h4>
+                <h4>Comparación de Documentos</h4>
                 <button mat-icon-button class="close-comparison" (click)="toggleComparacion()">
                   <mat-icon>close</mat-icon>
                 </button>
@@ -292,15 +359,16 @@
                 <!-- Documento secundario (para comparar) -->
                 <div class="comparison-panel">
                   <div class="comparison-panel-header">
-                    <h5>Documento para comparar</h5>
-                    <button mat-button class="select-button">
-                      <mat-icon>folder_open</mat-icon>
-                      Seleccionar documento
-                    </button>
+                    <h5>{{documentoComparacion}}</h5>
                   </div>
-                  <div class="comparison-panel-content empty-comparison">
-                    <mat-icon>compare</mat-icon>
-                    <p>Selecciona un documento para comparar</p>
+                  <div class="comparison-panel-content">
+                    <ngx-extended-pdf-viewer
+                      [src]="obtenerUrlDocumentoComparacion()"
+                      [height]="'100%'"
+                      [useBrowserLocale]="true"
+                      [showToolbar]="false"
+                      zoom="page-width">
+                    </ngx-extended-pdf-viewer>
                   </div>
                 </div>
               </div>
@@ -324,20 +392,6 @@
                 zoom="page-fit">
               </ngx-extended-pdf-viewer>
             </div>
-          </div>
-        </div>
-        
-        <!-- Controles adicionales para el PDF -->
-        <div *ngIf="documentoSeleccionado && !pdfCargando" class="pdf-controls">
-          <div class="control-group">
-            <button mat-button class="control-button" (click)="descargarDocumento()">
-              <mat-icon>file_download</mat-icon>
-              Descargar
-            </button>
-            <button mat-button class="control-button" (click)="toggleComparacion()">
-              <mat-icon>compare</mat-icon>
-              {{modoComparacion ? 'Salir de comparación' : 'Comparar Documentos'}}
-            </button>
           </div>
         </div>
       </div>

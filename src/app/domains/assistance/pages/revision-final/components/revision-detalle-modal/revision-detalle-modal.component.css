@@ -1016,4 +1016,244 @@ h2 {
   .right-panel {
     flex: 0 0 75%;
   }
+}
+
+/* Indicador de progreso */
+.progress-container {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(to right, #10B981, #059669);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4B5563;
+}
+
+/* Badges en el header */
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dias-badge {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.dias-badge .icon-small {
+  font-size: 14px;
+  height: 14px;
+  width: 14px;
+  margin-right: 4px;
+}
+
+/* Tarjetas de acción rápida */
+.action-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-color: #d1d5db;
+}
+
+.action-card mat-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  margin-bottom: 8px;
+  color: #691C32;
+}
+
+.action-card span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4B5563;
+}
+
+/* Cuadrícula de documentos */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.document-card {
+  display: flex;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  align-items: center;
+}
+
+.document-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-color: #d1d5db;
+}
+
+.document-card .document-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #FEF2F2;
+  border-radius: 8px;
+  margin-right: 12px;
+}
+
+.document-card .document-icon mat-icon {
+  color: #DC2626;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.document-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.document-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1F2937;
+}
+
+.document-info p {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #6B7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.document-meta {
+  font-size: 11px;
+  color: #9CA3AF;
+  display: block;
+}
+
+/* Mejoras para las opciones de radio */
+.radio-option {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.radio-option:hover {
+  background-color: #f9fafb;
+}
+
+.radio-option.selected {
+  border-color: #691C32;
+  background-color: rgba(105, 28, 50, 0.05);
+}
+
+.radio-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.radio-header h3 {
+  margin: 0 0 0 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1F2937;
+}
+
+/* Mejora para el visualizador de PDF */
+.viewer-title {
+  display: flex;
+  align-items: center;
+}
+
+.viewer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pdf-viewer-content {
+  transition: all 0.3s ease;
+}
+
+.pdf-viewer-content.expanded {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: white;
+  padding: 20px;
+}
+
+.empty-viewer-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  gap: 16px;
+}
+
+.mr-2 {
+  margin-right: 8px;
 } 
