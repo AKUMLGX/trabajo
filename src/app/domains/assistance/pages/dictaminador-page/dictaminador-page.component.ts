@@ -52,6 +52,22 @@ interface Estadisticas {
   prioridadAlta: number;
 }
 
+const ATENCION_DESCRIPCION: { [key: number]: string } = {
+  1: 'TOTAL',
+  2: 'PARCIAL',
+  3: 'EN TRAMITE'
+};
+
+const DOCUMENTO_DESCRIPCION: { [key: number]: string } = {
+  1: 'RESPUESTA',
+  2: 'REQUERIMIENTO',
+  3: 'REQUERIMIENTO Y RESPUESTA',
+  4: 'SOLICITUD INTERNA',
+  5: 'RESPUESTA INTERNA',
+  6: 'RESPUESTA A FGR',
+  7: 'ALCANCE'
+};
+
 @Component({
   selector: 'app-dictaminador-page',
   standalone: true,
@@ -118,15 +134,42 @@ export class DictaminadorPageComponent implements OnInit {
             const diferencia = fechaActual.getTime() - fechaRecepcion.getTime();
             diasTranscurridos = Math.floor(diferencia / (1000 * 60 * 60 * 24));
           }
+          // Lógica de prioridad y color
+          let prioridad = '';
+          let prioridadColor = '';
+          if (item.plazo_atencion && item.plazo_atencion > 0) {
+            prioridad = 'Urgente';
+            prioridadColor = 'rojo';
+          } else if (diasTranscurridos < 4) {
+            prioridad = 'Baja';
+            prioridadColor = 'verde';
+          } else if (diasTranscurridos >= 4 && diasTranscurridos <= 15) {
+            prioridad = 'Media';
+            prioridadColor = 'amarillo';
+          } else if (diasTranscurridos > 15) {
+            prioridad = 'Alta';
+            prioridadColor = 'rojo';
+          }
+          // Plazo atención visual
+          let plazoAtencionVisual = 'Sin plazo de atención';
+          if (item.plazo_atencion && item.plazo_atencion > 0) {
+            plazoAtencionVisual = item.plazo_atencion + ' días';
+          }
           return {
             'FOLIO INTERNO': item.folio_interno,
             'CARPETA INVESTIGACION': item.carpeta_investigacion,
             'PERSONA RELACIONADA': item.persona_relacionada,
             'FECHA RECEPCION': item.fecha_recepcion,
             'DIAS TRANSCURRIDOS': diasTranscurridos,
-            'ESTADO ATENCION': 'Atención Total', // Fijo
-            'PRIORIDAD': '', // Puedes calcularlo después si lo necesitas
-            'OFICIO': item.oficio
+            'ESTADO ATENCION': ATENCION_DESCRIPCION[item.id_atencion_fk] || '',
+            'PRIORIDAD': prioridad,
+            'PRIORIDAD COLOR': prioridadColor,
+            'OFICIO': item.oficio,
+            'TURNO JEFATURA': item.turno_jefatura,
+            'FOLIO SCANNER': item.folio_scanner,
+            'AUTORIDAD REMITENTE': item.autoridad_remitente,
+            'TIPO DOCUMENTO': DOCUMENTO_DESCRIPCION[item.id_documento_fk] || '',
+            'PLAZO ATENCION': plazoAtencionVisual
           };
         });
         this.actualizarEstadisticas();
