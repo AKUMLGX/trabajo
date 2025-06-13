@@ -1,4 +1,5 @@
-import { AsignarAsunto, AsignarAsuntoRequest } from './../../../interfaces/asiganar-AsuntoRequest.interface';
+
+import { AsignarAsunto, AsignarAsuntoRequest, modalItem } from './../../../interfaces/asiganar-AsuntoRequest.interface';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,7 +8,7 @@ import { MatDialogModule} from '@angular/material/dialog';
 import { FormControl, FormsModule,  ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { modalItem, porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
+import {  porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
 import { ModalService } from '../../../shared/services/modal.service';
@@ -74,8 +75,7 @@ buscador = new FormControl('');
   asignadosTable: boolean = false
   documento: string = 'REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion[] = []
-  itemDeFilaSelecionada: modalItem | null = null
-  // itemDeFilaSelecionada: modalItem [] = [];
+   itemDeFilaSelecionada: modalItem | null = null
 
 
   porAsignarDataTable: porAsignarRequest = {
@@ -100,13 +100,11 @@ buscador = new FormControl('');
         this.buscadorService.setData(this.allData)
       },
     });
-
   }
 
   onDearchChange(value:string){
     this.buscadorService.setSearchTerm(value)
   }
-
 
   filtrarIndicador = (item: tableAsuntosPorDictaminar, term: string): boolean => {
   return item.persona_relacionada?.toLowerCase().includes(term.toLocaleLowerCase());
@@ -126,54 +124,13 @@ buscador = new FormControl('');
     })
   }
 
-  itemJson : AsignarAsunto ={
-    folio_interno: '',
-            folio_scanner: 0,
-            carpeta_investigacion: '',
-            oficio: '',
-            persona_relacionada: '',
-            fecha_recepcion: '',
-            id_administracion_fk: 0,
-            id_documento_fk: 0,
-            id_atencion_fk: 0,
-            turno_jefatura: '',
-            autoridad_remitente: '',
-            id_asunto: 0,
-            es_historico: true,
-            plazo_atencion: 0
-  }
-  itemRFC: string =''
-
-  AsisgnarJSON=  {}
-
   asignarAsunto() {
-    this.usuariosAsignar.forEach((item) => {
-      debugger
-       this.itemRFC =  item.rfc
-    });
-    this.allData.forEach((item) => {
-       this.itemJson = {
-            folio_interno: item.folio_interno,
-            folio_scanner: item.folio_scanner,
-            carpeta_investigacion: item.carpeta_investigacion,
-            oficio: item.oficio,
-            persona_relacionada: item.persona_relacionada,
-            fecha_recepcion: item.fecha_recepcion,
-            id_administracion_fk: item.id_administracion_fk,
-            id_documento_fk: item.id_documento_fk,
-            id_atencion_fk: item.id_atencion_fk,
-            turno_jefatura: item.turno_jefatura,
-            autoridad_remitente: item.autoridad_remitente,
-            id_asunto: item.id_asunto,
-            es_historico: item.es_historico,
-            plazo_atencion: item.plazo_atencion
-      };
-    });
+    const itemJsonSeleccion = this.itemDeFilaSelecionada!
     const jsonRequest : AsignarAsuntoRequest = {
-      asunto: this.itemJson,
-      rfc_asignado:this.itemRFC
+      asunto: itemJsonSeleccion,
+      rfc_asignado: this.abogadoSeleccionado
     }
-
+    console.log("JSON",JSON.stringify(jsonRequest));
     this.cards.asignarAsunto(jsonRequest).subscribe({
       next: () => {
         window.location.reload()
@@ -183,7 +140,6 @@ buscador = new FormControl('');
 
   abrirModalAsignacion(template: TemplateRef<any>, item: modalItem) {
     this.itemDeFilaSelecionada = item
-    console.log(item);
     this.usuariosPorAdministracion()
     this.modalService.openCustomDialogWithTemplate({
       template

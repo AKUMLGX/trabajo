@@ -91,19 +91,26 @@ export class CardsComponent implements OnInit {
   }
 
   documento:string='REQUERIMIENTO'
-  asignados:boolean= true
+  asignados:boolean= false
+  asignadosTable:boolean= true
   porAsignarTotal:number=0
+  asignarData= true
 
   tablePorDictaminar : tableAsuntosPorDictaminar[]= []
-  // tablePorDictaminar : []= []
 
   porAsignarData :porAsignarRequest ={
     documento : this.documento,
     asignados: this.asignados
   }
 
+  porAsignarDataTable: porAsignarRequest={
+    documento:this.documento,
+    asignados:this.asignadosTable
+  }
+
   porAsignarDataResponse: porAsignarResponse={
-    total: this.porAsignarTotal
+    total: this.porAsignarTotal,
+    dicataminadorData:false
   }
 
     usuariosAsignar: usuariosPorAdministracion[] = []
@@ -166,7 +173,7 @@ export class CardsComponent implements OnInit {
   mostrarModalRechazados: boolean = false;
   mostrarConfirmacionReasignacion: boolean = false;
   asuntoRechazado: AsuntoRechazado | null = null;
-  
+
   // Datos de ejemplo para asuntos rechazados
   asuntosRechazados: AsuntoRechazado[] = [
     { folio: 'R001', autoridad: 'Servicio de Administración Tributaria', fechaRechazo: '05/04/2024', dictaminador: 'María Hernández', motivo: 'Información incompleta en el expediente. Se requiere documentación adicional.' },
@@ -182,6 +189,22 @@ export class CardsComponent implements OnInit {
     { id: '5', nombre: 'Luis Torres' }
   ];
 
+   mostarCardPorAsignar(){
+  this.cards.cardInfoPorAsignar(this.porAsignarData).subscribe( res=>{
+     this.porAsignarDataResponse = res;
+     console.log("Pro AS:");
+  }
+  )
+ }
+
+   asuntosPorDictaminar(){
+  this.cards.asutosPorDictaminar(this.porAsignarDataTable).subscribe({
+    next:(res) =>{
+      this.tablePorDictaminar = res
+    }
+  })
+ }
+
   ngOnInit(): void {
     // Al iniciar, mostrar todos los asuntos
     this.asuntosFiltrados = [...this.asuntos];
@@ -190,9 +213,9 @@ export class CardsComponent implements OnInit {
     // Calcular conteo de asuntos por dictaminador
     this.calcularConteoAsuntos();
 
-    this.mostarCardPorAsignar()
-    this.asuntosPorDictaminar()
     this.mostrarCards()
+    this.mostarCardPorAsignar()
+      this.asuntosPorDictaminar()
     this.usuariosPorAdministracion()
   }
   mostrarCards(){
@@ -212,22 +235,9 @@ export class CardsComponent implements OnInit {
     })
   }
 
- mostarCardPorAsignar(){
-  this.cards.cardInfoPorAsignar(this.porAsignarData).subscribe( res=>{
-     this.porAsignarDataResponse = res;
-    // this.porAsignarDataResponse.total
-  }
-  )
- }
 
 
- asuntosPorDictaminar(){
-  this.cards.asutosPorDictaminar(this.porAsignarData).subscribe({
-    next:(res) =>{
-      this.tablePorDictaminar = res
-    }
-  })
- }
+
 
 
   requerimiento:Cards={

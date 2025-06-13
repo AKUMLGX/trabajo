@@ -17,6 +17,14 @@
 
 
 export interface AsignarAsuntoRequest {
-   asunto:AsignarAsunto;
+   asunto:modalItem;
    rfc_asignado: string;
 }
+
+
+ export interface modalItem{
+  folio_interno: string,
+  persona_relacionada: string,
+  carpeta_investigacion: string,
+  plazo_atencion:number,
+ }
