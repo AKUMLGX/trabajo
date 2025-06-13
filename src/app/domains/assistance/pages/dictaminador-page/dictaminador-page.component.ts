@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DictaminadorBandejaService } from '../../../services/dictaminador-bandeja.service';
 
 interface Dictaminador {
   nombre: string;
@@ -65,8 +66,8 @@ export class DictaminadorPageComponent implements OnInit {
     area: 'Área Legal'
   };
 
-  asuntos: AsuntoDictaminador[] = [];
-  asuntosFiltrados: AsuntoDictaminador[] = [];
+  asuntos: any[] = [];
+  asuntosFiltrados: any[] = [];
   asuntosRechazados: AsuntoRechazado[] = [];
   asuntosRechazadosFiltrados: AsuntoRechazado[] = [];
   
@@ -94,18 +95,49 @@ export class DictaminadorPageComponent implements OnInit {
   mostrarDetallesRechazo: boolean = false;
   asuntoRechazadoSeleccionado: AsuntoRechazado | null = null;
 
-  constructor(private router: Router, private fb: FormBuilder) {
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private dictaminadorBandejaService: DictaminadorBandejaService
+  ) {
     this.formularioAtencion = this.fb.group({
       observaciones: ['', Validators.required]
     });
   }
 
   ngOnInit() {
-    // Simular carga de datos del backend
-    this.cargarDatosEjemplo();
+    this.dictaminadorBandejaService.obtenerAsuntosAsignados().subscribe({
+      next: (res) => {
+        console.log('Respuesta del backend:', res); // Imprimir la respuesta para inspección
+        this.asuntos = res.map((item: any) => {
+          // Calcular días transcurridos
+          let diasTranscurridos = 0;
+          if (item.fecha_recepcion) {
+            const fechaRecepcion = new Date(item.fecha_recepcion);
+            const fechaActual = new Date();
+            const diferencia = fechaActual.getTime() - fechaRecepcion.getTime();
+            diasTranscurridos = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+          }
+          return {
+            'FOLIO INTERNO': item.folio_interno,
+            'CARPETA INVESTIGACION': item.carpeta_investigacion,
+            'PERSONA RELACIONADA': item.persona_relacionada,
+            'FECHA RECEPCION': item.fecha_recepcion,
+            'DIAS TRANSCURRIDOS': diasTranscurridos,
+            'ESTADO ATENCION': 'Atención Total', // Fijo
+            'PRIORIDAD': '', // Puedes calcularlo después si lo necesitas
+            'OFICIO': item.oficio
+          };
+        });
+        this.actualizarEstadisticas();
+        this.aplicarFiltros();
+      },
+      error: (err) => {
+        console.error('Error al obtener asuntos:', err);
+      }
+    });
+
     this.cargarDatosRechazadosEjemplo();
-    this.actualizarEstadisticas();
-    this.aplicarFiltros();
     this.aplicarFiltrosRechazados();
   }
 
@@ -142,9 +174,10 @@ export class DictaminadorPageComponent implements OnInit {
 
   aplicarFiltros() {
     this.asuntosFiltrados = this.asuntos.filter(asunto => {
-      if (!this.mostrarCompletados && asunto.estado === 'Atendido') return false;
-      if (this.filtroEstado !== 'Todos' && asunto.estado !== this.filtroEstado) return false;
-      if (this.filtroPrioridad !== 'Todas' && asunto.prioridad !== this.filtroPrioridad) return false;
+      // Filtros adaptados a los nuevos campos personalizados
+      if (!this.mostrarCompletados && asunto['ESTADO'] === 'Atendido') return false;
+      if (this.filtroEstado !== 'Todos' && asunto['ESTADO'] !== this.filtroEstado) return false;
+      if (this.filtroPrioridad !== 'Todas' && asunto['PRIORIDAD'] !== this.filtroPrioridad) return false;
       return true;
     });
   }
@@ -165,62 +198,6 @@ export class DictaminadorPageComponent implements OnInit {
     }
   }
 
-  cargarDatosEjemplo() {
-    const fechaActual = new Date();
-    const ejemplos: AsuntoDictaminador[] = [
-      {
-        id: '1',
-        folio: 'EUACAPE-0021',
-        carpetaInvestigacion: 'CI-78945',
-        personaRelacionada: 'María González López',
-        fechaRecepcion: new Date(fechaActual.getTime() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-        fechaLimite: '2024-03-15',
-        estado: 'Pendiente',
-        estadoAtencion: 'Tramite',
-        prioridad: 'Alta',
-        prioridadVisual: 'rojo',
-        diasTranscurridos: 20,
-        plazoUrgente: true,
-        observaciones: 'Caso prioritario'
-      },
-      {
-        id: '2',
-        folio: 'EUACAPE-0022',
-        carpetaInvestigacion: 'CI-78946',
-        personaRelacionada: 'Juan Pérez Ramírez',
-        fechaRecepcion: new Date(fechaActual.getTime() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-        fechaLimite: '2024-03-25',
-        estado: 'En Proceso',
-        estadoAtencion: 'Parcial',
-        prioridad: 'Media',
-        prioridadVisual: 'amarillo',
-        diasTranscurridos: 10,
-        plazoUrgente: false,
-        observaciones: 'En revisión'
-      },
-      {
-        id: '3',
-        folio: 'EUACAPE-0023',
-        carpetaInvestigacion: 'CI-78947',
-        personaRelacionada: 'Carlos Sánchez Ruiz',
-        fechaRecepcion: new Date(fechaActual.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        fechaLimite: '2024-03-30',
-        estado: 'Pendiente',
-        estadoAtencion: 'Tramite',
-        prioridad: 'Baja',
-        prioridadVisual: 'verde',
-        diasTranscurridos: 3,
-        plazoUrgente: false
-      }
-    ];
-
-    // Calcular prioridad visual para cada asunto
-    this.asuntos = ejemplos.map(asunto => ({
-      ...asunto,
-      prioridadVisual: this.calcularPrioridadVisual(asunto)
-    }));
-  }
-  
   cargarDatosRechazadosEjemplo() {
     const fechaActual = new Date();
     const ejemplosRechazados: AsuntoRechazado[] = [
