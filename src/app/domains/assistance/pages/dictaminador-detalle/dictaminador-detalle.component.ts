@@ -53,6 +53,12 @@ interface AsuntoDictaminador {
   autoridadRemitente: string;
   tipoDocumento: string;
   plazoAtencion: string;
+  // Campos adicionales que necesitamos
+  id_atencion_fk?: number;
+  id_documento_fk?: number;
+  id_administracion_fk?: number;
+  plazo_atencion_original?: number;
+  id_asunto?: number;
 }
 
 @Component({
@@ -187,11 +193,21 @@ export class DictaminadorDetalleComponent implements OnInit {
                 prioridadVisual: prioridadColor,
                 oficio: encontrado.oficio,
                 turnoJefatura: encontrado.turno_jefatura,
-                folioScanner: String(encontrado.folio_scanner),
+                folioScanner: String(encontrado.folio_scanner || ''),
                 autoridadRemitente: encontrado.autoridad_remitente || '',
                 tipoDocumento: '', // Puedes mapearlo si lo necesitas
-                plazoAtencion: plazoAtencionVisual
+                plazoAtencion: plazoAtencionVisual,
+                // Añadimos los campos adicionales
+                id_atencion_fk: encontrado.id_atencion_fk,
+                id_documento_fk: encontrado.id_documento_fk,
+                id_administracion_fk: encontrado.id_administracion_fk,
+                plazo_atencion_original: encontrado.plazo_atencion,
+                id_asunto: encontrado.id_asunto
               };
+              
+              // Para debug: mostrar todos los campos disponibles
+              console.log('Datos completos del asunto:', encontrado);
+              console.log('Datos mapeados:', this.asunto);
             }
           },
           error: (err) => {
@@ -474,46 +490,52 @@ export class DictaminadorDetalleComponent implements OnInit {
   }
 
   getStatusClass(): string {
-    switch (this.asunto.estadoAtencion) {
-      case 'Tramite': return 'bg-blue-600 text-white';
-      case 'Parcial': return 'bg-orange-600 text-white';
-      case 'Total': return 'bg-green-600 text-white';
+    const estado = this.getEstadoAtencionText();
+    switch (estado) {
+      case 'EN TRAMITE': return 'bg-blue-600 text-white';
+      case 'PARCIAL': return 'bg-orange-600 text-white';
+      case 'TOTAL': return 'bg-green-600 text-white';
       default: return 'bg-gray-600 text-white';
     }
   }
 
   getStatusIcon(): string {
-    switch (this.asunto.estadoAtencion) {
-      case 'Tramite': return 'hourglass_empty';
-      case 'Parcial': return 'hourglass_half';
-      case 'Total': return 'check_circle';
+    const estado = this.getEstadoAtencionText();
+    switch (estado) {
+      case 'EN TRAMITE': return 'hourglass_empty';
+      case 'PARCIAL': return 'hourglass_half';
+      case 'TOTAL': return 'check_circle';
       default: return 'help_outline';
     }
   }
 
   getStatusText(): string {
-    switch (this.asunto.estadoAtencion) {
-      case 'Tramite': return 'En Trámite';
-      case 'Parcial': return 'Atención Parcial';
-      case 'Total': return 'Atención Total';
+    const estado = this.getEstadoAtencionText();
+    switch (estado) {
+      case 'EN TRAMITE': return 'En Trámite';
+      case 'PARCIAL': return 'Atención Parcial';
+      case 'TOTAL': return 'Atención Total';
+      case 'NO APLICA': return 'No Aplica';
       default: return 'Desconocido';
     }
   }
 
   getStatusColorClass(): string {
-    switch (this.asunto.estadoAtencion) {
-      case 'Tramite': return 'blue';
-      case 'Parcial': return 'orange';
-      case 'Total': return 'green';
+    const estado = this.getEstadoAtencionText();
+    switch (estado) {
+      case 'EN TRAMITE': return 'blue';
+      case 'PARCIAL': return 'orange';
+      case 'TOTAL': return 'green';
       default: return 'gray';
     }
   }
   
   getProgressColor(): string {
-    switch (this.asunto.estadoAtencion) {
-      case 'Tramite': return 'bg-blue-600';
-      case 'Parcial': return 'bg-orange-600';
-      case 'Total': return 'bg-green-600';
+    const estado = this.getEstadoAtencionText();
+    switch (estado) {
+      case 'EN TRAMITE': return 'bg-blue-600';
+      case 'PARCIAL': return 'bg-orange-600';
+      case 'TOTAL': return 'bg-green-600';
       default: return 'bg-gray-600';
     }
   }
@@ -544,5 +566,59 @@ export class DictaminadorDetalleComponent implements OnInit {
   getDocumentIcon(tipo: string): string {
     // Ahora todos los documentos son PDF
     return 'picture_as_pdf';
+  }
+
+  // Método para obtener el texto del estado de atención basado en el ID
+  getEstadoAtencionText(): string {
+    if (!this.asunto.id_atencion_fk) return 'Desconocido';
+    
+    switch(this.asunto.id_atencion_fk) {
+      case 1: return 'TOTAL';
+      case 2: return 'PARCIAL';
+      case 3: return 'EN TRAMITE';
+      case 5: return 'NO APLICA';
+      default: return 'Desconocido';
+    }
+  }
+
+  // Método para obtener el texto del tipo de documento basado en el ID
+  getDocumentoText(): string {
+    if (!this.asunto.id_documento_fk) return 'No especificado';
+    
+    switch(this.asunto.id_documento_fk) {
+      case 1: return 'RESPUESTA';
+      case 2: return 'REQUERIMIENTO';
+      case 3: return 'REQUERIMIENTO Y RESPUESTA';
+      case 4: return 'SOLICITUD INTERNA';
+      case 5: return 'RESPUESTA INTERNA';
+      case 6: return 'RESPUESTA A FGR';
+      case 7: return 'ALCANCE';
+      default: return 'No especificado';
+    }
+  }
+
+  // Método para obtener el texto de la administración basado en el ID
+  getAdministracionText(): string {
+    if (!this.asunto.id_administracion_fk) return 'No especificada';
+    return `Administración ${this.asunto.id_administracion_fk}`;
+  }
+
+  // Método para obtener el texto y clase del plazo de atención original
+  getPlazoAtencionText(): string {
+    if (this.asunto.plazo_atencion_original === 0) {
+      return 'Urgente';
+    } else if (this.asunto.plazo_atencion_original === null || this.asunto.plazo_atencion_original === undefined) {
+      return 'Normal';
+    } else {
+      return `${this.asunto.plazo_atencion_original} días`;
+    }
+  }
+
+  getPlazoAtencionClass(): string {
+    if (this.asunto.plazo_atencion_original === 0) {
+      return 'text-red-600 bg-red-50 border-red-200';
+    } else {
+      return 'text-green-600 bg-green-50 border-green-200';
+    }
   }
 } 

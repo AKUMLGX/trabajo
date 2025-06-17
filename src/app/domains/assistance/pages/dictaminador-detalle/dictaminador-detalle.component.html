@@ -17,10 +17,10 @@
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <span [ngClass]="[getPriorityClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
-            <mat-icon class="text-sm mr-1">{{getPriorityIcon()}}</mat-icon>
-          {{getPriorityText()}}
-        </span>
+          <span [ngClass]="[asunto.plazo_atencion_original === 0 ? 'bg-red-600 text-white' : 'bg-green-600 text-white', 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
+            <mat-icon class="text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' : 'check_circle'}}</mat-icon>
+            {{getPlazoAtencionText()}}
+          </span>
           <span [ngClass]="[getStatusClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
             <mat-icon class="text-sm mr-1">{{getStatusIcon()}}</mat-icon>
           {{getStatusText()}}
@@ -93,38 +93,38 @@
                 <div class="flex items-center gap-3">
                   <div class="flex-1 p-4 rounded-lg flex items-center" 
                        [ngClass]="{
-                         'bg-blue-50 border border-blue-200': asunto.estadoAtencion === 'Tramite',
-                         'bg-orange-50 border border-orange-200': asunto.estadoAtencion === 'Parcial',
-                         'bg-green-50 border border-green-200': asunto.estadoAtencion === 'Total',
-                         'bg-gray-50 border border-gray-200': asunto.estadoAtencion === 'Desconocido'
+                         'bg-blue-50 border border-blue-200': getEstadoAtencionText() === 'EN TRAMITE',
+                         'bg-orange-50 border border-orange-200': getEstadoAtencionText() === 'PARCIAL',
+                         'bg-green-50 border border-green-200': getEstadoAtencionText() === 'TOTAL',
+                         'bg-gray-50 border border-gray-200': getEstadoAtencionText() === 'Desconocido' || getEstadoAtencionText() === 'NO APLICA'
                        }">
                     <mat-icon class="mr-3 flex-shrink-0" 
                              [ngClass]="{
-                               'text-blue-600': asunto.estadoAtencion === 'Tramite',
-                               'text-orange-600': asunto.estadoAtencion === 'Parcial',
-                               'text-green-600': asunto.estadoAtencion === 'Total',
-                               'text-gray-600': asunto.estadoAtencion === 'Desconocido'
+                               'text-blue-600': getEstadoAtencionText() === 'EN TRAMITE',
+                               'text-orange-600': getEstadoAtencionText() === 'PARCIAL',
+                               'text-green-600': getEstadoAtencionText() === 'TOTAL',
+                               'text-gray-600': getEstadoAtencionText() === 'Desconocido' || getEstadoAtencionText() === 'NO APLICA'
                              }">{{getStatusIcon()}}</mat-icon>
                     <div class="min-w-0 flex-1">
                       <p class="text-sm text-gray-500 truncate">Estado de Atención</p>
                       <p class="font-bold truncate" 
                          [ngClass]="{
-                           'text-blue-600': asunto.estadoAtencion === 'Tramite',
-                           'text-orange-600': asunto.estadoAtencion === 'Parcial',
-                           'text-green-600': asunto.estadoAtencion === 'Total',
-                           'text-gray-600': asunto.estadoAtencion === 'Desconocido'
-                         }">{{getStatusText()}}</p>
+                           'text-blue-600': getEstadoAtencionText() === 'EN TRAMITE',
+                           'text-orange-600': getEstadoAtencionText() === 'PARCIAL',
+                           'text-green-600': getEstadoAtencionText() === 'TOTAL',
+                           'text-gray-600': getEstadoAtencionText() === 'Desconocido' || getEstadoAtencionText() === 'NO APLICA'
+                         }">{{getEstadoAtencionText()}}</p>
                     </div>
                   </div>
                   <div class="flex-1 p-4 rounded-lg flex items-center" 
-                       [ngClass]="asunto.plazoUrgente ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'">
-                    <mat-icon class="flex-shrink-0" [ngClass]="asunto.plazoUrgente ? 'text-red-600 mr-3' : 'text-green-600 mr-3'">
-                      {{asunto.plazoUrgente ? 'priority_high' : 'check_circle'}}
+                       [ngClass]="asunto.plazo_atencion_original === 0 ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'">
+                    <mat-icon class="flex-shrink-0" [ngClass]="asunto.plazo_atencion_original === 0 ? 'text-red-600 mr-3' : 'text-green-600 mr-3'">
+                      {{asunto.plazo_atencion_original === 0 ? 'priority_high' : 'check_circle'}}
                     </mat-icon>
                     <div class="min-w-0 flex-1">
                       <p class="text-sm text-gray-500 truncate">Plazo</p>
-                      <p class="truncate" [ngClass]="asunto.plazoUrgente ? 'font-bold text-red-600' : 'font-bold text-green-600'">
-                        {{asunto.plazoUrgente ? 'Urgente' : 'Normal'}}
+                      <p class="truncate" [ngClass]="asunto.plazo_atencion_original === 0 ? 'font-bold text-red-600' : 'font-bold text-green-600'">
+                        {{getPlazoAtencionText()}}
                       </p>
                     </div>
                   </div>
@@ -231,6 +231,42 @@
             <div>
               <p class="text-sm text-gray-500">Turno Jefatura</p>
               <p class="font-bold text-purple-800">{{asunto.turnoJefatura || 'No disponible'}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUEVA SECCIÓN: Información detallada -->
+     <div class="flex items-stretch gap-4 mt-6 mb-6">
+      <!-- Card de Información Detallada (azul) -->
+      <div class="flex-1 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-lg">
+        <div class="flex items-center mb-3">
+          <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center mr-3 border border-blue-200">
+            <mat-icon class="text-blue-600">data_object</mat-icon>
+          </div>
+          <h3 class="text-lg font-bold text-blue-800">Información Detallada</h3>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-4 rounded-lg bg-white border border-blue-200 flex items-center">
+            <mat-icon class="text-blue-600 mr-3">assignment_turned_in</mat-icon>
+            <div>
+              <p class="text-sm text-gray-500">Estado de atención</p>
+              <p class="font-bold text-blue-800">{{getEstadoAtencionText()}}</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-lg bg-white border border-blue-200 flex items-center">
+            <mat-icon class="text-blue-600 mr-3">insert_drive_file</mat-icon>
+            <div>
+              <p class="text-sm text-gray-500">Documento</p>
+              <p class="font-bold text-blue-800">{{getDocumentoText()}}</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-lg bg-white border border-blue-200 flex items-center">
+            <mat-icon class="text-blue-600 mr-3">corporate_fare</mat-icon>
+            <div>
+              <p class="text-sm text-gray-500">Administración</p>
+              <p class="font-bold text-blue-800">{{getAdministracionText()}}</p>
             </div>
           </div>
         </div>
