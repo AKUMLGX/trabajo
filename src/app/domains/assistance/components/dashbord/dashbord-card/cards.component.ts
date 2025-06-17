@@ -13,7 +13,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { FormsModule } from '@angular/forms';
 import { SafePipe } from '../../../../../shared/pipes/safe.pipe';
 import { CardsInfoBandejadeAtencionService } from '../../../../services/cards-info-bandejade-atencion.service';
-import {  AdministracionResponse, Cards,CardsResponse, } from '../../../../interfaces/datosCards.interface';
+import { AdministracionResponse, Cards, CardsResponse, } from '../../../../interfaces/datosCards.interface';
 import { porAsignarRequest } from '../../../../interfaces/porAsignarRequest.interface';
 import { porAsignarResponse } from '../../../../interfaces/porAsignarResponse.interface';
 import { usuariosPorAdministracion } from '../../../../interfaces/usuarios-Por-administracion.interface';
@@ -90,31 +90,34 @@ export class CardsComponent implements OnInit {
     this.mostrarSemaforoContenido.emit()
   }
 
-  documento:string='REQUERIMIENTO'
-  asignados:boolean= true
-  porAsignarTotal:number=0
+  documento: string = 'REQUERIMIENTO'
+  asignados: boolean = false
+  asignadosTable: boolean = true
+  porAsignarTotal: number = 0
+  asignarData = true
 
-  tablePorDictaminar : tableAsuntosPorDictaminar[]= []
-  // tablePorDictaminar : []= []
+  tablePorDictaminar: tableAsuntosPorDictaminar[] = []
 
-  porAsignarData :porAsignarRequest ={
-    documento : this.documento,
+  porAsignarData: porAsignarRequest = {
+    documento: this.documento,
     asignados: this.asignados
   }
 
-  porAsignarDataResponse: porAsignarResponse={
-    total: this.porAsignarTotal
+  porAsignarDataTable: porAsignarRequest = {
+    documento: this.documento,
+    asignados: this.asignadosTable
   }
 
-    usuariosAsignar: usuariosPorAdministracion[] = []
+  porAsignarDataResponse: porAsignarResponse = {
+    total: this.porAsignarTotal,
+    dicataminadorData: false
+  }
 
- constructor(private router:Router, private cards:CardsInfoBandejadeAtencionService){}
-// @Output() oucultar = new EventEmitter<void>()
+  usuariosAsignar: usuariosPorAdministracion[] = []
 
-// ocultarPadre():void{
-//   this.oucultar.emit()
-//   this.router.navigate(['/layout/assistance/tramite-card'])
-//   }
+  asuntosUrgentes: number = 0;
+
+  constructor(private router: Router, private cards: CardsInfoBandejadeAtencionService) { }
 
   // Propiedades para manejar la notificación
   mostrarNotificacion: boolean = false;
@@ -166,7 +169,8 @@ export class CardsComponent implements OnInit {
   mostrarModalRechazados: boolean = false;
   mostrarConfirmacionReasignacion: boolean = false;
   asuntoRechazado: AsuntoRechazado | null = null;
-  
+
+
   // Datos de ejemplo para asuntos rechazados
   asuntosRechazados: AsuntoRechazado[] = [
     { folio: 'R001', autoridad: 'Servicio de Administración Tributaria', fechaRechazo: '05/04/2024', dictaminador: 'María Hernández', motivo: 'Información incompleta en el expediente. Se requiere documentación adicional.' },
@@ -182,6 +186,20 @@ export class CardsComponent implements OnInit {
     { id: '5', nombre: 'Luis Torres' }
   ];
 
+
+  requerimiento: Cards = {
+    total: 0,
+    parcial: 0,
+    recibido: 0,
+    en_tramite: 0,
+    no_aplica: 0,
+    documento: 0,
+  }
+
+  administracion: AdministracionResponse = {
+    Administracion: 0,
+  }
+
   ngOnInit(): void {
     // Al iniciar, mostrar todos los asuntos
     this.asuntosFiltrados = [...this.asuntos];
@@ -190,79 +208,56 @@ export class CardsComponent implements OnInit {
     // Calcular conteo de asuntos por dictaminador
     this.calcularConteoAsuntos();
 
+    this.mostrarCards()
     this.mostarCardPorAsignar()
     this.asuntosPorDictaminar()
-    this.mostrarCards()
     this.usuariosPorAdministracion()
   }
-  mostrarCards(){
-    this.cards.cardsInfo().subscribe(res=>{
-     //  debugger
-      console.log("CARDS",res);
-        this.dataCards(res)
-        // this.requerimiento.total
-        // this.requerimiento.en_tramite
-        this.requerimiento.parcial
-         this.administracion.Administracion
 
-         console.log("Entramite", this.requerimiento.en_tramite);
-          console.log("ADM", this.administracion.Administracion);
-
-
+  mostarCardPorAsignar() {
+    this.cards.cardInfoPorAsignar(this.porAsignarData).subscribe(res => {
+      this.porAsignarDataResponse = res;
     })
   }
 
- mostarCardPorAsignar(){
-  this.cards.cardInfoPorAsignar(this.porAsignarData).subscribe( res=>{
-     this.porAsignarDataResponse = res;
-    // this.porAsignarDataResponse.total
-  }
-  )
- }
-
-
- asuntosPorDictaminar(){
-  this.cards.asutosPorDictaminar(this.porAsignarData).subscribe({
-    next:(res) =>{
-      this.tablePorDictaminar = res
-    }
-  })
- }
-
-
-  requerimiento:Cards={
-    total: 0,
-    parcial: 0,
-    recibido: 0,
-    en_tramite: 0,
-    no_aplica: 0,
-    documento:0,
+  mostrarCards() {
+    this.cards.cardsInfo().subscribe(res => {
+      this.dataCards(res)
+      this.requerimiento.parcial
+      this.administracion.Administracion
+    })
   }
 
-    administracion: AdministracionResponse={
-    Administracion: 0,
-    }
+  asuntosPorDictaminar() {
+    this.cards.asutosPorDictaminar(this.porAsignarDataTable).subscribe({
+      next: (res) => {
+        this.tablePorDictaminar = res
+        const fitrarPlazo = res.filter((item: any) => item.plazo_atencion !== null);
+        this.asuntosUrgentes = fitrarPlazo.length
+      }
+    })
+  }
 
-
-  dataCards(data:CardsResponse['data']):void{
-    const cardsData = data.find(i=>'REQUERIMIENTO'in i) as {REQUERIMIENTO:Cards};
+  dataCards(data: CardsResponse['data']): void {
+    const cardsData = data.find(i => 'REQUERIMIENTO' in i) as { REQUERIMIENTO: Cards };
     if (cardsData) {
       this.requerimiento = cardsData.REQUERIMIENTO
     }
-    const administracionObj = data.find(i=>'Administracion' in i) as  { Administracion: AdministracionResponse} ;
-if (administracionObj ) {
-    this.administracion = administracionObj.Administracion;
-    console.log('Administración encontrada:', this.administracion);
-  } else {
-    console.log('No se encontró la propiedad "Administracion"');
-  }
-  }
-
-  usuariosPorAdministracion() {
-      this.cards.usuariosPorAdminitracion().subscribe((res: usuariosPorAdministracion[]) => {
-        this.usuariosAsignar = res
-      })
+    const administracionObj = data.find(i => 'Administracion' in i) as { Administracion: AdministracionResponse };
+    if (administracionObj) {
+      this.administracion = administracionObj.Administracion;
     }
+  }
+  dataUrgentes(plazoAtencion: number) {
+    const urgentes = this.tablePorDictaminar.find(u => u.plazo_atencion === plazoAtencion);
+    console.log("URGEN", urgentes);
+    return urgentes?.plazo_atencion
+  }
+  usuariosPorAdministracion() {
+    this.cards.usuariosPorAdminitracion().subscribe((res: usuariosPorAdministracion[]) => {
+      this.usuariosAsignar = res
+    })
+  }
 
   // Método para calcular conteo de asuntos por dictaminador
   calcularConteoAsuntos(): void {
@@ -324,7 +319,7 @@ if (administracionObj ) {
       // Para otros casos mantenemos el comportamiento anterior
       let mensaje = '';
 
-      switch(categoria) {
+      switch (categoria) {
         default:
           mensaje = 'Mostrando detalles de asuntos';
       }
@@ -533,7 +528,7 @@ if (administracionObj ) {
     setTimeout(() => {
       this.pdfCargando = false;
     }, 1500);
-}
+  }
 
   // Métodos para gestionar asuntos rechazados
   mostrarTablaRechazados(): void {
