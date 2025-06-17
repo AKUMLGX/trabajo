@@ -218,10 +218,10 @@ export class DictaminadorPageComponent implements OnInit {
   actualizarEstadisticas() {
     this.estadisticas = {
       totalAsignados: this.asuntos.length,
-      pendientes: this.asuntos.filter(a => a.estado === 'Pendiente').length,
-      enProceso: this.asuntos.filter(a => a.estado === 'En Proceso').length,
-      completados: this.asuntos.filter(a => a.estado === 'Atendido').length,
-      prioridadAlta: this.asuntos.filter(a => a.prioridadVisual === 'rojo').length
+      pendientes: this.asuntos.filter(a => a['ESTADO'] === 'Pendiente').length,
+      enProceso: this.asuntos.filter(a => a['ESTADO'] === 'En Proceso').length,
+      completados: this.asuntos.filter(a => a['ESTADO'] === 'Atendido').length,
+      prioridadAlta: this.asuntos.filter(a => a['PLAZO ATENCION'] === 'Urgente').length
     };
   }
 
