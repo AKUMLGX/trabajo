@@ -182,14 +182,14 @@
           <div class="mb-2 flex justify-between items-center">
             <h3 class="text-lg font-medium">{{asunto['FOLIO INTERNO']}}</h3>
             <span class="text-xs font-bold uppercase"
-              [ngClass]="{
+                     [ngClass]="{
                 'text-green-600': asunto['PRIORIDAD COLOR'] === 'verde',
                 'text-yellow-600': asunto['PRIORIDAD COLOR'] === 'amarillo',
                 'text-red-600': asunto['PRIORIDAD COLOR'] === 'rojo'
-              }">
+                      }">
               {{asunto['PRIORIDAD']}}
-            </span>
-          </div>
+                </span>
+              </div>
           <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
             <div><span class="font-semibold text-gray-500">Carpeta:</span> {{asunto['CARPETA INVESTIGACION']}}</div>
             <div><span class="font-semibold text-gray-500">Persona:</span> {{asunto['PERSONA RELACIONADA']}}</div>
@@ -202,10 +202,14 @@
             <div><span class="font-semibold text-gray-500">Autoridad Remitente:</span> {{asunto['AUTORIDAD REMITENTE']}}</div>
             <div><span class="font-semibold text-gray-500">Tipo Documento:</span> {{asunto['TIPO DOCUMENTO']}}</div>
             <div><span class="font-semibold text-gray-500">Plazo Atención:</span> {{asunto['PLAZO ATENCION']}}</div>
-          </div>
-          <div class="flex gap-2 mt-4">
+            </div>
+            <div class="flex gap-2 mt-4">
             <button class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm">Atender</button>
-            <button class="flex-1 border border-[#691C32] text-[#691C32] px-4 py-2 rounded text-sm">Ver Detalle</button>
+            <button 
+              class="flex-1 border border-[#691C32] text-[#691C32] px-4 py-2 rounded text-sm"
+              (click)="verDetalle(asunto['ID_ASUNTO'])">
+                Ver Detalle
+              </button>
           </div>
         </div>
       </div>

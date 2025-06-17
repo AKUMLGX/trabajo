@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DictaminadorBandejaService } from '../../../../domains/services/dictaminador-bandeja.service';
+import { tableAsuntosPorDictaminar } from '../../../../domains/interfaces/porAsignarRequest.interface';
 
 // Material Modules
 import { MatIconModule } from '@angular/material/icon';
@@ -43,6 +45,14 @@ interface AsuntoDictaminador {
   motivoRechazo?: string;
   rechazadoPor?: string;
   observacionesRechazo?: string;
+  prioridad: string;
+  prioridadVisual: string;
+  oficio: string;
+  turnoJefatura: string;
+  folioScanner: string;
+  autoridadRemitente: string;
+  tipoDocumento: string;
+  plazoAtencion: string;
 }
 
 @Component({
@@ -62,28 +72,24 @@ interface AsuntoDictaminador {
 })
 export class DictaminadorDetalleComponent implements OnInit {
   asunto: AsuntoDictaminador = {
-    id: '12345',
-    folio: 'EUCAPE/12345/2024',
-    personaRelacionada: 'María González Pérez',
-    carpetaInvestigacion: 'CI-2024/56789',
+    id: '',
+    folio: '',
+    personaRelacionada: '',
+    carpetaInvestigacion: '',
     estadoAtencion: 'Tramite',
-    plazoUrgente: true,
-    fechaRecepcion: new Date('2024-02-15'),
-    diasTranscurridos: 45,
-    documentos: [
-      { id: '1', nombre: 'Oficio de solicitud.pdf', tipo: 'pdf', fecha: new Date('2024-02-15') },
-      { id: '2', nombre: 'Carpeta de investigación.pdf', tipo: 'pdf', fecha: new Date('2024-02-20') },
-      { id: '3', nombre: 'Documentación adicional.pdf', tipo: 'pdf', fecha: new Date('2024-03-10') }
-    ],
-    eventos: [
-      { id: '1', titulo: 'Recepción del asunto', descripcion: 'Se recibió el asunto para dictaminación', fecha: new Date('2024-02-15'), tipo: 'evento' },
-      { id: '2', titulo: 'Asignación de dictaminador', descripcion: 'El asunto fue asignado al Lic. Juan Pérez', fecha: new Date('2024-02-16'), tipo: 'evento' },
-      { id: '3', titulo: 'Carga de documento', descripcion: 'Se cargó la carpeta de investigación', fecha: new Date('2024-02-20'), tipo: 'documento' },
-      { id: '4', titulo: 'Solicitud de información adicional', descripcion: 'Se solicitó información complementaria', fecha: new Date('2024-03-05'), tipo: 'evento' },
-      { id: '5', titulo: 'Carga de documento', descripcion: 'Se cargó documentación adicional', fecha: new Date('2024-03-10'), tipo: 'documento' }
-    ],
-    rfc: 'GOPM850623ABC',
-    administracion: 'Administración Desconcentrada de Auditoría Fiscal'
+    plazoUrgente: false,
+    fechaRecepcion: new Date(),
+    diasTranscurridos: 0,
+    documentos: [],
+    eventos: [],
+    prioridad: '',
+    prioridadVisual: '',
+    oficio: '',
+    turnoJefatura: '',
+    folioScanner: '',
+    autoridadRemitente: '',
+    tipoDocumento: '',
+    plazoAtencion: 'Sin plazo de atención'
   };
   
   // Formulario para el dictamen
@@ -117,7 +123,8 @@ export class DictaminadorDetalleComponent implements OnInit {
     private location: Location,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dictaminadorBandejaService: DictaminadorBandejaService
   ) {
     this.dictamenForm = this.fb.group({
       temaPrincipal: ['', Validators.required],
@@ -128,11 +135,69 @@ export class DictaminadorDetalleComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    // Obtener parámetros de la URL
+    // Obtener el ID de la URL
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.asuntoId = params['id'];
-        this.cargarDatosAsunto(this.asuntoId);
+        // Llamar al endpoint general y filtrar por ID
+        this.dictaminadorBandejaService.obtenerAsuntosAsignados().subscribe({
+          next: (res) => {
+            // Buscar el asunto con el ID recibido
+            const encontrado = res.find((item: any) => item.id_asunto.toString() === this.asuntoId);
+            if (encontrado) {
+              // Mapear los campos igual que en la card
+              let diasTranscurridos = 0;
+              if (encontrado.fecha_recepcion) {
+                const fechaRecepcion = new Date(encontrado.fecha_recepcion);
+                const fechaActual = new Date();
+                const diferencia = fechaActual.getTime() - fechaRecepcion.getTime();
+                diasTranscurridos = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+              }
+              let prioridad = '';
+              let prioridadColor = '';
+              if (encontrado.plazo_atencion && encontrado.plazo_atencion > 0) {
+                prioridad = 'Urgente';
+                prioridadColor = 'rojo';
+              } else if (diasTranscurridos < 4) {
+                prioridad = 'Baja';
+                prioridadColor = 'verde';
+              } else if (diasTranscurridos >= 4 && diasTranscurridos <= 15) {
+                prioridad = 'Media';
+                prioridadColor = 'amarillo';
+              } else if (diasTranscurridos > 15) {
+                prioridad = 'Alta';
+                prioridadColor = 'rojo';
+              }
+              let plazoAtencionVisual = 'Sin plazo de atención';
+              if (encontrado.plazo_atencion && encontrado.plazo_atencion > 0) {
+                plazoAtencionVisual = encontrado.plazo_atencion + ' días';
+              }
+              this.asunto = {
+                id: encontrado.id_asunto.toString(),
+                folio: encontrado.folio_interno,
+                personaRelacionada: encontrado.persona_relacionada,
+                carpetaInvestigacion: encontrado.carpeta_investigacion,
+                estadoAtencion: '', // Puedes mapearlo si lo necesitas
+                fechaRecepcion: new Date(encontrado.fecha_recepcion),
+                diasTranscurridos: diasTranscurridos,
+                plazoUrgente: encontrado.plazo_atencion > 0,
+                documentos: [],
+                eventos: [],
+                prioridad: prioridad,
+                prioridadVisual: prioridadColor,
+                oficio: encontrado.oficio,
+                turnoJefatura: encontrado.turno_jefatura,
+                folioScanner: String(encontrado.folio_scanner),
+                autoridadRemitente: encontrado.autoridad_remitente || '',
+                tipoDocumento: '', // Puedes mapearlo si lo necesitas
+                plazoAtencion: plazoAtencionVisual
+              };
+            }
+          },
+          error: (err) => {
+            console.error('Error al obtener asuntos:', err);
+          }
+        });
       }
     });
     
@@ -173,13 +238,87 @@ export class DictaminadorDetalleComponent implements OnInit {
     };
   }
   
-  // Método para cargar datos del asunto (simulado por ahora)
+  // Método para cargar datos del asunto desde el backend
   cargarDatosAsunto(id: string): void {
     console.log(`Cargando datos del asunto con ID: ${id}`);
-    // Aquí iría la llamada al servicio para obtener los datos reales del asunto
-    // Por ahora usamos los datos de muestra
-    this.asunto.id = id;
-    this.asunto.folio = `EUCAPE/${id}/2024`;
+    this.dictaminadorBandejaService.obtenerAsuntoPorId(id)
+      .subscribe({
+        next: (response: tableAsuntosPorDictaminar) => {
+          console.log('Respuesta del backend:', response);
+          
+          // Estado de Atención basado en id_atencion_fk
+          let estadoAtencion = 'Desconocido';
+          if (response.id_atencion_fk === 1) {
+            estadoAtencion = 'Tramite';
+          } else if (response.id_atencion_fk === 2) {
+            estadoAtencion = 'Parcial';
+          } else if (response.id_atencion_fk === 3) {
+            estadoAtencion = 'Total';
+          }
+          
+          // Calcular días transcurridos
+          const diasTranscurridos = this.calcularDiasTranscurridos(response.fecha_recepcion);
+          
+          // Plazo: null = Normal/no urgente, 0 o mayor = Urgente
+          let plazoUrgente = false;
+          let plazoAtencionVisual = 'Sin plazo de atención';
+          if (response.plazo_atencion === null || response.plazo_atencion === undefined) {
+            plazoUrgente = false;
+            plazoAtencionVisual = 'Sin plazo de atención';
+          } else if (response.plazo_atencion === 0) {
+            plazoUrgente = true;
+            plazoAtencionVisual = 'Urgente';
+          } else if (response.plazo_atencion > 0) {
+            plazoUrgente = true;
+            plazoAtencionVisual = `${response.plazo_atencion} días`;
+          }
+          
+          // Prioridad visual para el semáforo
+          let prioridad = '';
+          let prioridadColor = '';
+          if (plazoUrgente) {
+            prioridad = 'Urgente';
+            prioridadColor = 'rojo';
+          } else {
+            prioridad = 'Normal';
+            prioridadColor = 'verde';
+          }
+          
+          this.asunto = {
+            id: response.id_asunto.toString(),
+            folio: response.folio_interno,
+            personaRelacionada: response.persona_relacionada,
+            carpetaInvestigacion: response.carpeta_investigacion,
+            estadoAtencion: estadoAtencion,
+            fechaRecepcion: new Date(response.fecha_recepcion),
+            diasTranscurridos: diasTranscurridos,
+            plazoUrgente: plazoUrgente,
+            documentos: [],
+            eventos: [],
+            rfc: '',
+            administracion: response.autoridad_remitente,
+            prioridad: prioridad,
+            prioridadVisual: prioridadColor,
+            oficio: response.oficio || '',
+            turnoJefatura: response.turno_jefatura || '',
+            folioScanner: response.folio_scanner ? String(response.folio_scanner) : '',
+            autoridadRemitente: response.autoridad_remitente || '',
+            tipoDocumento: '',
+            plazoAtencion: plazoAtencionVisual
+          };
+        },
+        error: (error: Error) => {
+          console.error('Error al cargar el asunto:', error);
+        }
+      });
+  }
+
+  // Método auxiliar para calcular días transcurridos
+  calcularDiasTranscurridos(fechaRecepcion: string): number {
+    const fecha = new Date(fechaRecepcion);
+    const hoy = new Date();
+    const diffTime = Math.abs(hoy.getTime() - fecha.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
   
   // Método para cargar datos específicos de un asunto rechazado
@@ -348,7 +487,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       case 'Tramite': return 'hourglass_empty';
       case 'Parcial': return 'hourglass_half';
       case 'Total': return 'check_circle';
-      default: return 'help';
+      default: return 'help_outline';
     }
   }
 

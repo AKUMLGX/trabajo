@@ -53,9 +53,9 @@ interface Estadisticas {
 }
 
 const ATENCION_DESCRIPCION: { [key: number]: string } = {
-  1: 'TOTAL',
-  2: 'PARCIAL',
-  3: 'EN TRAMITE'
+  1: 'En Trámite',
+  2: 'Atención Parcial',
+  3: 'Atención Total'
 };
 
 const DOCUMENTO_DESCRIPCION: { [key: number]: string } = {
@@ -137,23 +137,32 @@ export class DictaminadorPageComponent implements OnInit {
           // Lógica de prioridad y color
           let prioridad = '';
           let prioridadColor = '';
-          if (item.plazo_atencion && item.plazo_atencion > 0) {
+          let plazoAtencionVisual = 'Sin plazo de atención';
+          let plazoUrgente = false;
+          if (item.plazo_atencion === null || item.plazo_atencion === undefined) {
+            prioridad = 'Normal';
+            prioridadColor = 'verde';
+            plazoAtencionVisual = 'Sin plazo de atención';
+            plazoUrgente = false;
+          } else if (item.plazo_atencion === 0) {
             prioridad = 'Urgente';
             prioridadColor = 'rojo';
-          } else if (diasTranscurridos < 4) {
-            prioridad = 'Baja';
-            prioridadColor = 'verde';
-          } else if (diasTranscurridos >= 4 && diasTranscurridos <= 15) {
-            prioridad = 'Media';
-            prioridadColor = 'amarillo';
-          } else if (diasTranscurridos > 15) {
-            prioridad = 'Alta';
+            plazoAtencionVisual = 'Urgente';
+            plazoUrgente = true;
+          } else if (item.plazo_atencion > 0) {
+            prioridad = 'Urgente';
             prioridadColor = 'rojo';
-          }
-          // Plazo atención visual
-          let plazoAtencionVisual = 'Sin plazo de atención';
-          if (item.plazo_atencion && item.plazo_atencion > 0) {
             plazoAtencionVisual = item.plazo_atencion + ' días';
+            plazoUrgente = true;
+          }
+          // Estado de atención
+          let estadoAtencion = 'Desconocido';
+          if (item.id_atencion_fk === 1) {
+            estadoAtencion = 'En Trámite';
+          } else if (item.id_atencion_fk === 2) {
+            estadoAtencion = 'Atención Parcial';
+          } else if (item.id_atencion_fk === 3) {
+            estadoAtencion = 'Atención Total';
           }
           return {
             'FOLIO INTERNO': item.folio_interno,
@@ -161,7 +170,7 @@ export class DictaminadorPageComponent implements OnInit {
             'PERSONA RELACIONADA': item.persona_relacionada,
             'FECHA RECEPCION': item.fecha_recepcion,
             'DIAS TRANSCURRIDOS': diasTranscurridos,
-            'ESTADO ATENCION': ATENCION_DESCRIPCION[item.id_atencion_fk] || '',
+            'ESTADO ATENCION': estadoAtencion,
             'PRIORIDAD': prioridad,
             'PRIORIDAD COLOR': prioridadColor,
             'OFICIO': item.oficio,
@@ -169,7 +178,8 @@ export class DictaminadorPageComponent implements OnInit {
             'FOLIO SCANNER': item.folio_scanner,
             'AUTORIDAD REMITENTE': item.autoridad_remitente,
             'TIPO DOCUMENTO': DOCUMENTO_DESCRIPCION[item.id_documento_fk] || '',
-            'PLAZO ATENCION': plazoAtencionVisual
+            'PLAZO ATENCION': plazoAtencionVisual,
+            'ID_ASUNTO': item.id_asunto
           };
         });
         this.actualizarEstadisticas();
@@ -240,7 +250,7 @@ export class DictaminadorPageComponent implements OnInit {
       this.aplicarFiltros();
     }
   }
-
+  
   cargarDatosRechazadosEjemplo() {
     const fechaActual = new Date();
     const ejemplosRechazados: AsuntoRechazado[] = [

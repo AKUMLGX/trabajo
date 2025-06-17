@@ -317,6 +317,12 @@ export class RevisionFinalComponent implements OnInit {
     return asuntos;
   }
   
+  /**
+   * Método para filtrar asuntos pendientes por rango de días transcurridos
+   * @param minDias días mínimos
+   * @param maxDias días máximos
+   * @returns array de asuntos filtrados
+   */
   getAsuntosPendientesPorDias(minDias: number, maxDias: number): Asunto[] {
     let asuntos = this.asuntosPendientes.filter(a => 
       a.diasTranscurridos >= minDias && a.diasTranscurridos <= maxDias
@@ -341,7 +347,22 @@ export class RevisionFinalComponent implements OnInit {
     return asuntos;
   }
   
-  formatDate(date: Date): string {
-    return date ? new Date(date).toLocaleDateString('es-MX') : '';
+  /**
+   * Formatea una fecha para mostrarla en formato legible
+   * @param date fecha a formatear
+   * @returns fecha formateada como DD/MM/YYYY
+   */
+  formatDate(date: string | Date): string {
+    if (!date) return 'N/A';
+    
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    
+    if (isNaN(dateObj.getTime())) return 'Fecha inválida';
+    
+    return dateObj.toLocaleDateString('es-MX', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
   }
 } 

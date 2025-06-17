@@ -52,15 +52,15 @@
             <td class="py-2 px-3">
               <div class="flex justify-center space-x-2">
                 <button class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C] shadow-sm transition-all">
-                  Detalle
-                </button>
+                Detalle
+              </button>
                 <button class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C] shadow-sm transition-all">
-                  Ver
-                </button>
-                <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
+                Ver
+              </button>
+              <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
                         class="bg-[#691C32] text-white px-3 py-1 rounded text-sm hover:bg-[#8B1D3C] shadow-sm transition-all">
-                  Asignar
-                </button>
+                Asignar
+              </button>
               </div>
             </td>
           </tr>
@@ -126,81 +126,81 @@
 
 <ng-template #templeteAsignacion>
   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
-    <div class="bg-white rounded-lg shadow-xl w-[480px] transform transition-all overflow-hidden">
-      <!-- Encabezado del modal -->
-      <div class="bg-[#691C32] text-white py-4 px-6 flex items-center justify-between">
-        <h2 class="text-xl font-bold">Asignar asunto</h2>
-      </div>
+<div class="bg-white rounded-lg shadow-xl w-[480px] transform transition-all overflow-hidden">
+ <!-- Encabezado del modal -->
+ <div class="bg-[#691C32] text-white py-4 px-6 flex items-center justify-between">
+   <h2 class="text-xl font-bold">Asignar asunto</h2>
+ </div>
 
-      <!-- Cuerpo del modal -->
-      <div class="p-6">
-        <!-- Información del asunto -->
-        <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+ <!-- Cuerpo del modal -->
+ <div class="p-6">
+   <!-- Información del asunto -->
+   <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
           <div class="flex items-center gap-2 mb-3">
             <span class="font-semibold text-gray-700 text-base">Asunto a asignar</span>
-          </div>
+     </div>
           
           <div class="space-y-3">
             <div class="flex">
               <div class="w-1/4 text-gray-500 text-sm">Folio:</div>
               <div class="w-3/4 font-medium text-sm">{{itemDeFilaSelecionada?.folio_interno}}</div>
-            </div>
+       </div>
             
             <div class="flex">
               <div class="w-1/4 text-gray-500 text-sm">Carpeta de Investigación:</div>
               <div class="w-3/4 font-medium text-sm">{{itemDeFilaSelecionada?.carpeta_investigacion}}</div>
-            </div>
+       </div>
             
             <div class="flex">
               <div class="w-1/4 text-gray-500 text-sm">Persona Relacionada:</div>
               <div class="w-3/4 font-medium text-sm">{{itemDeFilaSelecionada?.persona_relacionada}}</div>
-            </div>
+       </div>
             
             <div class="flex">
               <div class="w-1/4 text-gray-500 text-sm">Antigüedad:</div>
               <div class="w-3/4 font-medium text-sm">{{itemDeFilaSelecionada?.plazo_atencion}} días</div>
-            </div>
-          </div>
-        </div>
+       </div>
+     </div>
+   </div>
 
-        <!-- Selección de abogado -->
-        <div class="mb-6">
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Seleccione un abogado para asignar
-          </label>
-          <div class="relative">
-            <select [(ngModel)]="abogadoSeleccionado"
-                    class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white">
-              <option value="">Seleccione...</option>
-                @for (user of usuariosAsignar; track $index) {
-                  <option>
-                    {{user.nombre}}
-                  </option>
-                }
-            </select>
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">
-              <mat-icon>arrow_drop_down</mat-icon>
-            </div>
-          </div>
-        </div>
-      </div>
+   <!-- Selección de abogado -->
+   <div class="mb-6">
+     <label class="block text-sm font-medium text-gray-700 mb-2">
+       Seleccione un abogado para asignar
+     </label>
+     <div class="relative">
+       <select [(ngModel)]="abogadoSeleccionado"
+               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white">
+         <option value="">Seleccione...</option>
+          @for (user of usuariosAsignar; track $index) {
+            <option>
+              {{user.nombre}}
+             </option>
+          }
+       </select>
+       <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">
+         <mat-icon>arrow_drop_down</mat-icon>
+       </div>
+     </div>
+   </div>
+ </div>
 
-      <!-- Pie del modal -->
-      <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
-        <mat-dialog-actions>
+ <!-- Pie del modal -->
+ <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
+   <mat-dialog-actions>
           <button class="px-5 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700 font-medium shadow-sm" 
                  mat-dialog-close>
             Cerrar
-          </button>
-        </mat-dialog-actions>
-        <button class="px-5 py-2 bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium"
-          (click)="asignarAsunto()"
-          [disabled]="!abogadoSeleccionado"
-          [class.opacity-50]="!abogadoSeleccionado"
+    </button>
+   </mat-dialog-actions>
+   <button class="px-5 py-2 bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium"
+     (click)="asignarAsunto()"
+      [disabled]="!abogadoSeleccionado"
+      [class.opacity-50]="!abogadoSeleccionado"
           [class.cursor-not-allowed]="!abogadoSeleccionado">
-          Asignar
-        </button>
-      </div>
-    </div>
-  </div>
+     Asignar
+   </button>
+ </div>
+</div>
+</div>
 </ng-template>

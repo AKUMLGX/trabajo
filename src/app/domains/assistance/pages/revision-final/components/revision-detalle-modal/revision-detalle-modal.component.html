@@ -20,9 +20,9 @@
           <mat-icon class="icon-small">schedule</mat-icon>
           <span>{{asunto.diasTranscurridos}} días</span>
         </div>
-        <span class="priority-badge" [ngClass]="{'alta': asunto.prioridad === 'Alta', 'media': asunto.prioridad === 'Media', 'baja': asunto.prioridad === 'Baja'}">
-          {{asunto.prioridad}}
-        </span>
+      <span class="priority-badge" [ngClass]="{'alta': asunto.prioridad === 'Alta', 'media': asunto.prioridad === 'Media', 'baja': asunto.prioridad === 'Baja'}">
+        {{asunto.prioridad}}
+      </span>
       </div>
       <button mat-icon-button class="close-button" (click)="cerrar()">
         <mat-icon>close</mat-icon>
@@ -291,10 +291,10 @@
       <div class="pdf-viewer">
         <div class="pdf-viewer-header">
           <div class="viewer-title">
-            <h2>Visualizador de Documentos</h2>
-            <div *ngIf="documentoSeleccionado" class="document-info">
-              <mat-icon>picture_as_pdf</mat-icon>
-              <span>{{documentoSeleccionado}}</span>
+          <h2>Visualizador de Documentos</h2>
+          <div *ngIf="documentoSeleccionado" class="document-info">
+            <mat-icon>picture_as_pdf</mat-icon>
+            <span>{{documentoSeleccionado}}</span>
             </div>
           </div>
           <div class="viewer-actions">
