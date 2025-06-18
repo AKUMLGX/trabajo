@@ -847,4 +847,32 @@ export class DictaminadorDetalleComponent implements OnInit {
   sanitizeUrl(url: string): SafeResourceUrl {
     return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
+
+  /**
+   * Descarga el PDF actual usando el contenido base64
+   */
+  descargarPdfActual(): void {
+    if (!this.pdfBase64 || this.cargandoPdf || this.errorPdf) return;
+    
+    try {
+      // Crear un elemento <a> para la descarga
+      const enlace = document.createElement('a');
+      enlace.href = this.urlPdfActual;
+      enlace.download = this.nombrePdfActual || 'documento.pdf';
+      document.body.appendChild(enlace);
+      enlace.click();
+      document.body.removeChild(enlace);
+      
+      this.snackBar.open('Descarga iniciada', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+    } catch (error) {
+      console.error('Error al descargar el PDF:', error);
+      this.snackBar.open('Error al descargar el archivo', 'Cerrar', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  }
 } 

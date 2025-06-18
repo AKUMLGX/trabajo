@@ -1086,9 +1086,17 @@
         </div>
         <h2 class="text-xl font-bold truncate">{{nombrePdfActual}}</h2>
       </div>
-      <button (click)="cerrarModalPdf()" class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
-        <mat-icon>close</mat-icon>
-      </button>
+      <div class="flex items-center gap-2">
+        <button *ngIf="!cargandoPdf && !errorPdf" 
+                (click)="descargarPdfActual()" 
+                class="bg-white/10 hover:bg-white/20 text-white py-1 px-3 rounded flex items-center border border-white/30 transition-all">
+          <mat-icon class="mr-1">download</mat-icon>
+          <span class="text-sm">Descargar</span>
+        </button>
+        <button (click)="cerrarModalPdf()" class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
     
           <!-- Contenido del PDF -->
