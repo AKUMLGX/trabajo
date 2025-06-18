@@ -4,7 +4,8 @@ import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DictaminadorBandejaService } from '../../../../domains/services/dictaminador-bandeja.service';
 import { tableAsuntosPorDictaminar } from '../../../../domains/interfaces/porAsignarRequest.interface';
-import { ArchivosAtencionService } from '../../../../domains/services/archivos-atencion.service';
+import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../domains/services/archivos-atencion.service';
+import { environment } from '../../../../../environments/environment';
 
 // Material Modules
 import { MatIconModule } from '@angular/material/icon';
@@ -101,6 +102,9 @@ export class DictaminadorDetalleComponent implements OnInit {
     plazoAtencion: 'Sin plazo de atención'
   };
   
+  // Para acceso desde la plantilla
+  environment = environment;
+  
   // Formulario para el dictamen
   dictamenForm: FormGroup;
   
@@ -133,6 +137,11 @@ export class DictaminadorDetalleComponent implements OnInit {
   archivosSeleccionados: File[] = [];
   cargandoArchivos = false;
   mostrarModalArchivos = false;
+  
+  // Para manejar archivos adjuntos
+  archivosAdjuntos: ArchivoAdjunto[] = [];
+  cargandoArchivosAdjuntos = false;
+  errorArchivosAdjuntos = '';
   
   constructor(
     private location: Location,
@@ -219,6 +228,9 @@ export class DictaminadorDetalleComponent implements OnInit {
               // Para debug: mostrar todos los campos disponibles
               console.log('Datos completos del asunto:', encontrado);
               console.log('Datos mapeados:', this.asunto);
+              
+              // Una vez que tenemos el asunto con su folio, cargamos los archivos adjuntos
+              this.cargarArchivosAdjuntos();
             }
           },
           error: (err) => {
@@ -700,8 +712,8 @@ export class DictaminadorDetalleComponent implements OnInit {
             panelClass: ['success-snackbar']
           });
           
-          // Refrescar la lista de documentos si es necesario
-          // this.cargarDatosAsunto(this.asuntoId);
+          // Refrescar la lista de archivos adjuntos
+          this.refrescarArchivosAdjuntos();
         },
         error: (error) => {
           this.cargandoArchivos = false;
@@ -717,5 +729,68 @@ export class DictaminadorDetalleComponent implements OnInit {
           );
         }
       });
+  }
+
+  /**
+   * Carga la lista de archivos PDF adjuntos al asunto actual
+   */
+  cargarArchivosAdjuntos(): void {
+    if (!this.asunto || !this.asunto.folio) return;
+    
+    this.cargandoArchivosAdjuntos = true;
+    this.errorArchivosAdjuntos = '';
+    
+    this.archivosAtencionService.listarArchivosPdf(this.asunto.folio)
+      .subscribe({
+        next: (archivos) => {
+          this.archivosAdjuntos = archivos;
+          this.cargandoArchivosAdjuntos = false;
+        },
+        error: (error) => {
+          console.error('Error al cargar archivos adjuntos:', error);
+          this.errorArchivosAdjuntos = 'No se pudieron cargar los archivos adjuntos.';
+          this.cargandoArchivosAdjuntos = false;
+          
+          // Si el error es 404, no es realmente un error - simplemente no hay archivos
+          if (error.status === 404) {
+            this.archivosAdjuntos = [];
+            this.errorArchivosAdjuntos = '';
+          }
+        }
+      });
+  }
+  
+  /**
+   * Formatea el tamaño de archivo en bytes a una representación más legible (KB, MB)
+   */
+  formatearTamanoArchivo(bytes: number): string {
+    if (bytes < 1024) {
+      return bytes + ' B';
+    } else if (bytes < 1048576) {
+      return (bytes / 1024).toFixed(1) + ' KB';
+    } else {
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+  }
+  
+  /**
+   * Formatea la fecha de última modificación a un formato legible
+   */
+  formatearFechaArchivo(fechaStr: string): string {
+    const fecha = new Date(fechaStr);
+    return fecha.toLocaleDateString('es-MX', { 
+      day: '2-digit',
+      month: '2-digit', 
+      year: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit'
+    });
+  }
+  
+  /**
+   * Refresca la lista de archivos después de una nueva subida
+   */
+  refrescarArchivosAdjuntos(): void {
+    this.cargarArchivosAdjuntos();
   }
 } 
