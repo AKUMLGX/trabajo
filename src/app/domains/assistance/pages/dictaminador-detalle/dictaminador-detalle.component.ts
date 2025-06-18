@@ -6,6 +6,7 @@ import { DictaminadorBandejaService } from '../../../../domains/services/dictami
 import { tableAsuntosPorDictaminar } from '../../../../domains/interfaces/porAsignarRequest.interface';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../domains/services/archivos-atencion.service';
 import { environment } from '../../../../../environments/environment';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 // Material Modules
 import { MatIconModule } from '@angular/material/icon';
@@ -143,6 +144,11 @@ export class DictaminadorDetalleComponent implements OnInit {
   cargandoArchivosAdjuntos = false;
   errorArchivosAdjuntos = '';
   
+  // Variables para el modal de visualización de PDF
+  mostrarModalPdf = false;
+  urlPdfActual = '';
+  nombrePdfActual = '';
+  
   constructor(
     private location: Location,
     private fb: FormBuilder,
@@ -150,7 +156,8 @@ export class DictaminadorDetalleComponent implements OnInit {
     private router: Router,
     private dictaminadorBandejaService: DictaminadorBandejaService,
     private archivosAtencionService: ArchivosAtencionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private domSanitizer: DomSanitizer
   ) {
     this.dictamenForm = this.fb.group({
       temaPrincipal: ['', Validators.required],
@@ -792,5 +799,33 @@ export class DictaminadorDetalleComponent implements OnInit {
    */
   refrescarArchivosAdjuntos(): void {
     this.cargarArchivosAdjuntos();
+  }
+
+  /**
+   * Abre el PDF en un modal para visualizarlo
+   * @param nombreArchivo Nombre del archivo a visualizar
+   */
+  verArchivoPdf(nombreArchivo: string): void {
+    if (!this.asunto || !this.asunto.folio) return;
+    
+    // Construir la URL para visualizar el archivo
+    this.urlPdfActual = `${this.environment.baseUrl}asunto/atencion/descargar_archivo?folio=${this.asunto.folio}&nombre=${nombreArchivo}`;
+    this.nombrePdfActual = nombreArchivo;
+    
+    // Mostrar el modal
+    this.mostrarModalPdf = true;
+  }
+  
+  /**
+   * Cierra el modal de visualización de PDF
+   */
+  cerrarModalPdf(): void {
+    this.mostrarModalPdf = false;
+    this.urlPdfActual = '';
+    this.nombrePdfActual = '';
+  }
+
+  sanitizeUrl(url: string): SafeResourceUrl {
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
 } 
