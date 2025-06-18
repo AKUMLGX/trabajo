@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DictaminadorBandejaService } from '../../../../domains/services/dictaminador-bandeja.service';
 import { tableAsuntosPorDictaminar } from '../../../../domains/interfaces/porAsignarRequest.interface';
+import { ArchivosAtencionService } from '../../../../domains/services/archivos-atencion.service';
 
 // Material Modules
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 interface Evento {
   id: string;
@@ -70,6 +72,7 @@ interface AsuntoDictaminador {
     MatButtonModule, 
     MatProgressBarModule, 
     MatTooltipModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     FormsModule
   ],
@@ -125,12 +128,20 @@ export class DictaminadorDetalleComponent implements OnInit {
   asuntoId: string = '';
   origenRechazado: boolean = false;
   
+  // Para la subida de archivos
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  archivosSeleccionados: File[] = [];
+  cargandoArchivos = false;
+  mostrarModalArchivos = false;
+  
   constructor(
     private location: Location,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private dictaminadorBandejaService: DictaminadorBandejaService
+    private dictaminadorBandejaService: DictaminadorBandejaService,
+    private archivosAtencionService: ArchivosAtencionService,
+    private snackBar: MatSnackBar
   ) {
     this.dictamenForm = this.fb.group({
       temaPrincipal: ['', Validators.required],
@@ -620,5 +631,91 @@ export class DictaminadorDetalleComponent implements OnInit {
     } else {
       return 'text-green-600 bg-green-50 border-green-200';
     }
+  }
+
+  /**
+   * Abre el selector de archivos
+   */
+  abrirSelectorArchivos(): void {
+    this.fileInput.nativeElement.click();
+  }
+  
+  /**
+   * Maneja la selección de archivos PDF
+   */
+  onArchivosSeleccionados(event: any): void {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      // Filtrar solo archivos PDF
+      this.archivosSeleccionados = Array.from(files as FileList).filter(
+        (file: File) => file.type === 'application/pdf'
+      );
+      
+      // Si hay archivos no PDF, mostrar advertencia
+      if (Array.from(files as FileList).length !== this.archivosSeleccionados.length) {
+        this.snackBar.open('Solo se permiten archivos PDF', 'Cerrar', { 
+          duration: 5000,
+          panelClass: ['warning-snackbar']
+        });
+      }
+      
+      // Mostrar modal de confirmación solo si hay archivos válidos
+      if (this.archivosSeleccionados.length > 0) {
+        this.mostrarModalArchivos = true;
+      }
+    }
+  }
+  
+  /**
+   * Cancela la subida de archivos
+   */
+  cancelarSubidaArchivos(): void {
+    this.archivosSeleccionados = [];
+    this.mostrarModalArchivos = false;
+    this.fileInput.nativeElement.value = '';
+  }
+  
+  /**
+   * Sube los archivos seleccionados al servidor
+   */
+  subirArchivos(): void {
+    if (this.archivosSeleccionados.length === 0) return;
+    
+    this.cargandoArchivos = true;
+    
+    // Obtener el folio del asunto actual
+    const folio = this.asunto.folio;
+    
+    this.archivosAtencionService.subirArchivosPdf(folio, this.archivosSeleccionados)
+      .subscribe({
+        next: (response) => {
+          this.cargandoArchivos = false;
+          this.mostrarModalArchivos = false;
+          this.archivosSeleccionados = [];
+          this.fileInput.nativeElement.value = '';
+          
+          // Mostrar mensaje de éxito
+          this.snackBar.open(response, 'Cerrar', { 
+            duration: 5000,
+            panelClass: ['success-snackbar']
+          });
+          
+          // Refrescar la lista de documentos si es necesario
+          // this.cargarDatosAsunto(this.asuntoId);
+        },
+        error: (error) => {
+          this.cargandoArchivos = false;
+          console.error('Error al subir archivos:', error);
+          
+          // Mostrar mensaje de error
+          this.snackBar.open(
+            error.error || 'Error al subir los archivos. Intente nuevamente.', 
+            'Cerrar', { 
+              duration: 7000,
+              panelClass: ['error-snackbar']
+            }
+          );
+        }
+      });
   }
 } 

@@ -58,6 +58,7 @@ export const environment={
   downloadExecelEnTramite:'asunto/atencion/descargar_asunto_por_atencion',
   downloadExecelParcial:'asunto/atencion/descargar_asunto_por_atencion',
   downloadExecelTotal:'asunto/atencion/descargar_asunto_por_atencion',
+  subirArchivosAtencion: 'asunto/atencion/subir_documentos',
   //#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
