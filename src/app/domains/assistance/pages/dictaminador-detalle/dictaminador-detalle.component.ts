@@ -148,6 +148,9 @@ export class DictaminadorDetalleComponent implements OnInit {
   mostrarModalPdf = false;
   urlPdfActual = '';
   nombrePdfActual = '';
+  pdfBase64 = '';
+  cargandoPdf = false;
+  errorPdf = '';
   
   constructor(
     private location: Location,
@@ -808,12 +811,26 @@ export class DictaminadorDetalleComponent implements OnInit {
   verArchivoPdf(nombreArchivo: string): void {
     if (!this.asunto || !this.asunto.folio) return;
     
-    // Construir la URL para visualizar el archivo
-    this.urlPdfActual = `${this.environment.baseUrl}asunto/atencion/descargar_archivo?folio=${this.asunto.folio}&nombre=${nombreArchivo}`;
     this.nombrePdfActual = nombreArchivo;
-    
-    // Mostrar el modal
+    this.cargandoPdf = true;
+    this.errorPdf = '';
     this.mostrarModalPdf = true;
+    
+    // Obtener el PDF usando el nuevo endpoint
+    this.archivosAtencionService.obtenerPdf(this.asunto.folio, nombreArchivo, 'atencion')
+      .subscribe({
+        next: (base64Data) => {
+          // Crear URL para visualizar el PDF
+          this.pdfBase64 = base64Data;
+          this.urlPdfActual = 'data:application/pdf;base64,' + base64Data;
+          this.cargandoPdf = false;
+        },
+        error: (error) => {
+          console.error('Error al obtener el PDF:', error);
+          this.errorPdf = 'No se pudo cargar el documento. Intente nuevamente.';
+          this.cargandoPdf = false;
+        }
+      });
   }
   
   /**
@@ -823,6 +840,8 @@ export class DictaminadorDetalleComponent implements OnInit {
     this.mostrarModalPdf = false;
     this.urlPdfActual = '';
     this.nombrePdfActual = '';
+    this.pdfBase64 = '';
+    this.errorPdf = '';
   }
 
   sanitizeUrl(url: string): SafeResourceUrl {

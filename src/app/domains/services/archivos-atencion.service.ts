@@ -50,4 +50,25 @@ export class ArchivosAtencionService {
     const targetUrl = environment.baseUrl + (environment as any)['listarArchivosAtencion'];
     return this.http.get<ArchivoAdjunto[]>(targetUrl, { params });
   }
+  
+  /**
+   * Obtiene un documento PDF codificado en base64
+   * @param folio - Folio interno del asunto al que pertenece el documento
+   * @param fileName - Nombre del archivo PDF que se desea obtener
+   * @param carpeta - (Opcional) Subcarpeta dentro del directorio del folio
+   * @returns Observable con el contenido del PDF en base64
+   */
+  obtenerPdf(folio: string, fileName: string, carpeta?: string): Observable<string> {
+    let params = new HttpParams()
+      .set('folio', folio)
+      .set('file_name', fileName);
+    
+    // Agregar el parámetro de carpeta solo si se proporciona
+    if (carpeta) {
+      params = params.set('carpeta', carpeta);
+    }
+    
+    const targetUrl = environment.baseUrl + environment.getPdfEndpoint;
+    return this.http.get(targetUrl, { params, responseType: 'text' });
+  }
 } 
