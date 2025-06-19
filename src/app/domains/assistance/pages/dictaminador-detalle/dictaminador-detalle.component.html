@@ -1008,10 +1008,16 @@
           </div>
           <h2 class="text-xl font-bold text-white">Documentos Adjuntos</h2>
         </div>
-        <button mat-stroked-button class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center" (click)="refrescarArchivosAdjuntos()">
-          <mat-icon class="mr-2">refresh</mat-icon>
-          <span>Actualizar</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button mat-stroked-button class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center" (click)="abrirSelectorArchivos()">
+            <mat-icon class="mr-2">upload_file</mat-icon>
+            <span>Subir archivos</span>
+          </button>
+          <button mat-stroked-button class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center" (click)="refrescarArchivosAdjuntos()">
+            <mat-icon class="mr-2">refresh</mat-icon>
+            <span>Actualizar</span>
+          </button>
+        </div>
       </div>
     </div>
     
@@ -1042,9 +1048,15 @@
             </div>
             <div class="min-w-0">
               <p class="font-medium text-blue-900 truncate mb-1">{{archivo.nombre}}</p>
-              <div class="flex text-xs text-gray-500">
-                <span class="mr-3">{{formatearTamanoArchivo(archivo.tamano_bytes)}}</span>
-                <span>{{formatearFechaArchivo(archivo.ultima_modificacion)}}</span>
+              <div class="flex flex-wrap text-xs text-gray-500">
+                <span class="flex items-center mr-4">
+                  <mat-icon class="text-blue-400 mr-1" style="font-size: 16px; width: 16px; height: 16px;">description</mat-icon>
+                  <span>{{formatearTamanoArchivo(archivo.tamano_bytes)}}</span>
+                </span>
+                <span class="flex items-center">
+                  <mat-icon class="text-blue-400 mr-1" style="font-size: 16px; width: 16px; height: 16px;">calendar_today</mat-icon>
+                  <span>{{formatearFechaArchivo(archivo.ultima_modificacion)}}</span>
+                </span>
               </div>
             </div>
           </div>
@@ -1052,9 +1064,6 @@
             <button mat-icon-button class="bg-blue-50 hover:bg-blue-100 transition-all" matTooltip="Ver archivo" (click)="verArchivoPdf(archivo.nombre)">
               <mat-icon class="text-blue-600">visibility</mat-icon>
             </button>
-            <a target="_blank" [href]="environment.baseUrl + 'asunto/atencion/descargar_archivo?folio=' + asunto.folio + '&nombre=' + archivo.nombre" mat-icon-button class="bg-blue-50 hover:bg-blue-100 transition-all" matTooltip="Descargar archivo">
-              <mat-icon class="text-blue-600">download</mat-icon>
-            </a>
           </div>
         </div>
       </div>
