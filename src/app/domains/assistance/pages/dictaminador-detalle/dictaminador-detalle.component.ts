@@ -774,12 +774,46 @@ export class DictaminadorDetalleComponent implements OnInit {
    * Formatea el tamaño de archivo en bytes a una representación más legible (KB, MB)
    */
   formatearTamanoArchivo(bytes: number): string {
-    if (bytes < 1024) {
-      return bytes + ' B';
-    } else if (bytes < 1048576) {
-      return (bytes / 1024).toFixed(1) + ' KB';
-    } else {
-      return (bytes / 1048576).toFixed(1) + ' MB';
+    if (!bytes && bytes !== 0) {
+      return 'Tamaño desconocido';
+    }
+    
+    try {
+      if (bytes < 1024) {
+        return bytes + ' B';
+      } else if (bytes < 1048576) {
+        // Convertir a KB con 1 decimal
+        const kb = (bytes / 1024).toFixed(1);
+        // Si el decimal es .0, mostrar sin decimal
+        return kb.endsWith('.0') ? kb.slice(0, -2) + ' KB' : kb + ' KB';
+      } else if (bytes < 1073741824) {
+        // Convertir a MB con 2 decimales
+        const mb = (bytes / 1048576).toFixed(2);
+        // Si termina en .00, mostrar sin decimales
+        if (mb.endsWith('.00')) {
+          return mb.slice(0, -3) + ' MB';
+        }
+        // Si termina en .x0, mostrar con 1 decimal
+        if (mb.endsWith('0')) {
+          return mb.slice(0, -1) + ' MB';
+        }
+        return mb + ' MB';
+      } else {
+        // Convertir a GB con 2 decimales
+        const gb = (bytes / 1073741824).toFixed(2);
+        // Si termina en .00, mostrar sin decimales
+        if (gb.endsWith('.00')) {
+          return gb.slice(0, -3) + ' GB';
+        }
+        // Si termina en .x0, mostrar con 1 decimal
+        if (gb.endsWith('0')) {
+          return gb.slice(0, -1) + ' GB';
+        }
+        return gb + ' GB';
+      }
+    } catch (error) {
+      console.error('Error al formatear tamaño:', error);
+      return 'Tamaño desconocido';
     }
   }
   
@@ -787,14 +821,52 @@ export class DictaminadorDetalleComponent implements OnInit {
    * Formatea la fecha de última modificación a un formato legible
    */
   formatearFechaArchivo(fechaStr: string): string {
-    const fecha = new Date(fechaStr);
-    return fecha.toLocaleDateString('es-MX', { 
-      day: '2-digit',
-      month: '2-digit', 
-      year: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit'
-    });
+    try {
+      const fecha = new Date(fechaStr);
+      
+      // Verificar si la fecha es válida
+      if (isNaN(fecha.getTime())) {
+        return 'Fecha no disponible';
+      }
+      
+      // Obtener fecha actual para comparaciones
+      const ahora = new Date();
+      const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+      const ayer = new Date(hoy);
+      ayer.setDate(ayer.getDate() - 1);
+      
+      // Si es hoy, mostrar "Hoy, HH:MM"
+      if (fecha.getDate() === hoy.getDate() && 
+          fecha.getMonth() === hoy.getMonth() && 
+          fecha.getFullYear() === hoy.getFullYear()) {
+        return `Hoy, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      
+      // Si es ayer, mostrar "Ayer, HH:MM"
+      if (fecha.getDate() === ayer.getDate() && 
+          fecha.getMonth() === ayer.getMonth() && 
+          fecha.getFullYear() === ayer.getFullYear()) {
+        return `Ayer, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      
+      // Si es este año, mostrar "DD MMM, HH:MM"
+      if (fecha.getFullYear() === ahora.getFullYear()) {
+        return fecha.toLocaleDateString('es-MX', { 
+          day: '2-digit', 
+          month: 'short'
+        }) + `, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      
+      // Para otros años, mostrar "DD MMM YYYY, HH:MM"
+      return fecha.toLocaleDateString('es-MX', { 
+        day: '2-digit', 
+        month: 'short', 
+        year: 'numeric' 
+      }) + `, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
+    } catch (error) {
+      console.error('Error al formatear fecha:', error);
+      return 'Fecha no disponible';
+    }
   }
   
   /**
