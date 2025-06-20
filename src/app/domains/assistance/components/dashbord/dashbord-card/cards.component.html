@@ -52,6 +52,24 @@
       <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block"><button (click)="mostrarDetalle('total')">Total</button></div>
     </div>
 
+    <!-- Nueva Tarjeta Por Aprobar -->
+    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow inter flex-shrink-0 mx-2 min-w-[180px] w-[200px]">
+      <div class="flex justify-center mb-2">
+        <div class="w-15 h-20 rounded-full flex items-center justify-center">
+          <svg class="w-12 h-12 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+      <div class="text-3xl font-bold text-gray-800 mb-1">
+        <span *ngIf="!cargandoAprobaciones">{{asuntosPorAprobar.length}}</span>
+        <span *ngIf="cargandoAprobaciones" class="animate-pulse">...</span>
+      </div>
+      <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">
+        <button (click)="cambiarVista('aprobacion')">Por Aprobar</button>
+      </div>
+    </div>
+
     <!-- Tarjeta Rechazados -->
     <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer flex-shrink-0 mx-2 min-w-[180px] w-[200px]" (click)="mostrarTablaRechazados()">
       <div class="flex justify-center mb-2">
@@ -93,6 +111,27 @@
     <div class="p-4 border-b border-gray-200">
       <h2 class="text-xl font-semibold text-[#691C32] mb-4">Asuntos por dictaminar</h2>
 
+      <!-- Pestañas para cambiar entre vistas -->
+      <div class="flex justify-center mb-4">
+        <div class="inline-flex rounded-md shadow-sm" role="group">
+          <button 
+            (click)="cambiarVista('atencion')" 
+            [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
+            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
+            En Atención
+          </button>
+          <button 
+            (click)="cambiarVista('aprobacion')" 
+            [ngClass]="vistaActual === 'aprobacion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
+            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
+            Por Aprobar
+            <span *ngIf="asuntosPorAprobar.length > 0" class="ml-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
+              {{asuntosPorAprobar.length}}
+            </span>
+          </button>
+        </div>
+      </div>
+
       <div class="flex justify-center items-center">
         <!-- Selector de dictaminador más compacto y estético -->
         <div class="w-56 relative">
@@ -125,11 +164,25 @@
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio Interno</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Autoridad solicitante</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Recepción</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Dictaminador</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona relacionada</th>
+            <!-- Columna específica para "Por Aprobar" -->
+            <th *ngIf="vistaActual === 'aprobacion'" scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Atención</th>
             <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
+          <!-- Indicador de carga -->
+          <tr *ngIf="(vistaActual === 'atencion' && cargandoAsuntos) || (vistaActual === 'aprobacion' && cargandoAprobaciones)">
+            <td colspan="6" class="px-6 py-4 text-center">
+              <div class="flex justify-center items-center space-x-2">
+                <div class="w-4 h-4 rounded-full bg-[#691C32] animate-bounce"></div>
+                <div class="w-4 h-4 rounded-full bg-[#691C32] animate-bounce" style="animation-delay: 0.2s"></div>
+                <div class="w-4 h-4 rounded-full bg-[#691C32] animate-bounce" style="animation-delay: 0.4s"></div>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">Cargando asuntos...</p>
+            </td>
+          </tr>
+          
           <!-- Filas filtradas -->
           @for (asunto of tablePorDictaminar; track asunto.folio_interno) {
             <tr [class]="asuntosFiltrados.indexOf(asunto) % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'"
@@ -139,9 +192,16 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.autoridad_remitente}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.fecha_recepcion}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.persona_relacionada}}</td>
+              
+              <!-- Columna específica para "Por Aprobar" -->
+              <td *ngIf="vistaActual === 'aprobacion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <!-- Aquí iría la fecha de atención, por ahora usamos un placeholder -->
+                {{asunto.fecha_recepcion}}
+              </td>
+              
               <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
                 <div class="flex justify-center space-x-2">
-                  <!-- Botón para ver detalle -->
+                  <!-- Botón para ver detalle (común) -->
                   <button (click)="verDetalle(asunto.folio_interno, $event)"
                           class="text-white bg-[#691C32] hover:bg-[#4a1423] p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32] tooltip"
                           title="Ver detalle">
@@ -157,12 +217,40 @@
                       </defs>
                     </svg>
                   </button>
+                  
+                  <!-- Botones específicos para "Por Aprobar" -->
+                  <ng-container *ngIf="vistaActual === 'aprobacion'">
+                    <button (click)="aprobarAsunto(asunto.id_asunto, $event)"
+                            class="text-white bg-green-600 hover:bg-green-700 p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-green-600 tooltip"
+                            title="Aprobar">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 13L9 17L19 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                    <button (click)="rechazarAsunto(asunto.id_asunto, $event)"
+                            class="text-white bg-red-600 hover:bg-red-700 p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-600 tooltip"
+                            title="Rechazar">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 18L18 6M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </ng-container>
                 </div>
               </td>
             </tr>
           } @empty {
             <tr>
-              <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">No se encontraron asuntos que coincidan con el filtro</td>
+              <td [attr.colspan]="vistaActual === 'aprobacion' ? '6' : '5'" class="px-6 py-4 text-center text-sm text-gray-500">
+                <div *ngIf="!cargandoAsuntos && !cargandoAprobaciones" class="py-8">
+                  <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  <p class="text-lg font-medium">No se encontraron asuntos</p>
+                  <p class="text-sm text-gray-500 mt-1">
+                    {{vistaActual === 'atencion' ? 'No hay asuntos en atención' : 'No hay asuntos por aprobar'}}
+                  </p>
+                </div>
+              </td>
             </tr>
           }
         </tbody>
@@ -173,43 +261,11 @@
     <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
       <div class="flex-1 flex justify-center">
         <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-          <!-- Botón Anterior -->
-          <!-- <button (click)="cambiarPagina('anterior')"
-                  class="relative inline-flex items-center px-2 py-1.5 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">
-            <span class="sr-only">Anterior</span>
-            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-          </button> -->
-
-          <!-- Números de página -->
-          <!-- <button (click)="cambiarPagina(1)"
-                  class="relative inline-flex items-center px-3 py-1.5 border border-[#691C32] bg-[#691C32] text-sm font-medium text-white focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">1</button>
-          <button (click)="cambiarPagina(2)"
-                  class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">2</button>
-          <button (click)="cambiarPagina(3)"
-                  class="relative inline-flex items-center px-3 py-1.5 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">3</button> -->
-
-          <!-- Botón Siguiente -->
-          <!-- <button (click)="cambiarPagina('siguiente')"
-                  class="relative inline-flex items-center px-2 py-1.5 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-[#691C32]">
-            <span class="sr-only">Siguiente</span>
-            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-            </svg>
-          </button> -->
+          <!-- Paginación aquí (comentada por ahora) -->
         </nav>
       </div>
     </div>
   </div>
-
-  <!-- Botón de prueba -->
-  <!-- <div class="mx-6 mb-3 flex justify-end">
-    <button (click)="verPDF('TEST', $event)"
-          class="text-xs text-gray-500 bg-gray-100 hover:bg-gray-200 py-1 px-2 rounded transition-colors">
-      Probar visor PDF
-    </button>
-  </div> -->
 
   <!-- Modal de detalles del asunto -->
   <div *ngIf="mostrarDetalleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
