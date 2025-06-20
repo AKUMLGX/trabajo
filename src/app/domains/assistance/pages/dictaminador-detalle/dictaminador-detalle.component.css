@@ -449,3 +449,44 @@ textarea:focus, input:focus {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 } 
+
+/* Estilos para los Snackbars */
+::ng-deep .mat-snackbar-success {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+::ng-deep .mat-snackbar-error {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+::ng-deep .mat-snackbar-info {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+::ng-deep .mat-snackbar-success .mat-simple-snackbar-action,
+::ng-deep .mat-snackbar-error .mat-simple-snackbar-action,
+::ng-deep .mat-snackbar-info .mat-simple-snackbar-action {
+  color: white !important;
+}
+
+/* Animaciones para el modal */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.animate-zoomIn {
+  animation: zoomIn 0.25s ease-out;
+} 

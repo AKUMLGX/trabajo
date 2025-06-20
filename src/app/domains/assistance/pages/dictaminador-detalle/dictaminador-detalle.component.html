@@ -375,7 +375,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <!-- Eliminada sección duplicada de Documentos Adjuntos -->
-      
+
       <!-- Fechas clave -->
       <div class="md:col-span-3">
         <div class="bg-white rounded-xl shadow-2xl overflow-hidden border border-[#d8cfc1]">
@@ -520,356 +520,64 @@
   </button>
 </div>
 
-<!-- Modal de confirmación para finalización -->
-<div *ngIf="mostrarModalConfirmacion" class="fixed inset-0 bg-gray-900/60 flex items-center justify-center z-50 backdrop-blur-sm font-['Noto_Sans']">
-  <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-fade-in border border-[#d8cfc1]">
-    <div class="mb-4 text-center">
-      <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
-        <mat-icon class="text-green-600 text-3xl">check_circle</mat-icon>
-      </div>
-      <h2 class="text-xl font-bold text-gray-800 mb-2">Finalizar y enviar a revisión</h2>
-      <p class="text-gray-600">¿Está seguro que desea finalizar este dictamen y enviarlo a revisión? Esta acción no se puede deshacer.</p>
-    </div>
-    <div class="flex gap-3 justify-center mt-6">
-      <button mat-stroked-button class="py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-50" (click)="cancelarFinalizacion()">
-        <mat-icon class="mr-1">close</mat-icon>
-        Cancelar
-      </button>
-      <button mat-flat-button class="py-2 px-4 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-md" (click)="confirmarYFinalizar()">
-        <mat-icon class="mr-1">done_all</mat-icon>
-        Confirmar y finalizar
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal de revisión del trabajo del dictaminador - VERSIÓN MEJORADA -->
-<div *ngIf="mostrarModalRevision" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans']">
-  <div class="bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col animate-fadeIn">
-    <!-- Encabezado del modal mejorado -->
-    <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] p-4 rounded-t-lg border-b border-[#691C32]/20 flex justify-between items-center">
-      <h3 class="text-xl font-bold text-white flex items-center">
-        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        Revisión de documento - {{asuntoEnRevision?.folio}}
-      </h3>
-      <button (click)="cerrarModalRevision()" class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    
-    <!-- Contenido principal con diseño mejorado - Vista a 2 columnas -->
-    <div class="flex-1 overflow-auto grid grid-cols-1 lg:grid-cols-2 gap-0">
-      <!-- Columna izquierda: Información y evaluación -->
-      <div class="p-5 border-r border-gray-200 overflow-auto">
-        <!-- Sección de información del asunto -->
-        <div class="mb-6">
-          <h4 class="text-[#691C32] text-lg font-semibold mb-4 flex items-center border-b pb-2">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            Información del asunto
-          </h4>
-          
-          <div class="space-y-4">
-            <div class="bg-gray-50 p-3 rounded-md border border-gray-200">
-              <label class="text-xs font-medium text-gray-500 block mb-1">Folio interno</label>
-              <p class="text-base font-medium text-gray-900">{{asuntoEnRevision?.folio}}</p>
-            </div>
-            
-            <div class="bg-gray-50 p-3 rounded-md border border-gray-200">
-              <label class="text-xs font-medium text-gray-500 block mb-1">Autoridad solicitante</label>
-              <p class="text-base font-medium text-gray-900">{{asuntoEnRevision?.autoridad}}</p>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-              <div class="bg-gray-50 p-3 rounded-md border border-gray-200">
-                <label class="text-xs font-medium text-gray-500 block mb-1">Fecha de recepción</label>
-                <p class="text-base font-medium text-gray-900">{{asuntoEnRevision?.fecha}}</p>
-              </div>
-              
-              <div class="bg-gray-50 p-3 rounded-md border border-gray-200">
-                <label class="text-xs font-medium text-gray-500 block mb-1">Dictaminador</label>
-                <p class="text-base font-medium text-gray-900">{{asuntoEnRevision?.dictaminador}}</p>
-              </div>
-            </div>
-            
-            <div class="bg-gray-50 p-3 rounded-md border border-gray-200">
-              <label class="text-xs font-medium text-gray-500 block mb-1">Estado actual</label>
+<!-- Modal de confirmación para finalizar y enviar a revisión -->
+<div *ngIf="mostrarModalConfirmacion" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
+  <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-zoomIn">
+    <!-- Encabezado del modal -->
+    <div class="bg-gradient-to-r from-green-600 to-green-700 p-5 text-white">
               <div class="flex items-center">
-                <span 
-                  [ngClass]="{
-                    'inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-[#E8F5E9] text-[#2E7D32] border border-[#2E7D32]/20': asuntoEnRevision?.estado === 'Aprobado',
-                    'inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-[#FFF8E1] text-[#F57F17] border border-[#F57F17]/20': asuntoEnRevision?.estado === 'Pendiente',
-                    'inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-[#E3F2FD] text-[#1565C0] border border-[#1565C0]/20': asuntoEnRevision?.estado === 'En revisión',
-                    'inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-[#FFEBEE] text-[#C62828] border border-[#C62828]/20': asuntoEnRevision?.estado === 'Rechazado'
-                  }"
-                >
-                  <span class="h-2 w-2 rounded-full mr-1"
-                    [ngClass]="{
-                      'bg-[#2E7D32]': asuntoEnRevision?.estado === 'Aprobado',
-                      'bg-[#F57F17]': asuntoEnRevision?.estado === 'Pendiente',
-                      'bg-[#1565C0]': asuntoEnRevision?.estado === 'En revisión',
-                      'bg-[#C62828]': asuntoEnRevision?.estado === 'Rechazado'
-                    }"
-                  ></span>
-                  {{asuntoEnRevision?.estado}}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sección de observaciones para rechazo -->
-        <div>
-          <h4 class="text-[#691C32] text-lg font-semibold mb-4 flex items-center border-b pb-2">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            Observaciones del revisor
-          </h4>
-          
-          <div class="space-y-5">
-            <!-- Observaciones -->
-            <div class="bg-white p-4 rounded-md border border-gray-200 shadow-sm">
-              <label class="block text-sm font-medium text-gray-700 mb-3">
-                Observaciones <span class="text-[#C62828] text-xs">(requerido en caso de rechazo)</span>
-              </label>
-              
-              <!-- Mostrar observaciones existentes si es un asunto rechazado -->
-              <div *ngIf="asunto.esRechazado" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-                <div class="flex items-center mb-2">
-                  <mat-icon class="text-red-600 mr-2 text-sm">error</mat-icon>
-                  <h5 class="text-red-800 font-medium text-sm">Observaciones del rechazo anterior:</h5>
                 </div>
-                <p class="text-sm text-red-700 whitespace-pre-line">{{asunto.observacionesRechazo}}</p>
-              </div>
-              
-              <textarea 
-                [(ngModel)]="motivoRechazo"
-                [ngModelOptions]="{standalone: true}"
-                rows="8" 
-                class="shadow-sm focus:ring-[#691C32] focus:border-[#691C32] block w-full sm:text-sm border border-gray-300 rounded-md p-3 resize-none"
-                placeholder="Detalle las observaciones o motivos del rechazo. Sea específico sobre los puntos que requieren corrección."></textarea>
-            </div>
-          </div>
+        <h2 class="text-xl font-bold">Finalizar y enviar a revisión</h2>
         </div>
       </div>
       
-      <!-- Columna derecha: Visor de PDF y documentos -->
-      <div class="lg:flex flex-col hidden">
-        <!-- Pestaña de navegación entre contenido y documentos -->
-        <div class="flex border-b border-gray-200 bg-gray-50">
-          <button (click)="cambiarVistaDictamen('dictamen')" 
-                  [ngClass]="{'text-[#691C32] border-b-2 border-[#691C32] bg-white': vistaActual === 'dictamen', 'text-gray-500 hover:text-gray-700': vistaActual !== 'dictamen'}"
-                  class="flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    <!-- Contenido del modal -->
+    <div class="p-6">
+      <div class="mb-5 text-center">
+        <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Vista del documento
-          </button>
-          <button (click)="cambiarVistaDictamen('documentos')" 
-                  [ngClass]="{'text-[#691C32] border-b-2 border-[#691C32] bg-white': vistaActual === 'documentos', 'text-gray-500 hover:text-gray-700': vistaActual !== 'documentos'}"
-                  class="flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-            </svg>
-            Documentos adjuntos 
-            <span class="ml-1.5 bg-[#691C32]/10 text-[#691C32] text-xs font-medium px-2 py-0.5 rounded-full">
-              {{asuntoEnRevision?.documentos?.length || 0}}
-            </span>
-          </button>
         </div>
-        
-        <!-- Visor PDF integrado - Vista del dictamen -->
-        <div *ngIf="vistaActual === 'dictamen'" class="flex-1 flex flex-col overflow-hidden">
-          <!-- Barra de herramientas del PDF -->
-          <div class="bg-gray-100 px-3 py-2 border-b border-gray-200 flex justify-between items-center">
-            <div class="flex items-center space-x-1">
-              <button class="p-1 rounded hover:bg-gray-200" title="Acercar">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6" />
-                </svg>
-              </button>
-              <button class="p-1 rounded hover:bg-gray-200" title="Alejar">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
-                </svg>
-              </button>
-              <div class="h-4 border-r border-gray-300 mx-1"></div>
-              <span class="text-xs text-gray-600">Página 1 de 3</span>
-            </div>
-            <div>
-              <button class="bg-[#691C32] text-white text-xs px-2 py-1 rounded flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-            </button>
-            </div>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">¿Está seguro que desea finalizar este dictamen y enviarlo a revisión?</h3>
+        <p class="text-gray-600">Esta acción no se puede deshacer. El asunto será enviado para su revisión por el asignador.</p>
           </div>
           
-          <!-- Contenedor del PDF -->
-          <div class="flex-1 bg-gray-800 overflow-auto flex justify-center">
-            <!-- Vista previa del PDF -->
-            <div class="bg-white shadow-lg my-4 max-w-xl w-full h-[calc(100%-2rem)] mx-auto">
-              <!-- Si hay un documento, mostrar el PDF -->
-              <ng-container *ngIf="asuntoEnRevision?.documentos?.length > 0; else noPdf">
-                <div class="h-full flex flex-col items-center justify-center p-8 text-center">
-                  <div class="w-full space-y-6">
-                    <!-- Simulación de contenido del dictamen -->
-                    <div class="text-left">
-                      <h1 class="text-xl font-bold mb-4 text-center">DICTAMEN JURÍDICO</h1>
-                      <p class="text-sm mb-4"><strong>Expediente:</strong> {{asuntoEnRevision?.folio}}</p>
-                      <p class="text-sm mb-4"><strong>Autoridad solicitante:</strong> {{asuntoEnRevision?.autoridad}}</p>
-                      <p class="text-sm mb-4"><strong>Fecha:</strong> {{asuntoEnRevision?.fecha}}</p>
-                      
-                      <p class="text-sm mb-4">El presente dictamen se emite con fundamento en los artículos 123, fracción III y 127 del Código Fiscal de la Federación, en relación con los artículos 28, 32, 32 A, 32-B, 32-D, 32-G y 32-H del mismo ordenamiento.</p>
-                      
-                      <p class="text-sm mb-4">Con base en la documentación proporcionada por el contribuyente <strong>{{asuntoEnRevision?.autoridad}}</strong>, se procedió al análisis de los hechos presentados y a la aplicación de la normatividad fiscal vigente, llegando a las siguientes conclusiones:</p>
-                      
-                      <ol class="text-sm list-decimal pl-5 space-y-2 mb-4">
-                        <li>La información presentada cumple con los requisitos establecidos en el artículo 32-H del Código Fiscal de la Federación.</li>
-                        <li>Los estados financieros adjuntos presentan razonablemente la situación financiera del contribuyente.</li>
-                        <li>Las operaciones reportadas son consistentes con la actividad económica declarada.</li>
-                        <li>Se identificaron áreas de oportunidad en materia de deducciones autorizadas que podrían ser objeto de revisión.</li>
-                      </ol>
-                      
-                      <p class="text-sm"><strong>Conclusión:</strong> Con base en la revisión efectuada, se determina que el contribuyente ha cumplido sustancialmente con sus obligaciones fiscales, con las observaciones mencionadas en el punto 4.</p>
-                      
-                      <div class="border-t border-gray-300 my-6"></div>
-                      
-                      <div class="text-center">
-                        <p class="font-medium text-sm">{{asuntoEnRevision?.dictaminador}}</p>
-                        <p class="text-xs text-gray-500">Dictaminador</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-              
-              <!-- Si no hay documentos asociados -->
-              <ng-template #noPdf>
-                <div class="h-full flex flex-col items-center justify-center p-8 text-center">
-                  <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      <!-- Detalles del documento -->
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
+        <div class="flex items-center mb-2">
+          <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <h3 class="text-lg font-medium text-gray-900 mb-2">No hay documentos disponibles</h3>
-                  <p class="text-sm text-gray-500 max-w-sm">No se encontraron documentos asociados a este dictamen para su visualización.</p>
+          <span class="text-sm font-medium text-gray-700">Información del asunto</span>
                 </div>
-              </ng-template>
-            </div>
+        <div class="space-y-1 text-sm">
+          <p><span class="font-medium">Folio:</span> {{asunto.folio}}</p>
+          <p><span class="font-medium">Carpeta:</span> {{asunto.carpetaInvestigacion}}</p>
+          <p><span class="font-medium">Persona relacionada:</span> {{asunto.personaRelacionada}}</p>
           </div>
         </div>
 
-        <!-- Vista de documentos adjuntos -->
-        <div *ngIf="vistaActual === 'documentos'" class="flex-1 overflow-auto bg-gray-50 p-4">
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-              <div>
-                <h5 class="text-base font-medium text-gray-800">Documentos del expediente</h5>
-                <p class="text-sm text-gray-500">Seleccione un documento para visualizarlo</p>
-              </div>
-              <div class="flex items-center">
-                <span class="text-xs text-gray-500 mr-2">Ordenar por:</span>
-                <select class="text-xs border border-gray-300 rounded px-2 py-1 bg-white">
-                  <option>Fecha (más reciente)</option>
-                  <option>Fecha (más antiguo)</option>
-                  <option>Nombre (A-Z)</option>
-                </select>
-              </div>
-            </div>
-            
-            <div class="divide-y divide-gray-200">
-              <div *ngFor="let documento of asuntoEnRevision?.documentos; let i = index" 
-                   (click)="seleccionarDocumento(i)"
-                   [ngClass]="{'bg-[#691C32]/5 border-l-4 border-[#691C32]': documentoSeleccionado === i, 'border-l-4 border-transparent': documentoSeleccionado !== i}"
-                   class="p-3 flex items-center hover:bg-gray-50 cursor-pointer transition-colors">
-                <div class="mr-3 p-2 rounded-full" [ngClass]="documentoSeleccionado === i ? 'bg-[#691C32]/10' : 'bg-gray-100'">
-                  <svg class="w-6 h-6" [ngClass]="documentoSeleccionado === i ? 'text-[#691C32]' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <div class="flex-1">
-                  <h6 class="text-sm font-medium" [ngClass]="documentoSeleccionado === i ? 'text-[#691C32]' : 'text-gray-800'">
-                    {{documento.nombre}}
-                  </h6>
-                  <div class="flex items-center mt-1">
-                    <span class="text-xs text-gray-500 flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {{documento.fecha | date:'dd/MM/yyyy'}}
-                    </span>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded ml-2">{{documento.tipo}}</span>
-                    <span *ngIf="i === 0" class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded ml-2">Principal</span>
-                  </div>
-                </div>
-                <div class="flex space-x-1">
-                  <button class="p-1.5 rounded-full hover:bg-gray-200 transition-colors" title="Ver documento">
-                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-            </button>
-                  <button class="p-1.5 rounded-full hover:bg-gray-200 transition-colors" title="Descargar documento">
-                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-            </button>
-                </div>
-              </div>
-              
-              <!-- Estado vacío -->
-              <div *ngIf="!asuntoEnRevision?.documentos || asuntoEnRevision?.documentos.length === 0" class="p-8 text-center">
-                <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-                <h3 class="text-base font-medium text-gray-700 mb-1">No hay documentos disponibles</h3>
-                <p class="text-sm text-gray-500">No se encontraron documentos adjuntos en este expediente</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Barra de acciones mejorada -->
-    <div class="bg-gray-50 p-4 rounded-b-lg border-t border-gray-200 flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <div *ngIf="asuntoEnRevision?.documentos?.length > 0" class="lg:hidden flex">
-          <button class="bg-[#691C32] hover:bg-[#5A172B] text-white px-3 py-1.5 rounded text-sm flex items-center transition-colors shadow-sm">
+      <!-- Botones de acción -->
+      <div class="flex justify-end gap-3">
+        <button (click)="cancelarFinalizacion()" 
+                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
-            Ver documento
-          </button>
-        </div>
-      </div>
-      
-      <div class="flex items-center space-x-3">
-        <button (click)="cerrarModalRevision()" 
-                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm">
           Cancelar
         </button>
         
-        <button (click)="rechazarDictamen()" 
-                class="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-md hover:from-red-700 hover:to-red-800 transition-colors shadow-sm flex items-center">
-          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          Rechazar documento
-        </button>
-        
-        <button (click)="confirmarAprobacion()" 
+        <button (click)="confirmarYFinalizar()" 
                 class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
-          Confirmar aprobación
+          Confirmar y finalizar
         </button>
       </div>
     </div>
@@ -1132,4 +840,4 @@
       <iframe *ngIf="!cargandoPdf && !errorPdf" [src]="sanitizeUrl(urlPdfActual)" class="w-full h-full" frameborder="0"></iframe>
     </div>
   </div>
-</div>
+</div> 

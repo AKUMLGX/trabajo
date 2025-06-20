@@ -434,14 +434,21 @@ export class DictaminadorDetalleComponent implements OnInit {
 
   // Método para mostrar mensajes de estado temporales
   mostrarMensaje(mensaje: string, tipo: string = 'success'): void {
-    this.mensajeEstado = mensaje;
-    this.tipoMensajeEstado = tipo;
-    this.mostrarMensajeEstado = true;
+    // Configurar el color según el tipo de mensaje
+    let panelClass = ['mat-snackbar-success'];
     
-    // Ocultar el mensaje después de 5 segundos
-    setTimeout(() => {
-      this.mostrarMensajeEstado = false;
-    }, 5000);
+    if (tipo === 'error') {
+      panelClass = ['mat-snackbar-error'];
+    } else if (tipo === 'info') {
+      panelClass = ['mat-snackbar-info'];
+    }
+    
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: panelClass
+    });
   }
 
   aprobarDictamen(): void {
@@ -496,14 +503,48 @@ export class DictaminadorDetalleComponent implements OnInit {
   }
 
   confirmarYFinalizar(): void {
-    // Aquí iría la lógica para finalizar y enviar a revisión
-    console.log('Dictamen finalizado y enviado a revisión');
+    // Verificar que tenemos el ID del asunto
+    if (!this.asunto.id_asunto) {
+      this.mostrarMensaje('No se pudo identificar el asunto a finalizar', 'error');
+      this.mostrarModalConfirmacion = false;
+      return;
+    }
+
+    // Mostrar indicador de carga
+    this.mostrarMensaje('Enviando asunto a revisión...', 'info');
+    
+    // Llamar al servicio para finalizar la atención
+    this.dictaminadorBandejaService.finalizarAtencion(this.asunto.id_asunto).subscribe({
+      next: (respuesta) => {
+        console.log('Respuesta del servidor:', respuesta);
+        this.mostrarModalConfirmacion = false;
+        
+        // La respuesta ahora es texto plano
+        if (respuesta && respuesta.includes('fue enviado a revisión')) {
+          this.mostrarMensaje('Asunto enviado a revisión correctamente', 'success');
+        } else {
+          this.mostrarMensaje(respuesta || 'Operación completada', 'success');
+        }
+      },
+      error: (error) => {
+        console.error('Error al finalizar atención:', error);
     this.mostrarModalConfirmacion = false;
-    // Mostrar mensaje de éxito sin redirección
-    setTimeout(() => {
-      this.mostrarMensaje('Documento enviado a revisión correctamente', 'success');
-      // No llamamos a goBack() para permanecer en la misma vista
-    }, 500);
+        
+        // Mejorar el manejo de errores
+        let mensajeError = 'Error al enviar asunto a revisión';
+        
+        // Intentar extraer mensaje de error
+        if (error.error && typeof error.error === 'string') {
+          mensajeError += ': ' + error.error;
+        } else if (error.message) {
+          mensajeError += ': ' + error.message;
+        } else if (typeof error === 'string') {
+          mensajeError += ': ' + error;
+        }
+        
+        this.mostrarMensaje(mensajeError, 'error');
+      }
+    });
   }
 
   goBack(): void {

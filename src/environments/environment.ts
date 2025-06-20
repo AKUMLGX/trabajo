@@ -46,7 +46,7 @@ export const environment={
   generateAcuse: "asunto/get_estadistico_por_folio",
   generateEstadistico: "asunto/get_estadistico_por_dia",
   //#region Bandeja de Atecion
-  cardsInfo:'asunto/get_atencion_por_administracion',
+  cardsInfo:'asunto/atencion/get_atencion_por_administracion',
   cardsInfoPorAsignar:'asunto/atencion/get_asunto_por_asignacion/total',
   asuntosPorDictaminar: 'asunto/atencion/get_asunto_por_asignacion/',
   asuntosPorAsignarTable: 'asunto/atencion/get_asunto_por_asignacion/',
@@ -60,6 +60,7 @@ export const environment={
   downloadExecelTotal:'asunto/atencion/descargar_asunto_por_atencion',
   subirArchivosAtencion: 'asunto/atencion/subir_documentos',
   listarArchivosAtencion: 'asunto/atencion/listar_archivos',
+  finalizarAtencion: 'asunto/atencion/finalizar_atencion',
   //#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
