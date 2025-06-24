@@ -1,0 +1,148 @@
+/* Estilos para el modal de revisión */
+:host {
+  --primary-color: #16a34a; /* green-600 */
+  --primary-dark: #15803d; /* green-700 */
+  --primary-light: #dcfce7; /* green-100 */
+  --accent-color: #691C32; /* Color Akamba */
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Estilos para los contenedores */
+.modal-container {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+/* Estilos para el visor de PDF */
+iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+/* Mejoras de accesibilidad para elementos interactivos */
+button:focus, 
+select:focus, 
+textarea:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Estilos para los elementos de la lista de documentos */
+.document-item {
+  transition: all 0.2s ease;
+}
+
+.document-item:hover {
+  transform: translateX(4px);
+}
+
+.document-item.active {
+  border-color: var(--primary-color);
+  background-color: var(--primary-light);
+}
+
+/* Estilos para la pestaña activa */
+.tab-active {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+/* Estilos para los campos de formulario */
+textarea.ng-touched.ng-invalid {
+  border-color: #ef4444; /* red-500 */
+}
+
+/* Estilos para los botones de acción */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-danger {
+  background-color: #dc2626; /* red-600 */
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c; /* red-700 */
+}
+
+/* Estilos para los indicadores de estado */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-badge.pending {
+  background-color: #fef3c7; /* amber-100 */
+  color: #92400e; /* amber-800 */
+}
+
+.status-badge.approved {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.status-badge.rejected {
+  background-color: #fee2e2; /* red-100 */
+  color: #b91c1c; /* red-700 */
+}
+
+/* Estilos para los mensajes de alerta */
+.alert {
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.alert-warning {
+  background-color: #fef3c7; /* amber-100 */
+  border-left: 4px solid #f59e0b; /* amber-500 */
+}
+
+.alert-info {
+  background-color: #e0f2fe; /* sky-100 */
+  border-left: 4px solid #0ea5e9; /* sky-500 */
+}
+
+/* Estilos para los campos de información */
+.info-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280; /* gray-500 */
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-size: 1rem;
+  color: #111827; /* gray-900 */
+}

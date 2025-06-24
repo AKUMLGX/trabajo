@@ -1,11 +1,13 @@
 export interface porAsignarRequest{
   documento:string,
   asignados:boolean,
+  requiere_aprobacion?:boolean,
 }
 
 export interface asutosPorDictaminador{
   documento:string,
   asignados:boolean,
+  requiere_aprobacion?:boolean,
 }
 
 export interface tableAsuntosPorDictaminar{

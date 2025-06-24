@@ -59,7 +59,7 @@ export const environment={
   downloadExecelParcial:'asunto/atencion/descargar_asunto_por_atencion',
   downloadExecelTotal:'asunto/atencion/descargar_asunto_por_atencion',
   subirArchivosAtencion: 'asunto/atencion/subir_documentos',
-  listarArchivosAtencion: 'asunto/atencion/listar_archivos',
+  listarArchivosAtencion: 'asunto/atencion/listar_archivos_atencion',
   finalizarAtencion: 'asunto/atencion/finalizar_atencion',
   //#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',

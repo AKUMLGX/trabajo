@@ -1,0 +1,383 @@
+<!-- Modal principal -->
+<div *ngIf="mostrarModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <!-- Fondo oscurecido -->
+  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+  
+  <!-- Contenedor del modal -->
+  <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+    <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-6xl">
+      <!-- Encabezado del modal -->
+      <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center">
+          <svg class="h-6 w-6 text-white mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h3 class="text-lg font-medium text-white" id="modal-title">
+            Revisión de Asunto {{asunto?.folio_interno}}
+          </h3>
+        </div>
+        <button type="button" (click)="cerrarModal()" class="text-white hover:text-gray-200 focus:outline-none">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Pestañas de navegación -->
+      <div class="border-b border-gray-200">
+        <nav class="flex -mb-px" aria-label="Tabs">
+          <button 
+            (click)="cambiarPestana('detalles')" 
+            [class.text-green-600]="pestanaActiva === 'detalles'"
+            [class.border-green-600]="pestanaActiva === 'detalles'"
+            [class.border-b-2]="pestanaActiva === 'detalles'"
+            [class.text-gray-500]="pestanaActiva !== 'detalles'"
+            class="w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200"
+          >
+            <div class="flex items-center justify-center">
+              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Detalles del Asunto
+            </div>
+          </button>
+          <button 
+            (click)="cambiarPestana('documentos')" 
+            [class.text-green-600]="pestanaActiva === 'documentos'"
+            [class.border-green-600]="pestanaActiva === 'documentos'"
+            [class.border-b-2]="pestanaActiva === 'documentos'"
+            [class.text-gray-500]="pestanaActiva !== 'documentos'"
+            class="w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200"
+          >
+            <div class="flex items-center justify-center">
+              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              Documentos
+              <span class="ml-2 bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                {{archivos?.length || 0}}
+              </span>
+            </div>
+          </button>
+          <button 
+            (click)="cambiarPestana('revision')" 
+            [class.text-green-600]="pestanaActiva === 'revision'"
+            [class.border-green-600]="pestanaActiva === 'revision'"
+            [class.border-b-2]="pestanaActiva === 'revision'"
+            [class.text-gray-500]="pestanaActiva !== 'revision'"
+            class="w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200"
+          >
+            <div class="flex items-center justify-center">
+              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Revisión y Dictamen
+            </div>
+          </button>
+        </nav>
+      </div>
+      
+      <!-- Contenido del modal -->
+      <div class="bg-gray-50 px-6 py-4 max-h-[70vh] overflow-y-auto">
+        <!-- Pestaña de Detalles -->
+        <div *ngIf="pestanaActiva === 'detalles'" class="animate-fadeIn">
+          <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Información del Asunto</h4>
+            
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Folio Interno</p>
+                  <p class="text-base font-semibold">{{asunto?.folio_interno || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Carpeta de Investigación</p>
+                  <p class="text-base">{{asunto?.carpeta_investigacion || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Oficio</p>
+                  <p class="text-base">{{asunto?.oficio || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Persona Relacionada</p>
+                  <p class="text-base">{{asunto?.persona_relacionada || 'N/A'}}</p>
+                </div>
+              </div>
+              
+              <div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Fecha de Recepción</p>
+                  <p class="text-base">{{formatearFecha(asunto?.fecha_recepcion)}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Autoridad Remitente</p>
+                  <p class="text-base">{{asunto?.autoridad_remitente || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Turno Jefatura</p>
+                  <p class="text-base">{{asunto?.turno_jefatura || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Plazo de Atención</p>
+                  <p class="text-base">
+                    <span *ngIf="asunto?.plazo_atencion === 0" class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Urgente</span>
+                    <span *ngIf="asunto?.plazo_atencion > 0">{{asunto?.plazo_atencion}} días</span>
+                    <span *ngIf="asunto?.plazo_atencion === null">Sin plazo definido</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white shadow rounded-lg p-6">
+            <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Información de Atención</h4>
+            
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Estado de Atención</p>
+                  <p class="text-base">
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Atendido - Pendiente de Aprobación</span>
+                  </p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Fecha de Atención</p>
+                  <p class="text-base">{{formatearFecha(asunto?.fecha_atencion || '')}}</p>
+                </div>
+              </div>
+              
+              <div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Dictaminador</p>
+                  <p class="text-base">{{asunto?.dictaminador || asunto?.persona_relacionada || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Documentos Adjuntos</p>
+                  <p class="text-base">{{archivos?.length || 0}} documento(s)</p>
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="asunto?.observaciones" class="mt-4 p-4 bg-gray-50 rounded-md">
+              <p class="text-sm font-medium text-gray-500 mb-2">Observaciones del Dictaminador:</p>
+              <p class="text-sm text-gray-700 whitespace-pre-line">{{asunto?.observaciones}}</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pestaña de Documentos -->
+        <div *ngIf="pestanaActiva === 'documentos'" class="animate-fadeIn">
+          <div class="grid grid-cols-3 gap-6">
+            <!-- Lista de documentos -->
+            <div class="col-span-1 bg-white shadow rounded-lg p-4 max-h-[60vh] overflow-y-auto">
+              <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Documentos</h4>
+              
+              <div *ngIf="!archivos || archivos.length === 0" class="text-center py-8">
+                <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <p class="text-gray-500">No hay documentos disponibles</p>
+              </div>
+              
+              <ul *ngIf="archivos && archivos.length > 0" class="space-y-2">
+                <li *ngFor="let archivo of archivos" 
+                    (click)="seleccionarArchivo(archivo)"
+                    [class.bg-green-50]="pdfActual === archivo"
+                    [class.border-green-300]="pdfActual === archivo"
+                    class="p-3 border rounded-md hover:bg-green-50 cursor-pointer transition-colors">
+                  <div class="flex items-center">
+                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-medium text-gray-900 truncate">
+                        {{archivo.nombre}}
+                      </p>
+                      <p class="text-xs text-gray-500">
+                        {{archivo.tamano_bytes | number}} bytes • {{archivo.ultima_modificacion | date:'dd/MM/yyyy'}}
+                      </p>
+                    </div>
+                    <span *ngIf="pdfActual === archivo" class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                      Actual
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Visor de PDF -->
+            <div class="col-span-2 bg-white shadow rounded-lg p-4 flex flex-col">
+              <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Visor de Documentos</h4>
+              
+              <div *ngIf="!pdfActual" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                <div class="text-center p-6">
+                  <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <p class="text-lg font-medium text-gray-500">Seleccione un documento para visualizar</p>
+                  <p class="text-sm text-gray-400 mt-2">Haga clic en un documento de la lista para verlo aquí</p>
+                </div>
+              </div>
+              
+              <div *ngIf="pdfActual && pdfCargando" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                <div class="text-center">
+                  <div class="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p class="text-gray-500">Cargando documento...</p>
+                </div>
+              </div>
+              
+              <div *ngIf="pdfActual && pdfError" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                <div class="text-center p-6">
+                  <svg class="w-16 h-16 mx-auto text-red-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p class="text-lg font-medium text-red-500">Error al cargar el documento</p>
+                  <p class="text-sm text-gray-500 mt-2">No se pudo cargar el documento seleccionado</p>
+                </div>
+              </div>
+              
+              <div *ngIf="pdfActual && !pdfCargando && !pdfError" class="flex-1 bg-gray-50 rounded-lg overflow-hidden">
+                <iframe 
+                  *ngIf="pdfUrl" 
+                  [src]="pdfUrl | safe" 
+                  class="w-full h-full border-0"
+                  type="application/pdf">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pestaña de Revisión -->
+        <div *ngIf="pestanaActiva === 'revision'" class="animate-fadeIn">
+          <form [formGroup]="formularioRevision" class="space-y-6">
+            <div class="bg-white shadow rounded-lg p-6">
+              <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Revisión y Dictamen</h4>
+              
+              <div class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-md">
+                <div class="flex">
+                  <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                      Por favor, revise cuidadosamente los detalles del asunto y los documentos adjuntos antes de emitir su dictamen.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-6">
+                <label for="observaciones" class="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
+                <textarea 
+                  id="observaciones"
+                  formControlName="observaciones"
+                  rows="5"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+                  placeholder="Ingrese sus observaciones sobre la revisión del asunto..."
+                ></textarea>
+                <div *ngIf="formularioRevision.get('observaciones')?.invalid && formularioRevision.get('observaciones')?.touched" class="mt-1 text-sm text-red-600">
+                  Las observaciones son obligatorias y deben tener al menos 10 caracteres.
+                </div>
+              </div>
+              
+              <div *ngIf="formularioRevision.get('motivo')?.touched && !formularioRevision.get('motivo')?.value" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                <p class="text-sm text-red-600">Por favor, seleccione un motivo de rechazo.</p>
+              </div>
+              
+              <div class="flex flex-col sm:flex-row sm:justify-between sm:space-x-4 space-y-4 sm:space-y-0">
+                <div class="flex-1">
+                  <button 
+                    type="button"
+                    (click)="aprobarAsunto()"
+                    [disabled]="formularioRevision.invalid || enviandoAprobacion"
+                    class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <svg *ngIf="enviandoAprobacion" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <svg *ngIf="!enviandoAprobacion" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Aprobar Asunto
+                  </button>
+                </div>
+                
+                <div class="flex-1">
+                  <div class="flex flex-col space-y-2">
+                    <select 
+                      formControlName="motivo"
+                      class="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+                    >
+                      <option value="" disabled selected>Seleccione motivo de rechazo</option>
+                      <option *ngFor="let motivo of motivosRechazo" [value]="motivo">{{motivo}}</option>
+                    </select>
+                    
+                    <button 
+                      type="button"
+                      (click)="rechazarAsunto()"
+                      [disabled]="formularioRevision.invalid || !formularioRevision.get('motivo')?.value || enviandoRechazo"
+                      class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <svg *ngIf="enviandoRechazo" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <svg *ngIf="!enviandoRechazo" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      Rechazar Asunto
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Pie del modal -->
+      <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
+        <button 
+          type="button" 
+          (click)="cerrarModal()"
+          class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        >
+          Cerrar
+        </button>
+        
+        <button 
+          *ngIf="pestanaActiva !== 'revision'"
+          type="button" 
+          (click)="cambiarPestana('revision')"
+          class="inline-flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        >
+          Ir a Revisión
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Estilos adicionales -->
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>

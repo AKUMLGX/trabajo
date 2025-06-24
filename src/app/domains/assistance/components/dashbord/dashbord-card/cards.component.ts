@@ -19,6 +19,8 @@ import { porAsignarResponse } from '../../../../interfaces/porAsignarResponse.in
 import { usuariosPorAdministracion } from '../../../../interfaces/usuarios-Por-administracion.interface';
 import { RechazadosTableComponent, AsuntoRechazado } from '../rechazados-table/rechazados-table.component';
 import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/rechazados-gestion.component';
+import { RevisionModalComponent } from '../revision-modal/revision-modal.component';
+import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/archivos-atencion.service';
 
 @Component({
   selector: 'app-cards',
@@ -36,7 +38,8 @@ import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/
     FormsModule,
     SafePipe,
     RechazadosTableComponent,
-    RechazadosGestionComponent
+    RechazadosGestionComponent,
+    RevisionModalComponent
   ],
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
@@ -117,7 +120,11 @@ export class CardsComponent implements OnInit {
 
   asuntosUrgentes: number = 0;
 
-  constructor(private router: Router, private cards: CardsInfoBandejadeAtencionService) { }
+  constructor(
+    private router: Router, 
+    private cards: CardsInfoBandejadeAtencionService,
+    private archivosService: ArchivosAtencionService
+  ) { }
 
   // Propiedades para manejar la notificación
   mostrarNotificacion: boolean = false;
@@ -200,6 +207,18 @@ export class CardsComponent implements OnInit {
     Administracion: 0,
   }
 
+  // Nuevas propiedades para manejar asuntos en atención y por aprobar
+  asuntosEnAtencion: tableAsuntosPorDictaminar[] = [];
+  asuntosPorAprobar: tableAsuntosPorDictaminar[] = [];
+  vistaActual: 'atencion' | 'aprobacion' = 'atencion';
+  cargandoAsuntos: boolean = false;
+  cargandoAprobaciones: boolean = false;
+
+  // Propiedades para el modal de revisión
+  mostrarModalRevision: boolean = false;
+  asuntoSeleccionadoRevision: any = null;
+  archivosAsunto: ArchivoAdjunto[] = [];
+
   ngOnInit(): void {
     // Al iniciar, mostrar todos los asuntos
     this.asuntosFiltrados = [...this.asuntos];
@@ -210,7 +229,11 @@ export class CardsComponent implements OnInit {
 
     this.mostrarCards()
     this.mostarCardPorAsignar()
-    this.asuntosPorDictaminar()
+    
+    // Cargar ambos tipos de asuntos
+    this.cargarAsuntosEnAtencion();
+    this.cargarAsuntosPorAprobar();
+    
     this.usuariosPorAdministracion()
   }
 
@@ -228,14 +251,78 @@ export class CardsComponent implements OnInit {
     })
   }
 
-  asuntosPorDictaminar() {
-    this.cards.asutosPorDictaminar(this.porAsignarDataTable).subscribe({
+  cargarAsuntosEnAtencion() {
+    this.cargandoAsuntos = true;
+    const params = {
+      documento: this.documento,
+      asignados: this.asignadosTable,
+      requiere_aprobacion: false
+    };
+    
+    this.cards.asutosPorDictaminar(params).subscribe({
       next: (res) => {
-        this.tablePorDictaminar = res
+        this.asuntosEnAtencion = res;
+        if (this.vistaActual === 'atencion') {
+          this.tablePorDictaminar = this.asuntosEnAtencion;
+        }
+        // Actualizar conteo de asuntos urgentes
         const fitrarPlazo = res.filter((item: any) => item.plazo_atencion !== null);
-        this.asuntosUrgentes = fitrarPlazo.length
+        this.asuntosUrgentes = fitrarPlazo.length;
+        this.cargandoAsuntos = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar asuntos en atención:', err);
+        this.cargandoAsuntos = false;
       }
-    })
+    });
+  }
+  
+  cargarAsuntosPorAprobar() {
+    this.cargandoAprobaciones = true;
+    const params = {
+      documento: this.documento,
+      asignados: this.asignadosTable,
+      requiere_aprobacion: true
+    };
+    
+    this.cards.asuntosPorAprobar(params).subscribe({
+      next: (res) => {
+        this.asuntosPorAprobar = res;
+        if (this.vistaActual === 'aprobacion') {
+          this.tablePorDictaminar = this.asuntosPorAprobar;
+        }
+        this.cargandoAprobaciones = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar asuntos por aprobar:', err);
+        this.cargandoAprobaciones = false;
+      }
+    });
+  }
+  
+  cambiarVista(vista: 'atencion' | 'aprobacion') {
+    this.vistaActual = vista;
+    this.tablePorDictaminar = vista === 'atencion' ? this.asuntosEnAtencion : this.asuntosPorAprobar;
+  }
+
+  // Métodos para manejar acciones de aprobación
+  aprobarAsunto(idAsunto: number, event: Event) {
+    event.stopPropagation();
+    // Por ahora solo mostramos un mensaje, la implementación real requeriría un servicio
+    this.mostrarMensaje(`Aprobando asunto con ID: ${idAsunto}`);
+    // Aquí iría la llamada al servicio para aprobar el asunto
+  }
+
+  rechazarAsunto(idAsunto: number, event: Event) {
+    event.stopPropagation();
+    // Por ahora solo mostramos un mensaje, la implementación real requeriría un modal
+    this.mostrarMensaje(`Rechazando asunto con ID: ${idAsunto}`);
+    // Aquí iría la lógica para abrir un modal de rechazo
+  }
+
+  // Mantener este método por compatibilidad con el código existente
+  asuntosPorDictaminar() {
+    this.cargarAsuntosEnAtencion();
   }
 
   dataCards(data: CardsResponse['data']): void {
@@ -365,21 +452,89 @@ export class CardsComponent implements OnInit {
     }
   }
 
-  // Método para ver detalle de asunto (evitando propagación del evento)
-  verDetalle(folio: string, event: Event): void {
-    event.stopPropagation(); // Evita que se active el seleccionarFila
-    const asunto = this.asuntos.find(a => a.folio === folio);
-    if (asunto) {
-      this.asuntoSeleccionado = asunto;
-      this.mostrarDetalleModal = true;
-      console.log('Mostrando detalle del asunto:', asunto);
+  // Método para ver detalle con el nuevo modal de revisión
+  verDetalle(asunto: any, event: Event): void {
+    event.stopPropagation();
+    
+    if (this.vistaActual === 'aprobacion') {
+      // Para asuntos que requieren aprobación, usamos el modal de revisión
+      this.asuntoSeleccionadoRevision = asunto;
+      
+      // Cargar los archivos del asunto
+      this.cargarArchivosAsunto(asunto);
+      
+      // Mostrar el modal
+      this.mostrarModalRevision = true;
+    } else {
+      // Para asuntos en atención, mantenemos el comportamiento anterior
+      const asuntoDetalle = this.asuntos.find(a => a.folio === asunto.folio);
+      if (asuntoDetalle) {
+        this.asuntoSeleccionado = asuntoDetalle;
+        this.mostrarDetalleModal = true;
+        console.log('Mostrando detalle del asunto:', asuntoDetalle);
+      }
     }
   }
 
+  // Método para cargar los archivos del asunto
+  cargarArchivosAsunto(asunto: any): void {
+    if (!asunto || !asunto.folio_interno) {
+      this.archivosAsunto = [];
+      return;
+    }
+    
+    this.archivosService.listarArchivosPdf(asunto.folio_interno).subscribe({
+      next: (archivos) => {
+        this.archivosAsunto = archivos;
+      },
+      error: (err) => {
+        console.error('Error al cargar archivos del asunto:', err);
+        this.archivosAsunto = [];
+      }
+    });
+  }
+  
   // Método para cerrar el modal de detalles
   cerrarDetalle(): void {
     this.mostrarDetalleModal = false;
     this.asuntoSeleccionado = null;
+  }
+  
+  // Método para cerrar el modal de revisión
+  cerrarModalRevision(): void {
+    this.mostrarModalRevision = false;
+    this.asuntoSeleccionadoRevision = null;
+    this.archivosAsunto = [];
+  }
+  
+  // Método para aprobar un asunto
+  aprobarAsuntoRevision(datos: {id: number, observaciones: string}): void {
+    console.log('Aprobando asunto:', datos);
+    
+    // Aquí iría la llamada al servicio para aprobar el asunto
+    // Por ahora solo mostramos un mensaje y actualizamos la lista
+    this.mostrarMensaje(`Asunto ${datos.id} aprobado correctamente`);
+    
+    // Actualizar la lista de asuntos
+    this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
+    if (this.vistaActual === 'aprobacion') {
+      this.tablePorDictaminar = this.asuntosPorAprobar;
+    }
+  }
+  
+  // Método para rechazar un asunto
+  rechazarAsuntoRevision(datos: {id: number, observaciones: string, motivo: string}): void {
+    console.log('Rechazando asunto:', datos);
+    
+    // Aquí iría la llamada al servicio para rechazar el asunto
+    // Por ahora solo mostramos un mensaje y actualizamos la lista
+    this.mostrarMensaje(`Asunto ${datos.id} rechazado por: ${datos.motivo}`);
+    
+    // Actualizar la lista de asuntos
+    this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
+    if (this.vistaActual === 'aprobacion') {
+      this.tablePorDictaminar = this.asuntosPorAprobar;
+    }
   }
 
   // Método para visualizar PDF
@@ -412,14 +567,6 @@ export class CardsComponent implements OnInit {
       // Aquí se iniciaría la descarga real
       console.log(`Descarga iniciada para ${folio}`);
     }, 1000);
-  }
-
-  // Método para cerrar el visor de PDF
-  cerrarPDF(): void {
-    this.mostrarPDFViewer = false;
-    this.pdfTitulo = '';
-    this.pdfUrl = '';
-    this.pdfCargando = true;
   }
 
   // Métodos para control de páginas
@@ -580,5 +727,13 @@ export class CardsComponent implements OnInit {
     event.stopPropagation();
     // Aquí iría la lógica para abrir el modal de revisión
     this.mostrarMensaje('Abriendo revisión de dictamen: ' + folio);
+  }
+
+  // Método para cerrar el visor de PDF
+  cerrarPDF(): void {
+    this.mostrarPDFViewer = false;
+    this.pdfTitulo = '';
+    this.pdfUrl = '';
+    this.pdfCargando = true;
   }
 }
