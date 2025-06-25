@@ -610,6 +610,13 @@
     (aprobarAsuntoEvent)="aprobarAsuntoRevision($event)"
     (rechazarAsuntoEvent)="rechazarAsuntoRevision($event)">
   </app-revision-modal>
+  
+  <!-- Modal de Atención de Asuntos -->
+  <app-atencion-modal
+    [mostrarModal]="mostrarModalAtencion"
+    [asunto]="asuntoSeleccionadoAtencion"
+    (cerrarModalEvent)="cerrarModalAtencion()">
+  </app-atencion-modal>
 </div>
 
 <style>

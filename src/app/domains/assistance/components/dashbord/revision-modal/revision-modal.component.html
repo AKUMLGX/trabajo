@@ -1,11 +1,11 @@
 <!-- Modal principal -->
-<div *ngIf="mostrarModal" class="fixed inset-0 z-50 overflow-hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<div *ngIf="mostrarModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
   <!-- Fondo oscurecido -->
   <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
   
   <!-- Contenedor del modal -->
-  <div class="flex min-h-full items-center justify-center text-center sm:p-0">
-    <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full h-[90vh] max-w-[95vw] flex flex-col">
+  <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+    <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-6xl">
       <!-- Encabezado del modal -->
       <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4 flex justify-between items-center">
         <div class="flex items-center">
@@ -77,14 +77,14 @@
         </nav>
       </div>
       
-      <!-- Contenido del modal - Ocupa el espacio restante -->
-      <div class="flex-1 bg-gray-50 overflow-hidden flex flex-col">
+      <!-- Contenido del modal -->
+      <div class="bg-gray-50 px-6 py-4 max-h-[70vh] overflow-y-auto">
         <!-- Pestaña de Detalles -->
-        <div *ngIf="pestanaActiva === 'detalles'" class="animate-fadeIn h-full overflow-y-auto p-6">
+        <div *ngIf="pestanaActiva === 'detalles'" class="animate-fadeIn">
           <div class="bg-white shadow rounded-lg p-6 mb-6">
             <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Información del Asunto</h4>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-6">
               <div>
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-500">Folio Interno</p>
@@ -138,7 +138,7 @@
           <div class="bg-white shadow rounded-lg p-6">
             <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Información de Atención</h4>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-6">
               <div>
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-500">Estado de Atención</p>
@@ -174,99 +174,90 @@
         </div>
         
         <!-- Pestaña de Documentos -->
-        <div *ngIf="pestanaActiva === 'documentos'" class="animate-fadeIn h-full overflow-hidden flex flex-col">
-          <div class="flex-1 grid grid-cols-1 md:grid-cols-4 h-full overflow-hidden">
+        <div *ngIf="pestanaActiva === 'documentos'" class="animate-fadeIn">
+          <div class="grid grid-cols-3 gap-6">
             <!-- Lista de documentos -->
-            <div class="md:col-span-1 bg-white border-r border-gray-200 overflow-y-auto">
-              <div class="p-4">
-                <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Documentos</h4>
-                
-                <div *ngIf="!archivos || archivos.length === 0" class="text-center py-8">
-                  <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                  <p class="text-gray-500">No hay documentos disponibles</p>
-                </div>
-                
-                <ul *ngIf="archivos && archivos.length > 0" class="space-y-2">
-                  <li *ngFor="let archivo of archivos" 
-                      (click)="seleccionarArchivo(archivo)"
-                      [class.bg-green-50]="pdfActual === archivo"
-                      [class.border-green-300]="pdfActual === archivo"
-                      class="p-3 border rounded-md hover:bg-green-50 cursor-pointer transition-colors">
-                    <div class="flex items-center">
-                      <svg class="w-6 h-6 text-red-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                      </svg>
-                      <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">
-                          {{archivo.nombre}}
-                        </p>
-                        <p class="text-xs text-gray-500">
-                          {{archivo.tamano_bytes | number}} bytes • {{archivo.ultima_modificacion | date:'dd/MM/yyyy'}}
-                        </p>
-                      </div>
-                      <span *ngIf="pdfActual === archivo" class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                        Actual
-                      </span>
-                    </div>
-                  </li>
-                </ul>
+            <div class="col-span-1 bg-white shadow rounded-lg p-4 max-h-[60vh] overflow-y-auto">
+              <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Documentos</h4>
+              
+              <div *ngIf="!archivos || archivos.length === 0" class="text-center py-8">
+                <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <p class="text-gray-500">No hay documentos disponibles</p>
               </div>
+              
+              <ul *ngIf="archivos && archivos.length > 0" class="space-y-2">
+                <li *ngFor="let archivo of archivos" 
+                    (click)="seleccionarArchivo(archivo)"
+                    [class.bg-green-50]="pdfActual === archivo"
+                    [class.border-green-300]="pdfActual === archivo"
+                    class="p-3 border rounded-md hover:bg-green-50 cursor-pointer transition-colors">
+                  <div class="flex items-center">
+                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-medium text-gray-900 truncate">
+                        {{archivo.nombre}}
+                      </p>
+                      <p class="text-xs text-gray-500">
+                        {{archivo.tamano_bytes | number}} bytes • {{archivo.ultima_modificacion | date:'dd/MM/yyyy'}}
+                      </p>
+                    </div>
+                    <span *ngIf="pdfActual === archivo" class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                      Actual
+                    </span>
+                  </div>
+                </li>
+              </ul>
             </div>
             
             <!-- Visor de PDF -->
-            <div class="md:col-span-3 flex flex-col h-full overflow-hidden">
-              <div class="p-4 border-b border-gray-200 bg-white">
-                <h4 class="text-lg font-medium text-gray-900">Visor de Documentos</h4>
-                <p *ngIf="pdfActual" class="text-sm text-gray-500 mt-1 truncate">
-                  {{pdfActual.nombre}}
-                </p>
+            <div class="col-span-2 bg-white shadow rounded-lg p-4 flex flex-col">
+              <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Visor de Documentos</h4>
+              
+              <div *ngIf="!pdfActual" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                <div class="text-center p-6">
+                  <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <p class="text-lg font-medium text-gray-500">Seleccione un documento para visualizar</p>
+                  <p class="text-sm text-gray-400 mt-2">Haga clic en un documento de la lista para verlo aquí</p>
+                </div>
               </div>
               
-              <div class="flex-1 overflow-hidden bg-gray-100">
-                <div *ngIf="!pdfActual" class="h-full flex items-center justify-center bg-gray-50">
-                  <div class="text-center p-6">
-                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <p class="text-lg font-medium text-gray-500">Seleccione un documento para visualizar</p>
-                    <p class="text-sm text-gray-400 mt-2">Haga clic en un documento de la lista para verlo aquí</p>
-                  </div>
+              <div *ngIf="pdfActual && pdfCargando" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                <div class="text-center">
+                  <div class="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p class="text-gray-500">Cargando documento...</p>
                 </div>
-                
-                <div *ngIf="pdfActual && pdfCargando" class="h-full flex items-center justify-center bg-gray-50">
-                  <div class="text-center">
-                    <div class="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p class="text-gray-500">Cargando documento...</p>
-                  </div>
+              </div>
+              
+              <div *ngIf="pdfActual && pdfError" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                <div class="text-center p-6">
+                  <svg class="w-16 h-16 mx-auto text-red-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p class="text-lg font-medium text-red-500">Error al cargar el documento</p>
+                  <p class="text-sm text-gray-500 mt-2">No se pudo cargar el documento seleccionado</p>
                 </div>
-                
-                <div *ngIf="pdfActual && pdfError" class="h-full flex items-center justify-center bg-gray-50">
-                  <div class="text-center p-6">
-                    <svg class="w-16 h-16 mx-auto text-red-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <p class="text-lg font-medium text-red-500">Error al cargar el documento</p>
-                    <p class="text-sm text-gray-500 mt-2">No se pudo cargar el documento seleccionado</p>
-                  </div>
-                </div>
-                
-                <div *ngIf="pdfActual && !pdfCargando && !pdfError" class="h-full">
-                  <iframe 
-                    *ngIf="pdfUrl" 
-                    [src]="pdfUrl | safe" 
-                    class="w-full h-full border-0 pdf-viewer-frame"
-                    type="application/pdf">
-                  </iframe>
-                </div>
+              </div>
+              
+              <div *ngIf="pdfActual && !pdfCargando && !pdfError" class="flex-1 bg-gray-50 rounded-lg overflow-hidden">
+                <iframe 
+                  *ngIf="pdfUrl" 
+                  [src]="pdfUrl | safe" 
+                  class="w-full h-full border-0"
+                  type="application/pdf">
+                </iframe>
               </div>
             </div>
           </div>
         </div>
         
         <!-- Pestaña de Revisión -->
-        <div *ngIf="pestanaActiva === 'revision'" class="animate-fadeIn h-full overflow-y-auto p-6">
+        <div *ngIf="pestanaActiva === 'revision'" class="animate-fadeIn">
           <form [formGroup]="formularioRevision" class="space-y-6">
             <div class="bg-white shadow rounded-lg p-6">
               <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Revisión y Dictamen</h4>
@@ -291,7 +282,7 @@
                 <textarea 
                   id="observaciones"
                   formControlName="observaciones"
-                  rows="8"
+                  rows="5"
                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
                   placeholder="Ingrese sus observaciones sobre la revisión del asunto..."
                 ></textarea>

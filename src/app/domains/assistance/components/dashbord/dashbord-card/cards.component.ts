@@ -21,6 +21,7 @@ import { RechazadosTableComponent, AsuntoRechazado } from '../rechazados-table/r
 import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/rechazados-gestion.component';
 import { RevisionModalComponent } from '../revision-modal/revision-modal.component';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/archivos-atencion.service';
+import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
 
 @Component({
   selector: 'app-cards',
@@ -39,7 +40,8 @@ import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/ar
     SafePipe,
     RechazadosTableComponent,
     RechazadosGestionComponent,
-    RevisionModalComponent
+    RevisionModalComponent,
+    AtencionModalComponent
   ],
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
@@ -225,6 +227,10 @@ export class CardsComponent implements OnInit {
   mostrarModalRevision: boolean = false;
   asuntoSeleccionadoRevision: any = null;
   archivosAsunto: ArchivoAdjunto[] = [];
+  
+  // Propiedades para el modal de atención
+  mostrarModalAtencion: boolean = false;
+  asuntoSeleccionadoAtencion: any = null;
 
   ngOnInit(): void {
     // Al iniciar, mostrar todos los asuntos
@@ -520,13 +526,11 @@ export class CardsComponent implements OnInit {
       // Mostrar el modal
       this.mostrarModalRevision = true;
     } else {
-      // Para asuntos en atención, mantenemos el comportamiento anterior
-      const asuntoDetalle = this.asuntos.find(a => a.folio === asunto.folio);
-      if (asuntoDetalle) {
-        this.asuntoSeleccionado = asuntoDetalle;
-        this.mostrarDetalleModal = true;
-        console.log('Mostrando detalle del asunto:', asuntoDetalle);
-      }
+      // Para asuntos en atención, usamos el nuevo modal de atención
+      this.asuntoSeleccionadoAtencion = asunto;
+      
+      // Mostrar el modal
+      this.mostrarModalAtencion = true;
     }
   }
 
@@ -794,5 +798,16 @@ export class CardsComponent implements OnInit {
   // Método auxiliar para calcular el mínimo entre dos números (usado en la paginación)
   minimo(a: number, b: number): number {
     return Math.min(a, b);
+  }
+
+  // Método para cerrar el modal de atención
+  cerrarModalAtencion(): void {
+    this.mostrarModalAtencion = false;
+    this.asuntoSeleccionadoAtencion = null;
+  }
+
+  verAsuntoEnAtencion(asunto: any): void {
+    this.asuntoSeleccionado = asunto;
+    this.mostrarModalAtencion = true;
   }
 }

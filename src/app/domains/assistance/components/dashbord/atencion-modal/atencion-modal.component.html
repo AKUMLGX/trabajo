@@ -1,0 +1,188 @@
+<!-- Modal principal mejorado -->
+<div *ngIf="mostrarModal" class="fixed inset-0 z-50 overflow-y-auto">
+  <!-- Fondo oscurecido -->
+  <div class="fixed inset-0 bg-gray-900 bg-opacity-75"></div>
+  
+  <!-- Modal -->
+  <div class="flex min-h-full items-center justify-center p-4">
+    <div class="relative bg-white rounded-lg shadow-xl w-full max-w-6xl">
+      <!-- Encabezado -->
+      <div class="bg-gradient-to-r from-[#691C32] to-[#8a2440] px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white p-2 rounded-full">
+            <svg class="h-6 w-6 text-[#691C32]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-white">Detalle del Asunto</h3>
+            <p class="text-sm text-gray-200">{{asunto?.folio_interno || 'Sin folio'}}</p>
+          </div>
+        </div>
+        <button type="button" (click)="cerrarModal()" class="text-white hover:bg-white/20 p-2 rounded-full">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Pestañas -->
+      <div class="border-b border-gray-200">
+        <nav class="flex">
+          <button 
+            (click)="pestanaActiva = 'detalles'" 
+            [class.text-[#691C32]]="pestanaActiva === 'detalles'"
+            [class.border-[#691C32]]="pestanaActiva === 'detalles'"
+            [class.border-b-2]="pestanaActiva === 'detalles'"
+            class="w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm">
+            <span class="flex items-center justify-center">
+              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              Detalles del Asunto
+            </span>
+          </button>
+          <button 
+            (click)="pestanaActiva = 'documentos'" 
+            [class.text-[#691C32]]="pestanaActiva === 'documentos'"
+            [class.border-[#691C32]]="pestanaActiva === 'documentos'"
+            [class.border-b-2]="pestanaActiva === 'documentos'"
+            class="w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm">
+            <span class="flex items-center justify-center">
+              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+              </svg>
+              Documentos
+              <span class="ml-2 bg-[#691C32] text-white text-xs font-medium px-2.5 py-0.5 rounded-full">
+                {{archivos?.length || 0}}
+              </span>
+            </span>
+          </button>
+        </nav>
+      </div>
+      
+      <!-- Contenido -->
+      <div class="max-h-[70vh] overflow-y-auto">
+        <!-- Pestaña de Detalles -->
+        <div *ngIf="pestanaActiva === 'detalles'" class="p-6">
+          <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Información del Asunto</h4>
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Folio Interno</p>
+                  <p class="text-base font-semibold">{{asunto?.folio_interno || 'N/A'}}</p>
+                </div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Persona Relacionada</p>
+                  <p class="text-base">{{asunto?.persona_relacionada || 'N/A'}}</p>
+                </div>
+              </div>
+              <div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Fecha de Recepción</p>
+                  <p class="text-base">{{formatearFecha(asunto?.fecha_recepcion)}}</p>
+                </div>
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Autoridad Remitente</p>
+                  <p class="text-base">{{asunto?.autoridad_remitente || 'N/A'}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pestaña de Documentos -->
+        <div *ngIf="pestanaActiva === 'documentos'" class="grid grid-cols-3 gap-0">
+          <!-- Lista de documentos -->
+          <div class="col-span-1 bg-gray-50 p-4 border-r border-gray-200 max-h-[70vh] overflow-y-auto">
+            <h4 class="text-lg font-medium text-gray-900 mb-4">Documentos</h4>
+            
+            <!-- Cargando -->
+            <div *ngIf="cargandoArchivos" class="flex justify-center py-8">
+              <div class="w-10 h-10 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            
+            <!-- Sin documentos -->
+            <div *ngIf="!cargandoArchivos && (!archivos || archivos.length === 0)" class="text-center py-8">
+              <p class="text-gray-500">No hay documentos disponibles</p>
+            </div>
+            
+            <!-- Lista -->
+            <div *ngIf="!cargandoArchivos && archivos && archivos.length > 0" class="space-y-2">
+              <div *ngFor="let doc of archivos" 
+                   (click)="seleccionarArchivo(doc)"
+                   class="p-3 border rounded-md hover:bg-gray-50 cursor-pointer"
+                   [class.border-[#691C32]]="pdfActual === doc">
+                <div class="flex items-center">
+                  <svg class="w-6 h-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">{{doc.nombre}}</p>
+                    <p class="text-xs text-gray-500">{{doc.tamano_bytes}} bytes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Visor de PDF -->
+          <div class="col-span-2 bg-white p-4 flex flex-col">
+            <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Visor de Documentos</h4>
+            
+            <!-- Sin documento seleccionado -->
+            <div *ngIf="!pdfActual" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+              <div class="text-center p-6">
+                <p class="text-lg font-medium text-gray-500">Seleccione un documento para visualizar</p>
+              </div>
+            </div>
+            
+            <!-- Cargando PDF -->
+            <div *ngIf="pdfActual && pdfCargando" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+              <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            
+            <!-- Error al cargar PDF -->
+            <div *ngIf="pdfActual && pdfError" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+              <div class="text-center">
+                <p class="text-red-500 mb-2">Error al cargar el documento</p>
+                <p class="text-sm text-gray-500">No se pudo cargar el documento seleccionado</p>
+              </div>
+            </div>
+            
+            <!-- PDF cargado -->
+            <div *ngIf="pdfActual && !pdfCargando && !pdfError" class="flex-1 bg-gray-50 rounded-lg overflow-hidden">
+              <iframe src="/assets/pdfs/documento_default.pdf" style="width: 100%; height: 500px; border: none;"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pie -->
+      <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
+        <button *ngIf="pdfActual" 
+                (click)="descargarPdf()" 
+                class="bg-[#691C32] text-white px-4 py-2 rounded hover:bg-[#4a1423]">
+          Descargar PDF
+        </button>
+        <button (click)="cerrarModal()" 
+                class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Estilos adicionales -->
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>
