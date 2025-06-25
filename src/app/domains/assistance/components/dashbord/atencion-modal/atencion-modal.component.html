@@ -69,23 +69,71 @@
             <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Información del Asunto</h4>
             <div class="grid grid-cols-2 gap-6">
               <div>
+                <!-- Columna izquierda -->
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-500">Folio Interno</p>
                   <p class="text-base font-semibold">{{asunto?.folio_interno || 'N/A'}}</p>
                 </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Folio Scanner</p>
+                  <p class="text-base">{{asunto?.folio_scanner || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Carpeta de Investigación</p>
+                  <p class="text-base">{{asunto?.carpeta_investigacion || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Oficio</p>
+                  <p class="text-base">{{asunto?.oficio || 'N/A'}}</p>
+                </div>
+                
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-500">Persona Relacionada</p>
                   <p class="text-base">{{asunto?.persona_relacionada || 'N/A'}}</p>
                 </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Turno Jefatura</p>
+                  <p class="text-base">{{asunto?.turno_jefatura || 'N/A'}}</p>
+                </div>
               </div>
+              
               <div>
+                <!-- Columna derecha -->
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-500">Fecha de Recepción</p>
                   <p class="text-base">{{formatearFecha(asunto?.fecha_recepcion)}}</p>
                 </div>
+                
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-500">Autoridad Remitente</p>
                   <p class="text-base">{{asunto?.autoridad_remitente || 'N/A'}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Administración</p>
+                  <p class="text-base">{{getAdministracionTexto()}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Tipo de Atención</p>
+                  <p class="text-base">{{getTipoAtencion()}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Tipo de Documento</p>
+                  <p class="text-base">{{getTipoDocumento()}}</p>
+                </div>
+                
+                <div class="mb-4">
+                  <p class="text-sm font-medium text-gray-500">Plazo de Atención</p>
+                  <p class="text-base">
+                    <span *ngIf="isPlazoUrgente()" class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Urgente</span>
+                    <span *ngIf="!isPlazoUrgente()">{{getPlazoAtencionTexto()}}</span>
+                  </p>
                 </div>
               </div>
             </div>

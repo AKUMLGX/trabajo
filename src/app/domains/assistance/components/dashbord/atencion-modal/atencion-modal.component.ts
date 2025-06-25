@@ -27,6 +27,11 @@ interface AsuntoPorAtencion {
   observaciones?: string;
   fecha_asignacion?: string;
   dictaminador?: string;
+  folio_scanner?: number;
+  id_administracion_fk?: number;
+  id_atencion_fk?: number;
+  id_documento_fk?: number;
+  es_historico?: boolean;
 }
 
 @Component({
@@ -236,5 +241,61 @@ export class AtencionModalComponent implements OnInit {
     }
     
     return nombre; // Si no coincide con el patrón, devuelve el nombre original
+  }
+  
+  // Método para obtener el texto del plazo de atención
+  getPlazoAtencionTexto(): string {
+    if (!this.asunto) return 'Sin plazo definido';
+    
+    const plazo = this.asunto.plazo_atencion;
+    
+    if (plazo === 0) {
+      return 'Urgente';
+    } else if (plazo && plazo > 0) {
+      return `${plazo} días`;
+    } else {
+      return 'Sin plazo definido';
+    }
+  }
+  
+  // Método para verificar si el plazo es urgente
+  isPlazoUrgente(): boolean {
+    return this.asunto?.plazo_atencion === 0;
+  }
+  
+  // Método para obtener el tipo de documento según el ID
+  getTipoDocumento(): string {
+    if (!this.asunto || this.asunto.id_documento_fk === undefined) return 'No especificado';
+    
+    switch (this.asunto.id_documento_fk) {
+      case 1: return 'RESPUESTA';
+      case 2: return 'REQUERIMIENTO';
+      case 3: return 'REQUERIMIENTO Y RESPUESTA';
+      case 4: return 'SOLICITUD INTERNA';
+      case 5: return 'RESPUESTA INTERNA';
+      case 6: return 'RESPUESTA A FGR';
+      case 7: return 'ALCANCE';
+      default: return `Tipo ${this.asunto.id_documento_fk}`;
+    }
+  }
+  
+  // Método para obtener el tipo de atención según el ID
+  getTipoAtencion(): string {
+    if (!this.asunto || this.asunto.id_atencion_fk === undefined) return 'No especificado';
+    
+    switch (this.asunto.id_atencion_fk) {
+      case 1: return 'TOTAL';
+      case 2: return 'PARCIAL';
+      case 3: return 'EN TRÁMITE';
+      case 5: return 'NO APLICA';
+      default: return `Tipo ${this.asunto.id_atencion_fk}`;
+    }
+  }
+  
+  // Método para obtener el texto de la administración
+  getAdministracionTexto(): string {
+    if (!this.asunto || this.asunto.id_administracion_fk === undefined) return 'No especificada';
+    
+    return `Administración ${this.asunto.id_administracion_fk}`;
   }
 }
