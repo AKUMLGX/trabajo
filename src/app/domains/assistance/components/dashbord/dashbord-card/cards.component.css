@@ -43,6 +43,7 @@
 
 .animate-marquee {
   animation: marquee 15s linear infinite;
+  display: inline-block;
 }
 
 /* Pausa la animación cuando el usuario pasa el mouse por encima */
@@ -129,4 +130,83 @@
 .urgent-text {
   display: inline-block;
   padding-right: 2rem;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Estilos para las celdas truncadas */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* Efecto hover para indicar que hay más contenido */
+.truncate:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+  cursor: help;
+}
+
+/* Asegurarse de que los tooltips tengan un estilo adecuado */
+[title] {
+  position: relative;
+}
+
+/* Ajustar anchos de columnas específicas para optimizar espacio */
+.col-folio {
+  width: 150px;
+  min-width: 120px;
+}
+
+.col-autoridad {
+  width: 250px;
+  min-width: 200px;
+}
+
+.col-fecha {
+  width: 120px;
+  min-width: 100px;
+}
+
+.col-persona {
+  width: 250px;
+  min-width: 200px;
+}
+
+.col-acciones {
+  width: 100px;
+  min-width: 80px;
+}
+
+/* Estilos para los botones de pestañas */
+.tab-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.tab-button.active {
+  background-color: #691C32;
+  color: white;
+}
+
+.tab-button.active:hover {
+  background-color: #4a1423;
+  color: white;
+}
+
+.tab-button:not(.active):hover {
+  background-color: #f3f4f6;
+}
+
+/* Asegurarse de que los SVG dentro de los botones hereden el color del texto */
+.tab-button svg {
+  fill: none;
+  stroke: currentColor;
 }
