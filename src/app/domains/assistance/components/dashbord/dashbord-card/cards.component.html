@@ -1,4 +1,4 @@
-<div class="h-full text-3xl border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto font-['Noto_Sans']">
+<div class="h-full  border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto ">
   <!-- Título principal con estilo mejorado -->
   <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] text-white py-4 px-6 mb-5 rounded-t-lg shadow-md">
     <h1 class="text-2xl font-bold text-center">Asuntos asignados a la administración {{this.administracion}} </h1>
@@ -114,8 +114,8 @@
       <!-- Pestañas para cambiar entre vistas -->
       <div class="flex justify-center mb-4">
         <div class="inline-flex rounded-md shadow-sm" role="group">
-          <button 
-            (click)="cambiarVista('atencion')" 
+          <button
+            (click)="cambiarVista('atencion')"
             [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
             class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
             <span class="flex items-center">
@@ -125,8 +125,8 @@
               En Atención
             </span>
           </button>
-          <button 
-            (click)="cambiarVista('aprobacion')" 
+          <button
+            (click)="cambiarVista('aprobacion')"
             [ngClass]="vistaActual === 'aprobacion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
             class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
             <span class="flex items-center">
@@ -223,16 +223,16 @@
               <p class="text-sm text-gray-500 mt-2">Cargando asuntos...</p>
             </td>
           </tr>
-          
+
           <!-- Filas filtradas -->
-          @for (asunto of tablePorDictaminar; track asunto.folio_interno) {
+          @for (asunto of pages [pageSelected-1] ;  track asunto.folio_interno) {
             <tr [ngClass]="{'hover:bg-blue-50': vistaActual === 'atencion', 'hover:bg-green-50': vistaActual === 'aprobacion'}"
                 [class]="asuntosFiltrados.indexOf(asunto) % 2 === 0 ? '' : vistaActual === 'atencion' ? 'bg-blue-50/30' : 'bg-green-50/30'"
                 class="inter transition-colors duration-150 ease-in-out"
                 (click)="seleccionarFila(asunto.folio_interno)">
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <div class="flex items-center">
-                  <span [ngClass]="vistaActual === 'atencion' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300'" 
+                  <span [ngClass]="vistaActual === 'atencion' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300'"
                         class="inline-block w-2 h-2 rounded-full mr-2 border"></span>
                   {{asunto.folio_interno}}
                 </div>
@@ -240,7 +240,7 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.autoridad_remitente}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.fecha_recepcion}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.persona_relacionada}}</td>
-              
+
               <!-- Columna específica para "Por Aprobar" -->
               <td *ngIf="vistaActual === 'aprobacion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <!-- Aquí iría la fecha de atención, por ahora usamos un placeholder -->
@@ -248,7 +248,7 @@
                   {{asunto.fecha_recepcion}}
                 </span>
               </td>
-              
+
               <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
                 <div class="flex justify-center space-x-2">
                   <!-- Botón para ver detalle (común) -->
@@ -291,6 +291,39 @@
         </tbody>
       </table>
     </div>
+     <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+        <div>
+          @if (pages.length>0) {
+          <ul>
+            <li *ngFor="let  document of tablePorDictaminar
+            | paginate
+                                : {
+                                    itemsPerPage: itemsPerPage,
+                                    currentPage: pageSelected
+                                  } "></li>
+          </ul>
+          <div class="has-text-centered">
+            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+              [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+          </div>
+          }
+        </div>
+      </div>
+       <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
+        <p class="text-sm leading-5 text-wine">
+          Mostrando
+          <span class="font-medium">{{
+            (pageSelected - 1) * itemsPerPage + 1
+            }}</span>
+          a
+          <span class="font-medium">{{
+            (pageSelected - 1) * itemsPerPage + itemsPerPage < tablePorDictaminar.length ? (pageSelected - 1) * itemsPerPage +
+              itemsPerPage : tablePorDictaminar.length }}</span>
+              de
+              <span class="font-medium">{{ tablePorDictaminar.length }}</span>
+              resultados
+        </p>
+      </div>
 
     <!-- Paginación mejorada -->
     <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
@@ -485,7 +518,7 @@
     (confirmarReasignacionEvent)="confirmarReasignacion()"
     (cancelarConfirmacionEvent)="cancelarConfirmacionReasignacion()">
   </app-rechazados-gestion>
-  
+
   <!-- Modal de Revisión de Asuntos -->
   <app-revision-modal
     [mostrarModal]="mostrarModalRevision"
