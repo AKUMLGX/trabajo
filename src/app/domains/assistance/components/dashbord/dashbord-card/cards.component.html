@@ -1,4 +1,4 @@
-<div class="h-full text-3xl border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto font-['Noto_Sans']">
+<div class="h-full  border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto ">
   <!-- Título principal con estilo mejorado -->
   <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] text-white py-4 px-6 mb-5 rounded-t-lg shadow-md">
     <h1 class="text-2xl font-bold text-center">Asuntos asignados a la administración {{this.administracion}} </h1>
@@ -114,10 +114,10 @@
       <!-- Pestañas para cambiar entre vistas -->
       <div class="flex justify-center mb-4">
         <div class="inline-flex rounded-md shadow-sm" role="group">
-          <button 
-            (click)="cambiarVista('atencion')" 
-            [ngClass]="{'tab-button': true, 'active': vistaActual === 'atencion'}"
-            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg focus:z-10 focus:ring-2 focus:ring-[#691C32]">
+          <button
+            (click)="cambiarVista('atencion')"
+            [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
+            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
             <span class="flex items-center">
               <svg class="w-5 h-5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -125,10 +125,10 @@
               En Atención
             </span>
           </button>
-          <button 
-            (click)="cambiarVista('aprobacion')" 
-            [ngClass]="{'tab-button': true, 'active': vistaActual === 'aprobacion'}"
-            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-r-lg focus:z-10 focus:ring-2 focus:ring-[#691C32]">
+          <button
+            (click)="cambiarVista('aprobacion')"
+            [ngClass]="vistaActual === 'aprobacion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
+            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
             <span class="flex items-center">
               <svg class="w-5 h-5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -223,16 +223,16 @@
               <p class="text-sm text-gray-500 mt-2">Cargando asuntos...</p>
             </td>
           </tr>
-          
+
           <!-- Filas filtradas -->
-          @for (asunto of asuntosPaginados; track asunto.folio_interno) {
+          @for (asunto of pages [pageSelected-1] ;  track asunto.folio_interno) {
             <tr [ngClass]="{'hover:bg-blue-50': vistaActual === 'atencion', 'hover:bg-green-50': vistaActual === 'aprobacion'}"
                 [class]="asuntosPaginados.indexOf(asunto) % 2 === 0 ? '' : vistaActual === 'atencion' ? 'bg-blue-50/30' : 'bg-green-50/30'"
                 class="inter transition-colors duration-150 ease-in-out"
                 (click)="seleccionarFila(asunto.folio_interno)">
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <div class="flex items-center">
-                  <span [ngClass]="vistaActual === 'atencion' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300'" 
+                  <span [ngClass]="vistaActual === 'atencion' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300'"
                         class="inline-block w-2 h-2 rounded-full mr-2 border"></span>
                   <div class="truncate max-w-[150px]" [title]="asunto.folio_interno">
                     {{asunto.folio_interno}}
@@ -254,7 +254,10 @@
                   {{asunto.persona_relacionada}}
                 </div>
               </td>
-              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.autoridad_remitente}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.fecha_recepcion}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{asunto.persona_relacionada}}</td>
+
               <!-- Columna específica para "Por Aprobar" -->
               <td *ngIf="vistaActual === 'aprobacion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <!-- Aquí iría la fecha de atención, por ahora usamos un placeholder -->
@@ -262,7 +265,7 @@
                   {{asunto.fecha_recepcion}}
                 </span>
               </td>
-              
+
               <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
                 <div class="flex justify-center space-x-2">
                   <!-- Botón para ver detalle (común) -->
@@ -305,116 +308,39 @@
         </tbody>
       </table>
     </div>
-
-    <!-- Paginación mejorada -->
-    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-      <div class="flex items-center">
-        <label class="mr-2 text-sm text-gray-600">Filas por página:</label>
-        <select 
-          (change)="cambiarFilasPorPagina($any($event.target).value)" 
-          class="border border-gray-300 rounded-md text-sm py-1 px-2 focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
-        >
-          <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion" [selected]="opcion === filasPorPagina">
-            {{opcion}}
-          </option>
-        </select>
+     <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+        <div>
+          @if (pages.length>0) {
+          <ul>
+            <li *ngFor="let  document of tablePorDictaminar
+            | paginate
+                                : {
+                                    itemsPerPage: itemsPerPage,
+                                    currentPage: pageSelected
+                                  } "></li>
+          </ul>
+          <div class="has-text-centered">
+            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+              [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+          </div>
+          }
+        </div>
       </div>
-      
-      <div class="flex-1 flex justify-center">
-        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-          <!-- Botón Anterior -->
-          <button 
-            (click)="paginaAnteriorTabla()" 
-            [disabled]="paginaActualTabla === 1"
-            [ngClass]="paginaActualTabla === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'"
-            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
-          >
-            <span class="sr-only">Anterior</span>
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-          </button>
-          
-          <!-- Números de página -->
-          <ng-container *ngIf="totalPaginas <= 7">
-            <button 
-              *ngFor="let pagina of [].constructor(totalPaginas); let i = index" 
-              (click)="cambiarPaginaTabla(i + 1)" 
-              [ngClass]="paginaActualTabla === i + 1 ? 'bg-[#691C32] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'"
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
-            >
-              {{ i + 1 }}
-            </button>
-          </ng-container>
-          
-          <ng-container *ngIf="totalPaginas > 7">
-            <!-- Primera página -->
-            <button 
-              *ngIf="paginaActualTabla > 3" 
-              (click)="cambiarPaginaTabla(1)" 
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
-            >
-              1
-            </button>
-            
-            <!-- Elipsis inicial -->
-            <span 
-              *ngIf="paginaActualTabla > 4" 
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
-            >
-              ...
-            </span>
-            
-            <!-- Páginas alrededor de la actual -->
-            <button 
-              *ngFor="let pagina of [].constructor(5); let i = index" 
-              [style.display]="paginaActualTabla - 2 + i <= 0 || paginaActualTabla - 2 + i > totalPaginas ? 'none' : ''"
-              (click)="cambiarPaginaTabla(paginaActualTabla - 2 + i)" 
-              [ngClass]="paginaActualTabla === paginaActualTabla - 2 + i ? 'bg-[#691C32] text-white' : 'bg-white text-gray-500 hover:bg-gray-50'"
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
-            >
-              {{ paginaActualTabla - 2 + i }}
-            </button>
-            
-            <!-- Elipsis final -->
-            <span 
-              *ngIf="paginaActualTabla < totalPaginas - 3" 
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
-            >
-              ...
-            </span>
-            
-            <!-- Última página -->
-            <button 
-              *ngIf="paginaActualTabla < totalPaginas - 2" 
-              (click)="cambiarPaginaTabla(totalPaginas)" 
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
-            >
-              {{ totalPaginas }}
-            </button>
-          </ng-container>
-          
-          <!-- Botón Siguiente -->
-          <button 
-            (click)="paginaSiguienteTabla()" 
-            [disabled]="paginaActualTabla === totalPaginas"
-            [ngClass]="paginaActualTabla === totalPaginas ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'"
-            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]"
-          >
-            <span class="sr-only">Siguiente</span>
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-            </svg>
-          </button>
-        </nav>
+       <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
+        <p class="text-sm leading-5 text-wine">
+          Mostrando
+          <span class="font-medium">{{
+            (pageSelected - 1) * itemsPerPage + 1
+            }}</span>
+          a
+          <span class="font-medium">{{
+            (pageSelected - 1) * itemsPerPage + itemsPerPage < tablePorDictaminar.length ? (pageSelected - 1) * itemsPerPage +
+              itemsPerPage : tablePorDictaminar.length }}</span>
+              de
+              <span class="font-medium">{{ tablePorDictaminar.length }}</span>
+              resultados
+        </p>
       </div>
-      
-      <div class="text-sm text-gray-600">
-        Mostrando <span class="font-medium">{{ (paginaActualTabla - 1) * filasPorPagina + 1 }}</span> 
-        a <span class="font-medium">{{ minimo(paginaActualTabla * filasPorPagina, tablePorDictaminar.length) }}</span> 
-        de <span class="font-medium">{{ tablePorDictaminar.length }}</span> resultados
-      </div>
-    </div>
   </div>
 
   <!-- Modal de detalles del asunto -->
@@ -600,7 +526,7 @@
     (confirmarReasignacionEvent)="confirmarReasignacion()"
     (cancelarConfirmacionEvent)="cancelarConfirmacionReasignacion()">
   </app-rechazados-gestion>
-  
+
   <!-- Modal de Revisión de Asuntos -->
   <app-revision-modal
     [mostrarModal]="mostrarModalRevision"
@@ -610,7 +536,7 @@
     (aprobarAsuntoEvent)="aprobarAsuntoRevision($event)"
     (rechazarAsuntoEvent)="rechazarAsuntoRevision($event)">
   </app-revision-modal>
-  
+
   <!-- Modal de Atención de Asuntos -->
   <app-atencion-modal
     [mostrarModal]="mostrarModalAtencion"
