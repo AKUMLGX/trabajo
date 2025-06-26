@@ -80,14 +80,37 @@ export class RevisionModalComponent implements OnInit {
     this.pdfError = false;
     
     if (this.asunto && this.pdfActual) {
+      // Extraer el nombre base del archivo sin timestamp si existe
+      let nombreArchivo = archivo.nombre;
+      const timestampMatch = nombreArchivo.match(/(.+\.pdf)-\d+$/);
+      if (timestampMatch && timestampMatch[1]) {
+        nombreArchivo = timestampMatch[1];
+        console.log(`Nombre de archivo original: ${archivo.nombre}, nombre base: ${nombreArchivo}`);
+      }
+
       this.archivosService.obtenerPdf(
         this.asunto.folio_interno, 
-        archivo.nombre
+        nombreArchivo,
+        'atencion'  // Pasar el parámetro carpeta='atencion'
       ).subscribe({
         next: (data: string) => {
-          // Crear URL para el PDF en base64
-          this.pdfUrl = `data:application/pdf;base64,${data}`;
-          this.pdfCargando = false;
+          // Verificar que recibimos datos válidos
+          if (!data || data.trim() === '') {
+            console.error('El servidor devolvió un documento vacío');
+            this.pdfError = true;
+            this.pdfCargando = false;
+            return;
+          }
+          
+          try {
+            // Crear URL para el PDF en base64
+            this.pdfUrl = `data:application/pdf;base64,${data}`;
+            this.pdfCargando = false;
+          } catch (error) {
+            console.error('Error al procesar el PDF:', error);
+            this.pdfError = true;
+            this.pdfCargando = false;
+          }
         },
         error: (err) => {
           console.error('Error al cargar el PDF:', err);

@@ -229,10 +229,21 @@ export class CardsComponent implements OnInit {
   cargandoAsuntos: boolean = false;
   cargandoAprobaciones: boolean = false;
 
+  // Propiedades para la paginación
+  paginaActualTabla: number = 1;
+  filasPorPagina: number = 5;
+  opcionesPaginacion: number[] = [5, 10, 15, 20];
+  totalPaginas: number = 1;
+  asuntosPaginados: tableAsuntosPorDictaminar[] = [];
+
   // Propiedades para el modal de revisión
   mostrarModalRevision: boolean = false;
   asuntoSeleccionadoRevision: any = null;
   archivosAsunto: ArchivoAdjunto[] = [];
+  
+  // Propiedades para el modal de atención
+  mostrarModalAtencion: boolean = false;
+  asuntoSeleccionadoAtencion: any = null;
 
   ngOnInit(): void {
     // Al iniciar, mostrar todos los asuntos
@@ -250,6 +261,9 @@ export class CardsComponent implements OnInit {
     this.cargarAsuntosPorAprobar();
 
     this.usuariosPorAdministracion()
+    
+    // Inicializar la paginación
+    this.aplicarPaginacion();
   }
 
   mostarCardPorAsignar() {
@@ -296,6 +310,7 @@ export class CardsComponent implements OnInit {
 
         if (this.vistaActual === 'atencion') {
           this.tablePorDictaminar = this.asuntosEnAtencion;
+          this.aplicarPaginacion();
         }
         // Actualizar conteo de asuntos urgentes
         const fitrarPlazo = res.filter((item: any) => item.plazo_atencion !== null);
@@ -322,6 +337,7 @@ export class CardsComponent implements OnInit {
         this.asuntosPorAprobar = res;
         if (this.vistaActual === 'aprobacion') {
           this.tablePorDictaminar = this.asuntosPorAprobar;
+          this.aplicarPaginacion();
         }
         this.cargandoAprobaciones = false;
       },
@@ -335,6 +351,48 @@ export class CardsComponent implements OnInit {
   cambiarVista(vista: 'atencion' | 'aprobacion') {
     this.vistaActual = vista;
     this.tablePorDictaminar = vista === 'atencion' ? this.asuntosEnAtencion : this.asuntosPorAprobar;
+    this.paginaActualTabla = 1; // Resetear a la primera página al cambiar de vista
+    this.aplicarPaginacion();
+  }
+
+  // Método para aplicar la paginación a la tabla actual
+  aplicarPaginacion(): void {
+    const inicio = (this.paginaActualTabla - 1) * this.filasPorPagina;
+    const fin = inicio + this.filasPorPagina;
+    
+    this.asuntosPaginados = this.tablePorDictaminar.slice(inicio, fin);
+    this.totalPaginas = Math.ceil(this.tablePorDictaminar.length / this.filasPorPagina);
+  }
+
+  // Método para cambiar la página actual
+  cambiarPaginaTabla(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaActualTabla = pagina;
+      this.aplicarPaginacion();
+    }
+  }
+
+  // Método para cambiar el número de filas por página
+  cambiarFilasPorPagina(filas: any): void {
+    this.filasPorPagina = parseInt(filas, 10);
+    this.paginaActualTabla = 1; // Resetear a la primera página
+    this.aplicarPaginacion();
+  }
+
+  // Método para ir a la página anterior
+  paginaAnteriorTabla(): void {
+    if (this.paginaActualTabla > 1) {
+      this.paginaActualTabla--;
+      this.aplicarPaginacion();
+    }
+  }
+
+  // Método para ir a la página siguiente
+  paginaSiguienteTabla(): void {
+    if (this.paginaActualTabla < this.totalPaginas) {
+      this.paginaActualTabla++;
+      this.aplicarPaginacion();
+    }
   }
 
   // Métodos para manejar acciones de aprobación
@@ -498,13 +556,11 @@ export class CardsComponent implements OnInit {
       // Mostrar el modal
       this.mostrarModalRevision = true;
     } else {
-      // Para asuntos en atención, mantenemos el comportamiento anterior
-      const asuntoDetalle = this.asuntos.find(a => a.folio === asunto.folio);
-      if (asuntoDetalle) {
-        this.asuntoSeleccionado = asuntoDetalle;
-        this.mostrarDetalleModal = true;
-        console.log('Mostrando detalle del asunto:', asuntoDetalle);
-      }
+      // Para asuntos en atención, usamos el nuevo modal de atención
+      this.asuntoSeleccionadoAtencion = asunto;
+      
+      // Mostrar el modal
+      this.mostrarModalAtencion = true;
     }
   }
 
@@ -767,5 +823,21 @@ export class CardsComponent implements OnInit {
     this.pdfTitulo = '';
     this.pdfUrl = '';
     this.pdfCargando = true;
+  }
+
+  // Método auxiliar para calcular el mínimo entre dos números (usado en la paginación)
+  minimo(a: number, b: number): number {
+    return Math.min(a, b);
+  }
+
+  // Método para cerrar el modal de atención
+  cerrarModalAtencion(): void {
+    this.mostrarModalAtencion = false;
+    this.asuntoSeleccionadoAtencion = null;
+  }
+
+  verAsuntoEnAtencion(asunto: any): void {
+    this.asuntoSeleccionado = asunto;
+    this.mostrarModalAtencion = true;
   }
 }
