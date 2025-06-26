@@ -22,6 +22,8 @@ import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/
 import { RevisionModalComponent } from '../revision-modal/revision-modal.component';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/archivos-atencion.service';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
+
 
 @Component({
   selector: 'app-cards',
@@ -42,6 +44,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     RechazadosGestionComponent,
     RevisionModalComponent,
     NgxPaginationModule,
+    AtencionModalComponent,
   ],
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
@@ -240,7 +243,7 @@ export class CardsComponent implements OnInit {
   mostrarModalRevision: boolean = false;
   asuntoSeleccionadoRevision: any = null;
   archivosAsunto: ArchivoAdjunto[] = [];
-  
+
   // Propiedades para el modal de atención
   mostrarModalAtencion: boolean = false;
   asuntoSeleccionadoAtencion: any = null;
@@ -261,7 +264,7 @@ export class CardsComponent implements OnInit {
     this.cargarAsuntosPorAprobar();
 
     this.usuariosPorAdministracion()
-    
+
     // Inicializar la paginación
     this.aplicarPaginacion();
   }
@@ -359,7 +362,7 @@ export class CardsComponent implements OnInit {
   aplicarPaginacion(): void {
     const inicio = (this.paginaActualTabla - 1) * this.filasPorPagina;
     const fin = inicio + this.filasPorPagina;
-    
+
     this.asuntosPaginados = this.tablePorDictaminar.slice(inicio, fin);
     this.totalPaginas = Math.ceil(this.tablePorDictaminar.length / this.filasPorPagina);
   }
@@ -558,7 +561,7 @@ export class CardsComponent implements OnInit {
     } else {
       // Para asuntos en atención, usamos el nuevo modal de atención
       this.asuntoSeleccionadoAtencion = asunto;
-      
+
       // Mostrar el modal
       this.mostrarModalAtencion = true;
     }
