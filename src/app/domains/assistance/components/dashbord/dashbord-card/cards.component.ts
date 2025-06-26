@@ -21,7 +21,7 @@ import { RechazadosTableComponent, AsuntoRechazado } from '../rechazados-table/r
 import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/rechazados-gestion.component';
 import { RevisionModalComponent } from '../revision-modal/revision-modal.component';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/archivos-atencion.service';
-import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-cards',
@@ -41,7 +41,7 @@ import { AtencionModalComponent } from '../atencion-modal/atencion-modal.compone
     RechazadosTableComponent,
     RechazadosGestionComponent,
     RevisionModalComponent,
-    AtencionModalComponent
+    NgxPaginationModule,
   ],
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
@@ -103,6 +103,7 @@ export class CardsComponent implements OnInit {
 
   tablePorDictaminar: tableAsuntosPorDictaminar[] = []
 
+
   porAsignarData: porAsignarRequest = {
     documento: this.documento,
     asignados: this.asignados
@@ -122,8 +123,20 @@ export class CardsComponent implements OnInit {
 
   asuntosUrgentes: number = 0;
 
+  //#region paginador
+  pages: tableAsuntosPorDictaminar[][] = [];
+
+  itemsPerPage: number = 5;
+  pageSelected: number = 1;
+  labelsPaginator = {
+    previousLabel: 'Anterior',
+    nextLabel: 'Siguiente',
+  };
+  //#endregion
+
+
   constructor(
-    private router: Router, 
+    private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
     private archivosService: ArchivosAtencionService
   ) { }
@@ -242,11 +255,11 @@ export class CardsComponent implements OnInit {
 
     this.mostrarCards()
     this.mostarCardPorAsignar()
-    
+
     // Cargar ambos tipos de asuntos
     this.cargarAsuntosEnAtencion();
     this.cargarAsuntosPorAprobar();
-    
+
     this.usuariosPorAdministracion()
     
     // Inicializar la paginación
@@ -256,7 +269,7 @@ export class CardsComponent implements OnInit {
   mostarCardPorAsignar() {
     this.cards.cardInfoPorAsignar(this.porAsignarData).subscribe(res => {
       this.porAsignarDataResponse = res;
-    })
+    });
   }
 
   mostrarCards() {
@@ -274,10 +287,27 @@ export class CardsComponent implements OnInit {
       asignados: this.asignadosTable,
       requiere_aprobacion: false
     };
-    
+
     this.cards.asutosPorDictaminar(params).subscribe({
       next: (res) => {
         this.asuntosEnAtencion = res;
+        console.log("TT", res);
+
+        let indexPage = 0;
+        let page: tableAsuntosPorDictaminar[] = [];
+        this.pages = []
+        this.pageSelected = 1;
+        this.asuntosEnAtencion.forEach((doc) => {
+          page.push(doc);
+          indexPage += 1;
+          if (indexPage === this.itemsPerPage) {
+            this.pages.push(page);
+            indexPage = 0;
+            page = []
+          }
+        })
+        if (page.length !== 0) this.pages.push(page)
+
         if (this.vistaActual === 'atencion') {
           this.tablePorDictaminar = this.asuntosEnAtencion;
           this.aplicarPaginacion();
@@ -293,7 +323,7 @@ export class CardsComponent implements OnInit {
       }
     });
   }
-  
+
   cargarAsuntosPorAprobar() {
     this.cargandoAprobaciones = true;
     const params = {
@@ -301,7 +331,7 @@ export class CardsComponent implements OnInit {
       asignados: this.asignadosTable,
       requiere_aprobacion: true
     };
-    
+
     this.cards.asuntosPorAprobar(params).subscribe({
       next: (res) => {
         this.asuntosPorAprobar = res;
@@ -317,7 +347,7 @@ export class CardsComponent implements OnInit {
       }
     });
   }
-  
+
   cambiarVista(vista: 'atencion' | 'aprobacion') {
     this.vistaActual = vista;
     this.tablePorDictaminar = vista === 'atencion' ? this.asuntosEnAtencion : this.asuntosPorAprobar;
@@ -515,14 +545,14 @@ export class CardsComponent implements OnInit {
   // Método para ver detalle con el nuevo modal de revisión
   verDetalle(asunto: any, event: Event): void {
     event.stopPropagation();
-    
+
     if (this.vistaActual === 'aprobacion') {
       // Para asuntos que requieren aprobación, usamos el modal de revisión
       this.asuntoSeleccionadoRevision = asunto;
-      
+
       // Cargar los archivos del asunto
       this.cargarArchivosAsunto(asunto);
-      
+
       // Mostrar el modal
       this.mostrarModalRevision = true;
     } else {
@@ -540,7 +570,7 @@ export class CardsComponent implements OnInit {
       this.archivosAsunto = [];
       return;
     }
-    
+
     this.archivosService.listarArchivosPdf(asunto.folio_interno).subscribe({
       next: (archivos) => {
         this.archivosAsunto = archivos;
@@ -551,43 +581,43 @@ export class CardsComponent implements OnInit {
       }
     });
   }
-  
+
   // Método para cerrar el modal de detalles
   cerrarDetalle(): void {
     this.mostrarDetalleModal = false;
     this.asuntoSeleccionado = null;
   }
-  
+
   // Método para cerrar el modal de revisión
   cerrarModalRevision(): void {
     this.mostrarModalRevision = false;
     this.asuntoSeleccionadoRevision = null;
     this.archivosAsunto = [];
   }
-  
+
   // Método para aprobar un asunto
-  aprobarAsuntoRevision(datos: {id: number, observaciones: string}): void {
+  aprobarAsuntoRevision(datos: { id: number, observaciones: string }): void {
     console.log('Aprobando asunto:', datos);
-    
+
     // Aquí iría la llamada al servicio para aprobar el asunto
     // Por ahora solo mostramos un mensaje y actualizamos la lista
     this.mostrarMensaje(`Asunto ${datos.id} aprobado correctamente`);
-    
+
     // Actualizar la lista de asuntos
     this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
     if (this.vistaActual === 'aprobacion') {
       this.tablePorDictaminar = this.asuntosPorAprobar;
     }
   }
-  
+
   // Método para rechazar un asunto
-  rechazarAsuntoRevision(datos: {id: number, observaciones: string, motivo: string}): void {
+  rechazarAsuntoRevision(datos: { id: number, observaciones: string, motivo: string }): void {
     console.log('Rechazando asunto:', datos);
-    
+
     // Aquí iría la llamada al servicio para rechazar el asunto
     // Por ahora solo mostramos un mensaje y actualizamos la lista
     this.mostrarMensaje(`Asunto ${datos.id} rechazado por: ${datos.motivo}`);
-    
+
     // Actualizar la lista de asuntos
     this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
     if (this.vistaActual === 'aprobacion') {
