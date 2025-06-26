@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AsuntoService } from '../../../../../domains/services/asunto.service';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../../domains/services/archivos-atencion.service';
 import { environment } from '../../../../../../environments/environment';
@@ -56,7 +56,6 @@ export class AtencionModalComponent implements OnInit {
   pdfCargando: boolean = false;
   pdfError: boolean = false;
   pdfSrc: string = '';
-  pdfHtml: SafeHtml | null = null;
   
   // Pestañas
   pestanaActiva: 'detalles' | 'documentos' = 'detalles';
@@ -78,8 +77,25 @@ export class AtencionModalComponent implements OnInit {
     this.cerrarModalEvent.emit();
     this.pdfActual = null;
     this.pdfUrl = null;
-    this.pdfHtml = null;
-    this.pestanaActiva = 'detalles'; // Resetear a la pestaña de detalles al cerrar
+    this.pestanaActiva = 'detalles';
+  }
+
+  // Método para obtener archivo por índice
+  getArchivo(index: number): ArchivoAtencion | null {
+    return this.archivos[index] || null;
+  }
+
+  // Método para verificar si es el archivo actual
+  isArchivoActual(index: number): boolean {
+    return this.pdfActual === this.archivos[index];
+  }
+
+  // Método para seleccionar archivo por índice
+  seleccionarArchivoPorIndice(index: number): void {
+    const archivo = this.archivos[index];
+    if (archivo) {
+      this.seleccionarArchivo(archivo);
+    }
   }
 
   formatearFecha(fecha: string | undefined): string {
@@ -103,20 +119,13 @@ export class AtencionModalComponent implements OnInit {
     this.cargandoArchivos = true;
     this.archivoService.listarArchivosPdf(this.asunto.folio_interno).subscribe({
       next: (archivos: ArchivoAdjunto[]) => {
-        // Convertir los archivos al formato que necesitamos
         this.archivos = archivos.map(archivo => ({
           nombre: archivo.nombre,
           tamano_bytes: archivo.tamano_bytes,
           ultima_modificacion: archivo.ultima_modificacion,
-          // Crear una ruta_completa simulada para usar en la carga del PDF
           ruta_completa: `${this.asunto?.folio_interno}/${archivo.nombre}`
         }));
         this.cargandoArchivos = false;
-        
-        // Si hay archivos, preseleccionar el primero
-        if (this.archivos.length > 0 && this.pestanaActiva === 'documentos') {
-          this.seleccionarArchivo(this.archivos[0]);
-        }
       },
       error: (error: any) => {
         console.error('Error al cargar archivos:', error);
@@ -132,7 +141,6 @@ export class AtencionModalComponent implements OnInit {
     this.pdfError = false;
     this.pdfUrl = null;
     this.pdfSrc = '';
-    this.pdfHtml = null;
 
     if (!this.asunto || !this.asunto.folio_interno || !archivo.nombre) {
       this.pdfError = true;
@@ -140,11 +148,10 @@ export class AtencionModalComponent implements OnInit {
       return;
     }
 
-    // Usar el método obtenerPdf del servicio
     this.archivoService.obtenerPdf(
       this.asunto.folio_interno,
       archivo.nombre,
-      'atencion' // Carpeta donde se encuentran los archivos
+      'atencion'
     ).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -155,18 +162,19 @@ export class AtencionModalComponent implements OnInit {
         }
         
         try {
-          // Crear URL para el PDF en base64
           this.pdfSrc = `data:application/pdf;base64,${data}`;
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrc);
           this.pdfCargando = false;
           
-          // Actualizar el contenido del contenedor
           setTimeout(() => {
             if (this.pdfContainer && this.pdfContainer.nativeElement) {
               this.pdfContainer.nativeElement.innerHTML = '';
-              const div = document.createElement('div');
-              div.innerHTML = `<iframe src="${this.pdfSrc}" style="width: 100%; height: 100%; border: none;"></iframe>`;
-              this.pdfContainer.nativeElement.appendChild(div);
+              const iframe = document.createElement('iframe');
+              iframe.src = this.pdfSrc;
+              iframe.style.width = '100%';
+              iframe.style.height = '500px';
+              iframe.style.border = 'none';
+              this.pdfContainer.nativeElement.appendChild(iframe);
             }
           }, 100);
         } catch (error) {
@@ -198,7 +206,6 @@ export class AtencionModalComponent implements OnInit {
         }
         
         try {
-          // Crear un blob desde los datos base64
           const byteCharacters = atob(data);
           const byteArrays = [];
           
@@ -209,11 +216,9 @@ export class AtencionModalComponent implements OnInit {
           const byteArray = new Uint8Array(byteArrays);
           const blob = new Blob([byteArray], { type: 'application/pdf' });
           
-          // Crear un enlace para la descarga
           const link = document.createElement('a');
           link.href = URL.createObjectURL(blob);
           
-          // Extraer nombre del archivo sin timestamp
           const nombreOriginal = this.pdfActual?.nombre || 'documento.pdf';
           const nombreLimpio = this.limpiarNombreArchivo(nombreOriginal);
           
@@ -230,20 +235,17 @@ export class AtencionModalComponent implements OnInit {
     });
   }
 
-  // Función para limpiar el nombre del archivo (quitar timestamp)
   private limpiarNombreArchivo(nombre: string): string {
-    // Intenta quitar el timestamp del formato "nombre_1234567890.pdf"
     const regex = /^(.+)_\d{10}(\.[^.]+)$/;
     const match = nombre.match(regex);
     
     if (match) {
-      return match[1] + match[2]; // nombre + extensión
+      return match[1] + match[2];
     }
     
-    return nombre; // Si no coincide con el patrón, devuelve el nombre original
+    return nombre;
   }
   
-  // Método para obtener el texto del plazo de atención
   getPlazoAtencionTexto(): string {
     if (!this.asunto) return 'Sin plazo definido';
     
@@ -258,12 +260,10 @@ export class AtencionModalComponent implements OnInit {
     }
   }
   
-  // Método para verificar si el plazo es urgente
   isPlazoUrgente(): boolean {
     return this.asunto?.plazo_atencion === 0;
   }
   
-  // Método para obtener el tipo de documento según el ID
   getTipoDocumento(): string {
     if (!this.asunto || this.asunto.id_documento_fk === undefined) return 'No especificado';
     
@@ -279,7 +279,6 @@ export class AtencionModalComponent implements OnInit {
     }
   }
   
-  // Método para obtener el tipo de atención según el ID
   getTipoAtencion(): string {
     if (!this.asunto || this.asunto.id_atencion_fk === undefined) return 'No especificado';
     
@@ -292,7 +291,6 @@ export class AtencionModalComponent implements OnInit {
     }
   }
   
-  // Método para obtener el texto de la administración
   getAdministracionTexto(): string {
     if (!this.asunto || this.asunto.id_administracion_fk === undefined) return 'No especificada';
     
