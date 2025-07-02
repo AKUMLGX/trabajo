@@ -206,6 +206,8 @@
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-autoridad">Autoridad solicitante</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-fecha">Fecha Recepción</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-persona">Persona relacionada</th>
+            <!-- 🆕 Nueva columna Dictaminador solo para En Atención -->
+            <th *ngIf="vistaActual === 'atencion'" scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-dictaminador">Dictaminador</th>
             <!-- Columna específica para "Por Aprobar" -->
             <th *ngIf="vistaActual === 'aprobacion'" scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-fecha">Fecha Atención</th>
             <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider col-acciones">Acciones</th>
@@ -214,7 +216,7 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <!-- Indicador de carga -->
           <tr *ngIf="(vistaActual === 'atencion' && cargandoAsuntos) || (vistaActual === 'aprobacion' && cargandoAprobaciones)">
-            <td colspan="6" class="px-6 py-4 text-center">
+            <td [attr.colspan]="vistaActual === 'aprobacion' ? '6' : vistaActual === 'atencion' ? '6' : '5'" class="px-6 py-4 text-center">
               <div class="flex justify-center items-center space-x-2">
                 <div [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32]' : 'bg-green-600'" class="w-4 h-4 rounded-full animate-bounce"></div>
                 <div [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32]' : 'bg-green-600'" class="w-4 h-4 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
@@ -255,6 +257,18 @@
                 </div>
               </td>
 
+              <!-- 🆕 Nueva columna Dictaminador solo para En Atención -->
+              <td *ngIf="vistaActual === 'atencion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <div class="truncate max-w-[180px]" [title]="asunto.nombre_dictaminador || 'Sin asignar'">
+                  <span *ngIf="asunto.nombre_dictaminador" class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                    {{asunto.nombre_dictaminador}}
+                  </span>
+                  <span *ngIf="!asunto.nombre_dictaminador" class="bg-gray-100 text-gray-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                    Sin asignar
+                  </span>
+                </div>
+              </td>
+
               <!-- Columna específica para "Por Aprobar" -->
               <td *ngIf="vistaActual === 'aprobacion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <!-- Aquí iría la fecha de atención, por ahora usamos un placeholder -->
@@ -289,7 +303,7 @@
             </tr>
           } @empty {
             <tr>
-              <td [attr.colspan]="vistaActual === 'aprobacion' ? '6' : '5'" class="px-6 py-4 text-center text-sm text-gray-500">
+              <td [attr.colspan]="vistaActual === 'aprobacion' ? '6' : vistaActual === 'atencion' ? '6' : '5'" class="px-6 py-4 text-center text-sm text-gray-500">
                 <div *ngIf="!cargandoAsuntos && !cargandoAprobaciones" class="py-8">
                   <svg [ngClass]="vistaActual === 'atencion' ? 'text-blue-300' : 'text-green-300'" class="w-12 h-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />

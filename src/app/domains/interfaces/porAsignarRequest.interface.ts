@@ -24,7 +24,9 @@ export interface tableAsuntosPorDictaminar{
   autoridad_remitente: string,
   id_asunto: number,
   es_historico: true,
-  plazo_atencion:number
+  plazo_atencion:number,
+  rfc_dictaminador?: string,
+  nombre_dictaminador?: string
 }
 
 
