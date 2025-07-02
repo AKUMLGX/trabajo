@@ -1,4 +1,3 @@
-
 import { AsignarAsunto, AsignarAsuntoRequest, modalItem } from './../../../interfaces/asiganar-AsuntoRequest.interface';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,6 +13,8 @@ import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-admi
 import { ModalService } from '../../../shared/services/modal.service';
 import { BuscadorService } from '../../../shared/services/buscador.service';
 import { Observable,of } from 'rxjs';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 @Component({
   selector: 'app-asignacion-page',
   standalone: true,
@@ -24,7 +25,8 @@ import { Observable,of } from 'rxjs';
     MatDialogModule,
     FormsModule,
     PdfViewerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPaginationModule
   ],
   templateUrl: './asignacion-page.component.html',
   // src\app\domains\assistance\pages\asignacion-page\asignacion-page.component.html
@@ -77,11 +79,29 @@ buscador = new FormControl('');
   usuariosAsignar: usuariosPorAdministracion[] = []
    itemDeFilaSelecionada: modalItem | null = null
 
+  // Variables para ngx-pagination
+  paginaActual: number = 1;
+  elementosPorPagina: number = 10;
+  configuracionPaginacion = {
+    itemsPerPage: this.elementosPorPagina,
+    currentPage: this.paginaActual,
+    totalItems: 0
+  };
 
   porAsignarDataTable: porAsignarRequest = {
     documento: this.documento,
     asignados: this.asignadosTable
   }
+
+  totalPages: number = 0;
+  totalRegistros: number = 0;
+  
+  asignacion: AsignarAsunto | null = null
+  searchText: string = '';
+  results$: Observable<string[]> = of([]);
+  allData: tableAsuntosPorDictaminar[] = [];
+  asuntosPaginados: tableAsuntosPorDictaminar[] = [];
+  filteredData$!: Observable<tableAsuntosPorDictaminar[]>;
 
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
@@ -89,7 +109,33 @@ buscador = new FormControl('');
    private buscadorService:BuscadorService<tableAsuntosPorDictaminar>) { }
 
   ngOnInit() {
-    this.tablePorAsignar()
+    this.filteredData$ = this.buscadorService.getFilteredData(this.filtrarIndicador);
+    this.tablePorAsignar();
+    
+    // Suscribirse a los cambios en los datos filtrados para actualizar la paginación
+    this.filteredData$.subscribe(data => {
+      this.actualizarPaginacion(data);
+    });
+  }
+
+  actualizarPaginacion(datos: tableAsuntosPorDictaminar[]) {
+    // Guardar el total de registros
+    this.totalRegistros = datos.length;
+    
+    // Calcular total de páginas
+    this.totalPages = Math.ceil(datos.length / this.itemsPerPage);
+    
+    // Resetear a la primera página si la página actual es mayor que el total
+    if (this.currentPage > this.totalPages && this.totalPages > 0) {
+      this.currentPage = 1;
+    }
+    
+    // Calcular índices
+    const inicio = (this.currentPage - 1) * this.itemsPerPage;
+    const fin = inicio + this.itemsPerPage;
+    
+    // Actualizar los asuntos paginados
+    this.asuntosPaginados = datos.slice(inicio, fin);
   }
 
   tablePorAsignar() {
@@ -111,12 +157,6 @@ buscador = new FormControl('');
   };
 
   asignarIndicador : Observable<tableAsuntosPorDictaminar[]>= new Observable
-
-
- searchText: string = '';
-  results$: Observable<string[]> = of([]);
- filteredData$: Observable<tableAsuntosPorDictaminar[]> = this.buscadorService.getFilteredData(this.filtrarIndicador);
- allData: tableAsuntosPorDictaminar[] = [];
 
   usuariosPorAdministracion() {
     this.cards.usuariosPorAdminitracion().subscribe((res: usuariosPorAdministracion[]) => {
@@ -153,15 +193,18 @@ buscador = new FormControl('');
     );
   }
 
-
-
   get startIndex(): number {
-    return (this.currentPage - 1) * this.itemsPerPage;
+    return this.totalRegistros > 0 ? (this.currentPage - 1) * this.itemsPerPage : 0;
   }
 
   get endIndex(): number {
-    const calculatedEnd = this.startIndex + this.itemsPerPage;
-    return Math.min(calculatedEnd, this.asuntosFiltrados.length);
+    if (this.totalRegistros === 0) return 0;
+    const fin = this.currentPage * this.itemsPerPage;
+    return Math.min(fin, this.totalRegistros);
+  }
+
+  get totalAsuntos(): number {
+    return this.totalRegistros;
   }
 
   get asuntosOrdenados() {
@@ -300,4 +343,42 @@ buscador = new FormControl('');
   //     this.verPDF(asunto);
   //   }, 100);
   // }
+
+  // Agregamos los métodos para la paginación
+  irAPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPages) {
+      this.currentPage = pagina;
+      // Re-aplicar la paginación con los datos actuales
+      this.filteredData$.subscribe(data => {
+        this.actualizarPaginacion(data);
+      });
+    }
+  }
+
+  getPageNumbers(): number[] {
+    const maxPagesToShow = 5;
+    const pages: number[] = [];
+    
+    if (this.totalPages <= maxPagesToShow) {
+      // Si hay pocas páginas, mostrar todas
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Si hay muchas páginas, mostrar un rango alrededor de la página actual
+      let start = Math.max(1, this.currentPage - 2);
+      let end = Math.min(this.totalPages, start + maxPagesToShow - 1);
+      
+      // Ajustar si estamos cerca del final
+      if (end === this.totalPages) {
+        start = Math.max(1, end - maxPagesToShow + 1);
+      }
+      
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
+  }
 }
