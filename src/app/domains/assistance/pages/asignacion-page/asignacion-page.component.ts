@@ -102,6 +102,9 @@ buscador = new FormControl('');
   allData: tableAsuntosPorDictaminar[] = [];
   asuntosPaginados: tableAsuntosPorDictaminar[] = [];
   filteredData$!: Observable<tableAsuntosPorDictaminar[]>;
+  
+  // Variable para el modal de detalle
+  asuntoDetalle: tableAsuntosPorDictaminar | null = null;
 
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
@@ -380,5 +383,76 @@ buscador = new FormControl('');
     }
     
     return pages;
+  }
+
+  // Funciones para mapear IDs según reglas de negocio
+  getDescripcionDocumento(idDocumento: number): string {
+    const documentos: { [key: number]: string } = {
+      1: 'RESPUESTA',
+      2: 'REQUERIMIENTO', 
+      3: 'REQUERIMIENTO Y RESPUESTA',
+      4: 'SOLICITUD INTERNA',
+      5: 'RESPUESTA INTERNA',
+      6: 'RESPUESTA A FGR',
+      7: 'ALCANCE'
+    };
+    return documentos[idDocumento] || 'Documento';
+  }
+
+  getDescripcionAtencion(idAtencion: number): string {
+    const atenciones: { [key: number]: string } = {
+      1: 'TOTAL',
+      2: 'PARCIAL',
+      3: 'EN TRAMITE',
+      4: 'POR ASIGNAR',
+      5: 'NO APLICA'
+    };
+    return atenciones[idAtencion] || 'Sin definir';
+  }
+
+  getDescripcionAdministracion(idAdministracion: number): string {
+    return `Administración ${idAdministracion}`;
+  }
+
+  getDescripcionPlazoAtencion(plazo: number | null | undefined): string {
+    if (plazo === null || plazo === undefined) {
+      return 'Sin plazo definido';
+    }
+    if (plazo === 0) {
+      return 'URGENTE';
+    }
+    if (plazo > 0) {
+      return `${plazo} ${plazo === 1 ? 'día' : 'días'}`;
+    }
+    return 'Sin plazo definido';
+  }
+
+  formatearFechaRecepcion(fecha: string | null | undefined): string {
+    if (!fecha || fecha === '' || fecha === null || fecha === undefined) {
+      return 'Fecha no disponible';
+    }
+    try {
+      // Intentar formatear la fecha
+      const fechaObj = new Date(fecha);
+      if (isNaN(fechaObj.getTime())) {
+        return 'Fecha no válida';
+      }
+      return fechaObj.toLocaleDateString('es-MX');
+    } catch (error) {
+      return 'Fecha no disponible';
+    }
+  }
+
+  // Método para abrir modal de detalle
+  abrirModalDetalle(template: TemplateRef<any>, asunto: tableAsuntosPorDictaminar) {
+    this.asuntoDetalle = asunto;
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    });
+  }
+
+  cerrarModalDetalle() {
+    this.asuntoDetalle = null;
+    this.modalService.closeAllDialogs();
   }
 }

@@ -44,13 +44,20 @@
             <td class="py-2 px-3">{{asunto.carpeta_investigacion}}</td>
             <td class="py-2 px-3">{{asunto.oficio}}</td>
             <td class="py-2 px-3">{{asunto.persona_relacionada}}</td>
-            <td class="py-2 px-3">{{asunto.fecha_recepcion}}</td>
-            <td class="py-2 px-3">{{asunto.plazo_atencion}}</td>
+            <td class="py-2 px-3">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
+            <td class="py-2 px-3">
+              <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' + 
+                            (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800' : 
+                             asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800' : 
+                             'bg-blue-100 text-blue-800')">
+                {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
+              </span>
+            </td>
 
             <td class="py-3 px-3">
               <div class="flex items-center justify-center gap-1">
                 <!-- Botón Detalle -->
-                <button 
+                <button (click)="abrirModalDetalle(templateDetalle, asunto)"
                   class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
                   title="Ver detalle">
                   <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -274,6 +281,164 @@
           (click)="asignarAsunto()" 
           [disabled]="!abogadoSeleccionado">
           Asignar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Modal de Detalle -->
+<ng-template #templateDetalle>
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
+    <div class="bg-white rounded-lg shadow-xl w-[800px] max-w-[95vw] max-h-[90vh] overflow-y-auto transform transition-all">
+      <!-- Encabezado del modal -->
+      <div class="bg-blue-600 text-white py-4 px-6 flex items-center justify-between sticky top-0">
+        <h2 class="text-xl font-bold flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Detalle del Asunto
+        </h2>
+        <button (click)="cerrarModalDetalle()" class="text-white hover:text-gray-200 transition-colors">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Cuerpo del modal -->
+      <div class="p-6 space-y-6">
+        <!-- Información Principal -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-5">
+          <h3 class="text-lg font-semibold text-blue-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Información Principal
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Folio Interno</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{asuntoDetalle?.folio_interno}}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Folio Scanner</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{asuntoDetalle?.folio_scanner}}</p>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-600 mb-1">Carpeta de Investigación</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{asuntoDetalle?.carpeta_investigacion}}</p>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-600 mb-1">Oficio</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{asuntoDetalle?.oficio}}</p>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-600 mb-1">Persona Relacionada</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{asuntoDetalle?.persona_relacionada}}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información de Fechas y Tiempos -->
+        <div class="bg-green-50 border border-green-200 rounded-lg p-5">
+          <h3 class="text-lg font-semibold text-green-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Fechas y Plazos
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Fecha de Recepción</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{formatearFechaRecepcion(asuntoDetalle?.fecha_recepcion)}}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Plazo de Atención</label>
+              <div class="bg-white p-2 rounded border">
+                <span [class]="'px-3 py-1 rounded-full text-sm font-medium ' + 
+                              (asuntoDetalle?.plazo_atencion === 0 ? 'bg-red-100 text-red-800' : 
+                               asuntoDetalle?.plazo_atencion === null ? 'bg-gray-100 text-gray-800' : 
+                               'bg-blue-100 text-blue-800')">
+                  {{getDescripcionPlazoAtencion(asuntoDetalle?.plazo_atencion)}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información de Catalogos -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-5">
+          <h3 class="text-lg font-semibold text-yellow-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            Información de Catálogos
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Tipo de Documento</label>
+              <div class="bg-white p-2 rounded border">
+                <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+                  {{getDescripcionDocumento(asuntoDetalle?.id_documento_fk!)}}
+                </span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Estado de Atención</label>
+              <div class="bg-white p-2 rounded border">
+                <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+                  {{getDescripcionAtencion(asuntoDetalle?.id_atencion_fk!)}}
+                </span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Administración</label>
+              <div class="bg-white p-2 rounded border">
+                <span class="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
+                  {{getDescripcionAdministracion(asuntoDetalle?.id_administracion_fk!)}}
+                </span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Es Histórico</label>
+              <div class="bg-white p-2 rounded border">
+                <span [class]="'px-3 py-1 rounded-full text-sm font-medium ' + 
+                              (asuntoDetalle?.es_historico ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800')">
+                  {{asuntoDetalle?.es_historico ? 'Sí' : 'No'}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información Adicional -->
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-5">
+          <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Información Adicional
+          </h3>
+          <div class="grid grid-cols-1 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Turno Jefatura</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{asuntoDetalle?.turno_jefatura || 'No especificado'}}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Autoridad Remitente</label>
+              <p class="text-gray-900 bg-white p-2 rounded border">{{asuntoDetalle?.autoridad_remitente || 'No especificado'}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie del modal -->
+      <div class="bg-gray-50 px-6 py-4 flex justify-end border-t sticky bottom-0">
+        <button
+          (click)="cerrarModalDetalle()"
+          class="px-6 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+          Cerrar
         </button>
       </div>
     </div>
