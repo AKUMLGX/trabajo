@@ -338,10 +338,28 @@ export class CardsComponent implements OnInit {
     this.cards.asuntosPorAprobar(params).subscribe({
       next: (res) => {
         this.asuntosPorAprobar = res;
+        
+        // 🆕 Aplicar el mismo sistema de paginación que En Atención
         if (this.vistaActual === 'aprobacion') {
           this.tablePorDictaminar = this.asuntosPorAprobar;
-          this.aplicarPaginacion();
+          
+          // Crear páginas para Por Aprobar (igual que En Atención)
+          let indexPage = 0;
+          let page: tableAsuntosPorDictaminar[] = [];
+          this.pages = []
+          this.pageSelected = 1;
+          this.asuntosPorAprobar.forEach((doc) => {
+            page.push(doc);
+            indexPage += 1;
+            if (indexPage === this.itemsPerPage) {
+              this.pages.push(page);
+              indexPage = 0;
+              page = []
+            }
+          })
+          if (page.length !== 0) this.pages.push(page)
         }
+        
         this.cargandoAprobaciones = false;
       },
       error: (err) => {
@@ -354,6 +372,23 @@ export class CardsComponent implements OnInit {
   cambiarVista(vista: 'atencion' | 'aprobacion') {
     this.vistaActual = vista;
     this.tablePorDictaminar = vista === 'atencion' ? this.asuntosEnAtencion : this.asuntosPorAprobar;
+    
+    // 🆕 Regenerar páginas según la vista actual
+    let indexPage = 0;
+    let page: tableAsuntosPorDictaminar[] = [];
+    this.pages = []
+    this.pageSelected = 1;
+    this.tablePorDictaminar.forEach((doc) => {
+      page.push(doc);
+      indexPage += 1;
+      if (indexPage === this.itemsPerPage) {
+        this.pages.push(page);
+        indexPage = 0;
+        page = []
+      }
+    })
+    if (page.length !== 0) this.pages.push(page)
+    
     this.paginaActualTabla = 1; // Resetear a la primera página al cambiar de vista
     this.aplicarPaginacion();
   }
