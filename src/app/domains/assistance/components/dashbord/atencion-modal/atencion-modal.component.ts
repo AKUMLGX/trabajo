@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, OnChanges, SimpleChanges, Output, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AsuntoService } from '../../../../../domains/services/asunto.service';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../../domains/services/archivos-atencion.service';
@@ -10,7 +10,7 @@ interface ArchivoAtencion {
   id?: number;
   nombre: string;
   ruta_completa?: string;
-  tamano_bytes: number;
+  tamano: string;
   ultima_modificacion?: string;
 }
 
@@ -41,7 +41,7 @@ interface AsuntoPorAtencion {
   standalone: true,
   imports: [CommonModule]
 })
-export class AtencionModalComponent implements OnInit {
+export class AtencionModalComponent implements OnInit, OnChanges {
   @ViewChild('pdfContainer') pdfContainer!: ElementRef;
 
   @Input() asunto: AsuntoPorAtencion | null = null;
@@ -59,6 +59,16 @@ export class AtencionModalComponent implements OnInit {
   
   // Pestañas
   pestanaActiva: 'detalles' | 'documentos' = 'detalles';
+  
+  // Método para cambiar pestaña y cargar documentos si es necesario
+  cambiarPestana(pestaña: 'detalles' | 'documentos'): void {
+    this.pestanaActiva = pestaña;
+    
+    // Si cambia a documentos y no hay archivos cargados, cargarlos
+    if (pestaña === 'documentos' && this.asunto && this.asunto.folio_interno && this.archivos.length === 0 && !this.cargandoArchivos) {
+      this.cargarArchivos();
+    }
+  }
 
   constructor(
     private archivoService: ArchivosAtencionService,
@@ -67,17 +77,34 @@ export class AtencionModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.asunto) {
+    console.log('🟤 [MODAL GUINDA] ngOnInit - Folio:', this.asunto?.folio_interno);
+    if (this.asunto && this.asunto.folio_interno) {
       this.cargarArchivos();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Si el asunto cambió o el modal se abrió
+    if ((changes['asunto'] && changes['asunto'].currentValue) || 
+        (changes['mostrarModal'] && changes['mostrarModal'].currentValue)) {
+      
+      if (this.asunto && this.asunto.folio_interno && this.mostrarModal) {
+        console.log('🟤 [MODAL GUINDA] Cargando archivos:', this.asunto.folio_interno);
+        this.cargarArchivos();
+      }
     }
   }
 
   cerrarModal(): void {
     this.mostrarModal = false;
     this.cerrarModalEvent.emit();
+    
+    // Resetear estado
     this.pdfActual = null;
     this.pdfUrl = null;
     this.pestanaActiva = 'detalles';
+    this.pdfError = false;
+    this.pdfCargando = false;
   }
 
   // Método para obtener archivo por índice
@@ -114,28 +141,46 @@ export class AtencionModalComponent implements OnInit {
   }
 
   cargarArchivos(): void {
-    if (!this.asunto || !this.asunto.folio_interno) return;
+    if (!this.asunto || !this.asunto.folio_interno) {
+      console.warn('🟤 [MODAL GUINDA] No se puede cargar - Folio faltante');
+      return;
+    }
     
     this.cargandoArchivos = true;
-    this.archivoService.listarArchivosPdf(this.asunto.folio_interno).subscribe({
+    this.archivos = [];
+    
+    this.archivoService.listarArchivosPdfAtencion(this.asunto.folio_interno).subscribe({
       next: (archivos: ArchivoAdjunto[]) => {
+        if (archivos && archivos.length > 0) {
         this.archivos = archivos.map(archivo => ({
           nombre: archivo.nombre,
-          tamano_bytes: archivo.tamano_bytes,
+            tamano: archivo.tamano,
           ultima_modificacion: archivo.ultima_modificacion,
           ruta_completa: `${this.asunto?.folio_interno}/${archivo.nombre}`
         }));
+          console.log(`🟤 [MODAL GUINDA] ${this.archivos.length} archivos cargados`);
+        } else {
+          this.archivos = [];
+          console.log('🟤 [MODAL GUINDA] No hay archivos disponibles');
+        }
         this.cargandoArchivos = false;
       },
       error: (error: any) => {
-        console.error('Error al cargar archivos:', error);
+        console.error('🟤 [MODAL GUINDA] Error al cargar archivos:', error.status);
         this.archivos = [];
         this.cargandoArchivos = false;
       }
     });
   }
 
+  // Método para recargar archivos manualmente
+  recargarArchivos(): void {
+    this.cargarArchivos();
+  }
+
   seleccionarArchivo(archivo: ArchivoAtencion): void {
+    console.log('🟤 [MODAL GUINDA] Visualizando PDF:', archivo.nombre);
+    
     this.pdfActual = archivo;
     this.pdfCargando = true;
     this.pdfError = false;
@@ -148,10 +193,10 @@ export class AtencionModalComponent implements OnInit {
       return;
     }
 
+    // Para modal GUINDA: archivos en carpeta raíz (SIN parámetro carpeta)
     this.archivoService.obtenerPdf(
       this.asunto.folio_interno,
-      archivo.nombre,
-      'atencion'
+      archivo.nombre
     ).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -194,10 +239,10 @@ export class AtencionModalComponent implements OnInit {
   descargarPdf(): void {
     if (!this.pdfActual || !this.asunto || !this.asunto.folio_interno) return;
 
+    // Para modal GUINDA: archivos en carpeta raíz (SIN parámetro carpeta)
     this.archivoService.obtenerPdf(
       this.asunto.folio_interno,
-      this.pdfActual.nombre,
-      'atencion'
+      this.pdfActual.nombre
     ).subscribe({
       next: (data: string) => {
         if (!data) {

@@ -583,9 +583,12 @@ export class CardsComponent implements OnInit {
   // Método para ver detalle con el nuevo modal de revisión
   verDetalle(asunto: any, event: Event): void {
     event.stopPropagation();
+    console.log('🔍 [verDetalle] ¡EJECUTÁNDOSE! Vista actual:', this.vistaActual);
+    console.log('🔍 [verDetalle] Asunto recibido:', asunto);
 
     if (this.vistaActual === 'aprobacion') {
       // Para asuntos que requieren aprobación, usamos el modal de revisión
+      console.log('✅ [verDetalle] Abriendo modal de REVISIÓN (Por Aprobar)');
       this.asuntoSeleccionadoRevision = asunto;
 
       // Cargar los archivos del asunto
@@ -595,26 +598,47 @@ export class CardsComponent implements OnInit {
       this.mostrarModalRevision = true;
     } else {
       // Para asuntos en atención, usamos el nuevo modal de atención
+      console.log('✅ [verDetalle] Abriendo modal de ATENCIÓN (En Atención)');
+      console.log('✅ [verDetalle] Asignando asunto a asuntoSeleccionadoAtencion:', asunto);
       this.asuntoSeleccionadoAtencion = asunto;
 
       // Mostrar el modal
+      console.log('✅ [verDetalle] Estableciendo mostrarModalAtencion = true');
       this.mostrarModalAtencion = true;
+      
+      console.log('✅ [verDetalle] Estado final:');
+      console.log('  - mostrarModalAtencion:', this.mostrarModalAtencion);
+      console.log('  - asuntoSeleccionadoAtencion:', this.asuntoSeleccionadoAtencion);
     }
   }
 
   // Método para cargar los archivos del asunto
   cargarArchivosAsunto(asunto: any): void {
+    console.log('🔧 [Cards] cargarArchivosAsunto iniciado');
+    console.log('🔧 [Cards] Asunto recibido:', asunto);
+    
     if (!asunto || !asunto.folio_interno) {
+      console.log('🔧 [Cards] No hay asunto o folio_interno, limpiando archivos');
       this.archivosAsunto = [];
       return;
     }
 
+    console.log('🔧 [Cards] Llamando servicio para folio:', asunto.folio_interno);
     this.archivosService.listarArchivosPdf(asunto.folio_interno).subscribe({
       next: (archivos) => {
+        console.log('🔧 [Cards] Respuesta del servicio archivos:', archivos);
+        console.log('🔧 [Cards] Número de archivos recibidos:', archivos?.length || 0);
         this.archivosAsunto = archivos;
+        console.log('🔧 [Cards] archivosAsunto asignado:', this.archivosAsunto);
       },
       error: (err) => {
-        console.error('Error al cargar archivos del asunto:', err);
+        console.error('🔧 [Cards] Error al cargar archivos del asunto:', err);
+        console.error('🔧 [Cards] Detalles del error:', {
+          status: err.status,
+          statusText: err.statusText,
+          message: err.message,
+          url: err.url
+        });
         this.archivosAsunto = [];
       }
     });

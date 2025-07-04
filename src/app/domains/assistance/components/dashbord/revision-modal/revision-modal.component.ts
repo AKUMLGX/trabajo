@@ -58,9 +58,17 @@ export class RevisionModalComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    console.log('🔧 [RevisionModal] ngOnInit ejecutado');
+    console.log('🔧 [RevisionModal] Asunto recibido:', this.asunto);
+    console.log('🔧 [RevisionModal] Archivos recibidos:', this.archivos);
+    console.log('🔧 [RevisionModal] Número de archivos:', this.archivos?.length || 0);
+    
     // Si hay archivos, preseleccionar el primero para visualización
     if (this.archivos && this.archivos.length > 0) {
+      console.log('🔧 [RevisionModal] Seleccionando primer archivo:', this.archivos[0]);
       this.seleccionarArchivo(this.archivos[0]);
+    } else {
+      console.log('🔧 [RevisionModal] No hay archivos para mostrar');
     }
   }
   

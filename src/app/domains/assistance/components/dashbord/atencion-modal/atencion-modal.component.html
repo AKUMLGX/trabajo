@@ -27,7 +27,7 @@
       <div class="border-b border-gray-200">
         <nav class="flex -mb-px" aria-label="Tabs">
           <button 
-            (click)="pestanaActiva = 'detalles'" 
+            (click)="cambiarPestana('detalles')" 
             [class.text-[#691C32]]="pestanaActiva === 'detalles'"
             [class.border-[#691C32]]="pestanaActiva === 'detalles'"
             [class.border-b-2]="pestanaActiva === 'detalles'"
@@ -42,7 +42,7 @@
             </div>
           </button>
           <button 
-            (click)="pestanaActiva = 'documentos'" 
+            (click)="cambiarPestana('documentos')" 
             [class.text-[#691C32]]="pestanaActiva === 'documentos'"
             [class.border-[#691C32]]="pestanaActiva === 'documentos'"
             [class.border-b-2]="pestanaActiva === 'documentos'"
@@ -55,7 +55,7 @@
               </svg>
               Documentos
               <span class="ml-2 bg-[#691C32] text-white text-xs font-medium px-2.5 py-0.5 rounded-full">
-                {{archivos?.length || 0}}
+                {{archivos.length || 0}}
               </span>
             </div>
           </button>
@@ -145,12 +145,25 @@
           <div class="grid grid-cols-3 gap-6">
             <!-- Lista de documentos -->
             <div class="col-span-1 bg-white shadow rounded-lg p-4 max-h-[60vh] overflow-y-auto">
-              <h4 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Documentos</h4>
+              <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h4 class="text-lg font-medium text-gray-900">Documentos</h4>
+                <button 
+                  (click)="recargarArchivos()" 
+                  class="text-[#691C32] hover:text-[#5a1729] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                  title="Recargar documentos">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+              </div>
+
+
               
               <!-- Cargando -->
               <div *ngIf="cargandoArchivos" class="text-center py-8">
                 <div class="w-12 h-12 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                 <p class="text-gray-500">Cargando documentos...</p>
+                <p class="text-xs text-gray-400 mt-1">Folio: {{ asunto?.folio_interno }}</p>
               </div>
               
               <!-- Sin documentos -->
@@ -158,34 +171,58 @@
                 <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
-                <p class="text-gray-500">No hay documentos disponibles</p>
+                <p class="text-gray-500 font-medium">No hay documentos disponibles</p>
+                <p class="text-xs text-gray-400 mt-2">
+                  Folio: {{ asunto?.folio_interno || 'Sin folio' }}
+                </p>
+                <button 
+                  (click)="recargarArchivos()" 
+                  class="mt-3 text-[#691C32] hover:text-[#5a1729] text-sm underline">
+                  Intentar recargar
+                </button>
               </div>
               
               <!-- Lista de archivos -->
-              <ul *ngIf="!cargandoArchivos && archivos && archivos.length > 0" class="space-y-2">
-                <li *ngFor="let archivo of archivos" 
+              <div *ngIf="!cargandoArchivos && archivos && archivos.length > 0">
+                <p class="text-sm text-green-600 font-medium mb-3">
+                  ✅ {{ archivos.length }} documento{{ archivos.length > 1 ? 's' : '' }} encontrado{{ archivos.length > 1 ? 's' : '' }}
+                </p>
+                <ul class="space-y-2">
+                  <li *ngFor="let archivo of archivos; let i = index" 
                     (click)="seleccionarArchivo(archivo)"
                     [class.bg-red-50]="pdfActual === archivo"
                     [class.border-[#691C32]]="pdfActual === archivo"
+                      [class.border-2]="pdfActual === archivo"
                     class="p-3 border rounded-md hover:bg-red-50 cursor-pointer transition-colors">
                   <div class="flex items-center">
-                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900 truncate">
+                        <p class="text-sm font-medium text-gray-900 truncate" [title]="archivo.nombre">
                         {{archivo.nombre}}
                       </p>
+                        <div class="flex items-center justify-between mt-1">
                       <p class="text-xs text-gray-500">
-                        {{archivo.tamano_bytes}} bytes
+                            📁 {{archivo.tamano}}
+                          </p>
+                          <p class="text-xs text-gray-400" *ngIf="archivo.ultima_modificacion">
+                            {{archivo.ultima_modificacion}}
                       </p>
                     </div>
+                      </div>
+                      <div class="ml-2 flex-shrink-0">
                     <span *ngIf="pdfActual === archivo" class="inline-flex items-center rounded-full bg-[#691C32] px-2.5 py-0.5 text-xs font-medium text-white">
                       Actual
                     </span>
+                        <span *ngIf="pdfActual !== archivo" class="text-xs text-gray-400">
+                          #{{i + 1}}
+                        </span>
+                      </div>
                   </div>
                 </li>
               </ul>
+              </div>
             </div>
             
             <!-- Visor de PDF -->

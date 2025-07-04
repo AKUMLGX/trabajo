@@ -55,7 +55,7 @@
               </svg>
               Documentos
               <span class="ml-2 bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                {{archivos?.length || 0}}
+                {{archivos.length || 0}}
               </span>
             </div>
           </button>
@@ -161,7 +161,7 @@
                 
                 <div class="mb-4">
                   <p class="text-sm font-medium text-gray-500">Documentos Adjuntos</p>
-                  <p class="text-base">{{archivos?.length || 0}} documento(s)</p>
+                  <p class="text-base">{{archivos.length || 0}} documento(s)</p>
                 </div>
               </div>
             </div>
@@ -202,7 +202,7 @@
                         {{archivo.nombre}}
                       </p>
                       <p class="text-xs text-gray-500">
-                        {{archivo.tamano_bytes | number}} bytes • {{archivo.ultima_modificacion | date:'dd/MM/yyyy'}}
+                        {{archivo.tamano}} • {{archivo.ultima_modificacion | date:'dd/MM/yyyy'}}
                       </p>
                     </div>
                     <span *ngIf="pdfActual === archivo" class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">

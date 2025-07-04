@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 /**
@@ -8,7 +9,7 @@ import { environment } from '../../../environments/environment';
  */
 export interface ArchivoAdjunto {
   nombre: string;
-  tamano_bytes: number;
+  tamano: string;
   ultima_modificacion: string;
 }
 
@@ -41,14 +42,67 @@ export class ArchivosAtencionService {
   }
 
   /**
-   * Obtiene la lista de archivos PDF adjuntos a un asunto en atención
+   * Obtiene la lista de archivos PDF adjuntos a un asunto en revisión (MODAL VERDE)
    * @param folio - Folio interno del asunto cuyos archivos se desean listar
    * @returns Observable con el listado de archivos adjuntos
    */
   listarArchivosPdf(folio: string): Observable<ArchivoAdjunto[]> {
+    console.log('🟢 [ArchivosService] listarArchivosPdf (MODAL VERDE) iniciado para folio:', folio);
+    
     const params = new HttpParams().set('folio', folio);
-    const targetUrl = environment.baseUrl + (environment as any)['listarArchivosAtencion'];
-    return this.http.get<ArchivoAdjunto[]>(targetUrl, { params });
+    const endpoint = (environment as any)['listarArchivosAtencion'];
+    const targetUrl = environment.baseUrl + endpoint;
+    const fullUrl = `${targetUrl}?${params.toString()}`;
+    
+    console.log('🟢 [ArchivosService] URL construida:', targetUrl);
+    console.log('🟢 [ArchivosService] URL completa con parámetros:', fullUrl);
+    console.log('🟢 [ArchivosService] Endpoint usado:', endpoint);
+    
+    return this.http.get<ArchivoAdjunto[]>(targetUrl, { params }).pipe(
+      tap({
+        next: (response: ArchivoAdjunto[]) => {
+          console.log('✅ [ArchivosService] MODAL VERDE - Respuesta exitosa:', response);
+          console.log('✅ [ArchivosService] MODAL VERDE - Número de archivos:', response?.length || 0);
+        },
+        error: (error: any) => {
+          console.error('❌ [ArchivosService] MODAL VERDE - Error en petición:', error);
+          console.error('❌ [ArchivosService] Status:', error.status);
+          console.error('❌ [ArchivosService] URL que falló:', fullUrl);
+        }
+      })
+    );
+  }
+
+  /**
+   * Obtiene la lista de archivos PDF adjuntos a un asunto en atención (MODAL GUINDA)
+   * @param folio - Folio interno del asunto cuyos archivos se desean listar
+   * @returns Observable con el listado de archivos adjuntos
+   */
+  listarArchivosPdfAtencion(folio: string): Observable<ArchivoAdjunto[]> {
+    console.log('🟤 [ArchivosService] listarArchivosPdfAtencion (MODAL GUINDA) iniciado para folio:', folio);
+    
+    const params = new HttpParams().set('folio', folio);
+    const endpoint = (environment as any)['listarArchivosAtencionModal'];
+    const targetUrl = environment.baseUrl + endpoint;
+    const fullUrl = `${targetUrl}?${params.toString()}`;
+    
+    console.log('🟤 [ArchivosService] URL construida:', targetUrl);
+    console.log('🟤 [ArchivosService] URL completa con parámetros:', fullUrl);
+    console.log('🟤 [ArchivosService] Endpoint usado:', endpoint);
+    
+    return this.http.get<ArchivoAdjunto[]>(targetUrl, { params }).pipe(
+      tap({
+        next: (response: ArchivoAdjunto[]) => {
+          console.log('✅ [ArchivosService] MODAL GUINDA - Respuesta exitosa:', response);
+          console.log('✅ [ArchivosService] MODAL GUINDA - Número de archivos:', response?.length || 0);
+        },
+        error: (error: any) => {
+          console.error('❌ [ArchivosService] MODAL GUINDA - Error en petición:', error);
+          console.error('❌ [ArchivosService] Status:', error.status);
+          console.error('❌ [ArchivosService] URL que falló:', fullUrl);
+        }
+      })
+    );
   }
   
   /**
