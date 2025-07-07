@@ -86,22 +86,38 @@
     </div>
   </div>
 
-  <!-- Indicadores de resumen - versión mejorada con ancho completo -->
+  <!-- 🔥 BANNER URGENTE CON EFECTO PULSO + GLOW MODERNO -->
   <div class="mb-6 mx-6">
-    <div class="bg-[#FFFCCB] relative overflow-hidden rounded-lg shadow-lg w-full">
-      <div class="urgent-content flex items-center p-4">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3">
-          <img src="{{environment.base}}/assets/images/A_urgentes.svg" alt="Asignar">
+    <div class="banner-urgente-moderno relative overflow-hidden rounded-xl shadow-2xl w-full transform transition-all duration-300">
+      <div class="urgent-content-glow flex items-center p-5">
+        <!-- 💓 Icono con efecto latido -->
+        <div class="w-10 h-10 rounded-full flex items-center justify-center mr-4 icon-latido">
+          <img src="{{environment.base}}/assets/images/A_urgentes.svg" alt="Asignar" class="w-6 h-6">
         </div>
+        
         <div class="flex-1">
-          <h3 class="text-[#2D2A26] text-xl font-bold tracking-wide">Asuntos Urgentes</h3>
-          <div class="overflow-hidden">
-            <div class="animate-marquee whitespace-nowrap">
-              <span class="text-[#FF003F] text-2xl font-semibold ml-12">{{asuntosUrgentes}} asuntos requieren atención inmediata</span>
-            </div>
+          <!-- Título con efecto brillante -->
+          <h3 class="text-[#2D2A26] text-xl font-bold tracking-wide mb-1 titulo-brillante">
+            ⚠️ Asuntos Urgentes
+          </h3>
+          
+          <!-- ✨ Texto principal con PULSO y sin movimiento lateral -->
+          <div class="texto-urgente-pulso">
+            <span class="text-[#FF003F] text-2xl font-bold">
+              {{asuntosUrgentes}} asuntos requieren atención inmediata
+            </span>
           </div>
         </div>
-        <div class="absolute left-0 top-0 h-full w-3 bg-[#FFD92E]"></div>
+        
+        <!-- 🌟 Barra lateral con resplandor -->
+        <div class="barra-glow absolute left-0 top-0 h-full w-3"></div>
+        
+        <!-- ⚡ Efectos de partículas brillantes -->
+        <div class="particulas-brillantes absolute inset-0 pointer-events-none">
+          <div class="particula-1"></div>
+          <div class="particula-2"></div>
+          <div class="particula-3"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -109,7 +125,7 @@
   <!-- Tabla de asuntos - versión mejorada con ancho completo -->
   <div class="bg-white rounded-lg shadow-md overflow-hidden mx-6 mb-6">
     <div class="p-4 border-b border-gray-200">
-      <h2 class="text-xl font-semibold text-[#691C32] mb-4">Asuntos por dictaminar</h2>
+      <h2 class="text-xl font-semibold text-[#691C32] mb-4">Panel de control</h2>
 
       <!-- Pestañas para cambiar entre vistas -->
       <div class="flex justify-center mb-4">
