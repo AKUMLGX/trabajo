@@ -106,6 +106,14 @@ export class CardsComponent implements OnInit {
 
   tablePorDictaminar: tableAsuntosPorDictaminar[] = []
 
+  // 🎨 NUEVO SISTEMA DE FILTRADO TIPO CARRUSEL - ULTRA RÁPIDO
+  dictaminadoresUnicos: string[] = [] // Lista de dictaminadores únicos
+  dictaminadorActivoAtencion: string = '' // Dictaminador activo en "En Atención"
+  dictaminadorActivoAprobacion: string = '' // Dictaminador activo en "Por Aprobar"
+  
+  // Datos filtrados por vista
+  asuntosEnAtencionFiltrados: tableAsuntosPorDictaminar[] = []
+  asuntosPorAprobarFiltrados: tableAsuntosPorDictaminar[] = []
 
   porAsignarData: porAsignarRequest = {
     documento: this.documento,
@@ -265,6 +273,9 @@ export class CardsComponent implements OnInit {
 
     this.usuariosPorAdministracion()
 
+    // 🎨 INICIALIZAR NUEVO SISTEMA DE FILTROS
+    this.inicializarFiltrosCarrusel();
+
     // Inicializar la paginación
     this.aplicarPaginacion();
   }
@@ -296,25 +307,15 @@ export class CardsComponent implements OnInit {
         this.asuntosEnAtencion = res;
         console.log("TT", res);
 
-        let indexPage = 0;
-        let page: tableAsuntosPorDictaminar[] = [];
-        this.pages = []
-        this.pageSelected = 1;
-        this.asuntosEnAtencion.forEach((doc) => {
-          page.push(doc);
-          indexPage += 1;
-          if (indexPage === this.itemsPerPage) {
-            this.pages.push(page);
-            indexPage = 0;
-            page = []
-          }
-        })
-        if (page.length !== 0) this.pages.push(page)
-
+        // 🎨 ACTUALIZAR SISTEMA NUEVO DE FILTROS
+        this.extraerDictaminadoresUnicos();
+        this.filtrarAsuntosAtencion();
+        
         if (this.vistaActual === 'atencion') {
-          this.tablePorDictaminar = this.asuntosEnAtencion;
-          this.aplicarPaginacion();
+          this.actualizarTablaSegunVista();
+          this.regenerarPaginacionRapida();
         }
+
         // Actualizar conteo de asuntos urgentes
         const fitrarPlazo = res.filter((item: any) => item.plazo_atencion !== null);
         this.asuntosUrgentes = fitrarPlazo.length;
@@ -339,25 +340,13 @@ export class CardsComponent implements OnInit {
       next: (res) => {
         this.asuntosPorAprobar = res;
         
-        // 🆕 Aplicar el mismo sistema de paginación que En Atención
+        // 🎨 ACTUALIZAR SISTEMA NUEVO DE FILTROS
+        this.extraerDictaminadoresUnicos();
+        this.filtrarAsuntosPorAprobar();
+        
         if (this.vistaActual === 'aprobacion') {
-          this.tablePorDictaminar = this.asuntosPorAprobar;
-          
-          // Crear páginas para Por Aprobar (igual que En Atención)
-          let indexPage = 0;
-          let page: tableAsuntosPorDictaminar[] = [];
-          this.pages = []
-          this.pageSelected = 1;
-          this.asuntosPorAprobar.forEach((doc) => {
-            page.push(doc);
-            indexPage += 1;
-            if (indexPage === this.itemsPerPage) {
-              this.pages.push(page);
-              indexPage = 0;
-              page = []
-            }
-          })
-          if (page.length !== 0) this.pages.push(page)
+          this.actualizarTablaSegunVista();
+          this.regenerarPaginacionRapida();
         }
         
         this.cargandoAprobaciones = false;
@@ -369,28 +358,144 @@ export class CardsComponent implements OnInit {
     });
   }
 
+  // 🎨 MÉTODO MEJORADO: Cambiar vista con nuevo sistema
   cambiarVista(vista: 'atencion' | 'aprobacion') {
+    console.log('🎨 Cambiando vista a:', vista);
     this.vistaActual = vista;
-    this.tablePorDictaminar = vista === 'atencion' ? this.asuntosEnAtencion : this.asuntosPorAprobar;
+    this.actualizarTablaSegunVista();
+    this.regenerarPaginacionRapida();
+  }
+
+  // 🎨 NUEVO: Inicializar el sistema de filtros tipo carrusel
+  private inicializarFiltrosCarrusel(): void {
+    // Extraer dictaminadores únicos de ambas vistas
+    this.extraerDictaminadoresUnicos();
     
-    // 🆕 Regenerar páginas según la vista actual
-    let indexPage = 0;
-    let page: tableAsuntosPorDictaminar[] = [];
-    this.pages = []
-    this.pageSelected = 1;
-    this.tablePorDictaminar.forEach((doc) => {
-      page.push(doc);
-      indexPage += 1;
-      if (indexPage === this.itemsPerPage) {
-        this.pages.push(page);
-        indexPage = 0;
-        page = []
+    // Inicializar datos filtrados
+    this.asuntosEnAtencionFiltrados = [...this.asuntosEnAtencion];
+    this.asuntosPorAprobarFiltrados = [...this.asuntosPorAprobar];
+    
+    // Establecer tabla inicial según vista actual
+    this.actualizarTablaSegunVista();
+  }
+
+  // 🎨 NUEVO: Extraer dictaminadores únicos de manera eficiente
+  private extraerDictaminadoresUnicos(): void {
+    const todosAsuntos = [...this.asuntosEnAtencion, ...this.asuntosPorAprobar];
+    const dictaminadoresSet = new Set<string>();
+    
+    todosAsuntos.forEach(asunto => {
+      if (asunto.nombre_dictaminador && asunto.nombre_dictaminador.trim()) {
+        dictaminadoresSet.add(asunto.nombre_dictaminador.trim());
       }
-    })
-    if (page.length !== 0) this.pages.push(page)
+    });
     
-    this.paginaActualTabla = 1; // Resetear a la primera página al cambiar de vista
-    this.aplicarPaginacion();
+    this.dictaminadoresUnicos = Array.from(dictaminadoresSet).sort();
+    console.log('🎨 Dictaminadores únicos extraídos:', this.dictaminadoresUnicos);
+  }
+
+  // 🎨 NUEVO: Seleccionar dictaminador desde el carrusel
+  seleccionarDictaminadorCarrusel(dictaminador: string): void {
+    console.log('🎨 Seleccionando dictaminador:', dictaminador, 'en vista:', this.vistaActual);
+    
+    if (this.vistaActual === 'atencion') {
+      this.dictaminadorActivoAtencion = this.dictaminadorActivoAtencion === dictaminador ? '' : dictaminador;
+      this.filtrarAsuntosAtencion();
+    } else {
+      this.dictaminadorActivoAprobacion = this.dictaminadorActivoAprobacion === dictaminador ? '' : dictaminador;
+      this.filtrarAsuntosPorAprobar();
+    }
+    
+    this.actualizarTablaSegunVista();
+    this.regenerarPaginacionRapida();
+  }
+
+  // 🎨 NUEVO: Filtrar asuntos de "En Atención"
+  private filtrarAsuntosAtencion(): void {
+    if (!this.dictaminadorActivoAtencion) {
+      this.asuntosEnAtencionFiltrados = [...this.asuntosEnAtencion];
+    } else {
+      this.asuntosEnAtencionFiltrados = this.asuntosEnAtencion.filter(asunto => 
+        asunto.nombre_dictaminador?.trim() === this.dictaminadorActivoAtencion
+      );
+    }
+  }
+
+  // 🎨 NUEVO: Filtrar asuntos de "Por Aprobar"
+  private filtrarAsuntosPorAprobar(): void {
+    if (!this.dictaminadorActivoAprobacion) {
+      this.asuntosPorAprobarFiltrados = [...this.asuntosPorAprobar];
+    } else {
+      this.asuntosPorAprobarFiltrados = this.asuntosPorAprobar.filter(asunto => 
+        asunto.nombre_dictaminador?.trim() === this.dictaminadorActivoAprobacion
+      );
+    }
+  }
+
+  // 🎨 NUEVO: Actualizar tabla según vista actual
+  private actualizarTablaSegunVista(): void {
+    if (this.vistaActual === 'atencion') {
+      this.tablePorDictaminar = [...this.asuntosEnAtencionFiltrados];
+    } else {
+      this.tablePorDictaminar = [...this.asuntosPorAprobarFiltrados];
+    }
+  }
+
+  // 🎨 NUEVO: Obtener dictaminador activo según vista
+  get dictaminadorActivoActual(): string {
+    return this.vistaActual === 'atencion' ? this.dictaminadorActivoAtencion : this.dictaminadorActivoAprobacion;
+  }
+
+  // 🎨 NUEVO: Verificar si un dictaminador está activo
+  isDictaminadorActivo(dictaminador: string): boolean {
+    return this.dictaminadorActivoActual === dictaminador;
+  }
+
+  // 🎨 NUEVO: Contar asuntos por dictaminador según vista actual
+  contarAsuntosPorDictaminador(dictaminador: string): number {
+    const asuntosVista = this.vistaActual === 'atencion' ? this.asuntosEnAtencion : this.asuntosPorAprobar;
+    return asuntosVista.filter(asunto => asunto.nombre_dictaminador?.trim() === dictaminador).length;
+  }
+
+  // 🎨 NUEVO: Obtener iniciales del nombre (para avatar)
+  obtenerIniciales(nombre: string): string {
+    if (!nombre) return '';
+    return nombre.split(' ')
+      .map(n => n.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('');
+  }
+
+  // 🎨 NUEVO: Método para seleccionar una fila (requerido por la tabla)
+  seleccionarFila(folio: string): void {
+    const asunto = this.tablePorDictaminar.find(a => a.folio_interno === folio);
+    if (asunto) {
+      console.log('🎨 Asunto seleccionado:', asunto);
+    }
+  }
+
+  // 🎨 NUEVO: Limpiar filtro de la vista actual
+  limpiarFiltroCarrusel(): void {
+    if (this.vistaActual === 'atencion') {
+      this.dictaminadorActivoAtencion = '';
+      this.filtrarAsuntosAtencion();
+    } else {
+      this.dictaminadorActivoAprobacion = '';
+      this.filtrarAsuntosPorAprobar();
+    }
+    
+    this.actualizarTablaSegunVista();
+    this.regenerarPaginacionRapida();
+  }
+
+  // 🎨 NUEVO: Paginación súper rápida
+  private regenerarPaginacionRapida(): void {
+    this.pages = [];
+    this.pageSelected = 1;
+    
+    for (let i = 0; i < this.tablePorDictaminar.length; i += this.itemsPerPage) {
+      this.pages.push(this.tablePorDictaminar.slice(i, i + this.itemsPerPage));
+    }
   }
 
   // Método para aplicar la paginación a la tabla actual
@@ -490,34 +595,6 @@ export class CardsComponent implements OnInit {
     console.log('Conteo de asuntos por dictaminador:', this.conteoAsuntosPorDictaminador);
   }
 
-  // Método para filtrar asuntos por texto de búsqueda
-  filtrarAsuntos(textoFiltro: string): void {
-    textoFiltro = textoFiltro.toLowerCase().trim();
-
-    // Primero aplicar el filtro de dictaminador si existe
-    let asuntosFiltradosPorDictaminador = this.asuntos;
-    if (this.dictaminadorSeleccionado) {
-      const nombreDictaminador = this.dictaminadoresMap[this.dictaminadorSeleccionado];
-      asuntosFiltradosPorDictaminador = this.asuntos.filter(asunto =>
-        asunto.dictaminador === nombreDictaminador
-      );
-    }
-
-    // Luego aplicar el filtro de texto si existe
-    if (!textoFiltro) {
-      this.asuntosFiltrados = [...asuntosFiltradosPorDictaminador];
-      return;
-    }
-
-    // Filtrar por texto de búsqueda sobre los resultados ya filtrados por dictaminador
-    this.asuntosFiltrados = asuntosFiltradosPorDictaminador.filter(asunto =>
-      asunto.folio.toLowerCase().includes(textoFiltro) ||
-      asunto.autoridad.toLowerCase().includes(textoFiltro)
-    );
-
-    this.mostrarMensaje(`Se encontraron ${this.asuntosFiltrados.length} resultados para "${textoFiltro}"`);
-  }
-
   // Método para mostrar detalles según la categoría
   mostrarDetalle(categoria: string): void {
     console.log(`Mostrando detalle para: ${categoria}`);
@@ -540,43 +617,6 @@ export class CardsComponent implements OnInit {
       }
 
       this.mostrarMensaje(mensaje);
-    }
-  }
-
-  // Método para cambiar dictaminador
-  cambiarDictaminador(idDictaminador: string): void {
-    this.dictaminadorSeleccionado = idDictaminador;
-
-    if (idDictaminador) {
-      // Obtener el nombre del dictaminador a partir del ID
-      const nombreDictaminador = this.dictaminadoresMap[idDictaminador];
-
-      // Filtrar los asuntos según el dictaminador seleccionado
-      this.asuntosFiltrados = this.asuntos.filter(asunto =>
-        asunto.dictaminador === nombreDictaminador
-      );
-
-      // Mostrar un mensaje con el número de asuntos encontrados
-      const numeroAsuntos = this.asuntosFiltrados.length;
-      this.mostrarMensaje(`Mostrando ${numeroAsuntos} asuntos asignados a ${nombreDictaminador}`);
-    } else {
-      // Si no hay dictaminador seleccionado (opción "Todos"), mostrar todos
-      this.asuntosFiltrados = [...this.asuntos];
-      this.mostrarMensaje(`Mostrando todos los ${this.asuntos.length} asuntos`);
-    }
-  }
-
-  // Método para crear nuevo asunto
-  crearNuevo(): void {
-    this.mostrarMensaje('Creando nuevo asunto');
-  }
-
-  // Método para seleccionar una fila
-  seleccionarFila(folio: string): void {
-    const asunto = this.asuntos.find(a => a.folio === folio);
-    if (asunto) {
-      console.log('Asunto seleccionado:', asunto);
-      this.mostrarMensaje(`Asunto ${folio} seleccionado`);
     }
   }
 
