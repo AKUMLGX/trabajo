@@ -52,6 +52,10 @@ export interface UsuarioCompleto {
     fechaEmision: Date;
     rolesArray: string[];
     
+    // Información de administración SAT
+    administracion: number | null;
+    descripcionAdministracion: string;
+    
     // Datos calculados/derivados
     esAdmin: boolean;
     esCapturista: boolean;
@@ -68,5 +72,18 @@ export interface EstadoAutenticacion {
     isLoading: boolean;
     usuario: UsuarioCompleto | null;
     error: string | null;
+}
+
+// Interfaces para administración
+export interface AdministracionResponse {
+    Administracion: number;
+}
+
+export interface AdministracionInfo {
+    administracion: AdministracionResponse;
+}
+
+export interface CardsAdministracionResponse {
+    data: AdministracionInfo[];
 }
 

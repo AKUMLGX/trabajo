@@ -687,6 +687,7 @@
   display: grid;
   gap: 16px;
   margin: 16px 0;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .info-item {
@@ -800,6 +801,75 @@ mat-divider {
 }
 
 /* ========================================== */
+/* 🎨 ESTILOS PARA INFORMACIÓN DE ADMINISTRACIÓN */
+/* ========================================== */
+
+.administracion-item {
+  background: linear-gradient(135deg, 
+    rgba(105, 28, 50, 0.05) 0%, 
+    rgba(139, 42, 68, 0.05) 100%);
+  border-left: 4px solid #691C32;
+}
+
+.administracion-item .info-icon {
+  color: #691C32;
+  background: rgba(105, 28, 50, 0.15);
+}
+
+.administracion-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.administracion-numero {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #691C32;
+  text-shadow: 0 1px 2px rgba(105, 28, 50, 0.1);
+}
+
+.administracion-descripcion {
+  font-size: 0.85rem;
+  color: #6B7280;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+/* Efecto especial para el item de administración */
+.administracion-item:hover {
+  background: linear-gradient(135deg, 
+    rgba(105, 28, 50, 0.08) 0%, 
+    rgba(139, 42, 68, 0.08) 100%);
+  transform: translateY(-3px);
+  box-shadow: 
+    0 12px 30px rgba(105, 28, 50, 0.15),
+    0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos generales para info-content */
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.info-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* ========================================== */
 /* 🎨 RESPONSIVE DESIGN MEJORADO */
 /* ========================================== */
 
@@ -839,5 +909,9 @@ mat-divider {
   
   .info-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .administracion-descripcion {
+    font-size: 0.8rem;
   }
 } 

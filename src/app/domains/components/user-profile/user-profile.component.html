@@ -57,6 +57,18 @@
       </h4>
       
       <div class="info-grid">
+        <!-- Información de Administración -->
+        <div class="info-item administracion-item">
+          <mat-icon class="info-icon">corporate_fare</mat-icon>
+          <div class="info-content">
+            <span class="info-label">Administración SAT</span>
+            <div class="administracion-info">
+              <span class="administracion-numero">{{ usuario.administracion || 'No asignada' }}</span>
+              <span class="administracion-descripcion">{{ usuario.descripcionAdministracion }}</span>
+            </div>
+          </div>
+        </div>
+        
         <div class="info-item" *ngIf="usuario.tipoContribuyente">
           <mat-icon class="info-icon">business</mat-icon>
           <div class="info-content">

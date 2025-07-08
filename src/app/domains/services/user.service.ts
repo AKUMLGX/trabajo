@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, switchMap, catchError, of } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { 
   SessionInfo, 
@@ -7,6 +7,8 @@ import {
   EstadoAutenticacion, 
   JWTClaims 
 } from '../interfaces/oauth2.interfaces';
+import { CardsInfoBandejadeAtencionService } from './cards-info-bandejade-atencion.service';
+import { AdministracionResponse } from '../interfaces/datosCards.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,7 @@ export class UserService {
 
   public estadoAutenticacion$ = this.estadoAutenticacionSubject.asObservable();
 
-  constructor() {
+  constructor(private cardsService: CardsInfoBandejadeAtencionService) {
     this.inicializarUsuario();
     
     // Monitorear cambios en localStorage (para tabs múltiples)
@@ -49,6 +51,9 @@ export class UserService {
       if (sessionInfo) {
         const usuarioCompleto = this.construirUsuarioCompleto(sessionInfo);
         this.setUsuarioAutenticado(usuarioCompleto);
+        
+        // Cargar información de administración de forma asíncrona
+        this.cargarAdministracion();
       } else {
         this.setUsuarioNoAutenticado();
       }
@@ -116,6 +121,10 @@ export class UserService {
       fechaExpiracion,
       fechaEmision,
       rolesArray,
+      
+      // Información de administración (se cargará después)
+      administracion: null,
+      descripcionAdministracion: 'Cargando...',
       
       // Datos calculados/derivados
       esAdmin: this.esAdminPrivado(rolesArray),
@@ -340,6 +349,84 @@ export class UserService {
   }
 
   /**
+   * Carga la información de administración del usuario desde el backend
+   */
+  private cargarAdministracion(): void {
+    const usuarioActual = this.getUsuarioActual();
+    if (!usuarioActual) return;
+
+    this.cardsService.cardsInfo().subscribe({
+      next: (data) => {
+        const administracionObj = data.find(i => 'Administracion' in i) as { Administracion: AdministracionResponse };
+        
+        if (administracionObj && administracionObj.Administracion) {
+          const numeroAdministracion = administracionObj.Administracion.Administracion;
+          const descripcion = this.obtenerDescripcionAdministracion(numeroAdministracion);
+          
+          // Actualizar el usuario con la información de administración
+          const usuarioActualizado: UsuarioCompleto = {
+            ...usuarioActual,
+            administracion: numeroAdministracion,
+            descripcionAdministracion: descripcion
+          };
+          
+          this.setUsuarioAutenticado(usuarioActualizado);
+        } else {
+          // Si no se encuentra la administración, establecer valores por defecto
+          const usuarioActualizado: UsuarioCompleto = {
+            ...usuarioActual,
+            administracion: null,
+            descripcionAdministracion: 'No disponible'
+          };
+          
+          this.setUsuarioAutenticado(usuarioActualizado);
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar información de administración:', error);
+        
+        // En caso de error, establecer valores por defecto
+        const usuarioActualizado: UsuarioCompleto = {
+          ...usuarioActual,
+          administracion: null,
+          descripcionAdministracion: 'Error al cargar'
+        };
+        
+        this.setUsuarioAutenticado(usuarioActualizado);
+      }
+    });
+  }
+
+  /**
+   * Obtiene la descripción de la administración basada en el número
+   */
+  private obtenerDescripcionAdministracion(numero: number): string {
+    const administraciones: { [key: number]: string } = {
+      1: 'Administración Central de Servicios Tributarios al Contribuyente',
+      2: 'Administración Central de Recaudación',
+      3: 'Administración Central de Fiscalización',
+      4: 'Administración Central de Normatividad',
+      5: 'Administración Central de Planeación y Evaluación'
+    };
+
+    return administraciones[numero] || `Administración ${numero}`;
+  }
+
+  /**
+   * Obtiene la administración del usuario actual
+   */
+  public getAdministracion(): number | null {
+    return this.getUsuarioActual()?.administracion || null;
+  }
+
+  /**
+   * Obtiene la descripción de la administración del usuario actual
+   */
+  public getDescripcionAdministracion(): string {
+    return this.getUsuarioActual()?.descripcionAdministracion || 'No disponible';
+  }
+
+  /**
    * Obtiene información de sesión para debuging
    */
   public getInfoSesion(): any {
@@ -350,6 +437,8 @@ export class UserService {
       rfc: usuario.rfc,
       nombre: usuario.nombre,
       roles: usuario.rolesArray,
+      administracion: usuario.administracion,
+      descripcionAdministracion: usuario.descripcionAdministracion,
       tiempoRestante: usuario.tiempoRestanteSesion,
       proximaExpirar: usuario.sesionProximaExpirar,
       fechaExpiracion: usuario.fechaExpiracion,
