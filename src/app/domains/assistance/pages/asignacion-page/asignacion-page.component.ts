@@ -194,6 +194,21 @@ buscador = new FormControl('');
   textosExpandidos: Set<string> = new Set();
   scrollHorizontalVisible: boolean = false;
 
+  // 🎯 VARIABLES PARA HEADER INTELIGENTE Y AGRUPACIÓN
+  filtroActivo: 'todos' | 'urgente' | 'plazo' | 'critico' | 'normal' | 'reciente' = 'todos';
+  mostrarAgrupacion: boolean = true;
+  seccionesColapsadas: Set<string> = new Set();
+  
+  // 📊 Contadores dinámicos
+  contadores = {
+    urgente: 0,
+    plazo: 0,
+    critico: 0, 
+    normal: 0,
+    reciente: 0,
+    total: 0
+  };
+
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
     private modalService: ModalService,
@@ -205,6 +220,7 @@ buscador = new FormControl('');
     
     // Suscribirse a los cambios en los datos filtrados para actualizar la paginación
     this.filteredData$.subscribe(data => {
+      this.calcularContadores(data); // 📊 Actualizar contadores
       this.actualizarPaginacion(data);
     });
   }
@@ -216,7 +232,7 @@ buscador = new FormControl('');
       const prioridadA = this.getPrioridad(a);
       const prioridadB = this.getPrioridad(b);
 
-      // Primero ordenar por prioridad (4=urgente, 3=rojo, 2=amarillo, 1=verde)
+      // Primero ordenar por prioridad (5=urgente, 4=plazo, 3=crítico, 2=normal, 1=reciente)
       if (prioridadA !== prioridadB) {
         return prioridadB - prioridadA; // Mayor prioridad primero
       }
@@ -251,6 +267,7 @@ buscador = new FormControl('');
       next: (res) => {
         // this.tablePorAsignarIndicador = res
         this.allData = res
+        this.calcularContadores(res); // 📊 Calcular contadores iniciales
         this.buscadorService.setData(this.allData)
       },
     });
@@ -331,28 +348,33 @@ buscador = new FormControl('');
     }
   }
 
-  // 🎯 SISTEMA DE PRIORIDADES CORREGIDO CON ANTIGÜEDAD REAL
+  // 🎯 SISTEMA DE PRIORIDADES CON NUEVA CATEGORÍA "PLAZO DEFINIDO"
   getPrioridad(asunto: tableAsuntosPorDictaminar): number {
-    // 🔴 MÁXIMA PRIORIDAD: Plazo de atención = 0 (URGENTE)
+    // 🚨 MÁXIMA PRIORIDAD: Plazo de atención = 0 (URGENTE)
     if (asunto.plazo_atencion === 0) {
-      return 4; // Prioridad máxima
+      return 5; // Prioridad máxima
     }
     
-    // Calcular antigüedad real desde fecha de recepción
+    // 🟠 ALTA PRIORIDAD: Plazo de atención = 1,2,3...n días (PLAZO DEFINIDO)
+    if (asunto.plazo_atencion && asunto.plazo_atencion > 0) {
+      return 4; // Segunda prioridad más alta
+    }
+    
+    // Para casos SIN plazo definido (null/undefined), usar antigüedad de fecha
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
     
-    // 🔴 ALTA PRIORIDAD: Mayor a 15 días de antigüedad real
+    // 🔴 MEDIA-ALTA PRIORIDAD: Mayor a 15 días de antigüedad real
     if (antiguedadDias > 15) {
-      return 3; // Rojo por antigüedad
+      return 3; // Crítico por antigüedad
     }
     
     // 🟡 MEDIA PRIORIDAD: Entre 5 y 15 días de antigüedad real
     if (antiguedadDias >= 5 && antiguedadDias <= 15) {
-      return 2; // Amarillo
+      return 2; // Normal
     }
     
     // 🟢 BAJA PRIORIDAD: Menor a 4 días de antigüedad real
-    return 1; // Verde
+    return 1; // Reciente
   }
 
   // 🚦 SEMÁFORO CORREGIDO CON ANTIGÜEDAD REAL
@@ -396,8 +418,9 @@ buscador = new FormControl('');
     return `RECIENTE - ${antiguedadDias} días de antigüedad`;
   }
 
-  // 🏷️ BADGES DE PRIORIDAD CORREGIDOS
+  // 🏷️ BADGES DE PRIORIDAD CON NUEVA CATEGORÍA "PLAZO DEFINIDO"
   getBadgePrioridad(asunto: tableAsuntosPorDictaminar): { clase: string, texto: string } {
+    // 🚨 URGENTE: plazo = 0
     if (asunto.plazo_atencion === 0) {
       return { 
         clase: 'bg-red-100 text-red-800 animate-pulse border border-red-300', 
@@ -405,6 +428,15 @@ buscador = new FormControl('');
       };
     }
     
+    // 🟠 PLAZO DEFINIDO: plazo = 1,2,3...n días
+    if (asunto.plazo_atencion && asunto.plazo_atencion > 0) {
+      return { 
+        clase: 'bg-orange-100 text-orange-800 border border-orange-300', 
+        texto: `🟠 PLAZO (${asunto.plazo_atencion}d)` 
+      };
+    }
+    
+    // Para casos sin plazo, usar lógica de antigüedad
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
     
     if (antiguedadDias > 15) {
@@ -694,5 +726,183 @@ buscador = new FormControl('');
 
   ngOnDestroy(): void {
     window.removeEventListener('resize', () => this.checkScrollHorizontal());
+  }
+
+  // 🎯 MÉTODOS PARA HEADER INTELIGENTE Y AGRUPACIÓN
+  
+  // 📊 CALCULAR CONTADORES POR PRIORIDAD
+  calcularContadores(datos: tableAsuntosPorDictaminar[]): void {
+    this.contadores = {
+      urgente: datos.filter(item => this.getPrioridad(item) === 5).length,  // plazo = 0
+      plazo: datos.filter(item => this.getPrioridad(item) === 4).length,    // plazo = 1,2,3...n
+      critico: datos.filter(item => this.getPrioridad(item) === 3).length,  // sin plazo + fecha > 15
+      normal: datos.filter(item => this.getPrioridad(item) === 2).length,   // sin plazo + fecha 5-15
+      reciente: datos.filter(item => this.getPrioridad(item) === 1).length, // sin plazo + fecha < 4
+      total: datos.length
+    };
+  }
+
+  // 🔍 APLICAR FILTRO POR PRIORIDAD
+  aplicarFiltroPrioridad(filtro: 'todos' | 'urgente' | 'plazo' | 'critico' | 'normal' | 'reciente'): void {
+    this.filtroActivo = filtro;
+    this.currentPage = 1; // Resetear a primera página
+    
+    // Aplicar filtro a los datos
+    this.filteredData$.subscribe(data => {
+      let datosFiltrados = data;
+      
+      if (filtro !== 'todos') {
+        const prioridadMap = {
+          'urgente': 5,
+          'plazo': 4,
+          'critico': 3,
+          'normal': 2,
+          'reciente': 1
+        };
+        
+        datosFiltrados = data.filter(item => 
+          this.getPrioridad(item) === prioridadMap[filtro]
+        );
+      }
+      
+      this.actualizarPaginacion(datosFiltrados);
+    });
+  }
+
+  // 📋 AGRUPAR DATOS POR PRIORIDAD
+  obtenerDatosAgrupados(): { [key: string]: tableAsuntosPorDictaminar[] } {
+    const agrupados: { [key: string]: tableAsuntosPorDictaminar[] } = {
+      "urgente": [],
+      "plazo": [],
+      "critico": [],
+      "normal": [],
+      "reciente": []
+    };
+
+    this.allData.forEach(item => {
+      const prioridad = this.getPrioridad(item);
+      switch (prioridad) {
+        case 5:
+          agrupados["urgente"].push(item);
+          break;
+        case 4:
+          agrupados["plazo"].push(item);
+          break;
+        case 3:
+          agrupados["critico"].push(item);
+          break;
+        case 2:
+          agrupados["normal"].push(item);
+          break;
+        case 1:
+          agrupados["reciente"].push(item);
+          break;
+      }
+    });
+
+    // Ordenar cada grupo por antigüedad
+    Object.keys(agrupados).forEach(key => {
+      agrupados[key].sort((a, b) => {
+        const antiguedadA = this.calcularAntiguedadEnDias(a.fecha_recepcion);
+        const antiguedadB = this.calcularAntiguedadEnDias(b.fecha_recepcion);
+        return antiguedadB - antiguedadA; // Mayor antigüedad primero
+      });
+    });
+
+    return agrupados;
+  }
+
+  // 🔽 TOGGLE SECCIÓN COLAPSADA
+  toggleSeccion(seccion: string): void {
+    if (this.seccionesColapsadas.has(seccion)) {
+      this.seccionesColapsadas.delete(seccion);
+    } else {
+      this.seccionesColapsadas.add(seccion);
+    }
+  }
+
+  // ❓ VERIFICAR SI SECCIÓN ESTÁ COLAPSADA
+  isSeccionColapsada(seccion: string): boolean {
+    return this.seccionesColapsadas.has(seccion);
+  }
+
+  // 🎨 OBTENER CONFIGURACIÓN DE PRIORIDAD
+  getConfiguracionPrioridad(tipo: string): { 
+    icono: string, 
+    color: string, 
+    titulo: string, 
+    descripcion: string,
+    bgColor: string,
+    borderColor: string
+  } {
+         const configuraciones: { [key: string]: { 
+       icono: string, 
+       color: string, 
+       titulo: string, 
+       descripcion: string,
+       bgColor: string,
+       borderColor: string
+     }} = {
+       "urgente": {
+         icono: '🚨',
+         color: 'text-red-600',
+         titulo: 'CASOS URGENTES',
+         descripcion: 'Requieren atención inmediata',
+         bgColor: 'bg-red-50',
+         borderColor: 'border-red-200'
+       },
+       "plazo": {
+         icono: '🟠',
+         color: 'text-orange-600',
+         titulo: 'CASOS CON PLAZO DEFINIDO',
+         descripcion: 'Tienen plazo específico de atención',
+         bgColor: 'bg-orange-50',
+         borderColor: 'border-orange-200'
+       },
+       "critico": {
+         icono: '🔴',
+         color: 'text-red-500',
+         titulo: 'CASOS CRÍTICOS',
+         descripcion: 'Más de 15 días sin atender',
+         bgColor: 'bg-red-50',
+         borderColor: 'border-red-200'
+       },
+       "normal": {
+         icono: '🟡',
+         color: 'text-yellow-600',
+         titulo: 'CASOS NORMALES',
+         descripcion: 'Entre 5 y 15 días',
+         bgColor: 'bg-yellow-50',
+         borderColor: 'border-yellow-200'
+       },
+       "reciente": {
+         icono: '🟢',
+         color: 'text-green-600',
+         titulo: 'CASOS RECIENTES',
+         descripcion: 'Menos de 4 días',
+         bgColor: 'bg-green-50',
+         borderColor: 'border-green-200'
+       }
+     };
+
+    return configuraciones[tipo] || configuraciones["reciente"];
+  }
+
+  // 🔄 TOGGLE VISTA AGRUPADA/LISTA
+  toggleVistaAgrupacion(): void {
+    this.mostrarAgrupacion = !this.mostrarAgrupacion;
+    
+    if (!this.mostrarAgrupacion) {
+      // Vista de lista normal
+      this.filteredData$.subscribe(data => {
+        this.actualizarPaginacion(data);
+      });
+    }
+  }
+
+  // 📊 ACTUALIZAR CON NUEVOS DATOS
+  actualizarDatosConContadores(datos: tableAsuntosPorDictaminar[]): void {
+    this.calcularContadores(datos);
+    this.actualizarPaginacion(datos);
   }
 }
