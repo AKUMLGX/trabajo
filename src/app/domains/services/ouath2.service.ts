@@ -7,6 +7,7 @@ import {
   SessionInfo,
 } from '../interfaces/oauth2.interfaces';
 import { LogoutService } from './logout.service';
+import { UserService } from './user.service';
 import { BehaviorSubject, from } from 'rxjs';
 
 
@@ -14,7 +15,11 @@ import { BehaviorSubject, from } from 'rxjs';
   providedIn: 'root',
 })
 export class Oauth2Service {
-  constructor(private httpClient: HttpClient, private logoutService: LogoutService) { }
+  constructor(
+    private httpClient: HttpClient, 
+    private logoutService: LogoutService,
+    private userService: UserService
+  ) { }
 
   getToken(oauth2Code: Oauth2Code): void {
     this.httpClient
@@ -25,6 +30,8 @@ export class Oauth2Service {
       .subscribe({
         next: (data) => {
           localStorage.setItem('sessionInfo', JSON.stringify(data));
+          // Notificar al UserService que la información ha cambiado
+          this.userService.actualizarUsuario();
         },
         error: () => {
           this.logoutService.logout();

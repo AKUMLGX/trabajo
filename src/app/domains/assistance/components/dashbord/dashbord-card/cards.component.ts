@@ -25,6 +25,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
 
 
+
 @Component({
   selector: 'app-cards',
   standalone: true,
@@ -45,6 +46,7 @@ import { AtencionModalComponent } from '../atencion-modal/atencion-modal.compone
     RevisionModalComponent,
     NgxPaginationModule,
     AtencionModalComponent,
+
   ],
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
@@ -256,6 +258,8 @@ export class CardsComponent implements OnInit {
   mostrarModalAtencion: boolean = false;
   asuntoSeleccionadoAtencion: any = null;
 
+
+
   ngOnInit(): void {
     // Al iniciar, mostrar todos los asuntos
     this.asuntosFiltrados = [...this.asuntos];
@@ -278,6 +282,8 @@ export class CardsComponent implements OnInit {
 
     // Inicializar la paginación
     this.aplicarPaginacion();
+
+
   }
 
   mostarCardPorAsignar() {
@@ -948,4 +954,6 @@ export class CardsComponent implements OnInit {
     this.asuntoSeleccionado = asunto;
     this.mostrarModalAtencion = true;
   }
+
+
 }

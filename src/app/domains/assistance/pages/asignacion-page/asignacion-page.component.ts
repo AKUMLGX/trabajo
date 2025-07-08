@@ -344,12 +344,12 @@ buscador = new FormControl('');
       const fechaActual = new Date();
       const diferenciaMilisegundos = fechaActual.getTime() - fechaRecep.getTime();
       const diferenciaDias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
-      
+
       return diferenciaDias >= 0 ? diferenciaDias : 0;
     } catch (error) {
       return 0;
     }
-  }
+      }
 
   // 🎯 SISTEMA DE PRIORIDADES HÍBRIDO - CLASIFICACIÓN POR ANTIGÜEDAD
   getPrioridad(asunto: tableAsuntosPorDictaminar): number {
@@ -388,7 +388,7 @@ buscador = new FormControl('');
     
     // 🔴 ROJO: Mayor a 15 días de antigüedad real
     if (antiguedadDias > 15) {
-      return 'bg-red-500'; 
+      return 'bg-red-500';
     }
     
     // 🟡 AMARILLO: Entre 5 y 15 días de antigüedad real
@@ -397,8 +397,8 @@ buscador = new FormControl('');
     }
     
     // 🟢 VERDE: Menor a 4 días de antigüedad real
-    return 'bg-green-500';
-  }
+      return 'bg-green-500';
+    }
 
   // 🎨 DESCRIPCIÓN DE PRIORIDAD CORREGIDA
   getDescripcionPrioridad(asunto: tableAsuntosPorDictaminar): string {

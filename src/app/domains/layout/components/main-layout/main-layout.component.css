@@ -101,3 +101,116 @@ mat-sidenav-content {
     border-left-color: #691C32;
     background-color: rgba(255, 255, 255, 0.9);
 }
+
+/* ========================================== */
+/* 🎨 ESTILOS PARA EL MODAL DE USUARIO */
+/* ========================================== */
+
+.user-modal-container {
+    max-width: 500px;
+    width: 100%;
+    /* Rellenar con el gradiente SAT para eliminar esquinas blancas */
+    background: linear-gradient(135deg, #691C32 0%, #8B2A44 35%, #A0335B 70%, #B8446F 100%) !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    position: relative;
+    box-shadow: 
+        0 25px 50px -12px rgba(105, 28, 50, 0.25),
+        0 10px 25px -10px rgba(0, 0, 0, 0.1);
+    animation: modalSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Forzar que NO haya espacios blancos */
+    border: none !important;
+    outline: none !important;
+    /* Padding para que el contenido no toque los bordes */
+    padding: 0 !important;
+}
+
+/* Botón de cerrar SÚPER MEJORADO - ¡Adiós tachesito feo! */
+.modal-close-button {
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    z-index: 1000 !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 2px solid rgba(105, 28, 50, 0.1) !important;
+    border-radius: 50% !important;
+    color: #691C32 !important;
+    box-shadow: 
+        0 8px 25px rgba(105, 28, 50, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.1),
+        inset 0 1px 3px rgba(255, 255, 255, 0.5) !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.modal-close-button:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(105, 28, 50, 0.3) !important;
+    transform: scale(1.15) rotate(90deg) !important;
+    box-shadow: 
+        0 12px 35px rgba(105, 28, 50, 0.25),
+        0 6px 20px rgba(0, 0, 0, 0.15),
+        inset 0 2px 6px rgba(255, 255, 255, 0.7) !important;
+}
+
+.modal-close-button:active {
+    transform: scale(1.05) rotate(90deg) !important;
+}
+
+.modal-close-button mat-icon {
+    font-size: 22px !important;
+    width: 22px !important;
+    height: 22px !important;
+    line-height: 22px !important;
+    color: #691C32 !important;
+    font-weight: bold !important;
+}
+
+/* Efecto adicional para el hover del ícono */
+.modal-close-button:hover mat-icon {
+    color: #8B2A44 !important;
+    text-shadow: 0 1px 3px rgba(105, 28, 50, 0.3) !important;
+}
+
+/* Animación de entrada del modal */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Media queries para responsive */
+@media (max-width: 768px) {
+    .user-modal-container {
+        max-width: 95vw;
+        margin: 10px;
+        border-radius: 16px;
+    }
+    
+    .modal-close-button {
+        top: 12px !important;
+        right: 12px !important;
+        width: 36px !important;
+        height: 36px !important;
+    }
+    
+    .modal-close-button mat-icon {
+        font-size: 18px !important;
+        width: 18px !important;
+        height: 18px !important;
+    }
+}

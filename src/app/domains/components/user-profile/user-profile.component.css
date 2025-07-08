@@ -1,0 +1,843 @@
+/* ==========================================
+   🎨 DISEÑO ELEGANTE PARA PERFIL DE USUARIO SAT
+   ========================================== */
+
+/* Contenedor principal con efectos modernos - SIN esquinas blancas */
+.user-profile-container {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 !important;
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: none !important; /* Las sombras las maneja el modal padre */
+  position: relative;
+  animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none !important;
+  outline: none !important;
+}
+
+.user-profile-container.compact {
+  max-width: 380px;
+  min-height: auto;
+}
+
+/* ========================================== */
+/* 🎨 HEADER ELEGANTE CON GRADIENTES Y PATRONES */
+/* ========================================== */
+
+.profile-header-elegant {
+  position: relative;
+  padding: 32px 24px 24px;
+  overflow: hidden;
+  color: white;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+  margin: 0 !important;
+}
+
+/* Fondo con múltiples capas para efecto premium */
+.header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    #691C32 0%, 
+    #8B2A44 35%, 
+    #A0335B 70%, 
+    #B8446F 100%);
+}
+
+/* Patrón decorativo sutil */
+.pattern-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px, 30px 30px;
+  animation: patternFloat 8s ease-in-out infinite;
+}
+
+/* Gradiente adicional para profundidad */
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(0, 0, 0, 0.1) 0%, 
+    transparent 50%, 
+    rgba(255, 255, 255, 0.05) 100%);
+}
+
+/* Contenido del header */
+.header-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ========================================== */
+/* 🎨 AVATAR ELEGANTE CON EFECTOS 3D */
+/* ========================================== */
+
+.avatar-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Anillo exterior con animación */
+.avatar-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+/* Avatar principal con efectos 3D */
+.user-avatar-elegant {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(0, 0, 0, 0.1) 100%);
+  backdrop-filter: blur(10px);
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 2px 8px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.user-avatar-elegant:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.3),
+    inset 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+.avatar-text-elegant {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+/* Badge de estado del usuario */
+.status-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.status-badge.primary {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.status-badge.accent {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.status-badge.warn {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  animation: warningPulse 2s ease-in-out infinite;
+}
+
+.status-badge mat-icon {
+  color: white;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* ========================================== */
+/* 🎨 INFORMACIÓN PRINCIPAL DEL USUARIO */
+/* ========================================== */
+
+.user-info-main {
+  flex: 1;
+  min-width: 0; /* Para truncamiento correcto */
+}
+
+.user-name-elegant {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+.user-position-elegant {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.user-rfc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.user-rfc-badge:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.rfc-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* ========================================== */
+/* 🎨 INDICADOR DE SESIÓN MODERNO */
+/* ========================================== */
+
+.session-indicator {
+  margin-top: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.session-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.session-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.session-time.normal {
+  background: rgba(76, 175, 80, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: #E8F5E8;
+}
+
+.session-time.warning {
+  background: rgba(255, 152, 0, 0.2);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  color: #FFF3E0;
+  animation: timeWarning 2s ease-in-out infinite;
+}
+
+.time-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.time-text {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* Barra de progreso de sesión personalizada */
+.session-progress-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.session-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #4CAF50 0%, 
+    #FFC107 70%, 
+    #f44336 100%);
+  border-radius: 3px;
+  transition: width 1s ease;
+  position: relative;
+}
+
+.session-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    transparent 100%);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Progress bar de sesión */
+.session-progress {
+  margin: 16px 0;
+  padding: 0 16px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.progress-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.progress-time {
+  color: #691C32;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.progress-time.warning {
+  color: #ff5722;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Secciones de información */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #691C32;
+}
+
+.section-title mat-icon {
+  color: #691C32;
+  font-size: 20px;
+}
+
+/* Grid de información general */
+.info-grid {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(105, 28, 50, 0.05);
+  border-radius: 8px;
+  border-left: 4px solid #691C32;
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  background: rgba(105, 28, 50, 0.08);
+  transform: translateX(4px);
+}
+
+.info-icon {
+  color: #691C32;
+  font-size: 20px;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-label {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Sección de roles */
+.roles-section {
+  margin: 16px 0;
+}
+
+.roles-container {
+  margin-top: 12px;
+}
+
+.roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.roles-list mat-chip-option {
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.roles-list mat-chip-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Grid de información de sesión */
+.session-grid {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.session-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.session-icon {
+  color: #691C32;
+  font-size: 20px;
+}
+
+.session-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.session-label {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.session-value {
+  font-size: 0.85rem;
+  color: #333;
+  font-weight: 500;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* Alertas de seguridad */
+.security-alerts {
+  margin-top: 16px;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.alert.warning {
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  color: #f57c00;
+}
+
+.alert mat-icon {
+  font-size: 18px;
+}
+
+/* Versión compacta */
+.compact-content {
+  padding: 16px;
+}
+
+.compact-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.compact-roles mat-chip-option {
+  font-size: 0.7rem;
+  height: 24px;
+  border-radius: 12px;
+}
+
+.more-roles {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 500;
+  padding: 4px 8px;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .user-profile-card {
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .profile-header {
+    padding: 20px 16px;
+  }
+  
+  .user-avatar {
+    width: 56px !important;
+    height: 56px !important;
+  }
+  
+  .avatar-text {
+    font-size: 20px;
+  }
+  
+  .user-name {
+    font-size: 1.2rem !important;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .session-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================== */
+/* 🎨 CONTENIDO PRINCIPAL ELEGANTE */
+/* ========================================== */
+
+.profile-content-elegant {
+  padding: 24px;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+  margin: 0 !important;
+}
+
+/* ========================================== */
+/* 🎨 ANIMACIONES PREMIUM */
+/* ========================================== */
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes patternFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+@keyframes ringPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes warningPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+  }
+}
+
+@keyframes timeWarning {
+  0%, 100% {
+    background: rgba(255, 152, 0, 0.2);
+  }
+  50% {
+    background: rgba(255, 152, 0, 0.3);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+/* ========================================== */
+/* 🎨 SECCIONES DE INFORMACIÓN MEJORADAS */
+/* ========================================== */
+
+.info-section {
+  margin: 20px 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #691C32;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-title mat-icon {
+  color: #691C32;
+  font-size: 20px;
+  background: rgba(105, 28, 50, 0.1);
+  padding: 4px;
+  border-radius: 6px;
+}
+
+/* Grid de información mejorado */
+.info-grid {
+  display: grid;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid rgba(105, 28, 50, 0.1);
+  box-shadow: 0 2px 8px rgba(105, 28, 50, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.info-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(135deg, #691C32, #8B2A44);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(105, 28, 50, 0.15);
+}
+
+.info-item:hover::before {
+  transform: scaleY(1);
+}
+
+.info-icon {
+  color: #691C32;
+  font-size: 24px;
+  background: rgba(105, 28, 50, 0.1);
+  padding: 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+/* ========================================== */
+/* 🎨 CHIPS DE ROLES MODERNOS */
+/* ========================================== */
+
+.roles-section {
+  margin: 24px 0;
+}
+
+.roles-container {
+  margin-top: 16px;
+}
+
+.roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.roles-list mat-chip-option {
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.roles-list mat-chip-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent);
+  transition: left 0.5s ease;
+}
+
+.roles-list mat-chip-option:hover::before {
+  left: 100%;
+}
+
+.roles-list mat-chip-option:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================== */
+/* 🎨 DIVIDERS Y ELEMENTOS DECORATIVOS */
+/* ========================================== */
+
+mat-divider {
+  margin: 24px 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(105, 28, 50, 0.2), 
+    transparent);
+  height: 2px;
+  border: none;
+}
+
+/* ========================================== */
+/* 🎨 RESPONSIVE DESIGN MEJORADO */
+/* ========================================== */
+
+@media (max-width: 768px) {
+  .user-profile-container {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 16px;
+  }
+  
+  .profile-header-elegant {
+    padding: 24px 16px 20px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .user-avatar-elegant {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .avatar-text-elegant {
+    font-size: 24px;
+  }
+  
+  .user-name-elegant {
+    font-size: 1.4rem;
+  }
+  
+  .profile-content-elegant {
+    padding: 20px 16px;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+} 
