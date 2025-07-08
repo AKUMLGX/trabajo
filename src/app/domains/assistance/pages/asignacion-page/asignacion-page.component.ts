@@ -1,5 +1,5 @@
 import { AsignarAsunto, AsignarAsuntoRequest, modalItem } from './../../../interfaces/asiganar-AsuntoRequest.interface';
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -46,6 +46,90 @@ import { NgxPaginationModule } from 'ngx-pagination';
       to { opacity: 1; }
     }
 
+    /* 🚨 Animación para indicadores urgentes */
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+      }
+    }
+
+    /* ⚡ Animación para indicador ping */
+    .animate-ping {
+      animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes ping {
+      75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+
+    /* 🎯 Hover effects para semáforos */
+    .group:hover .semaforo-hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 📱 Mejoras responsive para badges */
+    @media (max-width: 768px) {
+      .badge-prioridad {
+        font-size: 0.65rem;
+        padding: 0.25rem 0.5rem;
+      }
+    }
+
+    /* 🔄 Estilos para scroll horizontal suave */
+    .tabla-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: #691C32 #f1f1f1;
+    }
+
+    .tabla-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .tabla-scroll::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    .tabla-scroll::-webkit-scrollbar-thumb {
+      background: #691C32;
+      border-radius: 4px;
+    }
+
+    .tabla-scroll::-webkit-scrollbar-thumb:hover {
+      background: #8B1D3C;
+    }
+
+    /* 💬 Tooltip mejorado */
+    .tooltip-text {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* 📝 Animación para texto expandible */
+    .text-expand-animation {
+      transition: max-height 0.3s ease-in-out;
+      overflow: hidden;
+    }
+
     ::ng-deep pdf-viewer {
       height: 100%;
       width: 100%;
@@ -59,7 +143,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     }
   `]
 })
-export class AsignacionPageComponent implements OnInit {
+export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy {
   // asuntos: Asunto[] = [];
   tablePorAsignarIndicador: tableAsuntosPorDictaminar[] = []
 
@@ -106,6 +190,10 @@ buscador = new FormControl('');
   // Variable para el modal de detalle
   asuntoDetalle: tableAsuntosPorDictaminar | null = null;
 
+  // 📱 Variables para manejo de texto largo y responsividad
+  textosExpandidos: Set<string> = new Set();
+  scrollHorizontalVisible: boolean = false;
+
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
     private modalService: ModalService,
@@ -122,11 +210,28 @@ buscador = new FormControl('');
   }
 
   actualizarPaginacion(datos: tableAsuntosPorDictaminar[]) {
+    // 📊 APLICAR ORDENAMIENTO POR PRIORIDADES ANTES DE PAGINAR
+    const datosOrdenados = datos.sort((a, b) => {
+      // Obtener prioridades usando el sistema de prioridades
+      const prioridadA = this.getPrioridad(a);
+      const prioridadB = this.getPrioridad(b);
+
+      // Primero ordenar por prioridad (4=urgente, 3=rojo, 2=amarillo, 1=verde)
+      if (prioridadA !== prioridadB) {
+        return prioridadB - prioridadA; // Mayor prioridad primero
+      }
+
+      // Si tienen la misma prioridad, ordenar por antigüedad real (mayor primero)
+      const antiguedadA = this.calcularAntiguedadEnDias(a.fecha_recepcion);
+      const antiguedadB = this.calcularAntiguedadEnDias(b.fecha_recepcion);
+      return antiguedadB - antiguedadA;
+    });
+    
     // Guardar el total de registros
-    this.totalRegistros = datos.length;
+    this.totalRegistros = datosOrdenados.length;
     
     // Calcular total de páginas
-    this.totalPages = Math.ceil(datos.length / this.itemsPerPage);
+    this.totalPages = Math.ceil(datosOrdenados.length / this.itemsPerPage);
     
     // Resetear a la primera página si la página actual es mayor que el total
     if (this.currentPage > this.totalPages && this.totalPages > 0) {
@@ -137,8 +242,8 @@ buscador = new FormControl('');
     const inicio = (this.currentPage - 1) * this.itemsPerPage;
     const fin = inicio + this.itemsPerPage;
     
-    // Actualizar los asuntos paginados
-    this.asuntosPaginados = datos.slice(inicio, fin);
+    // Actualizar los asuntos paginados con orden por prioridades
+    this.asuntosPaginados = datosOrdenados.slice(inicio, fin);
   }
 
   tablePorAsignar() {
@@ -191,7 +296,7 @@ buscador = new FormControl('');
 
   get asuntosFiltrados() {
     // Filtrar por persona relacionada si hay término de búsqueda
-    return this.tablePorAsignarIndicador.filter(asunto =>
+    return this.allData.filter(asunto =>
       asunto.persona_relacionada.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
@@ -210,42 +315,117 @@ buscador = new FormControl('');
     return this.totalRegistros;
   }
 
-  get asuntosOrdenados() {
-    // Primero ordenamos todos los asuntos filtrados
-    const allOrdered = this.asuntosFiltrados.sort((a, b) => {
-      // Primero ordenar por prioridad (rojo > amarillo > verde)
-      const prioridadA = this.getPrioridad(a.plazo_atencion);
-      const prioridadB = this.getPrioridad(b.plazo_atencion);
-
-      if (prioridadA !== prioridadB) {
-        return prioridadB - prioridadA;
-      }
-
-      // Si tienen la misma prioridad, ordenar por días de antigüedad
-      return b.plazo_atencion - a.plazo_atencion;
-    });
-
-    // Luego tomamos solo los que corresponden a la página actual
-    return allOrdered.slice(this.startIndex, this.endIndex);
+  // 🕐 CALCULAR ANTIGÜEDAD REAL EN DÍAS DESDE FECHA DE RECEPCIÓN
+  private calcularAntiguedadEnDias(fechaRecepcion: string): number {
+    if (!fechaRecepcion) return 0;
+    
+    try {
+      const fechaRecep = new Date(fechaRecepcion);
+      const fechaActual = new Date();
+      const diferenciaMilisegundos = fechaActual.getTime() - fechaRecep.getTime();
+      const diferenciaDias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
+      
+      return diferenciaDias >= 0 ? diferenciaDias : 0;
+    } catch (error) {
+      return 0;
+    }
   }
 
-
-  getPrioridad(dias: number): number {
-    if (dias > 15 )  return 3; // Rojo
-    if (dias >= 5 && dias <= 15) return 2; // Amarillo
+  // 🎯 SISTEMA DE PRIORIDADES CORREGIDO CON ANTIGÜEDAD REAL
+  getPrioridad(asunto: tableAsuntosPorDictaminar): number {
+    // 🔴 MÁXIMA PRIORIDAD: Plazo de atención = 0 (URGENTE)
+    if (asunto.plazo_atencion === 0) {
+      return 4; // Prioridad máxima
+    }
+    
+    // Calcular antigüedad real desde fecha de recepción
+    const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
+    
+    // 🔴 ALTA PRIORIDAD: Mayor a 15 días de antigüedad real
+    if (antiguedadDias > 15) {
+      return 3; // Rojo por antigüedad
+    }
+    
+    // 🟡 MEDIA PRIORIDAD: Entre 5 y 15 días de antigüedad real
+    if (antiguedadDias >= 5 && antiguedadDias <= 15) {
+      return 2; // Amarillo
+    }
+    
+    // 🟢 BAJA PRIORIDAD: Menor a 4 días de antigüedad real
     return 1; // Verde
   }
 
-  getColorSemaforo(asunto:tableAsuntosPorDictaminar ): string {
-    const dias = asunto.plazo_atencion;
-    if (dias > 15) {
-      return 'bg-red-500';
-    } else if (dias >= 5 && dias <= 15) {
-      return 'bg-yellow-500';
-    } else {
-      return 'bg-green-500';
+  // 🚦 SEMÁFORO CORREGIDO CON ANTIGÜEDAD REAL
+  getColorSemaforo(asunto: tableAsuntosPorDictaminar): string {
+    // 🔴 ROJO URGENTE: Plazo de atención = 0 (URGENTE)
+    if (asunto.plazo_atencion === 0) {
+      return 'bg-red-500 animate-pulse'; // Rojo pulsante para urgente
     }
+    
+    // Calcular antigüedad real desde fecha de recepción
+    const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
+    
+    // 🔴 ROJO: Mayor a 15 días de antigüedad real
+    if (antiguedadDias > 15) {
+      return 'bg-red-500'; 
+    }
+    
+    // 🟡 AMARILLO: Entre 5 y 15 días de antigüedad real
+    if (antiguedadDias >= 5 && antiguedadDias <= 15) {
+      return 'bg-yellow-500';
+    }
+    
+    // 🟢 VERDE: Menor a 4 días de antigüedad real
+    return 'bg-green-500';
   }
+
+  // 🎨 DESCRIPCIÓN DE PRIORIDAD CORREGIDA
+  getDescripcionPrioridad(asunto: tableAsuntosPorDictaminar): string {
+    if (asunto.plazo_atencion === 0) {
+      return 'URGENTE - Requiere atención inmediata';
+    }
+    
+    const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
+    
+    if (antiguedadDias > 15) {
+      return `CRÍTICO - ${antiguedadDias} días de antigüedad`;
+    }
+    if (antiguedadDias >= 5 && antiguedadDias <= 15) {
+      return `NORMAL - ${antiguedadDias} días de antigüedad`;
+    }
+    return `RECIENTE - ${antiguedadDias} días de antigüedad`;
+  }
+
+  // 🏷️ BADGES DE PRIORIDAD CORREGIDOS
+  getBadgePrioridad(asunto: tableAsuntosPorDictaminar): { clase: string, texto: string } {
+    if (asunto.plazo_atencion === 0) {
+      return { 
+        clase: 'bg-red-100 text-red-800 animate-pulse border border-red-300', 
+        texto: '🚨 URGENTE' 
+      };
+    }
+    
+    const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
+    
+    if (antiguedadDias > 15) {
+      return { 
+        clase: 'bg-red-100 text-red-800 border border-red-300', 
+        texto: `🔴 CRÍTICO (${antiguedadDias}d)` 
+      };
+    }
+    if (antiguedadDias >= 5 && antiguedadDias <= 15) {
+      return { 
+        clase: 'bg-yellow-100 text-yellow-800 border border-yellow-300', 
+        texto: `🟡 NORMAL (${antiguedadDias}d)` 
+      };
+    }
+    return { 
+      clase: 'bg-green-100 text-green-800 border border-green-300', 
+      texto: `🟢 RECIENTE (${antiguedadDias}d)` 
+    };
+  }
+
+
 
   // verPDF(asunto: Asunto) {
   //   // En producción, aquí obtendrías la URL del archivo PDF del backend
@@ -454,5 +634,65 @@ buscador = new FormControl('');
   cerrarModalDetalle() {
     this.asuntoDetalle = null;
     this.modalService.closeAllDialogs();
+  }
+
+  // 📝 MÉTODOS PARA MANEJO DE TEXTO LARGO
+  truncarTexto(texto: string, limite: number = 60): string {
+    if (!texto || texto.length <= limite) {
+      return texto;
+    }
+    return texto.substring(0, limite) + '...';
+  }
+
+  toggleTextoExpandido(folioInterno: string): void {
+    if (this.textosExpandidos.has(folioInterno)) {
+      this.textosExpandidos.delete(folioInterno);
+    } else {
+      this.textosExpandidos.add(folioInterno);
+    }
+  }
+
+  isTextoExpandido(folioInterno: string): boolean {
+    return this.textosExpandidos.has(folioInterno);
+  }
+
+  necesitaTruncado(texto: string, limite: number = 60): boolean {
+    return Boolean(texto && texto.length > limite);
+  }
+
+  // 📱 MÉTODOS PARA SCROLL HORIZONTAL RESPONSIVO
+  scrollHorizontal(direccion: 'left' | 'right'): void {
+    const tabla = document.querySelector('.tabla-scroll');
+    if (tabla) {
+      const scrollAmount = 200;
+      const currentScroll = tabla.scrollLeft;
+      const newScroll = direccion === 'left' ? 
+        currentScroll - scrollAmount : 
+        currentScroll + scrollAmount;
+      
+      tabla.scrollTo({
+        left: newScroll,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  // 📱 DETECTAR SI NECESITA SCROLL HORIZONTAL
+  ngAfterViewInit(): void {
+    this.checkScrollHorizontal();
+    window.addEventListener('resize', () => this.checkScrollHorizontal());
+  }
+
+  checkScrollHorizontal(): void {
+    setTimeout(() => {
+      const tabla = document.querySelector('.tabla-scroll');
+      if (tabla) {
+        this.scrollHorizontalVisible = tabla.scrollWidth > tabla.clientWidth;
+      }
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', () => this.checkScrollHorizontal());
   }
 }

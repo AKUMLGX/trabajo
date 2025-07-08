@@ -20,83 +20,156 @@
       </div>
     </div>
 
+    <!-- 📱 CONTROLES DE SCROLL HORIZONTAL MODERNO -->
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-      <table class="w-full">
-        <thead>
-          <tr class="bg-[#691C32] text-white">
-            <th class="py-2 px-3 text-left">Ind.</th>
-            <th class="py-2 px-3 text-left">Folio Interno</th>
-            <th class="py-2 px-3 text-left">Carpeta de Investigación</th>
-            <th class="py-2 px-3 text-left">Oficio</th>
-            <th class="py-2 px-3 text-left">Persona Relacionada</th>
-            <th class="py-2 px-3 text-left">Fecha Recepción</th>
-            <th class="py-2 px-3 text-left">Plazo Atención</th>
-            <th class="py-2 px-3 text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let asunto of asuntosPaginados" 
-              class="border-b hover:bg-gray-50 even:bg-gray-50 transition-colors">
-            <td class="py-2 px-3">
-              <div [class]="'w-3 h-3 rounded-full ' + getColorSemaforo(asunto)"></div>
-            </td>
-            <td class="py-2 px-3">{{asunto.folio_interno}}</td>
-            <td class="py-2 px-3">{{asunto.carpeta_investigacion}}</td>
-            <td class="py-2 px-3">{{asunto.oficio}}</td>
-            <td class="py-2 px-3">{{asunto.persona_relacionada}}</td>
-            <td class="py-2 px-3">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
-            <td class="py-2 px-3">
-              <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' + 
-                            (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800' : 
-                             asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800' : 
-                             'bg-blue-100 text-blue-800')">
-                {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
-              </span>
-            </td>
+      <!-- Botones de scroll horizontal superiores -->
+      <div *ngIf="scrollHorizontalVisible" class="flex items-center justify-between bg-gray-50 border-b px-4 py-2">
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          <span class="text-sm text-gray-600">Desplaza horizontalmente para ver más campos</span>
+        </div>
+        <div class="flex space-x-2">
+          <button (click)="scrollHorizontal('left')" 
+                  class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
+            <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button (click)="scrollHorizontal('right')" 
+                  class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
+            <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-            <td class="py-3 px-3">
-              <div class="flex items-center justify-center gap-1">
-                <!-- Botón Detalle -->
-                <button (click)="abrirModalDetalle(templateDetalle, asunto)"
-                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
-                  title="Ver detalle">
-                  <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Detalle
+      <!-- Contenedor con scroll horizontal -->
+      <div class="tabla-scroll overflow-x-auto">
+        <table class="w-full min-w-[900px]">
+          <thead>
+            <tr class="bg-[#691C32] text-white">
+              <th class="py-2 px-3 text-left whitespace-nowrap">Ind.</th>
+              <th class="py-2 px-3 text-left whitespace-nowrap">Folio Interno</th>
+              <th class="py-2 px-3 text-left whitespace-nowrap">Carpeta de Investigación</th>
+              <th class="py-2 px-3 text-left whitespace-nowrap">Oficio</th>
+              <th class="py-2 px-3 text-left whitespace-nowrap min-w-[250px]">Persona Relacionada</th>
+              <th class="py-2 px-3 text-left whitespace-nowrap">Fecha Recepción</th>
+              <th class="py-2 px-3 text-left whitespace-nowrap">Plazo Atención</th>
+              <th class="py-2 px-3 text-center whitespace-nowrap">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let asunto of asuntosPaginados" 
+                class="border-b hover:bg-gray-50 even:bg-gray-50 transition-colors group">
+              <!-- 🚦 SEMÁFORO MEJORADO CON PRIORIDAD VISUAL -->
+              <td class="py-2 px-3 relative">
+                <div class="flex items-center justify-center">
+                  <div [class]="'w-4 h-4 rounded-full shadow-md transform transition-all duration-200 group-hover:scale-110 ' + getColorSemaforo(asunto)"
+                       [title]="getDescripcionPrioridad(asunto)">
+                  </div>
+                  <!-- 🚨 Indicador especial para URGENTE -->
+                  <div *ngIf="asunto.plazo_atencion === 0" 
+                       class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping">
+                  </div>
+                </div>
+              </td>
+              <td class="py-2 px-3 whitespace-nowrap">{{asunto.folio_interno}}</td>
+              <td class="py-2 px-3 whitespace-nowrap">{{asunto.carpeta_investigacion}}</td>
+              <td class="py-2 px-3 whitespace-nowrap">{{asunto.oficio}}</td>
+              <!-- 📝 CELDA CON MANEJO DE TEXTO LARGO -->
+              <td class="py-2 px-3 min-w-[250px] max-w-[300px]">
+                <div class="relative">
+                  <div class="break-words">
+                    <span [innerHTML]="isTextoExpandido(asunto.folio_interno) ? asunto.persona_relacionada : truncarTexto(asunto.persona_relacionada, 60)"></span>
+                  </div>
+                  
+                  <!-- Botón expandir/contraer para textos largos -->
+                  <button *ngIf="necesitaTruncado(asunto.persona_relacionada, 60)" 
+                          (click)="toggleTextoExpandido(asunto.folio_interno)"
+                          class="inline-flex items-center mt-1 text-xs text-blue-600 hover:text-blue-800 transition-colors">
+                    <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            [attr.d]="isTextoExpandido(asunto.folio_interno) ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'" />
+                    </svg>
+                    {{isTextoExpandido(asunto.folio_interno) ? 'Ver menos' : 'Ver más'}}
+                  </button>
+                  
+                  <!-- Tooltip para mostrar texto completo en hover -->
+                  <div *ngIf="necesitaTruncado(asunto.persona_relacionada, 60) && !isTextoExpandido(asunto.folio_interno)"
+                       class="absolute bottom-full left-0 mb-2 w-80 max-w-md p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
+                    <div class="break-words">{{asunto.persona_relacionada}}</div>
+                    <div class="absolute top-full left-4 w-2 h-2 bg-gray-900 transform rotate-45"></div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-2 px-3 whitespace-nowrap">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
+              <!-- 🎯 PLAZO ATENCIÓN SIMPLIFICADO -->
+              <td class="py-2 px-3 whitespace-nowrap">
+                <div class="flex flex-col items-start space-y-1">
+                  <!-- Badge principal de plazo -->
+                  <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' + 
+                                (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800 animate-pulse border border-red-300' : 
+                                 asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800 border border-gray-300' : 
+                                 'bg-blue-100 text-blue-800 border border-blue-300')">
+                    {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
                   </span>
-                </button>
+                  
+                  <!-- Badge de prioridad por antigüedad -->
+                  <span [class]="'px-2 py-0.5 rounded text-xs font-medium ' + getBadgePrioridad(asunto).clase">
+                    {{getBadgePrioridad(asunto).texto}}
+                  </span>
+                </div>
+              </td>
 
-                <!-- Botón Ver -->
-                <button 
-                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md"
-                  title="Ver documento">
-                  <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                  <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Ver
-                  </span>
-                </button>
 
-                <!-- Botón Asignar -->
-                <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
-                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-[#691C32] hover:bg-[#8B1D3C] transition-all duration-200 hover:shadow-md"
-                  title="Asignar">
-                  <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                  </svg>
-                  <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Asignar
-                  </span>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+              <td class="py-3 px-3 whitespace-nowrap">
+                <div class="flex items-center justify-center gap-1">
+                  <!-- Botón Detalle -->
+                  <button (click)="abrirModalDetalle(templateDetalle, asunto)"
+                    class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
+                    title="Ver detalle">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      Detalle
+                    </span>
+                  </button>
+
+                  <!-- Botón Ver -->
+                  <button 
+                    class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md"
+                    title="Ver documento">
+                    <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      Ver
+                    </span>
+                  </button>
+
+                  <!-- Botón Asignar -->
+                  <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
+                    class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-[#691C32] hover:bg-[#8B1D3C] transition-all duration-200 hover:shadow-md"
+                    title="Asignar">
+                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                    <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      Asignar
+                    </span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Paginador elegante -->
       <div class="p-4 bg-gray-50 border-t">
@@ -170,20 +243,30 @@
       </div>
     </div>
 
-    <div class="mt-6 bg-white rounded-lg shadow-md p-4 inline-block">
-      <div class="text-base font-medium text-[#691C32] mb-3">Indicadores de antigüedad:</div>
-      <div class="flex items-center space-x-8">
+    <!-- 🎯 INDICADORES DE PRIORIDAD ÚNICOS -->
+    <div class="mt-6 bg-white rounded-lg shadow-md p-4 border border-gray-200">
+      <div class="text-base font-medium text-[#691C32] mb-3 flex items-center">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Indicadores de prioridad:
+      </div>
+      <div class="flex flex-wrap items-center gap-6">
+        <!-- Urgente -->
         <div class="flex items-center">
-          <div class="w-4 h-4 rounded-full bg-green-500 mr-3 shadow-sm"></div>
-          <span class="text-sm font-medium">Menor a 4 días</span>
+          <span class="text-sm font-medium">🚨 <strong>URGENTE</strong> - Plazo = 0</span>
         </div>
+        <!-- Crítico -->
         <div class="flex items-center">
-          <div class="w-4 h-4 rounded-full bg-yellow-500 mr-3 shadow-sm"></div>
-          <span class="text-sm font-medium">Entre 5 y 15 días</span>
+          <span class="text-sm font-medium">🔴 <strong>CRÍTICO</strong> - Mayor a 15 días</span>
         </div>
+        <!-- Normal -->
         <div class="flex items-center">
-          <div class="w-4 h-4 rounded-full bg-red-500 mr-3 shadow-sm"></div>
-          <span class="text-sm font-medium">Mayor a 15 días</span>
+          <span class="text-sm font-medium">🟡 <strong>NORMAL</strong> - Entre 5 y 15 días</span>
+        </div>
+        <!-- Reciente -->
+        <div class="flex items-center">
+          <span class="text-sm font-medium">🟢 <strong>RECIENTE</strong> - Menor a 4 días</span>
         </div>
       </div>
     </div>
