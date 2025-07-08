@@ -194,19 +194,22 @@ buscador = new FormControl('');
   textosExpandidos: Set<string> = new Set();
   scrollHorizontalVisible: boolean = false;
 
-  // 🎯 VARIABLES PARA HEADER INTELIGENTE Y AGRUPACIÓN
-  filtroActivo: 'todos' | 'urgente' | 'plazo' | 'critico' | 'normal' | 'reciente' = 'todos';
+  // 🎯 VARIABLES PARA HEADER INTELIGENTE Y AGRUPACIÓN HÍBRIDA
+  filtroActivo: 'todos' | 'urgente' | 'critico' | 'normal' | 'reciente' = 'todos';
   mostrarAgrupacion: boolean = true;
   seccionesColapsadas: Set<string> = new Set();
   
-  // 📊 Contadores dinámicos
+  // 📊 Contadores dinámicos con subtotales de plazo
   contadores = {
     urgente: 0,
-    plazo: 0,
     critico: 0, 
     normal: 0,
     reciente: 0,
-    total: 0
+    total: 0,
+    // Subtotales de casos CON plazo dentro de cada categoría
+    criticoConPlazo: 0,
+    normalConPlazo: 0,
+    recienteConPlazo: 0
   };
 
   constructor(private router: Router,
@@ -348,22 +351,18 @@ buscador = new FormControl('');
     }
   }
 
-  // 🎯 SISTEMA DE PRIORIDADES CON NUEVA CATEGORÍA "PLAZO DEFINIDO"
+  // 🎯 SISTEMA DE PRIORIDADES HÍBRIDO - CLASIFICACIÓN POR ANTIGÜEDAD
   getPrioridad(asunto: tableAsuntosPorDictaminar): number {
     // 🚨 MÁXIMA PRIORIDAD: Plazo de atención = 0 (URGENTE)
     if (asunto.plazo_atencion === 0) {
-      return 5; // Prioridad máxima
+      return 4; // Prioridad máxima
     }
     
-    // 🟠 ALTA PRIORIDAD: Plazo de atención = 1,2,3...n días (PLAZO DEFINIDO)
-    if (asunto.plazo_atencion && asunto.plazo_atencion > 0) {
-      return 4; // Segunda prioridad más alta
-    }
-    
-    // Para casos SIN plazo definido (null/undefined), usar antigüedad de fecha
+    // Para todos los demás casos, clasificar por antigüedad de fecha_recepcion
+    // (independientemente si tienen plazo > 0 o no)
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
     
-    // 🔴 MEDIA-ALTA PRIORIDAD: Mayor a 15 días de antigüedad real
+    // 🔴 ALTA PRIORIDAD: Mayor a 15 días de antigüedad real
     if (antiguedadDias > 15) {
       return 3; // Crítico por antigüedad
     }
@@ -418,7 +417,7 @@ buscador = new FormControl('');
     return `RECIENTE - ${antiguedadDias} días de antigüedad`;
   }
 
-  // 🏷️ BADGES DE PRIORIDAD CON NUEVA CATEGORÍA "PLAZO DEFINIDO"
+  // 🏷️ BADGE PRINCIPAL POR ANTIGÜEDAD (Sistema Híbrido)
   getBadgePrioridad(asunto: tableAsuntosPorDictaminar): { clase: string, texto: string } {
     // 🚨 URGENTE: plazo = 0
     if (asunto.plazo_atencion === 0) {
@@ -428,15 +427,7 @@ buscador = new FormControl('');
       };
     }
     
-    // 🟠 PLAZO DEFINIDO: plazo = 1,2,3...n días
-    if (asunto.plazo_atencion && asunto.plazo_atencion > 0) {
-      return { 
-        clase: 'bg-orange-100 text-orange-800 border border-orange-300', 
-        texto: `🟠 PLAZO (${asunto.plazo_atencion}d)` 
-      };
-    }
-    
-    // Para casos sin plazo, usar lógica de antigüedad
+    // Para todos los demás casos, clasificar por antigüedad
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
     
     if (antiguedadDias > 15) {
@@ -455,6 +446,22 @@ buscador = new FormControl('');
       clase: 'bg-green-100 text-green-800 border border-green-300', 
       texto: `🟢 RECIENTE (${antiguedadDias}d)` 
     };
+  }
+
+  // 🏷️ BADGE SECUNDARIO PARA PLAZO (Diferenciador Visual)
+  getBadgePlazo(asunto: tableAsuntosPorDictaminar): { clase: string, texto: string } | null {
+    if (asunto.plazo_atencion && asunto.plazo_atencion > 0) {
+      return { 
+        clase: 'bg-orange-100 text-orange-800 border border-orange-300 ml-2', 
+        texto: `⏱️ PLAZO: ${asunto.plazo_atencion}d` 
+      };
+    }
+    return null;
+  }
+
+  // 🎨 VERIFICAR SI TIENE PLAZO (Para efectos visuales)
+  tienePlazo(asunto: tableAsuntosPorDictaminar): boolean {
+    return asunto.plazo_atencion !== null && asunto.plazo_atencion !== undefined && asunto.plazo_atencion > 0;
   }
 
 
@@ -730,20 +737,28 @@ buscador = new FormControl('');
 
   // 🎯 MÉTODOS PARA HEADER INTELIGENTE Y AGRUPACIÓN
   
-  // 📊 CALCULAR CONTADORES POR PRIORIDAD
+  // 📊 CALCULAR CONTADORES HÍBRIDOS CON SUBTOTALES DE PLAZO
   calcularContadores(datos: tableAsuntosPorDictaminar[]): void {
+    const urgentes = datos.filter(item => this.getPrioridad(item) === 4);
+    const criticos = datos.filter(item => this.getPrioridad(item) === 3);
+    const normales = datos.filter(item => this.getPrioridad(item) === 2);
+    const recientes = datos.filter(item => this.getPrioridad(item) === 1);
+    
     this.contadores = {
-      urgente: datos.filter(item => this.getPrioridad(item) === 5).length,  // plazo = 0
-      plazo: datos.filter(item => this.getPrioridad(item) === 4).length,    // plazo = 1,2,3...n
-      critico: datos.filter(item => this.getPrioridad(item) === 3).length,  // sin plazo + fecha > 15
-      normal: datos.filter(item => this.getPrioridad(item) === 2).length,   // sin plazo + fecha 5-15
-      reciente: datos.filter(item => this.getPrioridad(item) === 1).length, // sin plazo + fecha < 4
-      total: datos.length
+      urgente: urgentes.length,
+      critico: criticos.length,
+      normal: normales.length,
+      reciente: recientes.length,
+      total: datos.length,
+      // Calcular subtotales de casos CON plazo dentro de cada categoría
+      criticoConPlazo: criticos.filter(item => item.plazo_atencion && item.plazo_atencion > 0).length,
+      normalConPlazo: normales.filter(item => item.plazo_atencion && item.plazo_atencion > 0).length,
+      recienteConPlazo: recientes.filter(item => item.plazo_atencion && item.plazo_atencion > 0).length
     };
   }
 
   // 🔍 APLICAR FILTRO POR PRIORIDAD
-  aplicarFiltroPrioridad(filtro: 'todos' | 'urgente' | 'plazo' | 'critico' | 'normal' | 'reciente'): void {
+  aplicarFiltroPrioridad(filtro: 'todos' | 'urgente' | 'critico' | 'normal' | 'reciente'): void {
     this.filtroActivo = filtro;
     this.currentPage = 1; // Resetear a primera página
     
@@ -753,8 +768,7 @@ buscador = new FormControl('');
       
       if (filtro !== 'todos') {
         const prioridadMap = {
-          'urgente': 5,
-          'plazo': 4,
+          'urgente': 4,
           'critico': 3,
           'normal': 2,
           'reciente': 1
@@ -769,11 +783,10 @@ buscador = new FormControl('');
     });
   }
 
-  // 📋 AGRUPAR DATOS POR PRIORIDAD
+  // 📋 AGRUPAR DATOS POR PRIORIDAD HÍBRIDA
   obtenerDatosAgrupados(): { [key: string]: tableAsuntosPorDictaminar[] } {
     const agrupados: { [key: string]: tableAsuntosPorDictaminar[] } = {
       "urgente": [],
-      "plazo": [],
       "critico": [],
       "normal": [],
       "reciente": []
@@ -782,11 +795,8 @@ buscador = new FormControl('');
     this.allData.forEach(item => {
       const prioridad = this.getPrioridad(item);
       switch (prioridad) {
-        case 5:
-          agrupados["urgente"].push(item);
-          break;
         case 4:
-          agrupados["plazo"].push(item);
+          agrupados["urgente"].push(item);
           break;
         case 3:
           agrupados["critico"].push(item);
@@ -850,14 +860,6 @@ buscador = new FormControl('');
          descripcion: 'Requieren atención inmediata',
          bgColor: 'bg-red-50',
          borderColor: 'border-red-200'
-       },
-       "plazo": {
-         icono: '🟠',
-         color: 'text-orange-600',
-         titulo: 'CASOS CON PLAZO DEFINIDO',
-         descripcion: 'Tienen plazo específico de atención',
-         bgColor: 'bg-orange-50',
-         borderColor: 'border-orange-200'
        },
        "critico": {
          icono: '🔴',
