@@ -28,6 +28,45 @@ export class FileService {
       });
   }
 
+  updatePdfFileBandejaAtencion(folio: string, fileName: string): void {
+    console.log('🔍 [FileService] updatePdfFileBandejaAtencion INICIADO');
+    console.log('🔍 [FileService] Parámetros recibidos:', { folio, fileName });
+    
+    let params = {
+      folio: folio,
+      file_name: fileName,
+    };
+    
+    const fullUrl = environment.baseUrl + environment.getPdfEndpoint;
+    console.log('🔍 [FileService] URL construida:', fullUrl);
+    console.log('🔍 [FileService] Parámetros de la petición:', params);
+    console.log('🔍 [FileService] Environment.baseUrl:', environment.baseUrl);
+    console.log('🔍 [FileService] Environment.getPdfEndpoint:', environment.getPdfEndpoint);
+    
+    this.httpClient
+      .get(fullUrl, { params: params, responseType: 'text' })
+      .subscribe({
+        next: (data) => {
+          console.log('✅ [FileService] Respuesta exitosa del servidor');
+          console.log('✅ [FileService] Tipo de datos recibidos:', typeof data);
+          console.log('✅ [FileService] Longitud de datos:', data?.length || 0);
+          console.log('✅ [FileService] Primeros 100 caracteres:', data?.substring(0, 100));
+          
+          this.pdf = data;
+          this.pdfUpdated.emit(this.pdf);
+          console.log('✅ [FileService] Evento pdfUpdated emitido');
+        },
+        error: (error) => {
+          console.error('❌ [FileService] Error en la petición HTTP:', error);
+          console.error('❌ [FileService] Status:', error.status);
+          console.error('❌ [FileService] StatusText:', error.statusText);
+          console.error('❌ [FileService] URL que falló:', fullUrl);
+          console.error('❌ [FileService] Parámetros que fallaron:', params);
+          console.error('❌ [FileService] Error completo:', JSON.stringify(error, null, 2));
+        }
+      });
+  }
+
   updateMsgFile(folio: string, fileName: string): void {
     let params = {
       folio: folio,

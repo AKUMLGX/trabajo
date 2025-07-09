@@ -11,6 +11,7 @@ import { usuariosPorAdministracion } from '../interfaces/usuarios-Por-administra
 import { AsignarAsuntoRequest } from '../interfaces/asiganar-AsuntoRequest.interface';
 import { AsuntoPorAsigacionResponseEnTramite } from '../interfaces/asuntoPorAtencionResponse.interface';
 import { DownloadExcelCards } from '../interfaces/descargarExcelCards.interface';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
