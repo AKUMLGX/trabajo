@@ -316,7 +316,7 @@ export class CardsComponent implements OnInit {
         // 🎨 ACTUALIZAR SISTEMA NUEVO DE FILTROS
         this.extraerDictaminadoresUnicos();
         this.filtrarAsuntosAtencion();
-        
+
         if (this.vistaActual === 'atencion') {
           this.actualizarTablaSegunVista();
           this.regenerarPaginacionRapida();
@@ -710,12 +710,13 @@ export class CardsComponent implements OnInit {
   }
 
   // Método para aprobar un asunto
-  aprobarAsuntoRevision(datos: { id: number, observaciones: string }): void {
+  aprobarAsuntoRevision(datos: { id: number, observaciones: string, tipoAprobacion: 'parcial' | 'total' }): void {
     console.log('Aprobando asunto:', datos);
 
     // Aquí iría la llamada al servicio para aprobar el asunto
     // Por ahora solo mostramos un mensaje y actualizamos la lista
-    this.mostrarMensaje(`Asunto ${datos.id} aprobado correctamente`);
+    const tipoTexto = datos.tipoAprobacion === 'parcial' ? 'Parcial' : 'Total';
+    this.mostrarMensaje(`Asunto ${datos.id} aprobado como Atención ${tipoTexto}`);
 
     // Actualizar la lista de asuntos
     this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
@@ -730,7 +731,22 @@ export class CardsComponent implements OnInit {
 
     // Aquí iría la llamada al servicio para rechazar el asunto
     // Por ahora solo mostramos un mensaje y actualizamos la lista
-    this.mostrarMensaje(`Asunto ${datos.id} rechazado por: ${datos.motivo}`);
+    this.mostrarMensaje(`Asunto ${datos.id} rechazado definitivamente por: ${datos.motivo}`);
+
+    // Actualizar la lista de asuntos
+    this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
+    if (this.vistaActual === 'aprobacion') {
+      this.tablePorDictaminar = this.asuntosPorAprobar;
+    }
+  }
+
+  // Método para regresar un asunto al dictaminador
+  regresarAsuntoRevision(datos: { id: number, observaciones: string, motivo: string }): void {
+    console.log('Regresando asunto al dictaminador:', datos);
+
+    // Aquí iría la llamada al servicio para regresar el asunto
+    // Por ahora solo mostramos un mensaje y actualizamos la lista
+    this.mostrarMensaje(`Asunto ${datos.id} regresado al dictaminador: ${datos.motivo}`);
 
     // Actualizar la lista de asuntos
     this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
@@ -860,6 +876,20 @@ export class CardsComponent implements OnInit {
   // Método para ir a la vista de Asuntos por Asignar
   irAAsignacion(): void {
     this.router.navigate(['/layout/asignacion']);
+  }
+
+  // 🚨 NUEVO: Método para ir a la vista de Asuntos Urgentes
+  irAAsignacionUrgentes(): void {
+    console.log('🚨 [CardsComponent] Navegando a asuntos urgentes');
+    
+    // Navegar a la página de asignación con parámetros de filtro para urgentes
+    this.router.navigate(['/layout/asignacion'], {
+      queryParams: {
+        filtro: 'urgentes',
+        plazo: '0',
+        vista: 'urgentes'
+      }
+    });
   }
 
   // Método para visualizar PDF alternativo

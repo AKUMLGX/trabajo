@@ -86,13 +86,18 @@
     </div>
   </div>
 
-  <!-- 🔥 BANNER URGENTE CON EFECTO PULSO + GLOW MODERNO -->
+  <!-- 🔥 BOTÓN URGENTE CON EFECTO PULSO + GLOW MODERNO -->
   <div class="mb-6 mx-6">
-    <div class="banner-urgente-moderno relative overflow-hidden rounded-xl shadow-2xl w-full transform transition-all duration-300">
+    <button 
+      (click)="irAAsignacionUrgentes()" 
+      class="banner-urgente-moderno relative overflow-hidden rounded-xl shadow-2xl w-full transform transition-all duration-300 hover:scale-105 hover:shadow-3xl cursor-pointer border-none bg-transparent p-0"
+      [disabled]="asuntosUrgentes === 0"
+      [class.opacity-50]="asuntosUrgentes === 0"
+      [class.cursor-not-allowed]="asuntosUrgentes === 0">
       <div class="urgent-content-glow flex items-center p-5">
         <!-- 💓 Icono con efecto latido -->
         <div class="w-10 h-10 rounded-full flex items-center justify-center mr-4 icon-latido">
-          <img src="{{environment.base}}/assets/images/A_urgentes.svg" alt="Asignar" class="w-6 h-6">
+          <img src="{{environment.base}}/assets/images/A_urgentes.svg" alt="Ver Asuntos Urgentes" class="w-6 h-6">
         </div>
         
         <div class="flex-1">
@@ -106,6 +111,12 @@
             <span class="text-[#FF003F] text-2xl font-bold">
               {{asuntosUrgentes}} asuntos requieren atención inmediata
             </span>
+            </div>
+          
+          <!-- 🎯 Indicador de acción -->
+          <div class="mt-2 text-sm text-gray-600 font-medium">
+            <span *ngIf="asuntosUrgentes > 0">👆 Haz clic para ver y gestionar los asuntos urgentes</span>
+            <span *ngIf="asuntosUrgentes === 0">✅ No hay asuntos urgentes en este momento</span>
           </div>
         </div>
         
@@ -118,8 +129,15 @@
           <div class="particula-2"></div>
           <div class="particula-3"></div>
         </div>
+        
+        <!-- 🔥 Icono de acción en la esquina -->
+        <div class="absolute top-3 right-3 text-[#FF003F] opacity-75" *ngIf="asuntosUrgentes > 0">
+          <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </div>
       </div>
-    </div>
+    </button>
   </div>
 
   <!-- Tabla de asuntos - versión mejorada con ancho completo -->
@@ -656,7 +674,8 @@
     [archivos]="archivosAsunto"
     (cerrarModalEvent)="cerrarModalRevision()"
     (aprobarAsuntoEvent)="aprobarAsuntoRevision($event)"
-    (rechazarAsuntoEvent)="rechazarAsuntoRevision($event)">
+    (rechazarAsuntoEvent)="rechazarAsuntoRevision($event)"
+    (regresarAsuntoEvent)="regresarAsuntoRevision($event)">
   </app-revision-modal>
 
   <!-- Modal de Atención de Asuntos -->

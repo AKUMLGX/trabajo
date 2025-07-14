@@ -18,8 +18,9 @@ export class RevisionModalComponent implements OnInit {
   @Input() archivos: any[] = [];
   
   @Output() cerrarModalEvent = new EventEmitter<void>();
-  @Output() aprobarAsuntoEvent = new EventEmitter<{id: number, observaciones: string}>();
+  @Output() aprobarAsuntoEvent = new EventEmitter<{id: number, observaciones: string, tipoAprobacion: 'parcial' | 'total'}>();
   @Output() rechazarAsuntoEvent = new EventEmitter<{id: number, observaciones: string, motivo: string}>();
+  @Output() regresarAsuntoEvent = new EventEmitter<{id: number, observaciones: string, motivo: string}>();
   
   // Formulario para observaciones
   formularioRevision: FormGroup;
@@ -42,10 +43,24 @@ export class RevisionModalComponent implements OnInit {
     'Requiere correcciones mayores',
     'Otro motivo'
   ];
+
+  // Motivos para regresar al dictaminador
+  motivosRegreso: string[] = [
+    'Requiere información adicional',
+    'Documentación incompleta',
+    'Necesita correcciones técnicas',
+    'Falta documentación soporte',
+    'Requiere aclaración de criterios',
+    'Otro motivo'
+  ];
   
   // Estados de la interfaz
   enviandoAprobacion: boolean = false;
   enviandoRechazo: boolean = false;
+  enviandoRegreso: boolean = false;
+  
+  // Tipo de aprobación seleccionada
+  tipoAprobacionSeleccionada: 'parcial' | 'total' | null = null;
   
   constructor(
     private fb: FormBuilder,
@@ -53,7 +68,8 @@ export class RevisionModalComponent implements OnInit {
   ) {
     this.formularioRevision = this.fb.group({
       observaciones: ['', [Validators.required, Validators.minLength(10)]],
-      motivo: ['']
+      motivo: [''],
+      motivoRegreso: ['']
     });
   }
   
@@ -129,20 +145,23 @@ export class RevisionModalComponent implements OnInit {
     }
   }
   
-  aprobarAsunto(): void {
+  aprobarAsunto(tipoAprobacion: 'parcial' | 'total'): void {
     if (this.formularioRevision.valid && this.asunto) {
       this.enviandoAprobacion = true;
+      this.tipoAprobacionSeleccionada = tipoAprobacion;
       
-      // Emitir evento de aprobación con las observaciones
+      // Emitir evento de aprobación con las observaciones y tipo
       this.aprobarAsuntoEvent.emit({
         id: this.asunto.id_asunto,
-        observaciones: this.formularioRevision.get('observaciones')?.value
+        observaciones: this.formularioRevision.get('observaciones')?.value,
+        tipoAprobacion: tipoAprobacion
       });
       
       // En un caso real, esperaríamos la respuesta del servicio
       // Aquí simulamos un tiempo de espera
       setTimeout(() => {
         this.enviandoAprobacion = false;
+        this.tipoAprobacionSeleccionada = null;
         this.cerrarModal();
       }, 1000);
     }
@@ -175,12 +194,42 @@ export class RevisionModalComponent implements OnInit {
       }, 1000);
     }
   }
+
+  regresarAsunto(): void {
+    if (this.formularioRevision.valid && this.asunto) {
+      // Validar que se haya seleccionado un motivo de regreso
+      const motivo = this.formularioRevision.get('motivoRegreso')?.value;
+      if (!motivo) {
+        // Marcar el campo como tocado para mostrar el error
+        this.formularioRevision.get('motivoRegreso')?.markAsTouched();
+        return;
+      }
+      
+      this.enviandoRegreso = true;
+      
+      // Emitir evento de regreso con las observaciones y el motivo
+      this.regresarAsuntoEvent.emit({
+        id: this.asunto.id_asunto,
+        observaciones: this.formularioRevision.get('observaciones')?.value,
+        motivo: motivo
+      });
+      
+      // En un caso real, esperaríamos la respuesta del servicio
+      // Aquí simulamos un tiempo de espera
+      setTimeout(() => {
+        this.enviandoRegreso = false;
+        this.cerrarModal();
+      }, 1000);
+    }
+  }
   
   resetearFormulario(): void {
     this.formularioRevision.reset({
       observaciones: '',
-      motivo: ''
+      motivo: '',
+      motivoRegreso: ''
     });
+    this.tipoAprobacionSeleccionada = null;
   }
   
   // Método para formatear fechas

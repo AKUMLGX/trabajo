@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule} from '@angular/material/dialog';
 import { FormControl, FormsModule,  ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {  porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
@@ -227,11 +227,20 @@ buscador = new FormControl('');
    private buscadorService:BuscadorService<tableAsuntosPorDictaminar>,
    private fileService: FileService,
    private archivosAtencionService: ArchivosAtencionService,
-   private domSanitizer: DomSanitizer) { }
+   private domSanitizer: DomSanitizer,
+   private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.filteredData$ = this.buscadorService.getFilteredData(this.filtrarIndicador);
     this.tablePorAsignar();
+    
+    // 🚨 NUEVO: Verificar si viene de asuntos urgentes
+    this.route.queryParams.subscribe(params => {
+      if (params['filtro'] === 'urgentes' && params['plazo'] === '0') {
+        console.log('🚨 [AsignacionPage] Aplicando filtro de asuntos urgentes');
+        this.aplicarFiltroUrgentes();
+      }
+    });
     
     // Suscribirse a los cambios en los datos filtrados para actualizar la paginación
     this.filteredData$.subscribe(data => {
@@ -1092,5 +1101,39 @@ buscador = new FormControl('');
     this.pdfUrl = null;
     this.pdfCargando = false;
     this.pdfError = false;
+  }
+
+  /**
+   * 🚨 NUEVO: Aplica filtro para mostrar solo asuntos urgentes
+   */
+  private aplicarFiltroUrgentes(): void {
+    console.log('🚨 [AsignacionPage] Aplicando filtro de asuntos urgentes');
+    
+    // Esperar a que los datos se carguen
+    setTimeout(() => {
+      if (this.allData && this.allData.length > 0) {
+        // Filtrar solo asuntos con plazo_atencion = 0 (urgentes)
+        const asuntosUrgentes = this.allData.filter(asunto => 
+          asunto.plazo_atencion === 0
+        );
+        
+        console.log(`🚨 [AsignacionPage] Encontrados ${asuntosUrgentes.length} asuntos urgentes`);
+        
+        // Actualizar el servicio de búsqueda con los datos filtrados
+        this.buscadorService.setData(asuntosUrgentes);
+        
+        // Actualizar contadores y paginación
+        this.calcularContadores(asuntosUrgentes);
+        this.actualizarPaginacion(asuntosUrgentes);
+        
+        // Mostrar mensaje informativo
+        if (asuntosUrgentes.length === 0) {
+          console.log('✅ [AsignacionPage] No hay asuntos urgentes en este momento');
+        }
+      } else {
+        // Si no hay datos, intentar nuevamente después de un breve delay
+        setTimeout(() => this.aplicarFiltroUrgentes(), 1000);
+      }
+    }, 500);
   }
 }

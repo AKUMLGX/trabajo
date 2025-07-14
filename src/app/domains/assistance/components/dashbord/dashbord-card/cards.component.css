@@ -438,3 +438,23 @@
     font-size: 1rem;
   }
 }
+
+/* 🚨 ESTILOS PARA EL BOTÓN DE ASUNTOS URGENTES */
+.banner-urgente-moderno:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.banner-urgente-moderno:active {
+  transform: scale(0.98) !important;
+}
+
+.banner-urgente-moderno:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.banner-urgente-moderno:disabled:hover {
+  transform: none !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
