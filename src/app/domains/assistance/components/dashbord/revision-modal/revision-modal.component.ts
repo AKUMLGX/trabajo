@@ -62,14 +62,17 @@ export class RevisionModalComponent implements OnInit {
   // Tipo de aprobación seleccionada
   tipoAprobacionSeleccionada: 'parcial' | 'total' | null = null;
   
+  // Variables para el modal de confirmación
+  mostrarModalConfirmacion: boolean = false;
+  tipoAtencionSeleccionada: 'parcial' | 'total' | null = null;
+  
   constructor(
     private fb: FormBuilder,
     private archivosService: ArchivosAtencionService
   ) {
     this.formularioRevision = this.fb.group({
-      observaciones: ['', [Validators.required, Validators.minLength(10)]],
-      motivo: [''],
-      motivoRegreso: ['']
+      observaciones: [''],
+      motivo: ['']
     });
   }
   
@@ -196,22 +199,22 @@ export class RevisionModalComponent implements OnInit {
   }
 
   regresarAsunto(): void {
-    if (this.formularioRevision.valid && this.asunto) {
-      // Validar que se haya seleccionado un motivo de regreso
-      const motivo = this.formularioRevision.get('motivoRegreso')?.value;
-      if (!motivo) {
+    if (this.asunto) {
+      // Solo validar que haya observaciones
+      const observaciones = this.formularioRevision.get('observaciones')?.value;
+      if (!observaciones || observaciones.trim().length === 0) {
         // Marcar el campo como tocado para mostrar el error
-        this.formularioRevision.get('motivoRegreso')?.markAsTouched();
+        this.formularioRevision.get('observaciones')?.markAsTouched();
         return;
       }
       
       this.enviandoRegreso = true;
       
-      // Emitir evento de regreso con las observaciones y el motivo
+      // Emitir evento de regreso solo con las observaciones
       this.regresarAsuntoEvent.emit({
         id: this.asunto.id_asunto,
-        observaciones: this.formularioRevision.get('observaciones')?.value,
-        motivo: motivo
+        observaciones: observaciones,
+        motivo: 'Regresado con observaciones' // Motivo fijo
       });
       
       // En un caso real, esperaríamos la respuesta del servicio
@@ -223,13 +226,32 @@ export class RevisionModalComponent implements OnInit {
     }
   }
   
+  // Funciones para el modal de confirmación
+  mostrarConfirmacionAtencion(tipoAtencion: 'parcial' | 'total'): void {
+    this.tipoAtencionSeleccionada = tipoAtencion;
+    this.mostrarModalConfirmacion = true;
+  }
+  
+  cerrarModalConfirmacion(): void {
+    this.mostrarModalConfirmacion = false;
+    this.tipoAtencionSeleccionada = null;
+  }
+  
+  confirmarAtencion(): void {
+    if (this.tipoAtencionSeleccionada) {
+      this.cerrarModalConfirmacion();
+      this.aprobarAsunto(this.tipoAtencionSeleccionada);
+    }
+  }
+  
   resetearFormulario(): void {
     this.formularioRevision.reset({
       observaciones: '',
-      motivo: '',
-      motivoRegreso: ''
+      motivo: ''
     });
     this.tipoAprobacionSeleccionada = null;
+    this.tipoAtencionSeleccionada = null;
+    this.mostrarModalConfirmacion = false;
   }
   
   // Método para formatear fechas

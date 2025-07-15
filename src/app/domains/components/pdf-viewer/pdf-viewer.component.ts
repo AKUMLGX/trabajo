@@ -35,23 +35,23 @@ export class PdfViewerComponent {
       }
       
       try {
-        const byteCharacters = atob(file);
+      const byteCharacters = atob(file);
         console.log('🔍 [PdfViewerComponent] Base64 decodificado, longitud:', byteCharacters.length);
         
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
         console.log('🔍 [PdfViewerComponent] ByteArray creado, longitud:', byteArray.length);
         
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
         console.log('🔍 [PdfViewerComponent] Blob creado, tamaño:', blob.size);
         
-        var blobURL = URL.createObjectURL(blob);
+      var blobURL = URL.createObjectURL(blob);
         console.log('🔍 [PdfViewerComponent] BlobURL creado:', blobURL);
         
-        this.pdfUrl = blobURL;
+      this.pdfUrl = blobURL;
         console.log('✅ [PdfViewerComponent] PDF cargado exitosamente');
       } catch (error) {
         console.error('❌ [PdfViewerComponent] Error al procesar archivo:', error);
