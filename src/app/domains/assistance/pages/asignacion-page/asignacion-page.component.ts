@@ -1,5 +1,5 @@
 import { AsignarAsunto, AsignarAsuntoRequest, modalItem } from './../../../interfaces/asiganar-AsuntoRequest.interface';
-import { Component, OnInit, TemplateRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -144,6 +144,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       margin: 10px auto !important;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+
+
   `]
 })
 export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -156,6 +158,11 @@ buscador = new FormControl('');
   currentPage: number = 1;
   itemsPerPage: number = 10; // Número de elementos por página
   abogadoSeleccionado: string = '';
+  
+  // Variables para el modal de asignación
+  tipoAccion: 'asignar' | 'reasignar' = 'asignar';
+  observacionesReasignacion: string = '';
+  
   // mostrarPDFViewer: boolean = false;
   // pdfSrc: string = '';
   // pdfTitulo: string = '';
@@ -165,6 +172,10 @@ buscador = new FormControl('');
   documento: string = 'REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion[] = []
    itemDeFilaSelecionada: modalItem | null = null
+
+  // ViewChild para templates
+  @ViewChild('templateDetalle', { static: false }) templateDetalle!: TemplateRef<any>;
+  @ViewChild('templatePDF', { static: false }) templatePDF!: TemplateRef<any>;
 
   // Variables para ngx-pagination
   paginaActual: number = 1;
@@ -327,8 +338,53 @@ buscador = new FormControl('');
     })
   }
 
+  // Nueva función para manejar ambas acciones
+  ejecutarAccion() {
+    if (this.tipoAccion === 'asignar') {
+      this.asignarAsunto();
+    } else if (this.tipoAccion === 'reasignar') {
+      // Ejecutar directamente el rechazo
+      this.solicitarReasignacion();
+    }
+  }
+
+  // Función para manejar rechazo para correcta asignación
+  solicitarReasignacion() {
+    const datos = {
+      asunto: this.itemDeFilaSelecionada,
+      accion: 'rechazado_para_correcta_asignacion',
+      fecha_rechazo: new Date().toISOString(),
+      motivo: this.observacionesReasignacion
+    };
+
+    console.log('Rechazando asunto para correcta asignación:', datos);
+    
+    // Aquí iría la llamada al servicio para rechazar el asunto
+    // Por ahora solo mostramos confirmación
+    alert(`El asunto ${this.itemDeFilaSelecionada?.folio_interno} ha sido rechazado para su correcta asignación`);
+    
+    // Cerrar modal y limpiar datos
+    this.cerrarModalAsignacion();
+  }
+
+
+
+  // Función para cerrar modal y limpiar
+  cerrarModalAsignacion() {
+    this.itemDeFilaSelecionada = null;
+    this.abogadoSeleccionado = '';
+    this.tipoAccion = 'asignar';
+    this.observacionesReasignacion = '';
+    this.modalService.closeAllDialogs();
+  }
+
   abrirModalAsignacion(template: TemplateRef<any>, item: modalItem) {
     this.itemDeFilaSelecionada = item
+    // Limpiar datos del modal anterior
+    this.observacionesReasignacion = '';
+    this.abogadoSeleccionado = '';
+    this.tipoAccion = 'asignar';
+    
     this.usuariosPorAdministracion()
     this.modalService.openCustomDialogWithTemplate({
       template
