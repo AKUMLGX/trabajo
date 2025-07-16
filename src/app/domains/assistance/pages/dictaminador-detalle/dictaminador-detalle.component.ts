@@ -30,6 +30,21 @@ interface Documento {
   fecha: Date;
 }
 
+interface SeguimientoArea {
+  id: string;
+  area: string;
+  nombreCompleto: string;
+  solicitudEnviada: boolean;
+  fechaSolicitud?: string;
+  respuestaRecibida: boolean;
+  fechaRespuesta?: string;
+  tipoRespuesta: 'pendiente' | 'completa' | 'parcial';
+  recordatorioEnviado: boolean;
+  fechaRecordatorio?: string;
+  respuestaRecordatorio: boolean;
+  fechaRespuestaRecordatorio?: string;
+}
+
 interface AsuntoDictaminador {
   id: string;
   folio: string;
@@ -152,6 +167,61 @@ export class DictaminadorDetalleComponent implements OnInit {
   cargandoPdf = false;
   errorPdf = '';
   
+  // Variables para el checklist de seguimiento de áreas
+  seguimientoAreas: SeguimientoArea[] = [
+    {
+      id: '1',
+      area: 'ACOP',
+      nombreCompleto: 'Administración Central de Operación de Padrones',
+      solicitudEnviada: true,
+      fechaSolicitud: '15/01/2025',
+      respuestaRecibida: true,
+      fechaRespuesta: '22/01/2025',
+      tipoRespuesta: 'completa',
+      recordatorioEnviado: false,
+      respuestaRecordatorio: false
+    },
+    {
+      id: '2',
+      area: 'AGR',
+      nombreCompleto: 'Administración General de Recaudación',
+      solicitudEnviada: true,
+      fechaSolicitud: '18/01/2025',
+      respuestaRecibida: false,
+      tipoRespuesta: 'pendiente',
+      recordatorioEnviado: true,
+      fechaRecordatorio: '25/01/2025',
+      respuestaRecordatorio: false
+    }
+  ];
+  
+  // Variables para modales de gestión de áreas
+  mostrarModalAgregarArea = false;
+  areaSeleccionadaParaAgregar = '';
+  
+  mostrarModalEditarArea = false;
+  areaEnEdicion: SeguimientoArea | null = null;
+  fechaSolicitudEdicion = '';
+  fechaRespuestaEdicion = '';
+  fechaRecordatorioEdicion = '';
+  fechaRespuestaRecordatorioEdicion = '';
+  
+  mostrarModalEliminar = false;
+  areaParaEliminar: SeguimientoArea | null = null;
+  
+  // Áreas SAT disponibles
+  areasSAT = [
+    { codigo: 'ACOP', nombre: 'Administración Central de Operación de Padrones' },
+    { codigo: 'ACSTC', nombre: 'Administración Central de Servicios Tributarios al Contribuyente' },
+    { codigo: 'ACATF', nombre: 'Administración Central de Análisis Técnico Fiscal' },
+    { codigo: 'ACGSTME', nombre: 'Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos' },
+    { codigo: 'AGP', nombre: 'Administración General de Planeación' },
+    { codigo: 'AGR', nombre: 'Administración General de Recaudación' },
+    { codigo: 'ACOJ', nombre: 'Administración Central de Operación Jurídica' },
+    { codigo: 'AGACE', nombre: 'Administración General de Auditoria de Comercio Exterior' },
+    { codigo: 'AGGC', nombre: 'Administración General de Grandes Contribuyentes' }
+  ];
+  
   constructor(
     private location: Location,
     private fb: FormBuilder,
@@ -163,10 +233,26 @@ export class DictaminadorDetalleComponent implements OnInit {
     private domSanitizer: DomSanitizer
   ) {
     this.dictamenForm = this.fb.group({
-      temaPrincipal: ['', Validators.required],
-      observaciones: ['', Validators.required],
-      fundamentoLegal: ['', Validators.required],
-      conclusion: ['', Validators.required]
+      // Campos de Solicitud de Información
+      solicitudFolioInterno: ['', Validators.required],
+      solicitudFechaAcuse: ['', Validators.required],
+      solicitudNumeroOficio: [''],
+      solicitudAreaDestino: ['', Validators.required],
+      solicitudDescripcion: ['', Validators.required],
+      
+      // Campos de Respuesta Interna
+      respuestaInternaFolioInterno: ['', Validators.required],
+      respuestaInternaFecha: ['', Validators.required],
+      respuestaInternaNumeroOficio: [''],
+      respuestaInternaAreaOrigen: ['', Validators.required],
+      respuestaInternaDescripcion: ['', Validators.required],
+      
+      // Campos de Respuesta a FGR
+      respuestaFgrFolioInterno: ['', Validators.required],
+      respuestaFgrNumeroOficio: ['', Validators.required],
+      respuestaFgrFechaAcuse: ['', Validators.required],
+      respuestaFgrOficioAtiende: ['', Validators.required],
+      respuestaFgrEstadoAtencion: ['', Validators.required]
     });
   }
   
@@ -268,13 +354,16 @@ export class DictaminadorDetalleComponent implements OnInit {
       }
     });
     
-    // Inicialización del formulario con datos de muestra
+    // Inicialización del formulario con datos de muestra - COMENTADO TEMPORALMENTE
+    // Se comentó porque los campos del formulario han cambiado para el nuevo sistema de expedientes
+    /*
     this.dictamenForm.setValue({
       temaPrincipal: 'Análisis de la situación fiscal del contribuyente',
       observaciones: 'El contribuyente presenta inconsistencias en sus declaraciones mensuales de los periodos enero-marzo 2023.',
       fundamentoLegal: 'Artículos 42, fracción II y 48 del Código Fiscal de la Federación, en relación con los artículos 55 y 56 de su reglamento.',
       conclusion: 'Con base en la revisión efectuada, se determina procedente la solicitud de la autoridad.'
     });
+    */
     
     // Inicializar datos de revisión
     this.asuntoEnRevision = {
@@ -391,10 +480,13 @@ export class DictaminadorDetalleComponent implements OnInit {
       tipo: 'evento'
     });
     
-    // Actualizar datos del formulario con la observación del rechazo
+    // Actualizar datos del formulario con la observación del rechazo - COMENTADO TEMPORALMENTE
+    // Se comentó porque el campo 'observaciones' ya no existe en el nuevo formulario de expedientes
+    /*
     this.dictamenForm.patchValue({
       observaciones: `[CORRECCIÓN SOLICITADA] ${this.asunto.observacionesRechazo}\n\n${this.dictamenForm.get('observaciones')?.value}`
     });
+    */
     
     // Actualizar datos para el modal de revisión
     this.motivoRechazo = this.asunto.observacionesRechazo;
@@ -987,5 +1079,377 @@ export class DictaminadorDetalleComponent implements OnInit {
         panelClass: ['error-snackbar']
       });
     }
+  }
+
+  // Métodos para manejo de múltiples personas relacionadas
+  isMultiplePersonas(): boolean {
+    // Por ahora siempre false, pero extensible para el futuro
+    // cuando se implemente soporte para múltiples personas
+    return false;
+  }
+
+  getPersonasRelacionadas(): string[] {
+    // Por ahora retorna array con una persona, pero extensible
+    if (this.asunto.personaRelacionada) {
+      // En el futuro aquí se podría splitear si viene separado por comas o similar
+      return [this.asunto.personaRelacionada];
+    }
+    return [];
+  }
+
+  // ========== MÉTODOS PARA CHECKLIST DE SEGUIMIENTO DE ÁREAS ==========
+
+  // ========== GESTIÓN DE MODAL AGREGAR ÁREA ==========
+  
+  // Abrir modal para agregar área
+  agregarArea(): void {
+    const areasDisponibles = this.getAreasDisponibles();
+    if (areasDisponibles.length === 0) {
+      this.snackBar.open('Todas las áreas ya están en seguimiento', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['info-snackbar']
+      });
+      return;
+    }
+    
+    this.mostrarModalAgregarArea = true;
+    this.areaSeleccionadaParaAgregar = '';
+  }
+  
+  // Cerrar modal agregar área
+  cerrarModalAgregarArea(): void {
+    this.mostrarModalAgregarArea = false;
+    this.areaSeleccionadaParaAgregar = '';
+  }
+  
+  // Confirmar agregar nueva área
+  confirmarAgregarArea(): void {
+    if (!this.areaSeleccionadaParaAgregar) {
+      this.snackBar.open('Debe seleccionar un área', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+    
+    // Verificar que el área no esté ya agregada
+    const yaExiste = this.seguimientoAreas.some(area => area.area === this.areaSeleccionadaParaAgregar);
+    if (yaExiste) {
+      this.snackBar.open('Esta área ya está en seguimiento', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+    
+    const areaInfo = this.getAreaPorCodigo(this.areaSeleccionadaParaAgregar);
+    if (areaInfo) {
+      const nuevaArea: SeguimientoArea = {
+        id: Date.now().toString(),
+        area: areaInfo.codigo,
+        nombreCompleto: areaInfo.nombre,
+        solicitudEnviada: false,
+        respuestaRecibida: false,
+        tipoRespuesta: 'pendiente',
+        recordatorioEnviado: false,
+        respuestaRecordatorio: false
+      };
+      
+      this.seguimientoAreas.push(nuevaArea);
+      this.cerrarModalAgregarArea();
+      
+      this.snackBar.open(`Área ${areaInfo.codigo} agregada al seguimiento`, 'Cerrar', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+    }
+  }
+  
+  // Obtener áreas disponibles (que no están ya agregadas)
+  getAreasDisponibles() {
+    return this.areasSAT.filter(area => 
+      !this.seguimientoAreas.some(seguimiento => seguimiento.area === area.codigo)
+    );
+  }
+  
+  // Obtener información de área por código
+  getAreaPorCodigo(codigo: string) {
+    return this.areasSAT.find(area => area.codigo === codigo);
+  }
+
+  // Actualizar checkbox de solicitud enviada
+  actualizarSolicitudEnviada(areaId: string, checked: boolean): void {
+    const area = this.seguimientoAreas.find(a => a.id === areaId);
+    if (area) {
+      area.solicitudEnviada = checked;
+      if (checked && !area.fechaSolicitud) {
+        area.fechaSolicitud = new Date().toLocaleDateString('es-ES');
+      } else if (!checked) {
+        area.fechaSolicitud = undefined;
+        // Si desmarcamos solicitud, también desmarcamos respuesta
+        area.respuestaRecibida = false;
+        area.fechaRespuesta = undefined;
+        area.tipoRespuesta = 'pendiente';
+        area.recordatorioEnviado = false;
+        area.fechaRecordatorio = undefined;
+        area.respuestaRecordatorio = false;
+        area.fechaRespuestaRecordatorio = undefined;
+      }
+    }
+  }
+
+  // Actualizar checkbox de respuesta recibida
+  actualizarRespuestaRecibida(areaId: string, checked: boolean): void {
+    const area = this.seguimientoAreas.find(a => a.id === areaId);
+    if (area && area.solicitudEnviada) {
+      area.respuestaRecibida = checked;
+      if (checked && !area.fechaRespuesta) {
+        area.fechaRespuesta = new Date().toLocaleDateString('es-ES');
+        if (area.tipoRespuesta === 'pendiente') {
+          area.tipoRespuesta = 'completa';
+        }
+      } else if (!checked) {
+        area.fechaRespuesta = undefined;
+        area.tipoRespuesta = 'pendiente';
+      }
+    }
+  }
+
+  // Actualizar tipo de respuesta
+  actualizarTipoRespuesta(areaId: string, tipo: 'pendiente' | 'completa' | 'parcial'): void {
+    const area = this.seguimientoAreas.find(a => a.id === areaId);
+    if (area) {
+      area.tipoRespuesta = tipo;
+      // Si cambia a pendiente, desmarcar respuesta recibida
+      if (tipo === 'pendiente') {
+        area.respuestaRecibida = false;
+        area.fechaRespuesta = undefined;
+      } else if (!area.respuestaRecibida) {
+        // Si marca completa o parcial, marcar respuesta recibida
+        area.respuestaRecibida = true;
+        area.fechaRespuesta = new Date().toLocaleDateString('es-ES');
+      }
+    }
+  }
+
+  // Actualizar checkbox de recordatorio enviado
+  actualizarRecordatorioEnviado(areaId: string, checked: boolean): void {
+    const area = this.seguimientoAreas.find(a => a.id === areaId);
+    if (area && area.solicitudEnviada) {
+      area.recordatorioEnviado = checked;
+      if (checked && !area.fechaRecordatorio) {
+        area.fechaRecordatorio = new Date().toLocaleDateString('es-ES');
+      } else if (!checked) {
+        area.fechaRecordatorio = undefined;
+        area.respuestaRecordatorio = false;
+        area.fechaRespuestaRecordatorio = undefined;
+      }
+    }
+  }
+
+  // Actualizar checkbox de respuesta a recordatorio
+  actualizarRespuestaRecordatorio(areaId: string, checked: boolean): void {
+    const area = this.seguimientoAreas.find(a => a.id === areaId);
+    if (area && area.recordatorioEnviado) {
+      area.respuestaRecordatorio = checked;
+      if (checked && !area.fechaRespuestaRecordatorio) {
+        area.fechaRespuestaRecordatorio = new Date().toLocaleDateString('es-ES');
+      } else if (!checked) {
+        area.fechaRespuestaRecordatorio = undefined;
+      }
+    }
+  }
+
+  // ========== GESTIÓN DE MODAL ELIMINAR ÁREA ==========
+  
+  // Abrir modal de confirmación para eliminar área
+  eliminarArea(areaId: string): void {
+    const area = this.seguimientoAreas.find(a => a.id === areaId);
+    if (area) {
+      this.areaParaEliminar = area;
+      this.mostrarModalEliminar = true;
+    }
+  }
+  
+  // Cerrar modal de eliminación
+  cerrarModalEliminar(): void {
+    this.mostrarModalEliminar = false;
+    this.areaParaEliminar = null;
+  }
+  
+  // Confirmar eliminación del área
+  confirmarEliminarArea(): void {
+    if (this.areaParaEliminar) {
+      const index = this.seguimientoAreas.findIndex(a => a.id === this.areaParaEliminar!.id);
+      if (index > -1) {
+        const areaNombre = this.areaParaEliminar.area;
+        this.seguimientoAreas.splice(index, 1);
+        this.cerrarModalEliminar();
+        
+        this.snackBar.open(`Área ${areaNombre} eliminada del seguimiento`, 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      }
+    }
+  }
+
+  // ========== GESTIÓN DE MODAL EDITAR ÁREA ==========
+  
+  // Abrir modal para editar área
+  editarArea(areaId: string): void {
+    const area = this.seguimientoAreas.find(a => a.id === areaId);
+    if (area) {
+      this.areaEnEdicion = { ...area }; // Crear copia para edición
+      this.mostrarModalEditarArea = true;
+      
+      // Cargar fechas existentes para la edición
+      this.fechaSolicitudEdicion = this.convertirFechaParaInput(area.fechaSolicitud);
+      this.fechaRespuestaEdicion = this.convertirFechaParaInput(area.fechaRespuesta);
+      this.fechaRecordatorioEdicion = this.convertirFechaParaInput(area.fechaRecordatorio);
+      this.fechaRespuestaRecordatorioEdicion = this.convertirFechaParaInput(area.fechaRespuestaRecordatorio);
+    }
+  }
+  
+  // Cerrar modal editar área
+  cerrarModalEditarArea(): void {
+    this.mostrarModalEditarArea = false;
+    this.areaEnEdicion = null;
+    this.fechaSolicitudEdicion = '';
+    this.fechaRespuestaEdicion = '';
+    this.fechaRecordatorioEdicion = '';
+    this.fechaRespuestaRecordatorioEdicion = '';
+  }
+  
+  // Convertir fecha para input type="date"
+  private convertirFechaParaInput(fecha?: string): string {
+    if (!fecha) return '';
+    
+    // Si la fecha está en formato DD/MM/YYYY, convertir a YYYY-MM-DD
+    const partes = fecha.split('/');
+    if (partes.length === 3) {
+      return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+    }
+    
+    return fecha;
+  }
+  
+  // Convertir fecha de input a formato DD/MM/YYYY
+  private convertirFechaDeInput(fecha: string): string {
+    if (!fecha) return '';
+    
+    const partes = fecha.split('-');
+    if (partes.length === 3) {
+      return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+    
+    return fecha;
+  }
+  
+  // Eventos de cambio en el modal de edición
+  onEditarSolicitudEnviada(): void {
+    if (this.areaEnEdicion) {
+      if (this.areaEnEdicion.solicitudEnviada) {
+        if (!this.fechaSolicitudEdicion) {
+          this.fechaSolicitudEdicion = new Date().toISOString().split('T')[0];
+        }
+      } else {
+        // Si se desmarca, resetear todo lo dependiente
+        this.areaEnEdicion.respuestaRecibida = false;
+        this.areaEnEdicion.tipoRespuesta = 'pendiente';
+        this.areaEnEdicion.recordatorioEnviado = false;
+        this.areaEnEdicion.respuestaRecordatorio = false;
+        this.fechaSolicitudEdicion = '';
+        this.fechaRespuestaEdicion = '';
+        this.fechaRecordatorioEdicion = '';
+        this.fechaRespuestaRecordatorioEdicion = '';
+      }
+    }
+  }
+  
+  onEditarRespuestaRecibida(): void {
+    if (this.areaEnEdicion) {
+      if (this.areaEnEdicion.respuestaRecibida) {
+        if (!this.fechaRespuestaEdicion) {
+          this.fechaRespuestaEdicion = new Date().toISOString().split('T')[0];
+        }
+        if (this.areaEnEdicion.tipoRespuesta === 'pendiente') {
+          this.areaEnEdicion.tipoRespuesta = 'completa';
+        }
+      } else {
+        this.areaEnEdicion.tipoRespuesta = 'pendiente';
+        this.fechaRespuestaEdicion = '';
+      }
+    }
+  }
+  
+  onEditarRecordatorioEnviado(): void {
+    if (this.areaEnEdicion) {
+      if (this.areaEnEdicion.recordatorioEnviado) {
+        if (!this.fechaRecordatorioEdicion) {
+          this.fechaRecordatorioEdicion = new Date().toISOString().split('T')[0];
+        }
+      } else {
+        this.areaEnEdicion.respuestaRecordatorio = false;
+        this.fechaRecordatorioEdicion = '';
+        this.fechaRespuestaRecordatorioEdicion = '';
+      }
+    }
+  }
+  
+  onEditarRespuestaRecordatorio(): void {
+    if (this.areaEnEdicion) {
+      if (this.areaEnEdicion.respuestaRecordatorio) {
+        if (!this.fechaRespuestaRecordatorioEdicion) {
+          this.fechaRespuestaRecordatorioEdicion = new Date().toISOString().split('T')[0];
+        }
+      } else {
+        this.fechaRespuestaRecordatorioEdicion = '';
+      }
+    }
+  }
+  
+  // Guardar cambios de edición
+  guardarEdicionArea(): void {
+    if (!this.areaEnEdicion) return;
+    
+    // Encontrar el área original y actualizar
+    const indice = this.seguimientoAreas.findIndex(a => a.id === this.areaEnEdicion!.id);
+    if (indice > -1) {
+      // Actualizar fechas desde los inputs
+      this.areaEnEdicion.fechaSolicitud = this.fechaSolicitudEdicion ? 
+        this.convertirFechaDeInput(this.fechaSolicitudEdicion) : undefined;
+      this.areaEnEdicion.fechaRespuesta = this.fechaRespuestaEdicion ? 
+        this.convertirFechaDeInput(this.fechaRespuestaEdicion) : undefined;
+      this.areaEnEdicion.fechaRecordatorio = this.fechaRecordatorioEdicion ? 
+        this.convertirFechaDeInput(this.fechaRecordatorioEdicion) : undefined;
+      this.areaEnEdicion.fechaRespuestaRecordatorio = this.fechaRespuestaRecordatorioEdicion ? 
+        this.convertirFechaDeInput(this.fechaRespuestaRecordatorioEdicion) : undefined;
+      
+      // Reemplazar el área en el arreglo
+      this.seguimientoAreas[indice] = { ...this.areaEnEdicion };
+      
+      this.cerrarModalEditarArea();
+      
+      this.snackBar.open(`Seguimiento de ${this.areaEnEdicion.area} actualizado`, 'Cerrar', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+    }
+  }
+
+  // Obtener estadísticas del seguimiento
+  getEstadisticasSeguimiento() {
+    const areasContactadas = this.seguimientoAreas.filter(a => a.solicitudEnviada).length;
+    const respuestasCompletas = this.seguimientoAreas.filter(a => a.tipoRespuesta === 'completa').length;
+    const recordatoriosEnviados = this.seguimientoAreas.filter(a => a.recordatorioEnviado).length;
+    const respuestasPendientes = this.seguimientoAreas.filter(a => a.solicitudEnviada && !a.respuestaRecibida).length;
+    
+    return {
+      areasContactadas,
+      respuestasCompletas,
+      recordatoriosEnviados,
+      respuestasPendientes
+    };
   }
 } 
