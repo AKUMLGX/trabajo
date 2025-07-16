@@ -8,7 +8,6 @@
     </div>
     <div class="text-right">
       <p class="text-sm text-[#691C32]">{{dictaminador.area}}</p>
-      <p class="text-sm text-gray-600">{{asuntos.length}} asuntos asignados</p>
     </div>
   </div>
 
@@ -63,7 +62,7 @@
           </svg>
         </div>
         <div>
-          <p class="text-sm text-gray-500">Total Asignados</p>
+                          <p class="text-sm text-gray-500">Asuntos Asignados</p>
           <p class="text-xl font-semibold">{{estadisticas.totalAsignados}}</p>
         </div>
       </div>
@@ -146,11 +145,6 @@
         </div>
       </div>
       <div class="flex items-center gap-4">
-        <label class="flex items-center gap-2">
-          <input type="checkbox" [(ngModel)]="mostrarCompletados" (change)="aplicarFiltros()"
-                 class="rounded border-gray-300">
-          <span class="text-sm text-gray-600">Mostrar completados</span>
-        </label>
         <div class="flex gap-2">
           <button (click)="cambiarVista('tarjetas')" 
                   class="p-1.5 rounded hover:bg-gray-100">
@@ -204,12 +198,12 @@
             <div><span class="font-semibold text-gray-500">Plazo Atención:</span> {{asunto['PLAZO ATENCION']}}</div>
             </div>
             <div class="flex gap-2 mt-4">
-            <button class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm">Atender</button>
             <button 
               class="flex-1 border border-[#691C32] text-[#691C32] px-4 py-2 rounded text-sm"
               (click)="verDetalle(asunto['ID_ASUNTO'])">
                 Ver Detalle
               </button>
+            <button class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm">Atender</button>
           </div>
         </div>
       </div>

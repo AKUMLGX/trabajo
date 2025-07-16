@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DictaminadorBandejaService } from '../../../services/dictaminador-bandeja.service';
+import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
+import { AdministracionResponse, CardsResponse } from '../../../interfaces/datosCards.interface';
 
 interface Dictaminador {
   nombre: string;
@@ -76,10 +78,15 @@ const DOCUMENTO_DESCRIPCION: { [key: number]: string } = {
   styleUrl: './dictaminador-page.component.css'
 })
 export class DictaminadorPageComponent implements OnInit {
+  // Propiedad para el número de administración
+  administracion: AdministracionResponse = {
+    Administracion: 0,
+  }
+
   dictaminador: Dictaminador = {
     nombre: 'Juan Pérez',
     cargo: 'Abogado Dictaminador',
-    area: 'Área Legal'
+    area: 'Administracion de Asuntos Penales y Especiales 0'
   };
 
   asuntos: any[] = [];
@@ -97,7 +104,6 @@ export class DictaminadorPageComponent implements OnInit {
 
   filtroEstado: string = 'Todos';
   filtroPrioridad: string = 'Todas';
-  mostrarCompletados: boolean = false;
   vistaActual: 'tarjetas' | 'tabla' = 'tarjetas';
   pestanaActual: 'asignados' | 'rechazados' = 'asignados';
 
@@ -114,7 +120,8 @@ export class DictaminadorPageComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private dictaminadorBandejaService: DictaminadorBandejaService
+    private dictaminadorBandejaService: DictaminadorBandejaService,
+    private cards: CardsInfoBandejadeAtencionService
   ) {
     this.formularioAtencion = this.fb.group({
       observaciones: ['', Validators.required]
@@ -122,6 +129,9 @@ export class DictaminadorPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Obtener el número de administración primero
+    this.obtenerNumeroAdministracion();
+    
     this.dictaminadorBandejaService.obtenerAsuntosAsignados().subscribe({
       next: (res) => {
         console.log('Respuesta del backend:', res); // Imprimir la respuesta para inspección
@@ -194,6 +204,31 @@ export class DictaminadorPageComponent implements OnInit {
     this.aplicarFiltrosRechazados();
   }
 
+  // Método para obtener el número de administración
+  obtenerNumeroAdministracion() {
+    this.cards.cardsInfo().subscribe({
+      next: (res) => {
+        this.procesarDatosAdministracion(res)
+      },
+      error: (error) => {
+        console.error('Error al obtener información de administración:', error);
+      }
+    })
+  }
+
+  // Método para procesar los datos y extraer el número de administración
+  procesarDatosAdministracion(data: any[]): void {
+    const administracionObj = data.find(i => 'Administracion' in i) as { Administracion: number };
+    
+    if (administracionObj) {
+      // La estructura real es {Administracion: 1}, no {Administracion: {Administracion: 1}}
+      const numeroAdministracion = administracionObj.Administracion;
+      this.administracion.Administracion = numeroAdministracion;
+      // Actualizar el área del dictaminador con el número obtenido
+      this.dictaminador.area = `Administracion de Asuntos Penales y Especiales ${numeroAdministracion}`;
+    }
+  }
+
   calcularDiasTranscurridos(fechaRecepcion: string): number {
     const fechaInicio = new Date(fechaRecepcion);
     const fechaActual = new Date();
@@ -228,7 +263,6 @@ export class DictaminadorPageComponent implements OnInit {
   aplicarFiltros() {
     this.asuntosFiltrados = this.asuntos.filter(asunto => {
       // Filtros adaptados a los nuevos campos personalizados
-      if (!this.mostrarCompletados && asunto['ESTADO'] === 'Atendido') return false;
       if (this.filtroEstado !== 'Todos' && asunto['ESTADO'] !== this.filtroEstado) return false;
       if (this.filtroPrioridad !== 'Todas' && asunto['PRIORIDAD'] !== this.filtroPrioridad) return false;
       return true;
