@@ -311,8 +311,8 @@
     </div>
 
     <!-- Tabla mejorada -->
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
+    <div class="tabla-mejorada relative">
+      <table class="min-w-full divide-y divide-gray-200 table-fixed">
         <thead [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32]' : 'bg-green-700'" class="text-white">
           <tr>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-folio">Folio Interno</th>
@@ -340,10 +340,16 @@
           </tr>
 
           <!-- Filas filtradas -->
-          @for (asunto of pages [pageSelected-1] ;  track asunto.folio_interno) {
-            <tr [ngClass]="{'hover:bg-blue-50': vistaActual === 'atencion', 'hover:bg-green-50': vistaActual === 'aprobacion'}"
-                [class]="asuntosPaginados.indexOf(asunto) % 2 === 0 ? '' : vistaActual === 'atencion' ? 'bg-blue-50/30' : 'bg-green-50/30'"
-                class="inter transition-colors duration-150 ease-in-out"
+          @for (asunto of pages [pageSelected-1] ;  track asunto.folio_interno; let i = $index) {
+            <tr [ngClass]="{
+                  'fila-hover-atencion': vistaActual === 'atencion', 
+                  'fila-hover-aprobacion': vistaActual === 'aprobacion',
+                  'fila-atencion-par': vistaActual === 'atencion' && i % 2 === 0,
+                  'fila-atencion-impar': vistaActual === 'atencion' && i % 2 !== 0,
+                  'fila-aprobacion-par': vistaActual === 'aprobacion' && i % 2 === 0,
+                  'fila-aprobacion-impar': vistaActual === 'aprobacion' && i % 2 !== 0
+                }"
+                class="inter transition-colors duration-150 ease-in-out cursor-pointer"
                 (click)="seleccionarFila(asunto.folio_interno)">
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <div class="flex items-center">
@@ -392,15 +398,16 @@
                 </span>
               </td>
 
-              <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm col-acciones">
                 <div class="flex justify-center space-x-2">
                   <!-- Botón para ver detalle (común) -->
                   <button (click)="verDetalle(asunto, $event)"
-                          [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32] hover:bg-[#4a1423] text-white' : 'bg-green-700 hover:bg-green-800 text-white'"
-                          class="p-1.5 rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-offset-1 tooltip"
+                          [ngClass]="vistaActual === 'atencion' ? 'btn-atencion' : 'btn-aprobacion'"
+                          class="btn-accion-tabla focus:outline-none focus:ring-2 focus:ring-offset-1"
                           [class.focus:ring-[#691C32]]="vistaActual === 'atencion'"
-                          [class.focus:ring-green-700]="vistaActual === 'aprobacion'"
-                          title="Ver detalle">
+                          [class.focus:ring-green-500]="vistaActual === 'aprobacion'"
+                          title="Ver detalle" 
+                          type="button">
                     <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <g clip-path="url(#clip0_1406_282)">
                         <path d="M16 26.6004C8.73334 26.6004 3.09334 16.8804 2.85334 16.4671L2.58667 16.0004L2.85334 15.5337C3.09334 15.1204 8.73334 5.40039 16 5.40039C23.2667 5.40039 28.9067 15.1204 29.1467 15.5337L29.4133 16.0004L29.1467 16.4671C28.9067 16.8804 23.2667 26.6004 16 26.6004ZM4.76 16.0004C5.93334 17.8671 10.6267 24.7337 16 24.7337C21.3733 24.7337 26.0667 17.8671 27.24 16.0004C26.0667 14.1337 21.3733 7.26706 16 7.26706C10.6267 7.26706 5.93334 14.1337 4.76 16.0004Z" fill="currentColor"/>

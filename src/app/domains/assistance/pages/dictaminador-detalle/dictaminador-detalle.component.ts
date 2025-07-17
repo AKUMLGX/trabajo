@@ -327,6 +327,7 @@ export class DictaminadorDetalleComponent implements OnInit {
               // Para debug: mostrar todos los campos disponibles
               console.log('Datos completos del asunto:', encontrado);
               console.log('Datos mapeados:', this.asunto);
+              console.log('🔍 Folio para cargar archivos:', this.asunto.folio);
               
               // Una vez que tenemos el asunto con su folio, cargamos los archivos adjuntos
               this.cargarArchivosAdjuntos();
