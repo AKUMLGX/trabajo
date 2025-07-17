@@ -58,7 +58,10 @@ export class ArchivosAtencionService {
     console.log('🟢 [ArchivosService] URL completa con parámetros:', fullUrl);
     console.log('🟢 [ArchivosService] Endpoint usado:', endpoint);
     
-    return this.http.get<ArchivoAdjunto[]>(targetUrl, { params }).pipe(
+    // Agregar header para evitar mostrar modal de error en 404 (archivos no encontrados)
+    const headers = { 'X-Skip-Error-Handler': 'true' };
+    
+    return this.http.get<ArchivoAdjunto[]>(targetUrl, { params, headers }).pipe(
       tap({
         next: (response: ArchivoAdjunto[]) => {
           console.log('✅ [ArchivosService] MODAL VERDE - Respuesta exitosa:', response);
@@ -90,7 +93,10 @@ export class ArchivosAtencionService {
     console.log('🟤 [ArchivosService] URL completa con parámetros:', fullUrl);
     console.log('🟤 [ArchivosService] Endpoint usado:', endpoint);
     
-    return this.http.get<ArchivoAdjunto[]>(targetUrl, { params }).pipe(
+    // Agregar header para evitar mostrar modal de error en 404 (archivos no encontrados)
+    const headers = { 'X-Skip-Error-Handler': 'true' };
+    
+    return this.http.get<ArchivoAdjunto[]>(targetUrl, { params, headers }).pipe(
       tap({
         next: (response: ArchivoAdjunto[]) => {
           console.log('✅ [ArchivosService] MODAL GUINDA - Respuesta exitosa:', response);

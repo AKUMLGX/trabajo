@@ -1,0 +1,241 @@
+<!-- Modal Principal -->
+<div *ngIf="mostrarModal" class="modal-overlay">
+  <!-- Backdrop -->
+  <div class="modal-backdrop" (click)="onCerrarModal()"></div>
+  
+  <!-- Modal Content -->
+  <div class="modal-container">
+    
+    <!-- Header del Modal -->
+    <div class="modal-header">
+      <div class="modal-header-content">
+        <div class="modal-title-section">
+          <mat-icon class="modal-title-icon">assignment</mat-icon>
+          <div>
+            <h2 class="modal-title">Finalizar Atención de Asunto</h2>
+            <p class="modal-subtitle">{{asunto?.folio || 'N/A'}} - {{asunto?.personaRelacionada || 'N/A'}}</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" (click)="onCerrarModal()" type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenido del Modal -->
+    <div class="modal-body">
+      
+      <!-- Información del Asunto -->
+      <div class="asunto-info-section">
+        <h3 class="section-title">
+          <mat-icon class="section-icon">info</mat-icon>
+          Información del Asunto
+        </h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Folio:</span>
+            <span class="info-value">{{asunto?.folio || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Carpeta de Investigación:</span>
+            <span class="info-value">{{asunto?.carpetaInvestigacion || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Persona Relacionada:</span>
+            <span class="info-value">{{asunto?.personaRelacionada || 'N/A'}}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Fecha de Recepción:</span>
+            <span class="info-value">{{formatearFecha(asunto?.fechaRecepcion?.toString() || '')}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Datos de Respuesta a FGR -->
+      <div class="respuesta-fgr-section">
+        <h3 class="section-title">
+          <mat-icon class="section-icon">gavel</mat-icon>
+          Respuesta a FGR
+        </h3>
+        
+        <div *ngIf="asunto?.datosRespuestaFGR || obtenerDatosEjemplo(); let datos" class="respuesta-content">
+          
+          <!-- Grid de datos principales -->
+          <div class="respuesta-grid">
+            <div class="respuesta-item">
+              <span class="respuesta-label">Folio Interno:</span>
+              <span class="respuesta-value">{{datos.folioInterno}}</span>
+            </div>
+            
+            <div class="respuesta-item">
+              <span class="respuesta-label">Número de Oficio:</span>
+              <span class="respuesta-value">{{datos.numeroOficio}}</span>
+            </div>
+            
+            <div class="respuesta-item">
+              <span class="respuesta-label">Fecha Acuse Entrega FGR:</span>
+              <span class="respuesta-value">{{formatearFecha(datos.fechaAcuseEntrega)}}</span>
+            </div>
+            
+            <div class="respuesta-item">
+              <span class="respuesta-label">Oficio FGR que se Atiende:</span>
+              <span class="respuesta-value">{{datos.numeroOficioFGRAtiende}}</span>
+            </div>
+          </div>
+
+          <!-- Estado de Atención -->
+          <div class="estado-atencion">
+            <span class="respuesta-label">Estado de Atención:</span>
+            <div class="estado-badge">
+              <mat-icon [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</mat-icon>
+              <span [class]="obtenerClaseEstadoAtencion()">
+                {{datos.estadoAtencion === 'total' ? 'Atención Total' : 'Atención Parcial'}}
+              </span>
+            </div>
+          </div>
+
+          <!-- Descripción de la Respuesta -->
+          <div class="descripcion-respuesta">
+            <span class="respuesta-label">Descripción de la Respuesta:</span>
+            <div class="descripcion-content">
+              {{datos.descripcionRespuesta}}
+            </div>
+          </div>
+
+          <!-- Documento PDF -->
+          <div class="documento-pdf-section">
+            <div class="pdf-header">
+              <span class="respuesta-label">Documento PDF de Respuesta:</span>
+              <div class="pdf-actions">
+                <button *ngIf="datos.urlPDF" 
+                        class="btn-visualizar-pdf" 
+                        (click)="abrirVisorPDF()"
+                        type="button">
+                  <mat-icon>visibility</mat-icon>
+                  <span>Visualizar PDF</span>
+                </button>
+                <div *ngIf="!datos.urlPDF" class="no-pdf-message">
+                  <mat-icon class="warning-icon">warning</mat-icon>
+                  <span>No hay documento PDF adjunto</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Mensaje cuando no hay datos -->
+        <div *ngIf="!asunto?.datosRespuestaFGR && !obtenerDatosEjemplo()" class="no-datos-message">
+          <mat-icon class="warning-icon">info</mat-icon>
+          <p>No se han registrado datos de respuesta a FGR para este asunto.</p>
+          <p class="warning-text">Complete el expediente antes de finalizar la atención.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer del Modal -->
+    <div class="modal-footer">
+      <div class="footer-info">
+        <mat-icon class="info-icon">info</mat-icon>
+        <span>Al finalizar, el asunto será enviado a revisión y no podrá modificarse.</span>
+      </div>
+      <div class="footer-actions">
+        <button class="btn-cancelar" (click)="onCerrarModal()" type="button">
+          <mat-icon>close</mat-icon>
+          <span>Cancelar</span>
+        </button>
+        <button class="btn-finalizar" 
+                (click)="onFinalizarYEnviarRevision()" 
+                [disabled]="procesandoFinalizacion"
+                type="button">
+          <mat-icon *ngIf="!procesandoFinalizacion">check_circle</mat-icon>
+          <mat-icon *ngIf="procesandoFinalizacion" class="spinner">refresh</mat-icon>
+          <span>{{procesandoFinalizacion ? 'Enviando...' : 'Finalizar y enviar a revisión'}}</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Visor PDF -->
+<div *ngIf="mostrarVisorPDF" class="pdf-modal-overlay">
+  <!-- Backdrop -->
+  <div class="pdf-modal-backdrop" (click)="cerrarVisorPDF()"></div>
+  
+  <!-- Modal Content -->
+  <div class="pdf-modal-container">
+    
+    <!-- Header del Visor PDF -->
+    <div class="pdf-modal-header">
+      <div class="pdf-header-content">
+        <div class="pdf-title-section">
+          <mat-icon class="pdf-title-icon">picture_as_pdf</mat-icon>
+          <div>
+            <h3 class="pdf-title">Documento de Respuesta a FGR</h3>
+            <p class="pdf-subtitle">{{asunto?.folio || 'N/A'}}</p>
+          </div>
+        </div>
+        
+        <!-- Controles del PDF -->
+        <div class="pdf-controls">
+          <button class="pdf-control-btn" (click)="paginaAnterior()" [disabled]="paginaActualPDF <= 1" type="button">
+            <mat-icon>navigate_before</mat-icon>
+          </button>
+          
+          <span class="pdf-page-info">{{paginaActualPDF}} / {{totalPaginasPDF}}</span>
+          
+          <button class="pdf-control-btn" (click)="paginaSiguiente()" [disabled]="paginaActualPDF >= totalPaginasPDF" type="button">
+            <mat-icon>navigate_next</mat-icon>
+          </button>
+          
+          <div class="pdf-separator"></div>
+          
+          <button class="pdf-control-btn" (click)="disminuirZoom()" [disabled]="zoomPDF <= 50" type="button">
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          
+          <span class="pdf-zoom-info">{{zoomPDF}}%</span>
+          
+          <button class="pdf-control-btn" (click)="aumentarZoom()" [disabled]="zoomPDF >= 200" type="button">
+            <mat-icon>zoom_in</mat-icon>
+          </button>
+          
+          <button class="pdf-control-btn" (click)="ajustarPantalla()" type="button">
+            <mat-icon>fit_screen</mat-icon>
+          </button>
+        </div>
+        
+        <button class="pdf-close-btn" (click)="cerrarVisorPDF()" type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenido del PDF -->
+    <div class="pdf-modal-body">
+      <!-- Loading state -->
+      <div *ngIf="cargandoPDF" class="pdf-loading">
+        <mat-icon class="loading-spinner">refresh</mat-icon>
+        <p>Cargando documento PDF...</p>
+      </div>
+
+      <!-- Error state -->
+      <div *ngIf="errorPDF && !cargandoPDF" class="pdf-error">
+        <mat-icon class="error-icon">error</mat-icon>
+        <p>Error al cargar el documento PDF</p>
+        <p class="error-detail">{{errorPDF}}</p>
+      </div>
+
+      <!-- PDF Viewer -->
+      <div *ngIf="!cargandoPDF && !errorPDF && urlPDFSegura" class="pdf-viewer">
+        <iframe [src]="urlPDFSegura" 
+                class="pdf-iframe"
+                [style.transform]="'scale(' + (zoomPDF / 100) + ')'">
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+</div> 

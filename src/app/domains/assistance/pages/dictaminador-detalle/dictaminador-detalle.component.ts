@@ -159,6 +159,9 @@ export class DictaminadorDetalleComponent implements OnInit {
   cargandoArchivosAdjuntos = false;
   errorArchivosAdjuntos = '';
   
+  // Para detección inteligente de estado sin documentos
+  esEstadoPendienteSinDocumentos = false;
+  
   // Variables para el modal de visualización de PDF
   mostrarModalPdf = false;
   urlPdfActual = '';
@@ -849,9 +852,14 @@ export class DictaminadorDetalleComponent implements OnInit {
           this.archivosSeleccionados = [];
           this.fileInput.nativeElement.value = '';
           
-          // Mostrar mensaje de éxito
-          this.snackBar.open(response, 'Cerrar', { 
-            duration: 5000,
+          // Mostrar mensaje de éxito mejorado
+          let mensajeExito = response;
+          if (this.esEstadoPendienteSinDocumentos) {
+            mensajeExito += ' 🎉 ¡Asunto cambió a estado EN PROCESO!';
+          }
+          
+          this.snackBar.open(mensajeExito, 'Cerrar', { 
+            duration: 6000,
             panelClass: ['success-snackbar']
           });
           
@@ -882,22 +890,34 @@ export class DictaminadorDetalleComponent implements OnInit {
     
     this.cargandoArchivosAdjuntos = true;
     this.errorArchivosAdjuntos = '';
+    this.esEstadoPendienteSinDocumentos = false;
     
     this.archivosAtencionService.listarArchivosPdf(this.asunto.folio)
       .subscribe({
         next: (archivos) => {
           this.archivosAdjuntos = archivos;
           this.cargandoArchivosAdjuntos = false;
+          
+          // Si no hay archivos, pero la consulta fue exitosa, es estado PENDIENTE
+          if (archivos.length === 0) {
+            this.esEstadoPendienteSinDocumentos = true;
+            console.log('📋 Estado PENDIENTE detectado: Asunto sin documentos adjuntos');
+          }
         },
         error: (error) => {
           console.error('Error al cargar archivos adjuntos:', error);
-          this.errorArchivosAdjuntos = 'No se pudieron cargar los archivos adjuntos.';
           this.cargandoArchivosAdjuntos = false;
           
-          // Si el error es 404, no es realmente un error - simplemente no hay archivos
+          // Si el error es 404, es estado PENDIENTE (sin documentos)
           if (error.status === 404) {
             this.archivosAdjuntos = [];
             this.errorArchivosAdjuntos = '';
+            this.esEstadoPendienteSinDocumentos = true;
+            console.log('📋 Estado PENDIENTE detectado: Error 404 - sin documentos adjuntos');
+          } else {
+            // Solo mostrar error para errores genuinos (no 404)
+            this.errorArchivosAdjuntos = 'No se pudieron cargar los archivos adjuntos.';
+            console.error('⚠️ Error genuino al cargar archivos:', error);
           }
         }
       });
@@ -1006,6 +1026,7 @@ export class DictaminadorDetalleComponent implements OnInit {
    * Refresca la lista de archivos después de una nueva subida
    */
   refrescarArchivosAdjuntos(): void {
+    console.log('🔄 Refrescando estado de documentos...');
     this.cargarArchivosAdjuntos();
   }
 
