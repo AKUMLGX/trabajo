@@ -887,8 +887,15 @@ export class DictaminadorDetalleComponent implements OnInit {
    * Carga la lista de archivos PDF adjuntos al asunto actual
    */
   cargarArchivosAdjuntos(): void {
-    if (!this.asunto || !this.asunto.folio) return;
+    if (!this.asunto || !this.asunto.folio) {
+      console.log('❌ No se puede cargar archivos: asunto o folio no disponible', {
+        asunto: !!this.asunto,
+        folio: this.asunto?.folio
+      });
+      return;
+    }
     
+    console.log('🚀 Iniciando carga de archivos para folio:', this.asunto.folio);
     this.cargandoArchivosAdjuntos = true;
     this.errorArchivosAdjuntos = '';
     this.esEstadoPendienteSinDocumentos = false;
