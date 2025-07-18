@@ -49,7 +49,7 @@ export class TramiteDetalleComponent implements OnInit {
      private cards:CardsInfoBandejadeAtencionService,
     private buscadorService: BuscadorService<AsuntoPorAsigacionResponseEnTramite>,
     private domSanitizer: DomSanitizer,
-    private archivosService: ArchivosAtencionService
+    private archivosAtencionService: ArchivosAtencionService
    ) {}
 
   ngOnInit(): void {
@@ -126,7 +126,7 @@ export class TramiteDetalleComponent implements OnInit {
     // Primero intentar listar archivos reales del folio
     console.log('🔍 [TramiteDetalle] Intentando listar archivos reales para:', folio);
     
-    this.archivosService.listarArchivosPdf(folio).subscribe({
+    this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
       next: (archivos: any[]) => {
         console.log('🔍 [TramiteDetalle] Archivos encontrados:', archivos);
         
@@ -165,7 +165,7 @@ export class TramiteDetalleComponent implements OnInit {
   private cargarPdfDirecto(folio: string, nombreArchivo: string): void {
     console.log(`🔍 [TramiteDetalle] Cargando PDF directamente: ${nombreArchivo}`);
     
-    this.archivosService.obtenerPdf(folio, nombreArchivo).subscribe({
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
           console.log(`⚠️ [TramiteDetalle] Archivo ${nombreArchivo} vacío`);
@@ -206,7 +206,7 @@ export class TramiteDetalleComponent implements OnInit {
     const nombreArchivo = nombresArchivos[indice];
     console.log(`🔍 [TramiteDetalle] Probando archivo ${indice + 1}/${nombresArchivos.length}: ${nombreArchivo}`);
     
-    this.archivosService.obtenerPdf(folio, nombreArchivo).subscribe({
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
           console.log(`⚠️ [TramiteDetalle] Archivo ${nombreArchivo} vacío, probando siguiente...`);
