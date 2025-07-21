@@ -242,12 +242,12 @@
                 <thead>
                   <tr class="bg-gray-50 border-b border-gray-200">
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ind.</th>
-                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Folio</th>
-                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Carpeta</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Folio Interno</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Carpeta de Investigación</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Oficio</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[250px]">Persona Relacionada</th>
-                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plazo</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Recepción</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plazo de Atención</th>
                     <th class="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
@@ -320,7 +320,8 @@
                     <!-- Acciones -->
                     <td class="py-3 px-4">
                       <div class="flex items-center justify-center gap-1">
-                        <button (click)="abrirModalDetalle(templateDetalle, asunto)"
+                        <!-- Botón Detalle -->
+                        <button (click)="abrirModalDetalle(this.templateDetalle, asunto)"
                           class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
                           title="Ver detalle">
                           <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -328,14 +329,15 @@
                           </svg>
                         </button>
 
-                        <button class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md"
-                          title="Ver documento">
-                          <svg class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
+                        <!-- 🆕 Botón Ver PDF (ojo verde) -->
+                        <button class="group relative inline-flex items-center justify-center p-2 rounded-lg
+                           bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md" title="Ver documento"
+                          (click)="abrirModalPDF(templatePDF)"
+                          (click)="openPdfViewer(asunto.folio_interno, asunto.folio_scanner)">
+                          <mat-icon>remove_red_eye</mat-icon>
                         </button>
 
+                        <!-- Botón Asignar -->
                         <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
                           class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-[#691C32] hover:bg-[#8B1D3C] transition-all duration-200 hover:shadow-md"
                           title="Asignar">
@@ -402,7 +404,7 @@
               <th class="py-2 px-3 text-left whitespace-nowrap">Oficio</th>
               <th class="py-2 px-3 text-left whitespace-nowrap min-w-[250px]">Persona Relacionada</th>
               <th class="py-2 px-3 text-left whitespace-nowrap">Fecha Recepción</th>
-              <th class="py-2 px-3 text-left whitespace-nowrap">Plazo Atención</th>
+              <th class="py-2 px-3 text-left whitespace-nowrap">Plazo de Atención</th>
               <th class="py-2 px-3 text-center whitespace-nowrap">Acciones</th>
           </tr>
         </thead>
@@ -492,17 +494,12 @@
                   </span>
                 </button>
 
-                <!-- Botón Ver -->
-                <button 
-                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md"
-                  title="Ver documento">
-                  <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                  <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Ver
-                  </span>
+                <!-- 🆕 Botón Ver PDF (ojo verde) -->
+                <button class="group relative inline-flex items-center justify-center p-2 rounded-lg
+                   bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md" title="Ver documento"
+                  (click)="abrirModalPDF(templatePDF)"
+                  (click)="openPdfViewer(asunto.folio_interno, asunto.folio_scanner)">
+                  <mat-icon>remove_red_eye</mat-icon>
                 </button>
 
                 <!-- Botón Asignar -->
@@ -634,7 +631,7 @@
 
 
 <ng-template #templeteAsignacion>
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10500] animate-fade-in">
     <div class="bg-white rounded-lg shadow-xl w-[700px] max-w-[90vw] transform transition-all overflow-hidden">
       <!-- Encabezado del modal -->
       <div class="bg-[#691C32] text-white py-4 px-6 flex items-center justify-between">
@@ -681,33 +678,101 @@
           </div>
         </div>
 
-        <!-- Selección de abogado -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Seleccione un abogado para asignar
-          </label>
-          <div class="relative">
-            <select [(ngModel)]="abogadoSeleccionado"
-                  class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white transition-colors">
-              <option value="" disabled selected>Seleccione un abogado...</option>
-              @for (user of usuariosAsignar; track user.rfc;) {
-                <option [value]="user.rfc" >
-                  {{user.nombre}}
-                </option>
-              }
-            </select>
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
+        <!-- Selección de tipo de acción -->
+        <div class="space-y-4">
+          <div class="space-y-3">
+            <label class="block text-sm font-medium text-gray-700">
+              Seleccione la acción a realizar
+            </label>
+            
+            <!-- Radio button para asignar a abogado -->
+            <div class="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors" 
+                 [ngClass]="{'bg-red-50': tipoAccion === 'asignar', 'border-red-300': tipoAccion === 'asignar'}">
+              <input type="radio" 
+                     id="asignar-abogado" 
+                     name="tipoAccion" 
+                     value="asignar"
+                     [(ngModel)]="tipoAccion"
+                     class="mt-1 text-red-600 focus:ring-red-500">
+              <div class="flex-1">
+                <label for="asignar-abogado" class="block text-sm font-medium text-gray-900 cursor-pointer">
+                  Asignar a abogado de esta administración
+                </label>
+                <p class="text-xs text-gray-500 mt-1">
+                  El asunto será asignado a un abogado disponible para su atención
+                </p>
+              </div>
+            </div>
+            
+            <!-- Radio button para rechazar para correcta asignación -->
+            <div class="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                 [ngClass]="{'bg-orange-50': tipoAccion === 'reasignar', 'border-orange-300': tipoAccion === 'reasignar'}">
+              <input type="radio" 
+                     id="rechazar-asignacion" 
+                     name="tipoAccion" 
+                     value="reasignar"
+                     [(ngModel)]="tipoAccion"
+                     class="mt-1 text-orange-600 focus:ring-orange-500">
+              <div class="flex-1">
+                <label for="rechazar-asignacion" class="block text-sm font-medium text-gray-900 cursor-pointer">
+                  Rechazar para su correcta asignación
+                </label>
+                <p class="text-xs text-gray-500 mt-1">
+                  El asunto será rechazado para su correcta asignación
+                </p>
+              </div>
             </div>
           </div>
-          <p class="mt-2 text-sm text-gray-500">
-            <svg class="w-4 h-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            El asunto será asignado al abogado seleccionado para su atención
-          </p>
+
+          <!-- Dropdown de abogados (solo cuando se selecciona "asignar") -->
+          <div *ngIf="tipoAccion === 'asignar'" class="space-y-3">
+            <label class="block text-sm font-medium text-gray-700">
+              Seleccione un abogado para asignar
+            </label>
+            <div class="relative">
+              <select [(ngModel)]="abogadoSeleccionado"
+                    class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white transition-colors">
+                <option value="" disabled selected>Seleccione un abogado...</option>
+                @for (user of usuariosAsignar; track user.rfc;) {
+                  <option [value]="user.rfc" >
+                    {{user.nombre}}
+                  </option>
+                }
+              </select>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo de observaciones (solo cuando se selecciona "reasignar") -->
+          <div *ngIf="tipoAccion === 'reasignar'" class="space-y-3">
+            <label class="block text-sm font-medium text-gray-700">
+              Motivo del rechazo para correcta asignación *
+            </label>
+            <div class="relative">
+              <textarea [(ngModel)]="observacionesReasignacion"
+                      placeholder="Explique el motivo por el cual este asunto debe ser rechazado para su correcta asignación..."
+                      rows="4"
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-none transition-colors">
+              </textarea>
+              <div class="absolute bottom-3 right-3 text-orange-600">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 flex items-center">
+              <svg class="w-4 h-4 mr-1 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              La justificación será revisada por el área administrativa correspondiente
+            </p>
+          </div>
+
+
         </div>
       </div>
 
@@ -719,15 +784,18 @@
           Cerrar
         </button>
         <button
-          class="px-6 py-2.5 min-w-[100px] bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          (click)="asignarAsunto()" 
-          [disabled]="!abogadoSeleccionado">
-          Asignar
+          [class]="tipoAccion === 'asignar' ? 
+                   'px-6 py-2.5 min-w-[100px] bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed' :
+                   'px-6 py-2.5 min-w-[100px] bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'"
+          (click)="ejecutarAccion()" 
+          [disabled]="(tipoAccion === 'asignar' && !abogadoSeleccionado) || (tipoAccion === 'reasignar' && !observacionesReasignacion.trim())">
+          {{tipoAccion === 'asignar' ? 'Asignar' : 'Rechazar para Correcta Asignación'}}
         </button>
       </div>
     </div>
   </div>
 </ng-template>
+
 
 <!-- Modal de Detalle -->
 <ng-template #templateDetalle>
@@ -885,4 +953,75 @@
       </div>
     </div>
   </div>
+</ng-template>
+
+<!-- ✅ Modal PDF Viewer -->
+<ng-template #templatePDF>
+  @if (visualizarPdf) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
+      <div class="bg-white rounded-lg shadow-xl w-[900px] max-w-[95vw] h-[85vh] flex flex-col transform transition-all overflow-hidden">
+        <!-- Encabezado del modal -->
+        <div class="bg-[#691C32] text-white py-4 px-6 flex items-center justify-between">
+          <h2 class="text-xl font-bold flex items-center">
+            <svg class="w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Visualizador de PDF
+          </h2>
+          <button (click)="cerrarVisualizador()" class="text-white hover:text-gray-200 transition-colors">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Visualizador PDF -->
+        <div class="flex-1 p-4">
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 h-full">
+            <!-- Indicador de carga -->
+            <div *ngIf="pdfCargando" class="h-full flex flex-col items-center justify-center">
+              <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
+              <p class="mt-4 text-gray-600">Cargando documento...</p>
+            </div>
+
+            <!-- Error al cargar PDF -->
+            <div *ngIf="pdfError" class="h-full flex flex-col items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <p class="text-red-600 font-medium">Error al cargar el documento</p>
+              <p class="text-gray-500 text-sm mt-2">No se pudo encontrar el archivo PDF</p>
+            </div>
+
+            <!-- PDF Viewer -->
+            <div *ngIf="!pdfCargando && !pdfError && pdfUrl" class="h-full">
+              <iframe
+                [src]="pdfUrl"
+                style="width: 100%; height: 100%; border: none;"
+                type="application/pdf">
+                <p class="text-center py-10 text-gray-500">
+                  Tu navegador no puede mostrar este PDF.
+                  <a [href]="pdfUrl" class="text-[#691C32] hover:underline" target="_blank">
+                    Haz clic aquí para abrirlo en otra ventana
+                  </a>
+                </p>
+              </iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pie del modal -->
+        <div class="bg-gray-50 px-6 py-4 flex justify-end border-t">
+          <button 
+            (click)="cerrarVisualizador()"
+            class="px-6 py-2.5 bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:ring-offset-2">
+            <svg class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </ng-template>

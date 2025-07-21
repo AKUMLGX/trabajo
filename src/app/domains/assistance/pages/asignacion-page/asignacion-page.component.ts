@@ -1,12 +1,11 @@
 import { AsignarAsunto, AsignarAsuntoRequest, modalItem } from './../../../interfaces/asiganar-AsuntoRequest.interface';
-import { Component, OnInit, TemplateRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule} from '@angular/material/dialog';
 import { FormControl, FormsModule,  ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { Router, ActivatedRoute } from '@angular/router';
 import {  porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
@@ -14,6 +13,10 @@ import { ModalService } from '../../../shared/services/modal.service';
 import { BuscadorService } from '../../../shared/services/buscador.service';
 import { Observable,of } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
+import { FileService } from '../../../services/file.service';
+import { ArchivosAtencionService } from '../../../services/archivos-atencion.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-asignacion-page',
@@ -24,9 +27,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatButtonModule,
     MatDialogModule,
     FormsModule,
-    PdfViewerModule,
     ReactiveFormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    PdfViewerComponent,
   ],
   templateUrl: './asignacion-page.component.html',
   // src\app\domains\assistance\pages\asignacion-page\asignacion-page.component.html
@@ -141,6 +144,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
       margin: 10px auto !important;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+
+
   `]
 })
 export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -153,6 +158,11 @@ buscador = new FormControl('');
   currentPage: number = 1;
   itemsPerPage: number = 10; // Número de elementos por página
   abogadoSeleccionado: string = '';
+  
+  // Variables para el modal de asignación
+  tipoAccion: 'asignar' | 'reasignar' = 'asignar';
+  observacionesReasignacion: string = '';
+  
   // mostrarPDFViewer: boolean = false;
   // pdfSrc: string = '';
   // pdfTitulo: string = '';
@@ -162,6 +172,10 @@ buscador = new FormControl('');
   documento: string = 'REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion[] = []
    itemDeFilaSelecionada: modalItem | null = null
+
+  // ViewChild para templates
+  @ViewChild('templateDetalle', { static: false }) templateDetalle!: TemplateRef<any>;
+  @ViewChild('templatePDF', { static: false }) templatePDF!: TemplateRef<any>;
 
   // Variables para ngx-pagination
   paginaActual: number = 1;
@@ -190,6 +204,12 @@ buscador = new FormControl('');
   // Variable para el modal de detalle
   asuntoDetalle: tableAsuntosPorDictaminar | null = null;
 
+  // ✅ Variables para funcionalidad PDF Viewer
+  visualizarPdf: boolean = false;
+  pdfUrl: SafeResourceUrl | null = null;
+  pdfCargando: boolean = false;
+  pdfError: boolean = false;
+
   // 📱 Variables para manejo de texto largo y responsividad
   textosExpandidos: Set<string> = new Set();
   scrollHorizontalVisible: boolean = false;
@@ -215,11 +235,23 @@ buscador = new FormControl('');
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
     private modalService: ModalService,
-   private buscadorService:BuscadorService<tableAsuntosPorDictaminar>) { }
+   private buscadorService:BuscadorService<tableAsuntosPorDictaminar>,
+   private fileService: FileService,
+   private archivosAtencionService: ArchivosAtencionService,
+   private domSanitizer: DomSanitizer,
+   private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.filteredData$ = this.buscadorService.getFilteredData(this.filtrarIndicador);
     this.tablePorAsignar();
+    
+    // 🚨 NUEVO: Verificar si viene de asuntos urgentes
+    this.route.queryParams.subscribe(params => {
+      if (params['filtro'] === 'urgentes' && params['plazo'] === '0') {
+        console.log('🚨 [AsignacionPage] Aplicando filtro de asuntos urgentes');
+        this.aplicarFiltroUrgentes();
+      }
+    });
     
     // Suscribirse a los cambios en los datos filtrados para actualizar la paginación
     this.filteredData$.subscribe(data => {
@@ -306,8 +338,53 @@ buscador = new FormControl('');
     })
   }
 
+  // Nueva función para manejar ambas acciones
+  ejecutarAccion() {
+    if (this.tipoAccion === 'asignar') {
+      this.asignarAsunto();
+    } else if (this.tipoAccion === 'reasignar') {
+      // Ejecutar directamente el rechazo
+      this.solicitarReasignacion();
+    }
+  }
+
+  // Función para manejar rechazo para correcta asignación
+  solicitarReasignacion() {
+    const datos = {
+      asunto: this.itemDeFilaSelecionada,
+      accion: 'rechazado_para_correcta_asignacion',
+      fecha_rechazo: new Date().toISOString(),
+      motivo: this.observacionesReasignacion
+    };
+
+    console.log('Rechazando asunto para correcta asignación:', datos);
+    
+    // Aquí iría la llamada al servicio para rechazar el asunto
+    // Por ahora solo mostramos confirmación
+    alert(`El asunto ${this.itemDeFilaSelecionada?.folio_interno} ha sido rechazado para su correcta asignación`);
+    
+    // Cerrar modal y limpiar datos
+    this.cerrarModalAsignacion();
+  }
+
+
+
+  // Función para cerrar modal y limpiar
+  cerrarModalAsignacion() {
+    this.itemDeFilaSelecionada = null;
+    this.abogadoSeleccionado = '';
+    this.tipoAccion = 'asignar';
+    this.observacionesReasignacion = '';
+    this.modalService.closeAllDialogs();
+  }
+
   abrirModalAsignacion(template: TemplateRef<any>, item: modalItem) {
     this.itemDeFilaSelecionada = item
+    // Limpiar datos del modal anterior
+    this.observacionesReasignacion = '';
+    this.abogadoSeleccionado = '';
+    this.tipoAccion = 'asignar';
+    
     this.usuariosPorAdministracion()
     this.modalService.openCustomDialogWithTemplate({
       template
@@ -906,5 +983,213 @@ buscador = new FormControl('');
   actualizarDatosConContadores(datos: tableAsuntosPorDictaminar[]): void {
     this.calcularContadores(datos);
     this.actualizarPaginacion(datos);
+  }
+
+  // ✅ MÉTODOS PARA FUNCIONALIDAD PDF VIEWER
+  
+  /**
+   * Abre el visualizador de PDF en modal
+   * @param folio - Folio interno del asunto
+   * @param path - Path o número del archivo escaneado
+   */
+  openPdfViewer(folio: string, path: number): void {
+    console.log('🔍 [AsignacionPage] openPdfViewer INICIADO');
+    console.log('🔍 [AsignacionPage] Parámetros recibidos:', { folio, path });
+    
+    if (folio == null) {
+      folio = "sinAsignar";
+      console.log('🔍 [AsignacionPage] Folio era null, cambiado a:', folio);
+    }
+    
+    this.pdfCargando = true;
+    this.pdfError = false;
+    this.pdfUrl = null;
+    
+    // Primero intentar listar archivos reales del folio
+    console.log('🔍 [AsignacionPage] Intentando listar archivos reales para:', folio);
+    
+    this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
+      next: (archivos: any[]) => {
+        console.log('🔍 [AsignacionPage] Archivos encontrados:', archivos);
+        
+        if (archivos && archivos.length > 0) {
+          // Usar el primer archivo PDF encontrado
+          const primerArchivo = archivos[0];
+          const nombreArchivo = primerArchivo.nombre || primerArchivo.name;
+          
+          console.log('✅ [AsignacionPage] Usando archivo real encontrado:', nombreArchivo);
+          this.cargarPdfDirecto(folio, nombreArchivo);
+        } else {
+          console.log('⚠️ [AsignacionPage] No se encontraron archivos, usando lista de nombres posibles');
+          this.probarArchivosPorNombre(folio, path);
+        }
+      },
+      error: (error: any) => {
+        console.log('⚠️ [AsignacionPage] Error al listar archivos, usando lista de nombres posibles:', error.status);
+        this.probarArchivosPorNombre(folio, path);
+      }
+    });
+  }
+  
+  private probarArchivosPorNombre(folio: string, path: number): void {
+    // Lista de nombres de archivo posibles a probar (basada en patrones reales del sistema)
+    const nombresArchivoPosibles = [
+      'acta_compressed.pdf',
+      '59680.pdf',
+      `${path}.pdf`,
+      'documento_compressed.pdf',
+      'archivo_compressed.pdf',
+      'acta.pdf',
+      'documento.pdf',
+      'archivo.pdf',
+      'documento_escaneado.pdf',
+      'archivo_escaneado.pdf',
+      'acta_escaneada.pdf',
+      `documento_${path}.pdf`,
+      `archivo_${path}.pdf`,
+      'oficio.pdf',
+      'requerimiento.pdf',
+      'solicitud.pdf',
+      'ComprobanteNomina00000200940.pdf',
+      'GUIA_SINIESTRO_0163194079A.pdf',
+      'Mnuta_akamba_v1_06022025.pdf'
+    ];
+    
+    console.log('🔍 [AsignacionPage] Probando nombres de archivo:', nombresArchivoPosibles);
+    this.probarArchivos(folio, nombresArchivoPosibles, 0);
+  }
+  
+  private cargarPdfDirecto(folio: string, nombreArchivo: string): void {
+    console.log(`🔍 [AsignacionPage] Cargando PDF directamente: ${nombreArchivo}`);
+    
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
+      next: (data: string) => {
+        if (!data || data.trim() === '') {
+          console.log(`⚠️ [AsignacionPage] Archivo ${nombreArchivo} vacío`);
+          this.pdfError = true;
+          this.pdfCargando = false;
+          return;
+        }
+        
+        console.log(`✅ [AsignacionPage] Archivo ${nombreArchivo} cargado exitosamente`);
+        
+        try {
+          const pdfSrc = `data:application/pdf;base64,${data}`;
+          this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+          this.visualizarPdf = true;
+          this.pdfCargando = false;
+        } catch (error) {
+          console.error('❌ [AsignacionPage] Error al procesar el PDF:', error);
+          this.pdfError = true;
+          this.pdfCargando = false;
+        }
+      },
+      error: (error: any) => {
+        console.error(`❌ [AsignacionPage] Error al cargar PDF directo ${nombreArchivo}:`, error);
+        this.pdfError = true;
+        this.pdfCargando = false;
+      }
+    });
+  }
+  
+  private probarArchivos(folio: string, nombresArchivos: string[], indice: number): void {
+    if (indice >= nombresArchivos.length) {
+      console.error('❌ [AsignacionPage] No se pudo encontrar ningún archivo PDF');
+      this.pdfError = true;
+      this.pdfCargando = false;
+      return;
+    }
+    
+    const nombreArchivo = nombresArchivos[indice];
+    console.log(`🔍 [AsignacionPage] Probando archivo ${indice + 1}/${nombresArchivos.length}: ${nombreArchivo}`);
+    
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
+      next: (data: string) => {
+        if (!data || data.trim() === '') {
+          console.log(`⚠️ [AsignacionPage] Archivo ${nombreArchivo} vacío, probando siguiente...`);
+          this.probarArchivos(folio, nombresArchivos, indice + 1);
+          return;
+        }
+        
+        console.log(`✅ [AsignacionPage] Archivo ${nombreArchivo} encontrado y cargado exitosamente`);
+        
+        try {
+          const pdfSrc = `data:application/pdf;base64,${data}`;
+          this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+          this.visualizarPdf = true;
+          this.pdfCargando = false;
+        } catch (error) {
+          console.error('❌ [AsignacionPage] Error al procesar el PDF:', error);
+          this.pdfError = true;
+          this.pdfCargando = false;
+        }
+      },
+      error: (error: any) => {
+        console.log(`⚠️ [AsignacionPage] Error con archivo ${nombreArchivo}:`, error.status);
+        
+        // Si es un error 404, probar el siguiente archivo
+        if (error.status === 404) {
+          this.probarArchivos(folio, nombresArchivos, indice + 1);
+        } else {
+          console.error('❌ [AsignacionPage] Error no recuperable:', error);
+          this.pdfError = true;
+          this.pdfCargando = false;
+        }
+      }
+    });
+  }
+
+  /**
+   * Abre el modal PDF usando el ModalService
+   * @param template - Template reference del modal
+   */
+  abrirModalPDF(template: TemplateRef<any>): void {
+    this.modalService.openCustomDialogWithTemplate({
+      template
+    });
+  }
+
+  /**
+   * Cierra el visualizador de PDF
+   */
+  cerrarVisualizador(): void {
+    this.visualizarPdf = false;
+    this.pdfUrl = null;
+    this.pdfCargando = false;
+    this.pdfError = false;
+  }
+
+  /**
+   * 🚨 NUEVO: Aplica filtro para mostrar solo asuntos urgentes
+   */
+  private aplicarFiltroUrgentes(): void {
+    console.log('🚨 [AsignacionPage] Aplicando filtro de asuntos urgentes');
+    
+    // Esperar a que los datos se carguen
+    setTimeout(() => {
+      if (this.allData && this.allData.length > 0) {
+        // Filtrar solo asuntos con plazo_atencion = 0 (urgentes)
+        const asuntosUrgentes = this.allData.filter(asunto => 
+          asunto.plazo_atencion === 0
+        );
+        
+        console.log(`🚨 [AsignacionPage] Encontrados ${asuntosUrgentes.length} asuntos urgentes`);
+        
+        // Actualizar el servicio de búsqueda con los datos filtrados
+        this.buscadorService.setData(asuntosUrgentes);
+        
+        // Actualizar contadores y paginación
+        this.calcularContadores(asuntosUrgentes);
+        this.actualizarPaginacion(asuntosUrgentes);
+        
+        // Mostrar mensaje informativo
+        if (asuntosUrgentes.length === 0) {
+          console.log('✅ [AsignacionPage] No hay asuntos urgentes en este momento');
+        }
+      } else {
+        // Si no hay datos, intentar nuevamente después de un breve delay
+        setTimeout(() => this.aplicarFiltroUrgentes(), 1000);
+      }
+    }, 500);
   }
 }

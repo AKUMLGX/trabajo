@@ -18,13 +18,20 @@ export const errorInterceptor: HttpInterceptorFn = (
   let oauthService = inject(Oauth2Service);
   return next(request).pipe(
     catchError((err) => {
+      // No mostrar modal de error para peticiones de verificación de archivos (404 esperado)
+      const isFileCheckRequest = request.headers.has('X-Skip-Error-Handler') || 
+                                request.url.includes('listar_archivos_atencion');
+      
       if (err.status !== 401) {
+        // Solo mostrar modal si no es una petición de verificación de archivos o si no es un 404
+        if (!isFileCheckRequest || (isFileCheckRequest && err.status !== 404)) {
         matDialog.open(ErrorDialogComponent, {
           data: {
             errorTittle: 'Ha ocurrido un error',
             errorDescription: err.message,
           },
         });
+        }
       }else{
         return oauthService.refeshToken().pipe(switchMap((data) => {
           let sessionInfo = localStorage.getItem('sessionInfo');
