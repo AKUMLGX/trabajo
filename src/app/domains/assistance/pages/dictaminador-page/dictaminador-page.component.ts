@@ -208,8 +208,8 @@ export class DictaminadorPageComponent implements OnInit {
         });
         // Cargar información de documentos adjuntos para todos los asuntos
         this.verificarDocumentosAsuntos().then(() => {
-          this.actualizarEstadisticas();
-          this.aplicarFiltros();
+        this.actualizarEstadisticas();
+        this.aplicarFiltros();
         });
       },
       error: (err) => {

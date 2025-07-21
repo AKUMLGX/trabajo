@@ -25,12 +25,12 @@ export const errorInterceptor: HttpInterceptorFn = (
       if (err.status !== 401) {
         // Solo mostrar modal si no es una petición de verificación de archivos o si no es un 404
         if (!isFileCheckRequest || (isFileCheckRequest && err.status !== 404)) {
-          matDialog.open(ErrorDialogComponent, {
-            data: {
-              errorTittle: 'Ha ocurrido un error',
-              errorDescription: err.message,
-            },
-          });
+        matDialog.open(ErrorDialogComponent, {
+          data: {
+            errorTittle: 'Ha ocurrido un error',
+            errorDescription: err.message,
+          },
+        });
         }
       }else{
         return oauthService.refeshToken().pipe(switchMap((data) => {
