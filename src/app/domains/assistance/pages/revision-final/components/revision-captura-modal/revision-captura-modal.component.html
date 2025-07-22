@@ -210,7 +210,7 @@
             <input type="file" #fileInput accept=".pdf" 
                    (change)="onFileSelected($event)" style="display: none;">
             <button type="button" mat-stroked-button color="primary" 
-                    (click)="fileInput.click()" class="btn-upload">
+                    (click)="triggerFileInput()" class="btn-upload">
               <mat-icon>upload_file</mat-icon>
               Reemplazar PDF
             </button>
@@ -251,7 +251,7 @@
           <div *ngIf="!mostrarPdfOriginal && !pdfCorregidoUrl" class="no-pdf-corregido">
             <mat-icon>upload_file</mat-icon>
             <p>No has seleccionado un PDF corregido</p>
-            <button mat-button color="primary" (click)="fileInput.click()">
+            <button mat-button color="primary" (click)="triggerFileInput()">
               Seleccionar archivo PDF
             </button>
           </div>

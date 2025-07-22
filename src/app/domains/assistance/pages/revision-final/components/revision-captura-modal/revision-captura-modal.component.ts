@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, Inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, Inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -66,6 +66,9 @@ export interface CorreccionAsunto {
   styleUrls: ['./revision-captura-modal.component.css']
 })
 export class RevisionCapturaModalComponent implements OnInit, OnChanges {
+  
+  // ViewChild para el input de archivo
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   
   // Formulario reactivo
   correccionForm: FormGroup;
@@ -146,7 +149,7 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     }
   }
 
-  private cargarPdfOriginal(): void {
+  cargarPdfOriginal(): void {
     if (this.data?.asunto?.documento_pdf) {
       this.pdfCargando = true;
       this.pdfError = false;
@@ -197,6 +200,11 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
   // Cambiar vista de PDF
   cambiarVistaPdf(mostrarOriginal: boolean): void {
     this.mostrarPdfOriginal = mostrarOriginal;
+  }
+
+  // Método para abrir el selector de archivos
+  triggerFileInput(): void {
+    this.fileInput.nativeElement.click();
   }
 
   // Validaciones en tiempo real
