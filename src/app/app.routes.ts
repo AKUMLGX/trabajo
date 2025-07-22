@@ -13,6 +13,14 @@ import { TrafficLightsAtencionComponent } from './domains/assistance/components/
 import { ParcialPageComponent } from './domains/assistance/pages/parcial-page/parcial-page/parcial-page.component';
 import { FinalizadoComponent } from './domains/assistance/pages/finalizado-page/finalizado/finalizado-page.component';
 import { MsgReaderComponent } from './domains/components/msg-reader/msg-reader.component';
+import { AsignacionPageComponent } from './domains/assistance/pages/asignacion-page/asignacion-page.component';
+import { TramiteDetalleComponent } from './domains/assistance/pages/tramite-detalle/tramite-detalle.component';
+import { AsuntoDetalleComponent } from './domains/assistance/pages/asunto-detalle/asunto-detalle.component';
+import { ParcialDetalleComponent } from './domains/assistance/pages/parcial-detalle/parcial-detalle.component';
+import { AsuntoParcialComponent } from './domains/assistance/pages/asunto-parcial/asunto-parcial.component';
+import { DictaminadorPageComponent } from './domains/assistance/pages/dictaminador-page/dictaminador-page.component';
+import { DictaminadorDetalleComponent } from './domains/assistance/pages/dictaminador-detalle/dictaminador-detalle.component';
+import { RevisionFinalComponent } from './domains/assistance/pages/revision-final/revision-final.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -38,6 +46,22 @@ export const routes: Routes = [
         component: TramitePageComponent,
       },
       {
+        path: "tramite-detalle",
+        component: TramiteDetalleComponent,
+      },
+      {
+        path: "asunto-detalle/:id",
+        component: AsuntoDetalleComponent,
+      },
+      {
+        path: "parcial-detalle",
+        component: ParcialDetalleComponent,
+      },
+      {
+        path: "asunto-parcial/:id",
+        component: AsuntoParcialComponent,
+      },
+      {
         path: "semaforo",
         component: TrafficLightsAtencionComponent
       },
@@ -57,7 +81,10 @@ export const routes: Routes = [
         path: 'reports',
         component: ReportsPageComponent
       },
-
+      {
+        path: 'asignacion',
+        component: AsignacionPageComponent
+      },
       {
         path: 'tracking',
         component: TrackingPageComponent,
@@ -76,6 +103,18 @@ export const routes: Routes = [
         path: 'reports',
         component: ReportsPageComponent,
       },
+      {
+        path: 'dictaminador',
+        component: DictaminadorPageComponent,
+      },
+      {
+        path: 'dictaminador/detalle/:id',
+        component: DictaminadorDetalleComponent
+      },
+      {
+        path: 'revision-final',
+        component: RevisionFinalComponent
+      }
     ]
   },
   // {

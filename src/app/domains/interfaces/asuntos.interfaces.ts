@@ -16,7 +16,7 @@ export interface Asunto {
   autoridad_solicitante: String;
   turno_jefatura: String;
   correo_electronico: String;
-  plazo_atencion: String;
+  plazo_atencion: number;
   jefatura: String;
   que_solicita: String;
   fecha_numero_oficio_atencion: String;

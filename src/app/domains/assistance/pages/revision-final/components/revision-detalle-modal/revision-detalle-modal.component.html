@@ -1,0 +1,400 @@
+<div class="modal-container wide-modal">
+  <!-- Encabezado con información principal -->
+  <div class="header">
+    <div class="header-info">
+      <div class="document-icon">
+        <mat-icon>description</mat-icon>
+      </div>
+      <div class="folio-info">
+        <h1>{{asunto.folio}}</h1>
+        <p>Carpeta: {{asunto.carpetaInvestigacion}}</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="header-status">
+        <div class="dias-badge" [ngClass]="{
+          'bg-red-500': asunto.diasTranscurridos > 15,
+          'bg-yellow-500': asunto.diasTranscurridos > 7 && asunto.diasTranscurridos <= 15,
+          'bg-green-500': asunto.diasTranscurridos <= 7
+        }">
+          <mat-icon class="icon-small">schedule</mat-icon>
+          <span>{{asunto.diasTranscurridos}} días</span>
+        </div>
+      <span class="priority-badge" [ngClass]="{'alta': asunto.prioridad === 'Alta', 'media': asunto.prioridad === 'Media', 'baja': asunto.prioridad === 'Baja'}">
+        {{asunto.prioridad}}
+      </span>
+      </div>
+      <button mat-icon-button class="close-button" (click)="cerrar()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Información detallada del asunto (optimizada para mostrar más información en menos espacio) -->
+  <div class="info-section">
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Persona</label>
+        <span>{{asunto.personaRelacionada}}</span>
+      </div>
+      <div class="info-item">
+        <label>Encargado</label>
+        <span>{{asunto.dictaminador}}</span>
+      </div>
+      <div class="info-item">
+        <label>Estado</label>
+        <span class="estado" [ngClass]="{
+          'text-green-600': asunto.estadoAtencion === 'Aprobado',
+          'text-red-600': asunto.estadoAtencion === 'Rechazado',
+          'text-blue-600': asunto.estadoAtencion === 'Finalizado'
+        }">
+          <mat-icon class="text-sm inline-block align-middle mr-1">{{
+            asunto.estadoAtencion === 'Aprobado' ? 'check_circle' : 
+            asunto.estadoAtencion === 'Rechazado' ? 'cancel' : 'pending'
+          }}</mat-icon>
+          {{asunto.estadoAtencion}}
+        </span>
+      </div>
+      <div class="info-item">
+        <label>Fecha Recepción</label>
+        <span>{{formatDate(asunto.fechaRecepcion)}}</span>
+      </div>
+      <div class="info-item">
+        <label>Fecha Límite</label>
+        <span [ngClass]="{'text-red-600 font-medium': esFechaProxima(asunto.fechaLimite)}">
+          {{formatDate(asunto.fechaLimite)}}
+          <mat-icon *ngIf="esFechaProxima(asunto.fechaLimite)" class="text-sm inline-block align-middle ml-1">warning</mat-icon>
+        </span>
+      </div>
+      <div class="info-item">
+        <label>Tiempo de proceso</label>
+        <span class="text-gray-700">{{asunto.diasTranscurridos}} días</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal con split view -->
+  <div class="split-container">
+    <!-- Panel izquierdo: detalles y formulario -->
+    <div class="left-panel">
+      <!-- Pestañas de navegación -->
+      <mat-tab-group class="custom-tabs">
+        <!-- Pestaña de Detalles -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>description</mat-icon>
+              <span>Detalles del Asunto</span>
+            </div>
+          </ng-template>
+          
+          <div class="tab-content">
+            <!-- Resumen de acciones rápidas -->
+            <div class="action-summary">
+              <div class="action-card" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
+                <mat-icon>visibility</mat-icon>
+                <span>Ver dictamen</span>
+              </div>
+              <div class="action-card" (click)="mostrarDocumento('Análisis_Fiscal.pdf')">
+                <mat-icon>assessment</mat-icon>
+                <span>Ver análisis</span>
+              </div>
+              <div class="action-card" (click)="mostrarDocumento('Evidencia_Documental.pdf')">
+                <mat-icon>folder</mat-icon>
+                <span>Ver evidencias</span>
+              </div>
+            </div>
+            
+            <div class="section">
+              <h2>Resumen del Asunto</h2>
+              <p class="text-content">
+                El asunto presentado por {{asunto.dictaminador}} respecto al folio {{asunto.folio}} 
+                contiene un análisis detallado de la situación fiscal del contribuyente relacionado. 
+                Los hallazgos principales indican cumplimiento parcial de las obligaciones fiscales.
+              </p>
+            </div>
+            
+            <div class="dual-section">
+              <div class="section">
+                <h2>Documentos Analizados</h2>
+                <ul class="list-content">
+                  <li>Declaraciones anuales (2021-2023)</li>
+                  <li>Comprobantes fiscales emitidos</li>
+                  <li>Estados de cuenta bancarios</li>
+                  <li>Reportes de auditoría previa</li>
+                </ul>
+              </div>
+              
+              <div class="section">
+                <h2>Hallazgos Principales</h2>
+                <ul class="list-content">
+                  <li>Diferencias en ingresos declarados</li>
+                  <li>Gastos sin comprobación adecuada</li>
+                  <li>Inconsistencias en deducciones aplicadas</li>
+                  <li>Omisión parcial de ingresos</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="section">
+              <h2>Conclusiones del Encargado</h2>
+              <p class="text-content">
+                Con base en el análisis realizado, se determina que existen elementos suficientes para 
+                considerar que el contribuyente ha incumplido parcialmente sus obligaciones fiscales.
+                Se recomienda iniciar el proceso de determinación de crédito fiscal por las diferencias encontradas.
+              </p>
+              <p class="text-content">
+                La documentación presentada muestra inconsistencias en los periodos fiscales 2022 y 2023, 
+                mientras que el ejercicio 2021 presenta cumplimiento adecuado de obligaciones.
+              </p>
+            </div>
+            
+            <!-- Sección para documentación adjunta (cards) -->
+            <div class="section">
+              <h2>Documentación Adjunta</h2>
+              <div class="documents-grid">
+                <div class="document-card" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
+                  <div class="document-icon">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                  </div>
+                  <div class="document-info">
+                    <h4>Dictamen Técnico</h4>
+                    <p>Análisis detallado del caso</p>
+                    <span class="document-meta">PDF · 1.2 MB</span>
+                  </div>
+                </div>
+                
+                <div class="document-card" (click)="mostrarDocumento('Análisis_Fiscal.pdf')">
+                  <div class="document-icon">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                  </div>
+                  <div class="document-info">
+                    <h4>Análisis Fiscal</h4>
+                    <p>Estudio de cumplimiento de obligaciones</p>
+                    <span class="document-meta">PDF · 3.5 MB</span>
+                  </div>
+                </div>
+                
+                <div class="document-card" (click)="mostrarDocumento('Evidencia_Documental.pdf')">
+                  <div class="document-icon">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                  </div>
+                  <div class="document-info">
+                    <h4>Evidencia Documental</h4>
+                    <p>Pruebas y anexos del caso</p>
+                    <span class="document-meta">PDF · 5.8 MB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        
+        <!-- Pestaña de Revisar y Decidir -->
+        <mat-tab *ngIf="!soloLectura">
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>gavel</mat-icon>
+              <span>Revisar y Decidir</span>
+            </div>
+          </ng-template>
+          
+          <div class="tab-content">
+            <div class="info-banner">
+              <mat-icon>info</mat-icon>
+              <p>Como revisor, debes evaluar la calidad y precisión del asunto para aprobar o rechazar la resolución.</p>
+            </div>
+            
+            <!-- Sección de tipo de atención -->
+            <div class="section">
+              <h2>Tipo de Atención</h2>
+              <div class="atencion-options">
+                <div class="radio-option" [class.selected]="tipoAtencion === 'total'" (click)="setTipoAtencion('total')">
+                  <div class="radio-header">
+                    <mat-radio-button value="total" [checked]="tipoAtencion === 'total'" (change)="setTipoAtencion('total')"></mat-radio-button>
+                    <h3>Atención Total</h3>
+                  </div>
+                  <p class="option-description">El asunto fue atendido completamente y no requiere seguimiento adicional</p>
+                </div>
+                <div class="radio-option" [class.selected]="tipoAtencion === 'parcial'" (click)="setTipoAtencion('parcial')">
+                  <div class="radio-header">
+                    <mat-radio-button value="parcial" [checked]="tipoAtencion === 'parcial'" (change)="setTipoAtencion('parcial')"></mat-radio-button>
+                    <h3>Atención Parcial</h3>
+                  </div>
+                  <p class="option-description">El asunto fue atendido parcialmente y requiere seguimiento posterior</p>
+                </div>
+              </div>
+            </div>
+            
+            <h2>Opciones de Revisión</h2>
+            
+            <div class="decision-cards">
+              <div class="card approve" (click)="aprobar()">
+                <div class="card-icon">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+                <h3>Aprobar Asunto</h3>
+                <p>El asunto es correcto y cumple con todos los requisitos</p>
+              </div>
+              
+              <div class="card reject" (click)="motivoForm.controls['motivo'].setValue('')">
+                <div class="card-icon">
+                  <mat-icon>cancel</mat-icon>
+                </div>
+                <h3>Rechazar Asunto</h3>
+                <p>El asunto tiene errores o carece de elementos necesarios</p>
+              </div>
+            </div>
+            
+            <!-- Formulario de rechazo -->
+            <form [formGroup]="motivoForm" (ngSubmit)="rechazar()" class="rejection-form">
+              <h2>Detalles del Rechazo</h2>
+              
+              <div class="form-field">
+                <label>Motivo del Rechazo</label>
+                <mat-form-field appearance="outline">
+                  <mat-select formControlName="motivo" placeholder="Selecciona un motivo">
+                    <mat-option *ngFor="let motivo of motivosRechazo" [value]="motivo">{{motivo}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="motivoForm.controls['motivo'].hasError('required')">
+                    El motivo de rechazo es obligatorio
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              
+              <div class="form-field">
+                <label>Observaciones Detalladas</label>
+                <mat-form-field appearance="outline">
+                  <textarea matInput formControlName="observaciones" 
+                            placeholder="Describe los detalles del rechazo y qué debe corregirse"
+                            rows="4"></textarea>
+                  <mat-error *ngIf="motivoForm.controls['observaciones'].hasError('required')">
+                    Las observaciones son obligatorias
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              
+              <div class="form-actions">
+                <button mat-button type="button" (click)="cerrar()">Cancelar</button>
+                <button mat-raised-button color="warn" type="submit" [disabled]="motivoForm.invalid">
+                  Confirmar Rechazo
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    
+    <!-- Panel derecho: visor de PDF maximizado -->
+    <div class="right-panel">
+      <div class="pdf-viewer">
+        <div class="pdf-viewer-header">
+          <div class="viewer-title">
+          <h2>Visualizador de Documentos</h2>
+          <div *ngIf="documentoSeleccionado" class="document-info">
+            <mat-icon>picture_as_pdf</mat-icon>
+            <span>{{documentoSeleccionado}}</span>
+            </div>
+          </div>
+          <div class="viewer-actions">
+            <button mat-icon-button matTooltip="Descargar documento" *ngIf="documentoSeleccionado" (click)="descargarDocumento()">
+              <mat-icon>file_download</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Comparar documentos" *ngIf="documentoSeleccionado" (click)="toggleComparacion()">
+              <mat-icon>compare</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Expandir visualizador" *ngIf="documentoSeleccionado" (click)="toggleExpansion()">
+              <mat-icon>fullscreen</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Contenido del visor de PDF maximizado -->
+        <div class="pdf-viewer-content" [ngClass]="{'expanded': expandido}">
+          <!-- Mensaje cuando no hay documento seleccionado -->
+          <div *ngIf="!documentoSeleccionado" class="empty-viewer-message">
+            <mat-icon>info</mat-icon>
+            <p>Selecciona un documento para visualizarlo</p>
+            <button mat-stroked-button color="primary" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
+              <mat-icon class="mr-2">description</mat-icon>
+              Ver dictamen técnico
+            </button>
+          </div>
+          
+          <!-- Indicador de carga -->
+          <div *ngIf="documentoSeleccionado && pdfCargando" class="loading-viewer">
+            <div class="loading-spinner"></div>
+            <p>Cargando documento...</p>
+          </div>
+          
+          <!-- Visualizador de PDF -->
+          <div *ngIf="documentoSeleccionado && !pdfCargando" class="pdf-document-container">
+            <!-- Modo comparación -->
+            <div *ngIf="modoComparacion" class="comparison-view">
+              <div class="comparison-header">
+                <h4>Comparación de Documentos</h4>
+                <button mat-icon-button class="close-comparison" (click)="toggleComparacion()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              
+              <div class="comparison-container">
+                <!-- Documento principal -->
+                <div class="comparison-panel">
+                  <div class="comparison-panel-header">
+                    <h5>{{documentoSeleccionado}}</h5>
+                  </div>
+                  <div class="comparison-panel-content">
+                    <ngx-extended-pdf-viewer
+                      [src]="obtenerUrlDocumento()"
+                      [height]="'100%'"
+                      [useBrowserLocale]="true"
+                      [showToolbar]="false"
+                      zoom="page-width">
+                    </ngx-extended-pdf-viewer>
+                  </div>
+                </div>
+                
+                <!-- Documento secundario (para comparar) -->
+                <div class="comparison-panel">
+                  <div class="comparison-panel-header">
+                    <h5>{{documentoComparacion}}</h5>
+                  </div>
+                  <div class="comparison-panel-content">
+                    <ngx-extended-pdf-viewer
+                      [src]="obtenerUrlDocumentoComparacion()"
+                      [height]="'100%'"
+                      [useBrowserLocale]="true"
+                      [showToolbar]="false"
+                      zoom="page-width">
+                    </ngx-extended-pdf-viewer>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Modo normal (visor individual) maximizado -->
+            <div *ngIf="!modoComparacion" class="full-pdf-container">
+              <ngx-extended-pdf-viewer
+                [src]="obtenerUrlDocumento()"
+                [height]="'100%'"
+                [useBrowserLocale]="true"
+                [showOpenFileButton]="false"
+                [showBookmarkButton]="false"
+                [showSecondaryToolbarButton]="true"
+                [showRotateButton]="true"
+                [showHandToolButton]="true"
+                [showPresentationModeButton]="false"
+                [showDownloadButton]="true"
+                [showPrintButton]="true"
+                [showZoomButtons]="true"
+                zoom="page-fit">
+              </ngx-extended-pdf-viewer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

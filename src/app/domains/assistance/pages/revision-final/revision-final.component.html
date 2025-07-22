@@ -1,0 +1,460 @@
+<!-- Contenedor principal -->
+<div class="h-full bg-[#F3EAE4] p-6">
+  <!-- Encabezado con información -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-xl font-medium text-[#691C32]">Revisión Final de Asuntos</h1>
+      <p class="text-sm text-gray-600">Panel de revisión y aprobación de asuntos dictaminados</p>
+    </div>
+    <div class="text-right">
+      <p class="text-sm text-[#691C32]">Área de Revisión</p>
+      <p class="text-sm text-gray-600">{{estadisticas.totalPendientes + estadisticas.totalRevisados}} asuntos en total</p>
+    </div>
+  </div>
+
+  <!-- Panel de estadísticas -->
+  <div class="grid grid-cols-6 gap-4 mb-6">
+    <!-- Total Pendientes -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-blue-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-blue-600">assignment</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Pendientes</p>
+        <p class="text-xl font-semibold">{{estadisticas.totalPendientes}}</p>
+      </div>
+    </div>
+
+    <!-- Pendientes Hoy -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-yellow-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-yellow-600">today</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Pendientes Hoy</p>
+        <p class="text-xl font-semibold">{{estadisticas.pendientesHoy}}</p>
+      </div>
+    </div>
+
+    <!-- Urgentes -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-red-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-red-600">priority_high</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Urgentes</p>
+        <p class="text-xl font-semibold">{{estadisticas.pendientesUrgentes}}</p>
+      </div>
+    </div>
+
+    <!-- Total Revisados -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-purple-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-purple-600">checklist</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Total Revisados</p>
+        <p class="text-xl font-semibold">{{estadisticas.totalRevisados}}</p>
+      </div>
+    </div>
+
+    <!-- Aprobados -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-green-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-green-600">check_circle</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Aprobados</p>
+        <p class="text-xl font-semibold">{{estadisticas.aprobados}}</p>
+      </div>
+    </div>
+
+    <!-- Rechazados -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-red-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-red-600">cancel</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Rechazados</p>
+        <p class="text-xl font-semibold">{{estadisticas.rechazados}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pestañas de navegación -->
+  <mat-tab-group animationDuration="0ms" class="bg-white rounded-lg shadow-sm mb-6">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="flex items-center py-2">
+          <mat-icon class="mr-2 text-[#691C32]">pending_actions</mat-icon>
+          <span>Pendientes de Revisión</span>
+          <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+            {{asuntosPendientes.length}}
+          </span>
+        </div>
+      </ng-template>
+      
+      <!-- Contenido de la pestaña Pendientes -->
+      <div class="p-6">
+        <!-- Filtros y selector de vista -->
+        <div class="flex justify-between items-center mb-6">
+          <div class="flex gap-4">
+            <div class="w-64">
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Prioridad</label>
+              <div class="relative">
+              <select [(ngModel)]="filtroPrioridad" 
+                        class="appearance-none bg-white border border-gray-200 rounded-md shadow-sm px-4 py-2 pr-8 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+                <option value="Todas">Todas las prioridades</option>
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+              </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-600">
+                  <mat-icon class="text-sm">expand_more</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="w-96">
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Buscar</label>
+              <div class="relative">
+                <input type="text" [(ngModel)]="filtroText" placeholder="Buscar por folio, persona..." 
+                      class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+                <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
+                  <mat-icon class="text-gray-400 text-lg">search</mat-icon>
+                </div>
+                <button *ngIf="filtroText" 
+                        class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                        (click)="filtroText = ''">
+                  <mat-icon class="text-sm">close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selector de visualización -->
+          <div class="flex bg-gray-100 p-1 rounded-lg">
+            <button 
+              class="w-9 h-9 rounded-md flex items-center justify-center" 
+              [ngClass]="{'bg-white shadow-sm text-[#691C32]': vistaPendientes === 'tabla', 'text-gray-600 hover:bg-gray-200': vistaPendientes !== 'tabla'}"
+              (click)="vistaPendientes = 'tabla'" 
+              matTooltip="Vista de tabla">
+              <mat-icon>table_chart</mat-icon>
+            </button>
+            <button 
+              class="w-9 h-9 rounded-md flex items-center justify-center ml-1" 
+              [ngClass]="{'bg-white shadow-sm text-[#691C32]': vistaPendientes === 'grid', 'text-gray-600 hover:bg-gray-200': vistaPendientes !== 'grid'}"
+              (click)="vistaPendientes = 'grid'"
+              matTooltip="Vista de tarjetas">
+              <mat-icon>grid_view</mat-icon>
+            </button>
+            <button 
+              class="w-9 h-9 rounded-md flex items-center justify-center ml-1" 
+              [ngClass]="{'bg-white shadow-sm text-[#691C32]': vistaPendientes === 'kanban', 'text-gray-600 hover:bg-gray-200': vistaPendientes !== 'kanban'}"
+              (click)="vistaPendientes = 'kanban'"
+              matTooltip="Vista de flujo de trabajo">
+              <mat-icon>view_column</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Vista de tabla (por defecto) -->
+        <div *ngIf="vistaPendientes === 'tabla'">
+        <app-asuntos-pendientes-table 
+          [asuntos]="asuntosPendientes"
+          [filtroText]="filtroText"
+          [filtroPrioridad]="filtroPrioridad"
+          (aprobar)="aprobarAsunto($event)"
+            (rechazar)="rechazarAsunto($event)"
+            (verDetalleClick)="openRevisionDetalleModal($event)">
+        </app-asuntos-pendientes-table>
+        </div>
+
+        <!-- Vista de cuadrícula de tarjetas -->
+        <div *ngIf="vistaPendientes === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div *ngFor="let asunto of getAsuntosPendientesFiltered()" 
+               class="bg-white rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+            <div class="border-b border-gray-100 p-3 flex items-center justify-between" [ngClass]="{'bg-red-50': asunto.prioridad === 'Alta', 'bg-yellow-50': asunto.prioridad === 'Media', 'bg-green-50': asunto.prioridad === 'Baja'}">
+              <div class="flex items-center">
+                <div class="w-3 h-3 rounded-full mr-2" [ngClass]="{'bg-red-500': asunto.prioridad === 'Alta', 'bg-yellow-500': asunto.prioridad === 'Media', 'bg-green-500': asunto.prioridad === 'Baja'}"></div>
+                <h3 class="font-medium text-[#691C32]">{{asunto.folio}}</h3>
+              </div>
+              <div class="flex items-center">
+                <span class="text-xs px-2 py-1 rounded-full text-white font-medium" [ngClass]="{'bg-red-500': asunto.diasTranscurridos > 15, 'bg-yellow-500': asunto.diasTranscurridos > 7 && asunto.diasTranscurridos <= 15, 'bg-green-500': asunto.diasTranscurridos <= 7}">
+                  {{asunto.diasTranscurridos}} días
+                </span>
+              </div>
+            </div>
+            
+            <div class="p-4">
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-full">
+                  <p class="text-sm font-medium mb-1">Persona</p>
+                  <p class="text-gray-700">{{asunto.personaRelacionada}}</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <p class="text-sm font-medium mb-1">Carpeta</p>
+                  <p class="text-gray-700 text-sm">{{asunto.carpetaInvestigacion}}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium mb-1">Dictaminador</p>
+                  <p class="text-gray-700 text-sm">{{asunto.dictaminador}}</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                <div>
+                  <p class="text-sm font-medium mb-1">Fecha Recepción</p>
+                  <p class="text-gray-700 text-sm">{{formatDate(asunto.fechaRecepcion)}}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium mb-1">Fecha Límite</p>
+                  <p class="text-gray-700 text-sm">{{formatDate(asunto.fechaLimite)}}</p>
+                </div>
+              </div>
+              
+              <button (click)="openRevisionDetalleModal(asunto)" 
+                      class="w-full bg-[#691C32] hover:bg-[#4F1524] text-white py-2 rounded-md flex items-center justify-center transition-colors duration-200">
+                <mat-icon class="mr-1 text-sm">visibility</mat-icon>
+                <span>Ver detalle</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mensaje si no hay resultados -->
+          <div *ngIf="getAsuntosPendientesFiltered().length === 0" class="col-span-3 py-16 flex flex-col items-center justify-center bg-white rounded-lg shadow-sm border border-gray-200">
+            <mat-icon class="text-gray-400 text-5xl mb-3">search_off</mat-icon>
+            <p class="text-gray-500 text-lg">No se encontraron asuntos que coincidan con el filtro.</p>
+          </div>
+        </div>
+
+        <!-- Vista Kanban (por estado y días) -->
+        <div *ngIf="vistaPendientes === 'kanban'" class="flex flex-col gap-4">
+          <!-- Título y explicación del flujo -->
+          <div class="bg-white p-3 rounded-lg shadow-sm text-center">
+            <h3 class="text-[#691C32] font-medium mb-1">Flujo de Trabajo por Antigüedad</h3>
+            <p class="text-sm text-gray-600">Los asuntos se organizan automáticamente según su tiempo de procesamiento</p>
+          </div>
+
+          <!-- Contenedor de columnas -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Columna de urgentes (más de 15 días) -->
+            <div class="bg-white rounded-lg shadow border-t-4 border-red-500">
+              <div class="p-3 border-b flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="bg-red-100 p-2 rounded-lg mr-2">
+                    <mat-icon class="text-red-600">priority_high</mat-icon>
+                  </div>
+                  <div>
+                    <h3 class="font-medium">Atención Urgente</h3>
+                    <p class="text-xs text-gray-500">Más de 15 días</p>
+                  </div>
+                </div>
+                <span class="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                  {{getAsuntosPendientesPorDias(15, 999).length}}
+                </span>
+              </div>
+              
+              <div class="p-3 max-h-[calc(100vh-310px)] overflow-y-auto" style="background-color: #fff9f9; background-image: linear-gradient(#ffdddd 1px, transparent 1px), linear-gradient(90deg, #ffdddd 1px, transparent 1px); background-size: 20px 20px;">
+                <div *ngFor="let asunto of getAsuntosPendientesPorDias(15, 999)" 
+                    class="bg-white rounded-lg border-2 border-red-50 p-3 mb-3 hover:shadow-md transition-shadow duration-200">
+                  <!-- Encabezado con prioridad y días -->
+                  <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center">
+                      <div class="w-2 h-2 rounded-full mr-2" [ngClass]="{'bg-red-500': asunto.prioridad === 'Alta', 'bg-yellow-500': asunto.prioridad === 'Media', 'bg-green-500': asunto.prioridad === 'Baja'}"></div>
+                      <h4 class="font-medium text-[#691C32]">{{asunto.folio}}</h4>
+                    </div>
+                    <div class="bg-red-100 rounded-full px-2 py-1 text-xs text-red-700 font-bold">
+                      {{asunto.diasTranscurridos}} días
+                    </div>
+                  </div>
+                  
+                  <!-- Información principal -->
+                  <p class="text-sm font-medium mb-1">{{asunto.personaRelacionada}}</p>
+                  <p class="text-xs text-gray-600 mb-3">{{asunto.carpetaInvestigacion}} | {{asunto.dictaminador}}</p>
+                  
+                  <!-- Fecha límite -->
+                  <div class="flex items-center text-xs text-red-600 mb-3">
+                    <mat-icon class="text-xs mr-1">event</mat-icon>
+                    <span>Límite: {{formatDate(asunto.fechaLimite)}}</span>
+                  </div>
+                  
+                  <!-- Acciones -->
+                  <div class="flex gap-2">
+                    <button (click)="openRevisionDetalleModal(asunto)" 
+                            class="flex-1 bg-[#691C32] hover:bg-[#4F1524] text-white py-1.5 rounded flex items-center justify-center text-xs transition-colors">
+                      <mat-icon class="text-xs mr-1">visibility</mat-icon>
+                      <span>Ver detalle</span>
+                    </button>
+                  </div>
+                </div>
+                
+                <div *ngIf="getAsuntosPendientesPorDias(15, 999).length === 0" class="text-center p-8 text-gray-500">
+                  <mat-icon class="text-gray-300 text-4xl mb-2">task_alt</mat-icon>
+                  <p>No hay asuntos urgentes</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Columna de próximos (entre 8 y 14 días) -->
+            <div class="bg-white rounded-lg shadow border-t-4 border-yellow-500">
+              <div class="p-3 border-b flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="bg-yellow-100 p-2 rounded-lg mr-2">
+                    <mat-icon class="text-yellow-600">running_with_errors</mat-icon>
+                  </div>
+                  <div>
+                    <h3 class="font-medium">En Proceso</h3>
+                    <p class="text-xs text-gray-500">Entre 8 y 14 días</p>
+                  </div>
+                </div>
+                <span class="bg-yellow-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                  {{getAsuntosPendientesPorDias(8, 14).length}}
+                </span>
+              </div>
+              
+              <div class="p-3 max-h-[calc(100vh-310px)] overflow-y-auto" style="background-color: #fffdf5; background-image: linear-gradient(#ffeeba 1px, transparent 1px), linear-gradient(90deg, #ffeeba 1px, transparent 1px); background-size: 20px 20px;">
+                <div *ngFor="let asunto of getAsuntosPendientesPorDias(8, 14)" 
+                    class="bg-white rounded-lg border-2 border-yellow-50 p-3 mb-3 hover:shadow-md transition-shadow duration-200">
+                  <!-- Encabezado con prioridad y días -->
+                  <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center">
+                      <div class="w-2 h-2 rounded-full mr-2" [ngClass]="{'bg-red-500': asunto.prioridad === 'Alta', 'bg-yellow-500': asunto.prioridad === 'Media', 'bg-green-500': asunto.prioridad === 'Baja'}"></div>
+                      <h4 class="font-medium text-[#691C32]">{{asunto.folio}}</h4>
+                    </div>
+                    <div class="bg-yellow-100 rounded-full px-2 py-1 text-xs text-yellow-700 font-bold">
+                      {{asunto.diasTranscurridos}} días
+                    </div>
+                  </div>
+                  
+                  <!-- Información principal -->
+                  <p class="text-sm font-medium mb-1">{{asunto.personaRelacionada}}</p>
+                  <p class="text-xs text-gray-600 mb-3">{{asunto.carpetaInvestigacion}} | {{asunto.dictaminador}}</p>
+                  
+                  <!-- Fecha límite -->
+                  <div class="flex items-center text-xs text-yellow-600 mb-3">
+                    <mat-icon class="text-xs mr-1">event</mat-icon>
+                    <span>Límite: {{formatDate(asunto.fechaLimite)}}</span>
+                  </div>
+                  
+                  <!-- Acciones -->
+                  <div class="flex gap-2">
+                    <button (click)="openRevisionDetalleModal(asunto)" 
+                            class="flex-1 bg-[#691C32] hover:bg-[#4F1524] text-white py-1.5 rounded flex items-center justify-center text-xs transition-colors">
+                      <mat-icon class="text-xs mr-1">visibility</mat-icon>
+                      <span>Ver detalle</span>
+                    </button>
+                  </div>
+                </div>
+                
+                <div *ngIf="getAsuntosPendientesPorDias(8, 14).length === 0" class="text-center p-8 text-gray-500">
+                  <mat-icon class="text-gray-300 text-4xl mb-2">task_alt</mat-icon>
+                  <p>No hay asuntos en proceso</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Columna de recientes (menos de 7 días) -->
+            <div class="bg-white rounded-lg shadow border-t-4 border-green-500">
+              <div class="p-3 border-b flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="bg-green-100 p-2 rounded-lg mr-2">
+                    <mat-icon class="text-green-600">new_releases</mat-icon>
+                  </div>
+                  <div>
+                    <h3 class="font-medium">Recién Ingresados</h3>
+                    <p class="text-xs text-gray-500">7 días o menos</p>
+                  </div>
+                </div>
+                <span class="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                  {{getAsuntosPendientesPorDias(0, 7).length}}
+                </span>
+              </div>
+              
+              <div class="p-3 max-h-[calc(100vh-310px)] overflow-y-auto" style="background-color: #f9fff9; background-image: linear-gradient(#ccffcc 1px, transparent 1px), linear-gradient(90deg, #ccffcc 1px, transparent 1px); background-size: 20px 20px;">
+                <div *ngFor="let asunto of getAsuntosPendientesPorDias(0, 7)" 
+                    class="bg-white rounded-lg border-2 border-green-50 p-3 mb-3 hover:shadow-md transition-shadow duration-200">
+                  <!-- Encabezado con prioridad y días -->
+                  <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center">
+                      <div class="w-2 h-2 rounded-full mr-2" [ngClass]="{'bg-red-500': asunto.prioridad === 'Alta', 'bg-yellow-500': asunto.prioridad === 'Media', 'bg-green-500': asunto.prioridad === 'Baja'}"></div>
+                      <h4 class="font-medium text-[#691C32]">{{asunto.folio}}</h4>
+                    </div>
+                    <div class="bg-green-100 rounded-full px-2 py-1 text-xs text-green-700 font-bold">
+                      {{asunto.diasTranscurridos}} días
+                    </div>
+                  </div>
+                  
+                  <!-- Información principal -->
+                  <p class="text-sm font-medium mb-1">{{asunto.personaRelacionada}}</p>
+                  <p class="text-xs text-gray-600 mb-3">{{asunto.carpetaInvestigacion}} | {{asunto.dictaminador}}</p>
+                  
+                  <!-- Fecha límite -->
+                  <div class="flex items-center text-xs text-green-600 mb-3">
+                    <mat-icon class="text-xs mr-1">event</mat-icon>
+                    <span>Límite: {{formatDate(asunto.fechaLimite)}}</span>
+                  </div>
+                  
+                  <!-- Acciones -->
+                  <div class="flex gap-2">
+                    <button (click)="openRevisionDetalleModal(asunto)" 
+                            class="flex-1 bg-[#691C32] hover:bg-[#4F1524] text-white py-1.5 rounded flex items-center justify-center text-xs transition-colors">
+                      <mat-icon class="text-xs mr-1">visibility</mat-icon>
+                      <span>Ver detalle</span>
+                    </button>
+                  </div>
+                </div>
+                
+                <div *ngIf="getAsuntosPendientesPorDias(0, 7).length === 0" class="text-center p-8 text-gray-500">
+                  <mat-icon class="text-gray-300 text-4xl mb-2">task_alt</mat-icon>
+                  <p>No hay asuntos recientes</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="flex items-center py-2">
+          <mat-icon class="mr-2 text-[#691C32]">history</mat-icon>
+          <span>Asuntos Revisados</span>
+          <span *ngIf="asuntosRevisados.length > 0" class="ml-2 bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+            {{asuntosRevisados.length}}
+          </span>
+        </div>
+      </ng-template>
+      
+      <!-- Contenido de la pestaña Revisados -->
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <div class="w-96">
+            <label class="text-sm font-medium text-[#691C32] block mb-2">Buscar</label>
+            <div class="relative">
+              <input type="text" [(ngModel)]="filtroText" placeholder="Buscar por folio, persona..." 
+                    class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+              <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
+                <mat-icon class="text-gray-400 text-lg">search</mat-icon>
+              </div>
+              <button *ngIf="filtroText" 
+                      class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                      (click)="filtroText = ''">
+                <mat-icon class="text-sm">close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tabla de asuntos revisados -->
+        <app-asuntos-revisados-table 
+          [asuntos]="asuntosRevisados"
+          [filtroText]="filtroText">
+        </app-asuntos-revisados-table>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div> 

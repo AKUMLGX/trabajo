@@ -9,12 +9,12 @@
       <mat-icon>menu</mat-icon>
     </button>
     <!-- se comenta -->
-    <!-- <button mat-icon-button class="text-white">
-      <mat-icon>person</mat-icon>
+    <button mat-icon-button class="text-white" (click)="openModal(userInfoModal)">
+      <mat-icon>person</mat-icon >
     </button>
-    <button mat-icon-button class="text-white">
-      <mat-icon>pageview</mat-icon>
-    </button> -->
+    <button mat-icon-button class="text-white" [matTooltip]="'Revisión Final de Asuntos'" [routerLink]="'/layout/revision-final'">
+      <mat-icon>approval</mat-icon>
+    </button>
   </div>
   <app-navbar-content-info></app-navbar-content-info>
   <app-navbar-content></app-navbar-content>
@@ -32,4 +32,23 @@
     <router-outlet />
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #userInfoModal>
+  <div class="user-modal-container">
+    <!-- Botón cerrar elegante -->
+    <button mat-icon-button 
+            class="modal-close-button" 
+            (click)="closeModal()" 
+            mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    
+    <!-- Componente de perfil de usuario con toda la información -->
+    <app-user-profile 
+      [compact]="false" 
+      [showAdvancedInfo]="true">
+    </app-user-profile>
+  </div>
+</ng-template>
+
 

@@ -22,7 +22,11 @@ export class ModalService {
   
   openCustomDialogWithTemplate(data: TemplateModalData){
     return this.matDialog.open(
-      CustomModalWithTemplateComponent, {data, disableClose: true}
+      CustomModalWithTemplateComponent, {data, disableClose: false}
     )
+  }
+
+  closeAllDialogs() {
+    this.matDialog.closeAll();
   }
 }

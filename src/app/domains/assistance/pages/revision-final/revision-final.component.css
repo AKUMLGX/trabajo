@@ -1,0 +1,76 @@
+/* Estilos para los paneles de estadísticas */
+.mat-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
+}
+
+/* Estilos para las pestañas */
+::ng-deep .mat-mdc-tab-header {
+  background-color: #ffffff;
+  border-radius: 8px 8px 0 0;
+}
+
+::ng-deep .mat-mdc-tab-labels {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+::ng-deep .mat-mdc-tab-label-active {
+  opacity: 1;
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+  background-color: #ffffff;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Estilos para los componentes de tabla */
+app-asuntos-pendientes-table, app-asuntos-revisados-table {
+  display: block;
+  width: 100%;
+}
+
+/* Animaciones */
+.transition-shadow {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Utilidades */
+.bg-gradient-pattern {
+  /* Comentamos la referencia a la imagen que falta */
+  /* background-image: url('assets/images/pattern.png'); */
+  background-color: #f9f5f2;
+  background-repeat: repeat;
+  background-size: 300px;
+  background-blend-mode: multiply;
+}
+
+/* Estilos para los botones de acciones */
+.action-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+}
+
+/* Estilo para indicadores de prioridad */
+.priority-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.priority-high {
+  background-color: #ef4444;
+}
+
+.priority-medium {
+  background-color: #f59e0b;
+}
+
+.priority-low {
+  background-color: #10b981;
+} 

@@ -37,6 +37,11 @@ export class CustomSidenavComponent {
       route: '/layout/assistance',
     },
     {
+      icon: 'gavel',
+      label: 'Bandeja de dictaminador',
+      route: '/layout/dictaminador',
+    },
+    {
       icon: 'analytics',
       label: 'Bandeja de seguimiento',
       route: '/layout/tracking',
