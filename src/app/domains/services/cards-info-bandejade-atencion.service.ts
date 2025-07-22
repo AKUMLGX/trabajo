@@ -1,7 +1,7 @@
 import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
 import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest } from './../interfaces/asuntoPorAtencion.interface';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { asutosPorDictaminador, porAsignarRequest, tableAsuntosPorDictaminar } from '../interfaces/porAsignarRequest.interface';
@@ -22,7 +22,9 @@ export class CardsInfoBandejadeAtencionService {
 
 cardsInfo(){
   let tarjetUrl = environment.baseUrl+environment.cardsInfo
-  return this.http.get<CardsResponse['data']>(tarjetUrl)
+  // Añadir header para evitar loader en esta petición crítica de inicialización
+  const headers = new HttpHeaders().set('X-Skip-Loader', 'true');
+  return this.http.get<CardsResponse['data']>(tarjetUrl, { headers })
 
 }
 

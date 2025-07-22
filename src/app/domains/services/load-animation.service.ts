@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LoadAnimationService {
-  isLoading$ = new BehaviorSubject<boolean>(false);
+  public isLoading$ = new BehaviorSubject<boolean>(false);
   count = 0;
 
   show(): void {

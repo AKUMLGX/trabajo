@@ -53,14 +53,17 @@ export class UserService {
         this.setUsuarioAutenticado(usuarioCompleto);
         
         // Cargar información de administración de forma asíncrona
+        // NO llamar setLoading(false) aquí porque cargarAdministracion() lo maneja
         this.cargarAdministracion();
+        return; // No ejecutar el finally para este caso
       } else {
         this.setUsuarioNoAutenticado();
       }
     } catch (error) {
-      console.error('Error al inicializar usuario:', error);
+      console.error('❌ [UserService] Error al inicializar usuario:', error);
       this.setError('Error al cargar información del usuario');
     } finally {
+      // Solo se ejecuta si no hay sessionInfo o hay un error
       this.setLoading(false);
     }
   }
@@ -353,10 +356,20 @@ export class UserService {
    */
   private cargarAdministracion(): void {
     const usuarioActual = this.getUsuarioActual();
-    if (!usuarioActual) return;
+    if (!usuarioActual) {
+      this.setLoading(false);
+      return;
+    }
+
+    // Añadir timeout para evitar carga infinita
+    const timeoutId = setTimeout(() => {
+      console.warn('⚠️ [UserService] Timeout al cargar administración, estableciendo valores por defecto');
+      this.establecerAdministracionPorDefecto(usuarioActual);
+    }, 10000); // 10 segundos timeout
 
     this.cardsService.cardsInfo().subscribe({
       next: (data) => {
+        clearTimeout(timeoutId);
         const administracionObj = data.find(i => 'Administracion' in i) as { Administracion: AdministracionResponse };
         
         if (administracionObj && administracionObj.Administracion) {
@@ -372,29 +385,34 @@ export class UserService {
           
           this.setUsuarioAutenticado(usuarioActualizado);
         } else {
-          // Si no se encuentra la administración, establecer valores por defecto
-          const usuarioActualizado: UsuarioCompleto = {
-            ...usuarioActual,
-            administracion: null,
-            descripcionAdministracion: 'No disponible'
-          };
-          
-          this.setUsuarioAutenticado(usuarioActualizado);
+          this.establecerAdministracionPorDefecto(usuarioActual);
         }
       },
       error: (error) => {
-        console.error('Error al cargar información de administración:', error);
+        clearTimeout(timeoutId);
+        console.error('❌ [UserService] Error al cargar información de administración:', error);
         
-        // En caso de error, establecer valores por defecto
-        const usuarioActualizado: UsuarioCompleto = {
-          ...usuarioActual,
-          administracion: null,
-          descripcionAdministracion: 'Error al cargar'
-        };
+        // Si es un error de red, intentar continuar sin bloquear la app
+        if (error.status === 0 || error.status >= 500) {
+          console.warn('⚠️ [UserService] Error de conectividad, continuando sin administración');
+        }
         
-        this.setUsuarioAutenticado(usuarioActualizado);
+        this.establecerAdministracionPorDefecto(usuarioActual);
       }
     });
+  }
+
+  /**
+   * Establece la administración por defecto para el usuario
+   */
+  private establecerAdministracionPorDefecto(usuarioActual: UsuarioCompleto): void {
+    const usuarioActualizado: UsuarioCompleto = {
+      ...usuarioActual,
+      administracion: null,
+      descripcionAdministracion: 'Sin administración'
+    };
+    
+    this.setUsuarioAutenticado(usuarioActualizado);
   }
 
   /**
