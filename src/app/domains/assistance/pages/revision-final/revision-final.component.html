@@ -13,26 +13,63 @@
   </div>
 
   <!-- Panel de estadísticas -->
-  <div class="grid grid-cols-6 gap-4 mb-6">
+  <div class="grid grid-cols-8 gap-4 mb-6">
+    <!-- 🆕 ESTADÍSTICAS PARA ASUNTOS CAPTURADOS -->
+    
+    <!-- Total Capturados -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-purple-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-purple-600">input</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Capturados</p>
+        <p class="text-xl font-semibold">{{estadisticas.totalCapturados}}</p>
+      </div>
+    </div>
+
+    <!-- Capturados Hoy -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-indigo-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-indigo-600">today</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Capturados Hoy</p>
+        <p class="text-xl font-semibold">{{estadisticas.capturadosHoy}}</p>
+      </div>
+    </div>
+
+    <!-- Requieren Corrección -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-orange-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-orange-600">error_outline</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Por Corregir</p>
+        <p class="text-xl font-semibold">{{estadisticas.requierenCorreccion}}</p>
+      </div>
+    </div>
+
+    <!-- Listos para Enviar -->
+    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+      <div class="bg-emerald-50 rounded-full p-2 mr-3">
+        <mat-icon class="text-emerald-600">send</mat-icon>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Listos</p>
+        <p class="text-xl font-semibold">{{estadisticas.listosParaEnviar}}</p>
+      </div>
+    </div>
+
+    <!-- ✅ ESTADÍSTICAS EXISTENTES PARA DICTÁMENES -->
+
     <!-- Total Pendientes -->
     <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
       <div class="bg-blue-50 rounded-full p-2 mr-3">
         <mat-icon class="text-blue-600">assignment</mat-icon>
       </div>
       <div>
-        <p class="text-sm text-gray-500">Pendientes</p>
+        <p class="text-sm text-gray-500">Dictámenes</p>
         <p class="text-xl font-semibold">{{estadisticas.totalPendientes}}</p>
-      </div>
-    </div>
-
-    <!-- Pendientes Hoy -->
-    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
-      <div class="bg-yellow-50 rounded-full p-2 mr-3">
-        <mat-icon class="text-yellow-600">today</mat-icon>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">Pendientes Hoy</p>
-        <p class="text-xl font-semibold">{{estadisticas.pendientesHoy}}</p>
       </div>
     </div>
 
@@ -44,17 +81,6 @@
       <div>
         <p class="text-sm text-gray-500">Urgentes</p>
         <p class="text-xl font-semibold">{{estadisticas.pendientesUrgentes}}</p>
-      </div>
-    </div>
-
-    <!-- Total Revisados -->
-    <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
-      <div class="bg-purple-50 rounded-full p-2 mr-3">
-        <mat-icon class="text-purple-600">checklist</mat-icon>
-      </div>
-      <div>
-        <p class="text-sm text-gray-500">Total Revisados</p>
-        <p class="text-xl font-semibold">{{estadisticas.totalRevisados}}</p>
       </div>
     </div>
 
@@ -83,11 +109,214 @@
 
   <!-- Pestañas de navegación -->
   <mat-tab-group animationDuration="0ms" class="bg-white rounded-lg shadow-sm mb-6">
+    
+    <!-- 🆕 NUEVA PESTAÑA: Asuntos Capturados para Revisar -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="flex items-center py-2">
+          <mat-icon class="mr-2 text-[#691C32]">input</mat-icon>
+          <span>Asuntos Capturados</span>
+          <span *ngIf="asuntosCapturados.length > 0" class="ml-2 bg-purple-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+            {{asuntosCapturados.length}}
+          </span>
+        </div>
+      </ng-template>
+      
+      <!-- Contenido de la nueva pestaña -->
+      <div class="p-6">
+        <!-- Filtros y herramientas -->
+        <div class="flex justify-between items-center mb-6">
+          <div class="flex gap-4">
+            <div class="w-96">
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Buscar Asuntos Capturados</label>
+              <div class="relative">
+                <input type="text" [(ngModel)]="filtroText" placeholder="Buscar por folio, persona, capturista..." 
+                      class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+                <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
+                  <mat-icon class="text-gray-400 text-lg">search</mat-icon>
+                </div>
+                <button *ngIf="filtroText" 
+                        class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                        (click)="filtroText = ''">
+                  <mat-icon class="text-sm">close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel de acciones masivas -->
+          <div class="flex items-center gap-3">
+            <!-- Contador de seleccionados -->
+            <div *ngIf="asuntosSeleccionados.length > 0" class="flex items-center bg-emerald-50 px-3 py-2 rounded-lg">
+              <mat-icon class="text-emerald-600 mr-2">check_circle</mat-icon>
+              <span class="text-emerald-700 font-medium">{{asuntosSeleccionados.length}} seleccionado(s)</span>
+            </div>
+
+            <!-- Botón seleccionar todos los listos -->
+            <button class="flex items-center px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-md text-sm transition-colors"
+                    (click)="toggleSeleccionTodos()"
+                    [class.bg-blue-200]="todosProntosSeleccionados()">
+              <mat-icon class="mr-1 text-sm">{{todosProntosSeleccionados() ? 'check_box' : 'check_box_outline_blank'}}</mat-icon>
+              <span>{{todosProntosSeleccionados() ? 'Deseleccionar' : 'Seleccionar'}} listos</span>
+            </button>
+
+            <!-- Botón enviar seleccionados -->
+            <button class="flex items-center px-4 py-2 bg-[#691C32] hover:bg-[#4F1524] text-white rounded-md text-sm transition-colors shadow-sm"
+                    (click)="enviarAsuntosSeleccionados()"
+                    [disabled]="asuntosSeleccionados.length === 0"
+                    [class.opacity-50]="asuntosSeleccionados.length === 0"
+                    [class.cursor-not-allowed]="asuntosSeleccionados.length === 0">
+              <mat-icon class="mr-2 text-sm">send</mat-icon>
+              <span>Enviar al Akamba 3</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla de asuntos capturados -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-[#691C32] text-white">
+                <tr>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    <mat-icon class="text-sm">checklist</mat-icon>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona Relacionada</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tipo de Asunto</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Capturado Por</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Captura</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Estado</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Documentos</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let asunto of getAsuntosCapturasFiltrados(); let i = index"
+                    [class]="i % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'"
+                    class="transition-colors duration-150">
+                  
+                  <!-- Checkbox de selección -->
+                  <td class="px-4 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <input type="checkbox" 
+                             [checked]="isAsuntoSeleccionado(asunto.id)"
+                             (change)="toggleSeleccionAsunto(asunto.id)"
+                             [disabled]="asunto.estadoCaptura !== 'ListoParaEnviar'"
+                             class="w-4 h-4 text-[#691C32] bg-gray-100 border-gray-300 rounded focus:ring-[#691C32] focus:ring-2"
+                             [class.opacity-50]="asunto.estadoCaptura !== 'ListoParaEnviar'">
+                    </div>
+                  </td>
+
+                  <!-- Folio -->
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-2 h-2 rounded-full mr-3" [ngClass]="{
+                        'bg-red-500': asunto.prioridad === 'Alta',
+                        'bg-yellow-500': asunto.prioridad === 'Media',
+                        'bg-green-500': asunto.prioridad === 'Baja'
+                      }"></div>
+                      <span class="text-sm font-medium text-gray-900">{{asunto.folio}}</span>
+                    </div>
+                  </td>
+
+                  <!-- Persona Relacionada -->
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {{asunto.personaRelacionada}}
+                  </td>
+
+                  <!-- Tipo de Asunto -->
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {{asunto.tipoAsunto}}
+                  </td>
+
+                  <!-- Capturado Por -->
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {{asunto.capturadoPor}}
+                  </td>
+
+                  <!-- Fecha Captura -->
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {{formatDate(asunto.fechaCaptura)}}
+                  </td>
+
+                  <!-- Estado -->
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                          [ngClass]="getColorEstadoCaptura(asunto.estadoCaptura)">
+                      <mat-icon class="mr-1 text-xs">{{
+                        asunto.estadoCaptura === 'PendienteRevision' ? 'schedule' :
+                        asunto.estadoCaptura === 'RequiereCorreccion' ? 'error_outline' : 'check_circle'
+                      }}</mat-icon>
+                      {{getEtiquetaEstadoCaptura(asunto.estadoCaptura)}}
+                    </span>
+                  </td>
+
+                  <!-- Documentos -->
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <div class="flex items-center">
+                      <mat-icon class="mr-1 text-sm" [ngClass]="{
+                        'text-green-600': asunto.tieneDocumentos,
+                        'text-gray-400': !asunto.tieneDocumentos
+                      }">{{asunto.tieneDocumentos ? 'attachment' : 'attachment_off'}}</mat-icon>
+                      <span>{{asunto.cantidadDocumentos}} archivo(s)</span>
+                    </div>
+                  </td>
+
+                  <!-- Acciones -->
+                  <td class="px-6 py-4 whitespace-nowrap text-center">
+                    <div class="flex items-center justify-center gap-2">
+                      <!-- Botón Ver/Revisar -->
+                      <button class="inline-flex items-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
+                              title="Ver detalle y revisar"
+                              (click)="abrirModalCorreccion(asunto)">
+                        <mat-icon class="text-blue-600 text-sm">visibility</mat-icon>
+                      </button>
+
+                      <!-- Botón Corregir (solo si requiere corrección) -->
+                      <button *ngIf="asunto.estadoCaptura === 'RequiereCorreccion'" 
+                              class="inline-flex items-center p-2 rounded-lg bg-orange-50 hover:bg-orange-100 transition-all duration-200 hover:shadow-md"
+                              title="Corregir errores"
+                              (click)="abrirModalCorreccion(asunto)">
+                        <mat-icon class="text-orange-600 text-sm">edit</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Estado vacío -->
+          <div *ngIf="getAsuntosCapturasFiltrados().length === 0" class="py-16 flex flex-col items-center justify-center">
+            <mat-icon class="text-gray-400 text-5xl mb-3">inbox</mat-icon>
+            <p class="text-gray-500 text-lg">No hay asuntos capturados que coincidan con el filtro.</p>
+            <p class="text-gray-400 text-sm mt-1">Los asuntos capturados aparecerán aquí para su revisión.</p>
+          </div>
+        </div>
+
+        <!-- Panel informativo sobre errores -->
+        <div *ngIf="estadisticas.requierenCorreccion > 0" class="mt-6 bg-orange-50 border border-orange-200 rounded-lg p-4">
+          <div class="flex items-start">
+            <mat-icon class="text-orange-600 mr-3 mt-0.5">warning</mat-icon>
+            <div>
+              <h3 class="text-orange-800 font-medium mb-1">Asuntos que Requieren Atención</h3>
+              <p class="text-orange-700 text-sm">
+                Hay {{estadisticas.requierenCorreccion}} asunto(s) que requieren corrección antes de poder ser enviados al Akamba 3.
+                Revise los errores detectados y realice las correcciones necesarias.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ✅ PESTAÑAS EXISTENTES -->
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="flex items-center py-2">
           <mat-icon class="mr-2 text-[#691C32]">pending_actions</mat-icon>
-          <span>Pendientes de Revisión</span>
+          <span>Dictámenes Pendientes</span>
           <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
             {{asuntosPendientes.length}}
           </span>
