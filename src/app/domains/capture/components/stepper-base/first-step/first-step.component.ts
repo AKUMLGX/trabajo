@@ -20,13 +20,13 @@ import { MatStepperModule } from '@angular/material/stepper';
 })
 export class FirstStepComponent {
 
-  isDocumentSelected: boolean = false;
+  isDocumentSelected = false;
 
   selectedOption: any;
 
-  submitButtonHiddenStatus: boolean = false;
+  submitButtonHiddenStatus = false;
 
-  enabledButton: boolean = false;
+  enabledButton = false;
 
   retrieveSelectionFromDropdown(event:any){
     this.selectedOption = event;

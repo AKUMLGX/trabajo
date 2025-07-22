@@ -35,12 +35,12 @@ export class InitTemplateComponent {
   documentsSegundaPieza: EstadisticasDiarias[]=[];
 
   environment = environment;
-  mostrarChart: boolean = false;
-  mostrarTable: boolean = false
-  selecionarOpcion: string = ''
-  selecionarOpcion2: string = ''
-  fecha_Incial: string = ""
-  fecha_Final: string = ""
+  mostrarChart = false;
+  mostrarTable = false
+  selecionarOpcion = ''
+  selecionarOpcion2 = ''
+  fecha_Incial = ""
+  fecha_Final = ""
   administracion = ""
 
   download_requerimiento = "REQUERIMIENTO"
@@ -50,8 +50,8 @@ export class InitTemplateComponent {
   download_segunda_pieza = 'SEGUNDA PIEZA'
 
   formato = "xlsx"
-  itemsPerPage: number = 5
-  pageSelected: number = 1;
+  itemsPerPage = 5
+  pageSelected = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
@@ -102,37 +102,37 @@ export class InitTemplateComponent {
     documento: 0,
   }
 
-  total_requerimiento: number = 0
-  enTramite_requerimiento: number = 0
-  parcial_requerimiento: number = 0
-  documento_respuesta_requerimiento: number = 0
+  total_requerimiento = 0
+  enTramite_requerimiento = 0
+  parcial_requerimiento = 0
+  documento_respuesta_requerimiento = 0
 
 
-  total_respuesta_FGR: number = 0
-  enTramite_respuesta_FGR: number = 0
-  parcial_respuesta_FGR: number = 0
-  documento_respuesta_FGR: number = 0
+  total_respuesta_FGR = 0
+  enTramite_respuesta_FGR = 0
+  parcial_respuesta_FGR = 0
+  documento_respuesta_FGR = 0
 
-  total_respuesta_INTERNA: number = 0
-  enTramite_respuesta_INTERNA: number = 0
-  parcial_respuesta_INTERNA: number = 0
-  documento_respuesta_Interna: number = 0
+  total_respuesta_INTERNA = 0
+  enTramite_respuesta_INTERNA = 0
+  parcial_respuesta_INTERNA = 0
+  documento_respuesta_Interna = 0
 
-  total_apertura: number = 0
-  parcial_apertura: number = 0
-  documento_apertura: number = 0
-  entramite_apertura: number = 0
-
-
-  total_segundda_pieza: number = 0
-  parcial_segunda_pieza: number = 0
-  documento_segunda_pieza: number = 0
-  entramite_segunda_pieza: number = 0
+  total_apertura = 0
+  parcial_apertura = 0
+  documento_apertura = 0
+  entramite_apertura = 0
 
 
-  totalDeConteo: number = 0
-  totalDeConteoAperturas: number = 0
-  totalDeConteoSegundaPieza: number = 0
+  total_segundda_pieza = 0
+  parcial_segunda_pieza = 0
+  documento_segunda_pieza = 0
+  entramite_segunda_pieza = 0
+
+
+  totalDeConteo = 0
+  totalDeConteoAperturas = 0
+  totalDeConteoSegundaPieza = 0
 
   constructor(
     private fb: FormBuilder,
@@ -149,7 +149,7 @@ export class InitTemplateComponent {
   estadisticosReport(): void {
     if (this.repotByDay.valid === true) {
       this.mostrarChart = true
-      let data = this.repotByDay.value
+      const data = this.repotByDay.value
       this.chartPie.getQuerybyDay(data).subscribe(
         res => {
           // console.log("RES", res);
@@ -219,7 +219,7 @@ export class InitTemplateComponent {
   estaditicasPorDia(): void {
     if (this.repotByDay.valid === true) {
       this.mostrarTable = true
-      let dataConteo = this.repotByDay.value
+      const dataConteo = this.repotByDay.value
       this.tableConteo.getConteoDia(dataConteo).subscribe(
         res => {
           this.documents = res.registros.map(([fecha, totalRequerimineto, total_estatus, parcial_estatus, trmite
@@ -259,10 +259,10 @@ export class InitTemplateComponent {
 
   tableApertura() {
     if (this.repotByDay.valid === true) {
-      let fechaIncial = this.repotByDay.get("fecha_inicial")?.value;
-      let fechaFinal = this.repotByDay.get("fecha_final")?.value;
+      const fechaIncial = this.repotByDay.get("fecha_inicial")?.value;
+      const fechaFinal = this.repotByDay.get("fecha_final")?.value;
 
-      let data: EstadisticosRequest = {
+      const data: EstadisticosRequest = {
         fecha_final: fechaFinal,
         fecha_inicial: fechaIncial,
         tipo: "APERTURA"
@@ -306,10 +306,10 @@ export class InitTemplateComponent {
 
   tableSecondPices(): void {
     if (this.repotByDay.valid === true) {
-      let fechaFinal = this.repotByDay.get("fecha_final")?.value;
-      let fechaIncial = this.repotByDay.get("fecha_inicial")?.value;
+      const fechaFinal = this.repotByDay.get("fecha_final")?.value;
+      const fechaIncial = this.repotByDay.get("fecha_inicial")?.value;
 
-      let data: EstadisticosRequest = {
+      const data: EstadisticosRequest = {
         fecha_final: fechaFinal,
         fecha_inicial: fechaIncial,
         tipo: "SEGUNDA PIEZA"
@@ -468,8 +468,8 @@ export class InitTemplateComponent {
   }
 
   obtnerNombre() {
-    let fechaIncial = this.repotByDay.get("fecha_inicial")?.value;
-    let fechaFinal = this.repotByDay.get("fecha_final")?.value;
+    const fechaIncial = this.repotByDay.get("fecha_inicial")?.value;
+    const fechaFinal = this.repotByDay.get("fecha_final")?.value;
     this.fecha_Incial = fechaIncial
     this.fecha_Final = fechaFinal
   }

@@ -14,6 +14,6 @@ import { CivilPenalMercantilFormComponent } from '../third-step/preliminar-form/
 })
 export class FourthStepComponent {
 
-  @Input({required: true}) dropdownChoice: string = '';
+  @Input({required: true}) dropdownChoice = '';
 
 }

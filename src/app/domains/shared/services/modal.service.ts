@@ -11,7 +11,7 @@ import { CustomModalWithTemplateComponent } from '../components/custom-modal-wit
 })
 export class ModalService {
 
-  showError: EventEmitter<boolean> = new EventEmitter();
+  showError = new EventEmitter<boolean>();
 
   constructor(private matDialog: MatDialog) { }
   

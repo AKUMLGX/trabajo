@@ -6,17 +6,17 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class FileService {
-  pdf: string = '';
-  msg: string = '';
+  pdf = '';
+  msg = '';
 
-  pdfUpdated: EventEmitter<string> = new EventEmitter();
+  pdfUpdated = new EventEmitter<string>();
 
-  msgUpdated: EventEmitter<string> = new EventEmitter();
+  msgUpdated = new EventEmitter<string>();
 
   constructor(private httpClient: HttpClient) {}
 
   updatePdfFile(folio: string, fileName: string): void {
-    let params = {
+    const params = {
       folio: folio,
       file_name: fileName,
     };
@@ -32,7 +32,7 @@ export class FileService {
     console.log('🔍 [FileService] updatePdfFileBandejaAtencion INICIADO');
     console.log('🔍 [FileService] Parámetros recibidos:', { folio, fileName });
     
-    let params = {
+    const params = {
       folio: folio,
       file_name: fileName,
     };
@@ -68,7 +68,7 @@ export class FileService {
   }
 
   updateMsgFile(folio: string, fileName: string): void {
-    let params = {
+    const params = {
       folio: folio,
       file_name: fileName,
     };
@@ -81,7 +81,7 @@ export class FileService {
   }
 
   printPdf(folio: string, fileName: string): void {
-    let params = {
+    const params = {
       folio: folio,
       file_name: fileName,
     };
@@ -95,7 +95,7 @@ export class FileService {
         }
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'application/pdf' });
-        let blobURL = URL.createObjectURL(blob);
+        const blobURL = URL.createObjectURL(blob);
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         iframe.src = blobURL;

@@ -100,18 +100,18 @@ export class CardsComponent implements OnInit {
     this.mostrarSemaforoContenido.emit()
   }
 
-  documento: string = 'REQUERIMIENTO'
-  asignados: boolean = false
-  asignadosTable: boolean = true
-  porAsignarTotal: number = 0
+  documento = 'REQUERIMIENTO'
+  asignados = false
+  asignadosTable = true
+  porAsignarTotal = 0
   asignarData = true
 
   tablePorDictaminar: tableAsuntosPorDictaminar[] = []
 
   // 🎨 NUEVO SISTEMA DE FILTRADO TIPO CARRUSEL - ULTRA RÁPIDO
   dictaminadoresUnicos: string[] = [] // Lista de dictaminadores únicos
-  dictaminadorActivoAtencion: string = '' // Dictaminador activo en "En Atención"
-  dictaminadorActivoAprobacion: string = '' // Dictaminador activo en "Por Aprobar"
+  dictaminadorActivoAtencion = '' // Dictaminador activo en "En Atención"
+  dictaminadorActivoAprobacion = '' // Dictaminador activo en "Por Aprobar"
   
   // Datos filtrados por vista
   asuntosEnAtencionFiltrados: tableAsuntosPorDictaminar[] = []
@@ -134,13 +134,13 @@ export class CardsComponent implements OnInit {
 
   usuariosAsignar: usuariosPorAdministracion[] = []
 
-  asuntosUrgentes: number = 0;
+  asuntosUrgentes = 0;
 
   //#region paginador
   pages: tableAsuntosPorDictaminar[][] = [];
 
-  itemsPerPage: number = 5;
-  pageSelected: number = 1;
+  itemsPerPage = 5;
+  pageSelected = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
@@ -155,8 +155,8 @@ export class CardsComponent implements OnInit {
   ) { }
 
   // Propiedades para manejar la notificación
-  mostrarNotificacion: boolean = false;
-  mensajeNotificacion: string = '';
+  mostrarNotificacion = false;
+  mensajeNotificacion = '';
 
   // Datos de ejemplo para la tabla
   asuntos: any[] = [
@@ -172,10 +172,10 @@ export class CardsComponent implements OnInit {
 
   // Datos filtrados de la tabla
   asuntosFiltrados: any[] = [];
-  dictaminadorSeleccionado: string = '';
+  dictaminadorSeleccionado = '';
 
   // Mapeo de ID de dictaminador a nombre para mostrar mensajes
-  dictaminadoresMap: { [key: string]: string } = {
+  dictaminadoresMap: Record<string, string> = {
     '1': 'María Hernández',
     '2': 'Juan Rodríguez',
     '3': 'Carlos Sánchez',
@@ -184,25 +184,25 @@ export class CardsComponent implements OnInit {
   };
 
   // Conteo de asuntos por dictaminador
-  conteoAsuntosPorDictaminador: { [key: string]: number } = {};
-  totalAsuntos: number = 0;
+  conteoAsuntosPorDictaminador: Record<string, number> = {};
+  totalAsuntos = 0;
 
   // Propiedades para visualizar PDF
   mostrarPDFViewer = false;
   pdfTitulo = '';
-  pdfUrl: string = '';
+  pdfUrl = '';
   pdfCargando = true;
   paginaActual = 1;
   escalaZoom = 1.0;
 
   // Propiedades para el modal de detalles
-  mostrarDetalleModal: boolean = false;
+  mostrarDetalleModal = false;
   asuntoSeleccionado: any = null;
 
   // Propiedades para manejar asuntos rechazados
-  mostrarTablaRechazadosModal: boolean = false;
-  mostrarModalRechazados: boolean = false;
-  mostrarConfirmacionReasignacion: boolean = false;
+  mostrarTablaRechazadosModal = false;
+  mostrarModalRechazados = false;
+  mostrarConfirmacionReasignacion = false;
   asuntoRechazado: AsuntoRechazado | null = null;
 
 
@@ -239,23 +239,23 @@ export class CardsComponent implements OnInit {
   asuntosEnAtencion: tableAsuntosPorDictaminar[] = [];
   asuntosPorAprobar: tableAsuntosPorDictaminar[] = [];
   vistaActual: 'atencion' | 'aprobacion' = 'atencion';
-  cargandoAsuntos: boolean = false;
-  cargandoAprobaciones: boolean = false;
+  cargandoAsuntos = false;
+  cargandoAprobaciones = false;
 
   // Propiedades para la paginación
-  paginaActualTabla: number = 1;
-  filasPorPagina: number = 5;
+  paginaActualTabla = 1;
+  filasPorPagina = 5;
   opcionesPaginacion: number[] = [5, 10, 15, 20];
-  totalPaginas: number = 1;
+  totalPaginas = 1;
   asuntosPaginados: tableAsuntosPorDictaminar[] = [];
 
   // Propiedades para el modal de revisión
-  mostrarModalRevision: boolean = false;
+  mostrarModalRevision = false;
   asuntoSeleccionadoRevision: any = null;
   archivosAsunto: ArchivoAdjunto[] = [];
 
   // Propiedades para el modal de atención
-  mostrarModalAtencion: boolean = false;
+  mostrarModalAtencion = false;
   asuntoSeleccionadoAtencion: any = null;
 
 
@@ -861,7 +861,7 @@ export class CardsComponent implements OnInit {
    * @param mensaje Texto a mostrar
    * @param duracion Duración en milisegundos (por defecto 2000ms)
    */
-  mostrarMensaje(mensaje: string, duracion: number = 2000): void {
+  mostrarMensaje(mensaje: string, duracion = 2000): void {
     // Solo se registra el mensaje en consola sin mostrar la notificación visual
     console.log('Mensaje de sistema:', mensaje);
 

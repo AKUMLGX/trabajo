@@ -24,9 +24,9 @@ import { ModalService } from '../../../shared/services/modal.service';
 })
 export class ParcialDetalleComponent implements OnInit {
 
-  paginaActual: number = 1;
-  itemsPorPagina: number = 8;
-  totalAsuntos: number = 20;
+  paginaActual = 1;
+  itemsPorPagina = 8;
+  totalAsuntos = 20;
 
   tableparcialRequest: AsuntoPorAtencionParcialRequest = {
     atencion: "PARCIAL",
@@ -36,8 +36,8 @@ export class ParcialDetalleComponent implements OnInit {
 
   //#region paginador
   pages: AsuntoPorAsigacionResponseParcial[][] = []
-  itemsPerPage: number = 5
-  pageSelected: number = 1;
+  itemsPerPage = 5
+  pageSelected = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
@@ -64,17 +64,17 @@ export class ParcialDetalleComponent implements OnInit {
   };
 
 
-  asignarIndicador: Observable<AsuntoPorAsigacionResponseParcial[]> = new Observable
+  asignarIndicador = new Observable<AsuntoPorAsigacionResponseParcial[]>()
 
-  searchText: string = '';
+  searchText = '';
   filteredData$: Observable<AsuntoPorAsigacionResponseParcial[]> = this.buscadorService.getFilteredData(this.filtrarIndicador);
   allData: AsuntoPorAsigacionResponseParcial[] = [];
 
   // ✅ Variables para funcionalidad PDF Viewer
-  visualizarPdf: boolean = false;
+  visualizarPdf = false;
   pdfUrl: SafeResourceUrl | null = null;
-  pdfCargando: boolean = false;
-  pdfError: boolean = false;
+  pdfCargando = false;
+  pdfError = false;
 
   tablePracial() {
     this.cards.parcialTableCard(this.tableparcialRequest).subscribe(res => {

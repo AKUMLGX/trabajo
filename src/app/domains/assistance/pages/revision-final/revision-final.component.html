@@ -202,9 +202,9 @@
                       <input type="checkbox" 
                              [checked]="isAsuntoSeleccionado(asunto.id)"
                              (change)="toggleSeleccionAsunto(asunto.id)"
-                             [disabled]="asunto.estadoCaptura !== 'ListoParaEnviar'"
+                             [disabled]="asunto.estado_revision !== 'APROBADO'"
                              class="w-4 h-4 text-[#691C32] bg-gray-100 border-gray-300 rounded focus:ring-[#691C32] focus:ring-2"
-                             [class.opacity-50]="asunto.estadoCaptura !== 'ListoParaEnviar'">
+                             [class.opacity-50]="asunto.estado_revision !== 'APROBADO'">
                     </div>
                   </td>
 
@@ -212,9 +212,9 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                       <div class="w-2 h-2 rounded-full mr-3" [ngClass]="{
-                        'bg-red-500': asunto.prioridad === 'Alta',
-                        'bg-yellow-500': asunto.prioridad === 'Media',
-                        'bg-green-500': asunto.prioridad === 'Baja'
+                        'bg-red-500': asunto.prioridad === 'ALTA',
+                        'bg-yellow-500': asunto.prioridad === 'MEDIA',
+                        'bg-green-500': asunto.prioridad === 'BAJA'
                       }"></div>
                       <span class="text-sm font-medium text-gray-900">{{asunto.folio}}</span>
                     </div>
@@ -232,23 +232,23 @@
 
                   <!-- Capturado Por -->
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {{asunto.capturadoPor}}
+                    {{asunto.usuario_captura}}
                   </td>
 
                   <!-- Fecha Captura -->
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {{formatDate(asunto.fechaCaptura)}}
+                    {{formatDate(asunto.fecha_captura)}}
                   </td>
 
                   <!-- Estado -->
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
-                          [ngClass]="getColorEstadoCaptura(asunto.estadoCaptura)">
+                          [ngClass]="getColorEstadoCaptura(asunto.estado_revision)">
                       <mat-icon class="mr-1 text-xs">{{
-                        asunto.estadoCaptura === 'PendienteRevision' ? 'schedule' :
-                        asunto.estadoCaptura === 'RequiereCorreccion' ? 'error_outline' : 'check_circle'
+                        asunto.estado_revision === 'PENDIENTE' ? 'schedule' :
+                        asunto.estado_revision === 'RECHAZADO' ? 'error_outline' : 'check_circle'
                       }}</mat-icon>
-                      {{getEtiquetaEstadoCaptura(asunto.estadoCaptura)}}
+                      {{getEtiquetaEstadoCaptura(asunto.estado_revision)}}
                     </span>
                   </td>
 
@@ -274,7 +274,7 @@
                       </button>
 
                       <!-- Botón Corregir (solo si requiere corrección) -->
-                      <button *ngIf="asunto.estadoCaptura === 'RequiereCorreccion'" 
+                      <button *ngIf="asunto.estado_revision === 'RECHAZADO'" 
                               class="inline-flex items-center p-2 rounded-lg bg-orange-50 hover:bg-orange-100 transition-all duration-200 hover:shadow-md"
                               title="Corregir errores"
                               (click)="abrirModalCorreccion(asunto)">

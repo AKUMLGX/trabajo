@@ -18,6 +18,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { AsuntosPendientesTableComponent } from './components/asuntos-pendientes-table/asuntos-pendientes-table.component';
 import { AsuntosRevisadosTableComponent } from './components/asuntos-revisados-table/asuntos-revisados-table.component';
 import { RevisionDetalleModalComponent } from './components/revision-detalle-modal/revision-detalle-modal.component';
+import { RevisionCapturaModalComponent } from './components/revision-captura-modal/revision-captura-modal.component';
 
 interface Asunto {
   id: string;
@@ -37,17 +38,21 @@ interface Asunto {
 interface AsuntoCapturado {
   id: string;
   folio: string;
-  fechaCaptura: Date;
-  capturadoPor: string;
-  estadoCaptura: 'PendienteRevision' | 'RequiereCorreccion' | 'ListoParaEnviar';
-  personaRelacionada: string;
-  carpetaInvestigacion: string;
-  tipoAsunto: string;
-  prioridad: 'Alta' | 'Media' | 'Baja';
-  autoridad: string;
-  tieneDocumentos: boolean;
-  cantidadDocumentos: number;
-  observaciones?: string;
+  carpeta_investigacion: string;
+  autoridad_solicitante: string;
+  asunto: string;
+  fecha_captura: string;
+  usuario_captura: string;
+  estado_revision: 'PENDIENTE' | 'CORREGIDO' | 'APROBADO' | 'RECHAZADO';
+  observaciones_akamba1?: string;
+  documento_pdf?: string;
+  fecha_limite?: string;
+  prioridad?: 'ALTA' | 'MEDIA' | 'BAJA';
+  // Campos adicionales para la tabla
+  personaRelacionada?: string;
+  tipoAsunto?: string;
+  tieneDocumentos?: boolean;
+  cantidadDocumentos?: number;
   erroresDetectados?: string[];
 }
 
@@ -72,7 +77,8 @@ interface AsuntoCapturado {
     MatDialogModule,
     AsuntosPendientesTableComponent,
     AsuntosRevisadosTableComponent,
-    RevisionDetalleModalComponent
+    RevisionDetalleModalComponent,
+    RevisionCapturaModalComponent
   ],
   templateUrl: './revision-final.component.html',
   styleUrls: ['./revision-final.component.css']
@@ -105,12 +111,12 @@ export class RevisionFinalComponent implements OnInit {
   };
   
   // Filtros
-  filtroEstado: string = 'Todos';
-  filtroPrioridad: string = 'Todas';
-  filtroText: string = '';
+  filtroEstado = 'Todos';
+  filtroPrioridad = 'Todas';
+  filtroText = '';
 
   // Propiedades para la vista de asuntos pendientes
-  vistaPendientes: string = 'tabla'; // 'tabla', 'grid' o 'kanban'
+  vistaPendientes = 'tabla'; // 'tabla', 'grid' o 'kanban'
 
   constructor(private dialog: MatDialog) {}
 
@@ -241,14 +247,15 @@ export class RevisionFinalComponent implements OnInit {
       {
         id: 'CAP-001',
         folio: 'EUACAPE-0030',
-        fechaCaptura: new Date('2024-06-09'),
-        capturadoPor: 'Ana Martínez (Akamba 1)',
-        estadoCaptura: 'RequiereCorreccion',
+        fecha_captura: '2024-06-09T10:30:00',
+        usuario_captura: 'Ana Martínez (Akamba 1)',
+        estado_revision: 'PENDIENTE',
         personaRelacionada: 'Elena Rodríguez Vega',
-        carpetaInvestigacion: 'CI-78950',
+        carpeta_investigacion: 'CI-78950',
+        autoridad_solicitante: 'Fiscalía General de la República',
+        asunto: 'Investigación por evasión fiscal empresarial',
         tipoAsunto: 'Evasión Fiscal',
-        prioridad: 'Alta',
-        autoridad: 'Fiscalía General de la República',
+        prioridad: 'ALTA',
         tieneDocumentos: true,
         cantidadDocumentos: 3,
         erroresDetectados: ['Falta número de RFC', 'Documento ilegible']
@@ -256,14 +263,15 @@ export class RevisionFinalComponent implements OnInit {
       {
         id: 'CAP-002',
         folio: 'EUACAPE-0031',
-        fechaCaptura: new Date('2024-06-09'),
-        capturadoPor: 'Carlos Ruiz (Akamba 1)',
-        estadoCaptura: 'ListoParaEnviar',
+        fecha_captura: '2024-06-09T11:15:00',
+        usuario_captura: 'Carlos Ruiz (Akamba 1)',
+        estado_revision: 'APROBADO',
         personaRelacionada: 'Roberto Sánchez López',
-        carpetaInvestigacion: 'CI-78951',
+        carpeta_investigacion: 'CI-78951',
+        autoridad_solicitante: 'Procuraduría Fiscal',
+        asunto: 'Análisis de omisión de ingresos por actividades comerciales',
         tipoAsunto: 'Omisión de Ingresos',
-        prioridad: 'Media',
-        autoridad: 'Procuraduría Fiscal',
+        prioridad: 'MEDIA',
         tieneDocumentos: true,
         cantidadDocumentos: 5,
         erroresDetectados: []
@@ -271,14 +279,15 @@ export class RevisionFinalComponent implements OnInit {
       {
         id: 'CAP-003',
         folio: 'EUACAPE-0032',
-        fechaCaptura: new Date('2024-06-08'),
-        capturadoPor: 'María Fernández (Akamba 1)',
-        estadoCaptura: 'PendienteRevision',
+        fecha_captura: '2024-06-08T14:20:00',
+        usuario_captura: 'María Fernández (Akamba 1)',
+        estado_revision: 'PENDIENTE',
         personaRelacionada: 'Lucía Morales García',
-        carpetaInvestigacion: 'CI-78952',
+        carpeta_investigacion: 'CI-78952',
+        autoridad_solicitante: 'Fiscalía General de la República',
+        asunto: 'Investigación por defraudación fiscal mediante facturas falsas',
         tipoAsunto: 'Defraudación Fiscal',
-        prioridad: 'Alta',
-        autoridad: 'Fiscalía General de la República',
+        prioridad: 'ALTA',
         tieneDocumentos: false,
         cantidadDocumentos: 0,
         erroresDetectados: []
@@ -286,14 +295,15 @@ export class RevisionFinalComponent implements OnInit {
       {
         id: 'CAP-004',
         folio: 'EUACAPE-0033',
-        fechaCaptura: new Date('2024-06-09'),
-        capturadoPor: 'Luis García (Akamba 1)',
-        estadoCaptura: 'ListoParaEnviar',
+        fecha_captura: '2024-06-09T09:45:00',
+        usuario_captura: 'Luis García (Akamba 1)',
+        estado_revision: 'APROBADO',
         personaRelacionada: 'Fernando Jiménez Cruz',
-        carpetaInvestigacion: 'CI-78953',
+        carpeta_investigacion: 'CI-78953',
+        autoridad_solicitante: 'Aduanas',
+        asunto: 'Investigación por contrabando de mercancías',
         tipoAsunto: 'Contrabando',
-        prioridad: 'Baja',
-        autoridad: 'Aduanas',
+        prioridad: 'BAJA',
         tieneDocumentos: true,
         cantidadDocumentos: 2,
         erroresDetectados: []
@@ -301,14 +311,15 @@ export class RevisionFinalComponent implements OnInit {
       {
         id: 'CAP-005',
         folio: 'EUACAPE-0034',
-        fechaCaptura: new Date('2024-06-08'),
-        capturadoPor: 'Sofía Herrera (Akamba 1)',
-        estadoCaptura: 'RequiereCorreccion',
+        fecha_captura: '2024-06-08T16:10:00',
+        usuario_captura: 'Sofía Herrera (Akamba 1)',
+        estado_revision: 'RECHAZADO',
         personaRelacionada: 'Patricia Torres Ramírez',
-        carpetaInvestigacion: 'CI-78954',
+        carpeta_investigacion: 'CI-78954',
+        autoridad_solicitante: 'UIF',
+        asunto: 'Análisis de operaciones sospechosas de lavado de dinero',
         tipoAsunto: 'Lavado de Dinero',
-        prioridad: 'Alta',
-        autoridad: 'UIF',
+        prioridad: 'ALTA',
         tieneDocumentos: true,
         cantidadDocumentos: 8,
         erroresDetectados: ['Fecha incorrecta', 'Falta firma digital']
@@ -324,16 +335,16 @@ export class RevisionFinalComponent implements OnInit {
     hoy.setHours(0, 0, 0, 0);
     
     this.estadisticas.capturadosHoy = this.asuntosCapturados.filter(a => {
-      const fechaCaptura = new Date(a.fechaCaptura);
+      const fechaCaptura = new Date(a.fecha_captura);
       fechaCaptura.setHours(0, 0, 0, 0);
       return fechaCaptura.getTime() === hoy.getTime();
     }).length;
     
     this.estadisticas.requierenCorreccion = this.asuntosCapturados.filter(a => 
-      a.estadoCaptura === 'RequiereCorreccion').length;
+      a.estado_revision === 'RECHAZADO').length;
     
     this.estadisticas.listosParaEnviar = this.asuntosCapturados.filter(a => 
-      a.estadoCaptura === 'ListoParaEnviar').length;
+      a.estado_revision === 'APROBADO').length;
 
     // ✅ Calcular estadísticas existentes para dictámenes
     this.estadisticas.totalPendientes = this.asuntosPendientes.length;
@@ -520,7 +531,7 @@ export class RevisionFinalComponent implements OnInit {
    * Selecciona o deselecciona todos los asuntos listos para enviar
    */
   toggleSeleccionTodos(): void {
-    const asuntosListos = this.asuntosCapturados.filter(a => a.estadoCaptura === 'ListoParaEnviar');
+    const asuntosListos = this.asuntosCapturados.filter(a => a.estado_revision === 'APROBADO');
     const todosSeleccionados = asuntosListos.every(a => this.isAsuntoSeleccionado(a.id));
     
     if (todosSeleccionados) {
@@ -546,45 +557,38 @@ export class RevisionFinalComponent implements OnInit {
    * @returns true si todos están seleccionados
    */
   todosProntosSeleccionados(): boolean {
-    const asuntosListos = this.asuntosCapturados.filter(a => a.estadoCaptura === 'ListoParaEnviar');
+    const asuntosListos = this.asuntosCapturados.filter(a => a.estado_revision === 'APROBADO');
     return asuntosListos.length > 0 && asuntosListos.every(a => this.isAsuntoSeleccionado(a.id));
   }
 
   /**
-   * Obtiene el color del estado de captura
-   * @param estadoCaptura Estado del asunto capturado
+   * Obtiene el color del estado de revisión
+   * @param estadoRevision Estado del asunto capturado
    * @returns Clase CSS para el color
    */
-  getColorEstadoCaptura(estadoCaptura: string): string {
-    switch (estadoCaptura) {
-      case 'PendienteRevision': return 'bg-blue-500 text-white';
-      case 'RequiereCorreccion': return 'bg-red-500 text-white';
-      case 'ListoParaEnviar': return 'bg-green-500 text-white';
+  getColorEstadoCaptura(estadoRevision: string): string {
+    switch (estadoRevision) {
+      case 'PENDIENTE': return 'bg-blue-500 text-white';
+      case 'RECHAZADO': return 'bg-red-500 text-white';
+      case 'CORREGIDO': return 'bg-orange-500 text-white';
+      case 'APROBADO': return 'bg-green-500 text-white';
       default: return 'bg-gray-500 text-white';
     }
   }
 
   /**
-   * Obtiene la etiqueta del estado de captura
-   * @param estadoCaptura Estado del asunto capturado
+   * Obtiene la etiqueta del estado de revisión
+   * @param estadoRevision Estado del asunto capturado
    * @returns Texto descriptivo del estado
    */
-  getEtiquetaEstadoCaptura(estadoCaptura: string): string {
-    switch (estadoCaptura) {
-      case 'PendienteRevision': return 'Pendiente de Revisión';
-      case 'RequiereCorreccion': return 'Requiere Corrección';
-      case 'ListoParaEnviar': return 'Listo para Enviar';
+  getEtiquetaEstadoCaptura(estadoRevision: string): string {
+    switch (estadoRevision) {
+      case 'PENDIENTE': return 'Pendiente de Revisión';
+      case 'RECHAZADO': return 'Rechazado';
+      case 'CORREGIDO': return 'Corregido';
+      case 'APROBADO': return 'Aprobado';
       default: return 'Estado Desconocido';
     }
-  }
-
-  /**
-   * Abre el modal de corrección para un asunto capturado
-   * @param asunto Asunto a corregir
-   */
-  abrirModalCorreccion(asunto: AsuntoCapturado): void {
-    // TODO: Implementar modal de corrección
-    console.log('Abriendo modal de corrección para:', asunto.folio);
   }
 
   /**
@@ -597,7 +601,7 @@ export class RevisionFinalComponent implements OnInit {
     }
 
     const asuntosParaEnviar = this.asuntosCapturados.filter(a => 
-      this.asuntosSeleccionados.includes(a.id) && a.estadoCaptura === 'ListoParaEnviar'
+      this.asuntosSeleccionados.includes(a.id) && a.estado_revision === 'APROBADO'
     );
 
     if (asuntosParaEnviar.length === 0) {
@@ -624,6 +628,48 @@ export class RevisionFinalComponent implements OnInit {
   }
 
   /**
+   * Abre el modal de corrección para un asunto capturado
+   * @param asunto Asunto a corregir/revisar
+   */
+  abrirModalCorreccion(asunto: AsuntoCapturado): void {
+    const dialogRef = this.dialog.open(RevisionCapturaModalComponent, {
+      width: '1200px',
+      maxWidth: '95vw',
+      height: '90vh',
+      maxHeight: '90vh',
+      data: { asunto },
+      disableClose: false,
+      panelClass: 'revision-modal-panel'
+    });
+
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        console.log('Resultado de la corrección:', resultado);
+        
+        // Actualizar el asunto en la lista
+        const index = this.asuntosCapturados.findIndex(a => a.id === asunto.id);
+        if (index !== -1) {
+          // Actualizar estado según la acción realizada
+          switch (resultado.accion) {
+            case 'CORREGIR':
+              this.asuntosCapturados[index].estado_revision = 'CORREGIDO';
+              break;
+            case 'APROBAR':
+              this.asuntosCapturados[index].estado_revision = 'APROBADO';
+              break;
+            case 'RECHAZAR':
+              this.asuntosCapturados[index].estado_revision = 'RECHAZADO';
+              break;
+          }
+          
+          // Recalcular estadísticas
+          this.actualizarEstadisticas();
+        }
+      }
+    });
+  }
+
+  /**
    * Filtra asuntos capturados por texto de búsqueda
    * @returns Array de asuntos filtrados
    */
@@ -635,10 +681,10 @@ export class RevisionFinalComponent implements OnInit {
     const textoBusqueda = this.filtroText.toLowerCase();
     return this.asuntosCapturados.filter(a => 
       a.folio.toLowerCase().includes(textoBusqueda) ||
-      a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
-      a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
-      a.capturadoPor.toLowerCase().includes(textoBusqueda) ||
-      a.tipoAsunto.toLowerCase().includes(textoBusqueda)
+      (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+      a.carpeta_investigacion.toLowerCase().includes(textoBusqueda) ||
+      a.usuario_captura.toLowerCase().includes(textoBusqueda) ||
+      (a.tipoAsunto || '').toLowerCase().includes(textoBusqueda)
     );
   }
 } 

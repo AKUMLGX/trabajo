@@ -38,13 +38,13 @@ export class AsignacionCardComponent implements OnInit {
   yearActual: number = new Date().getFullYear();
 
   // Filtros
-  filtroFolio: string = '';
-  filtroAutoridad: string = '';
-  filtroEstado: string = '';
-  filtroTipo: string = '';
-  filtroUrgencia: string = '';
-  filtroFechaDesde: string = '';
-  filtroFechaHasta: string = '';
+  filtroFolio = '';
+  filtroAutoridad = '';
+  filtroEstado = '';
+  filtroTipo = '';
+  filtroUrgencia = '';
+  filtroFechaDesde = '';
+  filtroFechaHasta = '';
 
   // Lista de autoridades
   autoridades: string[] = [
@@ -82,15 +82,15 @@ export class AsignacionCardComponent implements OnInit {
   ];
 
   // Estado del modal
-  mostrarModalAsignacion: boolean = false;
-  dictaminadorSeleccionado: string = '';
+  mostrarModalAsignacion = false;
+  dictaminadorSeleccionado = '';
   asuntoSeleccionado: AsuntoAsignable | null = null;
-  mostrarDetallePDF: boolean = false;
+  mostrarDetallePDF = false;
 
   // Paginación
-  paginaActual: number = 1;
-  itemsPorPagina: number = 10;
-  totalPaginas: number = 1;
+  paginaActual = 1;
+  itemsPorPagina = 10;
+  totalPaginas = 1;
 
   // Datos de ejemplo (130 asuntos)
   asuntos: AsuntoAsignable[] = [];
@@ -98,8 +98,8 @@ export class AsignacionCardComponent implements OnInit {
   // Lista filtrada de asuntos
   asuntosFiltrados: AsuntoAsignable[] = [];
 
-  asignadosTable:boolean= false
-  documento:string='REQUERIMIENTO'
+  asignadosTable= false
+  documento='REQUERIMIENTO'
 
     porAsignarDataTable :porAsignarRequest ={
     documento : this.documento,

@@ -24,13 +24,13 @@
 
 
 export const environment={
-  environment:(window as {[key:string]:any})["env"]["environment"],
-  hash: (window as {[key:string]:any})["env"]["hash"],
+  environment:(window as Record<string, any>)["env"]["environment"],
+  hash: (window as Record<string, any>)["env"]["hash"],
 
-  baseUrl:(window as {[key:string]:any})["env"]["baseUrl"],
-  layoutUrl:(window as {[key:string]:any})["env"]["layoutUrl"],
-  loginUrl:(window as {[key:string]:any})["env"]["loginUrl"],
-  logoutUrl:(window as {[key:string]:any})["env"]["logoutUrl"],
+  baseUrl:(window as Record<string, any>)["env"]["baseUrl"],
+  layoutUrl:(window as Record<string, any>)["env"]["layoutUrl"],
+  loginUrl:(window as Record<string, any>)["env"]["loginUrl"],
+  logoutUrl:(window as Record<string, any>)["env"]["logoutUrl"],
 
   oauthParametersEndpoint: 'login/get_oauth_parameters',
   tokenValidationEndpoint: 'login/token_validation',

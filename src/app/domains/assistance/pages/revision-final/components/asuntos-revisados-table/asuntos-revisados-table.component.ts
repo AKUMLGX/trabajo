@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, OnChanges, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
@@ -39,9 +39,9 @@ interface Asunto {
   templateUrl: './asuntos-revisados-table.component.html',
   styleUrls: ['./asuntos-revisados-table.component.css']
 })
-export class AsuntosRevisadosTableComponent implements OnInit {
+export class AsuntosRevisadosTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() asuntos: Asunto[] = [];
-  @Input() filtroText: string = '';
+  @Input() filtroText = '';
   
   displayedColumns: string[] = ['folio', 'carpetaInvestigacion', 'personaRelacionada', 'dictaminador', 'fechaRecepcion', 'diasTranscurridos', 'prioridad', 'estadoAtencion', 'acciones'];
   dataSource = new MatTableDataSource<Asunto>([]);

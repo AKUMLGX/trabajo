@@ -57,11 +57,11 @@ export class TrackingFormComponent {
   input_two = 0
 
 
-  selecionarOpcion: string = ''
+  selecionarOpcion = ''
 
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
-  showCoincidencias: { [key: string]: boolean } = {};
-  campoValor: { [key: string]: any } = {};
+  showCoincidencias: Record<string, boolean> = {};
+  campoValor: Record<string, any> = {};
   campos: string[] = ["persona_relacionada", "autoridad_remitente", "folio_interno"]
   constructor(
     private fb: FormBuilder,
@@ -78,16 +78,16 @@ export class TrackingFormComponent {
       turno_jefatura: '',
     };
 
-    let date = new Date();
-    let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
-    let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
-    let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
+    const date = new Date();
+    const year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
+    const month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
+    const day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
     this.fechaActual = `${year}-${month}-${day}`;
     this.fecha_inicial.setValue(this.fechaActual);
     this.fecha_final.setValue(this.fechaActual)
   }
   coincidencias: string[] = [];
-  nombre_campo_input: string = "";
+  nombre_campo_input = "";
   mostrar_coincidencias?: boolean;
 
 
@@ -150,8 +150,8 @@ export class TrackingFormComponent {
   }
 
   descargarAcuseFolio(): void {
-    let folioOne = this.downloadByFolioScan.get("input_one")?.value;
-    let folioTwo = this.downloadByFolioScan.get("input_two")?.value;
+    const folioOne = this.downloadByFolioScan.get("input_one")?.value;
+    const folioTwo = this.downloadByFolioScan.get("input_two")?.value;
     this.input_one = folioOne
     this.input_two = folioTwo
     if (this.input_one && this.input_two) {

@@ -28,26 +28,26 @@ interface AsuntoParcial {
 export class ParcialPageComponent implements OnInit {
   // Año actual y filtro
   anioActual: number = new Date().getFullYear();
-  anioFiltro: string = 'todos';
+  anioFiltro = 'todos';
   Math = Math; // Hacer disponible Math en el template
   
   // Filtros
-  filtroFolio: string = '';
-  filtroDictaminador: string = '';
-  filtroFechaInicio: string = '';
-  filtroFechaFin: string = '';
-  filtroPersonaRelacionada: string = '';
+  filtroFolio = '';
+  filtroDictaminador = '';
+  filtroFechaInicio = '';
+  filtroFechaFin = '';
+  filtroPersonaRelacionada = '';
   
   // Datos de asuntos (simulados, se reemplazarían por datos reales de un servicio)
   asuntos: AsuntoParcial[] = [];
   asuntosFiltrados: AsuntoParcial[] = [];
   
   // Paginación
-  paginaActual: number = 1;
-  elementosPorPagina: number = 10;
-  totalPaginas: number = 0;
+  paginaActual = 1;
+  elementosPorPagina = 10;
+  totalPaginas = 0;
   asuntosPaginados: AsuntoParcial[] = [];
-  rangoElementosMostrados: string = '';
+  rangoElementosMostrados = '';
   
   constructor() { }
   
@@ -221,7 +221,7 @@ export class ParcialPageComponent implements OnInit {
     const maxPaginasVisibles = 5;
     
     let inicio = Math.max(1, this.paginaActual - Math.floor(maxPaginasVisibles / 2));
-    let fin = Math.min(this.totalPaginas, inicio + maxPaginasVisibles - 1);
+    const fin = Math.min(this.totalPaginas, inicio + maxPaginasVisibles - 1);
     
     // Ajustar el inicio si no hay suficientes páginas al final
     inicio = Math.max(1, fin - maxPaginasVisibles + 1);

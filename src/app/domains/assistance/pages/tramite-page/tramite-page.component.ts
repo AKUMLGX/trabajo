@@ -29,21 +29,21 @@ export class TramitePageComponent implements OnInit {
   anioActual: number = new Date().getFullYear();
   
   // Filtros
-  filtroFolio: string = '';
-  filtroDictaminador: string = '';
-  filtroFechaInicio: string = '';
-  filtroFechaFin: string = '';
+  filtroFolio = '';
+  filtroDictaminador = '';
+  filtroFechaInicio = '';
+  filtroFechaFin = '';
   
   // Datos de asuntos (simulados, se reemplazarían por datos reales de un servicio)
   asuntos: AsuntoTramite[] = [];
   asuntosFiltrados: AsuntoTramite[] = [];
   
   // Paginación
-  paginaActual: number = 1;
-  elementosPorPagina: number = 10;
-  totalPaginas: number = 0;
+  paginaActual = 1;
+  elementosPorPagina = 10;
+  totalPaginas = 0;
   asuntosPaginados: AsuntoTramite[] = [];
-  rangoElementosMostrados: string = '';
+  rangoElementosMostrados = '';
   
   constructor() { }
   
@@ -197,7 +197,7 @@ export class TramitePageComponent implements OnInit {
     const maxPaginasVisibles = 5;
     
     let inicio = Math.max(1, this.paginaActual - Math.floor(maxPaginasVisibles / 2));
-    let fin = Math.min(this.totalPaginas, inicio + maxPaginasVisibles - 1);
+    const fin = Math.min(this.totalPaginas, inicio + maxPaginasVisibles - 1);
     
     // Ajustar el inicio si no hay suficientes páginas al final
     inicio = Math.max(1, fin - maxPaginasVisibles + 1);

@@ -53,7 +53,7 @@ export class Oauth2Service {
         environment.baseUrl + environment.oauthParametersEndpoint
       )
       .subscribe((data) => {
-        let target_url =
+        const target_url =
           data.authentication_url +
           '?response_type=' +
           data.response_type +

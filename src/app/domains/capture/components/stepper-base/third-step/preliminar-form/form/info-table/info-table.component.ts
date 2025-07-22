@@ -39,7 +39,7 @@ export class InfoTableComponent {
 
   ){ }
 
-  @Input() dropdownChoice: string = '';
+  @Input() dropdownChoice = '';
 
   ADMINISTRACION = this.collectFormInfoService.ADMON;
   FECHARECEPCION = this.collectFormInfoService.FECHAREC;

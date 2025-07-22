@@ -41,7 +41,7 @@ export class StepperBaseComponent {
     private collectCarpetaStatusService : CollectCarpetaStatusService,
   ){}
 
-  dropdownChoice: string = '';  /// <---- just for aperturas
+  dropdownChoice = '';  /// <---- just for aperturas
 
   preloadedTipoAsunto = this.searchStatusService.tipoAsuntoFromSelectedRow; /// <--- just to be used in second pieces
 

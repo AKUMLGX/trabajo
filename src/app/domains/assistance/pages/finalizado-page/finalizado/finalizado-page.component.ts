@@ -35,8 +35,8 @@ export class FinalizadoComponent implements OnInit {
 
   //#region paginador
   pages: AsuntoPorAsigacionResponseTotal[][] = []
-  itemsPerPage: number = 5;
-  pageSelected: number = 1;
+  itemsPerPage = 5;
+  pageSelected = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
@@ -64,16 +64,16 @@ export class FinalizadoComponent implements OnInit {
     return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
   }
 
-  asignarIndicador: Observable<AsuntoPorAsigacionResponseTotal[]> = new Observable;
-  searchText: string = '';
+  asignarIndicador = new Observable<AsuntoPorAsigacionResponseTotal[]>();
+  searchText = '';
   filteredData$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredData(this.filterIndicador);
   allData: AsuntoPorAsigacionResponseTotal[] = []
 
   // ✅ Variables para funcionalidad PDF Viewer
-  visualizarPdf: boolean = false;
+  visualizarPdf = false;
   pdfUrl: SafeResourceUrl | null = null;
-  pdfCargando: boolean = false;
-  pdfError: boolean = false;
+  pdfCargando = false;
+  pdfError = false;
 
   tableTotal() {
     this.cards.totalTableCard(this.tableRequest).subscribe(res => {

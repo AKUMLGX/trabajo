@@ -18,8 +18,8 @@ export const successfullInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
-  let matDialog_ = inject(MatDialog)
-  let _snackBar = inject(MatSnackBar)
+  const matDialog_ = inject(MatDialog)
+  const _snackBar = inject(MatSnackBar)
   return next(request).pipe(
     map((event: HttpEvent<any>) => {
       if (request.url === environment.baseUrl + environment.tokenValidationEndpoint) {

@@ -1,0 +1,336 @@
+<!-- OVERLAY DEL MODAL -->
+<div class="modal-overlay" (click)="cerrarModal()">
+  
+  <!-- CONTENEDOR PRINCIPAL DEL MODAL -->
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    
+    <!-- HEADER DEL MODAL -->
+    <div class="modal-header">
+      <div class="header-content">
+        <div class="title-section">
+          <mat-icon class="header-icon">edit_document</mat-icon>
+          <div>
+            <h2 class="modal-title">Revisión de Asunto Capturado</h2>
+            <p class="modal-subtitle">Folio: {{ data?.asunto?.folio }}</p>
+          </div>
+        </div>
+        
+        <!-- Estado y prioridad -->
+        <div class="status-chips">
+          <span [class]="'chip-estado estado-' + data?.asunto?.estado_revision?.toLowerCase()">
+            {{ data?.asunto?.estado_revision }}
+          </span>
+          <span [class]="'chip-prioridad ' + getBgPrioridad(data?.asunto?.prioridad || 'MEDIA')" 
+                [ngClass]="getColorPrioridad(data?.asunto?.prioridad || 'MEDIA')">
+            {{ data?.asunto?.prioridad || 'MEDIA' }}
+          </span>
+        </div>
+      </div>
+      
+      <button mat-icon-button class="close-button" (click)="cerrarModal()" 
+              matTooltip="Cerrar modal">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- BARRA DE PROGRESO SI ESTÁ GUARDANDO -->
+    <mat-progress-bar *ngIf="guardando" mode="indeterminate" class="progress-bar"></mat-progress-bar>
+
+    <!-- CUERPO DEL MODAL -->
+    <div class="modal-body">
+      
+      <!-- INFORMACIÓN ORIGINAL DEL ASUNTO -->
+      <div class="seccion-info-original">
+        <h3 class="seccion-titulo">
+          <mat-icon>info</mat-icon>
+          Información Original (Akamba 1)
+        </h3>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Carpeta de Investigación:</label>
+            <span>{{ data?.asunto?.carpeta_investigacion }}</span>
+          </div>
+          <div class="info-item">
+            <label>Autoridad Solicitante:</label>
+            <span>{{ data?.asunto?.autoridad_solicitante }}</span>
+          </div>
+          <div class="info-item">
+            <label>Fecha de Captura:</label>
+            <span>{{ data?.asunto?.fecha_captura | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Usuario Captura:</label>
+            <span>{{ data?.asunto?.usuario_captura }}</span>
+          </div>
+          <div class="info-item info-item-full">
+            <label>Asunto Original:</label>
+            <span class="asunto-text">{{ data?.asunto?.asunto }}</span>
+          </div>
+          <div class="info-item info-item-full" *ngIf="data?.asunto?.observaciones_akamba1">
+            <label>Observaciones Akamba 1:</label>
+            <span class="observaciones-text">{{ data?.asunto?.observaciones_akamba1 }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULARIO DE CORRECCIÓN -->
+      <div class="seccion-formulario">
+        <h3 class="seccion-titulo">
+          <mat-icon>edit</mat-icon>
+          Datos para Corrección/Revisión
+        </h3>
+        
+        <form [formGroup]="correccionForm" class="formulario-correccion">
+          
+          <!-- TIPO DE ACCIÓN -->
+          <div class="campo-grupo campo-accion">
+            <label class="campo-label">Acción a realizar:</label>
+            <mat-radio-group formControlName="accion" class="radio-group">
+              <mat-radio-button value="CORREGIR" class="radio-option radio-corregir">
+                <div class="radio-content">
+                  <mat-icon>edit</mat-icon>
+                  <span>Corregir y devolver a Akamba 1</span>
+                </div>
+              </mat-radio-button>
+              <mat-radio-button value="APROBAR" class="radio-option radio-aprobar">
+                <div class="radio-content">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Aprobar y enviar a Akamba 3</span>
+                </div>
+              </mat-radio-button>
+              <mat-radio-button value="RECHAZAR" class="radio-option radio-rechazar">
+                <div class="radio-content">
+                  <mat-icon>cancel</mat-icon>
+                  <span>Rechazar y devolver a Akamba 1</span>
+                </div>
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- CAMPOS EDITABLES (Solo si es CORREGIR) -->
+          <div *ngIf="accionSeleccionada === 'CORREGIR'" class="campos-correccion">
+            
+            <div class="campo-fila">
+              <mat-form-field appearance="outline" class="campo-folio">
+                <mat-label>Folio</mat-label>
+                <input matInput formControlName="folio" placeholder="Ej: FGR/123/2024">
+                <mat-icon matSuffix>badge</mat-icon>
+                <mat-error>{{ obtenerErrorCampo('folio') }}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-prioridad">
+                <mat-label>Prioridad</mat-label>
+                <mat-select formControlName="prioridad">
+                  <mat-option *ngFor="let prioridad of prioridades" [value]="prioridad.value">
+                    <div class="opcion-prioridad" [ngClass]="getBgPrioridad(prioridad.value)">
+                      <span [ngClass]="getColorPrioridad(prioridad.value)">{{ prioridad.label }}</span>
+                    </div>
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>flag</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="campo-completo">
+              <mat-label>Carpeta de Investigación</mat-label>
+              <input matInput formControlName="carpeta_investigacion" 
+                     placeholder="Número de carpeta de investigación">
+              <mat-icon matSuffix>folder</mat-icon>
+              <mat-error>{{ obtenerErrorCampo('carpeta_investigacion') }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="campo-completo">
+              <mat-label>Autoridad Solicitante</mat-label>
+              <mat-select formControlName="autoridad_solicitante">
+                <mat-option *ngFor="let autoridad of autoridades" [value]="autoridad">
+                  {{ autoridad }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>account_balance</mat-icon>
+              <mat-error>{{ obtenerErrorCampo('autoridad_solicitante') }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="campo-completo">
+              <mat-label>Asunto</mat-label>
+              <textarea matInput formControlName="asunto" rows="3" 
+                        placeholder="Descripción del asunto..."></textarea>
+              <mat-icon matSuffix>description</mat-icon>
+              <mat-error>{{ obtenerErrorCampo('asunto') }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- OBSERVACIONES (Obligatorio para RECHAZAR) -->
+          <mat-form-field appearance="outline" class="campo-completo campo-observaciones">
+            <mat-label>
+              Observaciones/Comentarios 
+              <span *ngIf="requiereObservaciones" class="campo-obligatorio">*</span>
+            </mat-label>
+            <textarea matInput formControlName="observaciones_correccion" rows="4"
+                      [placeholder]="requiereObservaciones ? 
+                        'Explica el motivo del rechazo (obligatorio)...' : 
+                        'Comentarios adicionales (opcional)...'"></textarea>
+            <mat-icon matSuffix>comment</mat-icon>
+            <mat-hint *ngIf="requiereObservaciones" class="hint-obligatorio">
+              Las observaciones son obligatorias para rechazar un asunto
+            </mat-hint>
+          </mat-form-field>
+
+        </form>
+      </div>
+
+      <!-- SECCIÓN DE PDFs -->
+      <div class="seccion-pdfs">
+        <h3 class="seccion-titulo">
+          <mat-icon>picture_as_pdf</mat-icon>
+          Documentos PDF
+        </h3>
+
+        <!-- Controles de PDF -->
+        <div class="pdf-controles">
+          <div class="pdf-tabs">
+            <button type="button" 
+                    [class]="mostrarPdfOriginal ? 'tab-activo' : 'tab-inactivo'"
+                    (click)="cambiarVistaPdf(true)">
+              <mat-icon>description</mat-icon>
+              PDF Original
+            </button>
+            <button type="button" 
+                    [class]="!mostrarPdfOriginal ? 'tab-activo' : 'tab-inactivo'"
+                    (click)="cambiarVistaPdf(false)"
+                    [disabled]="!pdfCorregidoUrl">
+              <mat-icon>edit_document</mat-icon>
+              PDF Corregido
+              <span *ngIf="archivoSeleccionado" class="badge-nuevo">Nuevo</span>
+            </button>
+          </div>
+
+          <!-- Subir nuevo PDF (solo si es CORREGIR) -->
+          <div *ngIf="accionSeleccionada === 'CORREGIR'" class="upload-section">
+            <input type="file" #fileInput accept=".pdf" 
+                   (change)="onFileSelected($event)" style="display: none;">
+            <button type="button" mat-stroked-button color="primary" 
+                    (click)="fileInput.click()" class="btn-upload">
+              <mat-icon>upload_file</mat-icon>
+              Reemplazar PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Visualizador de PDF -->
+        <div class="pdf-viewer-container">
+          
+          <!-- PDF Cargando -->
+          <div *ngIf="pdfCargando" class="pdf-loading">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <p>Cargando documento PDF...</p>
+          </div>
+
+          <!-- PDF Error -->
+          <div *ngIf="pdfError && !pdfCargando" class="pdf-error">
+            <mat-icon>error</mat-icon>
+            <p>Error al cargar el documento PDF</p>
+            <button mat-button color="primary" (click)="cargarPdfOriginal()">
+              Reintentar
+            </button>
+          </div>
+
+          <!-- PDF Original -->
+          <iframe *ngIf="mostrarPdfOriginal && pdfOriginalUrl && !pdfCargando && !pdfError"
+                  [src]="pdfOriginalUrl" 
+                  class="pdf-iframe">
+          </iframe>
+
+          <!-- PDF Corregido -->
+          <iframe *ngIf="!mostrarPdfOriginal && pdfCorregidoUrl"
+                  [src]="pdfCorregidoUrl" 
+                  class="pdf-iframe">
+          </iframe>
+
+          <!-- No hay PDF corregido -->
+          <div *ngIf="!mostrarPdfOriginal && !pdfCorregidoUrl" class="no-pdf-corregido">
+            <mat-icon>upload_file</mat-icon>
+            <p>No has seleccionado un PDF corregido</p>
+            <button mat-button color="primary" (click)="fileInput.click()">
+              Seleccionar archivo PDF
+            </button>
+          </div>
+
+          <!-- No hay PDF original -->
+          <div *ngIf="mostrarPdfOriginal && !pdfOriginalUrl && !pdfCargando && !pdfError" 
+               class="no-pdf-original">
+            <mat-icon>description</mat-icon>
+            <p>No hay PDF original disponible</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER CON BOTONES DE ACCIÓN -->
+    <div class="modal-footer">
+      
+      <!-- Información de estado -->
+      <div class="footer-info">
+        <span class="info-formulario" [ngClass]="formularioValido ? 'valido' : 'invalido'">
+          <mat-icon>{{ formularioValido ? 'check_circle' : 'error' }}</mat-icon>
+          {{ formularioValido ? 'Formulario válido' : 'Revisa los campos obligatorios' }}
+        </span>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="footer-botones">
+        
+        <!-- Botón Cancelar -->
+        <button mat-stroked-button 
+                (click)="cerrarModal()" 
+                [disabled]="guardando"
+                class="btn-cancelar">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+
+        <!-- Botones principales según la acción -->
+        <ng-container [ngSwitch]="accionSeleccionada">
+          
+          <!-- Botón Corregir -->
+          <button *ngSwitchCase="'CORREGIR'" 
+                  mat-flat-button color="primary"
+                  (click)="corregirAsunto()"
+                  [disabled]="!formularioValido || guardando"
+                  class="btn-corregir">
+            <mat-icon *ngIf="!guardando">edit</mat-icon>
+            <mat-icon *ngIf="guardando" class="loading-icon">hourglass_empty</mat-icon>
+            {{ guardando ? 'Procesando...' : 'Corregir y Enviar' }}
+          </button>
+
+          <!-- Botón Aprobar -->
+          <button *ngSwitchCase="'APROBAR'" 
+                  mat-flat-button color="primary"
+                  (click)="aprobarAsunto()"
+                  [disabled]="guardando"
+                  class="btn-aprobar">
+            <mat-icon *ngIf="!guardando">check_circle</mat-icon>
+            <mat-icon *ngIf="guardando" class="loading-icon">hourglass_empty</mat-icon>
+            {{ guardando ? 'Procesando...' : 'Aprobar y Enviar' }}
+          </button>
+
+          <!-- Botón Rechazar -->
+          <button *ngSwitchCase="'RECHAZAR'" 
+                  mat-flat-button color="warn"
+                  (click)="rechazarAsunto()"
+                  [disabled]="guardando"
+                  class="btn-rechazar">
+            <mat-icon *ngIf="!guardando">cancel</mat-icon>
+            <mat-icon *ngIf="guardando" class="loading-icon">hourglass_empty</mat-icon>
+            {{ guardando ? 'Procesando...' : 'Rechazar y Devolver' }}
+          </button>
+
+        </ng-container>
+
+      </div>
+    </div>
+
+  </div>
+</div> 

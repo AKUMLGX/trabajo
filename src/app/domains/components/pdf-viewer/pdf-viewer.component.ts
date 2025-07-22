@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AsuntoService } from '../../services/asunto.service';
@@ -11,11 +11,11 @@ import { AsuntoService } from '../../services/asunto.service';
   templateUrl: './pdf-viewer.component.html',
   styleUrl: './pdf-viewer.component.css',
 })
-export class PdfViewerComponent {
-  pdfUrl: string = '';
+export class PdfViewerComponent implements OnInit {
+  pdfUrl = '';
 
   @Output() showTablePDF = new EventEmitter<void>()
-  mostrarTablaPDF: boolean = true
+  mostrarTablaPDF = true
 
   constructor(private fileService: FileService) { }
 
@@ -48,7 +48,7 @@ export class PdfViewerComponent {
       const blob = new Blob([byteArray], { type: 'application/pdf' });
         console.log('🔍 [PdfViewerComponent] Blob creado, tamaño:', blob.size);
         
-      var blobURL = URL.createObjectURL(blob);
+      const blobURL = URL.createObjectURL(blob);
         console.log('🔍 [PdfViewerComponent] BlobURL creado:', blobURL);
         
       this.pdfUrl = blobURL;

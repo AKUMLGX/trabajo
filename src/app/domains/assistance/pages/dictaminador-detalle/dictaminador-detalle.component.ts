@@ -145,8 +145,8 @@ export class DictaminadorDetalleComponent implements OnInit {
   mostrarMensajeEstado = false;
   
   // Parámetros de la URL
-  asuntoId: string = '';
-  origenRechazado: boolean = false;
+  asuntoId = '';
+  origenRechazado = false;
   
   // Para la subida de archivos
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -529,7 +529,7 @@ export class DictaminadorDetalleComponent implements OnInit {
   }
 
   // Método para mostrar mensajes de estado temporales
-  mostrarMensaje(mensaje: string, tipo: string = 'success'): void {
+  mostrarMensaje(mensaje: string, tipo = 'success'): void {
     // Configurar el color según el tipo de mensaje
     let panelClass = ['mat-snackbar-success'];
     

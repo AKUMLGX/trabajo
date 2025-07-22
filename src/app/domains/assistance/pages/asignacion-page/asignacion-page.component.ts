@@ -154,22 +154,22 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
 
 buscador = new FormControl('');
 
-  searchTerm: string = '';
-  currentPage: number = 1;
-  itemsPerPage: number = 10; // Número de elementos por página
-  abogadoSeleccionado: string = '';
+  searchTerm = '';
+  currentPage = 1;
+  itemsPerPage = 10; // Número de elementos por página
+  abogadoSeleccionado = '';
   
   // Variables para el modal de asignación
   tipoAccion: 'asignar' | 'reasignar' = 'asignar';
-  observacionesReasignacion: string = '';
+  observacionesReasignacion = '';
   
   // mostrarPDFViewer: boolean = false;
   // pdfSrc: string = '';
   // pdfTitulo: string = '';
   // asuntoParaDescargar: Asunto | null = null;
 
-  asignadosTable: boolean = false
-  documento: string = 'REQUERIMIENTO'
+  asignadosTable = false
+  documento = 'REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion[] = []
    itemDeFilaSelecionada: modalItem | null = null
 
@@ -178,8 +178,8 @@ buscador = new FormControl('');
   @ViewChild('templatePDF', { static: false }) templatePDF!: TemplateRef<any>;
 
   // Variables para ngx-pagination
-  paginaActual: number = 1;
-  elementosPorPagina: number = 10;
+  paginaActual = 1;
+  elementosPorPagina = 10;
   configuracionPaginacion = {
     itemsPerPage: this.elementosPorPagina,
     currentPage: this.paginaActual,
@@ -191,11 +191,11 @@ buscador = new FormControl('');
     asignados: this.asignadosTable
   }
 
-  totalPages: number = 0;
-  totalRegistros: number = 0;
+  totalPages = 0;
+  totalRegistros = 0;
   
   asignacion: AsignarAsunto | null = null
-  searchText: string = '';
+  searchText = '';
   results$: Observable<string[]> = of([]);
   allData: tableAsuntosPorDictaminar[] = [];
   asuntosPaginados: tableAsuntosPorDictaminar[] = [];
@@ -205,19 +205,19 @@ buscador = new FormControl('');
   asuntoDetalle: tableAsuntosPorDictaminar | null = null;
 
   // ✅ Variables para funcionalidad PDF Viewer
-  visualizarPdf: boolean = false;
+  visualizarPdf = false;
   pdfUrl: SafeResourceUrl | null = null;
-  pdfCargando: boolean = false;
-  pdfError: boolean = false;
+  pdfCargando = false;
+  pdfError = false;
 
   // 📱 Variables para manejo de texto largo y responsividad
-  textosExpandidos: Set<string> = new Set();
-  scrollHorizontalVisible: boolean = false;
+  textosExpandidos = new Set<string>();
+  scrollHorizontalVisible = false;
 
   // 🎯 VARIABLES PARA HEADER INTELIGENTE Y AGRUPACIÓN HÍBRIDA
   filtroActivo: 'todos' | 'urgente' | 'critico' | 'normal' | 'reciente' = 'todos';
-  mostrarAgrupacion: boolean = true;
-  seccionesColapsadas: Set<string> = new Set();
+  mostrarAgrupacion = true;
+  seccionesColapsadas = new Set<string>();
   
   // 📊 Contadores dinámicos con subtotales de plazo
   contadores = {
@@ -316,7 +316,7 @@ buscador = new FormControl('');
   return item.persona_relacionada?.toLowerCase().includes(term.toLocaleLowerCase());
   };
 
-  asignarIndicador : Observable<tableAsuntosPorDictaminar[]>= new Observable
+  asignarIndicador = new Observable<tableAsuntosPorDictaminar[]>()
 
   usuariosPorAdministracion() {
     this.cards.usuariosPorAdminitracion().subscribe((res: usuariosPorAdministracion[]) => {
@@ -666,7 +666,7 @@ buscador = new FormControl('');
     } else {
       // Si hay muchas páginas, mostrar un rango alrededor de la página actual
       let start = Math.max(1, this.currentPage - 2);
-      let end = Math.min(this.totalPages, start + maxPagesToShow - 1);
+      const end = Math.min(this.totalPages, start + maxPagesToShow - 1);
       
       // Ajustar si estamos cerca del final
       if (end === this.totalPages) {
@@ -683,7 +683,7 @@ buscador = new FormControl('');
 
   // Funciones para mapear IDs según reglas de negocio
   getDescripcionDocumento(idDocumento: number): string {
-    const documentos: { [key: number]: string } = {
+    const documentos: Record<number, string> = {
       1: 'RESPUESTA',
       2: 'REQUERIMIENTO', 
       3: 'REQUERIMIENTO Y RESPUESTA',
@@ -696,7 +696,7 @@ buscador = new FormControl('');
   }
 
   getDescripcionAtencion(idAtencion: number): string {
-    const atenciones: { [key: number]: string } = {
+    const atenciones: Record<number, string> = {
       1: 'TOTAL',
       2: 'PARCIAL',
       3: 'EN TRAMITE',
@@ -753,7 +753,7 @@ buscador = new FormControl('');
   }
 
   // 📝 MÉTODOS PARA MANEJO DE TEXTO LARGO
-  truncarTexto(texto: string, limite: number = 60): string {
+  truncarTexto(texto: string, limite = 60): string {
     if (!texto || texto.length <= limite) {
       return texto;
     }
@@ -772,7 +772,7 @@ buscador = new FormControl('');
     return this.textosExpandidos.has(folioInterno);
   }
 
-  necesitaTruncado(texto: string, limite: number = 60): boolean {
+  necesitaTruncado(texto: string, limite = 60): boolean {
     return Boolean(texto && texto.length > limite);
   }
 
@@ -861,8 +861,8 @@ buscador = new FormControl('');
   }
 
   // 📋 AGRUPAR DATOS POR PRIORIDAD HÍBRIDA
-  obtenerDatosAgrupados(): { [key: string]: tableAsuntosPorDictaminar[] } {
-    const agrupados: { [key: string]: tableAsuntosPorDictaminar[] } = {
+  obtenerDatosAgrupados(): Record<string, tableAsuntosPorDictaminar[]> {
+    const agrupados: Record<string, tableAsuntosPorDictaminar[]> = {
       "urgente": [],
       "critico": [],
       "normal": [],
@@ -922,14 +922,14 @@ buscador = new FormControl('');
     bgColor: string,
     borderColor: string
   } {
-         const configuraciones: { [key: string]: { 
+         const configuraciones: Record<string, { 
        icono: string, 
        color: string, 
        titulo: string, 
        descripcion: string,
        bgColor: string,
        borderColor: string
-     }} = {
+     }> = {
        "urgente": {
          icono: '🚨',
          color: 'text-red-600',

@@ -21,7 +21,7 @@ export class CustomSidenavComponent {
   // }
 
   constructor(private logoutService: LogoutService) {}
-  @Input() collapsed: boolean = false;
+  @Input() collapsed = false;
 
   public environment = environment;
 

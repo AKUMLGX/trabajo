@@ -14,8 +14,8 @@ export const errorInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
-  let matDialog = inject(MatDialog);
-  let oauthService = inject(Oauth2Service);
+  const matDialog = inject(MatDialog);
+  const oauthService = inject(Oauth2Service);
   return next(request).pipe(
     catchError((err) => {
       // No mostrar modal de error para peticiones de verificación de archivos (404 esperado)
@@ -34,9 +34,9 @@ export const errorInterceptor: HttpInterceptorFn = (
         }
       }else{
         return oauthService.refeshToken().pipe(switchMap((data) => {
-          let sessionInfo = localStorage.getItem('sessionInfo');
+          const sessionInfo = localStorage.getItem('sessionInfo');
           if (sessionInfo !== null) {
-            let parse = JSON.parse(sessionInfo);
+            const parse = JSON.parse(sessionInfo);
             parse.token = data;
             localStorage.setItem('sessionInfo', JSON.stringify(parse));
           }

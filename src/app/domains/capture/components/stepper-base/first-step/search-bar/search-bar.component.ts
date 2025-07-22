@@ -57,21 +57,21 @@ export class SearchBarComponent {
     userInput: ['', [Validators.required]],
   });
 
-  @Input() selectedSearchEntryType: string = '';
+  @Input() selectedSearchEntryType = '';
 
   saveuserInputForm(): void {}
 
   @Output() isSubmittedButtonHiddenEmitter = new EventEmitter();
 
-  isSubmittedButtonHidden: boolean = false;
+  isSubmittedButtonHidden = false;
 
   isResultsListEmpty: boolean | undefined = undefined;
 
-  folioInternoFromResults: string = '';
+  folioInternoFromResults = '';
 
   isNextButtonEnabled = false;
 
-  manuallyForceRedirectToAperturasFlux: boolean = false;
+  manuallyForceRedirectToAperturasFlux = false;
 
   searchFromInput() {
     this.asuntoService.searchBarCoincidences(
@@ -152,17 +152,17 @@ export class SearchBarComponent {
     );
   }
 
-  firstColumnHeader: string = 'Folio interno';
-  secondColumnHeader: string = 'Carpeta de Investigación';
-  thirdColumnHeader: string = 'Oficio';
-  fourthColumnHeader: string = 'Autoridad remitente';
-  fifthColumnHeader: string = 'Administración';
-  sixthColumnHeader: string = 'Persona relacionada';
-  seventhColumnHeader: string = 'Documento';
-  ninthColumnHeader: string = 'Fecha de Recepción';
-  tenthColumnHeader: string = "Atención";
-  eleventhColumnHeader: string = "Turno Jefatura";
-  twelfthColumnHeader: string = "Folio Scanner";
+  firstColumnHeader = 'Folio interno';
+  secondColumnHeader = 'Carpeta de Investigación';
+  thirdColumnHeader = 'Oficio';
+  fourthColumnHeader = 'Autoridad remitente';
+  fifthColumnHeader = 'Administración';
+  sixthColumnHeader = 'Persona relacionada';
+  seventhColumnHeader = 'Documento';
+  ninthColumnHeader = 'Fecha de Recepción';
+  tenthColumnHeader = "Atención";
+  eleventhColumnHeader = "Turno Jefatura";
+  twelfthColumnHeader = "Folio Scanner";
 
   //Dummy data, formerly used to feed table.
   // SEARCH_RESULTS = [

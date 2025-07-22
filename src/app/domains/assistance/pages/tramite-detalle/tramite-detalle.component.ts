@@ -25,8 +25,8 @@ export class TramiteDetalleComponent implements OnInit {
 
   //#region paginador
    pages: AsuntoPorAsigacionResponseEnTramite[][] = []
-  itemsPerPage: number = 5;
-  pageSelected: number = 1;
+  itemsPerPage = 5;
+  pageSelected = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
@@ -40,10 +40,10 @@ export class TramiteDetalleComponent implements OnInit {
   tableResponse: AsuntoPorAsigacionResponseEnTramite[]=[];
 
   // ✅ Variables para funcionalidad PDF Viewer
-  visualizarPdf: boolean = false;
+  visualizarPdf = false;
   pdfUrl: SafeResourceUrl | null = null;
-  pdfCargando: boolean = false;
-  pdfError: boolean = false;
+  pdfCargando = false;
+  pdfError = false;
 
   constructor(private router: Router,
      private cards:CardsInfoBandejadeAtencionService,
@@ -86,9 +86,9 @@ export class TramiteDetalleComponent implements OnInit {
     return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
   }
 
-  asignarIndicador : Observable<AsuntoPorAsigacionResponseEnTramite[]>= new Observable;
+  asignarIndicador = new Observable<AsuntoPorAsigacionResponseEnTramite[]>();
 
-  searchText:string='';
+  searchText='';
   // result$: Observable<string[]> = of ([]);
   filteredData$: Observable<AsuntoPorAsigacionResponseEnTramite[]> = this.buscadorService.getFilteredData(this.filterIndicador) ;
   allData: AsuntoPorAsigacionResponseEnTramite[]=[]

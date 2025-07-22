@@ -34,9 +34,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 })
 export class SecondPiecesFormComponent {
 
-  isSecondPiece: boolean = true;
+  isSecondPiece = true;
 
-  documentoEscaneadoName: string = '';
+  documentoEscaneadoName = '';
   documentoEscaneadoFile?:File;
 
   constructor(

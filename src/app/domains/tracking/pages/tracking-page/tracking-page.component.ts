@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InitTemplateComponent } from '../../../shared/constants/init-template/init-template.component';
 import { TrackingFormComponent } from '../../components/tracking-form/tracking-form.component';
 import { TrackingTableComponent } from '../../components/tracking-table/tracking-table.component';
@@ -19,7 +19,7 @@ import { AsuntoService } from '../../../services/asunto.service';
   templateUrl: './tracking-page.component.html',
   styleUrl: './tracking-page.component.css',
 })
-export class TrackingPageComponent {
+export class TrackingPageComponent implements OnInit {
 
   ngOnInit(): void {}
 }

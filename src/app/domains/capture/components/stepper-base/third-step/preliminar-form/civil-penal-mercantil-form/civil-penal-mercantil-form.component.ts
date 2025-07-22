@@ -39,10 +39,10 @@ export class CivilPenalMercantilFormComponent {
     private collectFormInfoService: CollectFormInfoService,
   ){}
 
-  documentoEscaneadoName: string = '';
+  documentoEscaneadoName = '';
   documentoEscaneadoFile?:File;
 
-  @Input() dropdownChoice: string = '';
+  @Input() dropdownChoice = '';
 
   public civilPenalAndMercantilForm: FormGroup = this.fb.group({
     administracion: [null, [Validators.required]],

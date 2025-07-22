@@ -19,26 +19,26 @@ export class PendientesPorAcusarComponent {
 
   public environment = environment;
 
-  isEmptyList            : boolean = true;
-  zeroColumnHeader       : string = 'Ver más';
-  firstColumnHeader      : string = 'Documento escaneado';
-  secondColumnHeader     : string = 'Folio interno';
-  thirdColumnHeader      : string = 'Oficio';
-  fourthColumnHeader     : string = 'Fecha de recepción';
-  fifthColumnHeader      : string = 'Autoridad solicitante';
-  sixthColumnHeader      : string = 'Persona relacionada';
-  seventhColumnHeader    : string = 'Carpeta de investigación';
-  eighthColumnHeader     : string = 'Descripción';
-  ninthColumnHeader      : string = 'Administración';
-  tenthColumnHeader      : string = 'Folio scanner';
-  eleventhColumnHeader   : string = 'Turno jefatura';
-  twelfthColumnHeader    : string = 'Atención';
-  thirteenthColumnHeader : string = 'Tipo de respuesta';
-  fourteenthColumnHeader : string = 'Tipo asunto';
-  fifteenthColumnHeader  : string = 'Plazo de atención';
-  sixteenthColumnHeader  : string = 'Folio Júpiter';
-  seventeenthColumnHeader: string = 'Volante de jefatura';
-  eighteenthColumnHeader : string = 'Otras acciones';
+  isEmptyList             = true;
+  zeroColumnHeader        = 'Ver más';
+  firstColumnHeader       = 'Documento escaneado';
+  secondColumnHeader      = 'Folio interno';
+  thirdColumnHeader       = 'Oficio';
+  fourthColumnHeader      = 'Fecha de recepción';
+  fifthColumnHeader       = 'Autoridad solicitante';
+  sixthColumnHeader       = 'Persona relacionada';
+  seventhColumnHeader     = 'Carpeta de investigación';
+  eighthColumnHeader      = 'Descripción';
+  ninthColumnHeader       = 'Administración';
+  tenthColumnHeader       = 'Folio scanner';
+  eleventhColumnHeader    = 'Turno jefatura';
+  twelfthColumnHeader     = 'Atención';
+  thirteenthColumnHeader  = 'Tipo de respuesta';
+  fourteenthColumnHeader  = 'Tipo asunto';
+  fifteenthColumnHeader   = 'Plazo de atención';
+  sixteenthColumnHeader   = 'Folio Júpiter';
+  seventeenthColumnHeader = 'Volante de jefatura';
+  eighteenthColumnHeader  = 'Otras acciones';
 
 
   SEARCH_RESULTS = [

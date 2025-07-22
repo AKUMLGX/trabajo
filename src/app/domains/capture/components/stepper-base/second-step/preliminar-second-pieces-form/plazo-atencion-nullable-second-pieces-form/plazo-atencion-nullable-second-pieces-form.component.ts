@@ -44,9 +44,9 @@ export class PlazoAtencionNullableSecondPiecesFormComponent {
 
   }
 
-  isSecondPiece: boolean = true;
+  isSecondPiece = true;
 
-  documentoEscaneadoName: string = '';
+  documentoEscaneadoName = '';
   documentoEscaneadoFile?:File;
 
   preloadedAdministracion = this.searchStatusService.administracionFromSelectedRow;

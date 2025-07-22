@@ -12,7 +12,7 @@ export const loadAnimationInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
-  let loadAnimationService = inject(LoadAnimationService);
+  const loadAnimationService = inject(LoadAnimationService);
   
   // Solo mostrar loader para peticiones críticas, no para todas
   const skipLoader = request.headers.has('X-Skip-Loader') || 
