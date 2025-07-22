@@ -33,6 +33,24 @@ interface Asunto {
   estado: string;
 }
 
+// 🆕 Nueva interface para asuntos capturados
+interface AsuntoCapturado {
+  id: string;
+  folio: string;
+  fechaCaptura: Date;
+  capturadoPor: string;
+  estadoCaptura: 'PendienteRevision' | 'RequiereCorreccion' | 'ListoParaEnviar';
+  personaRelacionada: string;
+  carpetaInvestigacion: string;
+  tipoAsunto: string;
+  prioridad: 'Alta' | 'Media' | 'Baja';
+  autoridad: string;
+  tieneDocumentos: boolean;
+  cantidadDocumentos: number;
+  observaciones?: string;
+  erroresDetectados?: string[];
+}
+
 @Component({
   selector: 'app-revision-final',
   standalone: true,
@@ -65,8 +83,19 @@ export class RevisionFinalComponent implements OnInit {
   asuntosPendientes: Asunto[] = [];
   asuntosRevisados: Asunto[] = [];
   
+  // 🆕 Datos para asuntos capturados
+  asuntosCapturados: AsuntoCapturado[] = [];
+  asuntosSeleccionados: string[] = []; // IDs de asuntos seleccionados para envío
+  
   // Estadísticas
   estadisticas = {
+    // 🆕 Estadísticas para asuntos capturados
+    totalCapturados: 0,
+    capturadosHoy: 0,
+    requierenCorreccion: 0,
+    listosParaEnviar: 0,
+    
+    // ✅ Estadísticas existentes para dictámenes
     totalPendientes: 0,
     pendientesHoy: 0,
     pendientesUrgentes: 0,
@@ -88,6 +117,7 @@ export class RevisionFinalComponent implements OnInit {
   ngOnInit(): void {
     // Cargar datos de ejemplo
     this.cargarDatosEjemplo();
+    this.cargarAsuntosCapturados(); // 🆕 Cargar asuntos capturados
     this.actualizarEstadisticas();
   }
 
@@ -205,12 +235,108 @@ export class RevisionFinalComponent implements OnInit {
     ];
   }
 
+  // 🆕 Método para cargar asuntos capturados
+  cargarAsuntosCapturados(): void {
+    this.asuntosCapturados = [
+      {
+        id: 'CAP-001',
+        folio: 'EUACAPE-0030',
+        fechaCaptura: new Date('2024-06-09'),
+        capturadoPor: 'Ana Martínez (Akamba 1)',
+        estadoCaptura: 'RequiereCorreccion',
+        personaRelacionada: 'Elena Rodríguez Vega',
+        carpetaInvestigacion: 'CI-78950',
+        tipoAsunto: 'Evasión Fiscal',
+        prioridad: 'Alta',
+        autoridad: 'Fiscalía General de la República',
+        tieneDocumentos: true,
+        cantidadDocumentos: 3,
+        erroresDetectados: ['Falta número de RFC', 'Documento ilegible']
+      },
+      {
+        id: 'CAP-002',
+        folio: 'EUACAPE-0031',
+        fechaCaptura: new Date('2024-06-09'),
+        capturadoPor: 'Carlos Ruiz (Akamba 1)',
+        estadoCaptura: 'ListoParaEnviar',
+        personaRelacionada: 'Roberto Sánchez López',
+        carpetaInvestigacion: 'CI-78951',
+        tipoAsunto: 'Omisión de Ingresos',
+        prioridad: 'Media',
+        autoridad: 'Procuraduría Fiscal',
+        tieneDocumentos: true,
+        cantidadDocumentos: 5,
+        erroresDetectados: []
+      },
+      {
+        id: 'CAP-003',
+        folio: 'EUACAPE-0032',
+        fechaCaptura: new Date('2024-06-08'),
+        capturadoPor: 'María Fernández (Akamba 1)',
+        estadoCaptura: 'PendienteRevision',
+        personaRelacionada: 'Lucía Morales García',
+        carpetaInvestigacion: 'CI-78952',
+        tipoAsunto: 'Defraudación Fiscal',
+        prioridad: 'Alta',
+        autoridad: 'Fiscalía General de la República',
+        tieneDocumentos: false,
+        cantidadDocumentos: 0,
+        erroresDetectados: []
+      },
+      {
+        id: 'CAP-004',
+        folio: 'EUACAPE-0033',
+        fechaCaptura: new Date('2024-06-09'),
+        capturadoPor: 'Luis García (Akamba 1)',
+        estadoCaptura: 'ListoParaEnviar',
+        personaRelacionada: 'Fernando Jiménez Cruz',
+        carpetaInvestigacion: 'CI-78953',
+        tipoAsunto: 'Contrabando',
+        prioridad: 'Baja',
+        autoridad: 'Aduanas',
+        tieneDocumentos: true,
+        cantidadDocumentos: 2,
+        erroresDetectados: []
+      },
+      {
+        id: 'CAP-005',
+        folio: 'EUACAPE-0034',
+        fechaCaptura: new Date('2024-06-08'),
+        capturadoPor: 'Sofía Herrera (Akamba 1)',
+        estadoCaptura: 'RequiereCorreccion',
+        personaRelacionada: 'Patricia Torres Ramírez',
+        carpetaInvestigacion: 'CI-78954',
+        tipoAsunto: 'Lavado de Dinero',
+        prioridad: 'Alta',
+        autoridad: 'UIF',
+        tieneDocumentos: true,
+        cantidadDocumentos: 8,
+        erroresDetectados: ['Fecha incorrecta', 'Falta firma digital']
+      }
+    ];
+  }
+
   actualizarEstadisticas(): void {
-    // Calcular estadísticas
-    this.estadisticas.totalPendientes = this.asuntosPendientes.length;
+    // 🆕 Calcular estadísticas para asuntos capturados
+    this.estadisticas.totalCapturados = this.asuntosCapturados.length;
     
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
+    
+    this.estadisticas.capturadosHoy = this.asuntosCapturados.filter(a => {
+      const fechaCaptura = new Date(a.fechaCaptura);
+      fechaCaptura.setHours(0, 0, 0, 0);
+      return fechaCaptura.getTime() === hoy.getTime();
+    }).length;
+    
+    this.estadisticas.requierenCorreccion = this.asuntosCapturados.filter(a => 
+      a.estadoCaptura === 'RequiereCorreccion').length;
+    
+    this.estadisticas.listosParaEnviar = this.asuntosCapturados.filter(a => 
+      a.estadoCaptura === 'ListoParaEnviar').length;
+
+    // ✅ Calcular estadísticas existentes para dictámenes
+    this.estadisticas.totalPendientes = this.asuntosPendientes.length;
     
     this.estadisticas.pendientesHoy = this.asuntosPendientes.filter(a => {
       const fechaLimite = new Date(a.fechaLimite);
@@ -364,5 +490,155 @@ export class RevisionFinalComponent implements OnInit {
       month: '2-digit',
       year: 'numeric'
     });
+  }
+
+  // 🆕 MÉTODOS PARA MANEJO DE ASUNTOS CAPTURADOS
+
+  /**
+   * Alterna la selección de un asunto capturado
+   * @param asuntoId ID del asunto a seleccionar/deseleccionar
+   */
+  toggleSeleccionAsunto(asuntoId: string): void {
+    const index = this.asuntosSeleccionados.indexOf(asuntoId);
+    if (index > -1) {
+      this.asuntosSeleccionados.splice(index, 1);
+    } else {
+      this.asuntosSeleccionados.push(asuntoId);
+    }
+  }
+
+  /**
+   * Verifica si un asunto está seleccionado
+   * @param asuntoId ID del asunto
+   * @returns true si está seleccionado
+   */
+  isAsuntoSeleccionado(asuntoId: string): boolean {
+    return this.asuntosSeleccionados.includes(asuntoId);
+  }
+
+  /**
+   * Selecciona o deselecciona todos los asuntos listos para enviar
+   */
+  toggleSeleccionTodos(): void {
+    const asuntosListos = this.asuntosCapturados.filter(a => a.estadoCaptura === 'ListoParaEnviar');
+    const todosSeleccionados = asuntosListos.every(a => this.isAsuntoSeleccionado(a.id));
+    
+    if (todosSeleccionados) {
+      // Deseleccionar todos los listos
+      asuntosListos.forEach(a => {
+        const index = this.asuntosSeleccionados.indexOf(a.id);
+        if (index > -1) {
+          this.asuntosSeleccionados.splice(index, 1);
+        }
+      });
+    } else {
+      // Seleccionar todos los listos
+      asuntosListos.forEach(a => {
+        if (!this.isAsuntoSeleccionado(a.id)) {
+          this.asuntosSeleccionados.push(a.id);
+        }
+      });
+    }
+  }
+
+  /**
+   * Verifica si todos los asuntos listos están seleccionados
+   * @returns true si todos están seleccionados
+   */
+  todosProntosSeleccionados(): boolean {
+    const asuntosListos = this.asuntosCapturados.filter(a => a.estadoCaptura === 'ListoParaEnviar');
+    return asuntosListos.length > 0 && asuntosListos.every(a => this.isAsuntoSeleccionado(a.id));
+  }
+
+  /**
+   * Obtiene el color del estado de captura
+   * @param estadoCaptura Estado del asunto capturado
+   * @returns Clase CSS para el color
+   */
+  getColorEstadoCaptura(estadoCaptura: string): string {
+    switch (estadoCaptura) {
+      case 'PendienteRevision': return 'bg-blue-500 text-white';
+      case 'RequiereCorreccion': return 'bg-red-500 text-white';
+      case 'ListoParaEnviar': return 'bg-green-500 text-white';
+      default: return 'bg-gray-500 text-white';
+    }
+  }
+
+  /**
+   * Obtiene la etiqueta del estado de captura
+   * @param estadoCaptura Estado del asunto capturado
+   * @returns Texto descriptivo del estado
+   */
+  getEtiquetaEstadoCaptura(estadoCaptura: string): string {
+    switch (estadoCaptura) {
+      case 'PendienteRevision': return 'Pendiente de Revisión';
+      case 'RequiereCorreccion': return 'Requiere Corrección';
+      case 'ListoParaEnviar': return 'Listo para Enviar';
+      default: return 'Estado Desconocido';
+    }
+  }
+
+  /**
+   * Abre el modal de corrección para un asunto capturado
+   * @param asunto Asunto a corregir
+   */
+  abrirModalCorreccion(asunto: AsuntoCapturado): void {
+    // TODO: Implementar modal de corrección
+    console.log('Abriendo modal de corrección para:', asunto.folio);
+  }
+
+  /**
+   * Envía los asuntos seleccionados al Akamba 3
+   */
+  enviarAsuntosSeleccionados(): void {
+    if (this.asuntosSeleccionados.length === 0) {
+      alert('No hay asuntos seleccionados para enviar');
+      return;
+    }
+
+    const asuntosParaEnviar = this.asuntosCapturados.filter(a => 
+      this.asuntosSeleccionados.includes(a.id) && a.estadoCaptura === 'ListoParaEnviar'
+    );
+
+    if (asuntosParaEnviar.length === 0) {
+      alert('Solo se pueden enviar asuntos que estén "Listos para Enviar"');
+      return;
+    }
+
+    const confirmacion = confirm(
+      `¿Está seguro de enviar ${asuntosParaEnviar.length} asunto(s) al Administrador (Akamba 3)?`
+    );
+
+    if (confirmacion) {
+      // TODO: Implementar llamada al servicio de envío
+      console.log('Enviando asuntos:', asuntosParaEnviar);
+      
+      // Simular envío exitoso
+      alert(`Se han enviado ${asuntosParaEnviar.length} asunto(s) exitosamente al Akamba 3`);
+      
+      // Limpiar selección
+      this.asuntosSeleccionados = [];
+      
+      // En un escenario real, estos asuntos se eliminarían de la lista o cambiarían de estado
+    }
+  }
+
+  /**
+   * Filtra asuntos capturados por texto de búsqueda
+   * @returns Array de asuntos filtrados
+   */
+  getAsuntosCapturasFiltrados(): AsuntoCapturado[] {
+    if (!this.filtroText) {
+      return this.asuntosCapturados;
+    }
+
+    const textoBusqueda = this.filtroText.toLowerCase();
+    return this.asuntosCapturados.filter(a => 
+      a.folio.toLowerCase().includes(textoBusqueda) ||
+      a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
+      a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
+      a.capturadoPor.toLowerCase().includes(textoBusqueda) ||
+      a.tipoAsunto.toLowerCase().includes(textoBusqueda)
+    );
   }
 } 
