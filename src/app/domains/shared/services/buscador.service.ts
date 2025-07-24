@@ -36,6 +36,30 @@ export class BuscadorService<T> {
       )
     );
   }
+
+
+ private dataMul$ = new BehaviorSubject<T[]>([]);
+  private searchTermsMul$ = new BehaviorSubject<Record<string, string>>({});
+
+  setDataMul(data: T[]) {
+    this.dataMul$.next(data);
+  }
+
+  setSearchTermsMu(terms: Record<string, string>) {
+    this.searchTermsMul$.next(terms);
+  }
+
+  getFilteredDataMul(predicate: (item: T, terms: Record<string, string>) => boolean): Observable<T[]> {
+    return combineLatest([
+      this.dataMul$,
+      this.searchTermsMul$.pipe(debounceTime(300), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+    ]).pipe(
+      map(([data, terms]) =>
+        data.filter(item => predicate(item, terms))
+      )
+    );
+  }
+
 }
 
 

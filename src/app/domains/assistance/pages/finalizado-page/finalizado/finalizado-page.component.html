@@ -11,7 +11,6 @@
       <div class="w-6"></div>
     </div>
   </div>
-
   <!-- Contenido principal -->
   <div class="px-6 pb-6">
     <!-- Panel de filtros -->
@@ -30,16 +29,35 @@
       </div>
 
       <!-- Formulario de filtros -->
-      <div class="p-4 bg-gray-50">
+   <div class="p-4 bg-gray-50 mt-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- Filtro por folio -->
+          <!-- Filtro Folio -->
           <div>
-            <label for="filtroFolio" class="block text-sm font-medium text-gray-700 mb-1">Folio:</label>
-            <input type="search"
-            [(ngModel)]="searchText"
-               (ngModelChange)="onDearchChange($event)"
-                   class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
-                   placeholder="Buscar por folio...">
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Folio Interno:</label>
+            <input type="search" [(ngModel)]="searchfolio_interno" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por Folio Interno...">
+          </div>
+          <!-- Filtro Carpeta -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Carpeta de investigación :</label>
+            <input type="search" [(ngModel)]="searchcarpeta_investigacion" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por  Carpeta de investigación...">
+          </div>
+          <!-- Filtro  N° Oficio -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Número de Oficio :</label>
+            <input type="search" [(ngModel)]="searchTextNoOficio" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por Número de Oficio...">
+          </div>
+          <!-- filtro Persona  -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Persona relacionada:</label>
+            <input type="search" [(ngModel)]=" searchPersona_relacionada" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por  Persona relacionada ...">
           </div>
         </div>
       </div>
@@ -51,26 +69,32 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-[#691C32] text-white">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio Interno</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Carpeta de investigación</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Número de Oficio :</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona relacionada</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tipo de Respuesta</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Documento</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Finalización</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona relacionada</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Recepcion</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Autoridad</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Plazo Atención</th>
               <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
                       </tr>
                   </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <ng-container *ngIf="asuntosPaginados.length > 0; else sinResultados">
-              <tr *ngFor="let asunto of  (filteredData$ |async)?.slice((pageSelected-1)*itemsPerPage,pageSelected*itemsPerPage);
+              <tr *ngFor="let asunto of  (filteredDataMul$ |async)?.slice((pageSelected-1)*itemsPerPage,pageSelected*itemsPerPage);
               let i = index"
                   [class]="i % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'">
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ asunto.folio_interno }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ asunto.carpeta_investigacion }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ asunto.oficio }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.persona_relacionada}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.id_documento_fk }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.id_documento_fk }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.fecha_recepcion }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.persona_relacionada}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.autoridad_remitente }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.plazo_atencion }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
                   <div class="flex justify-center space-x-2">
                     <!-- 🆕 Botón Ver PDF (ojo verde) -->
@@ -80,15 +104,6 @@
                       (click)="openPdfViewer(asunto.folio_interno, asunto.folio_scanner)">
                       <mat-icon class="text-green-600">remove_red_eye</mat-icon>
                     </button>
-                    
-                    <!-- Tooltip para las observaciones -->
-                    <div class="relative group">
-                      <button class="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </button>
-                    </div>
                   </div>
                           </td>
                       </tr>
