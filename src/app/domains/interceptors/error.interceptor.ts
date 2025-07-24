@@ -8,14 +8,16 @@ import { inject } from '@angular/core';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
-import { Oauth2Service } from '../services/ouath2.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 export const errorInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
   const matDialog = inject(MatDialog);
-  const oauthService = inject(Oauth2Service);
+  const httpClient = inject(HttpClient);
+  
   return next(request).pipe(
     catchError((err) => {
       // No mostrar modal de error para peticiones de verificación de archivos (404 esperado)
@@ -32,11 +34,18 @@ export const errorInterceptor: HttpInterceptorFn = (
           },
         });
         }
-      }else{
-        return oauthService.refeshToken().pipe(switchMap((data) => {
-          const sessionInfo = localStorage.getItem('sessionInfo');
+      } else {
+        // Para el error 401, intentar refresh token usando HttpClient directamente
+        return httpClient
+          .get(environment.baseUrl + environment.refreshTokenEndpoint, { 
+            withCredentials: true, 
+            responseType: "text" 
+          })
+          .pipe(
+            switchMap((data) => {
+              const sessionInfo = localStorage.getItem('sessionInfo');
           if (sessionInfo !== null) {
-            const parse = JSON.parse(sessionInfo);
+                const parse = JSON.parse(sessionInfo);
             parse.token = data;
             localStorage.setItem('sessionInfo', JSON.stringify(parse));
           }
@@ -45,7 +54,14 @@ export const errorInterceptor: HttpInterceptorFn = (
               Authorization: data,
             },
           }));
-        }))
+            }),
+            catchError((refreshError) => {
+              // Si el refresh token falla, redirigir al login
+              localStorage.removeItem('sessionInfo');
+              window.location.href = '/login';
+              return throwError(() => new Error('Session expired'));
+            })
+          );
       }
       return throwError(() => new Error(err.statusText));
     })
