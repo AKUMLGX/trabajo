@@ -700,14 +700,7 @@
                       <span>Estado Revisión</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
-                    <div class="flex items-center gap-2">
-                      <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-red-600 text-lg">picture_as_pdf</mat-icon>
-                      </div>
-                      <span>Documento</span>
-                    </div>
-                  </th>
+
                   <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-bold text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -721,7 +714,7 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 <!-- Mensaje cuando no hay resultados -->
                 <tr *ngIf="getAsuntosCapturasFiltrados().length === 0">
-                  <td colspan="8" class="px-8 py-16 text-center">
+                  <td colspan="7" class="px-8 py-16 text-center">
                     <div class="flex flex-col items-center justify-center text-gray-500">
                       <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                         <mat-icon class="text-3xl text-gray-400">search_off</mat-icon>
@@ -818,7 +811,10 @@
                       <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
                         <mat-icon class="text-orange-600 text-lg">timer</mat-icon>
                       </div>
-                      <div class="font-medium text-slate-900 text-sm">{{asunto.plazoAtencion || 'No definido'}}</div>
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
+                            [ngClass]="obtenerClasePlazo(asunto.plazo_atencion ?? null)">
+                        {{interpretarPlazoAtencion(asunto.plazo_atencion ?? null)}}
+                      </span>
                     </div>
                   </td>
 
@@ -835,20 +831,7 @@
 
                   <!-- Este elemento se eliminó y se movió arriba como "Estado de Revisión" -->
 
-                  <!-- Documento (simplificado) -->
-                  <td class="w-40 px-6 py-5">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 rounded-xl flex items-center justify-center" 
-                           [ngClass]="asunto.tieneDocumentos ? 'bg-red-100' : 'bg-gray-100'">
-                        <mat-icon [ngClass]="asunto.tieneDocumentos ? 'text-red-600' : 'text-gray-400'" class="text-lg">
-                          {{asunto.tieneDocumentos ? 'picture_as_pdf' : 'description'}}
-                      </mat-icon>
-                      </div>
-                      <span class="text-sm font-medium" [ngClass]="asunto.tieneDocumentos ? 'text-slate-900' : 'text-slate-400'">
-                        {{asunto.tieneDocumentos ? 'PDF disponible' : 'Sin documento'}}
-                      </span>
-                    </div>
-                  </td>
+
 
                   <!-- Acción (unificada) -->
                   <td class="w-32 px-6 py-5 text-center">

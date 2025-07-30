@@ -41,6 +41,10 @@ export interface AsuntoCapturado {
   id_tipo_asunto_fk?: number;
   id_tipo_fk?: number;
   
+  // Campos adicionales del JSON
+  volante_jefatura?: string;
+  folio_jupiter?: string;
+  
   // Metadatos de captura
   fecha_captura: string;
   usuario_captura: string;
@@ -426,6 +430,25 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
   }
 
   get accionSeleccionada(): string {
-    return this.correccionForm.get('accion')?.value || 'CORREGIR';
+    return this.correccionForm.get('accion')?.value || '';
+  }
+
+  // 🆕 MÉTODOS PARA PROCESAR INFORMACIÓN DEL JSON
+  obtenerPersonasRelacionadas(personaRelacionada: string): string[] {
+    if (!personaRelacionada) return [];
+    
+    // Dividir por comas y limpiar espacios
+    return personaRelacionada
+      .split(',')
+      .map(persona => persona.trim())
+      .filter(persona => persona.length > 0);
+  }
+
+  obtenerNombreArchivo(rutaCompleta: string): string {
+    if (!rutaCompleta) return 'No disponible';
+    
+    // Extraer solo el nombre del archivo de la ruta completa
+    const partes = rutaCompleta.split('\\');
+    return partes[partes.length - 1] || 'Archivo no identificado';
   }
 } 

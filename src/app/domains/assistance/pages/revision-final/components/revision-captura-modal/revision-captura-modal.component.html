@@ -56,8 +56,16 @@
             </div>
             <div class="card-content">
               <div class="info-row">
+                <span class="info-label">Folio Interno</span>
+                <span class="info-value highlight-value">{{ data.asunto.folio_interno }}</span>
+              </div>
+              <div class="info-row">
                 <span class="info-label">Carpeta de Investigación</span>
                 <span class="info-value">{{ data.asunto.carpeta_investigacion }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Oficio</span>
+                <span class="info-value">{{ data.asunto.oficio }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Autoridad Remitente</span>
@@ -66,40 +74,88 @@
             </div>
           </div>
 
-          <!-- Card 2: Información de Captura -->
-          <div class="info-card info-card-captura">
+          <!-- Card 2: Información de Fechas -->
+          <div class="info-card info-card-fechas">
             <div class="card-header">
               <mat-icon class="card-icon">schedule</mat-icon>
-              <h4>Datos de Captura</h4>
+              <h4>Fechas y Plazos</h4>
             </div>
             <div class="card-content">
               <div class="info-row">
-                <span class="info-label">Fecha de Captura</span>
-                <span class="info-value">{{ data.asunto.fecha_captura | date:'dd/MM/yyyy HH:mm' }}</span>
+                <span class="info-label">Fecha de Recepción</span>
+                <span class="info-value">{{ data.asunto.fecha_recepcion | date:'dd/MM/yyyy' }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label">Usuario Captura</span>
-                <span class="info-value">
-                  <div class="usuario-badge">
-                    <mat-icon>person</mat-icon>
-                    {{ data.asunto.usuario_captura }}
-                  </div>
-                </span>
+                <span class="info-label">Fecha de Atención</span>
+                <span class="info-value">{{ data.asunto.fecha_atencion ? (data.asunto.fecha_atencion | date:'dd/MM/yyyy') : 'No definida' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Plazo de Atención</span>
+                <span class="info-value">{{ data.asunto.plazo_atencion || 'No definido' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Turno Jefatura</span>
+                <span class="info-value">{{ data.asunto.turno_jefatura }}</span>
               </div>
             </div>
           </div>
 
-          <!-- Card 3: Descripción -->
-          <div class="info-card info-card-descripcion">
+          <!-- Card 3: Personas Relacionadas -->
+          <div class="info-card info-card-personas">
             <div class="card-header">
-              <mat-icon class="card-icon">description</mat-icon>
-              <h4>Descripción del Asunto</h4>
+              <mat-icon class="card-icon">people</mat-icon>
+              <h4>Personas Relacionadas</h4>
             </div>
             <div class="card-content">
-              <div class="descripcion-content">
-                {{ data.asunto.descripcion }}
+              <div class="personas-content">
+                <div class="personas-list">
+                                  <div *ngFor="let persona of obtenerPersonasRelacionadas(data.asunto.persona_relacionada || '')" 
+                     class="persona-item">
+                    <mat-icon class="persona-icon">person</mat-icon>
+                    <span class="persona-nombre">{{ persona }}</span>
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
+
+          <!-- Card 4: Documentos -->
+          <div class="info-card info-card-documentos">
+            <div class="card-header">
+              <mat-icon class="card-icon">picture_as_pdf</mat-icon>
+              <h4>Documentos</h4>
+            </div>
+            <div class="card-content">
+              <div class="info-row">
+                <span class="info-label">Documento Escaneado</span>
+                <span class="info-value">{{ obtenerNombreArchivo(data.asunto.documento_escaneado || '') }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Folio Scanner</span>
+                <span class="info-value">{{ data.asunto.folio_scanner }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Volante Jefatura</span>
+                <span class="info-value">{{ data.asunto.volante_jefatura || 'No disponible' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Folio Jupiter</span>
+                <span class="info-value">{{ data.asunto.folio_jupiter || 'No disponible' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Descripción del Asunto -->
+        <div class="info-card info-card-descripcion">
+          <div class="card-header">
+            <mat-icon class="card-icon">description</mat-icon>
+            <h4>Descripción del Asunto</h4>
+          </div>
+          <div class="card-content">
+            <div class="descripcion-content">
+              {{ data.asunto.descripcion }}
+            </div>
           </div>
         </div>
       </div>

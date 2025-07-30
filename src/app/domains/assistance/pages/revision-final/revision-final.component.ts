@@ -57,7 +57,8 @@ interface AsuntoCapturado {
   // Plazo de atención
   plazoCantidad?: number;
   plazoUnidad?: 'DIAS' | 'SEMANAS' | 'MESES';
-  plazoAtencion?: string; // Plazo formateado
+  plazo_atencion?: number; // Campo del JSON
+  plazoAtencion?: string; // Plazo formateado (para compatibilidad)
   esUrgente?: boolean;
   
   // Tipos requeridos
@@ -341,6 +342,7 @@ export class RevisionFinalComponent implements OnInit {
               descripcion: asuntoData.descripcion || 'Sin descripción',
               asunto: asuntoData.descripcion || 'Sin descripción', // Para compatibilidad
               oficio: asuntoData.oficio || 'Sin oficio',
+              plazo_atencion: asuntoData.plazo_atencion,
               plazoAtencion: asuntoData.plazo_atencion ? `${asuntoData.plazo_atencion} días` : 'No definido',
               prioridad: 'MEDIA', // Valor por defecto, se puede ajustar según lógica de negocio
               tieneDocumentos: Boolean(asuntoData.documento_escaneado),
@@ -964,6 +966,40 @@ export class RevisionFinalComponent implements OnInit {
   // 🆕 MÉTODO PARA OBTENER TEXTO COMPLETO PARA TOOLTIP
   obtenerTextoCompleto(texto: string): string {
     return texto || '';
+  }
+
+  // 🆕 MÉTODO PARA INTERPRETAR PLAZO DE ATENCIÓN
+  interpretarPlazoAtencion(plazo: number | null): string {
+    if (plazo === null || plazo === undefined) {
+      return 'Sin plazo definido';
+    }
+    
+    if (plazo === 0) {
+      return 'Urgente';
+    }
+    
+    if (plazo >= 1 && plazo <= 5) {
+      return `${plazo} día${plazo > 1 ? 's' : ''}`;
+    }
+    
+    return `${plazo} días`;
+  }
+
+  // 🆕 MÉTODO PARA OBTENER CLASE CSS DEL PLAZO
+  obtenerClasePlazo(plazo: number | null): string {
+    if (plazo === null || plazo === undefined) {
+      return 'bg-gray-100 text-gray-700';
+    }
+    
+    if (plazo === 0) {
+      return 'bg-red-100 text-red-700';
+    }
+    
+    if (plazo <= 2) {
+      return 'bg-orange-100 text-orange-700';
+    }
+    
+    return 'bg-green-100 text-green-700';
   }
 
   // 🆕 MÉTODOS PARA PRIMERA Y ÚLTIMA PÁGINA

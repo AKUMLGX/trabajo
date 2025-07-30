@@ -3556,3 +3556,101 @@
     width: 100% !important;
   }
 } 
+
+/* �� ESTILOS PARA LAS NUEVAS CARDS DE INFORMACIÓN */
+.info-card-fechas .card-icon {
+  color: #3b82f6;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.info-card-personas .card-icon {
+  color: #10b981;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.info-card-documentos .card-icon {
+  color: #ef4444;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+}
+
+.highlight-value {
+  font-weight: 600;
+  color: #691C32;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.personas-content {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.personas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.persona-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.persona-item:hover {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  transform: translateX(4px);
+}
+
+.persona-icon {
+  color: #64748b;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.persona-nombre {
+  font-size: 0.9em;
+  color: #475569;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.descripcion-content {
+  background: linear-gradient(135deg, #fef7e7 0%, #f3e8d3 100%);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #fbbf24;
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: #92400e;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Responsive para las nuevas cards */
+@media (max-width: 768px) {
+  .personas-list {
+    gap: 6px;
+  }
+  
+  .persona-item {
+    padding: 6px 10px;
+  }
+  
+  .persona-nombre {
+    font-size: 0.85em;
+  }
+  
+  .descripcion-content {
+    padding: 12px;
+    font-size: 0.9em;
+  }
+}
