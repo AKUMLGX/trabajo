@@ -3654,3 +3654,97 @@
     font-size: 0.9em;
   }
 }
+
+/* ===== INFORMACIÓN ORIGINAL UNIFICADA ===== */
+.info-original-unificada {
+  background: linear-gradient(145deg, #fefefe 0%, #f8f9fa 50%, #f1f3f4 100%);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 
+    0 4px 20px rgba(105, 28, 50, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(212, 180, 140, 0.15);
+}
+
+.info-original-unificada .info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.info-original-unificada .info-row {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(212, 180, 140, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.info-original-unificada .info-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #691C32 0%, #8B1538 100%);
+  border-radius: 0 2px 2px 0;
+}
+
+.info-original-unificada .info-row:hover {
+  transform: translateX(4px);
+  box-shadow: 
+    0 4px 12px rgba(105, 28, 50, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: rgba(105, 28, 50, 0.2);
+}
+
+.info-original-unificada .info-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #691C32;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+.info-original-unificada .info-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.info-original-unificada .info-value.highlight-value {
+  color: #691C32;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+@media (max-width: 768px) {
+  .info-original-unificada .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .info-original-unificada .info-row {
+    padding: 10px 12px;
+  }
+  
+  .info-original-unificada .info-label {
+    font-size: 11px;
+  }
+  
+  .info-original-unificada .info-value {
+    font-size: 13px;
+  }
+}

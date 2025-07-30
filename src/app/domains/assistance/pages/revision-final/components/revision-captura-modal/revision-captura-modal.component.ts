@@ -45,6 +45,10 @@ export interface AsuntoCapturado {
   volante_jefatura?: string;
   folio_jupiter?: string;
   
+  // Campos del JSON original
+  id_asunto_historico?: number;
+  respuesta?: boolean;
+  
   // Metadatos de captura
   fecha_captura: string;
   usuario_captura: string;

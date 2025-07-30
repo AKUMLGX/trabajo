@@ -47,114 +47,139 @@
           </div>
         </div>
         
-        <div class="info-cards-grid">
-          <!-- Card 1: Información Principal -->
-          <div class="info-card info-card-principal">
-            <div class="card-header">
-              <mat-icon class="card-icon">folder_open</mat-icon>
-              <h4>Datos Principales</h4>
+        <!-- Información Original Unificada -->
+        <div class="info-original-unificada">
+          <div class="info-grid">
+            <!-- ID Asunto Histórico -->
+            <div class="info-row">
+              <span class="info-label">ID Asunto Histórico</span>
+              <span class="info-value">{{ data.asunto.id_asunto_historico || 'No disponible' }}</span>
             </div>
-            <div class="card-content">
-              <div class="info-row">
-                <span class="info-label">Folio Interno</span>
-                <span class="info-value highlight-value">{{ data.asunto.folio_interno }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Carpeta de Investigación</span>
-                <span class="info-value">{{ data.asunto.carpeta_investigacion }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Oficio</span>
-                <span class="info-value">{{ data.asunto.oficio }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Autoridad Remitente</span>
-                <span class="info-value">{{ data.asunto.autoridad_remitente }}</span>
-              </div>
-            </div>
-          </div>
 
-          <!-- Card 2: Información de Fechas -->
-          <div class="info-card info-card-fechas">
-            <div class="card-header">
-              <mat-icon class="card-icon">schedule</mat-icon>
-              <h4>Fechas y Plazos</h4>
+            <!-- Folio Interno -->
+            <div class="info-row">
+              <span class="info-label">Folio Interno</span>
+              <span class="info-value highlight-value">{{ data.asunto.folio_interno }}</span>
             </div>
-            <div class="card-content">
-              <div class="info-row">
-                <span class="info-label">Fecha de Recepción</span>
-                <span class="info-value">{{ data.asunto.fecha_recepcion | date:'dd/MM/yyyy' }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Fecha de Atención</span>
-                <span class="info-value">{{ data.asunto.fecha_atencion ? (data.asunto.fecha_atencion | date:'dd/MM/yyyy') : 'No definida' }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Plazo de Atención</span>
-                <span class="info-value">{{ data.asunto.plazo_atencion || 'No definido' }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Turno Jefatura</span>
-                <span class="info-value">{{ data.asunto.turno_jefatura }}</span>
-              </div>
-            </div>
-          </div>
 
-          <!-- Card 3: Personas Relacionadas -->
-          <div class="info-card info-card-personas">
-            <div class="card-header">
-              <mat-icon class="card-icon">people</mat-icon>
-              <h4>Personas Relacionadas</h4>
+            <!-- Carpeta de Investigación -->
+            <div class="info-row">
+              <span class="info-label">Carpeta de Investigación</span>
+              <span class="info-value">{{ data.asunto.carpeta_investigacion }}</span>
             </div>
-            <div class="card-content">
-              <div class="personas-content">
-                <div class="personas-list">
-                                  <div *ngFor="let persona of obtenerPersonasRelacionadas(data.asunto.persona_relacionada || '')" 
-                     class="persona-item">
-                    <mat-icon class="persona-icon">person</mat-icon>
-                    <span class="persona-nombre">{{ persona }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Card 4: Documentos -->
-          <div class="info-card info-card-documentos">
-            <div class="card-header">
-              <mat-icon class="card-icon">picture_as_pdf</mat-icon>
-              <h4>Documentos</h4>
+            <!-- Folio Scanner -->
+            <div class="info-row">
+              <span class="info-label">Folio Scanner</span>
+              <span class="info-value">{{ data.asunto.folio_scanner }}</span>
             </div>
-            <div class="card-content">
-              <div class="info-row">
-                <span class="info-label">Documento Escaneado</span>
-                <span class="info-value">{{ obtenerNombreArchivo(data.asunto.documento_escaneado || '') }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Folio Scanner</span>
-                <span class="info-value">{{ data.asunto.folio_scanner }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Volante Jefatura</span>
-                <span class="info-value">{{ data.asunto.volante_jefatura || 'No disponible' }}</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Folio Jupiter</span>
-                <span class="info-value">{{ data.asunto.folio_jupiter || 'No disponible' }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Card 5: Descripción del Asunto -->
-        <div class="info-card info-card-descripcion">
-          <div class="card-header">
-            <mat-icon class="card-icon">description</mat-icon>
-            <h4>Descripción del Asunto</h4>
-          </div>
-          <div class="card-content">
-            <div class="descripcion-content">
-              {{ data.asunto.descripcion }}
+            <!-- Oficio -->
+            <div class="info-row">
+              <span class="info-label">Oficio</span>
+              <span class="info-value">{{ data.asunto.oficio }}</span>
+            </div>
+
+            <!-- Documento Escaneado -->
+            <div class="info-row">
+              <span class="info-label">Documento Escaneado</span>
+              <span class="info-value">{{ obtenerNombreArchivo(data.asunto.documento_escaneado || '') }}</span>
+            </div>
+
+            <!-- Persona Relacionada -->
+            <div class="info-row">
+              <span class="info-label">Persona Relacionada</span>
+              <span class="info-value">{{ data.asunto.persona_relacionada || 'No disponible' }}</span>
+            </div>
+
+            <!-- Descripción -->
+            <div class="info-row">
+              <span class="info-label">Descripción</span>
+              <span class="info-value">{{ data.asunto.descripcion }}</span>
+            </div>
+
+            <!-- Fecha de Recepción -->
+            <div class="info-row">
+              <span class="info-label">Fecha de Recepción</span>
+              <span class="info-value">{{ data.asunto.fecha_recepcion | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <!-- Fecha de Atención -->
+            <div class="info-row">
+              <span class="info-label">Fecha de Atención</span>
+              <span class="info-value">{{ data.asunto.fecha_atencion ? (data.asunto.fecha_atencion | date:'dd/MM/yyyy') : 'No definida' }}</span>
+            </div>
+
+            <!-- Turno Jefatura -->
+            <div class="info-row">
+              <span class="info-label">Turno Jefatura</span>
+              <span class="info-value">{{ data.asunto.turno_jefatura }}</span>
+            </div>
+
+            <!-- Respuesta -->
+            <div class="info-row">
+              <span class="info-label">Respuesta</span>
+              <span class="info-value">{{ data.asunto.respuesta ? 'Sí' : 'No' }}</span>
+            </div>
+
+            <!-- Volante Jefatura -->
+            <div class="info-row">
+              <span class="info-label">Volante Jefatura</span>
+              <span class="info-value">{{ data.asunto.volante_jefatura || 'No disponible' }}</span>
+            </div>
+
+            <!-- Folio Jupiter -->
+            <div class="info-row">
+              <span class="info-label">Folio Jupiter</span>
+              <span class="info-value">{{ data.asunto.folio_jupiter || 'No disponible' }}</span>
+            </div>
+
+            <!-- Autoridad Remitente -->
+            <div class="info-row">
+              <span class="info-label">Autoridad Remitente</span>
+              <span class="info-value">{{ data.asunto.autoridad_remitente }}</span>
+            </div>
+
+            <!-- Plazo de Atención -->
+            <div class="info-row">
+              <span class="info-label">Plazo de Atención</span>
+              <span class="info-value">{{ data.asunto.plazo_atencion || 'No definido' }}</span>
+            </div>
+
+            <!-- Fecha de Captura -->
+            <div class="info-row">
+              <span class="info-label">Fecha de Captura</span>
+              <span class="info-value">{{ data.asunto.fecha_captura ? (data.asunto.fecha_captura | date:'dd/MM/yyyy') : 'No definida' }}</span>
+            </div>
+
+            <!-- ID Documento -->
+            <div class="info-row">
+              <span class="info-label">ID Documento</span>
+              <span class="info-value">{{ data.asunto.id_documento_fk || 'No definido' }}</span>
+            </div>
+
+            <!-- ID Atención -->
+            <div class="info-row">
+              <span class="info-label">ID Atención</span>
+              <span class="info-value">{{ data.asunto.id_atencion_fk || 'No definido' }}</span>
+            </div>
+
+            <!-- ID Administración -->
+            <div class="info-row">
+              <span class="info-label">ID Administración</span>
+              <span class="info-value">{{ data.asunto.id_administracion_fk || 'No definido' }}</span>
+            </div>
+
+            <!-- ID Tipo Asunto -->
+            <div class="info-row">
+              <span class="info-label">ID Tipo Asunto</span>
+              <span class="info-value">{{ data.asunto.id_tipo_asunto_fk || 'No definido' }}</span>
+            </div>
+
+            <!-- ID Tipo -->
+            <div class="info-row">
+              <span class="info-label">ID Tipo</span>
+              <span class="info-value">{{ data.asunto.id_tipo_fk || 'No definido' }}</span>
             </div>
           </div>
         </div>
