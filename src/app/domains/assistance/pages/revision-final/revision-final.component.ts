@@ -154,6 +154,11 @@ export class RevisionFinalComponent implements OnInit {
   // 🎭 Control de pestaña activa para dashboard dinámico
   tabActiva: 'capturados' | 'dictamenes' | 'revisados' = 'capturados';
 
+  // 🆕 PROPIEDADES SENCILLAS PARA PAGINACIÓN
+  paginaActual: number = 1;
+  itemsPorPagina: number = 10;
+  asuntosPaginados: AsuntoCapturado[] = [];
+
   constructor(
     private dialog: MatDialog,
     private cardsService: CardsInfoBandejadeAtencionService
@@ -349,9 +354,11 @@ export class RevisionFinalComponent implements OnInit {
 
           console.log('✅ Asuntos capturados cargados exitosamente:', this.asuntosCapturados.length);
           this.actualizarEstadisticas();
+          this.calcularPaginacion(); // 🆕 Calcular paginación
         } else {
           console.log('⚠️ No se encontraron asuntos, cargando datos de ejemplo...');
           this.cargarDatosEjemploCapturados();
+          this.calcularPaginacion(); // 🆕 Calcular paginación
         }
       },
       error: (error) => {
@@ -909,6 +916,79 @@ export class RevisionFinalComponent implements OnInit {
     console.log('✅ getAsuntosCapturasFiltrados() resultado final:', asuntosFiltrados.length, 'asuntos');
     console.log('📋 Asuntos filtrados:', asuntosFiltrados);
     return asuntosFiltrados;
+  }
+
+  // 🆕 MÉTODOS SENCILLOS PARA PAGINACIÓN
+  calcularPaginacion(): void {
+    const asuntosFiltrados = this.getAsuntosCapturasFiltrados();
+    const inicio = (this.paginaActual - 1) * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+    this.asuntosPaginados = asuntosFiltrados.slice(inicio, fin);
+  }
+
+  cambiarPagina(pagina: number): void {
+    this.paginaActual = pagina;
+    this.calcularPaginacion();
+  }
+
+  paginaAnterior(): void {
+    if (this.paginaActual > 1) {
+      this.cambiarPagina(this.paginaActual - 1);
+    }
+  }
+
+  paginaSiguiente(): void {
+    const totalPaginas = Math.ceil(this.getAsuntosCapturasFiltrados().length / this.itemsPorPagina);
+    if (this.paginaActual < totalPaginas) {
+      this.cambiarPagina(this.paginaActual + 1);
+    }
+  }
+
+  cambiarItemsPorPagina(nuevoValor: number): void {
+    this.itemsPorPagina = nuevoValor;
+    this.paginaActual = 1;
+    this.calcularPaginacion();
+  }
+
+  obtenerTotalPaginas(): number {
+    return Math.ceil(this.getAsuntosCapturasFiltrados().length / this.itemsPorPagina);
+  }
+
+  // 🆕 MÉTODO PARA TRUNCAR TEXTO LARGO
+  truncarTexto(texto: string, longitud: number = 50): string {
+    if (!texto) return '';
+    if (texto.length <= longitud) return texto;
+    return texto.substring(0, longitud) + '...';
+  }
+
+  // 🆕 MÉTODO PARA OBTENER TEXTO COMPLETO PARA TOOLTIP
+  obtenerTextoCompleto(texto: string): string {
+    return texto || '';
+  }
+
+  // 🆕 MÉTODOS PARA PRIMERA Y ÚLTIMA PÁGINA
+  primeraPagina(): void {
+    this.cambiarPagina(1);
+  }
+
+  ultimaPagina(): void {
+    this.cambiarPagina(this.obtenerTotalPaginas());
+  }
+
+  // 🆕 MÉTODO PARA OBTENER RANGO DE PÁGINAS VISIBLES
+  obtenerRangoPaginas(): number[] {
+    const totalPaginas = this.obtenerTotalPaginas();
+    const paginas: number[] = [];
+    
+    // Mostrar máximo 5 páginas alrededor de la actual
+    const inicio = Math.max(1, this.paginaActual - 2);
+    const fin = Math.min(totalPaginas, this.paginaActual + 2);
+    
+    for (let i = inicio; i <= fin; i++) {
+      paginas.push(i);
+    }
+    
+    return paginas;
   }
 
   // 🆕 NUEVOS MÉTODOS PARA ESTADÍSTICAS Y FILTROS

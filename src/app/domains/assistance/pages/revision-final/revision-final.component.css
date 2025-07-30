@@ -74,3 +74,16 @@ app-asuntos-pendientes-table, app-asuntos-revisados-table {
 .priority-low {
   background-color: #10b981;
 } 
+
+/* 🆕 ESTILOS PARA TOOLTIP GRANDE */
+::ng-deep .tooltip-large {
+  max-width: 400px !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+} 
