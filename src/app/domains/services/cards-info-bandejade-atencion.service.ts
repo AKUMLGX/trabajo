@@ -1,5 +1,5 @@
 import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
-import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest } from './../interfaces/asuntoPorAtencion.interface';
+import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest, AsuntoPorEstadoAtencionRequest, AsuntoPorEstadoAtencionResponse } from './../interfaces/asuntoPorAtencion.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -139,6 +139,11 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
       link.download = `Total.xlsx`;
       link.click();
     })
+ }
+
+ getAsuntosPorEstadoAtencion(data: AsuntoPorEstadoAtencionRequest): Observable<AsuntoPorEstadoAtencionResponse> {
+   const tarjetURL = environment.baseUrl + 'asunto/atencion/get_asunto_por_estado_atencion/';
+   return this.http.post<AsuntoPorEstadoAtencionResponse>(tarjetURL, data);
  }
 
 }

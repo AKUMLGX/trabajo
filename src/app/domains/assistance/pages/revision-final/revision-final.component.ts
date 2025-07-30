@@ -20,6 +20,10 @@ import { AsuntosRevisadosTableComponent } from './components/asuntos-revisados-t
 import { RevisionDetalleModalComponent } from './components/revision-detalle-modal/revision-detalle-modal.component';
 import { RevisionCapturaModalComponent } from './components/revision-captura-modal/revision-captura-modal.component';
 
+// 🆕 Importar servicio e interfaces
+import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
+import { AsuntoPorEstadoAtencionRequest, AsuntoAsignacion } from '../../../interfaces/asuntoPorAtencion.interface';
+
 interface Asunto {
   id: string;
   folio: string;
@@ -150,7 +154,10 @@ export class RevisionFinalComponent implements OnInit {
   // 🎭 Control de pestaña activa para dashboard dinámico
   tabActiva: 'capturados' | 'dictamenes' | 'revisados' = 'capturados';
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private cardsService: CardsInfoBandejadeAtencionService
+  ) {}
 
   ngOnInit(): void {
     // Cargar datos de ejemplo
@@ -273,8 +280,102 @@ export class RevisionFinalComponent implements OnInit {
     ];
   }
 
-  // 🆕 Método para cargar asuntos capturados
+  // 🆕 Método para cargar asuntos capturados DESDE EL ENDPOINT REAL
   cargarAsuntosCapturados(): void {
+    console.log('🔄 Iniciando carga de asuntos capturados desde endpoint...');
+    
+    const request: AsuntoPorEstadoAtencionRequest = {
+      documento: "REQUERIMIENTO",
+      estado_atencion: "POR ASIGNAR"
+    };
+
+    console.log('📤 Enviando request:', request);
+
+    this.cardsService.getAsuntosPorEstadoAtencion(request).subscribe({
+      next: (response) => {
+        console.log('✅ Response del backend:', response);
+        console.log('📊 Cantidad de asuntos recibidos:', response?.length || 0);
+        
+        if (response && response.length > 0) {
+          // Transformar datos del backend al formato de la interfaz del frontend
+          this.asuntosCapturados = response.map((item: AsuntoAsignacion, index: number) => {
+            console.log(`🔄 Procesando asunto ${index + 1}:`, item);
+            
+            let asuntoData: any = {};
+            
+            // Extraer datos según la estructura anidada del backend
+            if ('tipo' in item.asunto && 'datos' in item.asunto) {
+              // Nueva estructura: { tipo: "Nuevo"|"Historico", datos: {...} }
+              asuntoData = item.asunto.datos;
+              console.log(`📝 Asunto ${item.asunto.tipo} encontrado:`, asuntoData);
+            } else if ('Nuevo' in item.asunto && item.asunto.Nuevo) {
+              // Estructura legacy: { Nuevo: {...} }
+              asuntoData = item.asunto.Nuevo;
+              console.log('📝 Asunto NUEVO encontrado:', asuntoData);
+            } else if ('Historico' in item.asunto && item.asunto.Historico) {
+              // Estructura legacy: { Historico: {...} }
+              asuntoData = item.asunto.Historico;
+              console.log('📚 Asunto HISTORICO encontrado:', asuntoData);
+            } else {
+              console.warn('⚠️ Estructura de asunto no reconocida:', item.asunto);
+              return null;
+            }
+
+            const asuntoCapturado: AsuntoCapturado = {
+              id: `CAP-${asuntoData.id_asunto_nuevo || asuntoData.id_asunto_historico || index + 1}`,
+              folio_interno: asuntoData.folio_interno || `N/A-${index + 1}`,
+              folio: asuntoData.folio_interno || `N/A-${index + 1}`, // Para compatibilidad
+              fecha_captura: asuntoData.fecha_captura || new Date().toISOString(),
+              fechaRecepcion: asuntoData.fecha_recepcion || new Date().toISOString().split('T')[0],
+              usuario_captura: item.rfc_asignado || 'Sistema Akamba Real',
+              estado_revision: 'PENDIENTE', // Estado mapeado al formato del frontend
+              personaRelacionada: asuntoData.persona_relacionada || 'No especificado',
+              carpeta_investigacion: asuntoData.carpeta_investigacion || 'Sin carpeta',
+              autoridad_remitente: asuntoData.autoridad_remitente || 'No especificado',
+              autoridad_solicitante: asuntoData.autoridad_remitente || 'No especificado', // Para compatibilidad
+              descripcion: asuntoData.descripcion || 'Sin descripción',
+              asunto: asuntoData.descripcion || 'Sin descripción', // Para compatibilidad
+              oficio: asuntoData.oficio || 'Sin oficio',
+              plazoAtencion: asuntoData.plazo_atencion ? `${asuntoData.plazo_atencion} días` : 'No definido',
+              prioridad: 'MEDIA', // Valor por defecto, se puede ajustar según lógica de negocio
+              tieneDocumentos: Boolean(asuntoData.documento_escaneado),
+              cantidadDocumentos: asuntoData.documento_escaneado ? 1 : 0,
+              erroresDetectados: [] // Se puede implementar validación posterior
+            };
+
+            console.log('✅ Asunto transformado:', asuntoCapturado);
+            return asuntoCapturado;
+          }).filter((item): item is AsuntoCapturado => item !== null); // Filtrar elementos nulos con type guard
+
+          console.log('✅ Asuntos capturados cargados exitosamente:', this.asuntosCapturados.length);
+          this.actualizarEstadisticas();
+        } else {
+          console.log('⚠️ No se encontraron asuntos, cargando datos de ejemplo...');
+          this.cargarDatosEjemploCapturados();
+        }
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar asuntos capturados:', error);
+        console.log('🔄 Cargando datos de ejemplo como fallback...');
+        
+        // Mostrar información específica del error
+        if (error.status === 401 || error.status === 403) {
+          console.log('🔐 Error de autenticación/autorización');
+        } else if (error.status === 404) {
+          console.log('🔍 Endpoint no encontrado');
+        } else if (error.status === 0) {
+          console.log('🌐 Error de conexión de red');
+        }
+        
+        // Fallback a datos de ejemplo
+        this.cargarDatosEjemploCapturados();
+      }
+    });
+  }
+
+  // 🆕 Método separado para cargar datos de ejemplo
+  cargarDatosEjemploCapturados(): void {
+    console.log('📋 Cargando datos de ejemplo para asuntos capturados...');
     this.asuntosCapturados = [
       {
         id: 'CAP-001',
@@ -382,6 +483,9 @@ export class RevisionFinalComponent implements OnInit {
         erroresDetectados: ['Fecha incorrecta', 'Falta firma digital']
       }
     ];
+    
+    console.log('✅ Datos de ejemplo cargados:', this.asuntosCapturados.length, 'asuntos');
+    this.actualizarEstadisticas();
   }
 
   actualizarEstadisticas(): void {
@@ -767,10 +871,16 @@ export class RevisionFinalComponent implements OnInit {
    * @returns Array de asuntos filtrados
    */
   getAsuntosCapturasFiltrados(): AsuntoCapturado[] {
+    console.log('🔍 getAsuntosCapturasFiltrados() ejecutado');
+    console.log('📊 this.asuntosCapturados.length:', this.asuntosCapturados.length);
+    console.log('📋 this.asuntosCapturados:', this.asuntosCapturados);
+    
     let asuntosFiltrados = [...this.asuntosCapturados];
+    console.log('📝 Antes de filtros - asuntosFiltrados.length:', asuntosFiltrados.length);
     
     // Filtrar por texto
     if (this.filtroText) {
+      console.log('🔎 Filtrando por texto:', this.filtroText);
       const textoBusqueda = this.filtroText.toLowerCase();
       asuntosFiltrados = asuntosFiltrados.filter(a => 
         (a.folio_interno || '').toLowerCase().includes(textoBusqueda) ||
@@ -779,18 +889,25 @@ export class RevisionFinalComponent implements OnInit {
         (a.oficio || '').toLowerCase().includes(textoBusqueda) ||
         (a.usuario_captura || '').toLowerCase().includes(textoBusqueda)
       );
+      console.log('📝 Después de filtro texto - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
     
     // Filtrar por estado de revisión
     if (this.filtroEstadoCaptura !== 'TODOS') {
+      console.log('📋 Filtrando por estado:', this.filtroEstadoCaptura);
       asuntosFiltrados = asuntosFiltrados.filter(a => a.estado_revision === this.filtroEstadoCaptura);
+      console.log('📝 Después de filtro estado - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
     
     // Filtrar por autoridad remitente
     if (this.filtroAutoridadRemitente !== 'Todas') {
+      console.log('🏛️ Filtrando por autoridad:', this.filtroAutoridadRemitente);
       asuntosFiltrados = asuntosFiltrados.filter(a => a.autoridad_remitente === this.filtroAutoridadRemitente);
+      console.log('📝 Después de filtro autoridad - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
     
+    console.log('✅ getAsuntosCapturasFiltrados() resultado final:', asuntosFiltrados.length, 'asuntos');
+    console.log('📋 Asuntos filtrados:', asuntosFiltrados);
     return asuntosFiltrados;
   }
 
@@ -994,7 +1111,13 @@ export class RevisionFinalComponent implements OnInit {
    */
   cambiarTab(tab: 'capturados' | 'dictamenes' | 'revisados'): void {
     this.tabActiva = tab;
-    console.log('Pestaña cambiada a:', tab);
+    console.log('🔄 Pestaña cambiada a:', tab);
+    
+    // 🆕 Cargar datos automáticamente cuando se activa la pestaña de capturados
+    if (tab === 'capturados') {
+      console.log('📋 Cargando asuntos capturados automáticamente...');
+      this.cargarAsuntosCapturados();
+    }
   }
 
   // 📊 MÉTRICAS PARA DICTÁMENES PENDIENTES
