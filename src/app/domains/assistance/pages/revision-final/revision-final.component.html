@@ -780,7 +780,6 @@
                       </div>
                       <div 
                         class="font-medium text-slate-900 text-sm cursor-help max-w-32 truncate"
-                        [title]="obtenerTextoCompleto(asunto.oficio || 'N/A')"
                         [matTooltip]="obtenerTextoCompleto(asunto.oficio || 'N/A')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.oficio || 'N/A', 25)}}
@@ -796,7 +795,6 @@
                       </div>
                       <div 
                         class="font-medium text-slate-900 text-sm cursor-help max-w-32 truncate"
-                        [title]="obtenerTextoCompleto(asunto.personaRelacionada || '')"
                         [matTooltip]="obtenerTextoCompleto(asunto.personaRelacionada || '')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.personaRelacionada || '', 35)}}
