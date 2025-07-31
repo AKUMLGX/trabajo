@@ -327,7 +327,7 @@ export class RevisionFinalComponent implements OnInit {
               return null;
             }
 
-            const asuntoCapturado: AsuntoCapturado = {
+                        const asuntoCapturado: AsuntoCapturado = {
               id: `CAP-${asuntoData.id_asunto_nuevo || asuntoData.id_asunto_historico || index + 1}`,
               folio_interno: asuntoData.folio_interno || `N/A-${index + 1}`,
               folio: asuntoData.folio_interno || `N/A-${index + 1}`, // Para compatibilidad
@@ -349,6 +349,9 @@ export class RevisionFinalComponent implements OnInit {
               cantidadDocumentos: asuntoData.documento_escaneado ? 1 : 0,
               erroresDetectados: [] // Se puede implementar validación posterior
             };
+
+            // 🆕 GUARDAR EL JSON ORIGINAL como propiedad adicional
+            (asuntoCapturado as any).jsonOriginal = item;
 
             console.log('✅ Asunto transformado:', asuntoCapturado);
             return asuntoCapturado;
@@ -1149,6 +1152,14 @@ export class RevisionFinalComponent implements OnInit {
    * Abre el modal de revisión de captura
    */
   abrirModalRevisionCaptura(asunto: AsuntoCapturado): void {
+    // 🆕 Buscar el JSON original del backend
+    const jsonOriginal = (asunto as any).jsonOriginal;
+    
+    console.log('🔧 ABRIENDO MODAL CON:');
+    console.log('📄 Asunto transformado:', asunto);
+    console.log('📦 JSON Original:', jsonOriginal);
+    console.log('🔍 ¿Tiene JSON original?', !!jsonOriginal);
+    
     const dialogRef = this.dialog.open(RevisionCapturaModalComponent, {
       width: '1200px',
       maxWidth: '95vw',
@@ -1157,7 +1168,9 @@ export class RevisionFinalComponent implements OnInit {
       disableClose: false,
       data: {
         asunto: asunto,
-        modo: asunto.estado_revision === 'PENDIENTE' ? 'REVISION' : 'EDICION'
+        modo: asunto.estado_revision === 'PENDIENTE' ? 'REVISION' : 'EDICION',
+        // 🆕 Pasar el JSON original del backend
+        jsonOriginal: jsonOriginal
       },
       panelClass: ['custom-dialog-container']
     });

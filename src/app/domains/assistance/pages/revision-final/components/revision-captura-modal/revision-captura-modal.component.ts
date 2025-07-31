@@ -58,6 +58,32 @@ export interface AsuntoCapturado {
   tieneDocumentos?: boolean;
   cantidadDocumentos?: number;
   erroresDetectados?: string[];
+  
+  // Estructura anidada del JSON
+  datos?: {
+    id_asunto_historico?: number;
+    folio_interno?: string;
+    carpeta_investigacion?: string;
+    folio_scanner?: number;
+    oficio?: string;
+    documento_escaneado?: string;
+    persona_relacionada?: string;
+    descripcion?: string;
+    fecha_recepcion?: string;
+    fecha_atencion?: string;
+    turno_jefatura?: string;
+    respuesta?: boolean;
+    volante_jefatura?: string;
+    folio_jupiter?: string;
+    autoridad_remitente?: string;
+    plazo_atencion?: number;
+    fecha_captura?: string;
+    id_documento_fk?: number;
+    id_atencion_fk?: number;
+    id_administracion_fk?: number;
+    id_tipo_asunto_fk?: number;
+    id_tipo_fk?: number;
+  };
 }
 
 export interface CorreccionAsunto {
@@ -132,7 +158,7 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
 
   constructor(
     public dialogRef: MatDialogRef<RevisionCapturaModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { asunto: AsuntoCapturado },
+    @Inject(MAT_DIALOG_DATA) public data: { asunto: AsuntoCapturado, jsonOriginal?: any },
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private sanitizer: DomSanitizer
@@ -141,6 +167,11 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    console.log('🔍 Modal abierto con datos:', this.data);
+    console.log('🔍 Estructura completa del asunto:', JSON.stringify(this.data.asunto, null, 2));
+    console.log('🔍 ¿Tiene datos anidados?', 'datos' in this.data.asunto);
+    console.log('🔍 Datos anidados:', this.data.asunto.datos);
+    
     this.inicializarFormulario();
     this.cargarPdfOriginal();
   }
