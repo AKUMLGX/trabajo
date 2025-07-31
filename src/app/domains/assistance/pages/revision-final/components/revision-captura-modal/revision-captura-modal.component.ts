@@ -486,4 +486,53 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     const partes = rutaCompleta.split('\\');
     return partes[partes.length - 1] || 'Archivo no identificado';
   }
+
+  // ===== MÉTODOS DE INTERPRETACIÓN DE CAMPOS =====
+
+  interpretarPlazoAtencion(plazo: number | null): string {
+    if (plazo === null || plazo === undefined) {
+      return 'Sin plazo definido';
+    }
+    if (plazo === 0) {
+      return 'Urgente';
+    }
+    if (plazo >= 1 && plazo <= 5) {
+      return `${plazo} día${plazo > 1 ? 's' : ''}`;
+    }
+    return `${plazo} días`;
+  }
+
+  interpretarIdDocumento(id: number | null): string {
+    if (!id) return 'No definido';
+    
+    const documentos = {
+      1: 'RESPUESTA',
+      2: 'REQUERIMIENTO',
+      3: 'REQUERIMIENTO Y RESPUESTA',
+      4: 'SOLICITUD INTERNA',
+      5: 'RESPUESTA INTERNA',
+      6: 'RESPUESTA A FGR',
+      7: 'ALCANCE'
+    };
+    
+    return documentos[id as keyof typeof documentos] || `Documento ${id}`;
+  }
+
+  interpretarIdAtencion(id: number | null): string {
+    if (!id) return 'No definido';
+    
+    const atenciones = {
+      1: 'TOTAL',
+      2: 'PARCIAL',
+      3: 'EN TRAMITE',
+      5: 'NO APLICA'
+    };
+    
+    return atenciones[id as keyof typeof atenciones] || `Atención ${id}`;
+  }
+
+  interpretarIdAdministracion(id: number | null): string {
+    if (!id) return 'No definido';
+    return `Administración ${id}`;
+  }
 } 

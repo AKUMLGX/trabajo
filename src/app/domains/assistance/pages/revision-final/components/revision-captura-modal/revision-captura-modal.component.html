@@ -113,7 +113,7 @@
             <!-- Plazo de Atención -->
             <div class="info-row" data-field="plazo_atencion">
               <span class="info-label">Plazo de Atención</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.plazo_atencion || data.asunto.datos?.plazo_atencion || data.asunto.plazo_atencion || 'No definido' }}</span>
+              <span class="info-value">{{ interpretarPlazoAtencion(data.jsonOriginal?.asunto?.datos?.plazo_atencion || data.asunto.datos?.plazo_atencion || data.asunto.plazo_atencion) }}</span>
             </div>
 
             <!-- Fecha de Captura -->
@@ -122,22 +122,22 @@
               <span class="info-value">{{ (data.jsonOriginal?.asunto?.datos?.fecha_captura || data.asunto.datos?.fecha_captura || data.asunto.fecha_captura) ? ((data.jsonOriginal?.asunto?.datos?.fecha_captura || data.asunto.datos?.fecha_captura || data.asunto.fecha_captura) | date:'dd/MM/yyyy') : 'No definida' }}</span>
             </div>
 
-            <!-- ID Documento -->
+            <!-- Documento -->
             <div class="info-row" data-field="id_documento_fk">
-              <span class="info-label">ID Documento</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_documento_fk || data.asunto.datos?.id_documento_fk || data.asunto.id_documento_fk || 'No definido' }}</span>
+              <span class="info-label">Documento</span>
+              <span class="info-value">{{ interpretarIdDocumento(data.jsonOriginal?.asunto?.datos?.id_documento_fk || data.asunto.datos?.id_documento_fk || data.asunto.id_documento_fk) }}</span>
             </div>
 
-            <!-- ID Atención -->
+            <!-- Atención -->
             <div class="info-row" data-field="id_atencion_fk">
-              <span class="info-label">ID Atención</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_atencion_fk || data.asunto.datos?.id_atencion_fk || data.asunto.id_atencion_fk || 'No definido' }}</span>
+              <span class="info-label">Atención</span>
+              <span class="info-value">{{ interpretarIdAtencion(data.jsonOriginal?.asunto?.datos?.id_atencion_fk || data.asunto.datos?.id_atencion_fk || data.asunto.id_atencion_fk) }}</span>
             </div>
 
-            <!-- ID Administración -->
+            <!-- Administración -->
             <div class="info-row" data-field="id_administracion_fk">
-              <span class="info-label">ID Administración</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_administracion_fk || data.asunto.datos?.id_administracion_fk || data.asunto.id_administracion_fk || 'No definido' }}</span>
+              <span class="info-label">Administración</span>
+              <span class="info-value">{{ interpretarIdAdministracion(data.jsonOriginal?.asunto?.datos?.id_administracion_fk || data.asunto.datos?.id_administracion_fk || data.asunto.id_administracion_fk) }}</span>
             </div>
           </div>
         </div>
