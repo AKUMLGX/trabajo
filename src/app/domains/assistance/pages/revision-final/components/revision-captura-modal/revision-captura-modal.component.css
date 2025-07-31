@@ -35,14 +35,15 @@
 
 /* ===== HEADER MEJORADO ===== */
 .modal-header {
-  background: linear-gradient(135deg, #691C32 0%, #4F1524 50%, #8B1538 100%);
+  background: #691C32;
   color: white;
-  padding: 32px;
+  padding: 24px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
-  box-shadow: 0 8px 32px rgba(105, 28, 50, 0.4);
+  box-shadow: 0 2px 8px rgba(105, 28, 50, 0.3);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .modal-header::before {
@@ -81,20 +82,20 @@
 }
 
 .modal-title {
-  font-size: 28px;
-  font-weight: 700;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
   margin: 0;
-  line-height: 1.2;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  letter-spacing: -0.5px;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
 }
 
 .modal-subtitle {
-  font-size: 16px;
-  margin: 6px 0 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  margin: 4px 0 0 0;
   opacity: 0.9;
   font-weight: 400;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .status-chips {
@@ -106,17 +107,16 @@
 }
 
 .chip-estado {
-  padding: 12px 20px;
-  border-radius: 25px;
-  font-size: 13px;
-  font-weight: 700;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  backdrop-filter: blur(10px);
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .chip-prioridad {
@@ -160,9 +160,10 @@
 .modal-body {
   flex: 1;
   overflow-y: auto;
-  padding: 40px;
+  padding: 32px;
   max-height: calc(95vh - 200px);
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  background: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Scrollbar personalizado */
@@ -188,18 +189,15 @@
 .seccion-info-original,
 .seccion-formulario,
 .seccion-pdfs {
-  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
-  border-radius: 20px;
-  padding: 32px;
-  margin-bottom: 32px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 
-    0 8px 32px rgba(105, 28, 50, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: all 0.3s ease;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .seccion-info-original::before,
@@ -226,15 +224,16 @@
 }
 
 .seccion-titulo {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 22px;
-  font-weight: 700;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 600;
   color: #691C32;
-  margin: 0 0 28px 0;
-  padding-bottom: 16px;
-  border-bottom: 3px solid #f1f5f9;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
   position: relative;
 }
 
@@ -466,13 +465,14 @@
 }
 
 .seccion-subtitulo {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #64748b;
-  margin: 0 0 20px 0;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0 0 16px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -655,13 +655,14 @@
 
 /* ===== FOOTER ===== */
 .modal-footer {
-  background: #f8f9fa;
-  border-top: 1px solid #e9ecef;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
   padding: 20px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .footer-info {
@@ -699,12 +700,14 @@
 .btn-corregir,
 .btn-aprobar,
 .btn-rechazar {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  padding: 0 24px;
-  height: 44px;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 8px;
 }
 
 .btn-corregir {
@@ -3655,81 +3658,115 @@
   }
 }
 
-/* ===== INFORMACIÓN ORIGINAL UNIFICADA ===== */
+/* ===== IMPORTAR FUENTES PROFESIONALES ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ===== INFORMACIÓN ORIGINAL - DISEÑO CARD-BASED PROFESIONAL ===== */
 .info-original-unificada {
-  background: linear-gradient(145deg, #fefefe 0%, #f8f9fa 50%, #f1f3f4 100%);
+  background: #ffffff;
   border-radius: 12px;
   padding: 24px;
-  margin-top: 20px;
-  box-shadow: 
-    0 4px 20px rgba(105, 28, 50, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(212, 180, 140, 0.15);
+  margin-top: 24px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .info-original-unificada .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 16px;
-  animation: fadeInUp 0.6s ease-out;
 }
 
 .info-original-unificada .info-row {
-  display: flex;
-  flex-direction: column;
-  padding: 12px 16px;
-  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  border: 1px solid rgba(212, 180, 140, 0.1);
+  padding: 16px;
   transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
-}
-
-.info-original-unificada .info-row::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, #691C32 0%, #8B1538 100%);
-  border-radius: 0 2px 2px 0;
 }
 
 .info-original-unificada .info-row:hover {
-  transform: translateX(4px);
-  box-shadow: 
-    0 4px 12px rgba(105, 28, 50, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.05);
-  border-color: rgba(105, 28, 50, 0.2);
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* TIPOGRAFÍA PROFESIONAL - INTER */
 .info-original-unificada .info-label {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 12px;
   font-weight: 600;
-  color: #691C32;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 4px;
-  opacity: 0.8;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .info-original-unificada .info-value {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #2c3e50;
+  color: #111827;
   line-height: 1.4;
   word-break: break-word;
+  margin: 0;
 }
 
+/* VALOR DESTACADO */
 .info-original-unificada .info-value.highlight-value {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #691C32;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 15px;
+  background: #fef2f2;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+  margin: 4px 0;
+  text-align: center;
+}
+
+/* CAMPOS ESPECÍFICOS CON ESTILOS DIFERENCIADOS */
+.info-original-unificada .info-row[data-field="folio_interno"] .info-value {
+  color: #691C32;
+  font-weight: 600;
   font-size: 15px;
 }
 
+.info-original-unificada .info-row[data-field="persona_relacionada"] .info-value {
+  color: #000000;
+  font-weight: 500;
+}
+
+.info-original-unificada .info-row[data-field="descripcion"] .info-value {
+  color: #000000;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.info-original-unificada .info-row[data-field="oficio"] .info-value {
+  color: #000000;
+  font-weight: 500;
+}
+
+.info-original-unificada .info-row[data-field*="fecha"] .info-value {
+  color: #000000;
+  font-weight: 500;
+  text-align: center;
+}
+
+.info-original-unificada .info-row[data-field*="id"] .info-value {
+  color: #6b7280;
+  font-weight: 400;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .info-original-unificada .info-grid {
     grid-template-columns: 1fr;
@@ -3737,11 +3774,87 @@
   }
   
   .info-original-unificada .info-row {
-    padding: 10px 12px;
+    padding: 12px;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .seccion-info-original,
+  .seccion-formulario,
+  .seccion-pdfs {
+    padding: 16px;
+  }
+  
+  .modal-title {
+    font-size: 20px;
+  }
+  
+  .modal-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* ===== ANIMACIONES SUAVES ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.info-original-unificada .info-grid {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive mejorado */
+@media (max-width: 768px) {
+  .info-original-unificada {
+    padding: 20px;
+    margin-top: 16px;
+  }
+  
+  .info-original-unificada .info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .info-original-unificada .info-row {
+    padding: 16px 20px;
+  }
+  
+  .info-original-unificada .info-label {
+    font-size: 12px;
+    letter-spacing: 0.6px;
+  }
+  
+  .info-original-unificada .info-value {
+    font-size: 14px;
+  }
+  
+  .info-original-unificada .info-value.highlight-value {
+    font-size: 15px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-original-unificada {
+    padding: 16px;
+  }
+  
+  .info-original-unificada .info-row {
+    padding: 12px 16px;
   }
   
   .info-original-unificada .info-label {
     font-size: 11px;
+    letter-spacing: 0.5px;
   }
   
   .info-original-unificada .info-value {

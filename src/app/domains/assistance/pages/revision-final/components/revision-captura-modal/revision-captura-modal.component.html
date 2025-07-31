@@ -50,136 +50,94 @@
         <!-- Información Original Unificada -->
         <div class="info-original-unificada">
           <div class="info-grid">
-            <!-- ID Asunto Histórico -->
-            <div class="info-row">
-              <span class="info-label">ID Asunto Histórico</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_asunto_historico || data.asunto.datos?.id_asunto_historico || data.asunto.id_asunto_historico || 'No disponible' }}</span>
-            </div>
-
             <!-- Folio Interno -->
-            <div class="info-row">
+            <div class="info-row" data-field="folio_interno">
               <span class="info-label">Folio Interno</span>
               <span class="info-value highlight-value">{{ data.jsonOriginal?.asunto?.datos?.folio_interno || data.asunto.datos?.folio_interno || data.asunto.folio_interno }}</span>
             </div>
 
             <!-- Carpeta de Investigación -->
-            <div class="info-row">
+            <div class="info-row" data-field="carpeta_investigacion">
               <span class="info-label">Carpeta de Investigación</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.carpeta_investigacion || data.asunto.datos?.carpeta_investigacion || data.asunto.carpeta_investigacion }}</span>
             </div>
 
             <!-- Folio Scanner -->
-            <div class="info-row">
+            <div class="info-row" data-field="folio_scanner">
               <span class="info-label">Folio Scanner</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.folio_scanner || data.asunto.datos?.folio_scanner || data.asunto.folio_scanner }}</span>
             </div>
 
             <!-- Oficio -->
-            <div class="info-row">
+            <div class="info-row" data-field="oficio">
               <span class="info-label">Oficio</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.oficio || data.asunto.datos?.oficio || data.asunto.oficio }}</span>
             </div>
 
             <!-- Documento Escaneado -->
-            <div class="info-row">
+            <div class="info-row" data-field="documento_escaneado">
               <span class="info-label">Documento Escaneado</span>
               <span class="info-value">{{ obtenerNombreArchivo(data.jsonOriginal?.asunto?.datos?.documento_escaneado || data.asunto.datos?.documento_escaneado || data.asunto.documento_escaneado || '') }}</span>
             </div>
 
             <!-- Persona Relacionada -->
-            <div class="info-row">
+            <div class="info-row" data-field="persona_relacionada">
               <span class="info-label">Persona Relacionada</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.persona_relacionada || data.asunto.datos?.persona_relacionada || data.asunto.persona_relacionada || 'No disponible' }}</span>
             </div>
 
             <!-- Descripción -->
-            <div class="info-row">
+            <div class="info-row" data-field="descripcion">
               <span class="info-label">Descripción</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.descripcion || data.asunto.datos?.descripcion || data.asunto.descripcion }}</span>
             </div>
 
             <!-- Fecha de Recepción -->
-            <div class="info-row">
+            <div class="info-row" data-field="fecha_recepcion">
               <span class="info-label">Fecha de Recepción</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.fecha_recepcion || data.asunto.datos?.fecha_recepcion || data.asunto.fecha_recepcion | date:'dd/MM/yyyy' }}</span>
             </div>
 
-            <!-- Fecha de Atención -->
-            <div class="info-row">
-              <span class="info-label">Fecha de Atención</span>
-              <span class="info-value">{{ (data.jsonOriginal?.asunto?.datos?.fecha_atencion || data.asunto.datos?.fecha_atencion || data.asunto.fecha_atencion) ? ((data.jsonOriginal?.asunto?.datos?.fecha_atencion || data.asunto.datos?.fecha_atencion || data.asunto.fecha_atencion) | date:'dd/MM/yyyy') : 'No definida' }}</span>
-            </div>
-
             <!-- Turno Jefatura -->
-            <div class="info-row">
+            <div class="info-row" data-field="turno_jefatura">
               <span class="info-label">Turno Jefatura</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.turno_jefatura || data.asunto.datos?.turno_jefatura || data.asunto.turno_jefatura }}</span>
             </div>
 
-            <!-- Respuesta -->
-            <div class="info-row">
-              <span class="info-label">Respuesta</span>
-              <span class="info-value">{{ (data.jsonOriginal?.asunto?.datos?.respuesta || data.asunto.datos?.respuesta || data.asunto.respuesta) ? 'Sí' : 'No' }}</span>
-            </div>
-
-            <!-- Volante Jefatura -->
-            <div class="info-row">
-              <span class="info-label">Volante Jefatura</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.volante_jefatura || data.asunto.datos?.volante_jefatura || data.asunto.volante_jefatura || 'No disponible' }}</span>
-            </div>
-
-            <!-- Folio Jupiter -->
-            <div class="info-row">
-              <span class="info-label">Folio Jupiter</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.folio_jupiter || data.asunto.datos?.folio_jupiter || data.asunto.folio_jupiter || 'No disponible' }}</span>
-            </div>
-
             <!-- Autoridad Remitente -->
-            <div class="info-row">
+            <div class="info-row" data-field="autoridad_remitente">
               <span class="info-label">Autoridad Remitente</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.autoridad_remitente || data.asunto.datos?.autoridad_remitente || data.asunto.autoridad_remitente }}</span>
             </div>
 
             <!-- Plazo de Atención -->
-            <div class="info-row">
+            <div class="info-row" data-field="plazo_atencion">
               <span class="info-label">Plazo de Atención</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.plazo_atencion || data.asunto.datos?.plazo_atencion || data.asunto.plazo_atencion || 'No definido' }}</span>
             </div>
 
             <!-- Fecha de Captura -->
-            <div class="info-row">
+            <div class="info-row" data-field="fecha_captura">
               <span class="info-label">Fecha de Captura</span>
               <span class="info-value">{{ (data.jsonOriginal?.asunto?.datos?.fecha_captura || data.asunto.datos?.fecha_captura || data.asunto.fecha_captura) ? ((data.jsonOriginal?.asunto?.datos?.fecha_captura || data.asunto.datos?.fecha_captura || data.asunto.fecha_captura) | date:'dd/MM/yyyy') : 'No definida' }}</span>
             </div>
 
             <!-- ID Documento -->
-            <div class="info-row">
+            <div class="info-row" data-field="id_documento_fk">
               <span class="info-label">ID Documento</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_documento_fk || data.asunto.datos?.id_documento_fk || data.asunto.id_documento_fk || 'No definido' }}</span>
             </div>
 
             <!-- ID Atención -->
-            <div class="info-row">
+            <div class="info-row" data-field="id_atencion_fk">
               <span class="info-label">ID Atención</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_atencion_fk || data.asunto.datos?.id_atencion_fk || data.asunto.id_atencion_fk || 'No definido' }}</span>
             </div>
 
             <!-- ID Administración -->
-            <div class="info-row">
+            <div class="info-row" data-field="id_administracion_fk">
               <span class="info-label">ID Administración</span>
               <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_administracion_fk || data.asunto.datos?.id_administracion_fk || data.asunto.id_administracion_fk || 'No definido' }}</span>
-            </div>
-
-            <!-- ID Tipo Asunto -->
-            <div class="info-row">
-              <span class="info-label">ID Tipo Asunto</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_tipo_asunto_fk || data.asunto.datos?.id_tipo_asunto_fk || data.asunto.id_tipo_asunto_fk || 'No definido' }}</span>
-            </div>
-
-            <!-- ID Tipo -->
-            <div class="info-row">
-              <span class="info-label">ID Tipo</span>
-              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.id_tipo_fk || data.asunto.datos?.id_tipo_fk || data.asunto.id_tipo_fk || 'No definido' }}</span>
             </div>
           </div>
         </div>
