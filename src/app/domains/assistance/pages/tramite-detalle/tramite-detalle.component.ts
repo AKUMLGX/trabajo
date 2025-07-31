@@ -59,8 +59,9 @@ export class TramiteDetalleComponent implements OnInit {
   tableEnTramite(){
   this.cards.enTramiteTableCard(this.tableRequest).subscribe(res=>{
     // this.tableResponse = res;
-    this.allData=res
-    this.buscadorService.setData(this.allData)
+    this.allData=res;
+    this.buscadorService.setDataMul(this.allData);
+    this.updateSearch();
 
        let indexPage = 0;
         let page: AsuntoPorAsigacionResponseEnTramite[] = [];
@@ -78,19 +79,61 @@ export class TramiteDetalleComponent implements OnInit {
         if (page.length !== 0) this.pages.push(page)
     })
   }
+//#region  buscador
+
   onDearchChange(value:string){
     this.buscadorService.setSearchTerm(value)
   }
 
-  filterIndicador=(item:AsuntoPorAsigacionResponseEnTramite, term:string):boolean=>{
-    return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
-  }
+  //para un solo filtro
+  // filterIndicador=(item:AsuntoPorAsigacionResponseEnTramite, term:string):boolean=>{
+  //   return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
+  // }
 
-  asignarIndicador : Observable<AsuntoPorAsigacionResponseEnTramite[]>= new Observable;
+onSearchChange() {
+  this.updateSearch();
+}
+  searchTextNoOficio:string="";
+  searchPersona_relacionada:string='';
+  searchAutoridad_remitente:string='';
+  searchfolio_interno:string='';
+  searchcarpeta_investigacion:string='';
 
-  searchText:string='';
+updateSearch() {
+  this.buscadorService.setSearchTermsMu({
+    folio: this.searchfolio_interno,
+    carpeta: this.searchcarpeta_investigacion,
+    persona : this.searchPersona_relacionada,
+    oficio: this.searchTextNoOficio,
+    autoridad_remitente: this.searchAutoridad_remitente,
+  });
+
+}
+
+ filterIndicador = (item: AsuntoPorAsigacionResponseEnTramite, terms: Record<string, string>): boolean => {
+const matchOficio = !terms['oficio'] || item.oficio?.toLowerCase().includes(terms['oficio'].toLowerCase());
+const matchCarpeta = !terms['carpeta'] || item.carpeta_investigacion?.toLowerCase().includes(terms['carpeta'].toLowerCase())
+const matchFolio = !terms['autoridad_remitente'] || item.autoridad_remitente?.toLowerCase().includes(terms['autoridad_remitente'].toLowerCase());
+const matchfolio_interno = !terms['folio'] || item.folio_interno?.toLowerCase().includes(terms['folio'].toLowerCase());
+const matchPersona = !terms['persona'] || item.persona_relacionada?.toLowerCase().includes(terms['persona'].toLowerCase())
+
+return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
+};
+
+
+
+
+  // asignarIndicador : Observable<AsuntoPorAsigacionResponseEnTramite[]>= new Observable;
+
+
   // result$: Observable<string[]> = of ([]);
-  filteredData$: Observable<AsuntoPorAsigacionResponseEnTramite[]> = this.buscadorService.getFilteredData(this.filterIndicador) ;
+// para un solo filtro
+ //filteredData$: Observable<AsuntoPorAsigacionResponseEnTramite[]> = this.buscadorService.getFilteredData(this.filterIndicador) ;
+
+  filteredDataMul$: Observable<AsuntoPorAsigacionResponseEnTramite[]> = this.buscadorService.getFilteredDataMul(this.filterIndicador) ;
+
+
+  //#endregion
   allData: AsuntoPorAsigacionResponseEnTramite[]=[]
 
   // Navegación
@@ -104,7 +147,7 @@ export class TramiteDetalleComponent implements OnInit {
   }
 
   // ✅ MÉTODOS PARA FUNCIONALIDAD PDF VIEWER
-  
+
   /**
    * Abre el visualizador de PDF en modal (basado en la lógica de asignación)
    * @param folio - Folio interno del asunto
@@ -113,28 +156,28 @@ export class TramiteDetalleComponent implements OnInit {
   openPdfViewer(folio: string, path: number): void {
     console.log('🔍 [TramiteDetalle] openPdfViewer INICIADO');
     console.log('🔍 [TramiteDetalle] Parámetros recibidos:', { folio, path });
-    
+
     if (folio == null) {
       folio = "sinAsignar";
       console.log('🔍 [TramiteDetalle] Folio era null, cambiado a:', folio);
     }
-    
+
     this.pdfCargando = true;
     this.pdfError = false;
     this.pdfUrl = null;
-    
+
     // Primero intentar listar archivos reales del folio
     console.log('🔍 [TramiteDetalle] Intentando listar archivos reales para:', folio);
-    
+
     this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
       next: (archivos: any[]) => {
         console.log('🔍 [TramiteDetalle] Archivos encontrados:', archivos);
-        
+
         if (archivos && archivos.length > 0) {
           // Usar el primer archivo PDF encontrado
           const primerArchivo = archivos[0];
           const nombreArchivo = primerArchivo.nombre || primerArchivo.name;
-          
+
           console.log('✅ [TramiteDetalle] Usando archivo real encontrado:', nombreArchivo);
           this.cargarPdfDirecto(folio, nombreArchivo);
         } else {
@@ -157,14 +200,14 @@ export class TramiteDetalleComponent implements OnInit {
       'documento.pdf',
       'archivo.pdf'
     ];
-    
+
     console.log('🔍 [TramiteDetalle] Probando archivos por nombre:', nombresArchivos);
     this.probarArchivos(folio, nombresArchivos, 0);
   }
-  
+
   private cargarPdfDirecto(folio: string, nombreArchivo: string): void {
     console.log(`🔍 [TramiteDetalle] Cargando PDF directamente: ${nombreArchivo}`);
-    
+
     this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -173,9 +216,9 @@ export class TramiteDetalleComponent implements OnInit {
           this.pdfCargando = false;
           return;
         }
-        
+
         console.log(`✅ [TramiteDetalle] Archivo ${nombreArchivo} cargado exitosamente`);
-        
+
         try {
           const pdfSrc = `data:application/pdf;base64,${data}`;
           this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
@@ -194,7 +237,7 @@ export class TramiteDetalleComponent implements OnInit {
       }
     });
   }
-  
+
   private probarArchivos(folio: string, nombresArchivos: string[], indice: number): void {
     if (indice >= nombresArchivos.length) {
       console.error('❌ [TramiteDetalle] No se pudo encontrar ningún archivo PDF');
@@ -202,10 +245,10 @@ export class TramiteDetalleComponent implements OnInit {
       this.pdfCargando = false;
       return;
     }
-    
+
     const nombreArchivo = nombresArchivos[indice];
     console.log(`🔍 [TramiteDetalle] Probando archivo ${indice + 1}/${nombresArchivos.length}: ${nombreArchivo}`);
-    
+
     this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -213,9 +256,9 @@ export class TramiteDetalleComponent implements OnInit {
           this.probarArchivos(folio, nombresArchivos, indice + 1);
           return;
         }
-        
+
         console.log(`✅ [TramiteDetalle] Archivo ${nombreArchivo} encontrado y cargado exitosamente`);
-        
+
         try {
           const pdfSrc = `data:application/pdf;base64,${data}`;
           this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
@@ -229,7 +272,7 @@ export class TramiteDetalleComponent implements OnInit {
       },
       error: (error: any) => {
         console.log(`⚠️ [TramiteDetalle] Error con archivo ${nombreArchivo}:`, error.status);
-        
+
         // Si es un error 404, probar el siguiente archivo
         if (error.status === 404) {
           this.probarArchivos(folio, nombresArchivos, indice + 1);
@@ -248,7 +291,7 @@ export class TramiteDetalleComponent implements OnInit {
   cerrarVisualizadorPdf(): void {
     this.visualizarPdf = false;
     this.pdfUrl = null;
-    this.pdfCargando = false;
+    this.pdfCargando = false;0
     this.pdfError = false;
   }
 }

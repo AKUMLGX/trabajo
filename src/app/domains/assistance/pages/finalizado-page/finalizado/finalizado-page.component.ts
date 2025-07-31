@@ -56,17 +56,52 @@ export class FinalizadoComponent implements OnInit {
     this.tableTotal();
   }
 
+  onSearchChange() {
+    this.updateSearch();
+  }
+  searchTextNoOficio: string = "";
+  searchPersona_relacionada: string = '';
+  searchAutoridad_remitente: string = '';
+  searchfolio_interno: string = '';
+  searchcarpeta_investigacion: string = '';
+
+  updateSearch() {
+    this.buscadorService.setSearchTermsMu({
+      folio: this.searchfolio_interno,
+      carpeta: this.searchcarpeta_investigacion,
+      persona: this.searchPersona_relacionada,
+      oficio: this.searchTextNoOficio,
+      autoridad_remitente: this.searchAutoridad_remitente,
+    });
+
+  }
+
+  filterIndicador = (item: AsuntoPorAsigacionResponseTotal, terms: Record<string, string>): boolean => {
+    const matchOficio = !terms['oficio'] || item.oficio?.toLowerCase().includes(terms['oficio'].toLowerCase());
+    const matchCarpeta = !terms['carpeta'] || item.carpeta_investigacion?.toLowerCase().includes(terms['carpeta'].toLowerCase())
+    const matchFolio = !terms['autoridad_remitente'] || item.autoridad_remitente?.toLowerCase().includes(terms['autoridad_remitente'].toLowerCase());
+    const matchfolio_interno = !terms['folio'] || item.folio_interno?.toLowerCase().includes(terms['folio'].toLowerCase());
+    const matchPersona = !terms['persona'] || item.persona_relacionada?.toLowerCase().includes(terms['persona'].toLowerCase())
+
+    return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
+  };
+
+
+
   onDearchChange(value: string) {
     this.buscadorService.setSearchTerm(value)
   }
 
-  filterIndicador = (item: AsuntoPorAsigacionResponseTotal, term: string): boolean => {
-    return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
-  }
+  // filterIndicador = (item: AsuntoPorAsigacionResponseTotal, term: string): boolean => {
+  //   return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
+  // }
 
   asignarIndicador: Observable<AsuntoPorAsigacionResponseTotal[]> = new Observable;
   searchText: string = '';
-  filteredData$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredData(this.filterIndicador);
+  // filteredData$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredData(this.filterIndicador);
+
+  filteredDataMul$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredDataMul(this.filterIndicador);
+
   allData: AsuntoPorAsigacionResponseTotal[] = []
 
   // ✅ Variables para funcionalidad PDF Viewer
@@ -79,8 +114,8 @@ export class FinalizadoComponent implements OnInit {
     this.cards.totalTableCard(this.tableRequest).subscribe(res => {
       // this.tableResponse=res;
       this.allData = res;
-      this.buscadorService.setData(this.allData)
-
+      this.buscadorService.setDataMul(this.allData)
+      this.updateSearch();
       let indexPage = 0;
       let page: AsuntoPorAsigacionResponseTotal[] = [];
       this.pages = []
@@ -112,7 +147,7 @@ export class FinalizadoComponent implements OnInit {
   }
 
   // ✅ MÉTODOS PARA FUNCIONALIDAD PDF VIEWER
-  
+
   /**
    * Abre el visualizador de PDF en modal
    * @param folio - Folio interno del asunto
@@ -121,28 +156,28 @@ export class FinalizadoComponent implements OnInit {
   openPdfViewer(folio: string, path: number): void {
     console.log('🔍 [FinalizadoPage] openPdfViewer INICIADO');
     console.log('🔍 [FinalizadoPage] Parámetros recibidos:', { folio, path });
-    
+
     if (folio == null) {
       folio = "sinAsignar";
       console.log('🔍 [FinalizadoPage] Folio era null, cambiado a:', folio);
     }
-    
+
     this.pdfCargando = true;
     this.pdfError = false;
     this.pdfUrl = null;
-    
+
     // Primero intentar listar archivos reales del folio
     console.log('🔍 [FinalizadoPage] Intentando listar archivos reales para:', folio);
-    
+
     this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
       next: (archivos: any[]) => {
         console.log('🔍 [FinalizadoPage] Archivos encontrados:', archivos);
-        
+
         if (archivos && archivos.length > 0) {
           // Usar el primer archivo PDF encontrado
           const primerArchivo = archivos[0];
           const nombreArchivo = primerArchivo.nombre || primerArchivo.name;
-          
+
           console.log('✅ [FinalizadoPage] Usando archivo real encontrado:', nombreArchivo);
           this.cargarPdfDirecto(folio, nombreArchivo);
         } else {
@@ -156,7 +191,7 @@ export class FinalizadoComponent implements OnInit {
       }
     });
   }
-  
+
   private probarArchivosPorNombre(folio: string, path: number): void {
     // Lista de nombres de archivo posibles a probar (basada en patrones reales del sistema)
     const nombresArchivoPosibles = [
@@ -180,14 +215,14 @@ export class FinalizadoComponent implements OnInit {
       'GUIA_SINIESTRO_0163194079A.pdf',
       'Mnuta_akamba_v1_06022025.pdf'
     ];
-    
+
     console.log('🔍 [FinalizadoPage] Probando nombres de archivo:', nombresArchivoPosibles);
     this.probarArchivos(folio, nombresArchivoPosibles, 0);
   }
-  
+
   private cargarPdfDirecto(folio: string, nombreArchivo: string): void {
     console.log(`🔍 [FinalizadoPage] Cargando PDF directamente: ${nombreArchivo}`);
-    
+
     this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -196,9 +231,9 @@ export class FinalizadoComponent implements OnInit {
           this.pdfCargando = false;
           return;
         }
-        
+
         console.log(`✅ [FinalizadoPage] Archivo ${nombreArchivo} cargado exitosamente`);
-        
+
         try {
           const pdfSrc = `data:application/pdf;base64,${data}`;
           this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
@@ -217,7 +252,7 @@ export class FinalizadoComponent implements OnInit {
       }
     });
   }
-  
+
   private probarArchivos(folio: string, nombresArchivos: string[], indice: number): void {
     if (indice >= nombresArchivos.length) {
       console.error('❌ [FinalizadoPage] No se pudo encontrar ningún archivo PDF');
@@ -225,10 +260,10 @@ export class FinalizadoComponent implements OnInit {
       this.pdfCargando = false;
       return;
     }
-    
+
     const nombreArchivo = nombresArchivos[indice];
     console.log(`🔍 [FinalizadoPage] Probando archivo ${indice + 1}/${nombresArchivos.length}: ${nombreArchivo}`);
-    
+
     this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -236,9 +271,9 @@ export class FinalizadoComponent implements OnInit {
           this.probarArchivos(folio, nombresArchivos, indice + 1);
           return;
         }
-        
+
         console.log(`✅ [FinalizadoPage] Archivo ${nombreArchivo} encontrado y cargado exitosamente`);
-        
+
         try {
           const pdfSrc = `data:application/pdf;base64,${data}`;
           this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
@@ -252,7 +287,7 @@ export class FinalizadoComponent implements OnInit {
       },
       error: (error: any) => {
         console.log(`⚠️ [FinalizadoPage] Error con archivo ${nombreArchivo}:`, error.status);
-        
+
         // Si es un error 404, probar el siguiente archivo
         if (error.status === 404) {
           this.probarArchivos(folio, nombresArchivos, indice + 1);
