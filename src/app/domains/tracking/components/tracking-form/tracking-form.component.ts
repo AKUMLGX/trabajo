@@ -1,6 +1,7 @@
 import { trigger, style, transition, animate, } from '@angular/animations';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -34,7 +35,7 @@ import { SharedDataFormService } from '../../../shared/services/shared-data-form
   ],
 
 })
-export class TrackingFormComponent {
+export class TrackingFormComponent implements OnInit, AfterViewInit {
   public consultForm: FormGroup = this.fb.group({
     folioInterno: new FormControl(''),
     carpetaInvertigacion: new FormControl(''),
@@ -66,7 +67,8 @@ export class TrackingFormComponent {
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
-    private shareData: SharedDataFormService
+    private shareData: SharedDataFormService,
+    private route: ActivatedRoute
   ) {
     this.campoValor = {
       folioInterno: '',
@@ -107,6 +109,8 @@ export class TrackingFormComponent {
     this.coincidencias = [];
   }
   onSave(): void {
+    console.log('🔍 [TrackingForm] onSave ejecutado');
+    console.log('🔍 [TrackingForm] Formulario actual:', this.consultForm.value);
     this.asuntoService.filterDocuments(this.consultForm);
   }
 
@@ -178,5 +182,62 @@ export class TrackingFormComponent {
   onSelectedOption(event: Event) {
     const target = event.target as HTMLSelectElement
     this.selecionarOpcion = target.value
+  }
+
+  ngOnInit(): void {
+    console.log('🔍 [TrackingForm] ngOnInit ejecutado');
+    
+    // Verificar si hay parámetro oficio en la URL
+    this.route.queryParams.subscribe(params => {
+      console.log('🔍 [TrackingForm] QueryParams recibidos:', params);
+      const oficio = params['oficio'];
+      
+      if (oficio) {
+        console.log('🔍 [TrackingForm] Oficio detectado en URL:', oficio);
+        
+        // Llenar el campo oficio
+        this.consultForm.patchValue({
+          oficio: oficio
+        });
+        
+        console.log('🔍 [TrackingForm] Campo oficio llenado:', this.consultForm.get('oficio')?.value);
+
+        // Ejecutar la búsqueda automáticamente después de un delay más largo
+        setTimeout(() => {
+          console.log('🔍 [TrackingForm] Ejecutando búsqueda automática...');
+          this.onSave();
+        }, 2000); // Aumentar el tiempo para asegurar que el formulario esté listo
+      } else {
+        console.log('🔍 [TrackingForm] No se encontró parámetro oficio en la URL');
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    console.log('🔍 [TrackingForm] ngAfterViewInit ejecutado');
+    
+    // Verificar si hay parámetro oficio en la URL después de que el DOM esté listo
+    this.route.queryParams.subscribe(params => {
+      const oficio = params['oficio'];
+      
+      if (oficio) {
+        console.log('🔍 [TrackingForm] ngAfterViewInit - Oficio detectado:', oficio);
+        
+        // Llenar el campo oficio usando setTimeout para asegurar que el DOM esté listo
+        setTimeout(() => {
+          this.consultForm.patchValue({
+            oficio: oficio
+          });
+          
+          console.log('🔍 [TrackingForm] ngAfterViewInit - Campo oficio llenado:', this.consultForm.get('oficio')?.value);
+          
+          // Ejecutar la búsqueda automáticamente
+          setTimeout(() => {
+            console.log('🔍 [TrackingForm] ngAfterViewInit - Ejecutando búsqueda...');
+            this.onSave();
+          }, 1000);
+        }, 500);
+      }
+    });
   }
 }

@@ -729,6 +729,16 @@
           Cancelar
         </button>
 
+        <!-- Botón Ir a Bandeja de Seguimiento -->
+        <button mat-stroked-button 
+                (click)="abrirTrackingEnNuevaPestana()" 
+                [disabled]="guardando"
+                style="color: #1e40af; border-color: #1e40af;"
+                class="btn-seguimiento">
+          <mat-icon>track_changes</mat-icon>
+          Ir a Bandeja de Seguimiento
+        </button>
+
         <!-- Botones principales según la acción -->
         <ng-container [ngSwitch]="accionSeleccionada">
           

@@ -675,4 +675,28 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     if (!id) return 'No definido';
     return `Administración ${id}`;
   }
+
+  // Método simple para abrir tracking en nueva pestaña
+  abrirTrackingEnNuevaPestana(): void {
+    const asunto = this.data.asunto;
+    const oficio = asunto.oficio || asunto.datos?.oficio;
+    
+    if (!oficio) {
+      this.snackBar.open('❌ No se puede identificar el asunto', 'Cerrar', {
+        duration: 3000
+      });
+      return;
+    }
+    
+    // Construir URL con el oficio como parámetro
+    const baseUrl = window.location.origin;
+    const trackingUrl = `${baseUrl}/akamba/layout/tracking?oficio=${encodeURIComponent(oficio)}`;
+    
+    // Abrir en nueva pestaña
+    window.open(trackingUrl, '_blank');
+    
+    this.snackBar.open('✅ Abriendo bandeja de seguimiento en nueva pestaña', 'Cerrar', {
+      duration: 2000
+    });
+  }
 } 
