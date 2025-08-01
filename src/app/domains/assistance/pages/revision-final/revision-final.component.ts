@@ -14,6 +14,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { AsuntosPendientesTableComponent } from './components/asuntos-pendientes-table/asuntos-pendientes-table.component';
 import { AsuntosRevisadosTableComponent } from './components/asuntos-revisados-table/asuntos-revisados-table.component';
@@ -23,6 +24,7 @@ import { RevisionCapturaModalComponent } from './components/revision-captura-mod
 // 🆕 Importar servicio e interfaces
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { AsuntoPorEstadoAtencionRequest, AsuntoAsignacion } from '../../../interfaces/asuntoPorAtencion.interface';
+import { ArchivosAtencionService } from '../../../services/archivos-atencion.service';
 
 interface Asunto {
   id: string;
@@ -162,7 +164,9 @@ export class RevisionFinalComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private cardsService: CardsInfoBandejadeAtencionService
+    private cardsService: CardsInfoBandejadeAtencionService,
+    private archivosAtencionService: ArchivosAtencionService,
+    private domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -1305,5 +1309,176 @@ export class RevisionFinalComponent implements OnInit {
       default:
         this.cambiarTab('capturados');
     }
+  }
+
+  // ✅ Variables para funcionalidad PDF Viewer
+  visualizarPdf: boolean = false;
+  pdfUrl: SafeResourceUrl | null = null;
+  pdfCargando: boolean = false;
+  pdfError: boolean = false;
+  pdfTitulo: string = '';
+
+  // ✅ MÉTODOS PARA FUNCIONALIDAD PDF VIEWER
+
+  /**
+   * Abre el visualizador de PDF para un asunto específico
+   * @param folio - Folio interno del asunto
+   * @param path - Path o número del archivo escaneado
+   */
+  openPdfViewer(folio: string, path: number): void {
+    console.log('🔍 [RevisionFinal] openPdfViewer INICIADO');
+    console.log('🔍 [RevisionFinal] Parámetros recibidos:', { folio, path });
+
+    if (folio == null) {
+      folio = "sinAsignar";
+      console.log('🔍 [RevisionFinal] Folio era null, cambiado a:', folio);
+    }
+
+    this.pdfCargando = true;
+    this.pdfError = false;
+    this.pdfUrl = null;
+    this.pdfTitulo = `Documento ${folio}`;
+
+    // Primero intentar listar archivos reales del folio
+    console.log('🔍 [RevisionFinal] Intentando listar archivos reales para:', folio);
+
+    this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
+      next: (archivos: any[]) => {
+        console.log('🔍 [RevisionFinal] Archivos encontrados:', archivos);
+
+        if (archivos && archivos.length > 0) {
+          // Usar el primer archivo PDF encontrado
+          const primerArchivo = archivos[0];
+          const nombreArchivo = primerArchivo.nombre || primerArchivo.name;
+
+          console.log('✅ [RevisionFinal] Usando archivo real encontrado:', nombreArchivo);
+          this.cargarPdfDirecto(folio, nombreArchivo);
+        } else {
+          console.log('⚠️ [RevisionFinal] No se encontraron archivos, usando lista de nombres posibles');
+          this.probarArchivosPorNombre(folio, path);
+        }
+      },
+      error: (error: any) => {
+        console.log('⚠️ [RevisionFinal] Error al listar archivos, usando lista de nombres posibles:', error.status);
+        this.probarArchivosPorNombre(folio, path);
+      }
+    });
+  }
+
+  private probarArchivosPorNombre(folio: string, path: number): void {
+    // Lista de nombres de archivo posibles a probar (basada en patrones reales del sistema)
+    const nombresArchivoPosibles = [
+      'acta_compressed.pdf',
+      '59680.pdf',
+      `${path}.pdf`,
+      'documento_compressed.pdf',
+      'archivo_compressed.pdf',
+      'acta.pdf',
+      'documento.pdf',
+      'archivo.pdf',
+      'documento_escaneado.pdf',
+      'archivo_escaneado.pdf',
+      'acta_escaneada.pdf',
+      `documento_${path}.pdf`,
+      `archivo_${path}.pdf`,
+      'oficio.pdf',
+      'requerimiento.pdf',
+      'solicitud.pdf',
+      'ComprobanteNomina00000200940.pdf',
+      'GUIA_SINIESTRO_0163194079A.pdf',
+      'Mnuta_akamba_v1_06022025.pdf'
+    ];
+
+    console.log('🔍 [RevisionFinal] Probando nombres de archivo:', nombresArchivoPosibles);
+    this.probarArchivos(folio, nombresArchivoPosibles, 0);
+  }
+
+  private cargarPdfDirecto(folio: string, nombreArchivo: string): void {
+    console.log(`🔍 [RevisionFinal] Cargando PDF directamente: ${nombreArchivo}`);
+
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
+      next: (data: string) => {
+        if (!data || data.trim() === '') {
+          console.log(`⚠️ [RevisionFinal] Archivo ${nombreArchivo} vacío`);
+          this.pdfError = true;
+          this.pdfCargando = false;
+          return;
+        }
+
+        console.log(`✅ [RevisionFinal] Archivo ${nombreArchivo} cargado exitosamente`);
+
+        try {
+          const pdfSrc = `data:application/pdf;base64,${data}`;
+          this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+          this.visualizarPdf = true;
+          this.pdfCargando = false;
+        } catch (error) {
+          console.error('❌ [RevisionFinal] Error al procesar el PDF:', error);
+          this.pdfError = true;
+          this.pdfCargando = false;
+        }
+      },
+      error: (error: any) => {
+        console.error(`❌ [RevisionFinal] Error al cargar PDF directo ${nombreArchivo}:`, error);
+        this.pdfError = true;
+        this.pdfCargando = false;
+      }
+    });
+  }
+
+  private probarArchivos(folio: string, nombresArchivos: string[], indice: number): void {
+    if (indice >= nombresArchivos.length) {
+      console.log('❌ [RevisionFinal] No se pudo cargar ningún archivo PDF');
+      this.pdfError = true;
+      this.pdfCargando = false;
+      return;
+    }
+
+    const nombreArchivo = nombresArchivos[indice];
+    console.log(`🔍 [RevisionFinal] Probando archivo ${indice + 1}/${nombresArchivos.length}: ${nombreArchivo}`);
+
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
+      next: (data: string) => {
+        if (!data || data.trim() === '') {
+          console.log(`⚠️ [RevisionFinal] Archivo ${nombreArchivo} vacío, probando siguiente...`);
+          this.probarArchivos(folio, nombresArchivos, indice + 1);
+          return;
+        }
+
+        console.log(`✅ [RevisionFinal] Archivo ${nombreArchivo} encontrado y cargado exitosamente`);
+
+        try {
+          const pdfSrc = `data:application/pdf;base64,${data}`;
+          this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+          this.visualizarPdf = true;
+          this.pdfCargando = false;
+        } catch (error) {
+          console.error('❌ [RevisionFinal] Error al procesar el PDF:', error);
+          this.probarArchivos(folio, nombresArchivos, indice + 1);
+        }
+      },
+      error: (error: any) => {
+        console.log(`⚠️ [RevisionFinal] Error al cargar ${nombreArchivo}, probando siguiente...`);
+        this.probarArchivos(folio, nombresArchivos, indice + 1);
+      }
+    });
+  }
+
+  /**
+   * Abre el modal de visualización de PDF
+   */
+  abrirModalPDF(): void {
+    this.visualizarPdf = true;
+  }
+
+  /**
+   * Cierra el visualizador de PDF
+   */
+  cerrarVisualizador(): void {
+    this.visualizarPdf = false;
+    this.pdfUrl = null;
+    this.pdfCargando = false;
+    this.pdfError = false;
+    this.pdfTitulo = '';
   }
 } 

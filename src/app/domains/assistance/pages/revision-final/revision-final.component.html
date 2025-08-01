@@ -843,8 +843,8 @@
                       <mat-icon class="text-lg">{{
                           asunto.estado_revision === 'PENDIENTE' ? 'rate_review' : 'edit'
                         }}</mat-icon>
-                        {{asunto.estado_revision === 'PENDIENTE' ? 'Revisar' : 'Editar'}}
-                      </button>
+                        <span class="hidden sm:inline">{{asunto.estado_revision === 'PENDIENTE' ? 'Revisar' : 'Editar'}}</span>
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -1388,4 +1388,55 @@
       </div>
     </mat-tab>
   </mat-tab-group>
+</div>
+
+<!-- ✅ Modal PDF Viewer -->
+<div *ngIf="visualizarPdf" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
+  <div class="bg-white rounded-lg shadow-xl w-[900px] max-w-[95vw] h-[85vh] flex flex-col transform transition-all overflow-hidden">
+    <!-- Encabezado del modal -->
+    <div class="bg-[#691C32] text-white py-4 px-6 flex items-center justify-between">
+      <h2 class="text-xl font-bold flex items-center">
+        <svg class="w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        {{pdfTitulo}}
+      </h2>
+      <button (click)="cerrarVisualizador()" class="text-white hover:text-gray-200 transition-colors">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Visualizador PDF -->
+    <div class="flex-1 p-4">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 h-full">
+        <!-- Indicador de carga -->
+        <div *ngIf="pdfCargando" class="h-full flex flex-col items-center justify-center">
+          <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
+          <p class="mt-4 text-gray-600">Cargando documento...</p>
+        </div>
+
+        <!-- Error al cargar -->
+        <div *ngIf="pdfError && !pdfCargando" class="h-full flex flex-col items-center justify-center">
+          <mat-icon class="text-red-500 text-6xl mb-4">error_outline</mat-icon>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Error al cargar el documento</h3>
+          <p class="text-gray-600 text-center mb-4">No se pudo cargar el archivo PDF. Verifique que el documento existe.</p>
+          <button (click)="cerrarVisualizador()" 
+                  class="bg-[#691C32] hover:bg-[#4F1524] text-white px-4 py-2 rounded-md transition-colors">
+            Cerrar
+          </button>
+        </div>
+
+        <!-- PDF Viewer -->
+        <div *ngIf="!pdfCargando && !pdfError && pdfUrl" class="h-full">
+          <iframe [src]="pdfUrl" 
+                  class="w-full h-full border-0"
+                  frameborder="0"
+                  allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
 </div> 

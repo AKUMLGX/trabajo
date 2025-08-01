@@ -16,6 +16,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ArchivosAtencionService } from '../../../../../services/archivos-atencion.service';
 
 export interface AsuntoCapturado {
   id: string;
@@ -161,7 +162,8 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     @Inject(MAT_DIALOG_DATA) public data: { asunto: AsuntoCapturado, jsonOriginal?: any },
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private archivosAtencionService: ArchivosAtencionService
   ) {
     this.correccionForm = this.crearFormulario();
   }
@@ -173,13 +175,13 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     console.log('🔍 Datos anidados:', this.data.asunto.datos);
     
     this.inicializarFormulario();
-    this.cargarPdfOriginal();
+    this.cargarPdfAutomatico();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data?.asunto) {
       this.inicializarFormulario();
-      this.cargarPdfOriginal();
+      this.cargarPdfAutomatico();
     }
   }
 
@@ -257,6 +259,144 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
         }
       }, 1000);
     }
+  }
+
+  /**
+   * Carga automáticamente el PDF usando el servicio de archivos
+   */
+  cargarPdfAutomatico(): void {
+    console.log('🔍 [RevisionCapturaModal] cargarPdfAutomatico iniciado');
+    
+    const folio = this.data?.asunto?.folio_interno || this.data?.asunto?.datos?.folio_interno;
+    const path = this.data?.asunto?.folio_scanner || this.data?.asunto?.datos?.folio_scanner || 1;
+    
+    if (!folio) {
+      console.log('⚠️ [RevisionCapturaModal] No se encontró folio para cargar PDF');
+      return;
+    }
+
+    console.log('🔍 [RevisionCapturaModal] Cargando PDF para folio:', folio, 'path:', path);
+    
+    this.pdfCargando = true;
+    this.pdfError = false;
+    this.pdfOriginalUrl = null;
+
+    // Primero intentar listar archivos reales del folio
+    this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
+      next: (archivos: any[]) => {
+        console.log('🔍 [RevisionCapturaModal] Archivos encontrados:', archivos);
+
+        if (archivos && archivos.length > 0) {
+          // Usar el primer archivo PDF encontrado
+          const primerArchivo = archivos[0];
+          const nombreArchivo = primerArchivo.nombre || primerArchivo.name;
+
+          console.log('✅ [RevisionCapturaModal] Usando archivo real encontrado:', nombreArchivo);
+          this.cargarPdfDirecto(folio, nombreArchivo);
+        } else {
+          console.log('⚠️ [RevisionCapturaModal] No se encontraron archivos, usando lista de nombres posibles');
+          this.probarArchivosPorNombre(folio, path);
+        }
+      },
+      error: (error: any) => {
+        console.log('⚠️ [RevisionCapturaModal] Error al listar archivos, usando lista de nombres posibles:', error.status);
+        this.probarArchivosPorNombre(folio, path);
+      }
+    });
+  }
+
+  private probarArchivosPorNombre(folio: string, path: number): void {
+    // Lista de nombres de archivo posibles a probar
+    const nombresArchivoPosibles = [
+      'acta_compressed.pdf',
+      '59680.pdf',
+      `${path}.pdf`,
+      'documento_compressed.pdf',
+      'archivo_compressed.pdf',
+      'acta.pdf',
+      'documento.pdf',
+      'archivo.pdf',
+      'documento_escaneado.pdf',
+      'archivo_escaneado.pdf',
+      'acta_escaneada.pdf',
+      `documento_${path}.pdf`,
+      `archivo_${path}.pdf`,
+      'oficio.pdf',
+      'requerimiento.pdf',
+      'solicitud.pdf'
+    ];
+
+    console.log('🔍 [RevisionCapturaModal] Probando nombres de archivo:', nombresArchivoPosibles);
+    this.probarArchivos(folio, nombresArchivoPosibles, 0);
+  }
+
+  private cargarPdfDirecto(folio: string, nombreArchivo: string): void {
+    console.log(`🔍 [RevisionCapturaModal] Cargando PDF directamente: ${nombreArchivo}`);
+
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
+      next: (data: string) => {
+        if (!data || data.trim() === '') {
+          console.log(`⚠️ [RevisionCapturaModal] Archivo ${nombreArchivo} vacío`);
+          this.pdfError = true;
+          this.pdfCargando = false;
+          return;
+        }
+
+        console.log(`✅ [RevisionCapturaModal] Archivo ${nombreArchivo} cargado exitosamente`);
+
+        try {
+          const pdfSrc = `data:application/pdf;base64,${data}`;
+          this.pdfOriginalUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+          this.pdfCargando = false;
+        } catch (error) {
+          console.error('❌ [RevisionCapturaModal] Error al procesar el PDF:', error);
+          this.pdfError = true;
+          this.pdfCargando = false;
+        }
+      },
+      error: (error: any) => {
+        console.error(`❌ [RevisionCapturaModal] Error al cargar PDF directo ${nombreArchivo}:`, error);
+        this.pdfError = true;
+        this.pdfCargando = false;
+      }
+    });
+  }
+
+  private probarArchivos(folio: string, nombresArchivos: string[], indice: number): void {
+    if (indice >= nombresArchivos.length) {
+      console.log('❌ [RevisionCapturaModal] No se pudo cargar ningún archivo PDF');
+      this.pdfError = true;
+      this.pdfCargando = false;
+      return;
+    }
+
+    const nombreArchivo = nombresArchivos[indice];
+    console.log(`🔍 [RevisionCapturaModal] Probando archivo ${indice + 1}/${nombresArchivos.length}: ${nombreArchivo}`);
+
+    this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
+      next: (data: string) => {
+        if (!data || data.trim() === '') {
+          console.log(`⚠️ [RevisionCapturaModal] Archivo ${nombreArchivo} vacío, probando siguiente...`);
+          this.probarArchivos(folio, nombresArchivos, indice + 1);
+          return;
+        }
+
+        console.log(`✅ [RevisionCapturaModal] Archivo ${nombreArchivo} encontrado y cargado exitosamente`);
+
+        try {
+          const pdfSrc = `data:application/pdf;base64,${data}`;
+          this.pdfOriginalUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+          this.pdfCargando = false;
+        } catch (error) {
+          console.error('❌ [RevisionCapturaModal] Error al procesar el PDF:', error);
+          this.probarArchivos(folio, nombresArchivos, indice + 1);
+        }
+      },
+      error: (error: any) => {
+        console.log(`⚠️ [RevisionCapturaModal] Error al cargar ${nombreArchivo}, probando siguiente...`);
+        this.probarArchivos(folio, nombresArchivos, indice + 1);
+      }
+    });
   }
 
   // Manejo de archivos PDF
