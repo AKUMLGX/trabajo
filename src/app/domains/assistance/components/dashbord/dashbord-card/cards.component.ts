@@ -100,31 +100,31 @@ export class CardsComponent implements OnInit {
     this.mostrarSemaforoContenido.emit()
   }
 
-  documento = 'REQUERIMIENTO'
-  asignados = false
-  asignadosTable = true
-  porAsignarTotal = 0
+  documento: string = 'REQUERIMIENTO'
+  estado_atencion: string = "POR ASIGNAR"
+  asignadosTable: boolean = true
+  porAsignarTotal: number = 0
   asignarData = true
 
   tablePorDictaminar: tableAsuntosPorDictaminar[] = []
 
   // 🎨 NUEVO SISTEMA DE FILTRADO TIPO CARRUSEL - ULTRA RÁPIDO
   dictaminadoresUnicos: string[] = [] // Lista de dictaminadores únicos
-  dictaminadorActivoAtencion = '' // Dictaminador activo en "En Atención"
-  dictaminadorActivoAprobacion = '' // Dictaminador activo en "Por Aprobar"
-  
+  dictaminadorActivoAtencion: string = '' // Dictaminador activo en "En Atención"
+  dictaminadorActivoAprobacion: string = '' // Dictaminador activo en "Por Aprobar"
+
   // Datos filtrados por vista
   asuntosEnAtencionFiltrados: tableAsuntosPorDictaminar[] = []
   asuntosPorAprobarFiltrados: tableAsuntosPorDictaminar[] = []
 
   porAsignarData: porAsignarRequest = {
     documento: this.documento,
-    asignados: this.asignados
+    estado_atencion: this.estado_atencion
   }
 
   porAsignarDataTable: porAsignarRequest = {
     documento: this.documento,
-    asignados: this.asignadosTable
+    estado_atencion: this.estado_atencion
   }
 
   porAsignarDataResponse: porAsignarResponse = {
@@ -134,13 +134,13 @@ export class CardsComponent implements OnInit {
 
   usuariosAsignar: usuariosPorAdministracion[] = []
 
-  asuntosUrgentes = 0;
+  asuntosUrgentes: number = 0;
 
   //#region paginador
   pages: tableAsuntosPorDictaminar[][] = [];
 
-  itemsPerPage = 5;
-  pageSelected = 1;
+  itemsPerPage: number = 5;
+  pageSelected: number = 1;
   labelsPaginator = {
     previousLabel: 'Anterior',
     nextLabel: 'Siguiente',
@@ -155,8 +155,8 @@ export class CardsComponent implements OnInit {
   ) { }
 
   // Propiedades para manejar la notificación
-  mostrarNotificacion = false;
-  mensajeNotificacion = '';
+  mostrarNotificacion: boolean = false;
+  mensajeNotificacion: string = '';
 
   // Datos de ejemplo para la tabla
   asuntos: any[] = [
@@ -172,10 +172,10 @@ export class CardsComponent implements OnInit {
 
   // Datos filtrados de la tabla
   asuntosFiltrados: any[] = [];
-  dictaminadorSeleccionado = '';
+  dictaminadorSeleccionado: string = '';
 
   // Mapeo de ID de dictaminador a nombre para mostrar mensajes
-  dictaminadoresMap: Record<string, string> = {
+  dictaminadoresMap: { [key: string]: string } = {
     '1': 'María Hernández',
     '2': 'Juan Rodríguez',
     '3': 'Carlos Sánchez',
@@ -184,25 +184,25 @@ export class CardsComponent implements OnInit {
   };
 
   // Conteo de asuntos por dictaminador
-  conteoAsuntosPorDictaminador: Record<string, number> = {};
-  totalAsuntos = 0;
+  conteoAsuntosPorDictaminador: { [key: string]: number } = {};
+  totalAsuntos: number = 0;
 
   // Propiedades para visualizar PDF
   mostrarPDFViewer = false;
   pdfTitulo = '';
-  pdfUrl = '';
+  pdfUrl: string = '';
   pdfCargando = true;
   paginaActual = 1;
   escalaZoom = 1.0;
 
   // Propiedades para el modal de detalles
-  mostrarDetalleModal = false;
+  mostrarDetalleModal: boolean = false;
   asuntoSeleccionado: any = null;
 
   // Propiedades para manejar asuntos rechazados
-  mostrarTablaRechazadosModal = false;
-  mostrarModalRechazados = false;
-  mostrarConfirmacionReasignacion = false;
+  mostrarTablaRechazadosModal: boolean = false;
+  mostrarModalRechazados: boolean = false;
+  mostrarConfirmacionReasignacion: boolean = false;
   asuntoRechazado: AsuntoRechazado | null = null;
 
 
@@ -239,23 +239,23 @@ export class CardsComponent implements OnInit {
   asuntosEnAtencion: tableAsuntosPorDictaminar[] = [];
   asuntosPorAprobar: tableAsuntosPorDictaminar[] = [];
   vistaActual: 'atencion' | 'aprobacion' = 'atencion';
-  cargandoAsuntos = false;
-  cargandoAprobaciones = false;
+  cargandoAsuntos: boolean = false;
+  cargandoAprobaciones: boolean = false;
 
   // Propiedades para la paginación
-  paginaActualTabla = 1;
-  filasPorPagina = 5;
+  paginaActualTabla: number = 1;
+  filasPorPagina: number = 5;
   opcionesPaginacion: number[] = [5, 10, 15, 20];
-  totalPaginas = 1;
+  totalPaginas: number = 1;
   asuntosPaginados: tableAsuntosPorDictaminar[] = [];
 
   // Propiedades para el modal de revisión
-  mostrarModalRevision = false;
+  mostrarModalRevision: boolean = false;
   asuntoSeleccionadoRevision: any = null;
   archivosAsunto: ArchivoAdjunto[] = [];
 
   // Propiedades para el modal de atención
-  mostrarModalAtencion = false;
+  mostrarModalAtencion: boolean = false;
   asuntoSeleccionadoAtencion: any = null;
 
 
@@ -304,7 +304,7 @@ export class CardsComponent implements OnInit {
     this.cargandoAsuntos = true;
     const params = {
       documento: this.documento,
-      asignados: this.asignadosTable,
+      estado_atencion: this.estado_atencion,
       requiere_aprobacion: false
     };
 
@@ -325,7 +325,7 @@ export class CardsComponent implements OnInit {
         // Actualizar conteo de asuntos urgentes
         const fitrarPlazo = res.filter((item: any) => item.plazo_atencion !== null);
         this.asuntosUrgentes = fitrarPlazo.length;
-        
+
         // 🔥 FORZAR VALOR DE PRUEBA PARA VER EL BANNER (REMOVER DESPUÉS)
         if (this.asuntosUrgentes === 0) {
           this.asuntosUrgentes = 3; // Valor de prueba
@@ -344,23 +344,23 @@ export class CardsComponent implements OnInit {
     this.cargandoAprobaciones = true;
     const params = {
       documento: this.documento,
-      asignados: this.asignadosTable,
+      estado_atencion: this.estado_atencion,
       requiere_aprobacion: true
     };
 
     this.cards.asuntosPorAprobar(params).subscribe({
       next: (res) => {
         this.asuntosPorAprobar = res;
-        
+
         // 🎨 ACTUALIZAR SISTEMA NUEVO DE FILTROS
         this.extraerDictaminadoresUnicos();
         this.filtrarAsuntosPorAprobar();
-        
+
         if (this.vistaActual === 'aprobacion') {
           this.actualizarTablaSegunVista();
           this.regenerarPaginacionRapida();
         }
-        
+
         this.cargandoAprobaciones = false;
       },
       error: (err) => {
@@ -382,11 +382,11 @@ export class CardsComponent implements OnInit {
   private inicializarFiltrosCarrusel(): void {
     // Extraer dictaminadores únicos de ambas vistas
     this.extraerDictaminadoresUnicos();
-    
+
     // Inicializar datos filtrados
     this.asuntosEnAtencionFiltrados = [...this.asuntosEnAtencion];
     this.asuntosPorAprobarFiltrados = [...this.asuntosPorAprobar];
-    
+
     // Establecer tabla inicial según vista actual
     this.actualizarTablaSegunVista();
   }
@@ -395,13 +395,13 @@ export class CardsComponent implements OnInit {
   private extraerDictaminadoresUnicos(): void {
     const todosAsuntos = [...this.asuntosEnAtencion, ...this.asuntosPorAprobar];
     const dictaminadoresSet = new Set<string>();
-    
+
     todosAsuntos.forEach(asunto => {
       if (asunto.nombre_dictaminador && asunto.nombre_dictaminador.trim()) {
         dictaminadoresSet.add(asunto.nombre_dictaminador.trim());
       }
     });
-    
+
     this.dictaminadoresUnicos = Array.from(dictaminadoresSet).sort();
     console.log('🎨 Dictaminadores únicos extraídos:', this.dictaminadoresUnicos);
   }
@@ -409,7 +409,7 @@ export class CardsComponent implements OnInit {
   // 🎨 NUEVO: Seleccionar dictaminador desde el carrusel
   seleccionarDictaminadorCarrusel(dictaminador: string): void {
     console.log('🎨 Seleccionando dictaminador:', dictaminador, 'en vista:', this.vistaActual);
-    
+
     if (this.vistaActual === 'atencion') {
       this.dictaminadorActivoAtencion = this.dictaminadorActivoAtencion === dictaminador ? '' : dictaminador;
       this.filtrarAsuntosAtencion();
@@ -417,7 +417,7 @@ export class CardsComponent implements OnInit {
       this.dictaminadorActivoAprobacion = this.dictaminadorActivoAprobacion === dictaminador ? '' : dictaminador;
       this.filtrarAsuntosPorAprobar();
     }
-    
+
     this.actualizarTablaSegunVista();
     this.regenerarPaginacionRapida();
   }
@@ -427,7 +427,7 @@ export class CardsComponent implements OnInit {
     if (!this.dictaminadorActivoAtencion) {
       this.asuntosEnAtencionFiltrados = [...this.asuntosEnAtencion];
     } else {
-      this.asuntosEnAtencionFiltrados = this.asuntosEnAtencion.filter(asunto => 
+      this.asuntosEnAtencionFiltrados = this.asuntosEnAtencion.filter(asunto =>
         asunto.nombre_dictaminador?.trim() === this.dictaminadorActivoAtencion
       );
     }
@@ -438,7 +438,7 @@ export class CardsComponent implements OnInit {
     if (!this.dictaminadorActivoAprobacion) {
       this.asuntosPorAprobarFiltrados = [...this.asuntosPorAprobar];
     } else {
-      this.asuntosPorAprobarFiltrados = this.asuntosPorAprobar.filter(asunto => 
+      this.asuntosPorAprobarFiltrados = this.asuntosPorAprobar.filter(asunto =>
         asunto.nombre_dictaminador?.trim() === this.dictaminadorActivoAprobacion
       );
     }
@@ -495,7 +495,7 @@ export class CardsComponent implements OnInit {
       this.dictaminadorActivoAprobacion = '';
       this.filtrarAsuntosPorAprobar();
     }
-    
+
     this.actualizarTablaSegunVista();
     this.regenerarPaginacionRapida();
   }
@@ -504,7 +504,7 @@ export class CardsComponent implements OnInit {
   private regenerarPaginacionRapida(): void {
     this.pages = [];
     this.pageSelected = 1;
-    
+
     for (let i = 0; i < this.tablePorDictaminar.length; i += this.itemsPerPage) {
       this.pages.push(this.tablePorDictaminar.slice(i, i + this.itemsPerPage));
     }
@@ -657,7 +657,7 @@ export class CardsComponent implements OnInit {
       // Mostrar el modal
       console.log('✅ [verDetalle] Estableciendo mostrarModalAtencion = true');
       this.mostrarModalAtencion = true;
-      
+
       console.log('✅ [verDetalle] Estado final:');
       console.log('  - mostrarModalAtencion:', this.mostrarModalAtencion);
       console.log('  - asuntoSeleccionadoAtencion:', this.asuntoSeleccionadoAtencion);
@@ -668,7 +668,7 @@ export class CardsComponent implements OnInit {
   cargarArchivosAsunto(asunto: any): void {
     console.log('🔧 [Cards] cargarArchivosAsunto iniciado');
     console.log('🔧 [Cards] Asunto recibido:', asunto);
-    
+
     if (!asunto || !asunto.folio_interno) {
       console.log('🔧 [Cards] No hay asunto o folio_interno, limpiando archivos');
       this.archivosAsunto = [];
@@ -861,7 +861,7 @@ export class CardsComponent implements OnInit {
    * @param mensaje Texto a mostrar
    * @param duracion Duración en milisegundos (por defecto 2000ms)
    */
-  mostrarMensaje(mensaje: string, duracion = 2000): void {
+  mostrarMensaje(mensaje: string, duracion: number = 2000): void {
     // Solo se registra el mensaje en consola sin mostrar la notificación visual
     console.log('Mensaje de sistema:', mensaje);
 
@@ -881,7 +881,7 @@ export class CardsComponent implements OnInit {
   // 🚨 NUEVO: Método para ir a la vista de Asuntos Urgentes
   irAAsignacionUrgentes(): void {
     console.log('🚨 [CardsComponent] Navegando a asuntos urgentes');
-    
+
     // Navegar a la página de asignación con parámetros de filtro para urgentes
     this.router.navigate(['/layout/asignacion'], {
       queryParams: {

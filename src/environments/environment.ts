@@ -24,13 +24,13 @@
 
 
 export const environment={
-  environment:(window as Record<string, any>)["env"]["environment"],
-  hash: (window as Record<string, any>)["env"]["hash"],
+  environment:(window as {[key:string]:any})["env"]["environment"],
+  hash: (window as {[key:string]:any})["env"]["hash"],
 
-  baseUrl:(window as Record<string, any>)["env"]["baseUrl"],
-  layoutUrl:(window as Record<string, any>)["env"]["layoutUrl"],
-  loginUrl:(window as Record<string, any>)["env"]["loginUrl"],
-  logoutUrl:(window as Record<string, any>)["env"]["logoutUrl"],
+  baseUrl:(window as {[key:string]:any})["env"]["baseUrl"],
+  layoutUrl:(window as {[key:string]:any})["env"]["layoutUrl"],
+  loginUrl:(window as {[key:string]:any})["env"]["loginUrl"],
+  logoutUrl:(window as {[key:string]:any})["env"]["logoutUrl"],
 
   oauthParametersEndpoint: 'login/get_oauth_parameters',
   tokenValidationEndpoint: 'login/token_validation',
@@ -48,9 +48,9 @@ export const environment={
   generateEstadistico: "asunto/get_estadistico_por_dia",
   //#region Bandeja de Atecion
   cardsInfo:'asunto/atencion/get_atencion_por_administracion',
-  cardsInfoPorAsignar:'asunto/atencion/get_asunto_por_asignacion/total',
-  asuntosPorDictaminar: 'asunto/atencion/get_asunto_por_asignacion/',
-  asuntosPorAsignarTable: 'asunto/atencion/get_asunto_por_asignacion/',
+  cardsInfoPorAsignar:'asunto/atencion/get_asunto_por_estado_atencion/total',
+  asuntosPorDictaminar: 'asunto/atencion/get_asunto_por_estado_atencion/',
+  asuntosPorAsignarTable: 'asunto/atencion/get_asunto_por_estado_atencion/',
   usuariosPorAdministracion:'asunto/atencion/usuarios_por_administracion ',
   asignarAsunto:'asunto/atencion/asignar_asunto',
   enTramiteTableCard:'asunto/atencion/get_asunto_por_atencion',
