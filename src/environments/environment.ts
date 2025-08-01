@@ -48,9 +48,9 @@ export const environment={
   generateEstadistico: "asunto/get_estadistico_por_dia",
   //#region Bandeja de Atecion
   cardsInfo:'asunto/atencion/get_atencion_por_administracion',
-  cardsInfoPorAsignar:'asunto/atencion/get_asunto_por_asignacion/total',
-  asuntosPorDictaminar: 'asunto/atencion/get_asunto_por_asignacion/',
-  asuntosPorAsignarTable: 'asunto/atencion/get_asunto_por_asignacion/',
+  cardsInfoPorAsignar:'asunto/atencion/get_asunto_por_estado_atencion/total',
+  asuntosPorDictaminar: 'asunto/atencion/get_asunto_por_estado_atencion/',
+  asuntosPorAsignarTable: 'asunto/atencion/get_asunto_por_estado_atencion/',
   usuariosPorAdministracion:'asunto/atencion/usuarios_por_administracion ',
   asignarAsunto:'asunto/atencion/asignar_asunto',
   enTramiteTableCard:'asunto/atencion/get_asunto_por_atencion',

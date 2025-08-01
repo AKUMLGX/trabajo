@@ -158,17 +158,17 @@ buscador = new FormControl('');
   currentPage: number = 1;
   itemsPerPage: number = 10; // Número de elementos por página
   abogadoSeleccionado: string = '';
-  
+
   // Variables para el modal de asignación
   tipoAccion: 'asignar' | 'reasignar' = 'asignar';
   observacionesReasignacion: string = '';
-  
+
   // mostrarPDFViewer: boolean = false;
   // pdfSrc: string = '';
   // pdfTitulo: string = '';
   // asuntoParaDescargar: Asunto | null = null;
 
-  asignadosTable: boolean = false
+  estado_atencio: string= "POR ASIGNAR"
   documento: string = 'REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion[] = []
    itemDeFilaSelecionada: modalItem | null = null
@@ -188,19 +188,19 @@ buscador = new FormControl('');
 
   porAsignarDataTable: porAsignarRequest = {
     documento: this.documento,
-    asignados: this.asignadosTable
+    estado_atencion: this.estado_atencio
   }
 
   totalPages: number = 0;
   totalRegistros: number = 0;
-  
+
   asignacion: AsignarAsunto | null = null
   searchText: string = '';
   results$: Observable<string[]> = of([]);
   allData: tableAsuntosPorDictaminar[] = [];
   asuntosPaginados: tableAsuntosPorDictaminar[] = [];
   filteredData$!: Observable<tableAsuntosPorDictaminar[]>;
-  
+
   // Variable para el modal de detalle
   asuntoDetalle: tableAsuntosPorDictaminar | null = null;
 
@@ -218,11 +218,11 @@ buscador = new FormControl('');
   filtroActivo: 'todos' | 'urgente' | 'critico' | 'normal' | 'reciente' = 'todos';
   mostrarAgrupacion: boolean = true;
   seccionesColapsadas: Set<string> = new Set();
-  
+
   // 📊 Contadores dinámicos con subtotales de plazo
   contadores = {
     urgente: 0,
-    critico: 0, 
+    critico: 0,
     normal: 0,
     reciente: 0,
     total: 0,
@@ -244,7 +244,7 @@ buscador = new FormControl('');
   ngOnInit() {
     this.filteredData$ = this.buscadorService.getFilteredData(this.filtrarIndicador);
     this.tablePorAsignar();
-    
+
     // 🚨 NUEVO: Verificar si viene de asuntos urgentes
     this.route.queryParams.subscribe(params => {
       if (params['filtro'] === 'urgentes' && params['plazo'] === '0') {
@@ -252,7 +252,7 @@ buscador = new FormControl('');
         this.aplicarFiltroUrgentes();
       }
     });
-    
+
     // Suscribirse a los cambios en los datos filtrados para actualizar la paginación
     this.filteredData$.subscribe(data => {
       this.calcularContadores(data); // 📊 Actualizar contadores
@@ -277,22 +277,22 @@ buscador = new FormControl('');
       const antiguedadB = this.calcularAntiguedadEnDias(b.fecha_recepcion);
       return antiguedadB - antiguedadA;
     });
-    
+
     // Guardar el total de registros
     this.totalRegistros = datosOrdenados.length;
-    
+
     // Calcular total de páginas
     this.totalPages = Math.ceil(datosOrdenados.length / this.itemsPerPage);
-    
+
     // Resetear a la primera página si la página actual es mayor que el total
     if (this.currentPage > this.totalPages && this.totalPages > 0) {
       this.currentPage = 1;
     }
-    
+
     // Calcular índices
     const inicio = (this.currentPage - 1) * this.itemsPerPage;
     const fin = inicio + this.itemsPerPage;
-    
+
     // Actualizar los asuntos paginados con orden por prioridades
     this.asuntosPaginados = datosOrdenados.slice(inicio, fin);
   }
@@ -358,11 +358,11 @@ buscador = new FormControl('');
     };
 
     console.log('Rechazando asunto para correcta asignación:', datos);
-    
+
     // Aquí iría la llamada al servicio para rechazar el asunto
     // Por ahora solo mostramos confirmación
     alert(`El asunto ${this.itemDeFilaSelecionada?.folio_interno} ha sido rechazado para su correcta asignación`);
-    
+
     // Cerrar modal y limpiar datos
     this.cerrarModalAsignacion();
   }
@@ -384,7 +384,7 @@ buscador = new FormControl('');
     this.observacionesReasignacion = '';
     this.abogadoSeleccionado = '';
     this.tipoAccion = 'asignar';
-    
+
     this.usuariosPorAdministracion()
     this.modalService.openCustomDialogWithTemplate({
       template
@@ -415,7 +415,7 @@ buscador = new FormControl('');
   // 🕐 CALCULAR ANTIGÜEDAD REAL EN DÍAS DESDE FECHA DE RECEPCIÓN
   private calcularAntiguedadEnDias(fechaRecepcion: string): number {
     if (!fechaRecepcion) return 0;
-    
+
     try {
       const fechaRecep = new Date(fechaRecepcion);
       const fechaActual = new Date();
@@ -434,21 +434,21 @@ buscador = new FormControl('');
     if (asunto.plazo_atencion === 0) {
       return 4; // Prioridad máxima
     }
-    
+
     // Para todos los demás casos, clasificar por antigüedad de fecha_recepcion
     // (independientemente si tienen plazo > 0 o no)
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
-    
+
     // 🔴 ALTA PRIORIDAD: Mayor a 15 días de antigüedad real
     if (antiguedadDias > 15) {
       return 3; // Crítico por antigüedad
     }
-    
+
     // 🟡 MEDIA PRIORIDAD: Entre 5 y 15 días de antigüedad real
     if (antiguedadDias >= 5 && antiguedadDias <= 15) {
       return 2; // Normal
     }
-    
+
     // 🟢 BAJA PRIORIDAD: Menor a 4 días de antigüedad real
     return 1; // Reciente
   }
@@ -459,20 +459,20 @@ buscador = new FormControl('');
     if (asunto.plazo_atencion === 0) {
       return 'bg-red-500 animate-pulse'; // Rojo pulsante para urgente
     }
-    
+
     // Calcular antigüedad real desde fecha de recepción
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
-    
+
     // 🔴 ROJO: Mayor a 15 días de antigüedad real
     if (antiguedadDias > 15) {
       return 'bg-red-500';
     }
-    
+
     // 🟡 AMARILLO: Entre 5 y 15 días de antigüedad real
     if (antiguedadDias >= 5 && antiguedadDias <= 15) {
       return 'bg-yellow-500';
     }
-    
+
     // 🟢 VERDE: Menor a 4 días de antigüedad real
       return 'bg-green-500';
     }
@@ -482,9 +482,9 @@ buscador = new FormControl('');
     if (asunto.plazo_atencion === 0) {
       return 'URGENTE - Requiere atención inmediata';
     }
-    
+
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
-    
+
     if (antiguedadDias > 15) {
       return `CRÍTICO - ${antiguedadDias} días de antigüedad`;
     }
@@ -498,39 +498,39 @@ buscador = new FormControl('');
   getBadgePrioridad(asunto: tableAsuntosPorDictaminar): { clase: string, texto: string } {
     // 🚨 URGENTE: plazo = 0
     if (asunto.plazo_atencion === 0) {
-      return { 
-        clase: 'bg-red-100 text-red-800 animate-pulse border border-red-300', 
-        texto: '🚨 URGENTE' 
+      return {
+        clase: 'bg-red-100 text-red-800 animate-pulse border border-red-300',
+        texto: '🚨 URGENTE'
       };
     }
-    
+
     // Para todos los demás casos, clasificar por antigüedad
     const antiguedadDias = this.calcularAntiguedadEnDias(asunto.fecha_recepcion);
-    
+
     if (antiguedadDias > 15) {
-      return { 
-        clase: 'bg-red-100 text-red-800 border border-red-300', 
-        texto: `🔴 CRÍTICO (${antiguedadDias}d)` 
+      return {
+        clase: 'bg-red-100 text-red-800 border border-red-300',
+        texto: `🔴 CRÍTICO (${antiguedadDias}d)`
       };
     }
     if (antiguedadDias >= 5 && antiguedadDias <= 15) {
-      return { 
-        clase: 'bg-yellow-100 text-yellow-800 border border-yellow-300', 
-        texto: `🟡 NORMAL (${antiguedadDias}d)` 
+      return {
+        clase: 'bg-yellow-100 text-yellow-800 border border-yellow-300',
+        texto: `🟡 NORMAL (${antiguedadDias}d)`
       };
     }
-    return { 
-      clase: 'bg-green-100 text-green-800 border border-green-300', 
-      texto: `🟢 RECIENTE (${antiguedadDias}d)` 
+    return {
+      clase: 'bg-green-100 text-green-800 border border-green-300',
+      texto: `🟢 RECIENTE (${antiguedadDias}d)`
     };
   }
 
   // 🏷️ BADGE SECUNDARIO PARA PLAZO (Diferenciador Visual)
   getBadgePlazo(asunto: tableAsuntosPorDictaminar): { clase: string, texto: string } | null {
     if (asunto.plazo_atencion && asunto.plazo_atencion > 0) {
-      return { 
-        clase: 'bg-orange-100 text-orange-800 border border-orange-300 ml-2', 
-        texto: `⏱️ PLAZO: ${asunto.plazo_atencion}d` 
+      return {
+        clase: 'bg-orange-100 text-orange-800 border border-orange-300 ml-2',
+        texto: `⏱️ PLAZO: ${asunto.plazo_atencion}d`
       };
     }
     return null;
@@ -657,7 +657,7 @@ buscador = new FormControl('');
   getPageNumbers(): number[] {
     const maxPagesToShow = 5;
     const pages: number[] = [];
-    
+
     if (this.totalPages <= maxPagesToShow) {
       // Si hay pocas páginas, mostrar todas
       for (let i = 1; i <= this.totalPages; i++) {
@@ -667,17 +667,17 @@ buscador = new FormControl('');
       // Si hay muchas páginas, mostrar un rango alrededor de la página actual
       let start = Math.max(1, this.currentPage - 2);
       let end = Math.min(this.totalPages, start + maxPagesToShow - 1);
-      
+
       // Ajustar si estamos cerca del final
       if (end === this.totalPages) {
         start = Math.max(1, end - maxPagesToShow + 1);
       }
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
     }
-    
+
     return pages;
   }
 
@@ -685,7 +685,7 @@ buscador = new FormControl('');
   getDescripcionDocumento(idDocumento: number): string {
     const documentos: { [key: number]: string } = {
       1: 'RESPUESTA',
-      2: 'REQUERIMIENTO', 
+      2: 'REQUERIMIENTO',
       3: 'REQUERIMIENTO Y RESPUESTA',
       4: 'SOLICITUD INTERNA',
       5: 'RESPUESTA INTERNA',
@@ -782,10 +782,10 @@ buscador = new FormControl('');
     if (tabla) {
       const scrollAmount = 200;
       const currentScroll = tabla.scrollLeft;
-      const newScroll = direccion === 'left' ? 
-        currentScroll - scrollAmount : 
+      const newScroll = direccion === 'left' ?
+        currentScroll - scrollAmount :
         currentScroll + scrollAmount;
-      
+
       tabla.scrollTo({
         left: newScroll,
         behavior: 'smooth'
@@ -813,14 +813,14 @@ buscador = new FormControl('');
   }
 
   // 🎯 MÉTODOS PARA HEADER INTELIGENTE Y AGRUPACIÓN
-  
+
   // 📊 CALCULAR CONTADORES HÍBRIDOS CON SUBTOTALES DE PLAZO
   calcularContadores(datos: tableAsuntosPorDictaminar[]): void {
     const urgentes = datos.filter(item => this.getPrioridad(item) === 4);
     const criticos = datos.filter(item => this.getPrioridad(item) === 3);
     const normales = datos.filter(item => this.getPrioridad(item) === 2);
     const recientes = datos.filter(item => this.getPrioridad(item) === 1);
-    
+
     this.contadores = {
       urgente: urgentes.length,
       critico: criticos.length,
@@ -838,11 +838,11 @@ buscador = new FormControl('');
   aplicarFiltroPrioridad(filtro: 'todos' | 'urgente' | 'critico' | 'normal' | 'reciente'): void {
     this.filtroActivo = filtro;
     this.currentPage = 1; // Resetear a primera página
-    
+
     // Aplicar filtro a los datos
     this.filteredData$.subscribe(data => {
       let datosFiltrados = data;
-      
+
       if (filtro !== 'todos') {
         const prioridadMap = {
           'urgente': 4,
@@ -850,12 +850,12 @@ buscador = new FormControl('');
           'normal': 2,
           'reciente': 1
         };
-        
-        datosFiltrados = data.filter(item => 
+
+        datosFiltrados = data.filter(item =>
           this.getPrioridad(item) === prioridadMap[filtro]
         );
       }
-      
+
       this.actualizarPaginacion(datosFiltrados);
     });
   }
@@ -914,18 +914,18 @@ buscador = new FormControl('');
   }
 
   // 🎨 OBTENER CONFIGURACIÓN DE PRIORIDAD
-  getConfiguracionPrioridad(tipo: string): { 
-    icono: string, 
-    color: string, 
-    titulo: string, 
+  getConfiguracionPrioridad(tipo: string): {
+    icono: string,
+    color: string,
+    titulo: string,
     descripcion: string,
     bgColor: string,
     borderColor: string
   } {
-         const configuraciones: { [key: string]: { 
-       icono: string, 
-       color: string, 
-       titulo: string, 
+         const configuraciones: { [key: string]: {
+       icono: string,
+       color: string,
+       titulo: string,
        descripcion: string,
        bgColor: string,
        borderColor: string
@@ -970,7 +970,7 @@ buscador = new FormControl('');
   // 🔄 TOGGLE VISTA AGRUPADA/LISTA
   toggleVistaAgrupacion(): void {
     this.mostrarAgrupacion = !this.mostrarAgrupacion;
-    
+
     if (!this.mostrarAgrupacion) {
       // Vista de lista normal
       this.filteredData$.subscribe(data => {
@@ -986,7 +986,7 @@ buscador = new FormControl('');
   }
 
   // ✅ MÉTODOS PARA FUNCIONALIDAD PDF VIEWER
-  
+
   /**
    * Abre el visualizador de PDF en modal
    * @param folio - Folio interno del asunto
@@ -995,28 +995,28 @@ buscador = new FormControl('');
   openPdfViewer(folio: string, path: number): void {
     console.log('🔍 [AsignacionPage] openPdfViewer INICIADO');
     console.log('🔍 [AsignacionPage] Parámetros recibidos:', { folio, path });
-    
+
     if (folio == null) {
       folio = "sinAsignar";
       console.log('🔍 [AsignacionPage] Folio era null, cambiado a:', folio);
     }
-    
+
     this.pdfCargando = true;
     this.pdfError = false;
     this.pdfUrl = null;
-    
+
     // Primero intentar listar archivos reales del folio
     console.log('🔍 [AsignacionPage] Intentando listar archivos reales para:', folio);
-    
+
     this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
       next: (archivos: any[]) => {
         console.log('🔍 [AsignacionPage] Archivos encontrados:', archivos);
-        
+
         if (archivos && archivos.length > 0) {
           // Usar el primer archivo PDF encontrado
           const primerArchivo = archivos[0];
           const nombreArchivo = primerArchivo.nombre || primerArchivo.name;
-          
+
           console.log('✅ [AsignacionPage] Usando archivo real encontrado:', nombreArchivo);
           this.cargarPdfDirecto(folio, nombreArchivo);
         } else {
@@ -1030,7 +1030,7 @@ buscador = new FormControl('');
       }
     });
   }
-  
+
   private probarArchivosPorNombre(folio: string, path: number): void {
     // Lista de nombres de archivo posibles a probar (basada en patrones reales del sistema)
     const nombresArchivoPosibles = [
@@ -1054,14 +1054,14 @@ buscador = new FormControl('');
       'GUIA_SINIESTRO_0163194079A.pdf',
       'Mnuta_akamba_v1_06022025.pdf'
     ];
-    
+
     console.log('🔍 [AsignacionPage] Probando nombres de archivo:', nombresArchivoPosibles);
     this.probarArchivos(folio, nombresArchivoPosibles, 0);
   }
-  
+
   private cargarPdfDirecto(folio: string, nombreArchivo: string): void {
     console.log(`🔍 [AsignacionPage] Cargando PDF directamente: ${nombreArchivo}`);
-    
+
     this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -1070,9 +1070,9 @@ buscador = new FormControl('');
           this.pdfCargando = false;
           return;
         }
-        
+
         console.log(`✅ [AsignacionPage] Archivo ${nombreArchivo} cargado exitosamente`);
-        
+
         try {
           const pdfSrc = `data:application/pdf;base64,${data}`;
           this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
@@ -1091,7 +1091,7 @@ buscador = new FormControl('');
       }
     });
   }
-  
+
   private probarArchivos(folio: string, nombresArchivos: string[], indice: number): void {
     if (indice >= nombresArchivos.length) {
       console.error('❌ [AsignacionPage] No se pudo encontrar ningún archivo PDF');
@@ -1099,10 +1099,10 @@ buscador = new FormControl('');
       this.pdfCargando = false;
       return;
     }
-    
+
     const nombreArchivo = nombresArchivos[indice];
     console.log(`🔍 [AsignacionPage] Probando archivo ${indice + 1}/${nombresArchivos.length}: ${nombreArchivo}`);
-    
+
     this.archivosAtencionService.obtenerPdf(folio, nombreArchivo).subscribe({
       next: (data: string) => {
         if (!data || data.trim() === '') {
@@ -1110,9 +1110,9 @@ buscador = new FormControl('');
           this.probarArchivos(folio, nombresArchivos, indice + 1);
           return;
         }
-        
+
         console.log(`✅ [AsignacionPage] Archivo ${nombreArchivo} encontrado y cargado exitosamente`);
-        
+
         try {
           const pdfSrc = `data:application/pdf;base64,${data}`;
           this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
@@ -1126,7 +1126,7 @@ buscador = new FormControl('');
       },
       error: (error: any) => {
         console.log(`⚠️ [AsignacionPage] Error con archivo ${nombreArchivo}:`, error.status);
-        
+
         // Si es un error 404, probar el siguiente archivo
         if (error.status === 404) {
           this.probarArchivos(folio, nombresArchivos, indice + 1);
@@ -1164,24 +1164,24 @@ buscador = new FormControl('');
    */
   private aplicarFiltroUrgentes(): void {
     console.log('🚨 [AsignacionPage] Aplicando filtro de asuntos urgentes');
-    
+
     // Esperar a que los datos se carguen
     setTimeout(() => {
       if (this.allData && this.allData.length > 0) {
         // Filtrar solo asuntos con plazo_atencion = 0 (urgentes)
-        const asuntosUrgentes = this.allData.filter(asunto => 
+        const asuntosUrgentes = this.allData.filter(asunto =>
           asunto.plazo_atencion === 0
         );
-        
+
         console.log(`🚨 [AsignacionPage] Encontrados ${asuntosUrgentes.length} asuntos urgentes`);
-        
+
         // Actualizar el servicio de búsqueda con los datos filtrados
         this.buscadorService.setData(asuntosUrgentes);
-        
+
         // Actualizar contadores y paginación
         this.calcularContadores(asuntosUrgentes);
         this.actualizarPaginacion(asuntosUrgentes);
-        
+
         // Mostrar mensaje informativo
         if (asuntosUrgentes.length === 0) {
           console.log('✅ [AsignacionPage] No hay asuntos urgentes en este momento');

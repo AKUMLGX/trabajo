@@ -14,7 +14,7 @@ export class DictaminadorBandejaService {
     const url = environment.baseUrl + environment.asuntosPorAsignarTable;
     const params: porAsignarRequest = {
       documento: 'REQUERIMIENTO',
-      asignados: true
+      estado_atencion: "EN DICTAMINACIÓN"
     };
     return this.http.post<tableAsuntosPorDictaminar[]>(url, params);
   }
@@ -30,7 +30,7 @@ export class DictaminadorBandejaService {
       id_asunto: idAsunto,
       aprobado: true // Este campo es ignorado en este endpoint, pero es requerido por la estructura
     };
-    
+
     // Configurar opciones para recibir respuesta como texto plano
     const httpOptions = {
       headers: new HttpHeaders({
@@ -39,7 +39,7 @@ export class DictaminadorBandejaService {
       }),
       responseType: 'text' as 'json' // Forzar el tipo de respuesta a texto
     };
-    
+
     return this.http.post<string>(url, params, httpOptions);
   }
-} 
+}
