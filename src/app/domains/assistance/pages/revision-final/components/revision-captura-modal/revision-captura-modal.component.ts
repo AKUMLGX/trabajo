@@ -16,6 +16,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { ArchivosAtencionService } from '../../../../../services/archivos-atencion.service';
 
 export interface AsuntoCapturado {
@@ -163,7 +164,8 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private sanitizer: DomSanitizer,
-    private archivosAtencionService: ArchivosAtencionService
+    private archivosAtencionService: ArchivosAtencionService,
+    private router: Router
   ) {
     this.correccionForm = this.crearFormulario();
   }
