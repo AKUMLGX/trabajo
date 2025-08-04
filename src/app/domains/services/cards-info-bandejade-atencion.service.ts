@@ -1,4 +1,4 @@
-import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
+import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal, AsuntoResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
 import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest } from './../interfaces/asuntoPorAtencion.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -12,6 +12,7 @@ import { AsignarAsuntoRequest } from '../interfaces/asiganar-AsuntoRequest.inter
 import { AsuntoPorAsigacionResponseEnTramite } from '../interfaces/asuntoPorAtencionResponse.interface';
 import { DownloadExcelCards } from '../interfaces/descargarExcelCards.interface';
 import { map } from 'rxjs/operators';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -70,9 +71,9 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
     return this.http.post<AsuntoPorAsigacionResponseParcial[]>(tarjetURL,data)
  }
 
- totalTableCard(data:AsuntoPorAtencionTotalRequest):Observable<AsuntoPorAsigacionResponseTotal[]>{
+ totalTableCard(data:AsuntoPorAtencionTotalRequest):Observable<AsuntoResponseTotal[]>{
   const tarjetURL = environment.baseUrl + environment.totalTableCard;
-  return this.http.post<AsuntoPorAsigacionResponseTotal[]>(tarjetURL,data)
+  return this.http.post<AsuntoResponseTotal[]>(tarjetURL,data)
  }
 
  descargarExcelEnTramite(data:AsuntoPorAtencionParcialRequest){

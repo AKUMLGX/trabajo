@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AsuntoPorAtencionTotalRequest } from '../../../../interfaces/asuntoPorAtencion.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../../services/cards-info-bandejade-atencion.service';
-import { AsuntoPorAsigacionResponseTotal } from './../../../../interfaces/asuntoPorAtencionResponse.interface';
+import { AsuntoPorAsigacionResponseTotal, AsuntoResponseTotal } from './../../../../interfaces/asuntoPorAtencionResponse.interface';
 import { BuscadorService } from '../../../../shared/services/buscador.service';
 import { Observable } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -14,8 +14,6 @@ import { ArchivosAtencionService } from '../../../../services/archivos-atencion.
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ModalService } from '../../../../shared/services/modal.service';
 
-
-
 @Component({
   selector: 'app-finalizado',
   standalone: true,
@@ -23,26 +21,6 @@ import { ModalService } from '../../../../shared/services/modal.service';
   templateUrl: './finalizado-page.component.html'
 })
 export class FinalizadoComponent implements OnInit {
-
-
-  tableRequest: AsuntoPorAtencionTotalRequest = {
-    atencion: "TOTAL",
-    documento: "REQUERIMIENTO",
-  }
-
-  tableResponse: AsuntoPorAsigacionResponseTotal[] = [];
-
-
-  //#region paginador
-  pages: AsuntoPorAsigacionResponseTotal[][] = []
-  itemsPerPage: number = 5;
-  pageSelected: number = 1;
-  labelsPaginator = {
-    previousLabel: 'Anterior',
-    nextLabel: 'Siguiente',
-  };
-  //#endregion
-
 
   constructor(
     private cards: CardsInfoBandejadeAtencionService,
@@ -56,6 +34,56 @@ export class FinalizadoComponent implements OnInit {
     this.tableTotal();
   }
 
+
+  //#region Request Table (Payload)
+  tableRequest: AsuntoPorAtencionTotalRequest = {
+    atencion: "TOTAL",
+    documento: "REQUERIMIENTO",
+  }
+  //#endregion
+
+  //#region Response Table
+  allData: AsuntoPorAsigacionResponseTotal[] = []
+  //#endregion
+
+  //#region paginador
+  pages: AsuntoPorAsigacionResponseTotal[][] = []
+  itemsPerPage: number = 5;
+  pageSelected: number = 1;
+  labelsPaginator = {
+    previousLabel: 'Anterior',
+    nextLabel: 'Siguiente',
+  };
+  //#endregion
+
+  //#region Table
+  tableTotal() {
+    this.cards.totalTableCard(this.tableRequest).subscribe({
+      next: (resp: AsuntoResponseTotal[]) => {
+        this.allData = resp.map(item => item.asunto.datos)
+        this.buscadorService.setDataMul(this.allData)
+        this.updateSearch();
+        let indexPage = 0;
+        let page: AsuntoPorAsigacionResponseTotal[] = [];
+        this.pages = []
+        this.pageSelected = 1;
+        this.allData.forEach((doc) => {
+          page.push(doc);
+          indexPage += 1;
+          if (indexPage === this.itemsPerPage) {
+            this.pages.push(page);
+            indexPage = 0
+            page = []
+          }
+        })
+        if (page.length !== 0) this.pages.push(page)
+
+      }
+    })
+  }
+  //#endregion
+
+  //#region Buscadores
   onSearchChange() {
     this.updateSearch();
   }
@@ -75,7 +103,6 @@ export class FinalizadoComponent implements OnInit {
     });
 
   }
-
   filterIndicador = (item: AsuntoPorAsigacionResponseTotal, terms: Record<string, string>): boolean => {
     const matchOficio = !terms['oficio'] || item.oficio?.toLowerCase().includes(terms['oficio'].toLowerCase());
     const matchCarpeta = !terms['carpeta'] || item.carpeta_investigacion?.toLowerCase().includes(terms['carpeta'].toLowerCase())
@@ -86,23 +113,17 @@ export class FinalizadoComponent implements OnInit {
     return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
   };
 
-
-
   onDearchChange(value: string) {
     this.buscadorService.setSearchTerm(value)
   }
 
-  // filterIndicador = (item: AsuntoPorAsigacionResponseTotal, term: string): boolean => {
-  //   return item.folio_interno?.toLocaleLowerCase().includes(term.toLocaleLowerCase())
-  // }
-
   asignarIndicador: Observable<AsuntoPorAsigacionResponseTotal[]> = new Observable;
   searchText: string = '';
-  // filteredData$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredData(this.filterIndicador);
 
   filteredDataMul$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredDataMul(this.filterIndicador);
+  //#endregion
 
-  allData: AsuntoPorAsigacionResponseTotal[] = []
+
 
   // ✅ Variables para funcionalidad PDF Viewer
   visualizarPdf: boolean = false;
@@ -110,36 +131,6 @@ export class FinalizadoComponent implements OnInit {
   pdfCargando: boolean = false;
   pdfError: boolean = false;
 
-  tableTotal() {
-    this.cards.totalTableCard(this.tableRequest).subscribe(res => {
-      // this.tableResponse=res;
-      this.allData = res;
-      this.buscadorService.setDataMul(this.allData)
-      this.updateSearch();
-      let indexPage = 0;
-      let page: AsuntoPorAsigacionResponseTotal[] = [];
-      this.pages = []
-      this.pageSelected = 1;
-      this.allData.forEach((doc) => {
-        page.push(doc);
-        indexPage += 1;
-        if (indexPage === this.itemsPerPage) {
-          this.pages.push(page);
-          indexPage = 0
-          page = []
-        }
-      })
-      if (page.length !== 0) this.pages.push(page)
-
-    })
-  }
-
-  // Obtener elementos para la página actual
-  get asuntosPaginados(): AsuntoPorAsigacionResponseTotal[] {
-    const inicio = (this.pageSelected - 1) * this.itemsPerPage;
-    const fin = inicio + this.itemsPerPage;
-    return this.allData.slice(inicio, fin);
-  }
 
   // Exportar a Excel
   exportarExcel() {
@@ -153,7 +144,7 @@ export class FinalizadoComponent implements OnInit {
    * @param folio - Folio interno del asunto
    * @param path - Path o número del archivo escaneado
    */
-  openPdfViewer(folio: string, path: number): void {
+  openPdfViewer(folio: string, path: string): void {
     console.log('🔍 [FinalizadoPage] openPdfViewer INICIADO');
     console.log('🔍 [FinalizadoPage] Parámetros recibidos:', { folio, path });
 
@@ -182,12 +173,12 @@ export class FinalizadoComponent implements OnInit {
           this.cargarPdfDirecto(folio, nombreArchivo);
         } else {
           console.log('⚠️ [FinalizadoPage] No se encontraron archivos, usando lista de nombres posibles');
-          this.probarArchivosPorNombre(folio, path);
+          // this.probarArchivosPorNombre(folio, path);
         }
       },
       error: (error: any) => {
         console.log('⚠️ [FinalizadoPage] Error al listar archivos, usando lista de nombres posibles:', error.status);
-        this.probarArchivosPorNombre(folio, path);
+        // this.probarArchivosPorNombre(folio, path);
       }
     });
   }
