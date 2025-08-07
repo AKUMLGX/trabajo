@@ -1,4 +1,4 @@
-import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal, AsuntoResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
+import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal, AsuntoReponseEnTramite, AsuntoResponseParcial, AsuntoResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
 import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest } from './../interfaces/asuntoPorAtencion.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -61,14 +61,14 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
   return this.http.post(tarjetURL,data,{responseType:"text"})
  }
 
- enTramiteTableCard(data:AsuntoPorAtencionEnTramiteRequest):Observable<AsuntoPorAsigacionResponseEnTramite[]>{
+ enTramiteTableCard(data:AsuntoPorAtencionEnTramiteRequest):Observable<AsuntoReponseEnTramite[]>{
     const tarejetURL= environment.baseUrl + environment.enTramiteTableCard;
-    return this.http.post<AsuntoPorAsigacionResponseEnTramite[]>(tarejetURL,data)
+    return this.http.post<AsuntoReponseEnTramite[]>(tarejetURL,data)
  }
 
- parcialTableCard(data:AsuntoPorAtencionParcialRequest):Observable<AsuntoPorAsigacionResponseParcial[]> {
+ parcialTableCard(data:AsuntoPorAtencionParcialRequest):Observable<AsuntoResponseParcial[]> {
     const tarjetURL = environment.baseUrl + environment.parcialTableCard;
-    return this.http.post<AsuntoPorAsigacionResponseParcial[]>(tarjetURL,data)
+    return this.http.post<AsuntoResponseParcial[]>(tarjetURL,data)
  }
 
  totalTableCard(data:AsuntoPorAtencionTotalRequest):Observable<AsuntoResponseTotal[]>{
