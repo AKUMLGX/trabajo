@@ -599,6 +599,17 @@
                 <mat-icon class="mr-2 text-sm">send</mat-icon>
                 <span>Enviar al Akamba 3</span>
               </button>
+
+              <!-- Nuevo botón para asignar directamente -->
+              <button class="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm transition-colors shadow-sm"
+                      (click)="asignarAsuntosDirectamente()"
+                      [disabled]="asuntosSeleccionados.length === 0"
+                      [class.opacity-50]="asuntosSeleccionados.length === 0"
+                      [class.cursor-not-allowed]="asuntosSeleccionados.length === 0"
+                      matTooltip="Asignar asuntos directamente a la administración sin requerir aprobación previa">
+                <mat-icon class="mr-2 text-sm">assignment_turned_in</mat-icon>
+                <span>Asignar Directamente</span>
+              </button>
             </div>
           </div>
         </div>
@@ -835,16 +846,26 @@
 
                   <!-- Acción (unificada) -->
                   <td class="w-32 px-6 py-5 text-center">
-                    <button class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105"
-                            [ngClass]="asunto.estado_revision === 'PENDIENTE' ? 
-                              'bg-gradient-to-r from-sky-500 to-sky-600 text-white hover:from-sky-600 hover:to-sky-700' : 
-                              'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700'"
-                            (click)="abrirModalRevisionCaptura(asunto)">
-                      <mat-icon class="text-lg">{{
-                          asunto.estado_revision === 'PENDIENTE' ? 'rate_review' : 'edit'
-                        }}</mat-icon>
-                        <span class="hidden sm:inline">{{asunto.estado_revision === 'PENDIENTE' ? 'Revisar' : 'Editar'}}</span>
-                    </button>
+                    <div class="flex items-center justify-center gap-2">
+                      <!-- Botón principal de revisar/editar -->
+                      <button class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105"
+                              [ngClass]="asunto.estado_revision === 'PENDIENTE' ? 
+                                'bg-gradient-to-r from-sky-500 to-sky-600 text-white hover:from-sky-600 hover:to-sky-700' : 
+                                'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700'"
+                              (click)="abrirModalRevisionCaptura(asunto)">
+                        <mat-icon class="text-lg">{{
+                            asunto.estado_revision === 'PENDIENTE' ? 'rate_review' : 'edit'
+                          }}</mat-icon>
+                          <span class="hidden sm:inline">{{asunto.estado_revision === 'PENDIENTE' ? 'Revisar' : 'Editar'}}</span>
+                      </button>
+                      
+                      <!-- Botón de asignación directa -->
+                      <button class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700"
+                              (click)="asignarAsuntoIndividual(asunto)"
+                              matTooltip="Asignar directamente sin aprobación">
+                        <mat-icon class="text-lg">assignment_turned_in</mat-icon>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>

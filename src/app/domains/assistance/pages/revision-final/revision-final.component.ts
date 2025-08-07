@@ -177,7 +177,7 @@ export class RevisionFinalComponent implements OnInit {
   }
 
   cargarDatosEjemplo(): void {
-    // Asuntos pendientes de revisión
+    // Datos de ejemplo para dictámenes (no para asuntos capturados)
     this.asuntosPendientes = [
       {
         id: '001',
@@ -290,48 +290,44 @@ export class RevisionFinalComponent implements OnInit {
     ];
   }
 
-  // 🆕 Método para cargar asuntos capturados DESDE EL ENDPOINT REAL
+  // Método para cargar asuntos capturados desde el endpoint
   cargarAsuntosCapturados(): void {
-    console.log('🔄 Iniciando carga de asuntos capturados desde endpoint...');
-    
     const request: AsuntoPorEstadoAtencionRequest = {
       documento: "REQUERIMIENTO",
       estado_atencion: "POR ASIGNAR"
     };
 
-    console.log('📤 Enviando request:', request);
-
     this.cardsService.getAsuntosPorEstadoAtencion(request).subscribe({
       next: (response) => {
-        console.log('✅ Response del backend:', response);
-        console.log('📊 Cantidad de asuntos recibidos:', response?.length || 0);
+        console.log(`✅ ${response?.length || 0} asuntos cargados`);
         
         if (response && response.length > 0) {
           // Transformar datos del backend al formato de la interfaz del frontend
           this.asuntosCapturados = response.map((item: AsuntoAsignacion, index: number) => {
-            console.log(`🔄 Procesando asunto ${index + 1}:`, item);
-            
             let asuntoData: any = {};
             
             // Extraer datos según la estructura anidada del backend
             if ('tipo' in item.asunto && 'datos' in item.asunto) {
               // Nueva estructura: { tipo: "Nuevo"|"Historico", datos: {...} }
               asuntoData = item.asunto.datos;
-              console.log(`📝 Asunto ${item.asunto.tipo} encontrado:`, asuntoData);
             } else if ('Nuevo' in item.asunto && item.asunto.Nuevo) {
               // Estructura legacy: { Nuevo: {...} }
               asuntoData = item.asunto.Nuevo;
-              console.log('📝 Asunto NUEVO encontrado:', asuntoData);
             } else if ('Historico' in item.asunto && item.asunto.Historico) {
               // Estructura legacy: { Historico: {...} }
               asuntoData = item.asunto.Historico;
-              console.log('📚 Asunto HISTORICO encontrado:', asuntoData);
             } else {
               console.warn('⚠️ Estructura de asunto no reconocida:', item.asunto);
               return null;
             }
 
-                        const asuntoCapturado: AsuntoCapturado = {
+            // Verificar que tenemos datos válidos
+            if (!asuntoData || !asuntoData.folio_interno) {
+              console.warn('⚠️ Asunto sin folio_interno, omitiendo:', asuntoData);
+              return null;
+            }
+
+            const asuntoCapturado: AsuntoCapturado = {
               id: `CAP-${asuntoData.id_asunto_nuevo || asuntoData.id_asunto_historico || index + 1}`,
               folio_interno: asuntoData.folio_interno || `N/A-${index + 1}`,
               folio: asuntoData.folio_interno || `N/A-${index + 1}`, // Para compatibilidad
@@ -354,155 +350,31 @@ export class RevisionFinalComponent implements OnInit {
               erroresDetectados: [] // Se puede implementar validación posterior
             };
 
-            // 🆕 GUARDAR EL JSON ORIGINAL como propiedad adicional
+            // GUARDAR EL JSON ORIGINAL como propiedad adicional
             (asuntoCapturado as any).jsonOriginal = item;
 
-            console.log('✅ Asunto transformado:', asuntoCapturado);
             return asuntoCapturado;
           }).filter((item): item is AsuntoCapturado => item !== null); // Filtrar elementos nulos con type guard
 
-          console.log('✅ Asuntos capturados cargados exitosamente:', this.asuntosCapturados.length);
           this.actualizarEstadisticas();
-          this.calcularPaginacion(); // 🆕 Calcular paginación
+          this.calcularPaginacion();
         } else {
-          console.log('⚠️ No se encontraron asuntos, cargando datos de ejemplo...');
-          this.cargarDatosEjemploCapturados();
-          this.calcularPaginacion(); // 🆕 Calcular paginación
+          console.log('⚠️ No se encontraron asuntos');
+          this.asuntosCapturados = [];
+          this.actualizarEstadisticas();
+          this.calcularPaginacion();
         }
       },
       error: (error) => {
-        console.error('❌ Error al cargar asuntos capturados:', error);
-        console.log('🔄 Cargando datos de ejemplo como fallback...');
-        
-        // Mostrar información específica del error
-        if (error.status === 401 || error.status === 403) {
-          console.log('🔐 Error de autenticación/autorización');
-        } else if (error.status === 404) {
-          console.log('🔍 Endpoint no encontrado');
-        } else if (error.status === 0) {
-          console.log('🌐 Error de conexión de red');
-        }
-        
-        // Fallback a datos de ejemplo
-        this.cargarDatosEjemploCapturados();
+        console.error('❌ Error al cargar asuntos:', error);
+        this.asuntosCapturados = [];
+        this.actualizarEstadisticas();
+        this.calcularPaginacion();
       }
     });
   }
 
-  // 🆕 Método separado para cargar datos de ejemplo
-  cargarDatosEjemploCapturados(): void {
-    console.log('📋 Cargando datos de ejemplo para asuntos capturados...');
-    this.asuntosCapturados = [
-      {
-        id: 'CAP-001',
-        folio_interno: 'EUACAPE-0030',
-        folio: 'EUACAPE-0030', // Para compatibilidad
-        fecha_captura: '2024-06-09T10:30:00',
-        fechaRecepcion: '2024-06-01',
-        usuario_captura: 'Ana Martínez (Akamba 1)',
-        estado_revision: 'PENDIENTE',
-        personaRelacionada: 'Elena Rodríguez Vega',
-        carpeta_investigacion: 'CI-78950',
-        autoridad_remitente: 'Fiscalía General de la República',
-        autoridad_solicitante: 'Fiscalía General de la República', // Para compatibilidad
-        descripcion: 'Investigación por evasión fiscal empresarial',
-        asunto: 'Investigación por evasión fiscal empresarial', // Para compatibilidad
-        oficio: 'OF-FGR-2024-0123',
-        plazoAtencion: '30 días',
-        prioridad: 'ALTA',
-        tieneDocumentos: true,
-        cantidadDocumentos: 3,
-        erroresDetectados: ['Falta número de RFC', 'Documento ilegible']
-      },
-      {
-        id: 'CAP-002',
-        folio_interno: 'EUACAPE-0031',
-        folio: 'EUACAPE-0031', // Para compatibilidad
-        fecha_captura: '2024-06-09T11:15:00',
-        fechaRecepcion: '2024-06-03',
-        usuario_captura: 'Carlos Ruiz (Akamba 1)',
-        estado_revision: 'APROBADO',
-        personaRelacionada: 'Roberto Sánchez López',
-        carpeta_investigacion: 'CI-78951',
-        autoridad_remitente: 'Procuraduría Fiscal',
-        autoridad_solicitante: 'Procuraduría Fiscal', // Para compatibilidad
-        descripcion: 'Análisis de omisión de ingresos por actividades comerciales',
-        asunto: 'Análisis de omisión de ingresos por actividades comerciales', // Para compatibilidad
-        oficio: 'PF-2024-0456',
-        plazoAtencion: '15 días',
-        prioridad: 'MEDIA',
-        tieneDocumentos: true,
-        cantidadDocumentos: 5,
-        erroresDetectados: []
-      },
-      {
-        id: 'CAP-003',
-        folio_interno: 'EUACAPE-0032',
-        folio: 'EUACAPE-0032', // Para compatibilidad
-        fecha_captura: '2024-06-08T14:20:00',
-        fechaRecepcion: '2024-06-05',
-        usuario_captura: 'María Fernández (Akamba 1)',
-        estado_revision: 'PENDIENTE',
-        personaRelacionada: 'Lucía Morales García',
-        carpeta_investigacion: 'CI-78952',
-        autoridad_remitente: 'Fiscalía General de la República',
-        autoridad_solicitante: 'Fiscalía General de la República', // Para compatibilidad
-        descripcion: 'Investigación por defraudación fiscal mediante facturas falsas',
-        asunto: 'Investigación por defraudación fiscal mediante facturas falsas', // Para compatibilidad
-        oficio: 'FGR-DEF-2024-789',
-        plazoAtencion: '20 días',
-        prioridad: 'ALTA',
-        tieneDocumentos: false,
-        cantidadDocumentos: 0,
-        erroresDetectados: []
-      },
-      {
-        id: 'CAP-004',
-        folio_interno: 'EUACAPE-0033',
-        folio: 'EUACAPE-0033', // Para compatibilidad
-        fecha_captura: '2024-06-09T09:45:00',
-        fechaRecepcion: '2024-06-07',
-        usuario_captura: 'Luis García (Akamba 1)',
-        estado_revision: 'APROBADO',
-        personaRelacionada: 'Fernando Jiménez Cruz',
-        carpeta_investigacion: 'CI-78953',
-        autoridad_remitente: 'Aduanas',
-        autoridad_solicitante: 'Aduanas', // Para compatibilidad
-        descripcion: 'Investigación por contrabando de mercancías',
-        asunto: 'Investigación por contrabando de mercancías', // Para compatibilidad
-        oficio: 'ADU-2024-567',
-        plazoAtencion: '45 días',
-        prioridad: 'BAJA',
-        tieneDocumentos: true,
-        cantidadDocumentos: 2,
-        erroresDetectados: []
-      },
-      {
-        id: 'CAP-005',
-        folio_interno: 'EUACAPE-0034',
-        folio: 'EUACAPE-0034', // Para compatibilidad
-        fecha_captura: '2024-06-08T16:10:00',
-        fechaRecepcion: '2024-06-02',
-        usuario_captura: 'Sofía Herrera (Akamba 1)',
-        estado_revision: 'PENDIENTE',
-        personaRelacionada: 'Patricia Torres Ramírez',
-        carpeta_investigacion: 'CI-78954',
-        autoridad_remitente: 'UIF',
-        autoridad_solicitante: 'UIF', // Para compatibilidad
-        descripcion: 'Análisis de operaciones sospechosas de lavado de dinero',
-        asunto: 'Análisis de operaciones sospechosas de lavado de dinero', // Para compatibilidad
-        oficio: 'UIF-2024-890',
-        plazoAtencion: '10 días',
-        prioridad: 'ALTA',
-        tieneDocumentos: true,
-        cantidadDocumentos: 8,
-        erroresDetectados: ['Fecha incorrecta', 'Falta firma digital']
-      }
-    ];
-    
-    console.log('✅ Datos de ejemplo cargados:', this.asuntosCapturados.length, 'asuntos');
-    this.actualizarEstadisticas();
-  }
+
 
   actualizarEstadisticas(): void {
     // 🆕 Calcular estadísticas para asuntos capturados
@@ -841,6 +713,91 @@ export class RevisionFinalComponent implements OnInit {
       
       // En un escenario real, estos asuntos se eliminarían de la lista o cambiarían de estado
     }
+  }
+
+  /**
+   * Envía asuntos seleccionados directamente a la administración sin aprobación previa
+   * Usa el endpoint /asunto/atencion/asignar_administracion
+   */
+  asignarAsuntosDirectamente(): void {
+    if (this.asuntosSeleccionados.length === 0) {
+      alert('Por favor seleccione al menos un asunto para asignar');
+      return;
+    }
+
+    const asuntosParaAsignar = this.asuntosCapturados.filter(a => 
+      this.asuntosSeleccionados.includes(a.id)
+    );
+
+    const confirmacion = confirm(
+      `¿Está seguro de asignar ${asuntosParaAsignar.length} asunto(s) directamente a la administración?\n\n` +
+      `Nota: Los asuntos se enviarán sin requerir aprobación previa.`
+    );
+
+    if (confirmacion) {
+      let asignacionesExitosas = 0;
+      let errores: string[] = [];
+
+      // Procesar cada asunto seleccionado
+      asuntosParaAsignar.forEach(asunto => {
+        // Recuperar el JSON original que guardamos anteriormente
+        const jsonOriginal = (asunto as any).jsonOriginal;
+        
+        if (jsonOriginal) {
+          // Preparar el objeto para el endpoint según la estructura requerida
+          const asuntoParaEnviar = {
+            asunto: jsonOriginal.asunto,
+            tipo_asunto: jsonOriginal.tipo_asunto.toLowerCase(), // Convertir a minúsculas
+            rfc_asignado: jsonOriginal.rfc_asignado || "", // DEBE ser string, no null
+            id_asignacion: jsonOriginal.id_asignacion || null
+          };
+
+          console.log('📤 Enviando asunto para asignación:', asuntoParaEnviar);
+
+          this.cardsService.asignarAsuntoAdministracion(asuntoParaEnviar).subscribe({
+            next: (response) => {
+              console.log('✅ Asunto asignado exitosamente:', response);
+              asignacionesExitosas++;
+              
+              // Si es el último asunto procesado, mostrar resultado
+              if (asignacionesExitosas + errores.length === asuntosParaAsignar.length) {
+                this.mostrarResultadoAsignacion(asignacionesExitosas, errores);
+              }
+            },
+            error: (error) => {
+              console.error('❌ Error al asignar asunto:', error);
+              errores.push(`${asunto.folio_interno}: ${error.error || 'Error desconocido'}`);
+              
+              // Si es el último asunto procesado, mostrar resultado
+              if (asignacionesExitosas + errores.length === asuntosParaAsignar.length) {
+                this.mostrarResultadoAsignacion(asignacionesExitosas, errores);
+              }
+            }
+          });
+        } else {
+          console.error('⚠️ No se encontró JSON original para el asunto:', asunto);
+          errores.push(`${asunto.folio_interno}: Datos incompletos`);
+        }
+      });
+    }
+  }
+
+  /**
+   * Muestra el resultado de la asignación masiva
+   */
+  private mostrarResultadoAsignacion(exitosas: number, errores: string[]): void {
+    let mensaje = `✅ Se asignaron ${exitosas} asunto(s) exitosamente.`;
+    
+    if (errores.length > 0) {
+      mensaje += `\n\n❌ Errores en ${errores.length} asunto(s):\n`;
+      mensaje += errores.join('\n');
+    }
+    
+    alert(mensaje);
+    
+    // Limpiar selección y recargar datos
+    this.asuntosSeleccionados = [];
+    this.cargarAsuntosCapturados();
   }
 
   /**
@@ -1201,6 +1158,55 @@ export class RevisionFinalComponent implements OnInit {
         }
       }
     });
+  }
+
+  /**
+   * Asigna un asunto individual directamente a la administración
+   * sin requerir aprobación previa
+   */
+  asignarAsuntoIndividual(asunto: AsuntoCapturado): void {
+    const confirmacion = confirm(
+      `¿Está seguro de asignar el asunto ${asunto.folio_interno} directamente a la administración?\n\n` +
+      `Nota: El asunto se enviará sin requerir aprobación previa.`
+    );
+
+    if (confirmacion) {
+      let asuntoParaEnviar: any;
+      
+      // Recuperar el JSON original
+      const jsonOriginal = (asunto as any).jsonOriginal;
+      
+      if (jsonOriginal) {
+        // IMPORTANTE: El backend espera rfc_asignado como String, NO puede ser null
+        asuntoParaEnviar = {
+          asunto: jsonOriginal.asunto,
+          tipo_asunto: jsonOriginal.tipo_asunto.toLowerCase(), // Convertir a minúsculas
+          rfc_asignado: jsonOriginal.rfc_asignado || "", // DEBE ser string, usar vacío si es null
+          id_asignacion: jsonOriginal.id_asignacion || null
+        };
+
+        console.log('📤 Enviando asunto:', asuntoParaEnviar);
+      } else {
+        console.error('❌ No hay JSON original disponible');
+        alert('⚠️ No se puede asignar este asunto porque no contiene los datos necesarios del servidor.');
+        return;
+      }
+
+      // Enviar el asunto (ya sea con JSON original o temporal)
+      this.cardsService.asignarAsuntoAdministracion(asuntoParaEnviar).subscribe({
+        next: (response) => {
+          console.log('✅ Asunto asignado exitosamente:', response);
+          alert(`✅ El asunto ${asunto.folio_interno} fue asignado exitosamente.`);
+          
+          // Recargar la lista
+          this.cargarAsuntosCapturados();
+        },
+        error: (error) => {
+          console.error('❌ Error al asignar asunto:', error);
+          alert(`❌ Error al asignar el asunto: ${error.error || 'Error desconocido'}`);
+        }
+      });
+    }
   }
 
   /**
