@@ -146,4 +146,10 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
    return this.http.post<AsuntoPorEstadoAtencionResponse>(tarjetURL, data);
  }
 
+ // Nuevo método para asignar asuntos a administración sin aprobación previa
+ asignarAsuntoAdministracion(asunto: any): Observable<string> {
+   const tarjetURL = environment.baseUrl + environment.asignarAdministracion;
+   return this.http.post(tarjetURL, asunto, { responseType: 'text' });
+ }
+
 }
