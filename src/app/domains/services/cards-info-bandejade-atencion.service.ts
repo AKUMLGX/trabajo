@@ -1,5 +1,5 @@
-import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
-import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest, AsuntoPorEstadoAtencionRequest, AsuntoPorEstadoAtencionResponse } from './../interfaces/asuntoPorAtencion.interface';
+import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal, AsuntoReponseEnTramite, AsuntoResponseParcial, AsuntoResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
+import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest } from './../interfaces/asuntoPorAtencion.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -12,6 +12,7 @@ import { AsignarAsuntoRequest } from '../interfaces/asiganar-AsuntoRequest.inter
 import { AsuntoPorAsigacionResponseEnTramite } from '../interfaces/asuntoPorAtencionResponse.interface';
 import { DownloadExcelCards } from '../interfaces/descargarExcelCards.interface';
 import { map } from 'rxjs/operators';
+import { AsuntoResponse } from '../interfaces/ausuntos-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -60,19 +61,19 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
   return this.http.post(tarjetURL,data,{responseType:"text"})
  }
 
- enTramiteTableCard(data:AsuntoPorAtencionEnTramiteRequest):Observable<AsuntoPorAsigacionResponseEnTramite[]>{
+ enTramiteTableCard(data:AsuntoPorAtencionEnTramiteRequest):Observable<AsuntoReponseEnTramite[]>{
     const tarejetURL= environment.baseUrl + environment.enTramiteTableCard;
-    return this.http.post<AsuntoPorAsigacionResponseEnTramite[]>(tarejetURL,data)
+    return this.http.post<AsuntoReponseEnTramite[]>(tarejetURL,data)
  }
 
- parcialTableCard(data:AsuntoPorAtencionParcialRequest):Observable<AsuntoPorAsigacionResponseParcial[]> {
+ parcialTableCard(data:AsuntoPorAtencionParcialRequest):Observable<AsuntoResponseParcial[]> {
     const tarjetURL = environment.baseUrl + environment.parcialTableCard;
-    return this.http.post<AsuntoPorAsigacionResponseParcial[]>(tarjetURL,data)
+    return this.http.post<AsuntoResponseParcial[]>(tarjetURL,data)
  }
 
- totalTableCard(data:AsuntoPorAtencionTotalRequest):Observable<AsuntoPorAsigacionResponseTotal[]>{
+ totalTableCard(data:AsuntoPorAtencionTotalRequest):Observable<AsuntoResponseTotal[]>{
   const tarjetURL = environment.baseUrl + environment.totalTableCard;
-  return this.http.post<AsuntoPorAsigacionResponseTotal[]>(tarjetURL,data)
+  return this.http.post<AsuntoResponseTotal[]>(tarjetURL,data)
  }
 
  descargarExcelEnTramite(data:AsuntoPorAtencionParcialRequest){

@@ -18,11 +18,13 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-center mb-4">
-      <button (click)="showAgain()" class="modal-left-button mr-10" >
-        Cerrar
-      </button>
-    </div>
+     @if(mostrarBotonCerrar){
+   <div class="flex justify-center mb-4">
+        <button (click)="showAgain()" class="modal-left-button mr-10" >
+          Cerrar
+        </button>
+      </div>
+     }
   </div>
 </section>
 }
