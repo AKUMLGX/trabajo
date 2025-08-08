@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -36,8 +36,8 @@ interface Asunto {
     MatProgressBarModule
   ]
 })
-export class AtenderAsuntoComponent {
-  @Input() visible: boolean = false;
+export class AtenderAsuntoComponent implements OnChanges {
+  @Input() visible = false;
   @Input() asunto: Asunto | null = null;
   @Output() cerrar = new EventEmitter<void>();
   @Output() guardar = new EventEmitter<any>();

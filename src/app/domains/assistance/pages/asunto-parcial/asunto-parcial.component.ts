@@ -18,12 +18,12 @@ interface Documento {
   styleUrls: ['./asunto-parcial.component.css']
 })
 export class AsuntoParcialComponent implements OnInit {
-  asuntoId: string = '';
+  asuntoId = '';
   
   // Variables para el visor de PDF
-  mostrarPDFViewer: boolean = false;
+  mostrarPDFViewer = false;
   pdfUrl: SafeResourceUrl | null = null;
-  pdfTitulo: string = '';
+  pdfTitulo = '';
   
   // Información del asunto
   asunto = {

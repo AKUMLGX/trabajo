@@ -36,20 +36,20 @@ export class EditTackingTableComponent implements OnInit {
     private modalService: ModalService,
 
   ) { }
-  botonHabilitado: boolean = false
-  mostrarTabla: boolean = true
+  botonHabilitado = false
+  mostrarTabla = true
   @Output() showTable = new EventEmitter<void>()
   @Input() documents!: Asunto
 
   carpetaResultList: Asunto[] = [];
 
-  isavailable: boolean = false;
+  isavailable = false;
 
-  showInput: boolean = false;
+  showInput = false;
 
-  isTouched: boolean = false;
+  isTouched = false;
 
-  documentoEscaneadoNameTracking: string = "";
+  documentoEscaneadoNameTracking = "";
 
   docuemntoEcaneadoFileTracking!: File;
 
@@ -161,7 +161,7 @@ export class EditTackingTableComponent implements OnInit {
 
 
 
-  getAtencion(atencion: String | null): number | null {
+  getAtencion(atencion: string | null): number | null {
     if (atencion !== null) {
       if (atencion === "TOTAL") {
         return 1;
@@ -178,7 +178,7 @@ export class EditTackingTableComponent implements OnInit {
     return null
   }
 
-  getAdministracion(administracion: String | null): number | null {
+  getAdministracion(administracion: string | null): number | null {
     if (administracion === "a_1") {
       return 1;
     } else if (administracion === "a_2") {
@@ -193,7 +193,7 @@ export class EditTackingTableComponent implements OnInit {
     return null
   }
 
-  getDocumento(documento: String | null): number | null {
+  getDocumento(documento: string | null): number | null {
     if (documento !== null) {
       if (documento === "REQUERIMIENTO") {
         return 2;
@@ -210,7 +210,7 @@ export class EditTackingTableComponent implements OnInit {
     return null
   }
 
-  getTipo(tipo: String | null): number | null {
+  getTipo(tipo: string | null): number | null {
     if (tipo !== null) {
       if (tipo === "SEGUNDA PIEZA") {
         return 1;
@@ -435,10 +435,10 @@ getToday(): string {
   // }
 
   getRol(): string {
-    let sessionInfo = localStorage.getItem('sessionInfo');
+    const sessionInfo = localStorage.getItem('sessionInfo');
     if (sessionInfo !== null) {
-      let parse = JSON.parse(sessionInfo);
-      let rol = parse.roles;
+      const parse = JSON.parse(sessionInfo);
+      const rol = parse.roles;
       return rol;
     }
     return "";

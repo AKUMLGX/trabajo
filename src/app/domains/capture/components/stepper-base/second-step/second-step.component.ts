@@ -25,9 +25,9 @@ export class SecondStepComponent {
 
   selectedOption: any;
 
-  enabledButton: boolean = false;
+  enabledButton = false;
 
-  isSecondStepPressed: boolean = false;
+  isSecondStepPressed = false;
 
   @Output() selectedOptionEmitter = new EventEmitter();
 

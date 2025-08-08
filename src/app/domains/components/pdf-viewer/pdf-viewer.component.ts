@@ -11,8 +11,8 @@ import { AsuntoService } from '../../services/asunto.service';
   templateUrl: './pdf-viewer.component.html',
   styleUrl: './pdf-viewer.component.css',
 })
-export class PdfViewerComponent {
-  pdfUrl: string = '';
+export class PdfViewerComponent implements OnInit {
+  pdfUrl = '';
 
   @Output() showTablePDF = new EventEmitter<void>()
 

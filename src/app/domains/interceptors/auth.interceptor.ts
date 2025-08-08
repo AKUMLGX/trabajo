@@ -11,10 +11,10 @@ export const authInterceptor: HttpInterceptorFn = (
   request: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
-  let sessionInfo = localStorage.getItem('sessionInfo');
+  const sessionInfo = localStorage.getItem('sessionInfo');
   if (sessionInfo !== null) {
-    let parse = JSON.parse(sessionInfo);
-    let token = parse.token;
+    const parse = JSON.parse(sessionInfo);
+    const token = parse.token;
     if (token) {
       request = request.clone({
         setHeaders: {

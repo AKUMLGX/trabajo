@@ -1,4 +1,4 @@
-import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, effect, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, effect, ElementRef, inject, ViewChild, OnInit } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -37,43 +37,43 @@ import { SharedDataFormService } from '../../../shared/services/shared-data-form
 
 
 
-export class TrackingTableComponent {
+export class TrackingTableComponent implements OnInit {
   public documents: Asunto[] = [];
   public pages: Asunto[][] = [];
 
   public description: Asunto[] = []
 
-  public pageSelected: number = 1;
+  public pageSelected = 1;
 
-  public itemsPerPage: number = 20;
+  public itemsPerPage = 20;
 
-  public tipoBusqueda: string = '';
+  public tipoBusqueda = '';
 
-  public newTableIsRendered: boolean = false;
+  public newTableIsRendered = false;
 
-  public pdfIsRendered: boolean = false;
+  public pdfIsRendered = false;
 
-  public formUpdateIsRendered: boolean = false;
+  public formUpdateIsRendered = false;
 
-  public fileIsOpen: boolean = false;
+  public fileIsOpen = false;
 
-  public visualizarPdf: boolean = false;
+  public visualizarPdf = false;
 
-  public visualizarMsg: boolean = false;
+  public visualizarMsg = false;
 
-  editar: boolean = false
+  editar = false
 
-  isExpanded: boolean = false;
+  isExpanded = false;
 
-  index: number = 0;
+  index = 0;
 
 
 
   filaSeleccionada: any
 
-  public mostrarTabla: boolean = false;
+  public mostrarTabla = false;
 
-  clickclose: boolean = false;
+  clickclose = false;
 
   public labels = {
     previousLabel: 'Anterior',
@@ -82,13 +82,13 @@ export class TrackingTableComponent {
   @ViewChild("edit-tacking-table") miComponente!: ElementRef;
 
 
-  folio_interno: string= ""
-  carpeta_investigacion: string= ""
-  oficio: string= ""
-  autoridad_remitente: string= ""
-  persona_relacionada: string= ""
-  volante_jefatura: string= ""
-  turno_jefatura: string= ""
+  folio_interno= ""
+  carpeta_investigacion= ""
+  oficio= ""
+  autoridad_remitente= ""
+  persona_relacionada= ""
+  volante_jefatura= ""
+  turno_jefatura= ""
 
   constructor(
     private asuntoService: AsuntoService,
@@ -184,29 +184,29 @@ export class TrackingTableComponent {
 
 
   getRol(): string {
-    let sessionInfo = localStorage.getItem('sessionInfo');
+    const sessionInfo = localStorage.getItem('sessionInfo');
     if (sessionInfo !== null) {
-      let parse = JSON.parse(sessionInfo);
-      let rol = parse.roles;
+      const parse = JSON.parse(sessionInfo);
+      const rol = parse.roles;
       return rol;
     }
     return "";
   }
 
 
-  getFileName(path: String): string {
-    let split: string[] = path.replace('\\\\', '\\').split('\\');
-    let name = split.pop()?.replaceAll(' ', '_');
+  getFileName(path: string): string {
+    const split: string[] = path.replace('\\\\', '\\').split('\\');
+    const name = split.pop()?.replaceAll(' ', '_');
     return name != undefined ? name.replaceAll('#', '') : '';
   }
 
-  getExtension(route: String): string | undefined {
-    let name = this.getFileName(route);
+  getExtension(route: string): string | undefined {
+    const name = this.getFileName(route);
     return name.split('.').pop()?.toLocaleLowerCase();
   }
 
-  openPdfViewer(folio: String, path: String): void {
-    let fileName = this.getFileName(path).replaceAll(' ', '_');
+  openPdfViewer(folio: string, path: string): void {
+    const fileName = this.getFileName(path).replaceAll(' ', '_');
     if (folio === null) folio = "sinasignar";
     this.fileService.updatePdfFile(folio.toString(), fileName);
     this.asuntoService.openPdf();
@@ -215,8 +215,8 @@ export class TrackingTableComponent {
     this.editar = false;
   }
 
-  openMsgReader(folio: String, path: String): void {
-    let fileName = this.getFileName(path).replaceAll(' ', '_');
+  openMsgReader(folio: string, path: string): void {
+    const fileName = this.getFileName(path).replaceAll(' ', '_');
     this.fileService.updateMsgFile(folio.toString(), fileName);
     this.asuntoService.openMsg();
     this.visualizarMsg = true;
@@ -224,8 +224,8 @@ export class TrackingTableComponent {
     this.editar = false
   }
 
-  printPdf(folio: String, path: String): void {
-    let fileName = this.getFileName(path);
+  printPdf(folio: string, path: string): void {
+    const fileName = this.getFileName(path);
     this.fileService.printPdf(folio.toString(), fileName);
   }
 

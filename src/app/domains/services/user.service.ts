@@ -419,7 +419,7 @@ export class UserService {
    * Obtiene la descripción de la administración basada en el número
    */
   private obtenerDescripcionAdministracion(numero: number): string {
-    const administraciones: { [key: number]: string } = {
+    const administraciones: Record<number, string> = {
       1: 'Administración Central de Servicios Tributarios al Contribuyente',
       2: 'Administración Central de Recaudación',
       3: 'Administración Central de Fiscalización',

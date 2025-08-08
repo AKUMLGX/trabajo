@@ -15,26 +15,26 @@ import { ParametrosAcuse, ParametrosAcuseFolio } from '../interfaces/acuses';
 export class AsuntoService {
   public documentList: Asunto[] = [];
 
-  documentsUpdated: EventEmitter<Asunto[]> = new EventEmitter();
+  documentsUpdated = new EventEmitter<Asunto[]>();
 
-  fileIsOpenUpdated: EventEmitter<boolean> = new EventEmitter();
+  fileIsOpenUpdated = new EventEmitter<boolean>();
 
-  public fileIsOpen: boolean = false;
+  public fileIsOpen = false;
 
   public tipoBusqueda = '';
   constructor(private httpClient: HttpClient) { }
 
   filterDocuments(consultForm: FormGroup): void {
     this.tipoBusqueda = consultForm.get('tipoBusqueda')?.value;
-    let folioInterno = consultForm.get('folioInterno')?.value;
-    let carpetaInvertigacion = consultForm.get('carpetaInvertigacion')?.value;
-    let oficio = consultForm.get('oficio')?.value;
-    let autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
-    let personaRelacionada = consultForm.get('personaRelacionada')?.value;
-    let volante_jefatura = consultForm.get('volante_jefatura')?.value;
-    let turno_jefatura = consultForm.get('turno_jefatura')?.value;
-    let url = environment.baseUrl + environment.asuntoEndpointC;
-    let params = {
+    const folioInterno = consultForm.get('folioInterno')?.value;
+    const carpetaInvertigacion = consultForm.get('carpetaInvertigacion')?.value;
+    const oficio = consultForm.get('oficio')?.value;
+    const autoridadRemitente = consultForm.get('autoridadRemitente')?.value;
+    const personaRelacionada = consultForm.get('personaRelacionada')?.value;
+    const volante_jefatura = consultForm.get('volante_jefatura')?.value;
+    const turno_jefatura = consultForm.get('turno_jefatura')?.value;
+    const url = environment.baseUrl + environment.asuntoEndpointC;
+    const params = {
       folio_interno: folioInterno,
       carpeta_investigacion: carpetaInvertigacion,
       oficio: oficio,
@@ -58,8 +58,8 @@ export class AsuntoService {
     volante_jefatura: string,
     turno_jefatura: string,
   ) {
-    let url = environment.baseUrl + environment.asuntoDescargaTablaBusqueda;
-    let params = {
+    const url = environment.baseUrl + environment.asuntoDescargaTablaBusqueda;
+    const params = {
       folio_interno: folio_interno,
       carpeta_investigacion: carpeta_investigacion,
       oficio: oficio,
@@ -74,7 +74,7 @@ export class AsuntoService {
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
@@ -85,8 +85,8 @@ export class AsuntoService {
   }
 
   searchBarCoincidencesIlike(consulta: string, campo: string): Observable<string[]> {
-    let url = environment.baseUrl + environment.asuntoEndpoint;
-    let params = { [campo]: consulta };
+    const url = environment.baseUrl + environment.asuntoEndpoint;
+    const params = { [campo]: consulta };
 
     return this.httpClient.get<any[]>(url, { params }).pipe(
       map((data: any[]) => {
@@ -95,8 +95,8 @@ export class AsuntoService {
     );
   }
   searchBarCoincidencesIlikeAsunto(consulta: string, campo: string): Observable<Asunto[]> {
-    let url = environment.baseUrl + environment.asuntoEndpoint;
-    let params = { [campo]: consulta };
+    const url = environment.baseUrl + environment.asuntoEndpoint;
+    const params = { [campo]: consulta };
     return this.httpClient.get<Asunto[]>(
       url, { params: params });
 
@@ -106,14 +106,14 @@ export class AsuntoService {
     userInputForm: FormGroup
   ): Observable<Asunto[]> {
     this.tipoBusqueda = searchEntryType;
-    let userInput = userInputForm.get('userInput')?.value;
-    let carpetaInvestigacion: string = '';
-    let personaRelacionada: string = '';
-    let folioInterno: string = '';
-    let oficio: string = '';
-    let autoridadRemitente: string = '';
-    let volante_jefatura: string = '';
-    let turno_jefatura: string = '';
+    const userInput = userInputForm.get('userInput')?.value;
+    let carpetaInvestigacion = '';
+    let personaRelacionada = '';
+    let folioInterno = '';
+    let oficio = '';
+    const autoridadRemitente = '';
+    const volante_jefatura = '';
+    let turno_jefatura = '';
     switch (this.tipoBusqueda) {
       case "CARPETA DE INVESTIGACIÓN": {
         carpetaInvestigacion = userInput;
@@ -137,8 +137,8 @@ export class AsuntoService {
       }
     }
 
-    let url = environment.baseUrl + environment.asuntoEndpoint;
-    let params = {
+    const url = environment.baseUrl + environment.asuntoEndpoint;
+    const params = {
       folio_interno: folioInterno,
       carpeta_investigacion: carpetaInvestigacion,
       oficio: oficio,
@@ -155,9 +155,9 @@ export class AsuntoService {
 
   checkNameCarpetaInvestigacion(
     userInputForm: FormGroup): Observable<Asunto[]> {
-    let userInput = userInputForm.get('carpetaInvestigacion')?.value
-    let url = environment.baseUrl + environment.asuntoEndpoint
-    let params = {
+    const userInput = userInputForm.get('carpetaInvestigacion')?.value
+    const url = environment.baseUrl + environment.asuntoEndpoint
+    const params = {
       carpeta_investigacion: userInput,
     }
     return this.httpClient.get<Asunto[]>(
@@ -167,9 +167,9 @@ export class AsuntoService {
 
   checkNameCarpetaInvestigacionUpdate(
     userInputForm: FormGroup): Observable<Asunto[]> {
-    let userInput = userInputForm.get('carpeta_investigacion')?.value
-    let url = environment.baseUrl + environment.asuntoEndpoint
-    let params = {
+    const userInput = userInputForm.get('carpeta_investigacion')?.value
+    const url = environment.baseUrl + environment.asuntoEndpoint
+    const params = {
       carpeta_investigacion: userInput,
     }
     return this.httpClient.get<Asunto[]>(
@@ -178,9 +178,9 @@ export class AsuntoService {
   }
 
   generateAcuse(date: string, dateFinal: string, administracion: string | null, formato: string | null): void {
-    let url = environment.baseUrl + environment.generateAcuse;
+    const url = environment.baseUrl + environment.generateAcuse;
     if (formato === null) formato = 'pdf';
-    let params: ParametrosAcuse = {
+    const params: ParametrosAcuse = {
       fecha_inicial: date,
       administracion: administracion,
       formato: formato,
@@ -211,9 +211,9 @@ export class AsuntoService {
 
 
   generateAcuseFolioScan(folio_inicial: number, folio_final: number, administracion: string | null, formato: string | null) {
-    let url = environment.baseUrl + environment.generateAcuse;
+    const url = environment.baseUrl + environment.generateAcuse;
     if (formato === null) formato = 'pdf';
-    let params: ParametrosAcuseFolio = {
+    const params: ParametrosAcuseFolio = {
       folio_inicial: folio_inicial,
       folio_final: folio_final,
       administracion: administracion,

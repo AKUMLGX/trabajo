@@ -91,10 +91,10 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   private dialogRef: MatDialogRef<any> | null = null;
 
   isExpanded = true;
-  showSubmenu: boolean = false;
+  showSubmenu = false;
   isShowing = false;
-  showSubSubMenu: boolean = false;
-  isLogged: boolean = false;
+  showSubSubMenu = false;
+  isLogged = false;
   public token: any;
   public isOpen = false;
   public user: any;
@@ -106,27 +106,27 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   public isExpandedCerrar = false;
 
   // Información del usuario para el modal
-  nombreUsuario: string = '';
-  puestoUsuario: string = '';
-  rfcUsuario: string = '';
-  correoUsuario: string = '';
-  numeroAdministracion: string = '';
-  numeroEmpleado: string = '';
-  fechaRegistro: string = '';
-  rolUsuario: string = '';
+  nombreUsuario = '';
+  puestoUsuario = '';
+  rfcUsuario = '';
+  correoUsuario = '';
+  numeroAdministracion = '';
+  numeroEmpleado = '';
+  fechaRegistro = '';
+  rolUsuario = '';
 
   // Contador de notificaciones
-  contadorNotificaciones: number = 0;
+  contadorNotificaciones = 0;
 
    closeModal() {
     this.modalService.closeAllDialogs();
   }
 
   getToken(): void {
-    let parts = window.location.href.split('&');
-    let oauth2Code: Oauth2Code = { code: '', scope: '' };
+    const parts = window.location.href.split('&');
+    const oauth2Code: Oauth2Code = { code: '', scope: '' };
     parts.forEach((part) => {
-      let keyValue = part.split('=');
+      const keyValue = part.split('=');
       if (
         keyValue.length === 2 &&
         keyValue[0].substring(keyValue[0].length - 4) == 'code'

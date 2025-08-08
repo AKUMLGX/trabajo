@@ -45,17 +45,17 @@ export class AtencionModalComponent implements OnInit, OnChanges {
   @ViewChild('pdfContainer') pdfContainer!: ElementRef;
 
   @Input() asunto: AsuntoPorAtencion | null = null;
-  @Input() mostrarModal: boolean = false;
+  @Input() mostrarModal = false;
   @Output() cerrarModalEvent = new EventEmitter<void>();
 
   // Variables para documentos
   archivos: ArchivoAtencion[] = [];
-  cargandoArchivos: boolean = false;
+  cargandoArchivos = false;
   pdfActual: ArchivoAtencion | null = null;
   pdfUrl: SafeResourceUrl | null = null;
-  pdfCargando: boolean = false;
-  pdfError: boolean = false;
-  pdfSrc: string = '';
+  pdfCargando = false;
+  pdfError = false;
+  pdfSrc = '';
   
   // Pestañas
   pestanaActiva: 'detalles' | 'documentos' = 'detalles';

@@ -22,7 +22,7 @@ export class CardsInfoBandejadeAtencionService {
   constructor(private http:HttpClient) { }
 
 cardsInfo(){
-  let tarjetUrl = environment.baseUrl+environment.cardsInfo
+  const tarjetUrl = environment.baseUrl+environment.cardsInfo
   // Añadir header para evitar loader en esta petición crítica de inicialización
   const headers = new HttpHeaders().set('X-Skip-Loader', 'true');
   return this.http.get<CardsResponse['data']>(tarjetUrl, { headers })
@@ -30,7 +30,7 @@ cardsInfo(){
 }
 
 cardInfoPorAsignar(data:porAsignarRequest){
-let tarjetUrl = environment.baseUrl+environment.cardsInfoPorAsignar
+const tarjetUrl = environment.baseUrl+environment.cardsInfoPorAsignar
 return this.http.post<porAsignarResponse>(tarjetUrl,data)
 }
 
@@ -40,13 +40,13 @@ return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl ,data)
 }
 
 asutosPorDictaminar(data:asutosPorDictaminador):Observable<tableAsuntosPorDictaminar[]>{
-  let tarjetUrl = environment.baseUrl+environment.asuntosPorDictaminar
+  const tarjetUrl = environment.baseUrl+environment.asuntosPorDictaminar
   return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl,data)
 }
 
 // Nuevo método para obtener asuntos que requieren aprobación
 asuntosPorAprobar(data:asutosPorDictaminador):Observable<tableAsuntosPorDictaminar[]>{
-  let tarjetUrl = environment.baseUrl+environment.asuntosPorDictaminar
+  const tarjetUrl = environment.baseUrl+environment.asuntosPorDictaminar
   const params = { ...data, requiere_aprobacion: true };
   return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl, params)
 }
@@ -78,7 +78,7 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
 
  descargarExcelEnTramite(data:AsuntoPorAtencionParcialRequest){
   const tarjetURL = environment.baseUrl + environment.downloadExecelEnTramite;
-  let params: DownloadExcelCards={
+  const params: DownloadExcelCards={
      atencion:data.atencion,
      documento:data.documento
   }
@@ -88,7 +88,7 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
@@ -100,7 +100,7 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
 
  descargarExcelParcial(data:AsuntoPorAtencionParcialRequest){
     const tarjetURL = environment.baseUrl +environment.downloadExecelParcial;
-    let params: DownloadExcelCards={
+    const params: DownloadExcelCards={
       atencion:data.atencion,
       documento:data.documento
     }
@@ -110,7 +110,7 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
@@ -122,7 +122,7 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
 
  descargarExcelTotal(data:AsuntoPorAtencionTotalRequest){
     const tarejetURL= environment.baseUrl + environment.downloadExecelTotal;
-    let params: DownloadExcelCards={
+    const params: DownloadExcelCards={
       atencion: data.atencion,
       documento: data.documento
     }
@@ -132,7 +132,7 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
@@ -140,6 +140,17 @@ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
       link.download = `Total.xlsx`;
       link.click();
     })
+ }
+
+ getAsuntosPorEstadoAtencion(data: AsuntoPorEstadoAtencionRequest): Observable<AsuntoPorEstadoAtencionResponse> {
+   const tarjetURL = environment.baseUrl + 'asunto/atencion/get_asunto_por_estado_atencion/';
+   return this.http.post<AsuntoPorEstadoAtencionResponse>(tarjetURL, data);
+ }
+
+ // Nuevo método para asignar asuntos a administración sin aprobación previa
+ asignarAsuntoAdministracion(asunto: any): Observable<string> {
+   const tarjetURL = environment.baseUrl + environment.asignarAdministracion;
+   return this.http.post(tarjetURL, asunto, { responseType: 'text' });
  }
 
 }

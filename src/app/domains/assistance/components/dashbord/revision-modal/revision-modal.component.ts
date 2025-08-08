@@ -13,7 +13,7 @@ import { ArchivosAtencionService } from '../../../../services/archivos-atencion.
   styleUrls: ['./revision-modal.component.css']
 })
 export class RevisionModalComponent implements OnInit {
-  @Input() mostrarModal: boolean = false;
+  @Input() mostrarModal = false;
   @Input() asunto: any = null;
   @Input() archivos: any[] = [];
   
@@ -27,9 +27,9 @@ export class RevisionModalComponent implements OnInit {
   
   // Estado del visor de PDF
   pdfActual: any = null;
-  pdfUrl: string = '';
-  pdfCargando: boolean = false;
-  pdfError: boolean = false;
+  pdfUrl = '';
+  pdfCargando = false;
+  pdfError = false;
   
   // Pestañas y vistas
   pestanaActiva: 'detalles' | 'documentos' | 'revision' = 'detalles';
@@ -55,15 +55,15 @@ export class RevisionModalComponent implements OnInit {
   ];
   
   // Estados de la interfaz
-  enviandoAprobacion: boolean = false;
-  enviandoRechazo: boolean = false;
-  enviandoRegreso: boolean = false;
+  enviandoAprobacion = false;
+  enviandoRechazo = false;
+  enviandoRegreso = false;
   
   // Tipo de aprobación seleccionada
   tipoAprobacionSeleccionada: 'parcial' | 'total' | null = null;
   
   // Variables para el modal de confirmación
-  mostrarModalConfirmacion: boolean = false;
+  mostrarModalConfirmacion = false;
   tipoAtencionSeleccionada: 'parcial' | 'total' | null = null;
   
   constructor(

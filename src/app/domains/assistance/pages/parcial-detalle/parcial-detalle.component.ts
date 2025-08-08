@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AsuntoPorAsigacionResponseParcial } from '../../../interfaces/asuntoPorAtencionResponse.interface';
+import { AsuntoPorAsigacionResponseEnTramite, AsuntoPorAsigacionResponseParcial } from '../../../interfaces/asuntoPorAtencionResponse.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { BuscadorService } from '../../../shared/services/buscador.service';
 import { NgxPaginationModule } from 'ngx-pagination';

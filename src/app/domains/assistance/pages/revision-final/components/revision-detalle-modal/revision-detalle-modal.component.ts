@@ -57,23 +57,23 @@ interface DialogData {
 })
 export class RevisionDetalleModalComponent implements OnInit {
   asunto: Asunto;
-  soloLectura: boolean = false;
+  soloLectura = false;
   motivoForm: FormGroup;
-  tipoAtencion: string = 'total';
-  documentoSeleccionado: string = '';
-  pdfCargando: boolean = false;
-  modoComparacion: boolean = false;
-  expandido: boolean = false;
+  tipoAtencion = 'total';
+  documentoSeleccionado = '';
+  pdfCargando = false;
+  modoComparacion = false;
+  expandido = false;
   
   // URLs de ejemplo para documentos PDF
-  documentosPDF: { [key: string]: string } = {
+  documentosPDF: Record<string, string> = {
     'Dictamen_Técnico.pdf': 'assets/pdfs/dictamen_tecnico_ejemplo.pdf',
     'Análisis_Fiscal.pdf': 'assets/pdfs/analisis_fiscal_ejemplo.pdf',
     'Evidencia_Documental.pdf': 'assets/pdfs/evidencia_documental_ejemplo.pdf'
   };
   
   // Documento para comparación
-  documentoComparacion: string = 'Evidencia_Documental.pdf';
+  documentoComparacion = 'Evidencia_Documental.pdf';
   
   motivosRechazo: string[] = [
     'Información incompleta',

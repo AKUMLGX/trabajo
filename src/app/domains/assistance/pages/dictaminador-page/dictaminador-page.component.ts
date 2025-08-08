@@ -58,13 +58,13 @@ interface Estadisticas {
   prioridadAlta: number;
 }
 
-const ATENCION_DESCRIPCION: { [key: number]: string } = {
+const ATENCION_DESCRIPCION: Record<number, string> = {
   1: 'En Trámite',
   2: 'Atención Parcial',
   3: 'Atención Total'
 };
 
-const DOCUMENTO_DESCRIPCION: { [key: number]: string } = {
+const DOCUMENTO_DESCRIPCION: Record<number, string> = {
   1: 'RESPUESTA',
   2: 'REQUERIMIENTO',
   3: 'REQUERIMIENTO Y RESPUESTA',
@@ -106,29 +106,29 @@ export class DictaminadorPageComponent implements OnInit {
     prioridadAlta: 0
   };
 
-  filtroEstado: string = 'Todos';
-  filtroPrioridad: string = 'Todas';
+  filtroEstado = 'Todos';
+  filtroPrioridad = 'Todas';
   vistaActual: 'tarjetas' | 'tabla' = 'tarjetas';
   pestanaActual: 'asignados' | 'rechazados' = 'asignados';
 
   // Nuevas variables para el formulario
-  mostrarFormularioAtencion: boolean = false;
+  mostrarFormularioAtencion = false;
   formularioAtencion: FormGroup;
   asuntoSeleccionado: any = null;
   archivosSeleccionados: File[] = [];
   
   // Variable para mostrar detalles del rechazo
-  mostrarDetallesRechazo: boolean = false;
+  mostrarDetallesRechazo = false;
   asuntoRechazadoSeleccionado: AsuntoRechazado | null = null;
 
   // Variables para el modal de atención del dictaminador
-  mostrarModalAtencionDictaminador: boolean = false;
+  mostrarModalAtencionDictaminador = false;
   asuntoParaAtencion: any = null;
 
   // Variables para el control de estados con documentos
-  asuntosConDocumentos: Set<string> = new Set(); // Folio de asuntos que tienen documentos
-  asuntosFinalizados: Set<string> = new Set(); // Folio de asuntos finalizados
-  cargandoEstadosDocumentos: boolean = false;
+  asuntosConDocumentos = new Set<string>(); // Folio de asuntos que tienen documentos
+  asuntosFinalizados = new Set<string>(); // Folio de asuntos finalizados
+  cargandoEstadosDocumentos = false;
 
   constructor(
     private router: Router,

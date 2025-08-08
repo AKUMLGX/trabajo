@@ -20,14 +20,14 @@ interface Documento {
   styleUrls: ['./asunto-detalle.component.css']
 })
 export class AsuntoDetalleComponent implements OnInit {
-  asuntoId: string = '';
+  asuntoId = '';
   
   // Variables para el visor de PDF
-  mostrarPDFViewer: boolean = false;
+  mostrarPDFViewer = false;
   pdfUrl: string | null = null;
-  pdfTitulo: string = '';
-  pdfCargando: boolean = true;
-  zoom: number = 1.0;
+  pdfTitulo = '';
+  pdfCargando = true;
+  zoom = 1.0;
   
   // Información del asunto
   asunto = {

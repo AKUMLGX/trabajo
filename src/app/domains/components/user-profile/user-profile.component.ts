@@ -26,8 +26,8 @@ import { UsuarioCompleto } from '../../interfaces/oauth2.interfaces';
   styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
-  @Input() compact: boolean = false; // Para diferentes variaciones del componente
-  @Input() showAdvancedInfo: boolean = true; // Mostrar información avanzada (JWT)
+  @Input() compact = false; // Para diferentes variaciones del componente
+  @Input() showAdvancedInfo = true; // Mostrar información avanzada (JWT)
 
   usuario: UsuarioCompleto | null = null;
   private destroy$ = new Subject<void>();

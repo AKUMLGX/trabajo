@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild, OnChanges, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
@@ -39,10 +39,10 @@ interface Asunto {
   templateUrl: './asuntos-pendientes-table.component.html',
   styleUrls: ['./asuntos-pendientes-table.component.css']
 })
-export class AsuntosPendientesTableComponent implements OnInit {
+export class AsuntosPendientesTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() asuntos: Asunto[] = [];
-  @Input() filtroText: string = '';
-  @Input() filtroPrioridad: string = 'Todas';
+  @Input() filtroText = '';
+  @Input() filtroPrioridad = 'Todas';
   
   @Output() aprobar = new EventEmitter<Asunto>();
   @Output() rechazar = new EventEmitter<Asunto>();

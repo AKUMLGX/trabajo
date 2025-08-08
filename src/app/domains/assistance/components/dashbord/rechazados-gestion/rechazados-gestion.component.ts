@@ -33,9 +33,9 @@ export class RechazadosGestionComponent {
   @Output() cancelarConfirmacionEvent = new EventEmitter<void>();
   
   // Propiedades para la gestión
-  nuevoDictaminadorId: string = '';
-  observacionesReasignacion: string = '';
-  notificarDictaminador: boolean = true;
+  nuevoDictaminadorId = '';
+  observacionesReasignacion = '';
+  notificarDictaminador = true;
   
   // Propiedades para la confirmación
   @Input() mostrarConfirmacionReasignacion = false;
