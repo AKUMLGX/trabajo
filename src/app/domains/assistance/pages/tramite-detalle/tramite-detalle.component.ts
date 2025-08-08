@@ -11,11 +11,10 @@ import { BuscadorService } from '../../../shared/services/buscador.service';
 import { Observable, of } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ArchivosAtencionService } from '../../../services/archivos-atencion.service';
 import { MatIconModule } from '@angular/material/icon';
 import { FileService } from '../../../services/file.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog,  } from '@angular/material/dialog';
+import { PlazoPipe } from '../../../shared/components/plazo.pipe';
 
 @Component({
   selector: 'app-tramite-detalle',
@@ -26,6 +25,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
      NgxPaginationModule,
      PdfViewerComponent,
       MatIconModule,
+      PlazoPipe
 
     ],
   templateUrl: './tramite-detalle.component.html',

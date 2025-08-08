@@ -91,11 +91,11 @@
                 {{ asunto.persona_relacionada }}
               </label>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.plazo_atencion }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.plazo_atencion | plazo}}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.fecha_recepcion }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-center">
               <div class="flex justify-center space-x-2">
-                <button class="" title="Ver documento" (click)="abrirModalPDF(templatePDF)"
+                <button (click)="abrirModalPDF(templatePDF)"
                   (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)">
                   <mat-icon>remove_red_eye</mat-icon>
                 </button>

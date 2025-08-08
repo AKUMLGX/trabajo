@@ -12,17 +12,23 @@ import { BuscadorService } from '../../../shared/services/buscador.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ArchivosAtencionService } from '../../../services/archivos-atencion.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ModalService } from '../../../shared/services/modal.service';
 import { FileService } from '../../../services/file.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PdfViewerComponent } from "../../../components/pdf-viewer/pdf-viewer.component";
+import { PlazoPipe } from '../../../shared/components/plazo.pipe';
 
 @Component({
   selector: 'app-parcial-detalle',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, NgxPaginationModule, MatIconModule, MatButtonModule, PdfViewerComponent],
+  imports: [CommonModule,
+     RouterModule,
+      FormsModule,
+      NgxPaginationModule,
+       MatIconModule,
+        MatButtonModule,
+        PdfViewerComponent,
+        PlazoPipe,],
   templateUrl: './parcial-detalle.component.html',
   styleUrls: ['./parcial-detalle.component.css']
 })
@@ -64,15 +70,7 @@ export class ParcialDetalleComponent implements OnInit {
     this.buscadorService.setSearchTerm(value)
   }
 
-  // filtrarIndicador = (item: AsuntoPorAsigacionResponseParcial, term: string): boolean => {
-  //   return item.folio_interno?.toLowerCase().includes(term.toLocaleLowerCase());
-  // };
-
-
-  // asignarIndicador: Observable<AsuntoPorAsigacionResponseParcial[]> = new Observable
-
-  // searchText: string = '';
-  // filteredData$: Observable<AsuntoPorAsigacionResponseParcial[]> = this.buscadorService.getFilteredData(this.filtrarIndicador);
+ ;
 
   onSearchChange() {
     this.updateSearch();

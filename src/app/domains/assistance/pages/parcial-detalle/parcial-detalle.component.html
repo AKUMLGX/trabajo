@@ -87,12 +87,10 @@
                </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.oficio }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.fecha_recepcion }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.plazo_atencion }} días</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.plazo_atencion  | plazo }}  </td>
               <td class="px-6 py-4 whitespace-nowrap text-center">
-                <div class="flex items-center justify-center gap-1">
-                  <!-- 🆕 Botón Ver PDF (ojo verde) -->
-                  <button class="group relative inline-flex items-center justify-center p-2 rounded-lg
-                     bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md" title="Ver documento"
+                <div class="flex justify-center space-x-2">
+                  <button
                     (click)="abrirModalPDF(templatePDF)"
                     (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)">
                     <mat-icon >remove_red_eye</mat-icon>
