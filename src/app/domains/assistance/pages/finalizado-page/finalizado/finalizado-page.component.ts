@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AsuntoPorAtencionTotalRequest } from '../../../../interfaces/asuntoPorAtencion.interface';
@@ -18,12 +18,19 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-finalizado',
   standalone: true,
-  imports: [RouterModule, MatIconModule, CommonModule, FormsModule, NgxPaginationModule, MatButtonModule, PdfViewerComponent],
+  imports: [RouterModule,
+    MatIconModule,
+    CommonModule,
+    FormsModule,
+    NgxPaginationModule,
+    MatButtonModule,
+    PdfViewerComponent,],
   templateUrl: './finalizado-page.component.html'
 })
 export class FinalizadoComponent implements OnInit {
 
   constructor(
+    private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
     private buscadorService: BuscadorService<AsuntoPorAsigacionResponseTotal>,
     private modalService: ModalService,
@@ -85,14 +92,16 @@ export class FinalizadoComponent implements OnInit {
   //#endregion
 
   //#region Buscadores
-  onSearchChange() {
-    this.updateSearch();
-  }
+
   searchTextNoOficio: string = "";
   searchPersona_relacionada: string = '';
   searchAutoridad_remitente: string = '';
   searchfolio_interno: string = '';
   searchcarpeta_investigacion: string = '';
+
+  onSearchChange() {
+    this.updateSearch();
+  }
 
   updateSearch() {
     this.buscadorService.setSearchTermsMu({
@@ -104,6 +113,11 @@ export class FinalizadoComponent implements OnInit {
     });
 
   }
+
+  onDearchChange(value: string) {
+    this.buscadorService.setSearchTerm(value)
+  }
+
   filterIndicador = (item: AsuntoPorAsigacionResponseTotal, terms: Record<string, string>): boolean => {
     const matchOficio = !terms['oficio'] || item.oficio?.toLowerCase().includes(terms['oficio'].toLowerCase());
     const matchCarpeta = !terms['carpeta'] || item.carpeta_investigacion?.toLowerCase().includes(terms['carpeta'].toLowerCase())
@@ -114,18 +128,12 @@ export class FinalizadoComponent implements OnInit {
     return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
   };
 
-  onDearchChange(value: string) {
-    this.buscadorService.setSearchTerm(value)
-  }
-
-  asignarIndicador: Observable<AsuntoPorAsigacionResponseTotal[]> = new Observable;
-  searchText: string = '';
-
   filteredDataMul$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredDataMul(this.filterIndicador);
+
   //#endregion
 
-//#region Exportar a Excel
-  exportarExcel() {
+  //#region descargar  Excel
+  descargarExcel() {
     this.cards.descargarExcelTotal(this.tableRequest);
   }
   //#endregion
@@ -140,19 +148,24 @@ export class FinalizadoComponent implements OnInit {
     this.fileService.updatePdfFileBandejaAtencion(folio.toString(), fileName)
   }
 
-abrirModalPDF(template: TemplateRef<any>) {
-  this.visualizarPdf = true
-   this.modalService.openCustomDialogWithTemplate({
+  abrirModalPDF(template: TemplateRef<any>) {
+    this.visualizarPdf = true
+    this.modalService.openCustomDialogWithTemplate({
       template
     })
   }
 
-    cerrarVisualizadorPdf(): void {
+  cerrarVisualizadorPdf(): void {
     this.visualizarPdf = false;
     this.dialog.closeAll()
 
   }
+  //#endregion
 
-//#endregion
+  //#region Navegación
+  volver(): void {
+    this.router.navigate(['/layout/assistance']);
+  }
+  //#endregion
 
 }

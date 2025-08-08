@@ -22,37 +22,17 @@ import { PlazoPipe } from '../../../shared/components/plazo.pipe';
   selector: 'app-parcial-detalle',
   standalone: true,
   imports: [CommonModule,
-     RouterModule,
-      FormsModule,
-      NgxPaginationModule,
-       MatIconModule,
-        MatButtonModule,
-        PdfViewerComponent,
-        PlazoPipe,],
+    RouterModule,
+    FormsModule,
+    NgxPaginationModule,
+    MatIconModule,
+    MatButtonModule,
+    PdfViewerComponent,
+    PlazoPipe,],
   templateUrl: './parcial-detalle.component.html',
   styleUrls: ['./parcial-detalle.component.css']
 })
 export class ParcialDetalleComponent implements OnInit {
-
-  paginaActual: number = 1;
-  itemsPorPagina: number = 8;
-  totalAsuntos: number = 20;
-
-  tableparcialRequest: AsuntoPorAtencionParcialRequest = {
-    atencion: "PARCIAL",
-    documento: "REQUERIMIENTO",
-  }
-  tableParcialResponse: AsuntoPorAsigacionResponseParcial[] = [];
-
-  //#region paginador
-  pages: AsuntoPorAsigacionResponseParcial[][] = []
-  itemsPerPage: number = 5
-  pageSelected: number = 1;
-  labelsPaginator = {
-    previousLabel: 'Anterior',
-    nextLabel: 'Siguiente',
-  };
-  //#endregion
 
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
@@ -66,20 +46,46 @@ export class ParcialDetalleComponent implements OnInit {
     this.tablePracial()
   }
 
-  onDearchChange(value: string) {
-    this.buscadorService.setSearchTerm(value)
+  volver(): void {
+    this.router.navigate(['/layout/assistance']);
   }
 
- ;
-
-  onSearchChange() {
-    this.updateSearch();
+  //#region Request Table (Payload)
+  tableparcialRequest: AsuntoPorAtencionParcialRequest = {
+    atencion: "PARCIAL",
+    documento: "REQUERIMIENTO",
   }
+  //#endregion
+
+  //#region Response Table
+  allData: AsuntoPorAsigacionResponseParcial[] = [];
+  //#endregion
+
+  //#region paginador
+  pages: AsuntoPorAsigacionResponseParcial[][] = []
+  itemsPerPage: number = 5
+  pageSelected: number = 1;
+  labelsPaginator = {
+    previousLabel: 'Anterior',
+    nextLabel: 'Siguiente',
+  };
+  //#endregion
+
+  //#region Buscadores
+
   searchTextNoOficio: string = "";
   searchPersona_relacionada: string = '';
   searchAutoridad_remitente: string = '';
   searchfolio_interno: string = '';
   searchcarpeta_investigacion: string = '';
+
+  onDearchChange(value: string) {
+    this.buscadorService.setSearchTerm(value)
+  }
+
+  onSearchChange() {
+    this.updateSearch();
+  }
 
   updateSearch() {
     this.buscadorService.setSearchTermsMu({
@@ -91,9 +97,7 @@ export class ParcialDetalleComponent implements OnInit {
     });
   }
 
-
   filterIndicador = (item: AsuntoPorAsigacionResponseParcial, terms: Record<string, string>): boolean => {
-
     const matchOficio = !terms['oficio'] || item.oficio?.toLowerCase().includes(terms['oficio'].toLowerCase());
     const matchCarpeta = !terms['carpeta'] || item.carpeta_investigacion?.toLowerCase().includes(terms['carpeta'].toLowerCase())
     const matchFolio = !terms['autoridad_remitente'] || item.autoridad_remitente?.toLowerCase().includes(terms['autoridad_remitente'].toLowerCase());
@@ -101,17 +105,13 @@ export class ParcialDetalleComponent implements OnInit {
     const matchPersona = !terms['persona'] || item.persona_relacionada?.toLowerCase().includes(terms['persona'].toLowerCase())
 
     return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
-  }
-
+  };
 
   filteredDataMul$: Observable<AsuntoPorAsigacionResponseParcial[]> = this.buscadorService.getFilteredDataMul(this.filterIndicador);
 
+  //#endregion
 
-  allData: AsuntoPorAsigacionResponseParcial[] = [];
-
-
-
-
+  //#region Table
   tablePracial() {
     this.cards.parcialTableCard(this.tableparcialRequest).subscribe({
       next: (resp: AsuntoResponseParcial[]) => {
@@ -136,16 +136,15 @@ export class ParcialDetalleComponent implements OnInit {
 
     })
   }
+  //#endregion
 
-  volver(): void {
-    this.router.navigate(['/layout/assistance']);
-  }
-
-  // Métodos para descargar Excel
+  // #region descargar Excel
   descargarExcel() {
     this.cards.descargarExcelParcial(this.tableparcialRequest)
   }
+  //#endregion
 
+  //#region  Visulizador
 
   visualizarPdf: boolean = false;
 
@@ -157,17 +156,17 @@ export class ParcialDetalleComponent implements OnInit {
   }
 
   abrirModalPDF(template: TemplateRef<any>): void {
-      this.visualizarPdf = true
+    this.visualizarPdf = true
     this.modalService.openCustomDialogWithTemplate({
       template
     });
   }
 
-    cerrarVisualizadorPdf(): void {
+  cerrarVisualizadorPdf(): void {
     this.visualizarPdf = false;
     this.dialog.closeAll()
-
   }
 
+  //#endregion
 
 }

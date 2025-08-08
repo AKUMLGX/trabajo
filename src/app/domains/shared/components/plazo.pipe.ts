@@ -8,10 +8,10 @@ export class PlazoPipe implements PipeTransform {
 
   transform(value: number | null): string {
     if (value === null) {
-      return `sin plazo definido`
+      return `Sin plazo definido`
     }
     if (value === 0) {
-      return `urgente (${value})`
+      return `Urgente `
     }
     return `  ${value} días`
   }

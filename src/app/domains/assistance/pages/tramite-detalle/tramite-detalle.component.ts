@@ -8,12 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { AsuntoPorAtencionEnTramiteRequest } from '../../../interfaces/asuntoPorAtencion.interface';
 import { BuscadorService } from '../../../shared/services/buscador.service';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FileService } from '../../../services/file.service';
-import { MatDialog,  } from '@angular/material/dialog';
+import { MatDialog, } from '@angular/material/dialog';
 import { PlazoPipe } from '../../../shared/components/plazo.pipe';
 
 @Component({
@@ -21,17 +21,44 @@ import { PlazoPipe } from '../../../shared/components/plazo.pipe';
   standalone: true,
   imports: [CommonModule,
     RouterModule,
-     FormsModule,
-     NgxPaginationModule,
-     PdfViewerComponent,
-      MatIconModule,
-      PlazoPipe
-
-    ],
+    FormsModule,
+    NgxPaginationModule,
+    PdfViewerComponent,
+    MatIconModule,
+    PlazoPipe,
+  ],
   templateUrl: './tramite-detalle.component.html',
   styleUrls: ['./tramite-detalle.component.css']
 })
 export class TramiteDetalleComponent implements OnInit {
+
+
+
+
+  tableResponse: AsuntoPorAsigacionResponseEnTramite[] = [];
+
+  constructor(private router: Router,
+    private cards: CardsInfoBandejadeAtencionService,
+    private buscadorService: BuscadorService<AsuntoPorAsigacionResponseEnTramite>,
+    private ModalService: ModalService,
+    private fileService: FileService,
+    public dialog: MatDialog,
+  ) { }
+
+  ngOnInit(): void {
+    this.tableEnTramite()
+  }
+
+  //#region Request Table (Payload)
+  tableRequest: AsuntoPorAtencionEnTramiteRequest = {
+    atencion: "EN TRAMITE",
+    documento: "REQUERIMIENTO",
+  }
+  //#endregion
+
+  //#region Response Table
+  allData: AsuntoPorAsigacionResponseEnTramite[] = []
+  //#endregion
 
   //#region paginador
   pages: AsuntoPorAsigacionResponseEnTramite[][] = []
@@ -43,28 +70,7 @@ export class TramiteDetalleComponent implements OnInit {
   };
   //#endregion
 
-  tableRequest: AsuntoPorAtencionEnTramiteRequest = {
-    atencion: "EN TRAMITE",
-    documento: "REQUERIMIENTO",
-  }
-  tableResponse: AsuntoPorAsigacionResponseEnTramite[] = [];
-
-  // ✅ Variables para funcionalidad PDF Viewer
-
-
-
-  constructor(private router: Router,
-    private cards: CardsInfoBandejadeAtencionService,
-    private buscadorService: BuscadorService<AsuntoPorAsigacionResponseEnTramite>,
-    private ModalService: ModalService,
-     private fileService: FileService,
-     public dialog: MatDialog,
-  ) { }
-
-  ngOnInit(): void {
-    this.tableEnTramite()
-  }
-
+  //#region Table
   tableEnTramite() {
     this.cards.enTramiteTableCard(this.tableRequest).subscribe({
       next: (res: AsuntoResponseParcial[]) => {
@@ -89,24 +95,18 @@ export class TramiteDetalleComponent implements OnInit {
       }
     })
   }
-
+  //#endregion
 
   //#region  buscador
-
-  onDearchChange(value: string) {
-    this.buscadorService.setSearchTerm(value)
-  }
-
-
-
-  onSearchChange() {
-    this.updateSearch();
-  }
   searchTextNoOficio: string = "";
   searchPersona_relacionada: string = '';
   searchAutoridad_remitente: string = '';
   searchfolio_interno: string = '';
   searchcarpeta_investigacion: string = '';
+
+  onSearchChange() {
+    this.updateSearch();
+  }
 
   updateSearch() {
     this.buscadorService.setSearchTermsMu({
@@ -119,6 +119,10 @@ export class TramiteDetalleComponent implements OnInit {
 
   }
 
+  onDearchChange(value: string) {
+    this.buscadorService.setSearchTerm(value)
+  }
+
   filterIndicador = (item: AsuntoPorAsigacionResponseEnTramite, terms: Record<string, string>): boolean => {
     const matchOficio = !terms['oficio'] || item.oficio?.toLowerCase().includes(terms['oficio'].toLowerCase());
     const matchCarpeta = !terms['carpeta'] || item.carpeta_investigacion?.toLowerCase().includes(terms['carpeta'].toLowerCase())
@@ -129,39 +133,32 @@ export class TramiteDetalleComponent implements OnInit {
     return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
   };
 
-
-
-
-  // asignarIndicador : Observable<AsuntoPorAsigacionResponseEnTramite[]>= new Observable;
-
-
-  // result$: Observable<string[]> = of ([]);
-  // para un solo filtro
-  //filteredData$: Observable<AsuntoPorAsigacionResponseEnTramite[]> = this.buscadorService.getFilteredData(this.filterIndicador) ;
-
   filteredDataMul$: Observable<AsuntoPorAsigacionResponseEnTramite[]> = this.buscadorService.getFilteredDataMul(this.filterIndicador);
 
 
   //#endregion
-  allData: AsuntoPorAsigacionResponseEnTramite[] = []
 
-  // Navegación
+  //#region Navegación
   volver(): void {
     this.router.navigate(['/layout/assistance']);
   }
+  //#endregion
 
-  // Exportar a Excel
+  //#region descargar  Excel
   descargarExcel(): void {
     this.cards.descargarExcelEnTramite(this.tableRequest)
   }
+  //#endregion
 
+
+  //#region Visualizador PDF
 
   visualizarPdf: boolean = false;
 
 
-abrirModalPDF(template: TemplateRef<any>) {
-  this.visualizarPdf = true
-   this.ModalService.openCustomDialogWithTemplate({
+  abrirModalPDF(template: TemplateRef<any>) {
+    this.visualizarPdf = true
+    this.ModalService.openCustomDialogWithTemplate({
       template
     })
   }
@@ -179,4 +176,5 @@ abrirModalPDF(template: TemplateRef<any>) {
     this.dialog.closeAll()
 
   }
+  //#endregion
 }
