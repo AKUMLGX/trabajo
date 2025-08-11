@@ -44,7 +44,7 @@ interface Asunto {
 interface AsuntoCapturado {
   id: string;
   folio_interno: string; // Folio interno (NO editable)
-  
+
   // ✅ Campos editables
   oficio?: string;
   folioScanner?: string;
@@ -55,18 +55,18 @@ interface AsuntoCapturado {
   turnoJefatura?: string;
   administracion?: string;
   descripcion: string; // Descripción del asunto
-  
+
   // Plazo de atención
   plazoCantidad?: number;
   plazoUnidad?: 'DIAS' | 'SEMANAS' | 'MESES';
   plazo_atencion?: number; // Campo del JSON
   plazoAtencion?: string; // Plazo formateado (para compatibilidad)
   esUrgente?: boolean;
-  
+
   // Tipos requeridos
   tipoDocumento?: string;
   tipoAtencion?: string;
-  
+
   // Metadatos de captura
   fecha_captura: string;
   usuario_captura: string;
@@ -74,12 +74,12 @@ interface AsuntoCapturado {
   documento_pdf?: string;
   fecha_limite?: string;
   prioridad?: 'ALTA' | 'MEDIA' | 'BAJA';
-  
+
   // Campos adicionales para la tabla
   tieneDocumentos?: boolean;
   cantidadDocumentos?: number;
   erroresDetectados?: string[];
-  
+
   // Campos antiguos para compatibilidad
   folio?: string; // Alias de folio_interno
   asunto?: string; // Alias de descripcion
@@ -114,15 +114,15 @@ interface AsuntoCapturado {
   styleUrls: ['./revision-final.component.css']
 })
 export class RevisionFinalComponent implements OnInit {
-  
+
   // Datos de ejemplo para las tablas
   asuntosPendientes: Asunto[] = [];
   asuntosRevisados: Asunto[] = [];
-  
+
   // 🆕 Datos para asuntos capturados
   asuntosCapturados: AsuntoCapturado[] = [];
   asuntosSeleccionados: string[] = []; // IDs de asuntos seleccionados para envío
-  
+
   // Estadísticas
   estadisticas = {
     // 🆕 Estadísticas para asuntos capturados
@@ -130,7 +130,7 @@ export class RevisionFinalComponent implements OnInit {
     capturadosHoy: 0,
     requierenCorreccion: 0,
     listosParaEnviar: 0,
-    
+
     // ✅ Estadísticas existentes para dictámenes
     totalPendientes: 0,
     pendientesHoy: 0,
@@ -139,7 +139,7 @@ export class RevisionFinalComponent implements OnInit {
     aprobados: 0,
     rechazados: 0
   };
-  
+
   // Filtros
   filtroEstado = 'Todos';
   filtroPrioridad = 'Todas';
@@ -300,12 +300,11 @@ export class RevisionFinalComponent implements OnInit {
     this.cardsService.getAsuntosPorEstadoAtencion(request).subscribe({
       next: (response) => {
         console.log(`✅ ${response?.length || 0} asuntos cargados`);
-        
+
         if (response && response.length > 0) {
           // Transformar datos del backend al formato de la interfaz del frontend
           this.asuntosCapturados = response.map((item: AsuntoAsignacion, index: number) => {
             let asuntoData: any = {};
-            
             // Extraer datos según la estructura anidada del backend
             if ('tipo' in item.asunto && 'datos' in item.asunto) {
               // Nueva estructura: { tipo: "Nuevo"|"Historico", datos: {...} }
@@ -379,33 +378,33 @@ export class RevisionFinalComponent implements OnInit {
   actualizarEstadisticas(): void {
     // 🆕 Calcular estadísticas para asuntos capturados
     this.estadisticas.totalCapturados = this.asuntosCapturados.length;
-    
+
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-    
+
     this.estadisticas.capturadosHoy = this.asuntosCapturados.filter(a => {
       const fechaCaptura = new Date(a.fecha_captura);
       fechaCaptura.setHours(0, 0, 0, 0);
       return fechaCaptura.getTime() === hoy.getTime();
     }).length;
-    
-    this.estadisticas.requierenCorreccion = this.asuntosCapturados.filter(a => 
+
+    this.estadisticas.requierenCorreccion = this.asuntosCapturados.filter(a =>
       a.estado_revision === 'PENDIENTE').length;
-    
-    this.estadisticas.listosParaEnviar = this.asuntosCapturados.filter(a => 
+
+    this.estadisticas.listosParaEnviar = this.asuntosCapturados.filter(a =>
       a.estado_revision === 'APROBADO').length;
 
     // ✅ Calcular estadísticas existentes para dictámenes
     this.estadisticas.totalPendientes = this.asuntosPendientes.length;
-    
+
     this.estadisticas.pendientesHoy = this.asuntosPendientes.filter(a => {
       const fechaLimite = new Date(a.fechaLimite);
       fechaLimite.setHours(0, 0, 0, 0);
       return fechaLimite.getTime() === hoy.getTime();
     }).length;
-    
+
     this.estadisticas.pendientesUrgentes = this.asuntosPendientes.filter(a => a.prioridad === 'Alta').length;
-    
+
     this.estadisticas.totalRevisados = this.asuntosRevisados.length;
     this.estadisticas.aprobados = this.asuntosRevisados.filter(a => a.estadoAtencion === 'Aprobado').length;
     this.estadisticas.rechazados = this.asuntosRevisados.filter(a => a.estadoAtencion === 'Rechazado').length;
@@ -414,15 +413,15 @@ export class RevisionFinalComponent implements OnInit {
   aprobarAsunto(asunto: Asunto): void {
     // Lógica para aprobar un asunto
     const index = this.asuntosPendientes.findIndex(a => a.id === asunto.id);
-    
+
     if (index !== -1) {
       const asuntoAprobado = {...this.asuntosPendientes[index]};
       asuntoAprobado.estadoAtencion = 'Aprobado';
       asuntoAprobado.estado = 'Completado';
-      
+
       this.asuntosPendientes.splice(index, 1);
       this.asuntosRevisados.unshift(asuntoAprobado);
-      
+
       this.actualizarEstadisticas();
     }
   }
@@ -430,19 +429,19 @@ export class RevisionFinalComponent implements OnInit {
   rechazarAsunto(asunto: Asunto): void {
     // Lógica para rechazar un asunto
     const index = this.asuntosPendientes.findIndex(a => a.id === asunto.id);
-    
+
     if (index !== -1) {
       const asuntoRechazado = {...this.asuntosPendientes[index]};
       asuntoRechazado.estadoAtencion = 'Rechazado';
       asuntoRechazado.estado = 'Completado';
-      
+
       this.asuntosPendientes.splice(index, 1);
       this.asuntosRevisados.unshift(asuntoRechazado);
-      
+
       this.actualizarEstadisticas();
     }
   }
-  
+
   onFiltroTextChange(filtro: string): void {
     this.filtroText = filtro;
   }
@@ -466,43 +465,43 @@ export class RevisionFinalComponent implements OnInit {
   // Métodos para las vistas alternativas de asuntos pendientes
   getAsuntosPendientesFiltered(): Asunto[] {
     let asuntosFiltrados = [...this.asuntosPendientes];
-    
+
     // Aplicar filtro de prioridad
     if (this.filtroPrioridad !== 'Todas') {
       asuntosFiltrados = asuntosFiltrados.filter(a => a.prioridad === this.filtroPrioridad);
     }
-    
+
     // Aplicar filtro de texto
     if (this.filtroText) {
       const textoBusqueda = this.filtroText.toLowerCase();
-      asuntosFiltrados = asuntosFiltrados.filter(a => 
+      asuntosFiltrados = asuntosFiltrados.filter(a =>
         a.folio.toLowerCase().includes(textoBusqueda) ||
         a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
         a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
         a.dictaminador.toLowerCase().includes(textoBusqueda)
       );
     }
-    
+
     return asuntosFiltrados;
   }
-  
+
   getAsuntosPendientesByPrioridad(prioridad: string): Asunto[] {
     let asuntos = this.asuntosPendientes.filter(a => a.prioridad === prioridad);
-    
+
     // Aplicar filtro de texto
     if (this.filtroText) {
       const textoBusqueda = this.filtroText.toLowerCase();
-      asuntos = asuntos.filter(a => 
+      asuntos = asuntos.filter(a =>
         a.folio.toLowerCase().includes(textoBusqueda) ||
         a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
         a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
         a.dictaminador.toLowerCase().includes(textoBusqueda)
       );
     }
-    
+
     return asuntos;
   }
-  
+
   /**
    * Método para filtrar asuntos pendientes por rango de días transcurridos
    * @param minDias días mínimos
@@ -510,29 +509,29 @@ export class RevisionFinalComponent implements OnInit {
    * @returns array de asuntos filtrados
    */
   getAsuntosPendientesPorDias(minDias: number, maxDias: number): Asunto[] {
-    let asuntos = this.asuntosPendientes.filter(a => 
+    let asuntos = this.asuntosPendientes.filter(a =>
       a.diasTranscurridos >= minDias && a.diasTranscurridos <= maxDias
     );
-    
+
     // Aplicar filtro de texto
     if (this.filtroText) {
       const textoBusqueda = this.filtroText.toLowerCase();
-      asuntos = asuntos.filter(a => 
+      asuntos = asuntos.filter(a =>
         a.folio.toLowerCase().includes(textoBusqueda) ||
         a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
         a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
         a.dictaminador.toLowerCase().includes(textoBusqueda)
       );
     }
-    
+
     // Aplicar filtro de prioridad
     if (this.filtroPrioridad !== 'Todas') {
       asuntos = asuntos.filter(a => a.prioridad === this.filtroPrioridad);
     }
-    
+
     return asuntos;
   }
-  
+
   /**
    * Formatea una fecha para mostrarla en formato legible
    * @param date fecha a formatear
@@ -540,11 +539,11 @@ export class RevisionFinalComponent implements OnInit {
    */
   formatDate(date: string | Date): string {
     if (!date) return 'N/A';
-    
+
     const dateObj = typeof date === 'string' ? new Date(date) : date;
-    
+
     if (isNaN(dateObj.getTime())) return 'Fecha inválida';
-    
+
     return dateObj.toLocaleDateString('es-MX', {
       day: '2-digit',
       month: '2-digit',
@@ -582,7 +581,7 @@ export class RevisionFinalComponent implements OnInit {
   toggleSeleccionTodos(): void {
     const asuntosListos = this.asuntosCapturados.filter(a => a.estado_revision === 'APROBADO');
     const todosSeleccionados = asuntosListos.every(a => this.isAsuntoSeleccionado(a.id));
-    
+
     if (todosSeleccionados) {
       // Deseleccionar todos los listos
       asuntosListos.forEach(a => {
@@ -634,7 +633,7 @@ export class RevisionFinalComponent implements OnInit {
   toggleTodosAprobados(event: any): void {
     const asuntosAprobados = this.getAsuntosCapturasFiltrados().filter(a => a.estado_revision === 'APROBADO');
     const todosSeleccionados = this.todosAprobadosSeleccionados();
-    
+
     if (todosSeleccionados) {
       // Deseleccionar todos los aprobados
       asuntosAprobados.forEach(a => {
@@ -688,7 +687,7 @@ export class RevisionFinalComponent implements OnInit {
       return;
     }
 
-    const asuntosParaEnviar = this.asuntosCapturados.filter(a => 
+    const asuntosParaEnviar = this.asuntosCapturados.filter(a =>
       this.asuntosSeleccionados.includes(a.id) && a.estado_revision === 'APROBADO'
     );
 
@@ -704,13 +703,13 @@ export class RevisionFinalComponent implements OnInit {
     if (confirmacion) {
       // TODO: Implementar llamada al servicio de envío
       console.log('Enviando asuntos:', asuntosParaEnviar);
-      
+
       // Simular envío exitoso
       alert(`Se han enviado ${asuntosParaEnviar.length} asunto(s) exitosamente al Akamba 3`);
-      
+
       // Limpiar selección
       this.asuntosSeleccionados = [];
-      
+
       // En un escenario real, estos asuntos se eliminarían de la lista o cambiarían de estado
     }
   }
@@ -725,7 +724,7 @@ export class RevisionFinalComponent implements OnInit {
       return;
     }
 
-    const asuntosParaAsignar = this.asuntosCapturados.filter(a => 
+    const asuntosParaAsignar = this.asuntosCapturados.filter(a =>
       this.asuntosSeleccionados.includes(a.id)
     );
 
@@ -742,7 +741,7 @@ export class RevisionFinalComponent implements OnInit {
       asuntosParaAsignar.forEach(asunto => {
         // Recuperar el JSON original que guardamos anteriormente
         const jsonOriginal = (asunto as any).jsonOriginal;
-        
+
         if (jsonOriginal) {
           // Preparar el objeto para el endpoint según la estructura requerida
           const asuntoParaEnviar = {
@@ -758,7 +757,7 @@ export class RevisionFinalComponent implements OnInit {
             next: (response) => {
               console.log('✅ Asunto asignado exitosamente:', response);
               asignacionesExitosas++;
-              
+
               // Si es el último asunto procesado, mostrar resultado
               if (asignacionesExitosas + errores.length === asuntosParaAsignar.length) {
                 this.mostrarResultadoAsignacion(asignacionesExitosas, errores);
@@ -767,7 +766,7 @@ export class RevisionFinalComponent implements OnInit {
             error: (error) => {
               console.error('❌ Error al asignar asunto:', error);
               errores.push(`${asunto.folio_interno}: ${error.error || 'Error desconocido'}`);
-              
+
               // Si es el último asunto procesado, mostrar resultado
               if (asignacionesExitosas + errores.length === asuntosParaAsignar.length) {
                 this.mostrarResultadoAsignacion(asignacionesExitosas, errores);
@@ -787,14 +786,14 @@ export class RevisionFinalComponent implements OnInit {
    */
   private mostrarResultadoAsignacion(exitosas: number, errores: string[]): void {
     let mensaje = `✅ Se asignaron ${exitosas} asunto(s) exitosamente.`;
-    
+
     if (errores.length > 0) {
       mensaje += `\n\n❌ Errores en ${errores.length} asunto(s):\n`;
       mensaje += errores.join('\n');
     }
-    
+
     alert(mensaje);
-    
+
     // Limpiar selección y recargar datos
     this.asuntosSeleccionados = [];
     this.cargarAsuntosCapturados();
@@ -818,7 +817,7 @@ export class RevisionFinalComponent implements OnInit {
     dialogRef.afterClosed().subscribe(resultado => {
       if (resultado) {
         console.log('Resultado de la corrección:', resultado);
-        
+
         // Actualizar el asunto en la lista
         const index = this.asuntosCapturados.findIndex(a => a.id === asunto.id);
         if (index !== -1) {
@@ -831,7 +830,7 @@ export class RevisionFinalComponent implements OnInit {
               this.asuntosCapturados[index].estado_revision = 'APROBADO';
               break;
           }
-          
+
           // Recalcular estadísticas
           this.actualizarEstadisticas();
         }
@@ -847,15 +846,15 @@ export class RevisionFinalComponent implements OnInit {
     console.log('🔍 getAsuntosCapturasFiltrados() ejecutado');
     console.log('📊 this.asuntosCapturados.length:', this.asuntosCapturados.length);
     console.log('📋 this.asuntosCapturados:', this.asuntosCapturados);
-    
+
     let asuntosFiltrados = [...this.asuntosCapturados];
     console.log('📝 Antes de filtros - asuntosFiltrados.length:', asuntosFiltrados.length);
-    
+
     // Filtrar por texto
     if (this.filtroText) {
       console.log('🔎 Filtrando por texto:', this.filtroText);
       const textoBusqueda = this.filtroText.toLowerCase();
-      asuntosFiltrados = asuntosFiltrados.filter(a => 
+      asuntosFiltrados = asuntosFiltrados.filter(a =>
         (a.folio_interno || '').toLowerCase().includes(textoBusqueda) ||
         (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
         (a.carpeta_investigacion || '').toLowerCase().includes(textoBusqueda) ||
@@ -864,21 +863,21 @@ export class RevisionFinalComponent implements OnInit {
       );
       console.log('📝 Después de filtro texto - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
-    
+
     // Filtrar por estado de revisión
     if (this.filtroEstadoCaptura !== 'TODOS') {
       console.log('📋 Filtrando por estado:', this.filtroEstadoCaptura);
       asuntosFiltrados = asuntosFiltrados.filter(a => a.estado_revision === this.filtroEstadoCaptura);
       console.log('📝 Después de filtro estado - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
-    
+
     // Filtrar por autoridad remitente
     if (this.filtroAutoridadRemitente !== 'Todas') {
       console.log('🏛️ Filtrando por autoridad:', this.filtroAutoridadRemitente);
       asuntosFiltrados = asuntosFiltrados.filter(a => a.autoridad_remitente === this.filtroAutoridadRemitente);
       console.log('📝 Después de filtro autoridad - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
-    
+
     console.log('✅ getAsuntosCapturasFiltrados() resultado final:', asuntosFiltrados.length, 'asuntos');
     console.log('📋 Asuntos filtrados:', asuntosFiltrados);
     return asuntosFiltrados;
@@ -937,15 +936,15 @@ export class RevisionFinalComponent implements OnInit {
     if (plazo === null || plazo === undefined) {
       return 'Sin plazo definido';
     }
-    
+
     if (plazo === 0) {
       return 'Urgente';
     }
-    
+
     if (plazo >= 1 && plazo <= 5) {
       return `${plazo} día${plazo > 1 ? 's' : ''}`;
     }
-    
+
     return `${plazo} días`;
   }
 
@@ -954,15 +953,15 @@ export class RevisionFinalComponent implements OnInit {
     if (plazo === null || plazo === undefined) {
       return 'bg-gray-100 text-gray-700';
     }
-    
+
     if (plazo === 0) {
       return 'bg-red-100 text-red-700';
     }
-    
+
     if (plazo <= 2) {
       return 'bg-orange-100 text-orange-700';
     }
-    
+
     return 'bg-green-100 text-green-700';
   }
 
@@ -979,15 +978,15 @@ export class RevisionFinalComponent implements OnInit {
   obtenerRangoPaginas(): number[] {
     const totalPaginas = this.obtenerTotalPaginas();
     const paginas: number[] = [];
-    
+
     // Mostrar máximo 5 páginas alrededor de la actual
     const inicio = Math.max(1, this.paginaActual - 2);
     const fin = Math.min(totalPaginas, this.paginaActual + 2);
-    
+
     for (let i = inicio; i <= fin; i++) {
       paginas.push(i);
     }
-    
+
     return paginas;
   }
 
@@ -1023,7 +1022,7 @@ export class RevisionFinalComponent implements OnInit {
   getRevisadosHoy(): number {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-    
+
     return this.asuntosCapturados.filter(a => {
       const fechaCaptura = new Date(a.fecha_captura);
       fechaCaptura.setHours(0, 0, 0, 0);
@@ -1102,10 +1101,10 @@ export class RevisionFinalComponent implements OnInit {
    */
   getHoraCaptura(fechaCaptura: string): string {
     const fecha = new Date(fechaCaptura);
-    return fecha.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
+    return fecha.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: false 
+      hour12: false
     });
   }
 
@@ -1115,12 +1114,12 @@ export class RevisionFinalComponent implements OnInit {
   abrirModalRevisionCaptura(asunto: AsuntoCapturado): void {
     // 🆕 Buscar el JSON original del backend
     const jsonOriginal = (asunto as any).jsonOriginal;
-    
+
     console.log('🔧 ABRIENDO MODAL CON:');
     console.log('📄 Asunto transformado:', asunto);
     console.log('📦 JSON Original:', jsonOriginal);
     console.log('🔍 ¿Tiene JSON original?', !!jsonOriginal);
-    
+
     const dialogRef = this.dialog.open(RevisionCapturaModalComponent, {
       width: '1200px',
       maxWidth: '95vw',
@@ -1139,7 +1138,7 @@ export class RevisionFinalComponent implements OnInit {
     dialogRef.afterClosed().subscribe(resultado => {
       if (resultado) {
         console.log('Resultado de la revisión:', resultado);
-        
+
         // Actualizar el asunto en la lista
         const index = this.asuntosCapturados.findIndex(a => a.id === asunto.id);
         if (index !== -1) {
@@ -1152,7 +1151,7 @@ export class RevisionFinalComponent implements OnInit {
               this.asuntosCapturados[index].estado_revision = 'APROBADO';
               break;
           }
-          
+
           // Recalcular estadísticas
           this.actualizarEstadisticas();
         }
@@ -1172,10 +1171,10 @@ export class RevisionFinalComponent implements OnInit {
 
     if (confirmacion) {
       let asuntoParaEnviar: any;
-      
+
       // Recuperar el JSON original
       const jsonOriginal = (asunto as any).jsonOriginal;
-      
+
       if (jsonOriginal) {
         // IMPORTANTE: El backend espera rfc_asignado como String, NO puede ser null
         asuntoParaEnviar = {
@@ -1197,7 +1196,7 @@ export class RevisionFinalComponent implements OnInit {
         next: (response) => {
           console.log('✅ Asunto asignado exitosamente:', response);
           alert(`✅ El asunto ${asunto.folio_interno} fue asignado exitosamente.`);
-          
+
           // Recargar la lista
           this.cargarAsuntosCapturados();
         },
@@ -1214,10 +1213,10 @@ export class RevisionFinalComponent implements OnInit {
    */
   getUltimaActualizacion(): string {
     const ahora = new Date();
-    return ahora.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
+    return ahora.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: false 
+      hour12: false
     });
   }
 
@@ -1251,7 +1250,7 @@ export class RevisionFinalComponent implements OnInit {
   cambiarTab(tab: 'capturados' | 'dictamenes' | 'revisados'): void {
     this.tabActiva = tab;
     console.log('🔄 Pestaña cambiada a:', tab);
-    
+
     // 🆕 Cargar datos automáticamente cuando se activa la pestaña de capturados
     if (tab === 'capturados') {
       console.log('📋 Cargando asuntos capturados automáticamente...');
@@ -1487,4 +1486,4 @@ export class RevisionFinalComponent implements OnInit {
     this.pdfError = false;
     this.pdfTitulo = '';
   }
-} 
+}

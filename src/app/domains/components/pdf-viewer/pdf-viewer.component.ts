@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AsuntoService } from '../../services/asunto.service';

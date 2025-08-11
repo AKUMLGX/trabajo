@@ -111,27 +111,6 @@ export class FinalizadoComponent implements OnInit {
       oficio: this.searchTextNoOficio,
       autoridad_remitente: this.searchAutoridad_remitente,
     });
-
-  }
-
-  onSearchChange() {
-    this.updateSearch();
-  }
-  searchTextNoOficio: string = "";
-  searchPersona_relacionada: string = '';
-  searchAutoridad_remitente: string = '';
-  searchfolio_interno: string = '';
-  searchcarpeta_investigacion: string = '';
-
-  updateSearch() {
-    this.buscadorService.setSearchTermsMu({
-      folio: this.searchfolio_interno,
-      carpeta: this.searchcarpeta_investigacion,
-      persona: this.searchPersona_relacionada,
-      oficio: this.searchTextNoOficio,
-      autoridad_remitente: this.searchAutoridad_remitente,
-    });
-
   }
 
   filterIndicador = (item: AsuntoPorAsigacionResponseTotal, terms: Record<string, string>): boolean => {
@@ -143,22 +122,11 @@ export class FinalizadoComponent implements OnInit {
 
     return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
   };
-
-
 
   onDearchChange(value: string) {
     this.buscadorService.setSearchTerm(value)
   }
 
-  filterIndicador = (item: AsuntoPorAsigacionResponseTotal, terms: Record<string, string>): boolean => {
-    const matchOficio = !terms['oficio'] || item.oficio?.toLowerCase().includes(terms['oficio'].toLowerCase());
-    const matchCarpeta = !terms['carpeta'] || item.carpeta_investigacion?.toLowerCase().includes(terms['carpeta'].toLowerCase())
-    const matchFolio = !terms['autoridad_remitente'] || item.autoridad_remitente?.toLowerCase().includes(terms['autoridad_remitente'].toLowerCase());
-    const matchfolio_interno = !terms['folio'] || item.folio_interno?.toLowerCase().includes(terms['folio'].toLowerCase());
-    const matchPersona = !terms['persona'] || item.persona_relacionada?.toLowerCase().includes(terms['persona'].toLowerCase())
-
-    return matchFolio && matchOficio && matchPersona && matchfolio_interno && matchCarpeta;
-  };
 
   filteredDataMul$: Observable<AsuntoPorAsigacionResponseTotal[]> = this.buscadorService.getFilteredDataMul(this.filterIndicador);
 

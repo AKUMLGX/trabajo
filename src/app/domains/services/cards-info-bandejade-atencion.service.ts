@@ -1,5 +1,5 @@
 import { AsuntoPorAsigacionResponseParcial, AsuntoPorAsigacionResponseTotal, AsuntoReponseEnTramite, AsuntoResponseParcial, AsuntoResponseTotal } from './../interfaces/asuntoPorAtencionResponse.interface';
-import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest } from './../interfaces/asuntoPorAtencion.interface';
+import { AsuntoPorAtencionEnTramiteRequest, AsuntoPorAtencionParcialRequest, AsuntoPorAtencionTotalRequest, AsuntoPorEstadoAtencionRequest, AsuntoPorEstadoAtencionResponse } from './../interfaces/asuntoPorAtencion.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
