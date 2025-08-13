@@ -14,7 +14,7 @@ export interface AsuntoPorAtencionTotalRequest{
 // 🆕 Nueva interface para el endpoint get_asunto_por_estado_atencion
 export interface AsuntoPorEstadoAtencionRequest {
   documento: string;        // "REQUERIMIENTO", obligatorio
-  estado_atencion: string; // "POR ASIGNAR", según catálogo de estados
+  estado_atencion?: string; // Opcional, ya no se envía "POR ASIGNAR"
 }
 
 // 🆕 Interfaces para la respuesta del endpoint

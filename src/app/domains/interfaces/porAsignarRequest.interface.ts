@@ -1,13 +1,11 @@
 export interface porAsignarRequest{
   documento:string,
-  estado_atencion:string,
-
+  estado_atencion?:string, // Opcional, ya no se envía por defecto
 }
 
 export interface asutosPorDictaminador{
   documento:string,
-  estado_atencion:string,
-
+  estado_atencion?:string, // Opcional, ya no se envía por defecto
 }
 
 export interface tableAsuntosPorDictaminar{

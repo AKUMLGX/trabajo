@@ -293,8 +293,8 @@ export class RevisionFinalComponent implements OnInit {
   // Método para cargar asuntos capturados desde el endpoint
   cargarAsuntosCapturados(): void {
     const request: AsuntoPorEstadoAtencionRequest = {
-      documento: "REQUERIMIENTO",
-      estado_atencion: "POR ASIGNAR"
+      documento: "REQUERIMIENTO"
+      // estado_atencion ya no se envía
     };
 
     this.cardsService.getAsuntosPorEstadoAtencion(request).subscribe({
