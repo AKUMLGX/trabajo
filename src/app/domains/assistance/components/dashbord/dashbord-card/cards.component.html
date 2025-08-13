@@ -350,41 +350,41 @@
                   'fila-aprobacion-impar': vistaActual === 'aprobacion' && i % 2 !== 0
                 }"
                 class="inter transition-colors duration-150 ease-in-out cursor-pointer"
-                (click)="seleccionarFila(asunto.folio_interno)">
+                (click)="seleccionarFila(obtenerFolioInterno(asunto))">
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <div class="flex items-center">
                   <span [ngClass]="vistaActual === 'atencion' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300'"
                         class="inline-block w-2 h-2 rounded-full mr-2 border"></span>
-                  <div class="truncate max-w-[150px]" [title]="asunto.folio_interno">
-                    {{asunto.folio_interno}}
+                  <div class="truncate max-w-[150px]" [title]="obtenerFolioInterno(asunto)">
+                    {{obtenerFolioInterno(asunto)}}
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <div class="truncate max-w-[200px]" [title]="asunto.autoridad_remitente">
-                  {{asunto.autoridad_remitente}}
+                <div class="truncate max-w-[200px]" [title]="obtenerAutoridadRemitente(asunto)">
+                  {{obtenerAutoridadRemitente(asunto)}}
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <div class="truncate max-w-[100px]" [title]="asunto.fecha_recepcion">
-                  {{asunto.fecha_recepcion}}
+                <div class="truncate max-w-[100px]" [title]="obtenerFechaRecepcion(asunto)">
+                  {{obtenerFechaRecepcion(asunto)}}
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <div class="truncate max-w-[200px]" [title]="asunto.persona_relacionada">
-                  {{asunto.persona_relacionada}}
+                <div class="truncate max-w-[200px]" [title]="obtenerPersonaRelacionada(asunto)">
+                  {{obtenerPersonaRelacionada(asunto)}}
                 </div>
               </td>
 
               <!-- 🆕 Columna Dictaminador para ambas vistas: En Atención y Por Aprobar -->
               <td *ngIf="vistaActual === 'atencion' || vistaActual === 'aprobacion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <div class="truncate max-w-[180px]" [title]="asunto.nombre_dictaminador || 'Sin asignar'">
-                  <span *ngIf="asunto.nombre_dictaminador" 
+                <div class="truncate max-w-[180px]" [title]="obtenerDictaminador(asunto) || 'Sin asignar'">
+                  <span *ngIf="obtenerDictaminador(asunto)" 
                         [ngClass]="vistaActual === 'atencion' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'"
                         class="text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {{asunto.nombre_dictaminador}}
+                    {{obtenerDictaminador(asunto)}}
                   </span>
-                  <span *ngIf="!asunto.nombre_dictaminador" class="bg-gray-100 text-gray-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                  <span *ngIf="!obtenerDictaminador(asunto)" class="bg-gray-100 text-gray-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
                     Sin asignar
                   </span>
                 </div>

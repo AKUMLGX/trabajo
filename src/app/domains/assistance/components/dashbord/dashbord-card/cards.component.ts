@@ -395,8 +395,9 @@ export class CardsComponent implements OnInit {
     const dictaminadoresSet = new Set<string>();
 
     todosAsuntos.forEach(asunto => {
-      if (asunto.nombre_dictaminador && asunto.nombre_dictaminador.trim()) {
-        dictaminadoresSet.add(asunto.nombre_dictaminador.trim());
+      const dictaminador = (asunto as any).rfc_asignado || asunto.nombre_dictaminador;
+      if (dictaminador && dictaminador.trim()) {
+        dictaminadoresSet.add(dictaminador.trim());
       }
     });
 
@@ -425,9 +426,10 @@ export class CardsComponent implements OnInit {
     if (!this.dictaminadorActivoAtencion) {
       this.asuntosEnAtencionFiltrados = [...this.asuntosEnAtencion];
     } else {
-      this.asuntosEnAtencionFiltrados = this.asuntosEnAtencion.filter(asunto =>
-        asunto.nombre_dictaminador?.trim() === this.dictaminadorActivoAtencion
-      );
+      this.asuntosEnAtencionFiltrados = this.asuntosEnAtencion.filter(asunto => {
+        const dictaminador = (asunto as any).rfc_asignado || asunto.nombre_dictaminador;
+        return dictaminador?.trim() === this.dictaminadorActivoAtencion;
+      });
     }
   }
 
@@ -436,9 +438,10 @@ export class CardsComponent implements OnInit {
     if (!this.dictaminadorActivoAprobacion) {
       this.asuntosPorAprobarFiltrados = [...this.asuntosPorAprobar];
     } else {
-      this.asuntosPorAprobarFiltrados = this.asuntosPorAprobar.filter(asunto =>
-        asunto.nombre_dictaminador?.trim() === this.dictaminadorActivoAprobacion
-      );
+      this.asuntosPorAprobarFiltrados = this.asuntosPorAprobar.filter(asunto => {
+        const dictaminador = (asunto as any).rfc_asignado || asunto.nombre_dictaminador;
+        return dictaminador?.trim() === this.dictaminadorActivoAprobacion;
+      });
     }
   }
 
@@ -464,7 +467,10 @@ export class CardsComponent implements OnInit {
   // 🎨 NUEVO: Contar asuntos por dictaminador según vista actual
   contarAsuntosPorDictaminador(dictaminador: string): number {
     const asuntosVista = this.vistaActual === 'atencion' ? this.asuntosEnAtencion : this.asuntosPorAprobar;
-    return asuntosVista.filter(asunto => asunto.nombre_dictaminador?.trim() === dictaminador).length;
+    return asuntosVista.filter(asunto => {
+      const dictaminadorAsunto = (asunto as any).rfc_asignado || asunto.nombre_dictaminador;
+      return dictaminadorAsunto?.trim() === dictaminador;
+    }).length;
   }
 
   // 🎨 NUEVO: Obtener iniciales del nombre (para avatar)
@@ -476,9 +482,32 @@ export class CardsComponent implements OnInit {
       .join('');
   }
 
+  // 🆕 FUNCIÓN AUXILIAR: Obtener dictaminador del asunto
+  obtenerDictaminador(asunto: any): string {
+    return asunto.rfc_asignado || asunto.nombre_dictaminador || '';
+  }
+
+  // 🆕 FUNCIONES AUXILIARES: Obtener datos anidados del JSON
+  obtenerFolioInterno(asunto: any): string {
+    return asunto.folio_interno || asunto.datos?.folio_interno || '';
+  }
+
+  obtenerAutoridadRemitente(asunto: any): string {
+    return asunto.autoridad_remitente || asunto.datos?.autoridad_remitente || '';
+  }
+
+  obtenerFechaRecepcion(asunto: any): string {
+    return asunto.fecha_recepcion || asunto.datos?.fecha_recepcion || '';
+  }
+
+  obtenerPersonaRelacionada(asunto: any): string {
+    return asunto.persona_relacionada || asunto.datos?.persona_relacionada || '';
+  }
+
   // 🎨 NUEVO: Método para seleccionar una fila (requerido por la tabla)
   seleccionarFila(folio: string): void {
-    const asunto = this.tablePorDictaminar.find(a => a.folio_interno === folio);
+    const asuntosFiltrados = this.vistaActual === 'atencion' ? this.asuntosEnAtencionFiltrados : this.asuntosPorAprobarFiltrados;
+    const asunto = asuntosFiltrados.find(a => this.obtenerFolioInterno(a) === folio);
     if (asunto) {
       console.log('🎨 Asunto seleccionado:', asunto);
     }
