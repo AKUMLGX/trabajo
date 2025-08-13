@@ -203,6 +203,7 @@ export class DictaminadorPageComponent implements OnInit {
             'AUTORIDAD REMITENTE': item.autoridad_remitente,
             'TIPO DOCUMENTO': DOCUMENTO_DESCRIPCION[item.id_documento_fk] || '',
             'PLAZO ATENCION': plazoAtencionVisual,
+            'DICTAMINADOR': item.rfc_dictaminador || item.rfc_asignado || 'Sin asignar',
             'ID_ASUNTO': item.id_asunto
           };
         });
