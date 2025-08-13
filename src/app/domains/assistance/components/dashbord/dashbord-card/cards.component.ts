@@ -101,7 +101,7 @@ export class CardsComponent implements OnInit {
   }
 
   documento: string = 'REQUERIMIENTO'
-  estado_atencion: string = "POR ASIGNAR"
+  // estado_atencion ya no se usa
   asignadosTable: boolean = true
   porAsignarTotal: number = 0
   asignarData = true
@@ -118,13 +118,13 @@ export class CardsComponent implements OnInit {
   asuntosPorAprobarFiltrados: tableAsuntosPorDictaminar[] = []
 
   porAsignarData: porAsignarRequest = {
-    documento: this.documento,
-    estado_atencion: this.estado_atencion
+    documento: this.documento
+    // estado_atencion ya no se envía
   }
 
   porAsignarDataTable: porAsignarRequest = {
-    documento: this.documento,
-    estado_atencion: this.estado_atencion
+    documento: this.documento
+    // estado_atencion ya no se envía
   }
 
   porAsignarDataResponse: porAsignarResponse = {
@@ -304,7 +304,7 @@ export class CardsComponent implements OnInit {
     this.cargandoAsuntos = true;
     const params = {
       documento: this.documento,
-      estado_atencion: this.estado_atencion,
+      estado_atencion: 'POR ASIGNAR', // Assuming 'POR ASIGNAR' is the default state
       requiere_aprobacion: false
     };
 
@@ -344,7 +344,7 @@ export class CardsComponent implements OnInit {
     this.cargandoAprobaciones = true;
     const params = {
       documento: this.documento,
-      estado_atencion: this.estado_atencion,
+      estado_atencion: 'POR ASIGNAR', // Assuming 'POR ASIGNAR' is the default state
       requiere_aprobacion: true
     };
 
