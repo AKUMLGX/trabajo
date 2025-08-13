@@ -11,7 +11,7 @@ export interface AsuntoPorAsigacionResponseEnTramite{
   turno_jefatura: string,
   autoridad_remitente: string,
   id_asunto: number,
-  es_historico: true,
+  es_historico: boolean,
   plazo_atencion:number
 }
 
@@ -28,7 +28,7 @@ export interface AsuntoPorAsigacionResponseParcial{
   turno_jefatura: string,
   autoridad_remitente: string,
   id_asunto: number,
-  es_historico: true,
+  es_historico: boolean,
   plazo_atencion:number
 }
 
@@ -45,6 +45,6 @@ export interface AsuntoPorAsigacionResponseTotal{
   turno_jefatura: string,
   autoridad_remitente: string,
   id_asunto: number,
-  es_historico: true,
+  es_historico: boolean,
   plazo_atencion:number
 }
