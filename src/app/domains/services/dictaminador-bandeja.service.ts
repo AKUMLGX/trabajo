@@ -14,7 +14,7 @@ export class DictaminadorBandejaService {
     const url = environment.baseUrl + environment.asuntosPorAsignarTable;
     const params: porAsignarRequest = {
       documento: 'REQUERIMIENTO',
-      estado_atencion: "EN DICTAMINACIÓN"
+      estado_atencion: "EN DICTAMINACION"
     };
     return this.http.post<tableAsuntosPorDictaminar[]>(url, params);
   }

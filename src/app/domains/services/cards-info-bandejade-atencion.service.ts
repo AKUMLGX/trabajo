@@ -46,8 +46,8 @@ asutosPorDictaminar(data:asutosPorDictaminador):Observable<tableAsuntosPorDictam
 // Nuevo método para obtener asuntos que requieren aprobación
 asuntosPorAprobar(data:asutosPorDictaminador):Observable<tableAsuntosPorDictaminar[]>{
   const tarjetUrl = environment.baseUrl+environment.asuntosPorDictaminar
-  const params = { ...data, requiere_aprobacion: true };
-  return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl, params)
+  // Ya no se usa requiere_aprobacion
+  return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl, data)
 }
 
 usuariosPorAdminitracion(){
