@@ -304,8 +304,7 @@ export class CardsComponent implements OnInit {
     this.cargandoAsuntos = true;
     const params = {
       documento: this.documento,
-      estado_atencion: 'POR ASIGNAR', // Assuming 'POR ASIGNAR' is the default state
-      requiere_aprobacion: false
+      estado_atencion: 'EN DICTAMINACION'
     };
 
     this.cards.asutosPorDictaminar(params).subscribe({
@@ -344,8 +343,7 @@ export class CardsComponent implements OnInit {
     this.cargandoAprobaciones = true;
     const params = {
       documento: this.documento,
-      estado_atencion: 'POR ASIGNAR', // Assuming 'POR ASIGNAR' is the default state
-      requiere_aprobacion: true
+      estado_atencion: 'VISTO BUENO AKAMBA 3'
     };
 
     this.cards.asuntosPorAprobar(params).subscribe({

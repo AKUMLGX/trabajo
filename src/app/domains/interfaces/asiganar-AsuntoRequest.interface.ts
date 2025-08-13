@@ -11,7 +11,7 @@
   turno_jefatura: string,
   autoridad_remitente: string,
   id_asunto: number,
-  es_historico: true,
+  es_historico: boolean,
   plazo_atencion:number
 }
 
