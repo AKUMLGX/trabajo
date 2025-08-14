@@ -72,6 +72,12 @@ return this.http.post<porAsignarResponse>(tarjetUrl,data)
   );
   }
 
+  // Conteo total por estado de atención
+  contarAsuntosPorEstadoAtencion(data: { documento: string; estado_atencion: string }): Observable<{ total: number }> {
+    const url = environment.baseUrl + 'asunto/atencion/get_asunto_por_estado_atencion/total';
+    return this.http.post<{ total: number }>(url, data);
+  }
+
 asutosPorDictaminar(data:asutosPorDictaminador):Observable<tableAsuntosPorDictaminar[]>{
   const tarjetUrl = environment.baseUrl+environment.asuntosPorDictaminar
   return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl,data)

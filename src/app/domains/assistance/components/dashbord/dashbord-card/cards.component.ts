@@ -293,11 +293,24 @@ export class CardsComponent implements OnInit {
   }
 
   mostrarCards() {
+    // Cargar tarjetas generales
     this.cards.cardsInfo().subscribe(res => {
       this.dataCards(res)
       this.requerimiento.parcial
       this.administracion.Administracion
     })
+
+    // Cargar total "Por asignar" desde endpoint específico
+    this.cards
+      .contarAsuntosPorEstadoAtencion({ documento: this.documento, estado_atencion: 'POR ASIGNAR' })
+      .subscribe({
+        next: (resp) => {
+          this.porAsignarTotal = resp?.total ?? 0;
+        },
+        error: () => {
+          this.porAsignarTotal = 0;
+        },
+      });
   }
 
   cargarAsuntosEnAtencion() {
