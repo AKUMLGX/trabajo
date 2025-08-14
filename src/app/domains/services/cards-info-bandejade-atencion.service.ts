@@ -95,9 +95,24 @@ usuariosPorAdminitracion(){
   return this.http.get<usuariosPorAdministracion[]>(tarjetURL)
 }
 
-asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
+ asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
   const tarjetURL = environment.baseUrl+environment.asignarAsunto;
-  return this.http.post(tarjetURL,data,{responseType:"text"})
+  // Backend espera { id_asignacion, rfc } en la raíz del JSON
+  const asunto: any = (data as any)?.asunto || {};
+  const payload: any = {
+    id_asignacion: asunto.id_asignacion ?? asunto.id_asignacion_fk ?? asunto.id_asignacionFK,
+    rfc: (data as any).rfc_asignado ?? (data as any).rfc,
+    // Estos dos campos son requeridos por el modelo del backend para deserializar,
+    // aunque el servicio de asignación solo utiliza id_asignacion y rfc.
+    tipo_asunto: asunto.es_historico ? 'historico' : 'nuevo',
+    id_asunto: asunto.id_asunto ?? asunto.id_asunto_nuevo ?? asunto.id_asunto_historico ?? 0,
+    // El backend fija el 2 automáticamente, pero algunos entornos validan su presencia en el JSON
+    estado_atencion: 2,
+    fecha_asignacion: null,
+  };
+  // Campos informativos (opcionales) si existen
+  // ya incluidos arriba
+  return this.http.post(tarjetURL,payload,{responseType:"text"})
  }
 
  enTramiteTableCard(data:AsuntoPorAtencionEnTramiteRequest):Observable<AsuntoReponseEnTramite[]>{
