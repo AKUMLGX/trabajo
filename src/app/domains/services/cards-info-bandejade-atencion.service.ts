@@ -34,10 +34,43 @@ const tarjetUrl = environment.baseUrl+environment.cardsInfoPorAsignar
 return this.http.post<porAsignarResponse>(tarjetUrl,data)
 }
 
-tablePorAsignar(data:porAsignarRequest):Observable<tableAsuntosPorDictaminar[]> {
-const tarjetUrl = environment.baseUrl + environment.asuntosPorAsignarTable
-return this.http.post<tableAsuntosPorDictaminar[]>(tarjetUrl ,data)
-}
+  tablePorAsignar(data:porAsignarRequest):Observable<tableAsuntosPorDictaminar[]> {
+  const tarjetUrl = environment.baseUrl + environment.asuntosPorAsignarTable
+  return this.http.post<any[]>(tarjetUrl ,data).pipe(
+    map((items:any[]) => items.map((item:any) => {
+      const contenedor = item?.asunto ?? item;
+      const datos = contenedor?.datos ?? contenedor?.Nuevo ?? contenedor?.Historico ?? contenedor ?? {};
+
+      const idAsunto = datos?.id_asunto ?? datos?.id_asunto_nuevo ?? datos?.id_asunto_historico ?? 0;
+      const esHistorico = (contenedor?.tipo && String(contenedor.tipo).toLowerCase() === 'historico') || Boolean(datos?.id_asunto_historico);
+
+      const normalizado: any = {
+        folio_interno: datos?.folio_interno ?? '',
+        folio_scanner: datos?.folio_scanner ?? 0,
+        carpeta_investigacion: datos?.carpeta_investigacion ?? '',
+        oficio: datos?.oficio ?? '',
+        persona_relacionada: datos?.persona_relacionada ?? '',
+        fecha_recepcion: datos?.fecha_recepcion ?? '',
+        id_administracion_fk: datos?.id_administracion_fk ?? 0,
+        id_documento_fk: datos?.id_documento_fk ?? 0,
+        id_atencion_fk: datos?.id_atencion_fk ?? 0,
+        turno_jefatura: datos?.turno_jefatura ?? '',
+        autoridad_remitente: datos?.autoridad_remitente ?? '',
+        id_asunto: idAsunto,
+        es_historico: esHistorico,
+        // Permitir null para soportar "Sin plazo definido"
+        plazo_atencion: (datos?.plazo_atencion ?? null) as any,
+        // Extras útiles en UI
+        id_asignacion: item?.id_asignacion ?? undefined,
+        tipo_asunto: item?.tipo_asunto ?? (contenedor?.tipo ? String(contenedor.tipo).toLowerCase() : undefined),
+        rfc_dictaminador: item?.rfc_dictaminador ?? undefined,
+        nombre_dictaminador: item?.rfc_asignado ?? item?.nombre_dictaminador ?? undefined,
+      };
+
+      return normalizado as tableAsuntosPorDictaminar;
+    }))
+  );
+  }
 
 asutosPorDictaminar(data:asutosPorDictaminador):Observable<tableAsuntosPorDictaminar[]>{
   const tarjetUrl = environment.baseUrl+environment.asuntosPorDictaminar

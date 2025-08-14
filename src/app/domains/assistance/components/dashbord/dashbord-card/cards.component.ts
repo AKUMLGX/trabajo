@@ -488,20 +488,39 @@ export class CardsComponent implements OnInit {
   }
 
   // 🆕 FUNCIONES AUXILIARES: Obtener datos anidados del JSON
+  private obtenerDatos(asunto: any): any {
+    // Estructuras posibles:
+    // 1) { asunto: { tipo: 'Nuevo'|'Historico', datos: {...} }, rfc_asignado, ... }
+    // 2) { asunto: { Nuevo: {...} } } o { asunto: { Historico: {...} } }
+    // 3) { datos: {...} } (plano)
+    // 4) { folio_interno, autoridad_remitente, ... } (plano legacy)
+    if (!asunto) return {};
+    const contenedor = asunto.asunto ?? asunto;
+    if (contenedor?.datos) return contenedor.datos;
+    if (contenedor?.Nuevo) return contenedor.Nuevo;
+    if (contenedor?.Historico) return contenedor.Historico;
+    if (asunto?.datos) return asunto.datos;
+    return asunto;
+  }
+
   obtenerFolioInterno(asunto: any): string {
-    return asunto.folio_interno || asunto.datos?.folio_interno || '';
+    const d = this.obtenerDatos(asunto);
+    return d?.folio_interno || '';
   }
 
   obtenerAutoridadRemitente(asunto: any): string {
-    return asunto.autoridad_remitente || asunto.datos?.autoridad_remitente || '';
+    const d = this.obtenerDatos(asunto);
+    return d?.autoridad_remitente || '';
   }
 
   obtenerFechaRecepcion(asunto: any): string {
-    return asunto.fecha_recepcion || asunto.datos?.fecha_recepcion || '';
+    const d = this.obtenerDatos(asunto);
+    return d?.fecha_recepcion || '';
   }
 
   obtenerPersonaRelacionada(asunto: any): string {
-    return asunto.persona_relacionada || asunto.datos?.persona_relacionada || '';
+    const d = this.obtenerDatos(asunto);
+    return d?.persona_relacionada || '';
   }
 
   // 🎨 NUEVO: Método para seleccionar una fila (requerido por la tabla)
