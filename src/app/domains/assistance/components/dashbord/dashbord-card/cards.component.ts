@@ -269,7 +269,6 @@ export class CardsComponent implements OnInit {
     this.calcularConteoAsuntos();
 
     this.mostrarCards()
-    this.mostarCardPorAsignar()
 
     // Cargar ambos tipos de asuntos
     this.cargarAsuntosEnAtencion();
@@ -286,11 +285,7 @@ export class CardsComponent implements OnInit {
 
   }
 
-  mostarCardPorAsignar() {
-    this.cards.cardInfoPorAsignar(this.porAsignarData).subscribe(res => {
-      this.porAsignarDataResponse = res;
-    });
-  }
+  // (El conteo 'Por asignar' ahora se obtiene con contarAsuntosPorEstadoAtencion)
 
   mostrarCards() {
     // Cargar tarjetas generales
