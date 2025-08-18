@@ -18,7 +18,7 @@ export class DictaminadorBandejaService {
       documento: 'REQUERIMIENTO',
       estado_atencion: "EN DICTAMINACION"
     };
-    
+
     return this.http.post<AsuntoPorEstadoAtencionResponse>(url, params).pipe(
       map((response) => {
         if (!response || response.length === 0) {
@@ -27,7 +27,7 @@ export class DictaminadorBandejaService {
 
         return response.map((item: AsuntoAsignacion, index: number) => {
           let asuntoData: any = {};
-          
+
           // Extraer datos según la estructura anidada del backend
           if ('tipo' in item.asunto && 'datos' in item.asunto) {
             // Nueva estructura: { tipo: "Nuevo"|"Historico", datos: {...} }
@@ -65,7 +65,7 @@ export class DictaminadorBandejaService {
             es_historico: 'Historico' in item.asunto || item.tipo_asunto === 'HISTORICO',
             plazo_atencion: asuntoData.plazo_atencion ?? 0,
             // Datos adicionales para asignación
-            id_asignacion: item.id_asignacion ?? undefined,
+            id_asignacion: item.id_asignacion ,
             tipo_asunto: item.tipo_asunto,
             rfc_dictaminador: item.rfc_asignado,
             nombre_dictaminador: item.rfc_asignado // Podrías mapear a nombre real si tienes la info
