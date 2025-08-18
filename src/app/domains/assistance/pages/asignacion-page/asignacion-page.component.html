@@ -123,7 +123,7 @@
         <!-- Filtros rápidos -->
         <div class="flex flex-wrap items-center gap-2">
           <span class="text-sm font-medium text-gray-700 mr-2">Filtros rápidos:</span>
-          
+
           <button (click)="aplicarFiltroPrioridad('todos')"
                   [class.bg-[#691C32]]="filtroActivo === 'todos'"
                   [class.text-white]="filtroActivo === 'todos'"
@@ -132,7 +132,7 @@
                   class="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:shadow-sm">
             Todos ({{contadores.total}})
           </button>
-          
+
           <button (click)="aplicarFiltroPrioridad('urgente')"
                   [class.bg-red-500]="filtroActivo === 'urgente'"
                   [class.text-white]="filtroActivo === 'urgente'"
@@ -141,9 +141,9 @@
                   class="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:shadow-sm">
             🚨 Urgentes ({{contadores.urgente}})
           </button>
-          
 
-          
+
+
           <button (click)="aplicarFiltroPrioridad('critico')"
                   [class.bg-red-500]="filtroActivo === 'critico'"
                   [class.text-white]="filtroActivo === 'critico'"
@@ -152,7 +152,7 @@
                   class="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:shadow-sm">
             🔴 Críticos ({{contadores.critico}}<span *ngIf="contadores.criticoConPlazo > 0" class="text-orange-300">•{{contadores.criticoConPlazo}}⏱️</span>)
           </button>
-          
+
           <button (click)="aplicarFiltroPrioridad('normal')"
                   [class.bg-yellow-500]="filtroActivo === 'normal'"
                   [class.text-white]="filtroActivo === 'normal'"
@@ -161,7 +161,7 @@
                   class="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:shadow-sm">
             🟡 Normales ({{contadores.normal}}<span *ngIf="contadores.normalConPlazo > 0" class="text-orange-300">•{{contadores.normalConPlazo}}⏱️</span>)
           </button>
-          
+
           <button (click)="aplicarFiltroPrioridad('reciente')"
                   [class.bg-green-500]="filtroActivo === 'reciente'"
                   [class.text-white]="filtroActivo === 'reciente'"
@@ -188,7 +188,7 @@
           <button (click)="toggleVistaAgrupacion()"
                   class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     [attr.d]="mostrarAgrupacion ? 'M4 6h16M4 10h16M4 14h16M4 18h16' : 'M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0 0h2a2 2 0 002-2V7a2 2 0 00-2-2H9z'" />
             </svg>
             {{mostrarAgrupacion ? 'Vista Lista' : 'Vista Agrupada'}}
@@ -200,9 +200,9 @@
     <!-- 📋 VISTA AGRUPADA POR PRIORIDADES -->
     <div *ngIf="mostrarAgrupacion" class="space-y-4 mb-6">
       <ng-container *ngFor="let grupo of ['urgente', 'critico', 'normal', 'reciente']">
-        <div *ngIf="obtenerDatosAgrupados()[grupo].length > 0" 
+        <div *ngIf="obtenerDatosAgrupados()[grupo].length > 0"
              [class]="'bg-white rounded-lg shadow-lg border overflow-hidden ' + getConfiguracionPrioridad(grupo).borderColor">
-          
+
           <!-- Header del grupo -->
           <div [class]="'p-4 cursor-pointer hover:bg-opacity-80 transition-colors ' + getConfiguracionPrioridad(grupo).bgColor"
                (click)="toggleSeccion(grupo)">
@@ -218,13 +218,13 @@
                   </p>
                 </div>
               </div>
-              
+
               <div class="flex items-center space-x-3">
                 <!-- Contador -->
                 <span [class]="'px-3 py-1 rounded-full text-sm font-bold ' + getConfiguracionPrioridad(grupo).bgColor + ' ' + getConfiguracionPrioridad(grupo).color">
                   {{obtenerDatosAgrupados()[grupo].length}}
                 </span>
-                
+
                 <!-- Icono colapsar/expandir -->
                 <svg class="w-5 h-5 transform transition-transform duration-200 text-gray-500"
                      [class.rotate-180]="isSeccionColapsada(grupo)"
@@ -252,17 +252,17 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                  <tr *ngFor="let asunto of obtenerDatosAgrupados()[grupo]" 
-                      [class]="'hover:bg-gray-50 transition-colors group ' + 
+                  <tr *ngFor="let asunto of obtenerDatosAgrupados()[grupo]"
+                      [class]="'hover:bg-gray-50 transition-colors group ' +
                                (tienePlazo(asunto) ? 'border-l-4 border-orange-300 bg-orange-25' : '')">
-                    
+
                     <!-- Semáforo -->
                     <td class="py-3 px-4 relative">
                       <div class="flex items-center justify-center">
                         <div [class]="'w-4 h-4 rounded-full shadow-md transform transition-all duration-200 group-hover:scale-110 ' + getColorSemaforo(asunto)"
                              [title]="getDescripcionPrioridad(asunto)">
                         </div>
-                        <div *ngIf="asunto.plazo_atencion === 0" 
+                        <div *ngIf="asunto.plazo_atencion === 0"
                              class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping">
                         </div>
                       </div>
@@ -272,19 +272,19 @@
                     <td class="py-3 px-4 text-sm text-gray-900">{{asunto.folio_interno}}</td>
                     <td class="py-3 px-4 text-sm text-gray-900">{{asunto.carpeta_investigacion}}</td>
                     <td class="py-3 px-4 text-sm text-gray-900">{{asunto.oficio}}</td>
-                    
+
                     <!-- Persona relacionada con manejo de texto largo -->
                     <td class="py-3 px-4 min-w-[250px] max-w-[300px]">
                       <div class="relative">
                         <div class="break-words text-sm text-gray-900">
                           <span [innerHTML]="isTextoExpandido(asunto.folio_interno) ? asunto.persona_relacionada : truncarTexto(asunto.persona_relacionada, 60)"></span>
                         </div>
-                        
-                        <button *ngIf="necesitaTruncado(asunto.persona_relacionada, 60)" 
+
+                        <button *ngIf="necesitaTruncado(asunto.persona_relacionada, 60)"
                                 (click)="toggleTextoExpandido(asunto.folio_interno)"
                                 class="inline-flex items-center mt-1 text-xs text-blue-600 hover:text-blue-800 transition-colors">
                           <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   [attr.d]="isTextoExpandido(asunto.folio_interno) ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'" />
                           </svg>
                           {{isTextoExpandido(asunto.folio_interno) ? 'Ver menos' : 'Ver más'}}
@@ -293,24 +293,24 @@
                     </td>
 
                     <td class="py-3 px-4 text-sm text-gray-900">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
-                    
+
                     <!-- Plazo con badges híbridos -->
                     <td class="py-3 px-4">
                       <div class="flex flex-col items-start space-y-1">
-                        <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' + 
-                                      (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800 animate-pulse border border-red-300' : 
-                                       asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800 border border-gray-300' : 
+                        <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' +
+                                      (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800 animate-pulse border border-red-300' :
+                                       asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800 border border-gray-300' :
                                        'bg-blue-100 text-blue-800 border border-blue-300')">
                           {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
                         </span>
-                        
+
                         <!-- Badge principal por antigüedad -->
                         <span [class]="'px-2 py-0.5 rounded text-xs font-medium ' + getBadgePrioridad(asunto).clase">
                           {{getBadgePrioridad(asunto).texto}}
                         </span>
-                        
+
                         <!-- Badge secundario para plazo (si aplica) -->
-                        <span *ngIf="getBadgePlazo(asunto)" 
+                        <span *ngIf="getBadgePlazo(asunto)"
                               [class]="'px-2 py-0.5 rounded text-xs font-medium ' + getBadgePlazo(asunto)!.clase">
                           {{getBadgePlazo(asunto)!.texto}}
                         </span>
@@ -354,7 +354,7 @@
           </div>
         </div>
       </ng-container>
-      
+
       <!-- Mensaje si no hay datos -->
       <div *ngIf="allData.length === 0" class="bg-white rounded-lg shadow-lg p-8 text-center">
         <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
@@ -378,13 +378,13 @@
           <span class="text-sm text-gray-600">Desplaza horizontalmente para ver más campos</span>
         </div>
         <div class="flex space-x-2">
-          <button (click)="scrollHorizontal('left')" 
+          <button (click)="scrollHorizontal('left')"
                   class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
             <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <button (click)="scrollHorizontal('right')" 
+          <button (click)="scrollHorizontal('right')"
                   class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
             <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -409,8 +409,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let asunto of asuntosPaginados" 
-                [class]="'border-b hover:bg-gray-50 even:bg-gray-50 transition-colors group ' + 
+          <tr *ngFor="let asunto of asuntosPaginados"
+                [class]="'border-b hover:bg-gray-50 even:bg-gray-50 transition-colors group ' +
                          (tienePlazo(asunto) ? 'border-l-4 border-orange-300' : '')">
               <!-- 🚦 SEMÁFORO MEJORADO CON PRIORIDAD VISUAL -->
               <td class="py-2 px-3 relative">
@@ -419,7 +419,7 @@
                        [title]="getDescripcionPrioridad(asunto)">
                   </div>
                   <!-- 🚨 Indicador especial para URGENTE -->
-                  <div *ngIf="asunto.plazo_atencion === 0" 
+                  <div *ngIf="asunto.plazo_atencion === 0"
                        class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping">
                   </div>
                 </div>
@@ -433,18 +433,18 @@
                   <div class="break-words">
                     <span [innerHTML]="isTextoExpandido(asunto.folio_interno) ? asunto.persona_relacionada : truncarTexto(asunto.persona_relacionada, 60)"></span>
                   </div>
-                  
+
                   <!-- Botón expandir/contraer para textos largos -->
-                  <button *ngIf="necesitaTruncado(asunto.persona_relacionada, 60)" 
+                  <button *ngIf="necesitaTruncado(asunto.persona_relacionada, 60)"
                           (click)="toggleTextoExpandido(asunto.folio_interno)"
                           class="inline-flex items-center mt-1 text-xs text-blue-600 hover:text-blue-800 transition-colors">
                     <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             [attr.d]="isTextoExpandido(asunto.folio_interno) ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'" />
                     </svg>
                     {{isTextoExpandido(asunto.folio_interno) ? 'Ver menos' : 'Ver más'}}
                   </button>
-                  
+
                   <!-- Tooltip para mostrar texto completo en hover -->
                   <div *ngIf="necesitaTruncado(asunto.persona_relacionada, 60) && !isTextoExpandido(asunto.folio_interno)"
                        class="absolute bottom-full left-0 mb-2 w-80 max-w-md p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
@@ -458,20 +458,20 @@
               <td class="py-2 px-3 whitespace-nowrap">
                 <div class="flex flex-col items-start space-y-1">
                   <!-- Badge principal de plazo -->
-              <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' + 
-                                (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800 animate-pulse border border-red-300' : 
-                                 asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800 border border-gray-300' : 
+              <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' +
+                                (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800 animate-pulse border border-red-300' :
+                                 asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800 border border-gray-300' :
                                  'bg-blue-100 text-blue-800 border border-blue-300')">
                 {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
               </span>
-                  
+
                   <!-- Badge de prioridad por antigüedad -->
                   <span [class]="'px-2 py-0.5 rounded text-xs font-medium ' + getBadgePrioridad(asunto).clase">
                     {{getBadgePrioridad(asunto).texto}}
                   </span>
-                  
+
                   <!-- Badge secundario para plazo (si aplica) -->
-                  <span *ngIf="getBadgePlazo(asunto)" 
+                  <span *ngIf="getBadgePlazo(asunto)"
                         [class]="'px-2 py-0.5 rounded text-xs font-medium ' + getBadgePlazo(asunto)!.clase">
                     {{getBadgePlazo(asunto)!.texto}}
                   </span>
@@ -529,11 +529,11 @@
               Filtro: {{filtroActivo}}
             </span>
           </div>
-          
+
           <div class="flex items-center space-x-2">
             <!-- Botón Primera página -->
-            <button 
-              (click)="irAPagina(1)" 
+            <button
+              (click)="irAPagina(1)"
               [disabled]="currentPage === 1"
               class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -542,8 +542,8 @@
             </button>
 
             <!-- Botón Anterior -->
-            <button 
-              (click)="irAPagina(currentPage - 1)" 
+            <button
+              (click)="irAPagina(currentPage - 1)"
               [disabled]="currentPage === 1"
               class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -553,8 +553,8 @@
 
             <!-- Números de página -->
             <div class="hidden md:flex items-center space-x-1">
-              <button 
-                *ngFor="let page of getPageNumbers()" 
+              <button
+                *ngFor="let page of getPageNumbers()"
                 (click)="irAPagina(page)"
                 [class.bg-[#691C32]]="page === currentPage"
                 [class.text-white]="page === currentPage"
@@ -572,8 +572,8 @@
             </span>
 
             <!-- Botón Siguiente -->
-            <button 
-              (click)="irAPagina(currentPage + 1)" 
+            <button
+              (click)="irAPagina(currentPage + 1)"
               [disabled]="currentPage === totalPages"
               class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -582,8 +582,8 @@
             </button>
 
             <!-- Botón Última página -->
-            <button 
-              (click)="irAPagina(totalPages)" 
+            <button
+              (click)="irAPagina(totalPages)"
               [disabled]="currentPage === totalPages"
               class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -656,23 +656,23 @@
           <div class="grid grid-cols-2 gap-4 text-sm">
             <div>
               <span class="text-gray-600 font-medium">Folio:</span>
-              <span class="ml-2 text-gray-800">{{itemDeFilaSelecionada?.folio_interno}}</span>
+              <span class="ml-2 text-gray-800">{{itemDeFilaSelecionada.folio_interno}}</span>
             </div>
             <div>
               <span class="text-gray-600 font-medium">Carpeta:</span>
-              <span class="ml-2 text-gray-800">{{itemDeFilaSelecionada?.carpeta_investigacion}}</span>
+              <span class="ml-2 text-gray-800">{{itemDeFilaSelecionada.carpeta_investigacion}}</span>
             </div>
             <div class="col-span-2">
               <span class="text-gray-600 font-medium">Persona Relacionada:</span>
-              <span class="ml-2 text-gray-800">{{itemDeFilaSelecionada?.persona_relacionada}}</span>
+              <span class="ml-2 text-gray-800">{{itemDeFilaSelecionada.persona_relacionada}}</span>
             </div>
             <div>
               <span class="text-gray-600 font-medium">Antigüedad:</span>
-              <span class="ml-2 font-semibold" 
+              <span class="ml-2 font-semibold"
                     [class.text-green-600]="itemDeFilaSelecionada!.plazo_atencion < 5"
                     [class.text-yellow-600]="itemDeFilaSelecionada!.plazo_atencion >= 5 && itemDeFilaSelecionada!.plazo_atencion <= 15"
                     [class.text-red-600]="itemDeFilaSelecionada!.plazo_atencion > 15">
-                {{itemDeFilaSelecionada?.plazo_atencion}} días
+                {{itemDeFilaSelecionada.plazo_atencion}} días
               </span>
             </div>
           </div>
@@ -684,13 +684,13 @@
             <label class="block text-sm font-medium text-gray-700">
               Seleccione la acción a realizar
             </label>
-            
+
             <!-- Radio button para asignar a abogado -->
-            <div class="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors" 
+            <div class="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                  [ngClass]="{'bg-red-50': tipoAccion === 'asignar', 'border-red-300': tipoAccion === 'asignar'}">
-              <input type="radio" 
-                     id="asignar-abogado" 
-                     name="tipoAccion" 
+              <input type="radio"
+                     id="asignar-abogado"
+                     name="tipoAccion"
                      value="asignar"
                      [(ngModel)]="tipoAccion"
                      class="mt-1 text-red-600 focus:ring-red-500">
@@ -703,13 +703,13 @@
                 </p>
               </div>
             </div>
-            
+
             <!-- Radio button para rechazar para correcta asignación -->
             <div class="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                  [ngClass]="{'bg-orange-50': tipoAccion === 'reasignar', 'border-orange-300': tipoAccion === 'reasignar'}">
-              <input type="radio" 
-                     id="rechazar-asignacion" 
-                     name="tipoAccion" 
+              <input type="radio"
+                     id="rechazar-asignacion"
+                     name="tipoAccion"
                      value="reasignar"
                      [(ngModel)]="tipoAccion"
                      class="mt-1 text-orange-600 focus:ring-orange-500">
@@ -784,10 +784,10 @@
           Cerrar
         </button>
         <button
-          [class]="tipoAccion === 'asignar' ? 
+          [class]="tipoAccion === 'asignar' ?
                    'px-6 py-2.5 min-w-[100px] bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed' :
                    'px-6 py-2.5 min-w-[100px] bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'"
-          (click)="ejecutarAccion()" 
+          (click)="ejecutarAccion()"
           [disabled]="(tipoAccion === 'asignar' && !abogadoSeleccionado) || (tipoAccion === 'reasignar' && !observacionesReasignacion.trim())">
           {{tipoAccion === 'asignar' ? 'Asignar' : 'Rechazar para Correcta Asignación'}}
         </button>
@@ -866,9 +866,9 @@
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Plazo de Atención</label>
               <div class="bg-white p-2 rounded border">
-                <span [class]="'px-3 py-1 rounded-full text-sm font-medium ' + 
-                              (asuntoDetalle?.plazo_atencion === 0 ? 'bg-red-100 text-red-800' : 
-                               asuntoDetalle?.plazo_atencion === null ? 'bg-gray-100 text-gray-800' : 
+                <span [class]="'px-3 py-1 rounded-full text-sm font-medium ' +
+                              (asuntoDetalle?.plazo_atencion === 0 ? 'bg-red-100 text-red-800' :
+                               asuntoDetalle?.plazo_atencion === null ? 'bg-gray-100 text-gray-800' :
                                'bg-blue-100 text-blue-800')">
                   {{getDescripcionPlazoAtencion(asuntoDetalle?.plazo_atencion)}}
                 </span>
@@ -913,7 +913,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Es Histórico</label>
               <div class="bg-white p-2 rounded border">
-                <span [class]="'px-3 py-1 rounded-full text-sm font-medium ' + 
+                <span [class]="'px-3 py-1 rounded-full text-sm font-medium ' +
                               (asuntoDetalle?.es_historico ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800')">
                   {{asuntoDetalle?.es_historico ? 'Sí' : 'No'}}
                 </span>
@@ -1012,7 +1012,7 @@
 
         <!-- Pie del modal -->
         <div class="bg-gray-50 px-6 py-4 flex justify-end border-t">
-          <button 
+          <button
             (click)="cerrarVisualizador()"
             class="px-6 py-2.5 bg-[#691C32] text-white rounded-lg hover:bg-[#8B1D3C] transition-colors shadow-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:ring-offset-2">
             <svg class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

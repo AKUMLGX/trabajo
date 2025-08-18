@@ -1,4 +1,3 @@
-import { usuariosPorAdministracion } from "./usuarios-Por-administracion.interface";
 
 export interface AsignarAsunto {
   folio_interno: string,
@@ -66,5 +65,5 @@ export interface AsuntoResponseAsignar{
   persona_relacionada: string,
   carpeta_investigacion: string,
   plazo_atencion:number,
-
+  id_asignacion: number
  }

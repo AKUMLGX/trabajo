@@ -171,16 +171,16 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
   estado_atencio: string = "POR ASIGNAR"
   documento: string = 'REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion[] = []
-  itemDeFilaSelecionada: modalItem | null = null
+  // itemDeFilaSelecionada: modalItem | null = null
 
-  //    itemDeFilaSelecionada: modalItem  ={
-  //   folio_interno: "",
-  //   persona_relacionada:"",
-  //   carpeta_investigacion:"",
-  //   plazo_atencion:0,
-  //   id_asignacion:0,
+     itemDeFilaSelecionada: modalItem  ={
+    folio_interno: "",
+    persona_relacionada:"",
+    carpeta_investigacion:"",
+    plazo_atencion:0,
+    id_asignacion:0,
 
-  //  }
+   }
 
   // ViewChild para templates
   @ViewChild('templateDetalle', { static: false }) templateDetalle!: TemplateRef<any>;
@@ -315,17 +315,6 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
       next: (res) => {
         // this.tablePorAsignarIndicador = res
         this.allData = res
-        console.log("All", res);
-
-        // this.idAsignaciones=res.map(idAsig=>idAsig.id_asignacion)
-        // this.tiposAsunto=res.map(tipoAsun=>tipoAsun.tipo_asunto)
-
-        this.idAsignaciones = res[0].id_asignacion;
-
-
-
-
-
         this.calcularContadores(res); // 📊 Calcular contadores iniciales
         this.buscadorService.setData(this.allData)
       },
@@ -354,7 +343,7 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
 
   asignarAsunto() {
     const payloadPorAsigarModal: AsignarAsuntoRequest = {
-      id_asignacion: this.idAsignaciones,
+      id_asignacion: this.itemDeFilaSelecionada.id_asignacion,
       tipo_asunto: 'nuevo',
       rfc: this.abogadoSeleccionado,
       id_asunto: 0,
@@ -363,7 +352,7 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
     }
     this.cards.asignarAsunto(payloadPorAsigarModal).subscribe({
       next: () => {
-        // window.location.reload()
+        window.location.reload()
       }
     })
   }
