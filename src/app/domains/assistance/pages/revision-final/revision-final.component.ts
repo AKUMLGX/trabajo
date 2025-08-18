@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DictaminadorBandejaService } from '../../../services/dictaminador-bandeja.service';
 
 import { AsuntosPendientesTableComponent } from './components/asuntos-pendientes-table/asuntos-pendientes-table.component';
 import { AsuntosRevisadosTableComponent } from './components/asuntos-revisados-table/asuntos-revisados-table.component';
@@ -29,15 +30,15 @@ import { ArchivosAtencionService } from '../../../services/archivos-atencion.ser
 interface Asunto {
   id: string;
   folio: string;
-  personaRelacionada: string;
-  fechaRecepcion: Date;
-  fechaLimite: Date;
-  diasTranscurridos: number;
-  estadoAtencion: string;
-  prioridad: string;
-  dictaminador: string;
-  carpetaInvestigacion: string;
-  estado: string;
+  personaRelacionada?: string;
+  fechaRecepcion?: Date;
+  fechaLimite?: Date;
+  diasTranscurridos?: number;
+  estadoAtencion?: string;
+  prioridad?: string;
+  dictaminador?: string;
+  carpetaInvestigacion?: string;
+  estado?: string;
 }
 
 // 🆕 Nueva interface para asuntos capturados
@@ -166,86 +167,45 @@ export class RevisionFinalComponent implements OnInit {
     private dialog: MatDialog,
     private cardsService: CardsInfoBandejadeAtencionService,
     private archivosAtencionService: ArchivosAtencionService,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private dictaminadorBandejaService: DictaminadorBandejaService
   ) {}
 
   ngOnInit(): void {
-    // Cargar datos de ejemplo
-    this.cargarDatosEjemplo();
+    // Cargar dictámenes pendientes reales (VISTO BUENO AKAMBA 2)
+    this.cargarDictamenesPendientesDesdeBackend();
     this.cargarAsuntosCapturados(); // 🆕 Cargar asuntos capturados
     this.actualizarEstadisticas();
   }
 
-  cargarDatosEjemplo(): void {
-    // Datos de ejemplo para dictámenes (no para asuntos capturados)
-    this.asuntosPendientes = [
-      {
-        id: '001',
-        folio: 'EUACAPE-0021',
-        personaRelacionada: 'María González López',
-        fechaRecepcion: new Date('2024-05-20'),
-        fechaLimite: new Date('2024-06-15'),
-        diasTranscurridos: 20,
-        estadoAtencion: 'Finalizado',
-        prioridad: 'Alta',
-        dictaminador: 'Juan Pérez',
-        carpetaInvestigacion: 'CI-78945',
-        estado: 'Pendiente'
-      },
-      {
-        id: '002',
-        folio: 'EUACAPE-0022',
-        personaRelacionada: 'Juan Pérez Ramírez',
-        fechaRecepcion: new Date('2024-05-30'),
-        fechaLimite: new Date('2024-06-25'),
-        diasTranscurridos: 10,
-        estadoAtencion: 'Finalizado',
-        prioridad: 'Media',
-        dictaminador: 'Ana López',
-        carpetaInvestigacion: 'CI-78946',
-        estado: 'Pendiente'
-      },
-      {
-        id: '003',
-        folio: 'EUACAPE-0023',
-        personaRelacionada: 'Carlos Sánchez Ruiz',
-        fechaRecepcion: new Date('2024-06-06'),
-        fechaLimite: new Date('2024-06-30'),
-        diasTranscurridos: 3,
-        estadoAtencion: 'Finalizado',
-        prioridad: 'Baja',
-        dictaminador: 'Luis Martínez',
-        carpetaInvestigacion: 'CI-78947',
-        estado: 'Pendiente'
-      },
-      {
-        id: '004',
-        folio: 'EUACAPE-0024',
-        personaRelacionada: 'Roberto Juárez Gómez',
-        fechaRecepcion: new Date('2024-06-01'),
-        fechaLimite: new Date('2024-06-20'),
-        diasTranscurridos: 8,
-        estadoAtencion: 'Finalizado',
-        prioridad: 'Alta',
-        dictaminador: 'Carmen Vega',
-        carpetaInvestigacion: 'CI-78948',
-        estado: 'Pendiente'
-      },
-      {
-        id: '005',
-        folio: 'EUACAPE-0025',
-        personaRelacionada: 'Laura Estrada Campos',
-        fechaRecepcion: new Date('2024-06-05'),
-        fechaLimite: new Date('2024-06-28'),
-        diasTranscurridos: 4,
-        estadoAtencion: 'Finalizado',
-        prioridad: 'Media',
-        dictaminador: 'Miguel Ángel Torres',
-        carpetaInvestigacion: 'CI-78949',
-        estado: 'Pendiente'
-      }
-    ];
+  private cargarDictamenesPendientesDesdeBackend(): void {
+    this.dictaminadorBandejaService
+      .obtenerAsuntosPorEstado('VISTO BUENO AKAMBA 2')
+      .subscribe({
+        next: (items) => {
+          this.asuntosPendientes = items.map((it) => ({
+            id: String((it as any).id_asunto ?? ''),
+            folio: it.folio_interno ?? '',
+            oficio: (it as any).oficio ?? '',
+            personaRelacionada: it.persona_relacionada ?? '',
+            fechaRecepcion: (it as any).fecha_recepcion ? new Date((it as any).fecha_recepcion as unknown as string) : (undefined as unknown as Date),
+            fechaLimite: undefined as unknown as Date,
+            diasTranscurridos: it.plazo_atencion ?? 0,
+            estadoAtencion: 'Pendiente',
+            prioridad: (it.plazo_atencion ?? 0) > 15 ? 'Alta' : (it.plazo_atencion ?? 0) > 7 ? 'Media' : 'Baja',
+            dictaminador: (it as any).nombre_dictaminador ?? '',
+            carpetaInvestigacion: it.carpeta_investigacion ?? '',
+            estado: 'Pendiente'
+          }));
+        },
+        error: (e) => {
+          console.error('[RevisionFinal] Error cargando dictámenes pendientes:', e);
+          this.asuntosPendientes = [];
+        }
+      });
+  }
 
+  cargarDatosEjemplo(): void {
     // Asuntos ya revisados
     this.asuntosRevisados = [
       {
@@ -398,7 +358,8 @@ export class RevisionFinalComponent implements OnInit {
     this.estadisticas.totalPendientes = this.asuntosPendientes.length;
 
     this.estadisticas.pendientesHoy = this.asuntosPendientes.filter(a => {
-      const fechaLimite = new Date(a.fechaLimite);
+      const fechaLimite = a.fechaLimite ? new Date(a.fechaLimite as Date) : null;
+      if (!fechaLimite) { return false; }
       fechaLimite.setHours(0, 0, 0, 0);
       return fechaLimite.getTime() === hoy.getTime();
     }).length;
@@ -453,6 +414,11 @@ export class RevisionFinalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        // Si resolvió en backend, refrescar lista desde backend y salir
+        if (result.resuelto === true) {
+          this.cargarDictamenesPendientesDesdeBackend();
+          return;
+        }
         if (result.accion === 'aprobar') {
           this.aprobarAsunto(result.asunto);
         } else if (result.accion === 'rechazar') {
@@ -476,9 +442,9 @@ export class RevisionFinalComponent implements OnInit {
       const textoBusqueda = this.filtroText.toLowerCase();
       asuntosFiltrados = asuntosFiltrados.filter(a =>
         a.folio.toLowerCase().includes(textoBusqueda) ||
-        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
-        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
-        a.dictaminador.toLowerCase().includes(textoBusqueda)
+        (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+        (a.carpetaInvestigacion || '').toLowerCase().includes(textoBusqueda) ||
+        (a.dictaminador || '').toLowerCase().includes(textoBusqueda)
       );
     }
 
@@ -493,9 +459,9 @@ export class RevisionFinalComponent implements OnInit {
       const textoBusqueda = this.filtroText.toLowerCase();
       asuntos = asuntos.filter(a =>
         a.folio.toLowerCase().includes(textoBusqueda) ||
-        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
-        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
-        a.dictaminador.toLowerCase().includes(textoBusqueda)
+        (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+        (a.carpetaInvestigacion || '').toLowerCase().includes(textoBusqueda) ||
+        (a.dictaminador || '').toLowerCase().includes(textoBusqueda)
       );
     }
 
@@ -510,7 +476,7 @@ export class RevisionFinalComponent implements OnInit {
    */
   getAsuntosPendientesPorDias(minDias: number, maxDias: number): Asunto[] {
     let asuntos = this.asuntosPendientes.filter(a =>
-      a.diasTranscurridos >= minDias && a.diasTranscurridos <= maxDias
+      (a.diasTranscurridos ?? 0) >= minDias && (a.diasTranscurridos ?? 0) <= maxDias
     );
 
     // Aplicar filtro de texto
@@ -518,9 +484,9 @@ export class RevisionFinalComponent implements OnInit {
       const textoBusqueda = this.filtroText.toLowerCase();
       asuntos = asuntos.filter(a =>
         a.folio.toLowerCase().includes(textoBusqueda) ||
-        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
-        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
-        a.dictaminador.toLowerCase().includes(textoBusqueda)
+        (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+        (a.carpetaInvestigacion || '').toLowerCase().includes(textoBusqueda) ||
+        (a.dictaminador || '').toLowerCase().includes(textoBusqueda)
       );
     }
 
@@ -1307,6 +1273,8 @@ export class RevisionFinalComponent implements OnInit {
         break;
       case 1:
         this.cambiarTab('dictamenes');
+        // Al entrar a Dictámenes, recargar desde backend
+        this.cargarDictamenesPendientesDesdeBackend();
         break;
       case 2:
         this.cambiarTab('revisados');

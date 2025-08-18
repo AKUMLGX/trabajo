@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRadioModule } from '@angular/material/radio';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { DictaminadorBandejaService } from '../../../../../services/dictaminador-bandeja.service';
 
 interface Asunto {
   id: string;
@@ -64,6 +65,7 @@ export class RevisionDetalleModalComponent implements OnInit {
   pdfCargando = false;
   modoComparacion = false;
   expandido = false;
+  resolviendo = false;
   
   // URLs de ejemplo para documentos PDF
   documentosPDF: Record<string, string> = {
@@ -88,7 +90,8 @@ export class RevisionDetalleModalComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<RevisionDetalleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dictaminadorBandejaService: DictaminadorBandejaService
   ) {
     this.asunto = data.asunto;
     this.soloLectura = data.soloLectura || false;
@@ -160,23 +163,71 @@ export class RevisionDetalleModalComponent implements OnInit {
   }
 
   aprobar(): void {
-    this.dialogRef.close({
-      accion: 'aprobar',
-      asunto: this.asunto,
-      tipoAtencion: this.tipoAtencion
+    const idAsunto = parseInt(this.asunto.id, 10);
+    if (!idAsunto || Number.isNaN(idAsunto)) {
+      console.error('[RevisionDetalle] id_asunto inválido para resolver');
+      return;
+    }
+
+    this.resolviendo = true;
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, true).subscribe({
+      next: () => {
+        this.resolviendo = false;
+        this.dialogRef.close({
+          accion: 'aprobar',
+          asunto: this.asunto,
+          tipoAtencion: this.tipoAtencion,
+          resuelto: true
+        });
+      },
+      error: (err) => {
+        this.resolviendo = false;
+        console.error('[RevisionDetalle] Error al aprobar/resolver asunto:', err);
+      }
     });
   }
 
   rechazar(): void {
-    if (this.motivoForm.valid) {
-      this.dialogRef.close({
-        accion: 'rechazar',
-        asunto: this.asunto,
-        motivo: this.motivoForm.value.motivo,
-        observaciones: this.motivoForm.value.observaciones,
-        tipoAtencion: this.tipoAtencion
-      });
+    if (!this.motivoForm.valid) { return; }
+
+    const idAsunto = parseInt(this.asunto.id, 10);
+    if (!idAsunto || Number.isNaN(idAsunto)) {
+      console.error('[RevisionDetalle] id_asunto inválido para resolver (rechazar)');
+      return;
     }
+
+    this.resolviendo = true;
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false).subscribe({
+      next: () => {
+        this.resolviendo = false;
+        this.dialogRef.close({
+          accion: 'rechazar',
+          asunto: this.asunto,
+          motivo: this.motivoForm.value.motivo,
+          observaciones: this.motivoForm.value.observaciones,
+          tipoAtencion: this.tipoAtencion,
+          resuelto: true
+        });
+      },
+      error: (err) => {
+        this.resolviendo = false;
+        console.error('[RevisionDetalle] Error al rechazar/resolver asunto:', err);
+      }
+    });
+  }
+
+  // Rechazo rápido desde la tarjeta roja (sin llenar formulario)
+  rechazarRapido(): void {
+    const idAsunto = parseInt(this.asunto.id, 10);
+    if (!idAsunto || Number.isNaN(idAsunto)) { return; }
+    this.resolviendo = true;
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false).subscribe({
+      next: () => {
+        this.resolviendo = false;
+        this.dialogRef.close({ accion: 'rechazar', asunto: this.asunto, resuelto: true });
+      },
+      error: (err) => { this.resolviendo = false; console.error('[RevisionDetalle] Error rechazar rápido:', err); }
+    });
   }
 
   /**
