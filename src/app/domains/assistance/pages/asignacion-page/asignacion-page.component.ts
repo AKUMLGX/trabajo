@@ -3,15 +3,15 @@ import { Component, OnInit, TemplateRef, AfterViewInit, OnDestroy, ViewChild } f
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule} from '@angular/material/dialog';
-import { FormControl, FormsModule,  ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import {  porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
+import { porAsignarRequest, tableAsuntosPorDictaminar } from '../../../interfaces/porAsignarRequest.interface';
 import { CardsInfoBandejadeAtencionService } from '../../../services/cards-info-bandejade-atencion.service';
 import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
 import { ModalService } from '../../../shared/services/modal.service';
 import { BuscadorService } from '../../../shared/services/buscador.service';
-import { Observable,of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
 import { FileService } from '../../../services/file.service';
@@ -152,7 +152,7 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
   // asuntos: Asunto[] = [];
   tablePorAsignarIndicador: tableAsuntosPorDictaminar[] = []
 
-buscador = new FormControl('');
+  buscador = new FormControl('');
 
   searchTerm: string = '';
   currentPage: number = 1;
@@ -168,10 +168,19 @@ buscador = new FormControl('');
   // pdfTitulo: string = '';
   // asuntoParaDescargar: Asunto | null = null;
 
-  estado_atencio: string= "POR ASIGNAR"
+  estado_atencio: string = "POR ASIGNAR"
   documento: string = 'REQUERIMIENTO'
   usuariosAsignar: usuariosPorAdministracion[] = []
-   itemDeFilaSelecionada: modalItem | null = null
+  itemDeFilaSelecionada: modalItem | null = null
+
+  //    itemDeFilaSelecionada: modalItem  ={
+  //   folio_interno: "",
+  //   persona_relacionada:"",
+  //   carpeta_investigacion:"",
+  //   plazo_atencion:0,
+  //   id_asignacion:0,
+
+  //  }
 
   // ViewChild para templates
   @ViewChild('templateDetalle', { static: false }) templateDetalle!: TemplateRef<any>;
@@ -186,10 +195,7 @@ buscador = new FormControl('');
     totalItems: 0
   };
 
-  porAsignarDataTable: porAsignarRequest = {
-    documento: this.documento,
-    estado_atencion: this.estado_atencio
-  }
+
 
   totalPages: number = 0;
   totalRegistros: number = 0;
@@ -235,11 +241,11 @@ buscador = new FormControl('');
   constructor(private router: Router,
     private cards: CardsInfoBandejadeAtencionService,
     private modalService: ModalService,
-   private buscadorService:BuscadorService<tableAsuntosPorDictaminar>,
-   private fileService: FileService,
-   private archivosAtencionService: ArchivosAtencionService,
-   private domSanitizer: DomSanitizer,
-   private route: ActivatedRoute) { }
+    private buscadorService: BuscadorService<tableAsuntosPorDictaminar>,
+    private fileService: FileService,
+    private archivosAtencionService: ArchivosAtencionService,
+    private domSanitizer: DomSanitizer,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.filteredData$ = this.buscadorService.getFilteredData(this.filtrarIndicador);
@@ -297,26 +303,44 @@ buscador = new FormControl('');
     this.asuntosPaginados = datosOrdenados.slice(inicio, fin);
   }
 
+
+
+  porAsignarDataTable: porAsignarRequest = {
+    documento: this.documento,
+    estado_atencion: this.estado_atencio
+  }
+
   tablePorAsignar() {
     this.cards.tablePorAsignar(this.porAsignarDataTable).subscribe({
       next: (res) => {
         // this.tablePorAsignarIndicador = res
         this.allData = res
+        console.log("All", res);
+
+        // this.idAsignaciones=res.map(idAsig=>idAsig.id_asignacion)
+        // this.tiposAsunto=res.map(tipoAsun=>tipoAsun.tipo_asunto)
+
+        this.idAsignaciones = res[0].id_asignacion;
+
+
+
+
+
         this.calcularContadores(res); // 📊 Calcular contadores iniciales
         this.buscadorService.setData(this.allData)
       },
     });
   }
 
-  onDearchChange(value:string){
+  onDearchChange(value: string) {
     this.buscadorService.setSearchTerm(value)
   }
 
   filtrarIndicador = (item: tableAsuntosPorDictaminar, term: string): boolean => {
-  return item.persona_relacionada?.toLowerCase().includes(term.toLocaleLowerCase());
+    return item.persona_relacionada?.toLowerCase().includes(term.toLocaleLowerCase());
   };
 
-  asignarIndicador : Observable<tableAsuntosPorDictaminar[]>= new Observable
+  asignarIndicador: Observable<tableAsuntosPorDictaminar[]> = new Observable
 
   usuariosPorAdministracion() {
     this.cards.usuariosPorAdminitracion().subscribe((res: usuariosPorAdministracion[]) => {
@@ -324,16 +348,22 @@ buscador = new FormControl('');
     })
   }
 
+  idAsignaciones:number = 0;
+  tiposAsunto: string = "";
+
+
   asignarAsunto() {
-    const itemJsonSeleccion = this.itemDeFilaSelecionada!
-    const jsonRequest : AsignarAsuntoRequest = {
-      asunto: itemJsonSeleccion,
-      rfc_asignado: this.abogadoSeleccionado
+    const payloadPorAsigarModal: AsignarAsuntoRequest = {
+      id_asignacion: this.idAsignaciones,
+      tipo_asunto: 'nuevo',
+      rfc: this.abogadoSeleccionado,
+      id_asunto: 0,
+      fecha_asignacion: null,
+      estado_atencion: 2,
     }
-    console.log("JSON",JSON.stringify(jsonRequest));
-    this.cards.asignarAsunto(jsonRequest).subscribe({
+    this.cards.asignarAsunto(payloadPorAsigarModal).subscribe({
       next: () => {
-        window.location.reload()
+        // window.location.reload()
       }
     })
   }
@@ -371,7 +401,7 @@ buscador = new FormControl('');
 
   // Función para cerrar modal y limpiar
   cerrarModalAsignacion() {
-    this.itemDeFilaSelecionada = null;
+    // this.itemDeFilaSelecionada = ;
     this.abogadoSeleccionado = '';
     this.tipoAccion = 'asignar';
     this.observacionesReasignacion = '';
@@ -426,7 +456,7 @@ buscador = new FormControl('');
     } catch (error) {
       return 0;
     }
-      }
+  }
 
   // 🎯 SISTEMA DE PRIORIDADES HÍBRIDO - CLASIFICACIÓN POR ANTIGÜEDAD
   getPrioridad(asunto: tableAsuntosPorDictaminar): number {
@@ -474,8 +504,8 @@ buscador = new FormControl('');
     }
 
     // 🟢 VERDE: Menor a 4 días de antigüedad real
-      return 'bg-green-500';
-    }
+    return 'bg-green-500';
+  }
 
   // 🎨 DESCRIPCIÓN DE PRIORIDAD CORREGIDA
   getDescripcionPrioridad(asunto: tableAsuntosPorDictaminar): string {
@@ -922,47 +952,49 @@ buscador = new FormControl('');
     bgColor: string,
     borderColor: string
   } {
-         const configuraciones: { [key: string]: {
-       icono: string,
-       color: string,
-       titulo: string,
-       descripcion: string,
-       bgColor: string,
-       borderColor: string
-     }} = {
-       "urgente": {
-         icono: '🚨',
-         color: 'text-red-600',
-         titulo: 'CASOS URGENTES',
-         descripcion: 'Requieren atención inmediata',
-         bgColor: 'bg-red-50',
-         borderColor: 'border-red-200'
-       },
-       "critico": {
-         icono: '🔴',
-         color: 'text-red-500',
-         titulo: 'CASOS CRÍTICOS',
-         descripcion: 'Más de 15 días sin atender',
-         bgColor: 'bg-red-50',
-         borderColor: 'border-red-200'
-       },
-       "normal": {
-         icono: '🟡',
-         color: 'text-yellow-600',
-         titulo: 'CASOS NORMALES',
-         descripcion: 'Entre 5 y 15 días',
-         bgColor: 'bg-yellow-50',
-         borderColor: 'border-yellow-200'
-       },
-       "reciente": {
-         icono: '🟢',
-         color: 'text-green-600',
-         titulo: 'CASOS RECIENTES',
-         descripcion: 'Menos de 4 días',
-         bgColor: 'bg-green-50',
-         borderColor: 'border-green-200'
-       }
-     };
+    const configuraciones: {
+      [key: string]: {
+        icono: string,
+        color: string,
+        titulo: string,
+        descripcion: string,
+        bgColor: string,
+        borderColor: string
+      }
+    } = {
+      "urgente": {
+        icono: '🚨',
+        color: 'text-red-600',
+        titulo: 'CASOS URGENTES',
+        descripcion: 'Requieren atención inmediata',
+        bgColor: 'bg-red-50',
+        borderColor: 'border-red-200'
+      },
+      "critico": {
+        icono: '🔴',
+        color: 'text-red-500',
+        titulo: 'CASOS CRÍTICOS',
+        descripcion: 'Más de 15 días sin atender',
+        bgColor: 'bg-red-50',
+        borderColor: 'border-red-200'
+      },
+      "normal": {
+        icono: '🟡',
+        color: 'text-yellow-600',
+        titulo: 'CASOS NORMALES',
+        descripcion: 'Entre 5 y 15 días',
+        bgColor: 'bg-yellow-50',
+        borderColor: 'border-yellow-200'
+      },
+      "reciente": {
+        icono: '🟢',
+        color: 'text-green-600',
+        titulo: 'CASOS RECIENTES',
+        descripcion: 'Menos de 4 días',
+        bgColor: 'bg-green-50',
+        borderColor: 'border-green-200'
+      }
+    };
 
     return configuraciones[tipo] || configuraciones["reciente"];
   }

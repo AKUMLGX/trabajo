@@ -24,8 +24,8 @@ export interface tableAsuntosPorDictaminar{
   es_historico: boolean,
   plazo_atencion: number,
   // 🆕 Datos necesarios para la asignación en backend
-  id_asignacion?: number,
-  tipo_asunto?: string,
+  id_asignacion: number,
+  tipo_asunto: string,
   rfc_dictaminador?: string,
   nombre_dictaminador?: string
 }
