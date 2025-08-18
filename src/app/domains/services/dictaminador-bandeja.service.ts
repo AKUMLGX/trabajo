@@ -103,4 +103,22 @@ export class DictaminadorBandejaService {
 
     return this.http.post<string>(url, params, httpOptions);
   }
+
+  resolverAsunto(idAsunto: number, aprobado: boolean): Observable<string> {
+    const url = environment.baseUrl + environment.resolverAsunto;
+    const params = {
+      id_asunto: idAsunto,
+      aprobado: aprobado
+    };
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'text/plain, */*'
+      }),
+      responseType: 'text' as 'json'
+    };
+
+    return this.http.post<string>(url, params, httpOptions);
+  }
 }

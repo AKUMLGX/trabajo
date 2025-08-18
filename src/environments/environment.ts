@@ -63,6 +63,7 @@ export const environment={
   listarArchivosAtencion: 'asunto/atencion/listar_archivos_atencion',
   listarArchivosAtencionModal: 'asunto/atencion/listar_archivos',
   finalizarAtencion: 'asunto/atencion/finalizar_atencion',
+  resolverAsunto: 'asunto/atencion/resolver',
   asignarAdministracion: 'asunto/atencion/asignar_administracion',
   //#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',

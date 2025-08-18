@@ -27,4 +27,7 @@ export interface AsignarAsuntoRequest {
   persona_relacionada: string,
   carpeta_investigacion: string,
   plazo_atencion:number,
+  id_asunto: number,
+  id_asignacion?: number,
+  es_historico: boolean
  }

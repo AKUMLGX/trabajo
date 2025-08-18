@@ -767,46 +767,38 @@ export class CardsComponent implements OnInit {
   aprobarAsuntoRevision(datos: { id: number, observaciones: string, tipoAprobacion: 'parcial' | 'total' }): void {
     console.log('Aprobando asunto:', datos);
 
-    // Aquí iría la llamada al servicio para aprobar el asunto
-    // Por ahora solo mostramos un mensaje y actualizamos la lista
+    // Refrescar datos desde backend y quitar el asunto de la lista
     const tipoTexto = datos.tipoAprobacion === 'parcial' ? 'Parcial' : 'Total';
     this.mostrarMensaje(`Asunto ${datos.id} aprobado como Atención ${tipoTexto}`);
 
-    // Actualizar la lista de asuntos
-    this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
-    if (this.vistaActual === 'aprobacion') {
-      this.tablePorDictaminar = this.asuntosPorAprobar;
-    }
+    // Actualizar listas desde el servidor para reflejar cambio de estado
+    this.cargarAsuntosPorAprobar();
+    this.cargarAsuntosEnAtencion();
+    this.actualizarTablaSegunVista();
   }
 
   // Método para rechazar un asunto
   rechazarAsuntoRevision(datos: { id: number, observaciones: string, motivo: string }): void {
     console.log('Rechazando asunto:', datos);
 
-    // Aquí iría la llamada al servicio para rechazar el asunto
-    // Por ahora solo mostramos un mensaje y actualizamos la lista
+    // Refrescar datos tras rechazo
     this.mostrarMensaje(`Asunto ${datos.id} rechazado definitivamente por: ${datos.motivo}`);
 
-    // Actualizar la lista de asuntos
-    this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
-    if (this.vistaActual === 'aprobacion') {
-      this.tablePorDictaminar = this.asuntosPorAprobar;
-    }
+    this.cargarAsuntosPorAprobar();
+    this.cargarAsuntosEnAtencion();
+    this.actualizarTablaSegunVista();
   }
 
   // Método para regresar un asunto al dictaminador
   regresarAsuntoRevision(datos: { id: number, observaciones: string, motivo: string }): void {
     console.log('Regresando asunto al dictaminador:', datos);
 
-    // Aquí iría la llamada al servicio para regresar el asunto
-    // Por ahora solo mostramos un mensaje y actualizamos la lista
+    // Refrescar datos tras regreso (rechazo)
     this.mostrarMensaje(`Asunto ${datos.id} regresado al dictaminador: ${datos.motivo}`);
 
-    // Actualizar la lista de asuntos
-    this.asuntosPorAprobar = this.asuntosPorAprobar.filter(a => a.id_asunto !== datos.id);
-    if (this.vistaActual === 'aprobacion') {
-      this.tablePorDictaminar = this.asuntosPorAprobar;
-    }
+    this.cargarAsuntosPorAprobar();
+    this.cargarAsuntosEnAtencion();
+    this.actualizarTablaSegunVista();
   }
 
   // Método para visualizar PDF

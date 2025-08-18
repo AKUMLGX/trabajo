@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { SafePipe } from '../../../../../shared/pipes/safe.pipe';
 import { environment } from '../../../../../../environments/environment';
 import { ArchivosAtencionService } from '../../../../services/archivos-atencion.service';
+import { DictaminadorBandejaService } from '../../../../services/dictaminador-bandeja.service';
 
 @Component({
   selector: 'app-revision-modal',
@@ -68,7 +69,8 @@ export class RevisionModalComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    private archivosService: ArchivosAtencionService
+    private archivosService: ArchivosAtencionService,
+    private dictaminadorBandejaService: DictaminadorBandejaService
   ) {
     this.formularioRevision = this.fb.group({
       observaciones: [''],
@@ -153,9 +155,19 @@ export class RevisionModalComponent implements OnInit {
       this.enviandoAprobacion = true;
       this.tipoAprobacionSeleccionada = tipoAprobacion;
       
+      const idAsunto = this.asunto?.id_asunto
+        ?? this.asunto?.datos?.id_asunto_nuevo
+        ?? this.asunto?.datos?.id_asunto_historico
+        ?? this.asunto?.asunto?.datos?.id_asunto_nuevo
+        ?? this.asunto?.asunto?.datos?.id_asunto_historico
+        ?? this.asunto?.id_asunto_nuevo
+        ?? this.asunto?.id_asunto_historico;
+
+      console.log('[RevisionModal] aprobarAsunto() -> id:', idAsunto, 'tipo:', tipoAprobacion);
+
       // Emitir evento de aprobación con las observaciones y tipo
       this.aprobarAsuntoEvent.emit({
-        id: this.asunto.id_asunto,
+        id: Number(idAsunto),
         observaciones: this.formularioRevision.get('observaciones')?.value,
         tipoAprobacion: tipoAprobacion
       });
@@ -181,20 +193,35 @@ export class RevisionModalComponent implements OnInit {
       }
       
       this.enviandoRechazo = true;
-      
-      // Emitir evento de rechazo con las observaciones y el motivo
-      this.rechazarAsuntoEvent.emit({
-        id: this.asunto.id_asunto,
-        observaciones: this.formularioRevision.get('observaciones')?.value,
-        motivo: motivo
+
+      const idAsunto = this.asunto?.id_asunto
+        ?? this.asunto?.datos?.id_asunto_nuevo
+        ?? this.asunto?.datos?.id_asunto_historico
+        ?? this.asunto?.asunto?.datos?.id_asunto_nuevo
+        ?? this.asunto?.asunto?.datos?.id_asunto_historico
+        ?? this.asunto?.id_asunto_nuevo
+        ?? this.asunto?.id_asunto_historico;
+
+      console.log('[RevisionModal] rechazarAsunto() -> id:', idAsunto, 'motivo:', motivo);
+
+      // Disparar rechazo vía endpoint resolver (aprobado=false)
+      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false).subscribe({
+        next: (resp) => {
+          console.log('[RevisionModal] Resolver (rechazo) OK:', resp);
+          // Emitir evento para que el padre actualice la tabla
+          this.rechazarAsuntoEvent.emit({
+            id: Number(idAsunto),
+            observaciones: this.formularioRevision.get('observaciones')?.value,
+            motivo: motivo
+          });
+          this.enviandoRechazo = false;
+          this.cerrarModal();
+        },
+        error: (err) => {
+          console.error('[RevisionModal] Error al rechazar asunto:', err);
+          this.enviandoRechazo = false;
+        }
       });
-      
-      // En un caso real, esperaríamos la respuesta del servicio
-      // Aquí simulamos un tiempo de espera
-      setTimeout(() => {
-        this.enviandoRechazo = false;
-        this.cerrarModal();
-      }, 1000);
     }
   }
 
@@ -209,20 +236,34 @@ export class RevisionModalComponent implements OnInit {
       }
       
       this.enviandoRegreso = true;
-      
-      // Emitir evento de regreso solo con las observaciones
-      this.regresarAsuntoEvent.emit({
-        id: this.asunto.id_asunto,
-        observaciones: observaciones,
-        motivo: 'Regresado con observaciones' // Motivo fijo
+
+      const idAsunto = this.asunto?.id_asunto
+        ?? this.asunto?.datos?.id_asunto_nuevo
+        ?? this.asunto?.datos?.id_asunto_historico
+        ?? this.asunto?.asunto?.datos?.id_asunto_nuevo
+        ?? this.asunto?.asunto?.datos?.id_asunto_historico
+        ?? this.asunto?.id_asunto_nuevo
+        ?? this.asunto?.id_asunto_historico;
+
+      console.log('[RevisionModal] regresarAsunto() -> id:', idAsunto, 'observaciones:', observaciones);
+
+      // Usar resolver para marcar como rechazado (aprobado=false)
+      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false).subscribe({
+        next: (resp) => {
+          console.log('[RevisionModal] Resolver (regresar) OK:', resp);
+          this.regresarAsuntoEvent.emit({
+            id: Number(idAsunto),
+            observaciones: observaciones,
+            motivo: 'Regresado con observaciones'
+          });
+          this.enviandoRegreso = false;
+          this.cerrarModal();
+        },
+        error: (err) => {
+          console.error('[RevisionModal] Error al regresar asunto:', err);
+          this.enviandoRegreso = false;
+        }
       });
-      
-      // En un caso real, esperaríamos la respuesta del servicio
-      // Aquí simulamos un tiempo de espera
-      setTimeout(() => {
-        this.enviandoRegreso = false;
-        this.cerrarModal();
-      }, 1000);
     }
   }
   
@@ -238,10 +279,42 @@ export class RevisionModalComponent implements OnInit {
   }
   
   confirmarAtencion(): void {
-    if (this.tipoAtencionSeleccionada) {
-      this.cerrarModalConfirmacion();
-      this.aprobarAsunto(this.tipoAtencionSeleccionada);
+    if (!this.tipoAtencionSeleccionada) {
+      console.warn('[RevisionModal] No hay tipo de atención seleccionado');
+      return;
     }
+
+    // No cerrar el modal de confirmación hasta recibir respuesta
+    // Intentar obtener id_asunto con diferentes formas del objeto
+    const idAsunto = this.asunto?.id_asunto
+      ?? this.asunto?.datos?.id_asunto_nuevo
+      ?? this.asunto?.datos?.id_asunto_historico
+      ?? this.asunto?.asunto?.datos?.id_asunto_nuevo
+      ?? this.asunto?.asunto?.datos?.id_asunto_historico
+      ?? this.asunto?.id_asunto_nuevo
+      ?? this.asunto?.id_asunto_historico;
+
+    console.log('[RevisionModal] confirmarAtencion() -> idAsunto:', idAsunto, 'tipo:', this.tipoAtencionSeleccionada);
+
+    if (!idAsunto) {
+      console.error('[RevisionModal] No se encontró id_asunto para resolver. Objeto asunto:', this.asunto);
+      return;
+    }
+
+    this.enviandoAprobacion = true;
+    this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), true).subscribe({
+      next: (resp) => {
+        console.log('[RevisionModal] Resolver OK:', resp);
+        this.enviandoAprobacion = false;
+        // Cerrar modal de confirmación y disparar flujo de UI
+        this.cerrarModalConfirmacion();
+        this.aprobarAsunto(this.tipoAtencionSeleccionada!);
+      },
+      error: (err) => {
+        this.enviandoAprobacion = false;
+        console.error('[RevisionModal] Error al resolver asunto:', err);
+      }
+    });
   }
   
   resetearFormulario(): void {
