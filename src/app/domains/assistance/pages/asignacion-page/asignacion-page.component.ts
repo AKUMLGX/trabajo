@@ -178,7 +178,9 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
     persona_relacionada:"",
     carpeta_investigacion:"",
     plazo_atencion:0,
+    id_asunto: 0,
     id_asignacion:0,
+    es_historico: false,
 
    }
 
@@ -343,7 +345,7 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
 
   asignarAsunto() {
     const payloadPorAsigarModal: AsignarAsuntoRequest = {
-      id_asignacion: this.itemDeFilaSelecionada.id_asignacion,
+      id_asignacion: this.itemDeFilaSelecionada.id_asignacion as number,
       tipo_asunto: 'nuevo',
       rfc: this.abogadoSeleccionado,
       id_asunto: 0,

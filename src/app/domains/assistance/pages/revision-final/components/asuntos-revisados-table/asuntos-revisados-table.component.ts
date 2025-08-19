@@ -12,15 +12,16 @@ import { RevisionDetalleModalComponent } from '../revision-detalle-modal/revisio
 interface Asunto {
   id: string;
   folio: string;
-  personaRelacionada: string;
-  fechaRecepcion: Date;
-  fechaLimite: Date;
-  diasTranscurridos: number;
-  estadoAtencion: string;
-  prioridad: string;
-  dictaminador: string;
-  carpetaInvestigacion: string;
-  estado: string;
+  oficio?: string;
+  personaRelacionada?: string;
+  fechaRecepcion?: Date;
+  fechaLimite?: Date;
+  diasTranscurridos?: number;
+  estadoAtencion?: string;
+  prioridad?: string;
+  dictaminador?: string;
+  carpetaInvestigacion?: string;
+  estado?: string;
 }
 
 @Component({
@@ -72,10 +73,10 @@ export class AsuntosRevisadosTableComponent implements OnInit, OnChanges, AfterV
       const textoBusqueda = this.filtroText.toLowerCase();
       asuntosFiltrados = asuntosFiltrados.filter(a => 
         a.folio.toLowerCase().includes(textoBusqueda) ||
-        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
-        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
-        a.dictaminador.toLowerCase().includes(textoBusqueda) ||
-        a.estadoAtencion.toLowerCase().includes(textoBusqueda)
+        (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+        (a.carpetaInvestigacion || '').toLowerCase().includes(textoBusqueda) ||
+        (a.dictaminador || '').toLowerCase().includes(textoBusqueda) ||
+        (a.estadoAtencion || '').toLowerCase().includes(textoBusqueda)
       );
     }
     

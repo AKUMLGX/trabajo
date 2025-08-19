@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* ===== OVERLAY Y CONTENEDOR PRINCIPAL ===== */
 .modal-overlay {
   position: fixed;
@@ -3657,9 +3659,6 @@
     font-size: 0.9em;
   }
 }
-
-/* ===== IMPORTAR FUENTES PROFESIONALES ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* ===== INFORMACIÓN ORIGINAL - DISEÑO CARD-BASED PROFESIONAL ===== */
 .info-original-unificada {

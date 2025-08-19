@@ -100,29 +100,35 @@ usuariosPorAdminitracion(){
   return this.http.get<usuariosPorAdministracion[]>(tarjetURL)
 }
 
- asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
-  const tarjetURL = environment.baseUrl+environment.asignarAsunto;
-   
-   const asunto = (data as any).asunto;
-   
-   // Validar que tenemos los campos requeridos
-   if (!asunto || !asunto.id_asignacion) {
-     console.error('❌ ERROR: id_asignacion es requerido y no se encontró en:', asunto);
-     throw new Error('id_asignacion es requerido para asignar el asunto');
-   }
-   
-   const payload = {
-     id_asignacion: asunto.id_asignacion,
-     rfc: (data as any).rfc_asignado,
-     tipo_asunto: asunto.es_historico ? 'historico' : 'nuevo',
-     id_asunto: asunto.id_asunto,
-     estado_atencion: 2,
-     fecha_asignacion: null,
-   };
-   
-   console.log('🚀 Payload para asignar_asunto:', payload);
-   
-   return this.http.post(tarjetURL,payload,{responseType:"text"})
+ asignarAsunto(data: any): Observable<string> {
+  const tarjetURL = environment.baseUrl + environment.asignarAsunto;
+
+  // Soportar ambos formatos: {asunto, rfc_asignado,...} y plano
+  const fuente = data?.asunto ?? data ?? {};
+  const id_asignacion = fuente.id_asignacion ?? data?.id_asignacion;
+  const id_asunto = fuente.id_asunto ?? data?.id_asunto;
+  const es_historico = fuente.es_historico ?? data?.es_historico ?? false;
+  const tipo_asunto = data?.tipo_asunto ?? (es_historico ? 'historico' : 'nuevo');
+  const rfc = data?.rfc_asignado ?? data?.rfc ?? '';
+  const estado_atencion = data?.estado_atencion ?? 2;
+  const fecha_asignacion = data?.fecha_asignacion ?? null;
+
+  if (id_asignacion == null || id_asunto == null || !rfc) {
+    console.error('❌ asignarAsunto: payload incompleto', { id_asignacion, id_asunto, rfc, data });
+    throw new Error('Datos incompletos para asignar el asunto');
+  }
+
+  const payload = {
+    id_asignacion,
+    rfc,
+    tipo_asunto,
+    id_asunto,
+    estado_atencion,
+    fecha_asignacion,
+  };
+
+  console.log('🚀 Payload para asignar_asunto:', payload);
+  return this.http.post(tarjetURL, payload, { responseType: 'text' });
  }
 
  enTramiteTableCard(data:AsuntoPorAtencionEnTramiteRequest):Observable<AsuntoReponseEnTramite[]>{
