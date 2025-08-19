@@ -66,17 +66,17 @@ export class RevisionDetalleModalComponent implements OnInit {
   modoComparacion = false;
   expandido = false;
   resolviendo = false;
-  
+
   // URLs de ejemplo para documentos PDF
   documentosPDF: Record<string, string> = {
     'Dictamen_Técnico.pdf': 'assets/pdfs/dictamen_tecnico_ejemplo.pdf',
     'Análisis_Fiscal.pdf': 'assets/pdfs/analisis_fiscal_ejemplo.pdf',
     'Evidencia_Documental.pdf': 'assets/pdfs/evidencia_documental_ejemplo.pdf'
   };
-  
+
   // Documento para comparación
   documentoComparacion = 'Evidencia_Documental.pdf';
-  
+
   motivosRechazo: string[] = [
     'Información incompleta',
     'Faltan documentos de soporte',
@@ -95,7 +95,7 @@ export class RevisionDetalleModalComponent implements OnInit {
   ) {
     this.asunto = data.asunto;
     this.soloLectura = data.soloLectura || false;
-    
+
     this.motivoForm = this.fb.group({
       motivo: ['', Validators.required],
       observaciones: ['', Validators.required]
@@ -120,12 +120,12 @@ export class RevisionDetalleModalComponent implements OnInit {
   mostrarDocumento(nombreDocumento: string): void {
     this.documentoSeleccionado = nombreDocumento;
     this.pdfCargando = true;
-    
+
     // Simular carga del PDF
     setTimeout(() => {
       this.pdfCargando = false;
     }, 1000);
-    
+
     console.log(`Mostrando documento: ${nombreDocumento}`);
   }
 
@@ -140,7 +140,7 @@ export class RevisionDetalleModalComponent implements OnInit {
     if (this.documentoSeleccionado) {
       // En una implementación real, aquí se manejaría la descarga del documento
       console.log(`Descargando documento: ${this.documentoSeleccionado}`);
-      
+
       // Simulación de descarga - en producción esto sería un servicio real
       const link = document.createElement('a');
       link.href = this.obtenerUrlDocumento();
@@ -170,7 +170,7 @@ export class RevisionDetalleModalComponent implements OnInit {
     }
 
     this.resolviendo = true;
-    this.dictaminadorBandejaService.resolverAsunto(idAsunto, true).subscribe({
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, true, "").subscribe({
       next: () => {
         this.resolviendo = false;
         this.dialogRef.close({
@@ -197,7 +197,7 @@ export class RevisionDetalleModalComponent implements OnInit {
     }
 
     this.resolviendo = true;
-    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false).subscribe({
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false,"").subscribe({
       next: () => {
         this.resolviendo = false;
         this.dialogRef.close({
@@ -221,7 +221,7 @@ export class RevisionDetalleModalComponent implements OnInit {
     const idAsunto = parseInt(this.asunto.id, 10);
     if (!idAsunto || Number.isNaN(idAsunto)) { return; }
     this.resolviendo = true;
-    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false).subscribe({
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false,"").subscribe({
       next: () => {
         this.resolviendo = false;
         this.dialogRef.close({ accion: 'rechazar', asunto: this.asunto, resuelto: true });
@@ -237,14 +237,14 @@ export class RevisionDetalleModalComponent implements OnInit {
    */
   esFechaProxima(fecha: Date): boolean {
     if (!fecha) return false;
-    
+
     const fechaLimite = new Date(fecha);
     const hoy = new Date();
-    
+
     // Calcular diferencia en días
     const diffTime = fechaLimite.getTime() - hoy.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     return diffDays <= 3 && diffDays >= 0;
   }
 
@@ -256,21 +256,21 @@ export class RevisionDetalleModalComponent implements OnInit {
    */
   calcularProgreso(fechaRecepcion: Date, fechaLimite: Date): number {
     if (!fechaRecepcion || !fechaLimite) return 0;
-    
+
     const fechaInicio = new Date(fechaRecepcion).getTime();
     const fechaFin = new Date(fechaLimite).getTime();
     const hoy = new Date().getTime();
-    
+
     // Si ya pasó la fecha límite, retornar 100%
     if (hoy > fechaFin) return 100;
-    
+
     // Si la fecha de inicio es mayor a hoy (caso inusual), retornar 0%
     if (fechaInicio > hoy) return 0;
-    
+
     // Calcular el porcentaje de tiempo transcurrido
     const tiempoTotal = fechaFin - fechaInicio;
     const tiempoTranscurrido = hoy - fechaInicio;
-    
+
     return Math.min(Math.round((tiempoTranscurrido / tiempoTotal) * 100), 100);
   }
 
@@ -287,4 +287,4 @@ export class RevisionDetalleModalComponent implements OnInit {
   obtenerUrlDocumentoComparacion(): string {
     return this.documentosPDF[this.documentoComparacion] || 'assets/pdfs/documento_default.pdf';
   }
-} 
+}

@@ -163,11 +163,12 @@ export class DictaminadorBandejaService {
     return this.http.post<string>(url, params, httpOptions);
   }
 
-  resolverAsunto(idAsunto: number, aprobado: boolean): Observable<string> {
+  resolverAsunto(idAsunto: number, aprobado: boolean , observaciones : string): Observable<string> {
     const url = environment.baseUrl + environment.resolverAsunto;
     const params = {
       id_asunto: idAsunto,
-      aprobado: aprobado
+      aprobado: aprobado,
+      observaciones: observaciones
     };
 
     const httpOptions = {

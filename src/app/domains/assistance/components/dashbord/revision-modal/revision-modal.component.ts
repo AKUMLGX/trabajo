@@ -17,24 +17,24 @@ export class RevisionModalComponent implements OnInit {
   @Input() mostrarModal = false;
   @Input() asunto: any = null;
   @Input() archivos: any[] = [];
-  
+
   @Output() cerrarModalEvent = new EventEmitter<void>();
   @Output() aprobarAsuntoEvent = new EventEmitter<{id: number, observaciones: string, tipoAprobacion: 'parcial' | 'total'}>();
   @Output() rechazarAsuntoEvent = new EventEmitter<{id: number, observaciones: string, motivo: string}>();
   @Output() regresarAsuntoEvent = new EventEmitter<{id: number, observaciones: string, motivo: string}>();
-  
+
   // Formulario para observaciones
   formularioRevision: FormGroup;
-  
+
   // Estado del visor de PDF
   pdfActual: any = null;
   pdfUrl = '';
   pdfCargando = false;
   pdfError = false;
-  
+
   // Pestañas y vistas
   pestanaActiva: 'detalles' | 'documentos' | 'revision' = 'detalles';
-  
+
   // Motivos de rechazo predefinidos
   motivosRechazo: string[] = [
     'Información incompleta',
@@ -54,19 +54,19 @@ export class RevisionModalComponent implements OnInit {
     'Requiere aclaración de criterios',
     'Otro motivo'
   ];
-  
+
   // Estados de la interfaz
   enviandoAprobacion = false;
   enviandoRechazo = false;
   enviandoRegreso = false;
-  
+
   // Tipo de aprobación seleccionada
   tipoAprobacionSeleccionada: 'parcial' | 'total' | null = null;
-  
+
   // Variables para el modal de confirmación
   mostrarModalConfirmacion = false;
   tipoAtencionSeleccionada: 'parcial' | 'total' | null = null;
-  
+
   constructor(
     private fb: FormBuilder,
     private archivosService: ArchivosAtencionService,
@@ -77,13 +77,13 @@ export class RevisionModalComponent implements OnInit {
       motivo: ['']
     });
   }
-  
+
   ngOnInit(): void {
     console.log('🔧 [RevisionModal] ngOnInit ejecutado');
     console.log('🔧 [RevisionModal] Asunto recibido:', this.asunto);
     console.log('🔧 [RevisionModal] Archivos recibidos:', this.archivos);
     console.log('🔧 [RevisionModal] Número de archivos:', this.archivos?.length || 0);
-    
+
     // Si hay archivos, preseleccionar el primero para visualización
     if (this.archivos && this.archivos.length > 0) {
       console.log('🔧 [RevisionModal] Seleccionando primer archivo:', this.archivos[0]);
@@ -92,22 +92,22 @@ export class RevisionModalComponent implements OnInit {
       console.log('🔧 [RevisionModal] No hay archivos para mostrar');
     }
   }
-  
+
   cerrarModal(): void {
     this.mostrarModal = false;
     this.cerrarModalEvent.emit();
     this.resetearFormulario();
   }
-  
+
   cambiarPestana(pestana: 'detalles' | 'documentos' | 'revision'): void {
     this.pestanaActiva = pestana;
   }
-  
+
   seleccionarArchivo(archivo: any): void {
     this.pdfActual = archivo;
     this.pdfCargando = true;
     this.pdfError = false;
-    
+
     if (this.asunto && this.pdfActual) {
       // Extraer el nombre base del archivo sin timestamp si existe
       let nombreArchivo = archivo.nombre;
@@ -118,7 +118,7 @@ export class RevisionModalComponent implements OnInit {
       }
 
       this.archivosService.obtenerPdf(
-        this.asunto.folio_interno, 
+        this.asunto.folio_interno,
         nombreArchivo,
         'atencion'  // Pasar el parámetro carpeta='atencion'
       ).subscribe({
@@ -130,7 +130,7 @@ export class RevisionModalComponent implements OnInit {
             this.pdfCargando = false;
             return;
           }
-          
+
           try {
             // Crear URL para el PDF en base64
             this.pdfUrl = `data:application/pdf;base64,${data}`;
@@ -149,12 +149,12 @@ export class RevisionModalComponent implements OnInit {
       });
     }
   }
-  
+
   aprobarAsunto(tipoAprobacion: 'parcial' | 'total'): void {
     if (this.formularioRevision.valid && this.asunto) {
       this.enviandoAprobacion = true;
       this.tipoAprobacionSeleccionada = tipoAprobacion;
-      
+
       const idAsunto = this.asunto?.id_asunto
         ?? this.asunto?.datos?.id_asunto_nuevo
         ?? this.asunto?.datos?.id_asunto_historico
@@ -171,7 +171,7 @@ export class RevisionModalComponent implements OnInit {
         observaciones: this.formularioRevision.get('observaciones')?.value,
         tipoAprobacion: tipoAprobacion
       });
-      
+
       // En un caso real, esperaríamos la respuesta del servicio
       // Aquí simulamos un tiempo de espera
       setTimeout(() => {
@@ -181,7 +181,7 @@ export class RevisionModalComponent implements OnInit {
       }, 1000);
     }
   }
-  
+
   rechazarAsunto(): void {
     if (this.formularioRevision.valid && this.asunto) {
       // Validar que se haya seleccionado un motivo de rechazo
@@ -191,7 +191,7 @@ export class RevisionModalComponent implements OnInit {
         this.formularioRevision.get('motivo')?.markAsTouched();
         return;
       }
-      
+
       this.enviandoRechazo = true;
 
       const idAsunto = this.asunto?.id_asunto
@@ -205,7 +205,7 @@ export class RevisionModalComponent implements OnInit {
       console.log('[RevisionModal] rechazarAsunto() -> id:', idAsunto, 'motivo:', motivo);
 
       // Disparar rechazo vía endpoint resolver (aprobado=false)
-      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false).subscribe({
+      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false,"").subscribe({
         next: (resp) => {
           console.log('[RevisionModal] Resolver (rechazo) OK:', resp);
           // Emitir evento para que el padre actualice la tabla
@@ -234,7 +234,7 @@ export class RevisionModalComponent implements OnInit {
         this.formularioRevision.get('observaciones')?.markAsTouched();
         return;
       }
-      
+
       this.enviandoRegreso = true;
 
       const idAsunto = this.asunto?.id_asunto
@@ -248,7 +248,7 @@ export class RevisionModalComponent implements OnInit {
       console.log('[RevisionModal] regresarAsunto() -> id:', idAsunto, 'observaciones:', observaciones);
 
       // Usar resolver para marcar como rechazado (aprobado=false)
-      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false).subscribe({
+      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false, "").subscribe({
         next: (resp) => {
           console.log('[RevisionModal] Resolver (regresar) OK:', resp);
           this.regresarAsuntoEvent.emit({
@@ -266,18 +266,18 @@ export class RevisionModalComponent implements OnInit {
       });
     }
   }
-  
+
   // Funciones para el modal de confirmación
   mostrarConfirmacionAtencion(tipoAtencion: 'parcial' | 'total'): void {
     this.tipoAtencionSeleccionada = tipoAtencion;
     this.mostrarModalConfirmacion = true;
   }
-  
+
   cerrarModalConfirmacion(): void {
     this.mostrarModalConfirmacion = false;
     this.tipoAtencionSeleccionada = null;
   }
-  
+
   confirmarAtencion(): void {
     if (!this.tipoAtencionSeleccionada) {
       console.warn('[RevisionModal] No hay tipo de atención seleccionado');
@@ -302,7 +302,7 @@ export class RevisionModalComponent implements OnInit {
     }
 
     this.enviandoAprobacion = true;
-    this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), true).subscribe({
+    this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), true,"").subscribe({
       next: (resp) => {
         console.log('[RevisionModal] Resolver OK:', resp);
         this.enviandoAprobacion = false;
@@ -316,7 +316,7 @@ export class RevisionModalComponent implements OnInit {
       }
     });
   }
-  
+
   resetearFormulario(): void {
     this.formularioRevision.reset({
       observaciones: '',
@@ -326,11 +326,11 @@ export class RevisionModalComponent implements OnInit {
     this.tipoAtencionSeleccionada = null;
     this.mostrarModalConfirmacion = false;
   }
-  
+
   // Método para formatear fechas
   formatearFecha(fecha: string): string {
     if (!fecha) return 'N/A';
-    
+
     try {
       const date = new Date(fecha);
       return date.toLocaleDateString('es-MX', {
