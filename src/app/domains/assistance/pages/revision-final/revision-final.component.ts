@@ -174,6 +174,7 @@ export class RevisionFinalComponent implements OnInit {
   ngOnInit(): void {
     // Cargar dictámenes pendientes reales (VISTO BUENO AKAMBA 2)
     this.cargarDictamenesPendientesDesdeBackend();
+    this.cargarAsuntosRevisadosDesdeBackend();
     this.cargarAsuntosCapturados(); // 🆕 Cargar asuntos capturados
     this.actualizarEstadisticas();
   }
@@ -201,6 +202,33 @@ export class RevisionFinalComponent implements OnInit {
         error: (e) => {
           console.error('[RevisionFinal] Error cargando dictámenes pendientes:', e);
           this.asuntosPendientes = [];
+        }
+      });
+  }
+
+  private cargarAsuntosRevisadosDesdeBackend(): void {
+    this.dictaminadorBandejaService
+      .obtenerAsuntosPorEstado('FINALIZADO')
+      .subscribe({
+        next: (items) => {
+          this.asuntosRevisados = items.map((it) => ({
+            id: String((it as any).id_asunto ?? ''),
+            folio: it.folio_interno ?? '',
+            oficio: (it as any).oficio ?? '',
+            personaRelacionada: it.persona_relacionada ?? '',
+            fechaRecepcion: (it as any).fecha_recepcion ? new Date((it as any).fecha_recepcion as unknown as string) : (undefined as unknown as Date),
+            fechaLimite: undefined as unknown as Date,
+            diasTranscurridos: it.plazo_atencion ?? 0,
+            estadoAtencion: 'Finalizado',
+            prioridad: (it.plazo_atencion ?? 0) > 15 ? 'Alta' : (it.plazo_atencion ?? 0) > 7 ? 'Media' : 'Baja',
+            dictaminador: (it as any).nombre_dictaminador ?? '',
+            carpetaInvestigacion: it.carpeta_investigacion ?? '',
+            estado: 'Completado'
+          }));
+        },
+        error: (e) => {
+          console.error('[RevisionFinal] Error cargando asuntos revisados:', e);
+          this.asuntosRevisados = [];
         }
       });
   }

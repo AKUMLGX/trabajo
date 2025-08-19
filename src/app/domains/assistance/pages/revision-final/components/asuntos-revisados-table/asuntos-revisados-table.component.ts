@@ -43,7 +43,7 @@ export class AsuntosRevisadosTableComponent implements OnInit, OnChanges, AfterV
   @Input() asuntos: Asunto[] = [];
   @Input() filtroText = '';
   
-  displayedColumns: string[] = ['folio', 'carpetaInvestigacion', 'personaRelacionada', 'dictaminador', 'fechaRecepcion', 'diasTranscurridos', 'prioridad', 'estadoAtencion', 'acciones'];
+  displayedColumns: string[] = ['folio', 'carpetaInvestigacion', 'oficio', 'personaRelacionada', 'fechaRecepcion', 'dictaminador', 'acciones'];
   dataSource = new MatTableDataSource<Asunto>([]);
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
