@@ -13,15 +13,15 @@ interface Asunto {
   id: string;
   folio: string;
   oficio?: string;
-  personaRelacionada: string;
-  fechaRecepcion: Date;
+  personaRelacionada?: string;
+  fechaRecepcion?: Date;
   fechaLimite?: Date;
   diasTranscurridos?: number;
   estadoAtencion?: string;
   prioridad?: string;
-  dictaminador: string;
-  carpetaInvestigacion: string;
-  estado: string;
+  dictaminador?: string;
+  carpetaInvestigacion?: string;
+  estado?: string;
 }
 
 @Component({
@@ -84,9 +84,9 @@ export class AsuntosPendientesTableComponent implements OnInit, OnChanges, After
       asuntosFiltrados = asuntosFiltrados.filter(a => 
         a.folio.toLowerCase().includes(textoBusqueda) ||
         (a.oficio || '').toLowerCase().includes(textoBusqueda) ||
-        a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
-        a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
-        a.dictaminador.toLowerCase().includes(textoBusqueda)
+        (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+        (a.carpetaInvestigacion || '').toLowerCase().includes(textoBusqueda) ||
+        (a.dictaminador || '').toLowerCase().includes(textoBusqueda)
       );
     }
     
