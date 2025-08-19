@@ -69,7 +69,7 @@ export interface AsuntoAsignacion {
   };
   tipo_asunto: "NUEVO" | "HISTORICO";
   rfc_asignado: string;
-  id_asignacion: number | null;
+  id_asignacion: number ;
 }
 
 export type AsuntoPorEstadoAtencionResponse = AsuntoAsignacion[];
