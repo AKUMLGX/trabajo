@@ -61,11 +61,11 @@ export class RevisionModalComponent implements OnInit {
   enviandoRegreso = false;
 
   // Tipo de aprobación seleccionada
-  tipoAprobacionSeleccionada: 'parcial' | 'total' | null = null;
+  tipoAprobacionSeleccionada: 'parcial' | 'total'  = "parcial";
 
   // Variables para el modal de confirmación
   mostrarModalConfirmacion = false;
-  tipoAtencionSeleccionada: 'parcial' | 'total' | null = null;
+  tipoAtencionSeleccionada: 'parcial' | 'total'  = "parcial";
 
   constructor(
     private fb: FormBuilder,
@@ -176,7 +176,7 @@ export class RevisionModalComponent implements OnInit {
       // Aquí simulamos un tiempo de espera
       setTimeout(() => {
         this.enviandoAprobacion = false;
-        this.tipoAprobacionSeleccionada = null;
+        this.tipoAprobacionSeleccionada = "parcial";
         this.cerrarModal();
       }, 1000);
     }
@@ -248,7 +248,7 @@ export class RevisionModalComponent implements OnInit {
       console.log('[RevisionModal] regresarAsunto() -> id:', idAsunto, 'observaciones:', observaciones);
 
       // Usar resolver para marcar como rechazado (aprobado=false)
-      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false, "").subscribe({
+      this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), false, observaciones).subscribe({
         next: (resp) => {
           console.log('[RevisionModal] Resolver (regresar) OK:', resp);
           this.regresarAsuntoEvent.emit({
@@ -275,7 +275,7 @@ export class RevisionModalComponent implements OnInit {
 
   cerrarModalConfirmacion(): void {
     this.mostrarModalConfirmacion = false;
-    this.tipoAtencionSeleccionada = null;
+    this.tipoAtencionSeleccionada = "parcial";
   }
 
   confirmarAtencion(): void {
@@ -302,7 +302,7 @@ export class RevisionModalComponent implements OnInit {
     }
 
     this.enviandoAprobacion = true;
-    this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), true,"").subscribe({
+    this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), true,this.tipoAprobacionSeleccionada ).subscribe({
       next: (resp) => {
         console.log('[RevisionModal] Resolver OK:', resp);
         this.enviandoAprobacion = false;
@@ -322,8 +322,8 @@ export class RevisionModalComponent implements OnInit {
       observaciones: '',
       motivo: ''
     });
-    this.tipoAprobacionSeleccionada = null;
-    this.tipoAtencionSeleccionada = null;
+    this.tipoAprobacionSeleccionada = "parcial";
+    this.tipoAtencionSeleccionada = "parcial";
     this.mostrarModalConfirmacion = false;
   }
 
