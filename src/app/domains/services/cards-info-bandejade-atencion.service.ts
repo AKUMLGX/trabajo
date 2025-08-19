@@ -37,40 +37,45 @@ return this.http.post<porAsignarResponse>(tarjetUrl,data)
   tablePorAsignar(data:porAsignarRequest):Observable<tableAsuntosPorDictaminar[]> {
   const tarjetUrl = environment.baseUrl + environment.asuntosPorAsignarTable
   return this.http.post<any[]>(tarjetUrl ,data).pipe(
-    map((items:any[]) => items.map((item:any) => {
-      const contenedor = item?.asunto ?? item;
-      const datos = contenedor?.datos ?? contenedor?.Nuevo ?? contenedor?.Historico ?? contenedor ?? {};
+    map((items:any[]) => {
+      console.log('🔍 DEBUG tablePorAsignar - Items recibidos del backend:', items);
+      return items.map((item:any) => {
+        console.log('🔍 DEBUG tablePorAsignar - Item individual:', item);
+        const contenedor = item?.asunto ?? item;
+        const datos = contenedor?.datos ?? contenedor?.Nuevo ?? contenedor?.Historico ?? contenedor ?? {};
 
-      const idAsunto = datos?.id_asunto ?? datos?.id_asunto_nuevo ?? datos?.id_asunto_historico ?? 0;
-      const esHistorico = (contenedor?.tipo && String(contenedor.tipo).toLowerCase() === 'historico') || Boolean(datos?.id_asunto_historico);
+        const idAsunto = datos?.id_asunto ?? datos?.id_asunto_nuevo ?? datos?.id_asunto_historico ?? 0;
+        const esHistorico = (contenedor?.tipo && String(contenedor.tipo).toLowerCase() === 'historico') || Boolean(datos?.id_asunto_historico);
 
-      const normalizado: any = {
-        folio_interno: datos?.folio_interno ?? '',
-        folio_scanner: datos?.folio_scanner ?? 0,
-        carpeta_investigacion: datos?.carpeta_investigacion ?? '',
-        oficio: datos?.oficio ?? '',
-        persona_relacionada: datos?.persona_relacionada ?? '',
-        fecha_recepcion: datos?.fecha_recepcion ?? '',
-        id_administracion_fk: datos?.id_administracion_fk ?? 0,
-        id_documento_fk: datos?.id_documento_fk ?? 0,
-        id_atencion_fk: datos?.id_atencion_fk ?? 0,
-        turno_jefatura: datos?.turno_jefatura ?? '',
-        autoridad_remitente: datos?.autoridad_remitente ?? '',
-        id_asunto: idAsunto,
-        es_historico: esHistorico,
-        // Permitir null para soportar "Sin plazo definido"
-        plazo_atencion: (datos?.plazo_atencion ?? null) as any,
-        // Extras útiles en UI
-        id_asignacion: item?.id_asignacion ?? undefined,
-        tipo_asunto: item?.tipo_asunto ?? (contenedor?.tipo ? String(contenedor.tipo).toLowerCase() : undefined),
-        rfc_dictaminador: item?.rfc_dictaminador ?? undefined,
-        nombre_dictaminador: item?.rfc_asignado ?? item?.nombre_dictaminador ?? undefined,
-      };
+        const normalizado: any = {
+          folio_interno: datos?.folio_interno ?? '',
+          folio_scanner: datos?.folio_scanner ?? 0,
+          carpeta_investigacion: datos?.carpeta_investigacion ?? '',
+          oficio: datos?.oficio ?? '',
+          persona_relacionada: datos?.persona_relacionada ?? '',
+          fecha_recepcion: datos?.fecha_recepcion ?? '',
+          id_administracion_fk: datos?.id_administracion_fk ?? 0,
+          id_documento_fk: datos?.id_documento_fk ?? 0,
+          id_atencion_fk: datos?.id_atencion_fk ?? 0,
+          turno_jefatura: datos?.turno_jefatura ?? '',
+          autoridad_remitente: datos?.autoridad_remitente ?? '',
+          id_asunto: idAsunto,
+          es_historico: esHistorico,
+          // Permitir null para soportar "Sin plazo definido"
+          plazo_atencion: (datos?.plazo_atencion ?? null) as any,
+          // Extras útiles en UI
+          id_asignacion: item?.id_asignacion ?? undefined,
+          tipo_asunto: item?.tipo_asunto ?? (contenedor?.tipo ? String(contenedor.tipo).toLowerCase() : undefined),
+          rfc_dictaminador: item?.rfc_dictaminador ?? undefined,
+          nombre_dictaminador: item?.rfc_asignado ?? item?.nombre_dictaminador ?? undefined,
+        };
 
-      return normalizado as tableAsuntosPorDictaminar;
-    }))
+        console.log('🚀 DEBUG tablePorAsignar - Objeto normalizado:', normalizado);
+        return normalizado as tableAsuntosPorDictaminar;
+      })
+    })
   );
-  }
+ }
 
   // Conteo total por estado de atención
   contarAsuntosPorEstadoAtencion(data: { documento: string; estado_atencion: string }): Observable<{ total: number }> {
@@ -97,7 +102,27 @@ usuariosPorAdminitracion(){
 
  asignarAsunto(data:AsignarAsuntoRequest):Observable<string>{
   const tarjetURL = environment.baseUrl+environment.asignarAsunto;
-  return this.http.post(tarjetURL,data, {responseType:"text"})
+   
+   const asunto = (data as any).asunto;
+   
+   // Validar que tenemos los campos requeridos
+   if (!asunto || !asunto.id_asignacion) {
+     console.error('❌ ERROR: id_asignacion es requerido y no se encontró en:', asunto);
+     throw new Error('id_asignacion es requerido para asignar el asunto');
+   }
+   
+   const payload = {
+     id_asignacion: asunto.id_asignacion,
+     rfc: (data as any).rfc_asignado,
+     tipo_asunto: asunto.es_historico ? 'historico' : 'nuevo',
+     id_asunto: asunto.id_asunto,
+     estado_atencion: 2,
+     fecha_asignacion: null,
+   };
+   
+   console.log('🚀 Payload para asignar_asunto:', payload);
+   
+   return this.http.post(tarjetURL,payload,{responseType:"text"})
  }
 
  enTramiteTableCard(data:AsuntoPorAtencionEnTramiteRequest):Observable<AsuntoReponseEnTramite[]>{

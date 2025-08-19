@@ -65,5 +65,7 @@ export interface AsuntoResponseAsignar{
   persona_relacionada: string,
   carpeta_investigacion: string,
   plazo_atencion:number,
-  id_asignacion: number
+  id_asunto: number,
+  id_asignacion?: number,
+  es_historico: boolean
  }

@@ -12,12 +12,13 @@ import { RevisionDetalleModalComponent } from '../revision-detalle-modal/revisio
 interface Asunto {
   id: string;
   folio: string;
+  oficio?: string;
   personaRelacionada: string;
   fechaRecepcion: Date;
-  fechaLimite: Date;
-  diasTranscurridos: number;
-  estadoAtencion: string;
-  prioridad: string;
+  fechaLimite?: Date;
+  diasTranscurridos?: number;
+  estadoAtencion?: string;
+  prioridad?: string;
   dictaminador: string;
   carpetaInvestigacion: string;
   estado: string;
@@ -44,11 +45,11 @@ export class AsuntosPendientesTableComponent implements OnInit, OnChanges, After
   @Input() filtroText = '';
   @Input() filtroPrioridad = 'Todas';
   
-  @Output() aprobar = new EventEmitter<Asunto>();
-  @Output() rechazar = new EventEmitter<Asunto>();
-  @Output() verDetalleClick = new EventEmitter<Asunto>();
+  @Output() aprobar = new EventEmitter<any>();
+  @Output() rechazar = new EventEmitter<any>();
+  @Output() verDetalleClick = new EventEmitter<any>();
   
-  displayedColumns: string[] = ['folio', 'carpetaInvestigacion', 'personaRelacionada', 'dictaminador', 'fechaRecepcion', 'fechaLimite', 'diasTranscurridos', 'prioridad', 'acciones'];
+  displayedColumns: string[] = ['folio', 'carpetaInvestigacion', 'oficio', 'personaRelacionada', 'fechaRecepcion', 'dictaminador', 'acciones'];
   dataSource = new MatTableDataSource<Asunto>([]);
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -82,6 +83,7 @@ export class AsuntosPendientesTableComponent implements OnInit, OnChanges, After
       const textoBusqueda = this.filtroText.toLowerCase();
       asuntosFiltrados = asuntosFiltrados.filter(a => 
         a.folio.toLowerCase().includes(textoBusqueda) ||
+        (a.oficio || '').toLowerCase().includes(textoBusqueda) ||
         a.personaRelacionada.toLowerCase().includes(textoBusqueda) ||
         a.carpetaInvestigacion.toLowerCase().includes(textoBusqueda) ||
         a.dictaminador.toLowerCase().includes(textoBusqueda)
