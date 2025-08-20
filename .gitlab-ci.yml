@@ -20,9 +20,7 @@ version-check:
   stage: Version_Check
   only:
     - desarrollo
-  image: docker:24.0.7
-  services:
-    - docker:dind
+  image: docker:20.10.21
   dependencies: []
   tags:
     - Develop
@@ -130,9 +128,7 @@ Build_image:
     - /^feature*/
     - /^patch*/
     - /^config*/
-  image: docker:24.0.7
-  services:
-    - docker:dind
+  image: docker:20.10.21
   dependencies: []
   tags:
     - Develop
@@ -162,9 +158,7 @@ Build_image_Release:
   rules:
   - if: $CI_COMMIT_BRANCH == "desarrollo"
     when: on_success
-  image: docker:24.0.7
-  services:
-    - docker:dind
+  image: docker:20.10.21
   dependencies: []
   tags:
     - Develop
