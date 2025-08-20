@@ -87,8 +87,8 @@
       </div>
     </div>
 
-    <!-- 📈 MÉTRICAS DE PRODUCTIVIDAD Y FLUJO DE TRABAJO PARA ASUNTOS CAPTURADOS -->
-    <div *ngIf="tabActiva === 'capturados'" class="grid grid-cols-3 gap-4">
+    <!-- 📈 Bloque de métricas extra para capturados eliminado por solicitud -->
+    <div *ngIf="tabActiva === 'capturados'" class="grid grid-cols-3 gap-4 hidden">
       
       <!-- Eficiencia de Proceso -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
@@ -147,7 +147,7 @@
       </div>
     </div>
 
-      <!-- Indicadores de Calidad -->
+      <!-- Indicadores de Calidad (oculto) -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-2">
@@ -256,8 +256,8 @@
         </div>
       </div>
 
-      <!-- Métricas Históricas -->
-      <div class="grid grid-cols-3 gap-4">
+      <!-- Métricas Históricas eliminadas por solicitud -->
+      <div class="grid grid-cols-3 gap-4 hidden">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
           <div class="flex items-center gap-2 mb-4">
             <mat-icon class="text-slate-600">bar_chart</mat-icon>

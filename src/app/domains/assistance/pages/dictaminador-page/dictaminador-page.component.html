@@ -29,24 +29,7 @@
           Asuntos Asignados
         </button>
       </li>
-      <li class="mr-1">
-        <button 
-          (click)="cambiarPestana('rechazados')" 
-          class="inline-block px-6 py-3 font-medium text-sm rounded-t-lg relative"
-          [class.text-[#691C32]]="pestanaActual === 'rechazados'"
-          [class.border-[#691C32]]="pestanaActual === 'rechazados'"
-          [class.border-b-2]="pestanaActual === 'rechazados'"
-          [class.bg-white]="pestanaActual === 'rechazados'"
-          [class.text-gray-500]="pestanaActual !== 'rechazados'"
-          [class.hover:text-gray-700]="pestanaActual !== 'rechazados'"
-          [class.hover:border-gray-300]="pestanaActual !== 'rechazados'"
-        >
-          Asuntos Rechazados
-          <span *ngIf="asuntosRechazados.length > 0" class="ml-2 bg-red-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
-            {{asuntosRechazados.length}}
-          </span>
-        </button>
-      </li>
+      <!-- Pestaña 'Asuntos Rechazados' eliminada por solicitud -->
     </ul>
   </div>
 
@@ -269,114 +252,7 @@
     </div>
   </div>
 
-  <!-- SECCIÓN DE ASUNTOS RECHAZADOS -->
-  <div *ngIf="pestanaActual === 'rechazados'">
-    <!-- Filtro para asuntos rechazados -->
-    <div class="flex justify-between items-center mb-6">
-      <div class="flex gap-4">
-        <div>
-          <label class="text-sm text-gray-600 block mb-1">Prioridad</label>
-          <select [(ngModel)]="filtroPrioridad" (change)="aplicarFiltrosRechazados()"
-                  class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
-            <option value="Todas">Todas las prioridades</option>
-            <option value="Alta">Alta</option>
-            <option value="Media">Media</option>
-            <option value="Baja">Baja</option>
-          </select>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-          <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          {{asuntosRechazados.length}} asuntos rechazados
-        </div>
-      </div>
-    </div>
-
-    <!-- Lista de Asuntos Rechazados -->
-    <div class="grid grid-cols-1 gap-6">
-      <div *ngFor="let asunto of asuntosRechazadosFiltrados" 
-           class="bg-white rounded-lg overflow-hidden shadow-md border-l-4"
-           [class.border-red-500]="asunto.prioridadVisual === 'rojo'"
-           [class.border-yellow-500]="asunto.prioridadVisual === 'amarillo'"
-           [class.border-green-500]="asunto.prioridadVisual === 'verde'">
-        
-        <div class="p-5">
-          <!-- Cabecera con información principal -->
-          <div class="flex justify-between items-start mb-4">
-            <div>
-              <div class="flex items-center">
-                <h3 class="text-lg font-medium text-gray-800">{{asunto.folio}}</h3>
-                <span *ngIf="asunto.plazoUrgente" 
-                      class="ml-2 px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded-full">
-                  Urgente
-                </span>
-              </div>
-              <p class="text-sm text-gray-500">{{asunto.carpetaInvestigacion}}</p>
-            </div>
-            <div class="bg-gray-100 px-3 py-1 rounded-full text-sm">
-              Rechazado el {{asunto.fechaRechazo | date:'dd/MM/yyyy'}}
-            </div>
-          </div>
-          
-          <!-- Información del rechazo -->
-          <div class="grid grid-cols-2 gap-6 mb-4">
-            <div>
-              <p class="text-sm text-gray-500">Persona Relacionada</p>
-              <p class="text-sm font-medium">{{asunto.personaRelacionada}}</p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-500">Rechazado por</p>
-              <p class="text-sm font-medium">{{asunto.rechazadoPor}}</p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-500">Motivo de Rechazo</p>
-              <p class="text-sm font-medium text-red-600">{{asunto.motivo}}</p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-500">Fecha Recepción</p>
-              <p class="text-sm">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}} ({{asunto.diasTranscurridos}} días)</p>
-            </div>
-          </div>
-          
-          <!-- Vista previa de observaciones -->
-          <div class="bg-gray-50 p-3 rounded-md mb-4">
-            <p class="text-sm text-gray-500 mb-1">Observaciones:</p>
-            <p class="text-sm line-clamp-2">{{asunto.observaciones}}</p>
-          </div>
-          
-          <!-- Acciones -->
-          <div class="flex justify-end gap-3">
-            <button (click)="verDetallesRechazo(asunto.id)"
-                    class="bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded text-sm font-medium flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Ver detalles
-            </button>
-            <button (click)="atenderAsuntoRechazado(asunto.id)"
-                    class="bg-[#691C32] text-white hover:bg-[#4a1423] px-4 py-2 rounded text-sm font-medium flex items-center">
-              <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              Atender
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Mensaje cuando no hay asuntos rechazados -->
-      <div *ngIf="asuntosRechazadosFiltrados.length === 0" class="bg-white rounded-lg p-8 text-center">
-        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg>
-        <h3 class="text-lg font-medium text-gray-800 mb-2">No hay asuntos rechazados</h3>
-        <p class="text-gray-500">No tienes asuntos rechazados con los filtros seleccionados.</p>
-      </div>
-    </div>
-  </div>
+  <!-- Sección de Asuntos Rechazados eliminada por solicitud -->
 </div>
 
 <!-- Modal de Atención -->
@@ -484,83 +360,7 @@
   </div>
 </div>
 
-<!-- Modal de Detalles de Rechazo -->
-<div *ngIf="mostrarDetallesRechazo" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg w-[600px] max-h-[80vh] overflow-y-auto">
-    <!-- Encabezado del modal -->
-    <div class="bg-[#691C32] text-white px-6 py-4 rounded-t-lg flex justify-between items-center">
-      <h2 class="text-lg font-medium">Detalles del Rechazo</h2>
-      <button (click)="cerrarDetallesRechazo()" class="text-white hover:text-gray-200">
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Contenido del modal -->
-    <div class="p-6" *ngIf="asuntoRechazadoSeleccionado">
-      <!-- Información del asunto -->
-      <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <p class="text-sm text-gray-500">Folio</p>
-            <p class="font-medium">{{asuntoRechazadoSeleccionado.folio}}</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500">Carpeta de Investigación</p>
-            <p class="font-medium">{{asuntoRechazadoSeleccionado.carpetaInvestigacion}}</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500">Persona Relacionada</p>
-            <p class="font-medium">{{asuntoRechazadoSeleccionado.personaRelacionada}}</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500">Fecha Recepción</p>
-            <p class="font-medium">{{asuntoRechazadoSeleccionado.fechaRecepcion | date:'dd/MM/yyyy'}}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Información del rechazo -->
-      <div class="mb-6">
-        <h3 class="text-md font-medium text-gray-800 mb-3">Información del Rechazo</h3>
-        
-        <div class="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <p class="text-sm text-gray-500">Rechazado por</p>
-            <p class="font-medium">{{asuntoRechazadoSeleccionado.rechazadoPor}}</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500">Fecha de Rechazo</p>
-            <p class="font-medium">{{asuntoRechazadoSeleccionado.fechaRechazo | date:'dd/MM/yyyy'}}</p>
-          </div>
-        </div>
-        
-        <div class="mb-4">
-          <p class="text-sm text-gray-500">Motivo del Rechazo</p>
-          <p class="font-medium text-red-600">{{asuntoRechazadoSeleccionado.motivo}}</p>
-        </div>
-        
-        <div class="bg-gray-50 p-4 rounded-md">
-          <p class="text-sm text-gray-500 mb-2">Observaciones Detalladas:</p>
-          <p class="text-sm whitespace-pre-line">{{asuntoRechazadoSeleccionado.observaciones}}</p>
-        </div>
-      </div>
-
-      <!-- Botones de acción -->
-      <div class="flex justify-end gap-3">
-        <button type="button" (click)="cerrarDetallesRechazo()"
-                class="px-5 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-          Cerrar
-        </button>
-        <button type="button" (click)="atenderAsuntoRechazado(asuntoRechazadoSeleccionado.id); cerrarDetallesRechazo()"
-                class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-medium hover:bg-[#4a1423] transition-colors shadow-sm">
-          Atender Asunto
-        </button>
-      </div>
-    </div>
-  </div>
-</div> 
+<!-- Modal de Detalles de Rechazo eliminado por solicitud -->
 
 <!-- Modal de Atención del Dictaminador -->
 <app-dictaminador-atencion-modal 
