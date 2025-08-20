@@ -203,29 +203,7 @@
           </div>
         </div>
 
-        <!-- Información del documento de Akamba 1 -->
-        <div class="documento-akamba1">
-          <div class="documento-info">
-            <div class="documento-header">
-              <mat-icon class="doc-icon">description</mat-icon>
-              <div class="documento-detalles">
-                <h5>Documento Original de Akamba 1</h5>
-                <span class="documento-metadatos">
-                  Subido por: {{ data.asunto.usuario_captura }} • 
-                  {{ data.asunto.fecha_captura | date:'dd/MM/yyyy HH:mm' }}
-                </span>
-              </div>
-              <div class="documento-acciones">
-                <button type="button" mat-icon-button 
-                        title="Ver documento original"
-                        (click)="cambiarVistaPdf(true)">
-                  <mat-icon>visibility</mat-icon>
-                </button>
 
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- Controles de PDF -->
         <div class="pdf-controles">
@@ -246,31 +224,7 @@
             </button>
           </div>
 
-          <!-- Subir nuevo PDF (solo si es CORREGIR) -->
-          <div *ngIf="accionSeleccionada === 'CORREGIR'" class="upload-section">
-            <input type="file" #fileInput accept=".pdf" 
-                   (change)="onFileSelected($event)" style="display: none;">
-            <button type="button" mat-stroked-button 
-                    style="color: #1e40af; border-color: #1e40af;"
-                    (click)="triggerFileInput()" class="btn-upload">
-              <mat-icon>upload_file</mat-icon>
-              {{ archivoSeleccionado ? 'Cambiar PDF' : 'Subir PDF Actualizado' }}
-            </button>
-            
-            <!-- Información del archivo seleccionado -->
-            <div *ngIf="archivoSeleccionado" class="archivo-seleccionado">
-              <div class="archivo-info">
-                <mat-icon>picture_as_pdf</mat-icon>
-                <span class="archivo-nombre">{{ archivoSeleccionado.name }}</span>
-                <span class="archivo-tamaño">{{ getFileSize(archivoSeleccionado.size) }}</span>
-                <button type="button" mat-icon-button 
-                        (click)="removeFile($event)" 
-                        title="Quitar archivo">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         <!-- Visualizador de PDF -->
@@ -327,13 +281,7 @@
     <!-- FOOTER CON BOTONES DE ACCIÓN -->
     <div class="modal-footer">
       
-      <!-- Información de estado -->
-      <div class="footer-info">
-        <span class="info-formulario" [ngClass]="formularioValido ? 'valido' : 'invalido'">
-          <mat-icon>{{ formularioValido ? 'check_circle' : 'error' }}</mat-icon>
-          {{ formularioValido ? 'Formulario válido' : 'Revisa los campos obligatorios' }}
-        </span>
-      </div>
+
 
       <!-- Botones de acción -->
       <div class="footer-botones">
