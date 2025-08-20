@@ -214,14 +214,7 @@
               <mat-icon>description</mat-icon>
               PDF Original (Akamba 1)
             </button>
-            <button type="button" 
-                    [class]="!mostrarPdfOriginal ? 'tab-activo' : 'tab-inactivo'"
-                    (click)="cambiarVistaPdf(false)"
-                    [disabled]="!pdfCorregidoUrl">
-              <mat-icon>edit_document</mat-icon>
-              PDF Actualizado
-              <span *ngIf="archivoSeleccionado" class="badge-nuevo">Nuevo</span>
-            </button>
+
           </div>
 
 
@@ -300,17 +293,7 @@
         <!-- Botones principales según la acción -->
         <ng-container [ngSwitch]="accionSeleccionada">
           
-          <!-- Botón Corregir -->
-          <button *ngSwitchCase="'CORREGIR'" 
-                  mat-flat-button 
-                  style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600;"
-                  (click)="corregirAsunto()"
-                  [disabled]="!formularioValido || guardando"
-                  class="btn-corregir">
-            <mat-icon *ngIf="!guardando">edit_note</mat-icon>
-            <mat-icon *ngIf="guardando" class="loading-icon">hourglass_empty</mat-icon>
-            {{ guardando ? 'Procesando...' : 'Corregir y Enviar' }}
-          </button>
+
 
           <!-- Botón Aprobar -->
           <button *ngSwitchCase="'APROBAR'" 
