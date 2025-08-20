@@ -407,9 +407,9 @@ export class RevisionFinalComponent implements OnInit {
     this.estadisticas.listosParaEnviar = this.asuntosCapturados.filter(a =>
       a.estado_revision === 'APROBADO').length;
 
-    // 🆕 Calcular asuntos enviados
-    this.estadisticas.enviados = this.asuntosCapturados.filter(a =>
-      a.estado_revision === 'ENVIADO').length;
+    // 🆕 Calcular asuntos enviados desde la lista persistente (localStorage)
+    // Esto garantiza persistencia incluso si el backend aún no refleja el cambio
+    this.estadisticas.enviados = this.asuntosEnviados.length;
     
     console.log('📊 Estadísticas actualizadas:', {
       totalCapturados: this.estadisticas.totalCapturados,
