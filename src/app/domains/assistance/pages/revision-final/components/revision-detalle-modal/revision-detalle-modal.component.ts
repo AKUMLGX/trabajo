@@ -170,7 +170,7 @@ export class RevisionDetalleModalComponent implements OnInit {
     }
 
     this.resolviendo = true;
-    this.dictaminadorBandejaService.resolverAsunto(idAsunto, true, "").subscribe({
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, true, this.motivoForm.value.observaciones).subscribe({
       next: () => {
         this.resolviendo = false;
         this.dialogRef.close({
@@ -221,7 +221,7 @@ export class RevisionDetalleModalComponent implements OnInit {
     const idAsunto = parseInt(this.asunto.id, 10);
     if (!idAsunto || Number.isNaN(idAsunto)) { return; }
     this.resolviendo = true;
-    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false,"").subscribe({
+    this.dictaminadorBandejaService.resolverAsunto(idAsunto, false, this.motivoForm.value.observaciones).subscribe({
       next: () => {
         this.resolviendo = false;
         this.dialogRef.close({ accion: 'rechazar', asunto: this.asunto, resuelto: true });
