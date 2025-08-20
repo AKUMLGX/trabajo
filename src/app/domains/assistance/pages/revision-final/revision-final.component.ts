@@ -1191,7 +1191,7 @@ export class RevisionFinalComponent implements OnInit {
     return texto || '';
   }
 
-  // 🆕 MÉTODO PARA INTERPRETAR PLAZO DE ATENCIÓN
+  // 🆕 MÉTODO PARA INTERPRETAR PLAZO DE ATENCIÓN (Backend envía horas)
   interpretarPlazoAtencion(plazo: number | null): string {
     if (plazo === null || plazo === undefined) {
       return 'Sin plazo definido';
@@ -1201,29 +1201,44 @@ export class RevisionFinalComponent implements OnInit {
       return 'Urgente';
     }
 
-    if (plazo >= 1 && plazo <= 5) {
-      return `${plazo} día${plazo > 1 ? 's' : ''}`;
+    // Convertir horas a formato legible
+    if (plazo < 24) {
+      return `${plazo} hora${plazo > 1 ? 's' : ''}`;
     }
 
-    return `${plazo} días`;
+    // Convertir a días si es >= 24 horas
+    const dias = Math.floor(plazo / 24);
+    const horasRestantes = plazo % 24;
+
+    if (horasRestantes === 0) {
+      return `${dias} día${dias > 1 ? 's' : ''}`;
+    } else {
+      return `${dias} día${dias > 1 ? 's' : ''} ${horasRestantes} hora${horasRestantes > 1 ? 's' : ''}`;
+    }
   }
 
-  // 🆕 MÉTODO PARA OBTENER CLASE CSS DEL PLAZO
+  // 🆕 MÉTODO PARA OBTENER CLASES CSS SEGÚN EL PLAZO
   obtenerClasePlazo(plazo: number | null): string {
     if (plazo === null || plazo === undefined) {
-      return 'bg-gray-100 text-gray-700';
+      return 'bg-gray-100 text-gray-700'; // Sin plazo definido
     }
 
     if (plazo === 0) {
-      return 'bg-red-100 text-red-700';
+      return 'bg-red-100 text-red-700'; // Urgente
     }
 
-    if (plazo <= 2) {
-      return 'bg-orange-100 text-orange-700';
+    if (plazo <= 24) { // Menos de o igual a 1 día
+      return 'bg-orange-100 text-orange-700'; // Crítico
     }
 
-    return 'bg-green-100 text-green-700';
+    if (plazo <= 72) { // Menos de o igual a 3 días
+      return 'bg-yellow-100 text-yellow-700'; // Moderado
+    }
+
+    return 'bg-green-100 text-green-700'; // Normal
   }
+
+
 
   // 🆕 MÉTODOS PARA PRIMERA Y ÚLTIMA PÁGINA
   primeraPagina(): void {

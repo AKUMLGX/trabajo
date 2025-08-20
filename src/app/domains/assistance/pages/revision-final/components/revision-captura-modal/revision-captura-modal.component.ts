@@ -635,13 +635,25 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     if (plazo === null || plazo === undefined) {
       return 'Sin plazo definido';
     }
+
     if (plazo === 0) {
       return 'Urgente';
     }
-    if (plazo >= 1 && plazo <= 5) {
-      return `${plazo} día${plazo > 1 ? 's' : ''}`;
+
+    // Convertir horas a formato legible
+    if (plazo < 24) {
+      return `${plazo} hora${plazo > 1 ? 's' : ''}`;
     }
-    return `${plazo} días`;
+
+    // Convertir a días si es >= 24 horas
+    const dias = Math.floor(plazo / 24);
+    const horasRestantes = plazo % 24;
+
+    if (horasRestantes === 0) {
+      return `${dias} día${dias > 1 ? 's' : ''}`;
+    } else {
+      return `${dias} día${dias > 1 ? 's' : ''} ${horasRestantes} hora${horasRestantes > 1 ? 's' : ''}`;
+    }
   }
 
   interpretarIdDocumento(id: number | null): string {
