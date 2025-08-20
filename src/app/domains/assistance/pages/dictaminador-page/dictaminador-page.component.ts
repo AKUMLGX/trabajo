@@ -147,23 +147,29 @@ export class DictaminadorPageComponent implements OnInit {
           // Lógica de prioridad y color
           let prioridad = '';
           let prioridadColor = '';
-          let plazoAtencionVisual = 'Sin plazo de atención';
+          let plazoAtencionVisual = this.interpretarPlazoAtencion(item.plazo_atencion);
           let plazoUrgente = false;
           if (item.plazo_atencion === null || item.plazo_atencion === undefined) {
             prioridad = 'Normal';
             prioridadColor = 'verde';
-            plazoAtencionVisual = 'Sin plazo de atención';
             plazoUrgente = false;
           } else if (item.plazo_atencion === 0) {
             prioridad = 'Urgente';
             prioridadColor = 'rojo';
-            plazoAtencionVisual = 'Urgente';
             plazoUrgente = true;
           } else if (item.plazo_atencion > 0) {
-            prioridad = 'Urgente';
-            prioridadColor = 'rojo';
-            plazoAtencionVisual = item.plazo_atencion + ' días';
-            plazoUrgente = true;
+            // Determinar prioridad basada en las horas
+            if (item.plazo_atencion <= 24) {
+              prioridad = 'Crítico';
+              prioridadColor = 'naranja';
+            } else if (item.plazo_atencion <= 72) {
+              prioridad = 'Moderado';
+              prioridadColor = 'amarillo';
+            } else {
+              prioridad = 'Normal';
+              prioridadColor = 'verde';
+            }
+            plazoUrgente = item.plazo_atencion <= 24;
           }
           // Estado de atención
           let estadoAtencion = 'Desconocido';
@@ -595,5 +601,50 @@ export class DictaminadorPageComponent implements OnInit {
   async recargarEstadosDocumentos(): Promise<void> {
     console.log('🔄 Recargando todos los estados de documentos...');
     await this.verificarDocumentosAsuntos();
+  }
+
+  /**
+   * Interpreta el plazo de atención enviado por el backend (en horas)
+   * @param plazo - Plazo en horas (null, 0, o número positivo)
+   * @returns Descripción legible del plazo
+   */
+  interpretarPlazoAtencion(plazo: number | null): string {
+    if (plazo === null || plazo === undefined) {
+      return 'Sin plazo definido';
+    }
+    if (plazo === 0) {
+      return 'Urgente';
+    }
+    if (plazo < 24) {
+      return `${plazo} hora${plazo > 1 ? 's' : ''}`;
+    }
+    const dias = Math.floor(plazo / 24);
+    const horasRestantes = plazo % 24;
+    if (horasRestantes === 0) {
+      return `${dias} día${dias > 1 ? 's' : ''}`;
+    } else {
+      return `${dias} día${dias > 1 ? 's' : ''} ${horasRestantes} hora${horasRestantes > 1 ? 's' : ''}`;
+    }
+  }
+
+  /**
+   * Obtiene las clases CSS para el badge de plazo de atención
+   * @param plazo - Plazo en horas (null, 0, o número positivo)
+   * @returns Clases CSS para aplicar colores según urgencia
+   */
+  obtenerClasePlazo(plazo: number | null): string {
+    if (plazo === null || plazo === undefined) {
+      return 'bg-gray-100 text-gray-700'; // Sin plazo definido
+    }
+    if (plazo === 0) {
+      return 'bg-red-100 text-red-700'; // Urgente
+    }
+    if (plazo <= 24) { // Menos de o igual a 1 día
+      return 'bg-orange-100 text-orange-700'; // Crítico
+    }
+    if (plazo <= 72) { // Menos de o igual a 3 días
+      return 'bg-yellow-100 text-yellow-700'; // Moderado
+    }
+    return 'bg-green-100 text-green-700'; // Normal
   }
 } 
