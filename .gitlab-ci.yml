@@ -136,7 +136,7 @@ Build_image:
   retry: 2
   before_script:
     - echo ${DOCKER_REGISTRY}
-    - export DOCKER_TLS_VERIFY=0
+    - export DOCKER_TLS_VERIFY=""
     - mkdir -p $HOME/.docker
     - echo "$DOCKER_HOST"
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
@@ -166,7 +166,7 @@ Build_image_Release:
   retry: 2
   before_script:
     - echo ${DOCKER_REGISTRY}
-    - export DOCKER_TLS_VERIFY=0
+    - export DOCKER_TLS_VERIFY=""
     - mkdir -p $HOME/.docker
     - echo "$DOCKER_HOST"
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
@@ -194,9 +194,7 @@ Deploy_DEV_A:
     - /^feature*/
     - /^patch*/
     - /^config*/
-  image: docker:24.0.7
-  services:
-    - docker:dind
+  image: docker:20.10.21
   stage: Deploy_DEV
   dependencies: []
   tags:
@@ -230,9 +228,7 @@ Deploy_DEV_B:
     - /^feature*/
     - /^patch*/
     - /^config*/
-  image: docker:24.0.7
-  services:
-    - docker:dind
+  image: docker:20.10.21
   stage: Deploy_DEV
   dependencies: []
   tags:
@@ -264,9 +260,7 @@ Deploy_PROD:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^produccion*/
       when: on_success
-  image: docker:24.0.7
-  services:
-    - docker:dind
+  image: docker:20.10.21
   stage: Deploy_PROD
   dependencies: []
   tags:
