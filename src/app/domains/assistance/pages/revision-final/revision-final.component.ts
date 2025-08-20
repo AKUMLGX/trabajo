@@ -17,8 +17,6 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DictaminadorBandejaService } from '../../../services/dictaminador-bandeja.service';
 
-import { AsuntosPendientesTableComponent } from './components/asuntos-pendientes-table/asuntos-pendientes-table.component';
-import { AsuntosRevisadosTableComponent } from './components/asuntos-revisados-table/asuntos-revisados-table.component';
 import { RevisionDetalleModalComponent } from './components/revision-detalle-modal/revision-detalle-modal.component';
 import { RevisionCapturaModalComponent } from './components/revision-captura-modal/revision-captura-modal.component';
 
@@ -39,6 +37,7 @@ interface Asunto {
   dictaminador?: string;
   carpetaInvestigacion?: string;
   estado?: string;
+  oficio?: string; // 🆕 Agregada la propiedad oficio
 }
 
 // 🆕 Nueva interface para asuntos capturados
@@ -71,7 +70,7 @@ interface AsuntoCapturado {
   // Metadatos de captura
   fecha_captura: string;
   usuario_captura: string;
-  estado_revision: 'PENDIENTE' | 'APROBADO';
+  estado_revision: 'PENDIENTE' | 'APROBADO' | 'ENVIADO';
   documento_pdf?: string;
   fecha_limite?: string;
   prioridad?: 'ALTA' | 'MEDIA' | 'BAJA';
@@ -106,8 +105,6 @@ interface AsuntoCapturado {
     MatSelectModule,
     MatTooltipModule,
     MatDialogModule,
-    AsuntosPendientesTableComponent,
-    AsuntosRevisadosTableComponent,
     RevisionDetalleModalComponent,
     RevisionCapturaModalComponent
   ],
@@ -123,6 +120,7 @@ export class RevisionFinalComponent implements OnInit {
   // 🆕 Datos para asuntos capturados
   asuntosCapturados: AsuntoCapturado[] = [];
   asuntosSeleccionados: string[] = []; // IDs de asuntos seleccionados para envío
+  asuntosEnviados: string[] = []; // 🆕 IDs de asuntos enviados (persistente)
 
   // Estadísticas
   estadisticas = {
@@ -131,6 +129,7 @@ export class RevisionFinalComponent implements OnInit {
     capturadosHoy: 0,
     requierenCorreccion: 0,
     listosParaEnviar: 0,
+    enviados: 0, // 🆕 Contador de asuntos enviados
 
     // ✅ Estadísticas existentes para dictámenes
     totalPendientes: 0,
@@ -152,6 +151,26 @@ export class RevisionFinalComponent implements OnInit {
   filtroFechaRecepcion = '';
   filtroPlazoAtencion = 'Todos';
 
+  // 🆕 Filtros específicos por campo individual para Asuntos Capturados
+  filtroFolioInterno = '';
+  filtroCarpetaInvestigacion = '';
+  filtroNumeroOficio = '';
+  filtroPersonaRelacionada = '';
+
+  // 🆕 Filtros específicos para Dictámenes Pendientes
+  filtroFolioDictamen = '';
+  filtroCarpetaDictamen = '';
+  filtroOficioDictamen = '';
+  filtroPersonaDictamen = '';
+  filtroDictaminador = '';
+
+  // 🆕 Filtros específicos para Asuntos Revisados
+  filtroFolioRevisado = '';
+  filtroCarpetaRevisada = '';
+  filtroOficioRevisado = '';
+  filtroPersonaRevisada = '';
+  filtroDictaminadorRevisado = '';
+
   // Propiedades para la vista de asuntos pendientes
   vistaPendientes = 'tabla'; // 'tabla', 'grid' o 'kanban'
 
@@ -172,6 +191,9 @@ export class RevisionFinalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // 🆕 Cargar asuntos enviados desde localStorage
+    this.cargarAsuntosEnviadosDesdeStorage();
+    
     // Cargar dictámenes pendientes reales (VISTO BUENO AKAMBA 2)
     this.cargarDictamenesPendientesDesdeBackend();
     this.cargarAsuntosRevisadosDesdeBackend();
@@ -343,6 +365,9 @@ export class RevisionFinalComponent implements OnInit {
             return asuntoCapturado;
           }).filter((item): item is AsuntoCapturado => item !== null); // Filtrar elementos nulos con type guard
 
+          // 🆕 Aplicar estado ENVIADO a asuntos que están en localStorage
+          this.aplicarEstadosEnviados();
+
           this.actualizarEstadisticas();
           this.calcularPaginacion();
         } else {
@@ -381,6 +406,18 @@ export class RevisionFinalComponent implements OnInit {
 
     this.estadisticas.listosParaEnviar = this.asuntosCapturados.filter(a =>
       a.estado_revision === 'APROBADO').length;
+
+    // 🆕 Calcular asuntos enviados
+    this.estadisticas.enviados = this.asuntosCapturados.filter(a =>
+      a.estado_revision === 'ENVIADO').length;
+    
+    console.log('📊 Estadísticas actualizadas:', {
+      totalCapturados: this.estadisticas.totalCapturados,
+      pendientes: this.estadisticas.requierenCorreccion,
+      aprobados: this.estadisticas.listosParaEnviar,
+      enviados: this.estadisticas.enviados,
+      asuntosEnLocalStorage: this.asuntosEnviados.length
+    });
 
     // ✅ Calcular estadísticas existentes para dictámenes
     this.estadisticas.totalPendientes = this.asuntosPendientes.length;
@@ -527,11 +564,127 @@ export class RevisionFinalComponent implements OnInit {
   }
 
   /**
+   * 🆕 Filtra dictámenes pendientes con filtros específicos
+   * @returns Array de dictámenes filtrados
+   */
+  getDictamenesPendientesFiltrados(): Asunto[] {
+    let asuntosFiltrados = [...this.asuntosPendientes];
+
+    // Filtrar por texto general
+    if (this.filtroText) {
+      const textoBusqueda = this.filtroText.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a =>
+        (a.folio || '').toLowerCase().includes(textoBusqueda) ||
+        (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+        (a.carpetaInvestigacion || '').toLowerCase().includes(textoBusqueda) ||
+        (a.dictaminador || '').toLowerCase().includes(textoBusqueda) ||
+        (a.oficio || '').toLowerCase().includes(textoBusqueda)
+      );
+    }
+
+    // 🆕 Filtros específicos por campo
+    if (this.filtroFolioDictamen) {
+      const folioTexto = this.filtroFolioDictamen.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.folio || '').toLowerCase().includes(folioTexto)
+      );
+    }
+
+    if (this.filtroCarpetaDictamen) {
+      const carpetaTexto = this.filtroCarpetaDictamen.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.carpetaInvestigacion || '').toLowerCase().includes(carpetaTexto)
+      );
+    }
+
+    if (this.filtroOficioDictamen) {
+      const oficioTexto = this.filtroOficioDictamen.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.oficio || '').toLowerCase().includes(oficioTexto)
+      );
+    }
+
+    if (this.filtroPersonaDictamen) {
+      const personaTexto = this.filtroPersonaDictamen.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.personaRelacionada || '').toLowerCase().includes(personaTexto)
+      );
+    }
+
+    if (this.filtroDictaminador) {
+      const dictaminadorTexto = this.filtroDictaminador.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.dictaminador || '').toLowerCase().includes(dictaminadorTexto)
+      );
+    }
+
+    return asuntosFiltrados;
+  }
+
+  /**
+   * 🆕 Filtra asuntos revisados con filtros específicos
+   * @returns Array de asuntos revisados filtrados
+   */
+  getAsuntosRevisadosFiltrados(): Asunto[] {
+    let asuntosFiltrados = [...this.asuntosRevisados];
+
+    // Filtrar por texto general
+    if (this.filtroText) {
+      const textoBusqueda = this.filtroText.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a =>
+        (a.folio || '').toLowerCase().includes(textoBusqueda) ||
+        (a.personaRelacionada || '').toLowerCase().includes(textoBusqueda) ||
+        (a.carpetaInvestigacion || '').toLowerCase().includes(textoBusqueda) ||
+        (a.dictaminador || '').toLowerCase().includes(textoBusqueda) ||
+        (a.oficio || '').toLowerCase().includes(textoBusqueda)
+      );
+    }
+
+    // 🆕 Filtros específicos por campo
+    if (this.filtroFolioRevisado) {
+      const folioTexto = this.filtroFolioRevisado.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.folio || '').toLowerCase().includes(folioTexto)
+      );
+    }
+
+    if (this.filtroCarpetaRevisada) {
+      const carpetaTexto = this.filtroCarpetaRevisada.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.carpetaInvestigacion || '').toLowerCase().includes(carpetaTexto)
+      );
+    }
+
+    if (this.filtroOficioRevisado) {
+      const oficioTexto = this.filtroOficioRevisado.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.oficio || '').toLowerCase().includes(oficioTexto)
+      );
+    }
+
+    if (this.filtroPersonaRevisada) {
+      const personaTexto = this.filtroPersonaRevisada.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.personaRelacionada || '').toLowerCase().includes(personaTexto)
+      );
+    }
+
+    if (this.filtroDictaminadorRevisado) {
+      const dictaminadorTexto = this.filtroDictaminadorRevisado.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.dictaminador || '').toLowerCase().includes(dictaminadorTexto)
+      );
+    }
+
+    return asuntosFiltrados;
+  }
+
+  /**
    * Formatea una fecha para mostrarla en formato legible
    * @param date fecha a formatear
    * @returns fecha formateada como DD/MM/YYYY
    */
-  formatDate(date: string | Date): string {
+  formatDate(date: string | Date | undefined): string {
     if (!date) return 'N/A';
 
     const dateObj = typeof date === 'string' ? new Date(date) : date;
@@ -558,6 +711,84 @@ export class RevisionFinalComponent implements OnInit {
     } else {
       this.asuntosSeleccionados.push(asuntoId);
     }
+  }
+
+  /**
+   * Abre el modal de detalle de un asunto para visualización
+   * @param asunto Asunto a mostrar en detalle
+   */
+  verDetalleAsunto(asunto: Asunto): void {
+    this.dialog.open(RevisionDetalleModalComponent, {
+      width: '800px',
+      data: { asunto, soloLectura: true }
+    });
+  }
+
+  // 🆕 MÉTODOS PARA PERSISTENCIA DE ASUNTOS ENVIADOS
+
+  /**
+   * Carga los IDs de asuntos enviados desde localStorage
+   */
+  private cargarAsuntosEnviadosDesdeStorage(): void {
+    const enviadosStorage = localStorage.getItem('akamba_asuntos_enviados');
+    if (enviadosStorage) {
+      try {
+        this.asuntosEnviados = JSON.parse(enviadosStorage);
+        console.log('📦 Asuntos enviados cargados desde localStorage:', this.asuntosEnviados);
+      } catch (error) {
+        console.error('❌ Error al cargar asuntos enviados desde localStorage:', error);
+        this.asuntosEnviados = [];
+      }
+    }
+  }
+
+  /**
+   * Guarda los IDs de asuntos enviados en localStorage
+   */
+  private guardarAsuntosEnviadosEnStorage(): void {
+    try {
+      localStorage.setItem('akamba_asuntos_enviados', JSON.stringify(this.asuntosEnviados));
+      console.log('💾 Asuntos enviados guardados en localStorage:', this.asuntosEnviados);
+    } catch (error) {
+      console.error('❌ Error al guardar asuntos enviados en localStorage:', error);
+    }
+  }
+
+  /**
+   * Marca un asunto como enviado (persistente)
+   */
+  private marcarAsuntoComoEnviado(asuntoId: string): void {
+    if (!this.asuntosEnviados.includes(asuntoId)) {
+      this.asuntosEnviados.push(asuntoId);
+      this.guardarAsuntosEnviadosEnStorage();
+      console.log(`✅ Asunto ${asuntoId} marcado como ENVIADO. Total enviados: ${this.asuntosEnviados.length}`);
+    } else {
+      console.log(`⚠️ Asunto ${asuntoId} ya estaba marcado como ENVIADO`);
+    }
+  }
+
+  /**
+   * Aplica el estado ENVIADO a los asuntos que están en localStorage
+   */
+  private aplicarEstadosEnviados(): void {
+    this.asuntosCapturados.forEach(asunto => {
+      if (this.asuntosEnviados.includes(asunto.id)) {
+        asunto.estado_revision = 'ENVIADO';
+      }
+    });
+    console.log('✅ Estados ENVIADO aplicados desde localStorage');
+  }
+
+  /**
+   * Limpia el historial de asuntos enviados (útil para debugging)
+   */
+  limpiarHistorialEnviados(): void {
+    this.asuntosEnviados = [];
+    localStorage.removeItem('akamba_asuntos_enviados');
+    console.log('🧹 Historial de asuntos enviados limpiado');
+    
+    // Recargar datos para reflejar el cambio
+    this.cargarAsuntosCapturados();
   }
 
   /**
@@ -752,6 +983,15 @@ export class RevisionFinalComponent implements OnInit {
               console.log('✅ Asunto asignado exitosamente:', response);
               asignacionesExitosas++;
 
+              // 🆕 Marcar el asunto como ENVIADO persistentemente
+              const index = this.asuntosCapturados.findIndex(a => a.id === asunto.id);
+              if (index !== -1) {
+                this.asuntosCapturados[index].estado_revision = 'ENVIADO';
+                this.marcarAsuntoComoEnviado(asunto.id);
+                // 🔄 Actualizar estadísticas inmediatamente
+                this.actualizarEstadisticas();
+              }
+
               // Si es el último asunto procesado, mostrar resultado
               if (asignacionesExitosas + errores.length === asuntosParaAsignar.length) {
                 this.mostrarResultadoAsignacion(asignacionesExitosas, errores);
@@ -788,8 +1028,9 @@ export class RevisionFinalComponent implements OnInit {
 
     alert(mensaje);
 
-    // Limpiar selección y recargar datos
+    // Limpiar selección, actualizar estadísticas y recargar datos
     this.asuntosSeleccionados = [];
+    this.actualizarEstadisticas();
     this.cargarAsuntosCapturados();
   }
 
@@ -858,19 +1099,44 @@ export class RevisionFinalComponent implements OnInit {
       console.log('📝 Después de filtro texto - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
 
-    // Filtrar por estado de revisión
-    if (this.filtroEstadoCaptura !== 'TODOS') {
-      console.log('📋 Filtrando por estado:', this.filtroEstadoCaptura);
-      asuntosFiltrados = asuntosFiltrados.filter(a => a.estado_revision === this.filtroEstadoCaptura);
-      console.log('📝 Después de filtro estado - asuntosFiltrados.length:', asuntosFiltrados.length);
+    // 🆕 Filtros específicos por campo individual
+    if (this.filtroFolioInterno) {
+      console.log('🔖 Filtrando por folio interno:', this.filtroFolioInterno);
+      const folioTexto = this.filtroFolioInterno.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.folio_interno || '').toLowerCase().includes(folioTexto)
+      );
+      console.log('📝 Después de filtro folio interno - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
 
-    // Filtrar por autoridad remitente
-    if (this.filtroAutoridadRemitente !== 'Todas') {
-      console.log('🏛️ Filtrando por autoridad:', this.filtroAutoridadRemitente);
-      asuntosFiltrados = asuntosFiltrados.filter(a => a.autoridad_remitente === this.filtroAutoridadRemitente);
-      console.log('📝 Después de filtro autoridad - asuntosFiltrados.length:', asuntosFiltrados.length);
+    if (this.filtroCarpetaInvestigacion) {
+      console.log('📁 Filtrando por carpeta investigación:', this.filtroCarpetaInvestigacion);
+      const carpetaTexto = this.filtroCarpetaInvestigacion.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.carpeta_investigacion || '').toLowerCase().includes(carpetaTexto)
+      );
+      console.log('📝 Después de filtro carpeta - asuntosFiltrados.length:', asuntosFiltrados.length);
     }
+
+    if (this.filtroNumeroOficio) {
+      console.log('📝 Filtrando por número oficio:', this.filtroNumeroOficio);
+      const oficioTexto = this.filtroNumeroOficio.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.oficio || '').toLowerCase().includes(oficioTexto)
+      );
+      console.log('📝 Después de filtro oficio - asuntosFiltrados.length:', asuntosFiltrados.length);
+    }
+
+    if (this.filtroPersonaRelacionada) {
+      console.log('👤 Filtrando por persona relacionada:', this.filtroPersonaRelacionada);
+      const personaTexto = this.filtroPersonaRelacionada.toLowerCase();
+      asuntosFiltrados = asuntosFiltrados.filter(a => 
+        (a.personaRelacionada || '').toLowerCase().includes(personaTexto)
+      );
+      console.log('📝 Después de filtro persona - asuntosFiltrados.length:', asuntosFiltrados.length);
+    }
+
+
 
     console.log('✅ getAsuntosCapturasFiltrados() resultado final:', asuntosFiltrados.length, 'asuntos');
     console.log('📋 Asuntos filtrados:', asuntosFiltrados);
@@ -1011,6 +1277,13 @@ export class RevisionFinalComponent implements OnInit {
   }
 
   /**
+   * Obtiene el número de asuntos seleccionados para envío
+   */
+  getCountAsuntosSeleccionados(): number {
+    return this.asuntosSeleccionados.length;
+  }
+
+  /**
    * Obtiene el número de asuntos revisados hoy
    */
   getRevisadosHoy(): number {
@@ -1071,11 +1344,29 @@ export class RevisionFinalComponent implements OnInit {
    */
   limpiarFiltros(): void {
     this.filtroText = '';
-    this.filtroEstadoCaptura = 'TODOS';
-    this.filtroAutoridadRemitente = 'Todas';
-    this.filtroPrioridad = 'Todas';
-    this.filtroFechaRecepcion = '';
-    this.filtroPlazoAtencion = 'Todos';
+    
+    // 🆕 Limpiar filtros específicos para Asuntos Capturados
+    this.filtroFolioInterno = '';
+    this.filtroCarpetaInvestigacion = '';
+    this.filtroNumeroOficio = '';
+    this.filtroPersonaRelacionada = '';
+
+    // 🆕 Limpiar filtros específicos para Dictámenes Pendientes
+    this.filtroFolioDictamen = '';
+    this.filtroCarpetaDictamen = '';
+    this.filtroOficioDictamen = '';
+    this.filtroPersonaDictamen = '';
+    this.filtroDictaminador = '';
+
+    // 🆕 Limpiar filtros específicos para Asuntos Revisados
+    this.filtroFolioRevisado = '';
+    this.filtroCarpetaRevisada = '';
+    this.filtroOficioRevisado = '';
+    this.filtroPersonaRevisada = '';
+    this.filtroDictaminadorRevisado = '';
+    
+    // Recalcular paginación
+    this.calcularPaginacion();
   }
 
   /**
@@ -1083,11 +1374,23 @@ export class RevisionFinalComponent implements OnInit {
    */
   tienesFiltrosActivos(): boolean {
     return this.filtroText !== '' ||
-           this.filtroEstadoCaptura !== 'TODOS' ||
-           this.filtroAutoridadRemitente !== 'Todas' ||
-           this.filtroPrioridad !== 'Todas' ||
-           this.filtroFechaRecepcion !== '' ||
-           this.filtroPlazoAtencion !== 'Todos';
+           // 🆕 Filtros específicos para Asuntos Capturados
+           this.filtroFolioInterno !== '' ||
+           this.filtroCarpetaInvestigacion !== '' ||
+           this.filtroNumeroOficio !== '' ||
+           this.filtroPersonaRelacionada !== '' ||
+           // 🆕 Filtros específicos para Dictámenes Pendientes
+           this.filtroFolioDictamen !== '' ||
+           this.filtroCarpetaDictamen !== '' ||
+           this.filtroOficioDictamen !== '' ||
+           this.filtroPersonaDictamen !== '' ||
+           this.filtroDictaminador !== '' ||
+           // 🆕 Filtros específicos para Asuntos Revisados
+           this.filtroFolioRevisado !== '' ||
+           this.filtroCarpetaRevisada !== '' ||
+           this.filtroOficioRevisado !== '' ||
+           this.filtroPersonaRevisada !== '' ||
+           this.filtroDictaminadorRevisado !== '';
   }
 
   /**
@@ -1190,6 +1493,14 @@ export class RevisionFinalComponent implements OnInit {
         next: (response) => {
           console.log('✅ Asunto asignado exitosamente:', response);
           alert(`✅ El asunto ${asunto.folio_interno} fue asignado exitosamente.`);
+
+          // 🆕 Marcar el asunto como ENVIADO persistentemente
+          const index = this.asuntosCapturados.findIndex(a => a.id === asunto.id);
+          if (index !== -1) {
+            this.asuntosCapturados[index].estado_revision = 'ENVIADO';
+            this.marcarAsuntoComoEnviado(asunto.id);
+            this.actualizarEstadisticas();
+          }
 
           // Recargar la lista
           this.cargarAsuntosCapturados();

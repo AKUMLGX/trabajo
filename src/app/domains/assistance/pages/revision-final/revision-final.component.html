@@ -69,19 +69,19 @@
         </div>
       </div>
 
-      <!-- Cola de Envío -->
+      <!-- Enviados -->
       <div class="bg-gradient-to-br from-[#691C32]/10 to-[#4F1524]/20 rounded-xl shadow-sm border border-[#691C32]/30 p-5">
         <div class="flex items-start justify-between">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <mat-icon class="text-[#691C32] text-lg">send</mat-icon>
-              <p class="text-sm font-medium text-[#691C32]">En Cola de Envío</p>
+              <mat-icon class="text-[#691C32] text-lg">check_circle_outline</mat-icon>
+              <p class="text-sm font-medium text-[#691C32]">Enviados</p>
             </div>
-            <p class="text-2xl font-bold text-[#4F1524]">{{asuntosSeleccionados.length}}</p>
-            <p class="text-xs text-[#691C32] mt-1">Seleccionados para enviar</p>
+            <p class="text-2xl font-bold text-[#4F1524]">{{estadisticas.enviados}}</p>
+            <p class="text-xs text-[#691C32] mt-1">Enviados a Akamba 3</p>
           </div>
           <div class="w-12 h-12 bg-[#691C32]/20 rounded-xl flex items-center justify-center">
-            <mat-icon class="text-[#691C32] text-xl">upload</mat-icon>
+            <mat-icon class="text-[#691C32] text-xl">done_all</mat-icon>
           </div>
         </div>
       </div>
@@ -190,61 +190,60 @@
       <div class="p-6">
         <!-- Filtros y herramientas mejorados -->
         <div class="bg-gray-50 rounded-lg p-4 mb-6">
-          <!-- Fila 1: Buscador principal y filtros rápidos -->
+          <!-- Fila 1: Filtros específicos por campo -->
+          <div class="grid grid-cols-4 gap-4 mb-4">
+            <!-- Folio Interno -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Folio Interno</label>
+              <input type="text" [(ngModel)]="filtroFolioInterno" (input)="calcularPaginacion()" 
+                     placeholder="Buscar por folio interno..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Carpeta de Investigación -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Carpeta de Investigación</label>
+              <input type="text" [(ngModel)]="filtroCarpetaInvestigacion" (input)="calcularPaginacion()" 
+                     placeholder="Buscar por carpeta..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Número de Oficio -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Número de Oficio</label>
+              <input type="text" [(ngModel)]="filtroNumeroOficio" (input)="calcularPaginacion()" 
+                     placeholder="Buscar por oficio..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Persona Relacionada -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Persona Relacionada</label>
+              <input type="text" [(ngModel)]="filtroPersonaRelacionada" (input)="calcularPaginacion()" 
+                     placeholder="Buscar por persona..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+          </div>
+
+          <!-- Fila 2: Buscador general y botón limpiar -->
           <div class="flex justify-between items-start mb-4">
             <div class="flex gap-4 flex-1">
-              <!-- Buscador principal -->
-              <div class="w-80">
-                <label class="text-sm font-medium text-[#691C32] block mb-2">Buscar</label>
+              <!-- Buscador general -->
+              <div class="w-96">
+                <label class="text-sm font-medium text-[#691C32] block mb-2">Búsqueda General</label>
                 <div class="relative">
-                  <input type="text" [(ngModel)]="filtroText" placeholder="Folio interno, carpeta, oficio, persona..." 
+                  <input type="text" [(ngModel)]="filtroText" (input)="calcularPaginacion()" 
+                         placeholder="Buscar en todos los campos..." 
                         class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                   <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
                     <mat-icon class="text-gray-400 text-lg">search</mat-icon>
                   </div>
                   <button *ngIf="filtroText" 
                           class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
-                          (click)="filtroText = ''">
+                          (click)="filtroText = ''; calcularPaginacion()">
                     <mat-icon class="text-sm">close</mat-icon>
                   </button>
                 </div>
-              </div>
-
-              <!-- Filtro por estado de revisión -->
-              <div class="w-48">
-                <label class="text-sm font-medium text-[#691C32] block mb-2">Estado de Revisión</label>
-                <select [(ngModel)]="filtroEstadoCaptura" 
-                        class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent">
-                  <option value="TODOS">📋 Todos los estados</option>
-                  <option value="PENDIENTE">⏳ Pendiente de revisión</option>
-                  <option value="APROBADO">✅ Aprobado para Akamba 3</option>
-                </select>
-              </div>
-
-              <!-- Filtro por autoridad remitente -->
-              <div class="w-56">
-                <label class="text-sm font-medium text-[#691C32] block mb-2">Autoridad Remitente</label>
-                <select [(ngModel)]="filtroAutoridadRemitente" 
-                        class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent">
-                  <option value="Todas">Todas las autoridades</option>
-                  <option value="Fiscalía General de la República">Fiscalía General de la República</option>
-                  <option value="Procuraduría Fiscal">Procuraduría Fiscal</option>
-                  <option value="Aduanas">Aduanas</option>
-                  <option value="UIF">UIF</option>
-                  <option value="Sofía Herrera">Sofía Herrera</option>
-                </select>
-              </div>
-
-              <!-- Filtro por prioridad -->
-              <div class="w-32">
-                <label class="text-sm font-medium text-[#691C32] block mb-2">Prioridad</label>
-                <select [(ngModel)]="filtroPrioridad" 
-                        class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent">
-                  <option value="Todas">Todas</option>
-                  <option value="ALTA">🔴 Alta</option>
-                  <option value="MEDIA">🟡 Media</option>
-                  <option value="BAJA">🟢 Baja</option>
-                </select>
               </div>
             </div>
 
@@ -291,9 +290,9 @@
             <!-- Panel de acciones masivas -->
             <div class="flex items-center gap-3">
               <!-- Contador de seleccionados -->
-              <div *ngIf="asuntosSeleccionados.length > 0" class="flex items-center bg-emerald-50 px-3 py-2 rounded-lg">
+              <div *ngIf="getCountAsuntosSeleccionados() > 0" class="flex items-center bg-emerald-50 px-3 py-2 rounded-lg">
                 <mat-icon class="text-emerald-600 mr-2">check_circle</mat-icon>
-                <span class="text-emerald-700 font-medium">{{asuntosSeleccionados.length}} seleccionado(s)</span>
+                <span class="text-emerald-700 font-medium">{{getCountAsuntosSeleccionados()}} seleccionado(s)</span>
               </div>
 
               <!-- Botón seleccionar todos los listos -->
@@ -472,75 +471,45 @@
 
                   <!-- Folio Interno -->
                   <td class="w-44 px-6 py-5">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
-                      </div>
                       <div class="font-semibold text-slate-900 text-sm">{{asunto.folio_interno}}</div>
-                    </div>
                   </td>
 
                   <!-- Carpeta de Investigación -->
                   <td class="w-48 px-6 py-5">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                        <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
-                      </div>
                       <div class="font-medium text-slate-900 text-sm">{{asunto.carpeta_investigacion}}</div>
-                    </div>
                   </td>
 
                   <!-- Oficio -->
                   <td class="w-40 px-6 py-5">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
-                        <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
-                      </div>
                       <div 
                         class="font-medium text-slate-900 text-sm cursor-help max-w-32 truncate"
                         [matTooltip]="obtenerTextoCompleto(asunto.oficio || 'N/A')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.oficio || 'N/A', 25)}}
-                      </div>
                     </div>
                   </td>
 
                   <!-- Persona Relacionada -->
                   <td class="w-48 px-6 py-5">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                        <mat-icon class="text-green-600 text-lg">person</mat-icon>
-                      </div>
                       <div 
                         class="font-medium text-slate-900 text-sm cursor-help max-w-32 truncate"
                         [matTooltip]="obtenerTextoCompleto(asunto.personaRelacionada || '')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.personaRelacionada || '', 35)}}
-                      </div>
                     </div>
                   </td>
 
                   <!-- Fecha Recepción -->
                   <td class="w-40 px-6 py-5">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-                        <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
-                      </div>
                       <div class="font-medium text-slate-900 text-sm">{{asunto.fechaRecepcion || formatDate(asunto.fecha_captura)}}</div>
-                    </div>
                   </td>
 
                   <!-- Plazo Atención -->
                   <td class="w-36 px-6 py-5">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                        <mat-icon class="text-orange-600 text-lg">timer</mat-icon>
-                      </div>
                       <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
                             [ngClass]="obtenerClasePlazo(asunto.plazo_atencion ?? null)">
                         {{interpretarPlazoAtencion(asunto.plazo_atencion ?? null)}}
                       </span>
-                    </div>
                   </td>
 
                   <!-- Estado de Revisión -->
@@ -762,28 +731,60 @@
       
       <!-- Contenido de la pestaña Pendientes -->
       <div class="p-6">
-        <!-- Filtros y selector de vista -->
-        <div class="flex justify-between items-center mb-6">
-          <div class="flex gap-4">
-            <div class="w-64">
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Prioridad</label>
-              <div class="relative">
-              <select [(ngModel)]="filtroPrioridad" 
-                        class="appearance-none bg-white border border-gray-200 rounded-md shadow-sm px-4 py-2 pr-8 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
-                <option value="Todas">Todas las prioridades</option>
-                <option value="Alta">Alta</option>
-                <option value="Media">Media</option>
-                <option value="Baja">Baja</option>
-              </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-600">
-                  <mat-icon class="text-sm">expand_more</mat-icon>
+        <!-- Filtros y herramientas mejorados -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+          <!-- Fila 1: Filtros específicos por campo -->
+          <div class="grid grid-cols-5 gap-4 mb-4">
+            <!-- Folio -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Folio</label>
+              <input type="text" [(ngModel)]="filtroFolioDictamen" 
+                     placeholder="Buscar por folio..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                 </div>
+
+            <!-- Carpeta de Investigación -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Carpeta</label>
+              <input type="text" [(ngModel)]="filtroCarpetaDictamen" 
+                     placeholder="Buscar por carpeta..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
               </div>
+
+            <!-- Oficio -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Oficio</label>
+              <input type="text" [(ngModel)]="filtroOficioDictamen" 
+                     placeholder="Buscar por oficio..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
+
+            <!-- Persona Relacionada -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Persona</label>
+              <input type="text" [(ngModel)]="filtroPersonaDictamen" 
+                     placeholder="Buscar por persona..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Dictaminador -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Dictaminador</label>
+              <input type="text" [(ngModel)]="filtroDictaminador" 
+                     placeholder="Buscar por dictaminador..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+          </div>
+
+          <!-- Fila 2: Buscador general y botón limpiar -->
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex gap-4 flex-1">
+              <!-- Buscador general -->
             <div class="w-96">
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Buscar</label>
+                <label class="text-sm font-medium text-[#691C32] block mb-2">Búsqueda General</label>
               <div class="relative">
-                <input type="text" [(ngModel)]="filtroText" placeholder="Buscar por folio, persona..." 
+                  <input type="text" [(ngModel)]="filtroText" 
+                         placeholder="Buscar en todos los campos..." 
                       class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                 <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
                   <mat-icon class="text-gray-400 text-lg">search</mat-icon>
@@ -797,18 +798,173 @@
             </div>
           </div>
 
-          <!-- Selector de visualización quitado -->
+            <!-- Botón limpiar filtros -->
+            <div class="ml-4">
+              <label class="text-sm font-medium text-transparent block mb-2">.</label>
+              <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
+                      (click)="limpiarFiltros()">
+                <mat-icon class="mr-1 text-sm">refresh</mat-icon>
+                <span>Limpiar</span>
+              </button>
+            </div>
+          </div>
         </div>
         
-        <!-- Solo tabla de Dictámenes Pendientes -->
-        <app-asuntos-pendientes-table 
-          [asuntos]="asuntosPendientes"
-          [filtroText]="filtroText"
-          [filtroPrioridad]="filtroPrioridad"
-          (aprobar)="aprobarAsunto($event)"
-          (rechazar)="rechazarAsunto($event)"
-          (verDetalleClick)="openRevisionDetalleModal($event)">
-        </app-asuntos-pendientes-table>
+        <!-- Tabla moderna con diseño mejorado -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <!-- Header moderno con gradiente guinda -->
+          <div class="bg-gradient-to-r from-[#691C32] to-[#4F1524] px-8 py-6">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <div class="bg-white/20 p-3 rounded-xl mr-4">
+                  <mat-icon class="text-white text-2xl">gavel</mat-icon>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white">Dictámenes Pendientes</h3>
+                  <p class="text-white/80 text-sm">Pendientes de revisión final</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-6 text-white text-sm">
+                <div class="flex items-center bg-white/10 px-3 py-2 rounded-lg">
+                  <div class="w-3 h-3 bg-orange-400 rounded-full mr-2"></div>
+                  <span class="font-medium">Total: {{getDictamenesPendientesFiltrados().length}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla responsiva -->
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gradient-to-r from-slate-50 to-slate-100">
+                <tr>
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
+                      </div>
+                      <span>Folio</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
+                      </div>
+                      <span>Carpeta</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
+                      </div>
+                      <span>Oficio</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-green-600 text-lg">person</mat-icon>
+                      </div>
+                      <span>Persona</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-purple-600 text-lg">account_circle</mat-icon>
+                      </div>
+                      <span>Dictaminador</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
+                      </div>
+                      <span>Fecha Recepción</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-bold text-slate-700">
+                    <div class="flex items-center justify-center gap-2">
+                      <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-emerald-600 text-lg">settings</mat-icon>
+                      </div>
+                      <span>Acciones</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <!-- Mensaje cuando no hay resultados -->
+                <tr *ngIf="getDictamenesPendientesFiltrados().length === 0">
+                  <td colspan="7" class="px-8 py-16 text-center">
+                    <div class="flex flex-col items-center justify-center text-gray-500">
+                      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <mat-icon class="text-3xl text-gray-400">search_off</mat-icon>
+                      </div>
+                      <h3 class="text-lg font-semibold text-gray-700 mb-2">No se encontraron dictámenes</h3>
+                      <p class="text-sm text-gray-500 mb-4">Intenta ajustar los filtros de búsqueda</p>
+                      <button class="px-6 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg text-sm hover:from-slate-700 hover:to-slate-800 transition-all transform hover:scale-105"
+                              (click)="limpiarFiltros()">
+                        <mat-icon class="text-sm mr-2">refresh</mat-icon>
+                        Limpiar filtros
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Filas de datos -->
+                <tr *ngFor="let asunto of getDictamenesPendientesFiltrados(); let i = index"
+                    class="hover:bg-slate-50 transition-all duration-200 group border-b border-slate-100">
+                  
+                  <!-- Folio -->
+                  <td class="w-32 px-6 py-5">
+                    <div class="font-semibold text-slate-900 text-sm">{{asunto.folio}}</div>
+                  </td>
+
+                  <!-- Carpeta -->
+                  <td class="w-40 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.carpetaInvestigacion}}</div>
+                  </td>
+
+                  <!-- Oficio -->
+                  <td class="w-32 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.oficio || 'N/A'}}</div>
+                  </td>
+
+                  <!-- Persona Relacionada -->
+                  <td class="w-48 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.personaRelacionada}}</div>
+                  </td>
+
+                  <!-- Dictaminador -->
+                  <td class="w-40 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.dictaminador}}</div>
+                  </td>
+
+                  <!-- Fecha Recepción -->
+                  <td class="w-32 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{formatDate(asunto.fechaRecepcion)}}</div>
+                  </td>
+
+                  <!-- Acciones -->
+                  <td class="w-32 px-6 py-5 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                      <!-- Botón revisar -->
+                      <button class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700"
+                              (click)="openRevisionDetalleModal(asunto)">
+                        <mat-icon class="text-lg">visibility</mat-icon>
+                        <span class="hidden sm:inline">Ver</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </mat-tab>
     
@@ -825,11 +981,60 @@
       
       <!-- Contenido de la pestaña Revisados -->
       <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
+        <!-- Filtros y herramientas mejorados -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+          <!-- Fila 1: Filtros específicos por campo -->
+          <div class="grid grid-cols-5 gap-4 mb-4">
+            <!-- Folio -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Folio</label>
+              <input type="text" [(ngModel)]="filtroFolioRevisado" 
+                     placeholder="Buscar por folio..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Carpeta de Investigación -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Carpeta</label>
+              <input type="text" [(ngModel)]="filtroCarpetaRevisada" 
+                     placeholder="Buscar por carpeta..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Oficio -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Oficio</label>
+              <input type="text" [(ngModel)]="filtroOficioRevisado" 
+                     placeholder="Buscar por oficio..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Persona Relacionada -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Persona</label>
+              <input type="text" [(ngModel)]="filtroPersonaRevisada" 
+                     placeholder="Buscar por persona..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+
+            <!-- Dictaminador -->
+            <div>
+              <label class="text-sm font-medium text-[#691C32] block mb-2">Dictaminador</label>
+              <input type="text" [(ngModel)]="filtroDictaminadorRevisado" 
+                     placeholder="Buscar por dictaminador..." 
+                     class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
+            </div>
+          </div>
+
+          <!-- Fila 2: Buscador general y botón limpiar -->
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex gap-4 flex-1">
+              <!-- Buscador general -->
           <div class="w-96">
-            <label class="text-sm font-medium text-[#691C32] block mb-2">Buscar</label>
+                <label class="text-sm font-medium text-[#691C32] block mb-2">Búsqueda General</label>
             <div class="relative">
-              <input type="text" [(ngModel)]="filtroText" placeholder="Buscar por folio, persona..." 
+                  <input type="text" [(ngModel)]="filtroText" 
+                         placeholder="Buscar en todos los campos..." 
                     class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
               <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
                 <mat-icon class="text-gray-400 text-lg">search</mat-icon>
@@ -843,11 +1048,188 @@
           </div>
         </div>
         
-        <!-- Tabla de asuntos revisados -->
-        <app-asuntos-revisados-table 
-          [asuntos]="asuntosRevisados"
-          [filtroText]="filtroText">
-        </app-asuntos-revisados-table>
+            <!-- Botón limpiar filtros -->
+            <div class="ml-4">
+              <label class="text-sm font-medium text-transparent block mb-2">.</label>
+              <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
+                      (click)="limpiarFiltros()">
+                <mat-icon class="mr-1 text-sm">refresh</mat-icon>
+                <span>Limpiar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla moderna con diseño mejorado -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <!-- Header moderno con gradiente guinda -->
+          <div class="bg-gradient-to-r from-[#691C32] to-[#4F1524] px-8 py-6">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <div class="bg-white/20 p-3 rounded-xl mr-4">
+                  <mat-icon class="text-white text-2xl">history</mat-icon>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white">Asuntos Revisados</h3>
+                  <p class="text-white/80 text-sm">Histórico de asuntos procesados</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-6 text-white text-sm">
+                <div class="flex items-center bg-white/10 px-3 py-2 rounded-lg">
+                  <div class="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+                  <span class="font-medium">Total: {{getAsuntosRevisadosFiltrados().length}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla responsiva -->
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gradient-to-r from-slate-50 to-slate-100">
+                <tr>
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
+                      </div>
+                      <span>Folio</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
+                      </div>
+                      <span>Carpeta</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
+                      </div>
+                      <span>Oficio</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-green-600 text-lg">person</mat-icon>
+                      </div>
+                      <span>Persona</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-purple-600 text-lg">account_circle</mat-icon>
+                      </div>
+                      <span>Dictaminador</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
+                      </div>
+                      <span>Fecha Recepción</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                      <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-emerald-600 text-lg">check_circle</mat-icon>
+                      </div>
+                      <span>Estado</span>
+                    </div>
+                  </th>
+                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-bold text-slate-700">
+                    <div class="flex items-center justify-center gap-2">
+                      <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <mat-icon class="text-gray-600 text-lg">visibility</mat-icon>
+                      </div>
+                      <span>Acciones</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <!-- Mensaje cuando no hay resultados -->
+                <tr *ngIf="getAsuntosRevisadosFiltrados().length === 0">
+                  <td colspan="8" class="px-8 py-16 text-center">
+                    <div class="flex flex-col items-center justify-center text-gray-500">
+                      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <mat-icon class="text-3xl text-gray-400">search_off</mat-icon>
+                      </div>
+                      <h3 class="text-lg font-semibold text-gray-700 mb-2">No se encontraron asuntos revisados</h3>
+                      <p class="text-sm text-gray-500 mb-4">Intenta ajustar los filtros de búsqueda</p>
+                      <button class="px-6 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg text-sm hover:from-slate-700 hover:to-slate-800 transition-all transform hover:scale-105"
+                              (click)="limpiarFiltros()">
+                        <mat-icon class="text-sm mr-2">refresh</mat-icon>
+                        Limpiar filtros
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Filas de datos -->
+                <tr *ngFor="let asunto of getAsuntosRevisadosFiltrados(); let i = index"
+                    class="hover:bg-slate-50 transition-all duration-200 group border-b border-slate-100">
+                  
+                  <!-- Folio -->
+                  <td class="w-32 px-6 py-5">
+                    <div class="font-semibold text-slate-900 text-sm">{{asunto.folio}}</div>
+                  </td>
+
+                  <!-- Carpeta -->
+                  <td class="w-40 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.carpetaInvestigacion}}</div>
+                  </td>
+
+                  <!-- Oficio -->
+                  <td class="w-32 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.oficio || 'N/A'}}</div>
+                  </td>
+
+                  <!-- Persona Relacionada -->
+                  <td class="w-48 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.personaRelacionada}}</div>
+                  </td>
+
+                  <!-- Dictaminador -->
+                  <td class="w-40 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{asunto.dictaminador}}</div>
+                  </td>
+
+                  <!-- Fecha Recepción -->
+                  <td class="w-32 px-6 py-5">
+                    <div class="font-medium text-slate-900 text-sm">{{formatDate(asunto.fechaRecepcion)}}</div>
+                  </td>
+
+                  <!-- Estado -->
+                  <td class="w-32 px-6 py-5">
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold"
+                          [ngClass]="asunto.estadoAtencion === 'Aprobado' ? 'bg-green-100 text-green-700' : 
+                                     asunto.estadoAtencion === 'Rechazado' ? 'bg-red-100 text-red-700' : 
+                                     'bg-gray-100 text-gray-700'">
+                      {{asunto.estadoAtencion}}
+                    </span>
+                  </td>
+
+                  <!-- Acciones -->
+                  <td class="w-32 px-6 py-5 text-center">
+                    <button class="px-3 py-1 rounded-md text-white flex items-center mx-auto bg-[#691C32] hover:bg-[#4F1524] transition-colors duration-200"
+                            (click)="verDetalleAsunto(asunto)">
+                      <mat-icon class="mr-1 text-base">visibility</mat-icon>
+                      <span>Ver detalle</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>
