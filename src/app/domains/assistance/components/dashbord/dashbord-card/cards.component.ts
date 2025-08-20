@@ -17,8 +17,9 @@ import { AdministracionResponse, Cards, CardsResponse, } from '../../../../inter
 import { porAsignarRequest } from '../../../../interfaces/porAsignarRequest.interface';
 import { porAsignarResponse } from '../../../../interfaces/porAsignarResponse.interface';
 import { usuariosPorAdministracion } from '../../../../interfaces/usuarios-Por-administracion.interface';
-import { RechazadosTableComponent, AsuntoRechazado } from '../rechazados-table/rechazados-table.component';
-import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/rechazados-gestion.component';
+// Eliminado por solicitud: módulo de rechazados
+// import { RechazadosTableComponent, AsuntoRechazado } from '../rechazados-table/rechazados-table.component';
+// import { RechazadosGestionComponent, Dictaminador } from '../rechazados-gestion/rechazados-gestion.component';
 import { RevisionModalComponent } from '../revision-modal/revision-modal.component';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/archivos-atencion.service';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -41,8 +42,8 @@ import { AtencionModalComponent } from '../atencion-modal/atencion-modal.compone
     NgxExtendedPdfViewerModule,
     FormsModule,
     SafePipe,
-    RechazadosTableComponent,
-    RechazadosGestionComponent,
+    // RechazadosTableComponent,
+    // RechazadosGestionComponent,
     RevisionModalComponent,
     NgxPaginationModule,
     AtencionModalComponent,
@@ -200,26 +201,27 @@ export class CardsComponent implements OnInit {
   asuntoSeleccionado: any = null;
 
   // Propiedades para manejar asuntos rechazados
-  mostrarTablaRechazadosModal: boolean = false;
-  mostrarModalRechazados: boolean = false;
+  // mostrarTablaRechazadosModal: boolean = false;
+  // mostrarModalRechazados: boolean = false;
   mostrarConfirmacionReasignacion: boolean = false;
-  asuntoRechazado: AsuntoRechazado | null = null;
+  // asuntoRechazado: any | null = null;
 
 
   // Datos de ejemplo para asuntos rechazados
-  asuntosRechazados: AsuntoRechazado[] = [
+  /* Eliminado: datos de rechazados
+  asuntosRechazados: any[] = [
     { folio: 'R001', autoridad: 'Servicio de Administración Tributaria', fechaRechazo: '05/04/2024', dictaminador: 'María Hernández', motivo: 'Información incompleta en el expediente. Se requiere documentación adicional.' },
     { folio: 'R002', autoridad: 'Secretaría de Finanzas', fechaRechazo: '03/04/2024', dictaminador: 'Juan Rodríguez', motivo: 'No corresponde a esta área. Debe ser reasignado a otra administración.' }
-  ];
+  ];*/
 
   // Dictaminadores disponibles para reasignación
-  dictaminadoresDisponibles: Dictaminador[] = [
-    { id: '1', nombre: 'María Hernández' },
-    { id: '2', nombre: 'Juan Rodríguez' },
-    { id: '3', nombre: 'Carlos Sánchez' },
-    { id: '4', nombre: 'Ana González' },
-    { id: '5', nombre: 'Luis Torres' }
-  ];
+  // dictaminadoresDisponibles: any[] = [
+  //   { id: '1', nombre: 'María Hernández' },
+  //   { id: '2', nombre: 'Juan Rodríguez' },
+  //   { id: '3', nombre: 'Carlos Sánchez' },
+  //   { id: '4', nombre: 'Ana González' },
+  //   { id: '5', nombre: 'Luis Torres' }
+  // ];
 
 
   requerimiento: Cards = {
@@ -956,29 +958,29 @@ export class CardsComponent implements OnInit {
   }
 
   // Métodos para gestionar asuntos rechazados
-  mostrarTablaRechazados(): void {
-    this.mostrarTablaRechazadosModal = true;
+  // mostrarTablaRechazados(): void {
+  //   this.mostrarTablaRechazadosModal = true;
+  // }
+
+  // cerrarTablaRechazados(): void {
+  //   this.mostrarTablaRechazadosModal = false;
+  // }
+
+  seleccionarAsuntoRechazado(asunto: any): void {
+    // this.asuntoRechazado = asunto;
+    // this.mostrarTablaRechazadosModal = false;
+    // this.mostrarModalRechazados = true;
   }
 
-  cerrarTablaRechazados(): void {
-    this.mostrarTablaRechazadosModal = false;
-  }
-
-  seleccionarAsuntoRechazado(asunto: AsuntoRechazado): void {
-    this.asuntoRechazado = asunto;
-    this.mostrarTablaRechazadosModal = false;
-    this.mostrarModalRechazados = true;
-  }
-
-  cerrarModalRechazados(): void {
-    this.mostrarModalRechazados = false;
-  }
+  // cerrarModalRechazados(): void {
+  //   this.mostrarModalRechazados = false;
+  // }
 
   manejarReasignacion(event: { asunto: any, nuevoDictaminadorId: string, observaciones: string, notificar: boolean }): void {
     // Implementar la lógica para reasignar el asunto rechazado a un nuevo dictaminador
     console.log('Reasignando asunto', event);
     this.mostrarMensaje(`Asunto reasignado a ${this.dictaminadoresMap[event.nuevoDictaminadorId]}`);
-    this.cerrarModalRechazados();
+    // this.cerrarModalRechazados();
   }
 
   confirmarReasignacion(): void {
@@ -987,12 +989,12 @@ export class CardsComponent implements OnInit {
       // Simular respuesta exitosa
       this.mostrarMensaje('Asunto reasignado exitosamente');
       // Actualizar la lista de asuntos rechazados (quitar el asunto reasignado)
-      if (this.asuntoRechazado) {
-        this.asuntosRechazados = this.asuntosRechazados.filter(a => a.folio !== this.asuntoRechazado?.folio);
-      }
+      // if (this.asuntoRechazado) {
+      //   this.asuntosRechazados = this.asuntosRechazados.filter(a => a.folio !== this.asuntoRechazado?.folio);
+      // }
       this.mostrarConfirmacionReasignacion = false;
-      this.mostrarModalRechazados = false;
-      this.asuntoRechazado = null;
+      // this.mostrarModalRechazados = false;
+      // this.asuntoRechazado = null;
     }, 1000);
   }
 

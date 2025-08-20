@@ -70,20 +70,7 @@
       </div>
     </div>
 
-    <!-- Tarjeta Rechazados -->
-    <div class="bg-white p-4 rounded-lg shadow-md text-center border border-gray-100 hover:shadow-lg transition-shadow cursor-pointer flex-shrink-0 mx-2 min-w-[180px] w-[200px]" (click)="mostrarTablaRechazados()">
-      <div class="flex justify-center mb-2">
-        <div class="w-15 h-20 rounded-full flex items-center justify-center">
-          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M28 54.5265C42.648 54.5265 54.526 42.6486 54.526 28.0002C54.526 13.3517 42.648 1.47388 28 1.47388C13.352 1.47388 1.474 13.3517 1.474 28.0002C1.474 42.6486 13.352 54.5265 28 54.5265Z" stroke="#ef4444" stroke-width="3" stroke-miterlimit="10"/>
-            <path d="M35 21L21 35" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M21 21L35 35" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-      <div class="text-3xl font-bold text-gray-800 mb-1">{{asuntosRechazados.length}}</div>
-      <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block">Rechazados</div>
-    </div>
+    <!-- Tarjeta Rechazados eliminada por solicitud -->
   </div>
 
   <!-- 🔥 BOTÓN URGENTE CON EFECTO PULSO + GLOW MODERNO -->
@@ -654,25 +641,7 @@
     </div>
   </div>
 
-  <!-- Modal de Lista de Asuntos Rechazados -->
-  <app-rechazados-table
-    [mostrarTablaRechazadosModal]="mostrarTablaRechazadosModal"
-    [asuntosRechazados]="asuntosRechazados"
-    (cerrarTablaEvent)="cerrarTablaRechazados()"
-    (seleccionarAsuntoEvent)="seleccionarAsuntoRechazado($event)">
-  </app-rechazados-table>
-
-  <!-- Modal de Gestión de Asuntos Rechazados -->
-  <app-rechazados-gestion
-    [mostrarModalRechazados]="mostrarModalRechazados"
-    [asuntoRechazado]="asuntoRechazado"
-    [dictaminadoresDisponibles]="dictaminadoresDisponibles"
-    [mostrarConfirmacionReasignacion]="mostrarConfirmacionReasignacion"
-    (cerrarModalEvent)="cerrarModalRechazados()"
-    (reasignarAsuntoEvent)="manejarReasignacion($event)"
-    (confirmarReasignacionEvent)="confirmarReasignacion()"
-    (cancelarConfirmacionEvent)="cancelarConfirmacionReasignacion()">
-  </app-rechazados-gestion>
+  <!-- Modales de Rechazados eliminados por solicitud -->
 
   <!-- Modal de Revisión de Asuntos -->
   <app-revision-modal
