@@ -180,7 +180,7 @@
         <div class="flex items-center py-2">
           <mat-icon class="mr-2 text-[#691C32]">input</mat-icon>
           <span>Asuntos Capturados</span>
-          <span *ngIf="asuntosCapturados.length > 0" class="ml-2 bg-purple-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+          <span *ngIf="asuntosCapturados.length > 0" class="ml-2 bg-purple-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-medium">
             {{asuntosCapturados.length}}
           </span>
         </div>
@@ -723,7 +723,7 @@
         <div class="flex items-center py-2">
           <mat-icon class="mr-2 text-[#691C32]">pending_actions</mat-icon>
           <span>Dictámenes Pendientes</span>
-          <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+          <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-medium">
             {{asuntosPendientes.length}}
           </span>
         </div>
@@ -953,10 +953,10 @@
                   <td class="w-32 px-6 py-5 text-center">
                     <div class="flex items-center justify-center gap-2">
                       <!-- Botón revisar -->
-                      <button class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700"
+                      <button class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 bg-gradient-to-r from-[#691C32] to-[#4F1524] text-white hover:from-[#4F1524] hover:to-[#691C32]"
                               (click)="openRevisionDetalleModal(asunto)">
                         <mat-icon class="text-lg">visibility</mat-icon>
-                        <span class="hidden sm:inline">Ver</span>
+                        <span class="hidden sm:inline">Revisar</span>
                       </button>
                     </div>
                   </td>
@@ -973,7 +973,7 @@
         <div class="flex items-center py-2">
           <mat-icon class="mr-2 text-[#691C32]">history</mat-icon>
           <span>Asuntos Revisados</span>
-          <span *ngIf="asuntosRevisados.length > 0" class="ml-2 bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">
+          <span *ngIf="asuntosRevisados.length > 0" class="ml-2 bg-green-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-medium">
             {{asuntosRevisados.length}}
           </span>
         </div>
