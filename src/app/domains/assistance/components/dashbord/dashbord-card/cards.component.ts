@@ -694,13 +694,16 @@ export class CardsComponent implements OnInit {
     console.log('🔍 [verDetalle] ¡EJECUTÁNDOSE! Vista actual:', this.vistaActual);
     console.log('🔍 [verDetalle] Asunto recibido:', asunto);
 
+    // Normalizar el objeto para que los modales reciban un shape consistente
+    const asuntoNormalizado = this.normalizarAsunto(asunto);
+
     if (this.vistaActual === 'aprobacion') {
       // Para asuntos que requieren aprobación, usamos el modal de revisión
       console.log('✅ [verDetalle] Abriendo modal de REVISIÓN (Por Aprobar)');
-      this.asuntoSeleccionadoRevision = asunto;
+      this.asuntoSeleccionadoRevision = asuntoNormalizado;
 
       // Cargar los archivos del asunto
-      this.cargarArchivosAsunto(asunto);
+      this.cargarArchivosAsunto(asuntoNormalizado);
 
       // Mostrar el modal
       this.mostrarModalRevision = true;
@@ -708,7 +711,7 @@ export class CardsComponent implements OnInit {
       // Para asuntos en atención, usamos el nuevo modal de atención
       console.log('✅ [verDetalle] Abriendo modal de ATENCIÓN (En Atención)');
       console.log('✅ [verDetalle] Asignando asunto a asuntoSeleccionadoAtencion:', asunto);
-      this.asuntoSeleccionadoAtencion = asunto;
+      this.asuntoSeleccionadoAtencion = asuntoNormalizado;
 
       // Mostrar el modal
       console.log('✅ [verDetalle] Estableciendo mostrarModalAtencion = true');
@@ -734,22 +737,66 @@ export class CardsComponent implements OnInit {
     console.log('🔧 [Cards] Llamando servicio para folio:', asunto.folio_interno);
     this.archivosService.listarArchivosPdf(asunto.folio_interno).subscribe({
       next: (archivos) => {
-        console.log('🔧 [Cards] Respuesta del servicio archivos:', archivos);
-        console.log('🔧 [Cards] Número de archivos recibidos:', archivos?.length || 0);
-        this.archivosAsunto = archivos;
-        console.log('🔧 [Cards] archivosAsunto asignado:', this.archivosAsunto);
+        console.log('🔧 [Cards] Respuesta del servicio archivos (VERDE):', archivos?.length || 0);
+        if (archivos && archivos.length > 0) {
+          this.archivosAsunto = archivos;
+          return;
+        }
+        // Fallback: intentar endpoint alterno (GUINDA)
+        console.log('🔧 [Cards] Sin archivos en VERDE, probando endpoint alterno (GUINDA)');
+        this.archivosService.listarArchivosPdfAtencion(asunto.folio_interno).subscribe({
+          next: (alternos) => {
+            console.log('🔧 [Cards] Archivos vía alterno:', alternos?.length || 0);
+            this.archivosAsunto = alternos || [];
+          },
+          error: () => {
+            this.archivosAsunto = [];
+          }
+        });
       },
       error: (err) => {
-        console.error('🔧 [Cards] Error al cargar archivos del asunto:', err);
-        console.error('🔧 [Cards] Detalles del error:', {
-          status: err.status,
-          statusText: err.statusText,
-          message: err.message,
-          url: err.url
+        console.error('🔧 [Cards] Error en VERDE, probando alterno (GUINDA). Detalle:', err?.status);
+        this.archivosService.listarArchivosPdfAtencion(asunto.folio_interno).subscribe({
+          next: (alternos) => {
+            this.archivosAsunto = alternos || [];
+          },
+          error: () => {
+            this.archivosAsunto = [];
+          }
         });
-        this.archivosAsunto = [];
       }
     });
+  }
+
+  // Adaptador para entregar al modal un objeto plano con las llaves esperadas
+  private normalizarAsunto(asunto: any): any {
+    const d = this.obtenerDatos(asunto) || {};
+
+    const id_asunto = d.id_asunto
+      ?? d.id_asunto_nuevo
+      ?? d.id_asunto_historico
+      ?? asunto?.id_asunto
+      ?? asunto?.id_asunto_nuevo
+      ?? asunto?.id_asunto_historico;
+
+    return {
+      id_asunto: id_asunto,
+      folio_interno: d.folio_interno ?? d.folio ?? asunto?.folio_interno ?? '',
+      folio_scanner: d.folio_scanner ?? asunto?.folio_scanner,
+      persona_relacionada: d.persona_relacionada ?? asunto?.persona_relacionada,
+      carpeta_investigacion: d.carpeta_investigacion ?? asunto?.carpeta_investigacion,
+      oficio: d.oficio ?? asunto?.oficio,
+      turno_jefatura: d.turno_jefatura ?? asunto?.turno_jefatura,
+      fecha_recepcion: d.fecha_recepcion ?? asunto?.fecha_recepcion,
+      autoridad_remitente: d.autoridad_remitente ?? asunto?.autoridad_remitente,
+      plazo_atencion: d.plazo_atencion ?? asunto?.plazo_atencion,
+      id_administracion_fk: d.id_administracion_fk ?? asunto?.id_administracion_fk,
+      id_atencion_fk: d.id_atencion_fk ?? asunto?.id_atencion_fk,
+      id_documento_fk: d.id_documento_fk ?? asunto?.id_documento_fk,
+      observaciones: d.observaciones ?? asunto?.observaciones,
+      dictaminador: asunto?.rfc_asignado || asunto?.nombre_dictaminador || d.dictaminador,
+      es_historico: Boolean(d.id_asunto_historico || asunto?.id_asunto_historico)
+    };
   }
 
   // Método para cerrar el modal de detalles

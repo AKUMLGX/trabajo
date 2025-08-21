@@ -56,6 +56,8 @@ export class AtencionModalComponent implements OnInit, OnChanges {
   pdfCargando = false;
   pdfError = false;
   pdfSrc = '';
+  // Origen de listado para elegir correctamente la carpeta al ver/descargar
+  private origenArchivos: 'raiz' | 'atencion' = 'raiz';
   
   // Pestañas
   pestanaActiva: 'detalles' | 'documentos' = 'detalles';
@@ -149,26 +151,65 @@ export class AtencionModalComponent implements OnInit, OnChanges {
     this.cargandoArchivos = true;
     this.archivos = [];
     
-    this.archivoService.listarArchivosPdfAtencion(this.asunto.folio_interno).subscribe({
+    // Primer intento: listar en carpeta raíz (compatibilidad anterior)
+    const folio = this.asunto.folio_interno as string;
+    this.archivoService.listarArchivosPdfAtencion(folio).subscribe({
       next: (archivos: ArchivoAdjunto[]) => {
         if (archivos && archivos.length > 0) {
-        this.archivos = archivos.map(archivo => ({
-          nombre: archivo.nombre,
+          this.archivos = archivos.map(archivo => ({
+            nombre: archivo.nombre,
             tamano: archivo.tamano,
-          ultima_modificacion: archivo.ultima_modificacion,
-          ruta_completa: `${this.asunto?.folio_interno}/${archivo.nombre}`
-        }));
-          console.log(`🟤 [MODAL GUINDA] ${this.archivos.length} archivos cargados`);
+            ultima_modificacion: archivo.ultima_modificacion,
+            ruta_completa: `${folio}/${archivo.nombre}`
+          }));
+          console.log(`🟤 [MODAL GUINDA] ${this.archivos.length} archivos cargados (raíz)`);
+          this.origenArchivos = 'raiz';
+          this.cargandoArchivos = false;
         } else {
-          this.archivos = [];
-          console.log('🟤 [MODAL GUINDA] No hay archivos disponibles');
+          // Fallback: intentar en carpeta 'atencion'
+          console.log('🟤 [MODAL GUINDA] Sin archivos en raíz, intentando carpeta "atencion"...');
+          this.archivoService.listarArchivosPdf(folio).subscribe({
+            next: (archivosAtencion) => {
+              if (archivosAtencion && archivosAtencion.length > 0) {
+                this.archivos = archivosAtencion.map(archivo => ({
+                  nombre: archivo.nombre,
+                  tamano: archivo.tamano,
+                  ultima_modificacion: archivo.ultima_modificacion,
+                  ruta_completa: `${folio}/${archivo.nombre}`
+                }));
+                console.log(`🟤 [MODAL GUINDA] ${this.archivos.length} archivos cargados (carpeta atencion)`);
+                this.origenArchivos = 'atencion';
+              } else {
+                this.archivos = [];
+                console.log('🟤 [MODAL GUINDA] No hay archivos disponibles en ninguna ubicación');
+              }
+              this.cargandoArchivos = false;
+            },
+            error: () => {
+              this.archivos = [];
+              this.cargandoArchivos = false;
+            }
+          });
         }
-        this.cargandoArchivos = false;
       },
-      error: (error: any) => {
-        console.error('🟤 [MODAL GUINDA] Error al cargar archivos:', error.status);
-        this.archivos = [];
-        this.cargandoArchivos = false;
+      error: () => {
+        // Si falla el endpoint de raíz, probar carpeta 'atencion'
+        this.archivoService.listarArchivosPdf(folio).subscribe({
+          next: (archivosAtencion) => {
+            this.archivos = (archivosAtencion || []).map(archivo => ({
+              nombre: archivo.nombre,
+              tamano: archivo.tamano,
+              ultima_modificacion: archivo.ultima_modificacion,
+              ruta_completa: `${folio}/${archivo.nombre}`
+            }));
+            this.origenArchivos = 'atencion';
+            this.cargandoArchivos = false;
+          },
+          error: () => {
+            this.archivos = [];
+            this.cargandoArchivos = false;
+          }
+        });
       }
     });
   }
@@ -193,46 +234,53 @@ export class AtencionModalComponent implements OnInit, OnChanges {
       return;
     }
 
-    // Para modal GUINDA: archivos en carpeta raíz (SIN parámetro carpeta)
-    this.archivoService.obtenerPdf(
-      this.asunto.folio_interno,
-      archivo.nombre
-    ).subscribe({
-      next: (data: string) => {
+    const renderPdf = (data: string) => {
+      this.pdfSrc = `data:application/pdf;base64,${data}`;
+      this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrc);
+      this.pdfCargando = false;
+
+      setTimeout(() => {
+        if (this.pdfContainer && this.pdfContainer.nativeElement) {
+          this.pdfContainer.nativeElement.innerHTML = '';
+          const iframe = document.createElement('iframe');
+          iframe.src = this.pdfSrc;
+          iframe.style.width = '100%';
+          iframe.style.height = '500px';
+          iframe.style.border = 'none';
+          this.pdfContainer.nativeElement.appendChild(iframe);
+        }
+      }, 100);
+    };
+
+    const folio = this.asunto.folio_interno as string;
+    // Normalizar nombre de archivo:
+    // 1) Si viene como "nombre_1234567890.pdf" -> transformar a "nombre.pdf"
+    // 2) Si viene como "nombre.pdf-1234567890" -> transformar a "nombre.pdf"
+    let nombre = archivo.nombre;
+    const matchUnderscore = nombre.match(/^(.+)_\d{10}(\.[^.]+)$/);
+    if (matchUnderscore) {
+      nombre = matchUnderscore[1] + matchUnderscore[2];
+    }
+    const matchDashAfterExt = nombre.match(/(.+\.pdf)-\d+$/);
+    if (matchDashAfterExt && matchDashAfterExt[1]) {
+      nombre = matchDashAfterExt[1];
+    }
+
+    const sourceIsAtencion = this.origenArchivos === 'atencion';
+    const obs = sourceIsAtencion
+      ? this.archivoService.obtenerPdf(folio, nombre, 'atencion')
+      : this.archivoService.obtenerPdf(folio, nombre);
+
+    obs.subscribe({
+      next: (data) => {
         if (!data || data.trim() === '') {
-          console.error('El servidor devolvió un documento vacío');
           this.pdfError = true;
           this.pdfCargando = false;
           return;
         }
-        
-        try {
-          this.pdfSrc = `data:application/pdf;base64,${data}`;
-          this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrc);
-          this.pdfCargando = false;
-          
-          setTimeout(() => {
-            if (this.pdfContainer && this.pdfContainer.nativeElement) {
-              this.pdfContainer.nativeElement.innerHTML = '';
-              const iframe = document.createElement('iframe');
-              iframe.src = this.pdfSrc;
-              iframe.style.width = '100%';
-              iframe.style.height = '500px';
-              iframe.style.border = 'none';
-              this.pdfContainer.nativeElement.appendChild(iframe);
-            }
-          }, 100);
-        } catch (error) {
-          console.error('Error al procesar el PDF:', error);
-          this.pdfError = true;
-          this.pdfCargando = false;
-        }
+        try { renderPdf(data); } catch { this.pdfError = true; this.pdfCargando = false; }
       },
-      error: (err) => {
-        console.error('Error al cargar el PDF:', err);
-        this.pdfError = true;
-        this.pdfCargando = false;
-      }
+      error: () => { this.pdfError = true; this.pdfCargando = false; }
     });
   }
 
