@@ -187,6 +187,11 @@ export class DictaminadorPageComponent implements OnInit {
             ''
           );
           const observaciones = obsFuente.trim();
+          
+          // Debug: verificar si hay observaciones
+          if (observaciones) {
+            console.log('🔍 Observaciones encontradas para folio', item?.asunto?.datos?.folio_interno || 'N/A', ':', observaciones);
+          }
 
           return {
             'FOLIO INTERNO': item.folio_interno,
