@@ -180,7 +180,13 @@ export class DictaminadorPageComponent implements OnInit {
           } else if (item.id_atencion_fk === 3) {
             estadoAtencion = 'Atención Total';
           }
-          const observaciones = typeof item.observaciones === 'string' ? item.observaciones.trim() : '';
+          const obsFuente = (
+            (typeof item.observaciones === 'string' && item.observaciones) ||
+            (typeof item?.asunto?.datos?.observaciones === 'string' && item.asunto.datos.observaciones) ||
+            (typeof item?.asunto?.observaciones === 'string' && item.asunto.observaciones) ||
+            ''
+          );
+          const observaciones = obsFuente.trim();
 
           return {
             'FOLIO INTERNO': item.folio_interno,
