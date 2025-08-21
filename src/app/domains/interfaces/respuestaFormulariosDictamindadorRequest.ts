@@ -1,0 +1,15 @@
+export interface respuestaFormularioDictaminadorRequest{
+     folio_interno: string,
+     folio_scanner: number,
+     oficio: string,
+     documento_escaneado: string,
+     atencion: string,
+     descripcion: string,
+     fecha_atencion: string,
+     persona_relacionada: string,
+     administracion: string,
+     autoridad_remitente: string,
+     carpeta_investigacion: string,
+     documento: string,
+     id_req: number,
+}

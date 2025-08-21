@@ -5,6 +5,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { porAsignarRequest, tableAsuntosPorDictaminar } from '../interfaces/porAsignarRequest.interface';
 import { AsuntoPorEstadoAtencionRequest, AsuntoPorEstadoAtencionResponse, AsuntoAsignacion } from '../interfaces/asuntoPorAtencion.interface';
+import { respuestaFormularioDictaminadorRequest } from './../interfaces/respuestaFormulariosDictamindadorRequest';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -181,4 +184,19 @@ export class DictaminadorBandejaService {
 
     return this.http.post<string>(url, params, httpOptions);
   }
+
+  asignarRespuestasDictaminadorFormularios(data:respuestaFormularioDictaminadorRequest, selectedFile :File):Observable<string> {
+    const tarjetURL = environment.baseUrl + environment.asigarRespuestaDictaminador;
+    const type = 'application/json'
+    const json = JSON.stringify(data);
+
+    let formData: FormData;
+    const blob = new Blob([json], { type });
+    formData = new FormData();
+    formData.append('data', blob);
+    formData.append('file', selectedFile, selectedFile.name);
+
+    return this.http.post(tarjetURL, formData, { responseType: 'text' })
+  }
+
 }

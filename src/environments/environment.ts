@@ -66,6 +66,9 @@ export const environment={
   resolverAsunto: 'asunto/atencion/resolver',
   asignarAdministracion: 'asunto/atencion/asignar_administracion',
   //#endregion
+//#region Bandeja Dictaminiador
+  asigarRespuestaDictaminador: 'asunto/nuevo/euacape/respuesta/',
+//#endregion
   asuntoHistoricoEndpoint: 'asunto/historico/',
   asuntoNuevoEndpoint: 'asunto/nuevo/',
   getPdfEndpoint: 'getPdf',

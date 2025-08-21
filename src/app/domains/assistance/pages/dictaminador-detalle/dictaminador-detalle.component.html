@@ -4,27 +4,32 @@
     <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <button mat-icon-button (click)="goBack()" class="mr-4 text-white hover:bg-white/20 rounded-full transition-all">
+          <button mat-icon-button (click)="goBack()"
+            class="mr-4 text-white hover:bg-white/20 rounded-full transition-all">
             <mat-icon>arrow_back</mat-icon>
           </button>
           <div>
             <div class="flex items-center">
               <h1 class="text-2xl font-bold text-white tracking-tight">{{asunto.folio}}</h1>
-              <span class="ml-4 text-sm text-white/90 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
+              <span
+                class="ml-4 text-sm text-white/90 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
                 Carpeta de Investigación: {{asunto.carpetaInvestigacion}}
               </span>
             </div>
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <span [ngClass]="[asunto.plazo_atencion_original === 0 ? 'bg-red-600 text-white' : 'bg-green-600 text-white', 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
-            <mat-icon class="text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' : 'check_circle'}}</mat-icon>
+          <span
+            [ngClass]="[asunto.plazo_atencion_original === 0 ? 'bg-red-600 text-white' : 'bg-green-600 text-white', 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
+            <mat-icon class="text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' :
+              'check_circle'}}</mat-icon>
             {{getPlazoAtencionText()}}
           </span>
-          <span [ngClass]="[getStatusClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
+          <span
+            [ngClass]="[getStatusClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
             <mat-icon class="text-sm mr-1">{{getStatusIcon()}}</mat-icon>
-          {{getStatusText()}}
-        </span>
+            {{getStatusText()}}
+          </span>
         </div>
       </div>
     </div>
@@ -32,32 +37,36 @@
 
   <!-- Contenido principal con diseño elegante -->
   <div class="container mx-auto px-6 py-8">
-    
+
     <!-- Banner de asunto rechazado -->
-    <div *ngIf="asunto.esRechazado" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-lg shadow-md">
+    <div *ngIf="asunto.esRechazado"
+      class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-lg shadow-md">
       <div class="flex items-start">
         <div class="flex-shrink-0">
           <mat-icon class="text-red-600">error</mat-icon>
         </div>
         <div class="ml-3">
           <p class="text-lg font-medium">Este asunto ha sido rechazado</p>
-          <p class="mt-1">Rechazado por: <span class="font-medium">{{asunto.rechazadoPor}}</span> el {{asunto.fechaRechazo | date:'dd/MM/yyyy'}}</p>
+          <p class="mt-1">Rechazado por: <span class="font-medium">{{asunto.rechazadoPor}}</span> el
+            {{asunto.fechaRechazo | date:'dd/MM/yyyy'}}</p>
           <p class="mt-1">Motivo: <span class="font-medium">{{asunto.motivoRechazo}}</span></p>
-          <button (click)="mostrarRevision()" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-medium py-1 px-3 rounded text-sm flex items-center">
+          <button (click)="mostrarRevision()"
+            class="mt-2 bg-red-600 hover:bg-red-700 text-white font-medium py-1 px-3 rounded text-sm flex items-center">
             <mat-icon class="mr-1 text-sm">visibility</mat-icon>
             Ver detalles del rechazo
           </button>
         </div>
       </div>
     </div>
-    
+
     <!-- Tarjeta de información principal -->
     <div class="bg-white rounded-xl shadow-2xl mb-8 overflow-hidden border border-[#d8cfc1]">
       <div class="bg-gradient-to-r from-[#691C32]/95 to-[#8a2541]/95 p-6 relative">
         <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('assets/images/pattern.png')]"></div>
         <div class="flex items-center justify-between relative z-10">
           <div class="flex items-center">
-            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-4 border border-white/30">
+            <div
+              class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-4 border border-white/30">
               <mat-icon class="text-white">description</mat-icon>
             </div>
             <div>
@@ -68,20 +77,20 @@
                 <p class="text-xs text-white/75 mb-1">Persona(s) relacionada(s):</p>
                 <div class="flex flex-wrap gap-1">
                   <!-- Para un caso simple (una persona) -->
-                  <span *ngIf="asunto.personaRelacionada && !isMultiplePersonas()" 
-                        class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
+                  <span *ngIf="asunto.personaRelacionada && !isMultiplePersonas()"
+                    class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
                     {{asunto.personaRelacionada}}
                   </span>
                   <!-- Para múltiples personas (si se implementa en el futuro) -->
                   <ng-container *ngIf="isMultiplePersonas()">
-                    <span *ngFor="let persona of getPersonasRelacionadas()" 
-                          class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
+                    <span *ngFor="let persona of getPersonasRelacionadas()"
+                      class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
                       {{persona}}
                     </span>
                   </ng-container>
                   <!-- Si no hay personas -->
-                  <span *ngIf="!asunto.personaRelacionada" 
-                        class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/60 border border-white/20">
+                  <span *ngIf="!asunto.personaRelacionada"
+                    class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/60 border border-white/20">
                     No especificada
                   </span>
                 </div>
@@ -100,97 +109,104 @@
           </div>
         </div>
       </div>
-      
+
       <div class="p-8 bg-gradient-to-br from-white to-[#f9f7f3]">
-    <div class="grid grid-cols-3 gap-6">
-      <div class="col-span-2 space-y-6">
-        <!-- Título unificado: Datos Generales del Requerimiento -->
-        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border border-slate-200 shadow-lg">
-          <div class="flex items-center mb-6">
-            <div class="w-12 h-12 rounded-full bg-slate-500/10 flex items-center justify-center mr-4 border border-slate-200">
-              <mat-icon class="text-slate-600">assignment</mat-icon>
-                  </div>
-            <h3 class="text-xl font-bold text-slate-800">Datos Generales del Requerimiento</h3>
+        <div class="grid grid-cols-3 gap-6">
+          <div class="col-span-2 space-y-6">
+            <!-- Título unificado: Datos Generales del Requerimiento -->
+            <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border border-slate-200 shadow-lg">
+              <div class="flex items-center mb-6">
+                <div
+                  class="w-12 h-12 rounded-full bg-slate-500/10 flex items-center justify-center mr-4 border border-slate-200">
+                  <mat-icon class="text-slate-600">assignment</mat-icon>
                 </div>
-          
-          <!-- Grid con información unificada (sin Estado y Plazo que ya están arriba) -->
-          <div class="grid grid-cols-2 gap-4">
-
-            <!-- Carpeta de Investigación -->
-            <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 flex items-center">
-              <mat-icon class="text-amber-600 mr-3">insert_drive_file</mat-icon>
-                    <div class="min-w-0 flex-1">
-                <p class="text-sm text-gray-500 truncate">Carpeta de Investigación</p>
-                <p class="font-bold text-amber-800 truncate">{{asunto.carpetaInvestigacion}}</p>
-                    </div>
-                  </div>
-
-            <!-- Número de Oficio -->
-            <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
-              <mat-icon class="text-green-600 mr-3">article</mat-icon>
-                    <div class="min-w-0 flex-1">
-                <p class="text-sm text-gray-500 truncate">Número de Oficio</p>
-                <p class="font-bold text-green-800 truncate">{{asunto.oficio || 'No disponible'}}</p>
-                    </div>
-                  </div>
-
-            <!-- Folio Scanner -->
-            <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
-              <mat-icon class="text-green-600 mr-3">qr_code</mat-icon>
-              <div class="min-w-0 flex-1">
-                <p class="text-sm text-gray-500 truncate">Folio Scanner</p>
-                <p class="font-bold text-green-800 truncate">{{asunto.folioScanner || 'No disponible'}}</p>
-                </div>
+                <h3 class="text-xl font-bold text-slate-800">Datos Generales del Requerimiento</h3>
               </div>
-              
-            <!-- Autoridad Remitente -->
-            <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
-              <mat-icon class="text-purple-600 mr-3">account_balance</mat-icon>
-              <div class="min-w-0 flex-1">
-                <p class="text-sm text-gray-500 truncate">Autoridad Remitente</p>
-                <p class="font-bold text-purple-800 truncate">{{asunto.autoridadRemitente || 'No disponible'}}</p>
+
+              <!-- Grid con información unificada (sin Estado y Plazo que ya están arriba) -->
+              <div class="grid grid-cols-2 gap-4">
+
+                <!-- Carpeta de Investigación -->
+                <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 flex items-center">
+                  <mat-icon class="text-amber-600 mr-3">insert_drive_file</mat-icon>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm text-gray-500 truncate">Carpeta de Investigación</p>
+                    <p class="font-bold text-amber-800 truncate">{{asunto.carpetaInvestigacion}}</p>
                   </div>
                 </div>
 
-            <!-- Turno Jefatura -->
-            <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
-              <mat-icon class="text-purple-600 mr-3">call_split</mat-icon>
-              <div class="min-w-0 flex-1">
-                <p class="text-sm text-gray-500 truncate">Turno Jefatura</p>
-                <p class="font-bold text-purple-800 truncate">{{asunto.turnoJefatura || 'No disponible'}}</p>
-                    </div>
+                <!-- Número de Oficio -->
+                <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
+                  <mat-icon class="text-green-600 mr-3">article</mat-icon>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm text-gray-500 truncate">Número de Oficio</p>
+                    <p class="font-bold text-green-800 truncate">{{asunto.oficio || 'No disponible'}}</p>
                   </div>
-
-            <!-- Administración -->
-            <div class="p-4 rounded-lg bg-blue-50 border border-blue-200 flex items-center">
-              <mat-icon class="text-blue-600 mr-3">business</mat-icon>
-              <div class="min-w-0 flex-1">
-                <p class="text-sm text-gray-500 truncate">Administración</p>
-                <p class="font-bold text-blue-800 truncate">{{getAdministracionText()}}</p>
                 </div>
-            </div>
+
+                <!-- Folio Scanner -->
+                <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
+                  <mat-icon class="text-green-600 mr-3">qr_code</mat-icon>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm text-gray-500 truncate">Folio Scanner</p>
+                    <p class="font-bold text-green-800 truncate">{{asunto.folioScanner || 'No disponible'}}</p>
+                  </div>
+                </div>
+
+                <!-- Autoridad Remitente -->
+                <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
+                  <mat-icon class="text-purple-600 mr-3">account_balance</mat-icon>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm text-gray-500 truncate">Autoridad Remitente</p>
+                    <p class="font-bold text-purple-800 truncate">{{asunto.autoridadRemitente || 'No disponible'}}</p>
+                  </div>
+                </div>
+
+                <!-- Turno Jefatura -->
+                <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
+                  <mat-icon class="text-purple-600 mr-3">call_split</mat-icon>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm text-gray-500 truncate">Turno Jefatura</p>
+                    <p class="font-bold text-purple-800 truncate">{{asunto.turnoJefatura || 'No disponible'}}</p>
+                  </div>
+                </div>
+
+                <!-- Administración -->
+                <div class="p-4 rounded-lg bg-blue-50 border border-blue-200 flex items-center">
+                  <mat-icon class="text-blue-600 mr-3">business</mat-icon>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm text-gray-500 truncate">Administración</p>
+                    <p class="font-bold text-blue-800 truncate">{{getAdministracionText()}}</p>
+                  </div>
+                </div>
 
               </div>
             </div>
           </div>
-          
+
           <div>
             <!-- Acciones rápidas -->
-            <div class="bg-gradient-to-br from-[#691C32]/5 to-[#8a2541]/10 rounded-xl p-6 border border-[#691C32]/20 shadow-lg">
+            <div
+              class="bg-gradient-to-br from-[#691C32]/5 to-[#8a2541]/10 rounded-xl p-6 border border-[#691C32]/20 shadow-lg">
               <div class="flex items-center mb-4">
-                <div class="w-10 h-10 rounded-full bg-[#691C32]/10 flex items-center justify-center mr-3 border border-[#691C32]/20">
+                <div
+                  class="w-10 h-10 rounded-full bg-[#691C32]/10 flex items-center justify-center mr-3 border border-[#691C32]/20">
                   <mat-icon class="text-[#691C32]">tune</mat-icon>
                 </div>
                 <h3 class="text-lg font-bold text-[#691C32]">Acciones Rápidas</h3>
               </div>
               <div class="space-y-3">
-                
-                <button mat-stroked-button class="w-full justify-start py-3 px-4 rounded-lg border-[#691C32] text-[#691C32] hover:bg-[#691C32]/5 transition-all" (click)="abrirSelectorArchivos()">
+
+                <button mat-stroked-button
+                  class="w-full justify-start py-3 px-4 rounded-lg border-[#691C32] text-[#691C32] hover:bg-[#691C32]/5 transition-all"
+                  (click)="abrirSelectorArchivos()">
                   <mat-icon class="mr-3">attach_file</mat-icon>
                   <span>Adjuntar Documento</span>
                 </button>
-                
-                <button mat-stroked-button class="w-full justify-start py-3 px-4 rounded-lg border-green-600 text-green-600 hover:bg-green-50 transition-all" (click)="confirmarFinalizacion()">
+
+                <button mat-stroked-button
+                  class="w-full justify-start py-3 px-4 rounded-lg border-green-600 text-green-600 hover:bg-green-50 transition-all"
+                  (click)="confirmarFinalizacion()">
                   <mat-icon class="mr-3">done_all</mat-icon>
                   <span>Finalizar y Enviar a Revisión</span>
                 </button>
@@ -200,16 +216,16 @@
         </div>
       </div>
     </div>
-    
+
     <!-- NUEVA CARD: Descarga de Requerimiento en PDF -->
     <div class="bg-gradient-to-br from-rose-50 to-rose-100 rounded-xl p-6 border border-rose-200 shadow-lg mb-6">
       <div class="flex items-center mb-6">
         <div class="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center mr-4 border border-rose-200">
           <mat-icon class="text-rose-600">picture_as_pdf</mat-icon>
-          </div>
-        <h3 class="text-xl font-bold text-rose-800">Descarga de Requerimiento</h3>
         </div>
-      
+        <h3 class="text-xl font-bold text-rose-800">Descarga de Requerimiento</h3>
+      </div>
+
       <div class="grid grid-cols-3 gap-6">
         <!-- Lado izquierdo: Lista de requerimientos -->
         <div class="col-span-1">
@@ -220,7 +236,8 @@
             </h4>
             <div class="space-y-2">
               <!-- ÚNICO elemento: Requerimiento Principal -->
-              <button class="w-full p-3 rounded-lg bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer text-left">
+              <button
+                class="w-full p-3 rounded-lg bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer text-left">
                 <div class="flex items-center justify-between">
                   <div class="flex-1">
                     <p class="text-sm font-medium text-gray-800">Requerimiento Principal</p>
@@ -231,913 +248,942 @@
               </button>
             </div>
           </div>
-          
+
           <!-- Se elimina Anexo 1/2 y Descargar ZIP -->
         </div>
+      </div>
+
+      <!-- Lado derecho: Visualización del PDF -->
+      <div class="col-span-2">
+        <div class="bg-white rounded-lg p-4 border border-rose-200 shadow-sm h-[400px]">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-sm font-semibold text-gray-700 flex items-center">
+              <mat-icon class="text-rose-600 mr-2 text-lg">preview</mat-icon>
+              Vista Previa del Documento
+            </h4>
+            <div class="flex items-center gap-2">
+              <button class="p-1.5 rounded hover:bg-gray-100 transition-colors" title="Zoom Out">
+                <mat-icon class="text-gray-600 text-lg">zoom_out</mat-icon>
+              </button>
+              <span class="text-xs text-gray-500 px-2">100%</span>
+              <button class="p-1.5 rounded hover:bg-gray-100 transition-colors" title="Zoom In">
+                <mat-icon class="text-gray-600 text-lg">zoom_in</mat-icon>
+              </button>
+              <button class="p-1.5 rounded hover:bg-gray-100 transition-colors" title="Pantalla Completa">
+                <mat-icon class="text-gray-600 text-lg">fullscreen</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Área de visualización del PDF -->
+          <div
+            class="bg-gray-100 rounded-lg h-full flex items-center justify-center border-2 border-dashed border-gray-300">
+            <div class="text-center">
+              <mat-icon class="text-6xl text-gray-400 mb-3">description</mat-icon>
+              <p class="text-gray-500 font-medium">Selecciona un requerimiento</p>
+              <p class="text-gray-400 text-sm">para visualizar el contenido</p>
+              <button
+                class="mt-3 bg-rose-600 hover:bg-rose-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                Cargar Vista Previa
+              </button>
+            </div>
+          </div>
         </div>
-        
-        <!-- Lado derecho: Visualización del PDF -->
-        <div class="col-span-2">
-          <div class="bg-white rounded-lg p-4 border border-rose-200 shadow-sm h-[400px]">
-            <div class="flex items-center justify-between mb-3">
-              <h4 class="text-sm font-semibold text-gray-700 flex items-center">
-                <mat-icon class="text-rose-600 mr-2 text-lg">preview</mat-icon>
-                Vista Previa del Documento
-              </h4>
-              <div class="flex items-center gap-2">
-                <button class="p-1.5 rounded hover:bg-gray-100 transition-colors" title="Zoom Out">
-                  <mat-icon class="text-gray-600 text-lg">zoom_out</mat-icon>
-                </button>
-                <span class="text-xs text-gray-500 px-2">100%</span>
-                <button class="p-1.5 rounded hover:bg-gray-100 transition-colors" title="Zoom In">
-                  <mat-icon class="text-gray-600 text-lg">zoom_in</mat-icon>
-                </button>
-                <button class="p-1.5 rounded hover:bg-gray-100 transition-colors" title="Pantalla Completa">
-                  <mat-icon class="text-gray-600 text-lg">fullscreen</mat-icon>
-                </button>
       </div>
     </div>
+  </div>
 
-            <!-- Área de visualización del PDF -->
-            <div class="bg-gray-100 rounded-lg h-full flex items-center justify-center border-2 border-dashed border-gray-300">
-              <div class="text-center">
-                <mat-icon class="text-6xl text-gray-400 mb-3">description</mat-icon>
-                <p class="text-gray-500 font-medium">Selecciona un requerimiento</p>
-                <p class="text-gray-400 text-sm">para visualizar el contenido</p>
-                <button class="mt-3 bg-rose-600 hover:bg-rose-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
-                  Cargar Vista Previa
-                </button>
-          </div>
+  <!-- Nueva sección para información capturada y editable por el abogado -->
+  <div class="bg-white rounded-xl shadow-2xl mb-8 overflow-hidden border border-[#d8cfc1]">
+    <div class="bg-gradient-to-r from-[#691C32]/95 to-[#8a2541]/95 p-5">
+      <div class="flex items-center">
+        <div
+          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+          <mat-icon class="text-white">edit_note</mat-icon>
         </div>
-          </div>
-        </div>
+        <h2 class="text-xl font-bold text-white">Expediente</h2>
       </div>
     </div>
+    <!-- Formularios  -->
 
-    <!-- Nueva sección para información capturada y editable por el abogado -->
-    <div class="bg-white rounded-xl shadow-2xl mb-8 overflow-hidden border border-[#d8cfc1]">
-      <div class="bg-gradient-to-r from-[#691C32]/95 to-[#8a2541]/95 p-5">
-        <div class="flex items-center">
-          <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-            <mat-icon class="text-white">edit_note</mat-icon>
-          </div>
-          <h2 class="text-xl font-bold text-white">Expediente</h2>
+    <div class="p-6 bg-gradient-to-br from-white to-[#f9f7f3]">
+      <mat-dialog-content>
+        <div class="flex justify-center w-full">
+          <select
+            class=" bg-gray-50 border-[#691C32] text-center text-gray-900 focus:border-blue-500 mb-6 rounded-lg focus:ring-blue-500 block w-full p-2.5"
+            (change)="onSelectedOption($event)">
+            <option disabled selected value="">Selecciona un formulario</option>
+            <option value="selecionarFormularioOne"> Solicitud de Información </option>
+            <option value="selecionarFormularioTwo"> Respuesta Interna</option>
+            <option value="selecionarFormularioThree"> Respuesta a FGR</option>
+          </select>
         </div>
-      </div>
-      
-      <div class="p-6 bg-gradient-to-br from-white to-[#f9f7f3]">
-        <form [formGroup]="dictamenForm" class="space-y-8">
-          
-          <!-- SECCIÓN 1: SOLICITUD DE INFORMACIÓN -->
-          <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div class="flex items-center justify-between mb-8">
-              <h3 class="text-xl font-bold text-blue-800 flex items-center">
-                <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center mr-4">
-                  <mat-icon class="text-blue-700">send</mat-icon>
-                </div>
-                Solicitud de Información
+      </mat-dialog-content>
+
+      @if (selecionarFormulario === "selecionarFormularioOne") {
+
+      <form [formGroup]="formSolicitudDeInformacion" class="space-y-8">
+
+        <!-- SECCIÓN 1: SOLICITUD DE INFORMACIÓN -->
+        <div
+          class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="text-xl font-bold text-blue-800 flex items-center">
+              <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center mr-4">
+                <mat-icon class="text-blue-700">send</mat-icon>
+              </div>
+              Solicitud de Información
             </h3>
-              <div class="flex items-center text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
-                <mat-icon class="text-sm mr-1">info</mat-icon>
-                Paso 1 de 3
-              </div>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4 space-y-4">
-              <!-- Número de folio interno -->
-              <div class="col-span-1">
-                <label class="text-sm font-semibold text-blue-700 block mb-3 flex items-center">
-                  <mat-icon class="text-blue-600 mr-2 text-lg">confirmation_number</mat-icon>
-                  Número de folio interno (folio scan) *
-                </label>
-                <div class="relative">
-                  <input type="text" 
-                         formControlName="solicitudFolioInterno" 
-                         class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
-                         placeholder="Ej: 12345">
-                  <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <mat-icon class="text-blue-400 text-lg">#</mat-icon>
-              </div>
-            </div>
+
           </div>
 
-              <!-- Fecha del acuse -->
-              <div class="col-span-1">
-                <label class="text-sm font-semibold text-blue-700 block mb-3 flex items-center">
-                  <mat-icon class="text-blue-600 mr-2 text-lg">event</mat-icon>
-                  Fecha del acuse de solicitud *
-                </label>
-                <div class="relative">
-                  <input type="date" 
-                         formControlName="solicitudFechaAcuse" 
-                         class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800">
-                  <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <mat-icon class="text-blue-400 text-lg">calendar_today</mat-icon>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Número de oficio -->
-              <div class="col-span-1">
-                <label class="text-sm font-semibold text-blue-700 block mb-3 flex items-center">
-                  <mat-icon class="text-blue-600 mr-2 text-lg">description</mat-icon>
-                  Número de oficio (cuando aplique)
-                </label>
-                <div class="relative">
-                  <input type="text" 
-                         formControlName="solicitudNumeroOficio" 
-                         class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
-                         placeholder="Ej: SAT/001/2025">
-                  <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <mat-icon class="text-blue-400 text-lg">article</mat-icon>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Área solicitada -->
-              <div class="col-span-1">
-                <label class="text-sm font-semibold text-blue-700 block mb-3 flex items-center">
-                  <mat-icon class="text-blue-600 mr-2 text-lg">business</mat-icon>
-                  Área a quien se solicita información *
-                </label>
-                <div class="relative">
-                  <select formControlName="solicitudAreaDestino" 
-                          class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 appearance-none">
-                    <option value="">Seleccionar área...</option>
-                    <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
-                    <option value="ACSTC">Administración Central de Servicios Tributarios al Contribuyente (ACSTC)</option>
-                    <option value="ACATF">Administración Central de Análisis Técnico Fiscal (ACATF)</option>
-                    <option value="ACGSTME">Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos (ACGSTME)</option>
-                    <option value="AGP">Administración General de Planeación (AGP)</option>
-                    <option value="AGR">Administración General de Recaudación (AGR)</option>
-                    <option value="ACOJ">Administración Central de Operación Jurídica (ACOJ)</option>
-                    <option value="AGACE">Administración General de Auditoria de Comercio Exterior (AGACE)</option>
-                    <option value="AGGC">Administración General de Grandes Contribuyentes (AGGC)</option>
-                  </select>
-                  <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <mat-icon class="text-blue-400 text-lg">domain</mat-icon>
-                  </div>
-                  <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <mat-icon class="text-blue-400 text-lg">expand_more</mat-icon>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Descripción -->
-              <div class="col-span-2">
-                <label class="text-sm font-semibold text-blue-700 block mb-3 flex items-center">
-                  <mat-icon class="text-blue-600 mr-2 text-lg">edit_note</mat-icon>
-                  Breve descripción de lo solicitado *
-                </label>
-                <div class="relative">
-                  <textarea formControlName="solicitudDescripcion" 
-                            rows="4" 
-                            class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400 resize-none"
-                            placeholder="Describa brevemente la información solicitada..."></textarea>
-                  <div class="absolute left-4 top-4">
-                    <mat-icon class="text-blue-400 text-lg">notes</mat-icon>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Adjuntar archivo -->
-              <div class="col-span-2">
-                <label class="text-sm font-semibold text-blue-700 block mb-3 flex items-center">
-                  <mat-icon class="text-blue-600 mr-2 text-lg">attach_file</mat-icon>
-                  Adjuntar archivo PDF de la solicitud *
-                </label>
-                <div class="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-25 transition-all cursor-pointer bg-gradient-to-br from-blue-25 to-white">
-                  <mat-icon class="text-blue-500 text-4xl mb-3">cloud_upload</mat-icon>
-                  <p class="text-sm text-gray-700 mb-2 font-medium">Arrastra el archivo aquí o <span class="text-blue-600 font-semibold underline cursor-pointer hover:text-blue-700">examina</span></p>
-                  <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
-                  <input type="file" class="hidden" accept=".pdf">
-                  <div class="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-                    <mat-icon class="text-xs mr-1">info</mat-icon>
-                    Formato requerido: PDF
-                  </div>
+          <div class="grid grid-cols-2 gap-4 space-y-4">
+            <!-- Número de folio interno -->
+            <div class="col-span-1">
+              <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
+                <mat-icon class="text-blue-600 mr-2 text-lg">confirmation_number</mat-icon>
+                Número de folio interno (folio scan) *
+              </label>
+              <div class="relative">
+                <input type="text" formControlName="solicitudFolioInterno"
+                  class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
+                  placeholder="Ej: 12345">
+                <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <mat-icon class="text-blue-400 text-lg">#</mat-icon>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- SECCIÓN 2: RESPUESTA INTERNA -->
-          <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-8 border border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div class="flex items-center justify-between mb-8">
-              <h3 class="text-xl font-bold text-green-800 flex items-center">
-                <div class="w-10 h-10 rounded-full bg-green-200 flex items-center justify-center mr-4">
-                  <mat-icon class="text-green-700">reply</mat-icon>
+            <!-- Fecha del acuse -->
+            <div class="col-span-1">
+              <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
+                <mat-icon class="text-blue-600 mr-2 text-lg">event</mat-icon>
+                Fecha del acuse de solicitud *
+              </label>
+              <div class="relative">
+                <input type="date" formControlName="solicitudFechaAcuse"
+                  class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800">
+                <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <mat-icon class="text-blue-400 text-lg">calendar_today</mat-icon>
                 </div>
-                Respuesta Interna
-            </h3>
-              <div class="flex items-center text-sm text-green-600 bg-green-100 px-3 py-1 rounded-full">
-                <mat-icon class="text-sm mr-1">info</mat-icon>
-                Paso 2 de 3
               </div>
-              </div>
-            
-            <div class="grid grid-cols-2 gap-4 space-y-4">
-              <!-- Número de folio interno -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Número de folio interno (folio scan) *</label>
-                <input type="text" 
-                       formControlName="respuestaInternaFolioInterno" 
-                       class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
-                       placeholder="Ej: 12346">
             </div>
-              
-              <!-- Fecha de respuesta -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Fecha de respuesta *</label>
-                <input type="date" 
-                       formControlName="respuestaInternaFecha" 
-                       class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
-          </div>
 
-              <!-- Número de oficio o atenta nota -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio o atenta nota (cuando aplique)</label>
-                <input type="text" 
-                       formControlName="respuestaInternaNumeroOficio" 
-                       class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
-                       placeholder="Ej: AGAFF/002/2025">
+            <!-- Número de oficio -->
+            <div class="col-span-1">
+              <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
+                <mat-icon class="text-blue-600 mr-2 text-lg">description</mat-icon>
+                Número de oficio (cuando aplique)
+              </label>
+              <div class="relative">
+                <input type="text" formControlName="solicitudNumeroOficio"
+                  class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
+                  placeholder="Ej: SAT/001/2025">
+                <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <mat-icon class="text-blue-400 text-lg">article</mat-icon>
+                </div>
               </div>
-              
-              <!-- Área que responde -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Área que responde *</label>
-                <select formControlName="respuestaInternaAreaOrigen" 
-                        class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
+            </div>
+
+            <!-- Área solicitada -->
+            <div class="col-span-1">
+              <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
+                <mat-icon class="text-blue-600 mr-2 text-lg">business</mat-icon>
+                Área a quien se solicita información *
+              </label>
+              <div class="relative">
+                <select formControlName="solicitudAreaDestino"
+                  class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 appearance-none">
                   <option value="">Seleccionar área...</option>
                   <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
-                  <option value="ACSTC">Administración Central de Servicios Tributarios al Contribuyente (ACSTC)</option>
+                  <option value="ACSTC">Administración Central de Servicios Tributarios al Contribuyente (ACSTC)
+                  </option>
                   <option value="ACATF">Administración Central de Análisis Técnico Fiscal (ACATF)</option>
-                  <option value="ACGSTME">Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos (ACGSTME)</option>
+                  <option value="ACGSTME">Administración Central de Gestión, Servicios y Trámites con Medios
+                    Electrónicos (ACGSTME)</option>
                   <option value="AGP">Administración General de Planeación (AGP)</option>
                   <option value="AGR">Administración General de Recaudación (AGR)</option>
                   <option value="ACOJ">Administración Central de Operación Jurídica (ACOJ)</option>
                   <option value="AGACE">Administración General de Auditoria de Comercio Exterior (AGACE)</option>
                   <option value="AGGC">Administración General de Grandes Contribuyentes (AGGC)</option>
                 </select>
-              </div>
-              
-              <!-- Descripción de la respuesta -->
-              <div class="col-span-2">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Breve descripción de la respuesta *</label>
-                <textarea formControlName="respuestaInternaDescripcion" 
-                          rows="3" 
-                          class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
-                          placeholder="Describa brevemente el contenido de la respuesta recibida..."></textarea>
-              </div>
-              
-              <!-- Adjuntar archivo de respuesta -->
-              <div class="col-span-2">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta *</label>
-                <div class="border-2 border-dashed border-green-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
-                  <mat-icon class="text-green-500 text-3xl mb-2">upload_file</mat-icon>
-                  <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span class="text-green-600 font-medium cursor-pointer">examina</span></p>
-                  <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
-                  <input type="file" class="hidden" accept=".pdf">
+                <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <mat-icon class="text-blue-400 text-lg">domain</mat-icon>
+                </div>
+                <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <mat-icon class="text-blue-400 text-lg">expand_more</mat-icon>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- SECCIÓN 3: RESPUESTA A FGR -->
-          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-8 border border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div class="flex items-center justify-between mb-8">
-              <h3 class="text-xl font-bold text-purple-800 flex items-center">
-                <div class="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center mr-4">
-                  <mat-icon class="text-purple-700">gavel</mat-icon>
-                </div>
-                Respuesta a FGR
-            </h3>
-              <div class="flex items-center text-sm text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
-                <mat-icon class="text-sm mr-1">info</mat-icon>
-                Paso 3 de 3
-              </div>
-                    </div>
-            
-            <div class="grid grid-cols-2 gap-4 space-y-4">
-              <!-- Número de folio interno -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Número de folio interno *</label>
-                <input type="text" 
-                       formControlName="respuestaFgrFolioInterno" 
-                       class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
-                       placeholder="Ej: 12347">
-                  </div>
-                  
-              <!-- Número de oficio -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio *</label>
-                <input type="text" 
-                       formControlName="respuestaFgrNumeroOficio" 
-                       class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
-                       placeholder="Ej: SAT/RES/001/2025">
-                </div>
-              
-              <!-- Fecha del acuse de entrega -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Fecha del acuse de entrega del oficio a FGR *</label>
-                <input type="date" 
-                       formControlName="respuestaFgrFechaAcuse" 
-                       class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white">
-              </div>
-              
-              <!-- Número de oficio de FGR que se atiende -->
-              <div class="col-span-1">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio de FGR que se atiende *</label>
-                <input type="text" 
-                       formControlName="respuestaFgrOficioAtiende" 
-                       class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
-                       placeholder="Número del oficio original de FGR">
-              </div>
-              
-              <!-- Estado de atención -->
-              <div class="col-span-2">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Estado de atención *</label>
-                <div class="flex gap-4">
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" 
-                           name="estadoAtencion" 
-                           value="Parcial" 
-                           formControlName="respuestaFgrEstadoAtencion" 
-                           class="mr-2 text-purple-600 focus:ring-purple-500">
-                    <span class="text-sm font-medium text-gray-700">Parcial</span>
-                  </label>
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" 
-                           name="estadoAtencion" 
-                           value="Total" 
-                           formControlName="respuestaFgrEstadoAtencion" 
-                           class="mr-2 text-purple-600 focus:ring-purple-500">
-                    <span class="text-sm font-medium text-gray-700">Total</span>
-                  </label>
-              </div>
-                <p class="text-xs text-gray-500 mt-1">Esta selección no afectará el estado general del asunto hasta que sea aprobado por un usuario Akamba 2</p>
-              </div>
-              
-              <!-- Adjuntar archivo de respuesta emitida -->
-              <div class="col-span-2">
-                <label class="text-sm font-medium text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta emitida *</label>
-                <div class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
-                  <mat-icon class="text-purple-500 text-3xl mb-2">upload_file</mat-icon>
-                  <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span class="text-purple-600 font-medium cursor-pointer">examina</span></p>
-                  <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
-                  <input type="file" class="hidden" accept=".pdf">
+            <!-- Descripción -->
+            <div class="col-span-2">
+              <label class="text-sm font-semibold text-blue-700 mb-3 flex items-center">
+                <mat-icon class="text-blue-600 mr-2 text-lg">edit_note</mat-icon>
+                Breve descripción de lo solicitado *
+              </label>
+              <div class="relative">
+                <textarea formControlName="solicitudDescripcion" rows="4"
+                  class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400 resize-none"
+                  placeholder="Describa brevemente la información solicitada..."></textarea>
+                <div class="absolute left-4 top-4">
+                  <mat-icon class="text-blue-400 text-lg">notes</mat-icon>
                 </div>
               </div>
             </div>
-          </div>
 
-                    <!-- Botones de acción -->
-          <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-            <div class="text-sm text-gray-600 flex items-center">
-              <mat-icon class="text-lg mr-2 text-gray-500">info</mat-icon>
-              Los campos marcados con * son obligatorios
+            <!-- Adjuntar archivo -->
+                 <div class="col-span-2">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta emitida
+                *</label>
+              <div
+                class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
+                <mat-icon class="text-purple-500 text-3xl mb-2">upload_file</mat-icon>
+                <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
+                    class="text-purple-600 font-medium cursor-pointer">examina</span></p>
+                <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
+                <input type="file" formControlName="formSolicitudDeInformacion" accept=".pdf">
+              </div>
             </div>
-            <div class="flex gap-4">
-              <button type="button" 
-                      class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-sm hover:shadow-md border border-gray-300">
-                <mat-icon class="mr-3">refresh</mat-icon>
-                Limpiar formulario
-              </button>
-              <button type="button" 
-                      class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                      (click)="guardarDictamen()">
-                <mat-icon class="mr-3">save</mat-icon>
-                Guardar expediente
-            </button>
-            </div>
-          </div>
-        </form>
           </div>
         </div>
 
-    <!-- NUEVA SECCIÓN: CHECKLIST DE SEGUIMIENTO DE ÁREAS -->
-    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border border-indigo-200 shadow-lg mb-6">
-      
-      <!-- MODAL AGREGAR ÁREA -->
-      <div *ngIf="mostrarModalAgregarArea" class="fixed inset-0 z-[10600] flex items-center justify-center">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalAgregarArea()"></div>
-        
-        <!-- Modal Content -->
-        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
-          <!-- Header -->
-          <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-2xl p-6">
-            <div class="flex items-center justify-between">
-              <h3 class="text-xl font-bold text-white flex items-center">
-                <mat-icon class="mr-3">add_business</mat-icon>
-                Agregar Área de Seguimiento
-              </h3>
-              <button (click)="cerrarModalAgregarArea()" class="text-white hover:text-indigo-200 transition-colors">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
+        <!-- Botones de acción -->
+        <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+          <div class="text-sm text-gray-600 flex items-center">
+            <mat-icon class="text-lg mr-2 text-gray-500">info</mat-icon>
+            Los campos marcados con * son obligatorios
           </div>
-          
-          <!-- Content -->
-          <div class="p-6">
-            <div class="mb-6">
-              <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                <mat-icon class="text-indigo-600 mr-2">business</mat-icon>
-                Seleccionar Área SAT
-              </label>
-                             <select [(ngModel)]="areaSeleccionadaParaAgregar" 
-                       class="w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800"
-                       [disabled]="getAreasDisponibles().length === 0">
-                 <option value="">
-                   {{getAreasDisponibles().length === 0 ? '-- No hay áreas disponibles --' : '-- Selecciona un área --'}}
-                 </option>
-                 <option *ngFor="let area of getAreasDisponibles()" [value]="area.codigo">
-                   {{area.codigo}} - {{area.nombre}}
-                 </option>
-               </select>
-               
-               <!-- Mensaje cuando no hay áreas disponibles -->
-               <div *ngIf="getAreasDisponibles().length === 0" class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-            <div class="flex items-center">
-                   <mat-icon class="text-yellow-600 mr-2">info</mat-icon>
-                   <p class="text-sm text-yellow-800 font-medium">
-                     Todas las áreas SAT ya están en seguimiento
-                   </p>
-              </div>
-                 <p class="text-xs text-yellow-700 mt-1 ml-7">
-                   Puedes eliminar un área existente para agregar otra diferente.
-                 </p>
-               </div>
-              
-              <!-- Descripción del área seleccionada -->
-              <div *ngIf="areaSeleccionadaParaAgregar" class="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
-                <p class="text-sm text-indigo-800 font-medium">{{getAreaPorCodigo(areaSeleccionadaParaAgregar)?.nombre}}</p>
-            </div>
-          </div>
-          
-            <!-- Información adicional -->
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <div class="flex items-start">
-                <mat-icon class="text-blue-600 mr-2 mt-0.5">info</mat-icon>
-                <div class="text-sm text-blue-800">
-                  <p class="font-medium mb-1">Al agregar esta área podrás:</p>
-                  <ul class="list-disc list-inside space-y-1 text-xs">
-                    <li>Marcar cuando envíes la solicitud</li>
-                    <li>Registrar respuestas recibidas</li>
-                    <li>Controlar recordatorios</li>
-                    <li>Hacer seguimiento completo</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Actions -->
-          <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-            <button (click)="cerrarModalAgregarArea()" 
-                    class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-              Cancelar
-            </button>
-            <button (click)="confirmarAgregarArea()" 
-                    [disabled]="!areaSeleccionadaParaAgregar"
-                    class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
-              <mat-icon class="mr-2">add</mat-icon>
-              Agregar Área
+          <div class="flex gap-4">
+
+            <button type="button"
+              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+              <mat-icon class="mr-3">save</mat-icon>
+              Guardar expediente
             </button>
           </div>
+        </div>
+      </form>
+      }
+
+      @if (selecionarFormulario === "selecionarFormularioTwo") {
+      <form [formGroup]="formRespuestaInterna" class="space-y-8">
+        <!-- SECCIÓN 2: RESPUESTA INTERNA -->
+        <div
+          class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-8 border border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="text-xl font-bold text-green-800 flex items-center">
+              <div class="w-10 h-10 rounded-full bg-green-200 flex items-center justify-center mr-4">
+                <mat-icon class="text-green-700">reply</mat-icon>
+              </div>
+              Respuesta Interna
+            </h3>
+
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 space-y-4">
+            <!-- Número de folio interno -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Número de folio interno (folio scan) *</label>
+              <input type="text" formControlName="respuestaInternaFolioInterno"
+                class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
+                placeholder="Ej: 12346">
+            </div>
+
+            <!-- Fecha de respuesta -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Fecha de respuesta *</label>
+              <input type="date" formControlName="respuestaInternaFecha"
+                class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
+            </div>
+
+            <!-- Número de oficio o atenta nota -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio o atenta nota (cuando
+                aplique)</label>
+              <input type="text" formControlName="respuestaInternaNumeroOficio"
+                class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
+                placeholder="Ej: AGAFF/002/2025">
+            </div>
+
+            <!-- Área que responde -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Área que responde *</label>
+              <select formControlName="respuestaInternaAreaOrigen"
+                class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
+                <option value="">Seleccionar área...</option>
+                <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
+                <option value="ACSTC">Administración Central de Servicios Tributarios al Contribuyente (ACSTC)</option>
+                <option value="ACATF">Administración Central de Análisis Técnico Fiscal (ACATF)</option>
+                <option value="ACGSTME">Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos
+                  (ACGSTME)</option>
+                <option value="AGP">Administración General de Planeación (AGP)</option>
+                <option value="AGR">Administración General de Recaudación (AGR)</option>
+                <option value="ACOJ">Administración Central de Operación Jurídica (ACOJ)</option>
+                <option value="AGACE">Administración General de Auditoria de Comercio Exterior (AGACE)</option>
+                <option value="AGGC">Administración General de Grandes Contribuyentes (AGGC)</option>
+              </select>
+            </div>
+
+            <!-- Descripción de la respuesta -->
+            <div class="col-span-2">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Breve descripción de la respuesta *</label>
+              <textarea formControlName="respuestaInternaDescripcion" rows="3"
+                class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
+                placeholder="Describa brevemente el contenido de la respuesta recibida..."></textarea>
+            </div>
+
+            <!-- Adjuntar archivo de respuesta -->
+            <div class="col-span-2">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta *</label>
+              <div
+                class="border-2 border-dashed border-green-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
+                <mat-icon class="text-green-500 text-3xl mb-2">upload_file</mat-icon>
+                <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
+                    class="text-green-600 font-medium cursor-pointer">examina</span></p>
+                <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
+                <input type="file" formControlName="respuestaInternaDocumentoEscaneado"  accept=".pdf">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+          <div class="text-sm text-gray-600 flex items-center">
+            <mat-icon class="text-lg mr-2 text-gray-500">info</mat-icon>
+            Los campos marcados con * son obligatorios
+          </div>
+          <div class="flex gap-4">
+
+            <button type="button"
+              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <mat-icon class="mr-3">save</mat-icon>
+              Guardar expediente
+            </button>
+          </div>
+        </div>
+      </form>
+    }
+      @if (selecionarFormulario === "selecionarFormularioThree") {
+      <form [formGroup]="formRespuestaAFGR" class="space-y-8">
+
+        <!-- SECCIÓN 3: RESPUESTA A FGR -->
+        <div
+          class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-8 border border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="text-xl font-bold text-purple-800 flex items-center">
+              <div class="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center mr-4">
+                <mat-icon class="text-purple-700">gavel</mat-icon>
+              </div>
+              Respuesta a FGR
+            </h3>
+
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 space-y-4">
+            <!-- Número de folio interno -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Número de folio interno *</label>
+              <input type="text" formControlName="respuestaFgrFolioInterno"
+                class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
+                placeholder="Ej: 12347">
+            </div>
+
+            <!-- Número de oficio -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio *</label>
+              <input type="text" formControlName="respuestaFgrNumeroOficio"
+                class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
+                placeholder="Ej: SAT/RES/001/2025">
+            </div>
+
+            <!-- Fecha del acuse de entrega -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Fecha del acuse de entrega del oficio a FGR
+                *</label>
+              <input type="date" formControlName="respuestaFgrFechaAcuse"
+                class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white">
+            </div>
+
+            <!-- Número de oficio de FGR que se atiende -->
+            <div class="col-span-1">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio de FGR que se atiende
+                *</label>
+              <input type="text" formControlName="respuestaFgrOficioAtiende"
+                class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
+                placeholder="Número del oficio original de FGR">
+            </div>
+
+            <!-- Estado de atención -->
+            <div class="col-span-2">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Estado de atención *</label>
+              <div class="flex gap-4">
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="estadoAtencion" value="Parcial" formControlName="respuestaFgrEstadoAtencion"
+                    class="mr-2 text-purple-600 focus:ring-purple-500">
+                  <span class="text-sm font-medium text-gray-700">Parcial</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="estadoAtencion" value="Total" formControlName="respuestaFgrEstadoAtencion"
+                    class="mr-2 text-purple-600 focus:ring-purple-500">
+                  <span class="text-sm font-medium text-gray-700">Total</span>
+                </label>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">Esta selección no afectará el estado general del asunto hasta que
+                sea aprobado por un usuario Akamba 2</p>
+            </div>
+
+            <!-- Adjuntar archivo de respuesta emitida -->
+            <div class="col-span-2">
+              <label class="text-sm font-medium text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta emitida
+                *</label>
+              <div
+                class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
+                <mat-icon class="text-purple-500 text-3xl mb-2">upload_file</mat-icon>
+                <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
+                    class="text-purple-600 font-medium cursor-pointer">examina</span></p>
+                <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
+                <input type="file" formControlName="respuestaFgrDocumentoEscaneado" accept=".pdf">
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+          <div class="text-sm text-gray-600 flex items-center">
+            <mat-icon class="text-lg mr-2 text-gray-500">info</mat-icon>
+            Los campos marcados con * son obligatorios
+          </div>
+          <div class="flex gap-4">
+
+            <button type="button"
+              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+        >
+              <mat-icon class="mr-3">save</mat-icon>
+              Guardar expediente
+            </button>
+          </div>
+        </div>
+      </form>
+
+      }
+    </div>
+  </div>
+
+  <!-- NUEVA SECCIÓN: CHECKLIST DE SEGUIMIENTO DE ÁREAS -->
+  <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border border-indigo-200 shadow-lg mb-6">
+
+    <!-- MODAL AGREGAR ÁREA -->
+    <div *ngIf="mostrarModalAgregarArea" class="fixed inset-0 z-[10600] flex items-center justify-center">
+      <!-- Backdrop -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalAgregarArea()"></div>
+
+      <!-- Modal Content -->
+      <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-2xl p-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-white flex items-center">
+              <mat-icon class="mr-3">add_business</mat-icon>
+              Agregar Área de Seguimiento
+            </h3>
+            <button (click)="cerrarModalAgregarArea()" class="text-white hover:text-indigo-200 transition-colors">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6">
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
+              <mat-icon class="text-indigo-600 mr-2">business</mat-icon>
+              Seleccionar Área SAT
+            </label>
+            <select [(ngModel)]="areaSeleccionadaParaAgregar"
+              class="w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800"
+              [disabled]="getAreasDisponibles().length === 0">
+              <option value="">
+                {{getAreasDisponibles().length === 0 ? '-- No hay áreas disponibles --' : '-- Selecciona un área --'}}
+              </option>
+              <option *ngFor="let area of getAreasDisponibles()" [value]="area.codigo">
+                {{area.codigo}} - {{area.nombre}}
+              </option>
+            </select>
+
+            <!-- Mensaje cuando no hay áreas disponibles -->
+            <div *ngIf="getAreasDisponibles().length === 0"
+              class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+              <div class="flex items-center">
+                <mat-icon class="text-yellow-600 mr-2">info</mat-icon>
+                <p class="text-sm text-yellow-800 font-medium">
+                  Todas las áreas SAT ya están en seguimiento
+                </p>
+              </div>
+              <p class="text-xs text-yellow-700 mt-1 ml-7">
+                Puedes eliminar un área existente para agregar otra diferente.
+              </p>
+            </div>
+
+            <!-- Descripción del área seleccionada -->
+            <div *ngIf="areaSeleccionadaParaAgregar" class="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+              <p class="text-sm text-indigo-800 font-medium">{{getAreaPorCodigo(areaSeleccionadaParaAgregar)?.nombre}}
+              </p>
+            </div>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div class="flex items-start">
+              <mat-icon class="text-blue-600 mr-2 mt-0.5">info</mat-icon>
+              <div class="text-sm text-blue-800">
+                <p class="font-medium mb-1">Al agregar esta área podrás:</p>
+                <ul class="list-disc list-inside space-y-1 text-xs">
+                  <li>Marcar cuando envíes la solicitud</li>
+                  <li>Registrar respuestas recibidas</li>
+                  <li>Controlar recordatorios</li>
+                  <li>Hacer seguimiento completo</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+          <button (click)="cerrarModalAgregarArea()"
+            class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+            Cancelar
+          </button>
+          <button (click)="confirmarAgregarArea()" [disabled]="!areaSeleccionadaParaAgregar"
+            class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+            <mat-icon class="mr-2">add</mat-icon>
+            Agregar Área
+          </button>
         </div>
       </div>
-      
-      <!-- MODAL EDITAR ÁREA -->
-      <div *ngIf="mostrarModalEditarArea && areaEnEdicion" class="fixed inset-0 z-[10600] flex items-center justify-center">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEditarArea()"></div>
-        
-        <!-- Modal Content -->
-        <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 transform transition-all">
-          <!-- Header -->
-          <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-2xl p-6">
-            <div class="flex items-center justify-between">
-              <h3 class="text-xl font-bold text-white flex items-center">
-                <mat-icon class="mr-3">edit</mat-icon>
-                Editar Seguimiento - {{areaEnEdicion.area}}
-              </h3>
-              <button (click)="cerrarModalEditarArea()" class="text-white hover:text-blue-200 transition-colors">
-                <mat-icon>close</mat-icon>
-              </button>
+    </div>
+
+    <!-- MODAL EDITAR ÁREA -->
+    <div *ngIf="mostrarModalEditarArea && areaEnEdicion"
+      class="fixed inset-0 z-[10600] flex items-center justify-center">
+      <!-- Backdrop -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEditarArea()"></div>
+
+      <!-- Modal Content -->
+      <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 transform transition-all">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-2xl p-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-white flex items-center">
+              <mat-icon class="mr-3">edit</mat-icon>
+              Editar Seguimiento - {{areaEnEdicion.area}}
+            </h3>
+            <button (click)="cerrarModalEditarArea()" class="text-white hover:text-blue-200 transition-colors">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 max-h-96 overflow-y-auto">
+          <!-- Información del área -->
+          <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="flex items-center mb-2">
+              <mat-icon class="text-blue-600 mr-2">business</mat-icon>
+              <span class="font-semibold text-blue-800">{{areaEnEdicion.area}}</span>
+            </div>
+            <p class="text-sm text-blue-700">{{areaEnEdicion.nombreCompleto}}</p>
+          </div>
+
+          <!-- Solicitud Enviada -->
+          <div class="mb-6">
+            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+              <mat-icon class="text-indigo-600 mr-2 text-sm">send</mat-icon>
+              Solicitud Enviada
+            </h4>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <label class="flex items-center cursor-pointer">
+                <input type="checkbox" [(ngModel)]="areaEnEdicion.solicitudEnviada"
+                  (change)="onEditarSolicitudEnviada()"
+                  class="form-checkbox h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                <span class="ml-3 text-sm font-medium text-gray-700">Solicitud enviada</span>
+              </label>
+              <input *ngIf="areaEnEdicion.solicitudEnviada" type="date" [(ngModel)]="fechaSolicitudEdicion"
+                class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500">
             </div>
           </div>
-          
-          <!-- Content -->
-          <div class="p-6 max-h-96 overflow-y-auto">
-            <!-- Información del área -->
-            <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <div class="flex items-center mb-2">
-                <mat-icon class="text-blue-600 mr-2">business</mat-icon>
-                <span class="font-semibold text-blue-800">{{areaEnEdicion.area}}</span>
-              </div>
-              <p class="text-sm text-blue-700">{{areaEnEdicion.nombreCompleto}}</p>
-            </div>
-            
-            <!-- Solicitud Enviada -->
-            <div class="mb-6">
-              <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <mat-icon class="text-indigo-600 mr-2 text-sm">send</mat-icon>
-                Solicitud Enviada
-              </h4>
+
+          <!-- Respuesta Recibida -->
+          <div class="mb-6" *ngIf="areaEnEdicion.solicitudEnviada">
+            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+              <mat-icon class="text-green-600 mr-2 text-sm">reply</mat-icon>
+              Respuesta Recibida
+            </h4>
+            <div class="space-y-3">
               <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" 
-                         [(ngModel)]="areaEnEdicion.solicitudEnviada"
-                         (change)="onEditarSolicitudEnviada()"
-                         class="form-checkbox h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                  <span class="ml-3 text-sm font-medium text-gray-700">Solicitud enviada</span>
+                  <input type="checkbox" [(ngModel)]="areaEnEdicion.respuestaRecibida"
+                    (change)="onEditarRespuestaRecibida()"
+                    class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
+                  <span class="ml-3 text-sm font-medium text-gray-700">Respuesta recibida</span>
                 </label>
-                <input *ngIf="areaEnEdicion.solicitudEnviada" 
-                       type="date" 
-                       [(ngModel)]="fechaSolicitudEdicion"
-                       class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500">
+                <input *ngIf="areaEnEdicion.respuestaRecibida" type="date" [(ngModel)]="fechaRespuestaEdicion"
+                  class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+              </div>
+
+              <div class="pl-7">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Tipo de respuesta:</label>
+                <select [(ngModel)]="areaEnEdicion.tipoRespuesta"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                  <option value="pendiente">Pendiente</option>
+                  <option value="completa">Completa</option>
+                  <option value="parcial">Parcial</option>
+                </select>
               </div>
             </div>
-            
-            <!-- Respuesta Recibida -->
-            <div class="mb-6" *ngIf="areaEnEdicion.solicitudEnviada">
-              <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <mat-icon class="text-green-600 mr-2 text-sm">reply</mat-icon>
-                Respuesta Recibida
-              </h4>
-              <div class="space-y-3">
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" 
-                           [(ngModel)]="areaEnEdicion.respuestaRecibida"
-                           (change)="onEditarRespuestaRecibida()"
-                           class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
-                    <span class="ml-3 text-sm font-medium text-gray-700">Respuesta recibida</span>
-                  </label>
-                  <input *ngIf="areaEnEdicion.respuestaRecibida" 
-                         type="date" 
-                         [(ngModel)]="fechaRespuestaEdicion"
-                         class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                </div>
-                
-                <div class="pl-7">
-                  <label class="block text-xs font-medium text-gray-600 mb-1">Tipo de respuesta:</label>
-                  <select [(ngModel)]="areaEnEdicion.tipoRespuesta" 
-                          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                    <option value="pendiente">Pendiente</option>
-                    <option value="completa">Completa</option>
-                    <option value="parcial">Parcial</option>
-                  </select>
-                </div>
+          </div>
+
+          <!-- Recordatorio -->
+          <div class="mb-6" *ngIf="areaEnEdicion.solicitudEnviada">
+            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+              <mat-icon class="text-yellow-600 mr-2 text-sm">schedule_send</mat-icon>
+              Recordatorio
+            </h4>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <label class="flex items-center cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="areaEnEdicion.recordatorioEnviado"
+                    (change)="onEditarRecordatorioEnviado()"
+                    class="form-checkbox h-4 w-4 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500">
+                  <span class="ml-3 text-sm font-medium text-gray-700">Recordatorio enviado</span>
+                </label>
+                <input *ngIf="areaEnEdicion.recordatorioEnviado" type="date" [(ngModel)]="fechaRecordatorioEdicion"
+                  class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500">
               </div>
-            </div>
-            
-            <!-- Recordatorio -->
-            <div class="mb-6" *ngIf="areaEnEdicion.solicitudEnviada">
-              <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-                <mat-icon class="text-yellow-600 mr-2 text-sm">schedule_send</mat-icon>
-                Recordatorio
-              </h4>
-              <div class="space-y-3">
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+
+              <!-- Respuesta a recordatorio -->
+              <div *ngIf="areaEnEdicion.recordatorioEnviado" class="pl-7">
+                <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
                   <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" 
-                           [(ngModel)]="areaEnEdicion.recordatorioEnviado"
-                           (change)="onEditarRecordatorioEnviado()"
-                           class="form-checkbox h-4 w-4 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500">
-                    <span class="ml-3 text-sm font-medium text-gray-700">Recordatorio enviado</span>
+                    <input type="checkbox" [(ngModel)]="areaEnEdicion.respuestaRecordatorio"
+                      (change)="onEditarRespuestaRecordatorio()"
+                      class="form-checkbox h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
+                    <span class="ml-3 text-sm font-medium text-gray-700">Respuesta a recordatorio</span>
                   </label>
-                  <input *ngIf="areaEnEdicion.recordatorioEnviado" 
-                         type="date" 
-                         [(ngModel)]="fechaRecordatorioEdicion"
-                         class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500">
-                </div>
-                
-                <!-- Respuesta a recordatorio -->
-                <div *ngIf="areaEnEdicion.recordatorioEnviado" class="pl-7">
-                  <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <label class="flex items-center cursor-pointer">
-                      <input type="checkbox" 
-                             [(ngModel)]="areaEnEdicion.respuestaRecordatorio"
-                             (change)="onEditarRespuestaRecordatorio()"
-                             class="form-checkbox h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
-                      <span class="ml-3 text-sm font-medium text-gray-700">Respuesta a recordatorio</span>
-                    </label>
-                    <input *ngIf="areaEnEdicion.respuestaRecordatorio" 
-                           type="date" 
-                           [(ngModel)]="fechaRespuestaRecordatorioEdicion"
-                           class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-orange-500">
-                  </div>
+                  <input *ngIf="areaEnEdicion.respuestaRecordatorio" type="date"
+                    [(ngModel)]="fechaRespuestaRecordatorioEdicion"
+                    class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-orange-500">
                 </div>
               </div>
             </div>
           </div>
-          
-          <!-- Actions -->
-          <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-            <button (click)="cerrarModalEditarArea()" 
-                    class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-              Cancelar
-            </button>
-            <button (click)="guardarEdicionArea()" 
-                    class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-lg flex items-center">
-              <mat-icon class="mr-2">save</mat-icon>
-              Guardar Cambios
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+          <button (click)="cerrarModalEditarArea()"
+            class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+            Cancelar
+          </button>
+          <button (click)="guardarEdicionArea()"
+            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-lg flex items-center">
+            <mat-icon class="mr-2">save</mat-icon>
+            Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL CONFIRMAR ELIMINACIÓN -->
+    <div *ngIf="mostrarModalEliminar && areaParaEliminar"
+      class="fixed inset-0 z-[10600] flex items-center justify-center">
+      <!-- Backdrop -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEliminar()"></div>
+
+      <!-- Modal Content -->
+      <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl p-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-white flex items-center">
+              <mat-icon class="mr-3">delete_forever</mat-icon>
+              Eliminar Área del Seguimiento
+            </h3>
+            <button (click)="cerrarModalEliminar()" class="text-white hover:text-red-200 transition-colors">
+              <mat-icon>close</mat-icon>
             </button>
           </div>
         </div>
-      </div>
-      
-      <!-- MODAL CONFIRMAR ELIMINACIÓN -->
-      <div *ngIf="mostrarModalEliminar && areaParaEliminar" class="fixed inset-0 z-[10600] flex items-center justify-center">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEliminar()"></div>
-        
-        <!-- Modal Content -->
-        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
-          <!-- Header -->
-          <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl p-6">
-            <div class="flex items-center justify-between">
-              <h3 class="text-xl font-bold text-white flex items-center">
-                <mat-icon class="mr-3">delete_forever</mat-icon>
-                Eliminar Área del Seguimiento
-              </h3>
-              <button (click)="cerrarModalEliminar()" class="text-white hover:text-red-200 transition-colors">
-                <mat-icon>close</mat-icon>
-              </button>
+
+        <!-- Content -->
+        <div class="p-6">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+              <mat-icon class="text-red-600 text-2xl">warning</mat-icon>
             </div>
-          </div>
-          
-          <!-- Content -->
-          <div class="p-6">
-            <div class="text-center mb-6">
-              <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-                <mat-icon class="text-red-600 text-2xl">warning</mat-icon>
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">¿Estás seguro?</h4>
+            <p class="text-gray-600 mb-4">
+              Esta acción eliminará permanentemente el seguimiento del área:
+            </p>
+
+            <!-- Información del área a eliminar -->
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
+              <div class="flex items-center mb-2">
+                <mat-icon class="text-red-600 mr-2">business</mat-icon>
+                <span class="font-semibold text-red-800">{{areaParaEliminar.area}}</span>
               </div>
-              <h4 class="text-lg font-semibold text-gray-800 mb-2">¿Estás seguro?</h4>
-              <p class="text-gray-600 mb-4">
-                Esta acción eliminará permanentemente el seguimiento del área:
-              </p>
-              
-              <!-- Información del área a eliminar -->
-              <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
-                <div class="flex items-center mb-2">
-                  <mat-icon class="text-red-600 mr-2">business</mat-icon>
-                  <span class="font-semibold text-red-800">{{areaParaEliminar.area}}</span>
-                </div>
-                <p class="text-sm text-red-700">{{areaParaEliminar.nombreCompleto}}</p>
-                
-                <!-- Estado actual -->
-                <div class="mt-3 pt-3 border-t border-red-200">
-                  <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="flex items-center">
-                      <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.solicitudEnviada ? 'check_circle' : 'radio_button_unchecked'}}</mat-icon>
-                      <span [class]="areaParaEliminar.solicitudEnviada ? 'text-red-700' : 'text-red-500'">Solicitud</span>
+              <p class="text-sm text-red-700">{{areaParaEliminar.nombreCompleto}}</p>
+
+              <!-- Estado actual -->
+              <div class="mt-3 pt-3 border-t border-red-200">
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="flex items-center">
+                    <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.solicitudEnviada ? 'check_circle' :
+                      'radio_button_unchecked'}}</mat-icon>
+                    <span [class]="areaParaEliminar.solicitudEnviada ? 'text-red-700' : 'text-red-500'">Solicitud</span>
                   </div>
-                    <div class="flex items-center">
-                      <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.respuestaRecibida ? 'check_circle' : 'radio_button_unchecked'}}</mat-icon>
-                      <span [class]="areaParaEliminar.respuestaRecibida ? 'text-red-700' : 'text-red-500'">Respuesta</span>
-                </div>
-                    <div class="flex items-center">
-                      <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.recordatorioEnviado ? 'check_circle' : 'radio_button_unchecked'}}</mat-icon>
-                      <span [class]="areaParaEliminar.recordatorioEnviado ? 'text-red-700' : 'text-red-500'">Recordatorio</span>
-                    </div>
-                    <div class="text-xs">
-                      <span class="px-2 py-1 rounded text-xs" 
-                            [ngClass]="{
+                  <div class="flex items-center">
+                    <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.respuestaRecibida ? 'check_circle' :
+                      'radio_button_unchecked'}}</mat-icon>
+                    <span
+                      [class]="areaParaEliminar.respuestaRecibida ? 'text-red-700' : 'text-red-500'">Respuesta</span>
+                  </div>
+                  <div class="flex items-center">
+                    <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.recordatorioEnviado ? 'check_circle'
+                      : 'radio_button_unchecked'}}</mat-icon>
+                    <span
+                      [class]="areaParaEliminar.recordatorioEnviado ? 'text-red-700' : 'text-red-500'">Recordatorio</span>
+                  </div>
+                  <div class="text-xs">
+                    <span class="px-2 py-1 rounded text-xs" [ngClass]="{
                               'bg-green-100 text-green-700': areaParaEliminar.tipoRespuesta === 'completa',
                               'bg-yellow-100 text-yellow-700': areaParaEliminar.tipoRespuesta === 'parcial',
                               'bg-gray-100 text-gray-600': areaParaEliminar.tipoRespuesta === 'pendiente'
                             }">
-                        {{areaParaEliminar.tipoRespuesta | titlecase}}
-                </span>
-                    </div>
+                      {{areaParaEliminar.tipoRespuesta | titlecase}}
+                    </span>
                   </div>
                 </div>
               </div>
-              
-              <p class="text-sm text-gray-500 mt-4">
-                Todo el historial de seguimiento de esta área se perderá.
-              </p>
-                  </div>
-                </div>
-          
-          <!-- Actions -->
-          <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-            <button (click)="cerrarModalEliminar()" 
-                    class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-              Cancelar
-            </button>
-            <button (click)="confirmarEliminarArea()" 
-                    class="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-medium shadow-lg flex items-center">
-              <mat-icon class="mr-2">delete</mat-icon>
-              Eliminar Área
-            </button>
+            </div>
+
+            <p class="text-sm text-gray-500 mt-4">
+              Todo el historial de seguimiento de esta área se perderá.
+            </p>
           </div>
         </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+          <button (click)="cerrarModalEliminar()"
+            class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+            Cancelar
+          </button>
+          <button (click)="confirmarEliminarArea()"
+            class="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-medium shadow-lg flex items-center">
+            <mat-icon class="mr-2">delete</mat-icon>
+            Eliminar Área
+          </button>
+        </div>
       </div>
-      
-              <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center">
-            <div class="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center mr-4 border border-indigo-200">
-              <mat-icon class="text-indigo-600">checklist</mat-icon>
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-indigo-800">Control de Seguimiento por Áreas</h3>
-              <p class="text-sm text-indigo-600">
-                {{seguimientoAreas.length}} área{{seguimientoAreas.length !== 1 ? 's' : ''}} en seguimiento
-                <span *ngIf="getAreasDisponibles().length > 0" class="ml-2 text-indigo-500">
-                  • {{getAreasDisponibles().length}} disponible{{getAreasDisponibles().length !== 1 ? 's' : ''}} para agregar
-                </span>
-              </p>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="text-right text-xs text-indigo-600">
-              <p>{{getEstadisticasSeguimiento().areasContactadas}} de {{seguimientoAreas.length}} contactadas</p>
-              <p>{{getEstadisticasSeguimiento().respuestasCompletas}} respuesta{{getEstadisticasSeguimiento().respuestasCompletas !== 1 ? 's' : ''}} completa{{getEstadisticasSeguimiento().respuestasCompletas !== 1 ? 's' : ''}}</p>
-            </div>
-            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center text-sm shadow-md hover:shadow-lg"
-                    [disabled]="getAreasDisponibles().length === 0"
-                    [class.opacity-50]="getAreasDisponibles().length === 0"
-                    [class.cursor-not-allowed]="getAreasDisponibles().length === 0"
-                    (click)="agregarArea()">
-              <mat-icon class="mr-2 text-lg">add</mat-icon>
-              Agregar Área
-            </button>
-          </div>
-              </div>
-              
-      <!-- Tabla de seguimiento -->
-      <div class="bg-white rounded-lg shadow-sm border border-indigo-200 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="min-w-full">
-            <thead class="bg-indigo-600 text-white">
-              <tr>
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Área Solicitada</th>
-                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Solicitud Enviada</th>
-                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Respuesta Recibida</th>
-                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Tipo de Respuesta</th>
-                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Recordatorio Enviado</th>
-                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Respuesta a Recordatorio</th>
-                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr *ngFor="let area of seguimientoAreas" class="hover:bg-gray-50 transition-colors">
-                <!-- Área -->
-                <td class="px-4 py-4">
+    </div>
+
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center">
+        <div
+          class="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center mr-4 border border-indigo-200">
+          <mat-icon class="text-indigo-600">checklist</mat-icon>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-indigo-800">Control de Seguimiento por Áreas</h3>
+          <p class="text-sm text-indigo-600">
+            {{seguimientoAreas.length}} área{{seguimientoAreas.length !== 1 ? 's' : ''}} en seguimiento
+            <span *ngIf="getAreasDisponibles().length > 0" class="ml-2 text-indigo-500">
+              • {{getAreasDisponibles().length}} disponible{{getAreasDisponibles().length !== 1 ? 's' : ''}} para
+              agregar
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-right text-xs text-indigo-600">
+          <p>{{getEstadisticasSeguimiento().areasContactadas}} de {{seguimientoAreas.length}} contactadas</p>
+          <p>{{getEstadisticasSeguimiento().respuestasCompletas}}
+            respuesta{{getEstadisticasSeguimiento().respuestasCompletas !== 1 ? 's' : ''}}
+            completa{{getEstadisticasSeguimiento().respuestasCompletas !== 1 ? 's' : ''}}</p>
+        </div>
+        <button
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center text-sm shadow-md hover:shadow-lg"
+          [disabled]="getAreasDisponibles().length === 0" [class.opacity-50]="getAreasDisponibles().length === 0"
+          [class.cursor-not-allowed]="getAreasDisponibles().length === 0" (click)="agregarArea()">
+          <mat-icon class="mr-2 text-lg">add</mat-icon>
+          Agregar Área
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabla de seguimiento -->
+    <div class="bg-white rounded-lg shadow-sm border border-indigo-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead class="bg-indigo-600 text-white">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Área Solicitada</th>
+              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Solicitud Enviada</th>
+              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Respuesta Recibida</th>
+              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Tipo de Respuesta</th>
+              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Recordatorio Enviado</th>
+              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Respuesta a Recordatorio
+              </th>
+              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let area of seguimientoAreas" class="hover:bg-gray-50 transition-colors">
+              <!-- Área -->
+              <td class="px-4 py-4">
                 <div class="flex items-center">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3"
-                         [ngClass]="{
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" [ngClass]="{
                            'bg-blue-100': area.tipoRespuesta === 'completa',
                            'bg-yellow-100': area.tipoRespuesta === 'parcial',
                            'bg-gray-100': area.tipoRespuesta === 'pendiente'
                          }">
-                      <mat-icon class="text-sm"
-                                [ngClass]="{
+                    <mat-icon class="text-sm" [ngClass]="{
                                   'text-blue-600': area.tipoRespuesta === 'completa',
                                   'text-yellow-600': area.tipoRespuesta === 'parcial',
                                   'text-gray-600': area.tipoRespuesta === 'pendiente'
                                 }">business</mat-icon>
                   </div>
-                    <div>
-                      <p class="text-sm font-medium text-gray-900">{{area.area}}</p>
-                      <p class="text-xs text-gray-500">{{area.nombreCompleto}}</p>
-                </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{area.area}}</p>
+                    <p class="text-xs text-gray-500">{{area.nombreCompleto}}</p>
                   </div>
-                </td>
-                
-                <!-- Solicitud Enviada -->
-                <td class="px-4 py-4 text-center">
-                  <label class="inline-flex items-center cursor-pointer">
-                                         <input type="checkbox" 
-                            [checked]="area.solicitudEnviada"
-                            (change)="actualizarSolicitudEnviada(area.id, $any($event.target).checked)"
-                            class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-indigo-500">
-                    <span class="ml-2 text-sm"
-                          [ngClass]="area.solicitudEnviada ? 'text-gray-700' : 'text-gray-500'">
-                      {{area.fechaSolicitud || 'Pendiente'}}
-                </span>
-                  </label>
-                </td>
-                
-                <!-- Respuesta Recibida -->
-                <td class="px-4 py-4 text-center">
-                  <label class="inline-flex items-center cursor-pointer">
-                                                              <input type="checkbox" 
-                            [checked]="area.respuestaRecibida"
-                            [disabled]="!area.solicitudEnviada"
-                            (change)="actualizarRespuestaRecibida(area.id, $any($event.target).checked)"
-                            class="form-checkbox h-4 w-4 text-green-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-green-500">
-                     <span class="ml-2 text-sm"
-                           [ngClass]="area.respuestaRecibida ? 'text-gray-700' : 'text-gray-500'">
-                       {{area.fechaRespuesta || (area.solicitudEnviada ? 'Pendiente' : 'N/A')}}
-                     </span>
-                   </label>
-                 </td>
-                 
-                 <!-- Tipo de Respuesta -->
-                 <td class="px-4 py-4 text-center">
-                   <select [value]="area.tipoRespuesta"
-                           [disabled]="!area.solicitudEnviada"
-                           (change)="actualizarTipoRespuesta(area.id, $any($event.target).value)"
-                           class="text-xs rounded-full px-2 py-1 font-medium border-0 focus:ring-2 focus:ring-indigo-500"
-                           [ngClass]="{
+                </div>
+              </td>
+
+              <!-- Solicitud Enviada -->
+              <td class="px-4 py-4 text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" [checked]="area.solicitudEnviada"
+                    (change)="actualizarSolicitudEnviada(area.id, $any($event.target).checked)"
+                    class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-indigo-500">
+                  <span class="ml-2 text-sm" [ngClass]="area.solicitudEnviada ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaSolicitud || 'Pendiente'}}
+                  </span>
+                </label>
+              </td>
+
+              <!-- Respuesta Recibida -->
+              <td class="px-4 py-4 text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" [checked]="area.respuestaRecibida" [disabled]="!area.solicitudEnviada"
+                    (change)="actualizarRespuestaRecibida(area.id, $any($event.target).checked)"
+                    class="form-checkbox h-4 w-4 text-green-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-green-500">
+                  <span class="ml-2 text-sm" [ngClass]="area.respuestaRecibida ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaRespuesta || (area.solicitudEnviada ? 'Pendiente' : 'N/A')}}
+                  </span>
+                </label>
+              </td>
+
+              <!-- Tipo de Respuesta -->
+              <td class="px-4 py-4 text-center">
+                <select [value]="area.tipoRespuesta" [disabled]="!area.solicitudEnviada"
+                  (change)="actualizarTipoRespuesta(area.id, $any($event.target).value)"
+                  class="text-xs rounded-full px-2 py-1 font-medium border-0 focus:ring-2 focus:ring-indigo-500"
+                  [ngClass]="{
                              'bg-green-100 text-green-800': area.tipoRespuesta === 'completa',
                              'bg-yellow-100 text-yellow-800': area.tipoRespuesta === 'parcial',
                              'bg-gray-100 text-gray-500': area.tipoRespuesta === 'pendiente' || !area.solicitudEnviada
                            }">
-                     <option value="pendiente">Pendiente</option>
-                     <option value="completa">Completa</option>
-                     <option value="parcial">Parcial</option>
-                   </select>
-                 </td>
-                 
-                 <!-- Recordatorio Enviado -->
-                 <td class="px-4 py-4 text-center">
-                   <label class="inline-flex items-center cursor-pointer">
-                     <input type="checkbox" 
-                            [checked]="area.recordatorioEnviado"
-                            [disabled]="!area.solicitudEnviada"
-                            (change)="actualizarRecordatorioEnviado(area.id, $any($event.target).checked)"
-                            class="form-checkbox h-4 w-4 text-yellow-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-yellow-500">
-                     <span class="ml-2 text-sm"
-                           [ngClass]="area.recordatorioEnviado ? 'text-gray-700' : 'text-gray-500'">
-                       {{area.fechaRecordatorio || (area.solicitudEnviada ? 'N/A' : 'N/A')}}
-                     </span>
-                   </label>
-                 </td>
-                 
-                 <!-- Respuesta a Recordatorio -->
-                 <td class="px-4 py-4 text-center">
-                   <label class="inline-flex items-center cursor-pointer">
-                     <input type="checkbox" 
-                            [checked]="area.respuestaRecordatorio"
-                            [disabled]="!area.recordatorioEnviado"
-                            (change)="actualizarRespuestaRecordatorio(area.id, $any($event.target).checked)"
-                            class="form-checkbox h-4 w-4 text-gray-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-gray-500">
-                    <span class="ml-2 text-sm"
-                          [ngClass]="area.respuestaRecordatorio ? 'text-gray-700' : 'text-gray-500'">
-                      {{area.fechaRespuestaRecordatorio || (area.recordatorioEnviado ? 'Pendiente' : 'N/A')}}
-                    </span>
-                  </label>
-                </td>
-                
-                <!-- Acciones -->
-                <td class="px-4 py-4 text-center">
-                  <div class="flex justify-center gap-1">
-                    <button class="p-1 rounded hover:bg-indigo-100 transition-colors" 
-                            title="Editar"
-                            (click)="editarArea(area.id)">
-                      <mat-icon class="text-indigo-600 text-sm">edit</mat-icon>
-                    </button>
-                    <button class="p-1 rounded hover:bg-red-100 transition-colors" 
-                            title="Eliminar"
-                            (click)="eliminarArea(area.id)">
-                      <mat-icon class="text-red-600 text-sm">delete</mat-icon>
-                    </button>
-              </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-            </div>
-          </div>
-      
-      <!-- Resumen estadístico -->
-      <div class="mt-6 grid grid-cols-4 gap-4">
-        <div class="bg-white rounded-lg p-4 border border-indigo-200 text-center">
-          <div class="text-2xl font-bold text-indigo-600">{{getEstadisticasSeguimiento().areasContactadas}}</div>
-          <div class="text-sm text-gray-600">Áreas Contactadas</div>
-        </div>
-        <div class="bg-white rounded-lg p-4 border border-green-200 text-center">
-          <div class="text-2xl font-bold text-green-600">{{getEstadisticasSeguimiento().respuestasCompletas}}</div>
-          <div class="text-sm text-gray-600">Respuestas Completas</div>
-        </div>
-        <div class="bg-white rounded-lg p-4 border border-yellow-200 text-center">
-          <div class="text-2xl font-bold text-yellow-600">{{getEstadisticasSeguimiento().recordatoriosEnviados}}</div>
-          <div class="text-sm text-gray-600">Recordatorios Enviados</div>
-        </div>
-        <div class="bg-white rounded-lg p-4 border border-red-200 text-center">
-          <div class="text-2xl font-bold text-red-600">{{getEstadisticasSeguimiento().respuestasPendientes}}</div>
-          <div class="text-sm text-gray-600">Respuestas Pendientes</div>
-        </div>
+                  <option value="pendiente">Pendiente</option>
+                  <option value="completa">Completa</option>
+                  <option value="parcial">Parcial</option>
+                </select>
+              </td>
+
+              <!-- Recordatorio Enviado -->
+              <td class="px-4 py-4 text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" [checked]="area.recordatorioEnviado" [disabled]="!area.solicitudEnviada"
+                    (change)="actualizarRecordatorioEnviado(area.id, $any($event.target).checked)"
+                    class="form-checkbox h-4 w-4 text-yellow-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-yellow-500">
+                  <span class="ml-2 text-sm" [ngClass]="area.recordatorioEnviado ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaRecordatorio || (area.solicitudEnviada ? 'N/A' : 'N/A')}}
+                  </span>
+                </label>
+              </td>
+
+              <!-- Respuesta a Recordatorio -->
+              <td class="px-4 py-4 text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" [checked]="area.respuestaRecordatorio" [disabled]="!area.recordatorioEnviado"
+                    (change)="actualizarRespuestaRecordatorio(area.id, $any($event.target).checked)"
+                    class="form-checkbox h-4 w-4 text-gray-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-gray-500">
+                  <span class="ml-2 text-sm" [ngClass]="area.respuestaRecordatorio ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaRespuestaRecordatorio || (area.recordatorioEnviado ? 'Pendiente' : 'N/A')}}
+                  </span>
+                </label>
+              </td>
+
+              <!-- Acciones -->
+              <td class="px-4 py-4 text-center">
+                <div class="flex justify-center gap-1">
+                  <button class="p-1 rounded hover:bg-indigo-100 transition-colors" title="Editar"
+                    (click)="editarArea(area.id)">
+                    <mat-icon class="text-indigo-600 text-sm">edit</mat-icon>
+                  </button>
+                  <button class="p-1 rounded hover:bg-red-100 transition-colors" title="Eliminar"
+                    (click)="eliminarArea(area.id)">
+                    <mat-icon class="text-red-600 text-sm">delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Historial de eventos: eliminado por solicitud -->
+    <!-- Resumen estadístico -->
+    <div class="mt-6 grid grid-cols-4 gap-4">
+      <div class="bg-white rounded-lg p-4 border border-indigo-200 text-center">
+        <div class="text-2xl font-bold text-indigo-600">{{getEstadisticasSeguimiento().areasContactadas}}</div>
+        <div class="text-sm text-gray-600">Áreas Contactadas</div>
+      </div>
+      <div class="bg-white rounded-lg p-4 border border-green-200 text-center">
+        <div class="text-2xl font-bold text-green-600">{{getEstadisticasSeguimiento().respuestasCompletas}}</div>
+        <div class="text-sm text-gray-600">Respuestas Completas</div>
+      </div>
+      <div class="bg-white rounded-lg p-4 border border-yellow-200 text-center">
+        <div class="text-2xl font-bold text-yellow-600">{{getEstadisticasSeguimiento().recordatoriosEnviados}}</div>
+        <div class="text-sm text-gray-600">Recordatorios Enviados</div>
+      </div>
+      <div class="bg-white rounded-lg p-4 border border-red-200 text-center">
+        <div class="text-2xl font-bold text-red-600">{{getEstadisticasSeguimiento().respuestasPendientes}}</div>
+        <div class="text-sm text-gray-600">Respuestas Pendientes</div>
+      </div>
+    </div>
   </div>
 
+  <!-- Historial de eventos: eliminado por solicitud -->
+</div>
+
 <!-- Notificación flotante para mensajes de estado -->
-<div *ngIf="mostrarMensajeEstado" 
-     [ngClass]="{'bg-green-600': tipoMensajeEstado === 'success', 'bg-red-600': tipoMensajeEstado === 'error'}"
-     class="fixed top-5 right-5 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center animate-fadeIn">
-  <svg *ngIf="tipoMensajeEstado === 'success'" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+<div *ngIf="mostrarMensajeEstado"
+  [ngClass]="{'bg-green-600': tipoMensajeEstado === 'success', 'bg-red-600': tipoMensajeEstado === 'error'}"
+  class="fixed top-5 right-5 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center animate-fadeIn">
+  <svg *ngIf="tipoMensajeEstado === 'success'" class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+    viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
   <svg *ngIf="tipoMensajeEstado === 'error'" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
   <span>{{mensajeEstado}}</span>
   <button (click)="mostrarMensajeEstado = false" class="ml-4 hover:bg-white/20 p-1 rounded-full">
@@ -1148,59 +1194,67 @@
 </div>
 
 <!-- Modal de confirmación para finalizar y enviar a revisión -->
-<div *ngIf="mostrarModalConfirmacion" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
+<div *ngIf="mostrarModalConfirmacion"
+  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
   <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-zoomIn">
     <!-- Encabezado del modal -->
     <div class="bg-gradient-to-r from-green-600 to-green-700 p-5 text-white">
-              <div class="flex items-center">
-        <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+      <div class="flex items-center">
+        <div
+          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-                </div>
-        <h2 class="text-xl font-bold">Finalizar y enviar a revisión</h2>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
         </div>
+        <h2 class="text-xl font-bold">Finalizar y enviar a revisión</h2>
       </div>
-      
+    </div>
+
     <!-- Contenido del modal -->
     <div class="p-6">
       <div class="mb-5 text-center">
-        <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
+        <div
+          class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
           <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
         </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">¿Está seguro que desea finalizar este dictamen y enviarlo a revisión?</h3>
-        <p class="text-gray-600">Esta acción no se puede deshacer. El asunto será enviado para su revisión por el asignador.</p>
-          </div>
-          
+        <h3 class="text-lg font-bold text-gray-800 mb-2">¿Está seguro que desea finalizar este dictamen y enviarlo a
+          revisión?</h3>
+        <p class="text-gray-600">Esta acción no se puede deshacer. El asunto será enviado para su revisión por el
+          asignador.</p>
+      </div>
+
       <!-- Detalles del documento -->
       <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
         <div class="flex items-center mb-2">
           <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           <span class="text-sm font-medium text-gray-700">Información del asunto</span>
-                </div>
+        </div>
         <div class="space-y-1 text-sm">
           <p><span class="font-medium">Folio:</span> {{asunto.folio}}</p>
           <p><span class="font-medium">Carpeta de Investigación:</span> {{asunto.carpetaInvestigacion}}</p>
           <p><span class="font-medium">Persona relacionada:</span> {{asunto.personaRelacionada}}</p>
-          </div>
         </div>
+      </div>
 
       <!-- Botones de acción -->
       <div class="flex justify-end gap-3">
-        <button (click)="cancelarFinalizacion()" 
-                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button (click)="cancelarFinalizacion()"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+          </svg>
           Cancelar
         </button>
-        
-        <button (click)="confirmarYFinalizar()" 
-                class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
+
+        <button (click)="confirmarYFinalizar()"
+          class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
@@ -1212,12 +1266,14 @@
 </div>
 
 <!-- Modal de confirmación para aprobación -->
-<div *ngIf="mostrarModalAprobacion" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
+<div *ngIf="mostrarModalAprobacion"
+  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
   <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-zoomIn">
     <!-- Encabezado del modal -->
     <div class="bg-gradient-to-r from-green-600 to-green-700 p-5 text-white">
       <div class="flex items-center">
-        <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+        <div
+          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
@@ -1225,24 +1281,28 @@
         <h2 class="text-xl font-bold">Confirmar aprobación</h2>
       </div>
     </div>
-    
+
     <!-- Contenido del modal -->
     <div class="p-6">
       <div class="mb-5 text-center">
-        <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
+        <div
+          class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
           <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
         <h3 class="text-lg font-bold text-gray-800 mb-2">¿Está seguro que desea aprobar este documento?</h3>
-        <p class="text-gray-600">El documento será aprobado y enviado al solicitante. Esta acción no se puede deshacer.</p>
+        <p class="text-gray-600">El documento será aprobado y enviado al solicitante. Esta acción no se puede deshacer.
+        </p>
       </div>
-      
+
       <!-- Detalles del documento -->
       <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
         <div class="flex items-center mb-2">
           <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span class="text-sm font-medium text-gray-700">Información del documento</span>
         </div>
@@ -1252,19 +1312,19 @@
           <p><span class="font-medium">Fecha:</span> {{asuntoEnRevision?.fecha}}</p>
         </div>
       </div>
-      
+
       <!-- Botones de acción -->
       <div class="flex justify-end gap-3">
-        <button (click)="cancelarAprobacion()" 
-                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
+        <button (click)="cancelarAprobacion()"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
           Cancelar
         </button>
-        
-        <button (click)="aprobarDictamen()" 
-                class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
+
+        <button (click)="aprobarDictamen()"
+          class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
@@ -1273,20 +1333,15 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
 
 <!-- Input oculto para seleccionar archivos -->
-<input 
-  type="file" 
-  #fileInput 
-  style="display: none"
-  multiple
-  accept="application/pdf" 
-  (change)="onArchivosSeleccionados($event)"
-/>
+<input type="file" #fileInput style="display: none" multiple accept="application/pdf"
+  (change)="onArchivosSeleccionados($event)" />
 
 <!-- Modal para confirmar la subida de archivos -->
-<div *ngIf="mostrarModalArchivos" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
+<div *ngIf="mostrarModalArchivos"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
   <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 transform transition-all">
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-bold text-[#691C32]">Confirmar subida de archivos</h3>
@@ -1294,11 +1349,12 @@
         <mat-icon>close</mat-icon>
       </button>
     </div>
-    
+
     <div class="mb-6">
       <p class="text-gray-700 mb-4">Se subirán los siguientes archivos:</p>
       <ul class="bg-gray-50 rounded-lg p-3 max-h-60 overflow-y-auto">
-        <li *ngFor="let archivo of archivosSeleccionados" class="flex items-center py-2 border-b border-gray-100 last:border-0">
+        <li *ngFor="let archivo of archivosSeleccionados"
+          class="flex items-center py-2 border-b border-gray-100 last:border-0">
           <mat-icon class="text-[#691C32] mr-2">picture_as_pdf</mat-icon>
           <span class="flex-1 truncate">{{archivo.name}}</span>
           <span class="text-sm text-gray-500">{{(archivo.size / 1024).toFixed(1)}} KB</span>
@@ -1306,21 +1362,14 @@
       </ul>
       <p class="text-sm text-gray-500 mt-2">* Todos los archivos deben estar en formato PDF</p>
     </div>
-    
+
     <div class="flex justify-end gap-3">
-      <button 
-        mat-stroked-button
-        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700"
-        (click)="cancelarSubidaArchivos()"
-      >
+      <button mat-stroked-button class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700"
+        (click)="cancelarSubidaArchivos()">
         Cancelar
       </button>
-      <button 
-        mat-flat-button
-        class="px-4 py-2 rounded-lg bg-[#691C32] text-white flex items-center"
-        [disabled]="cargandoArchivos"
-        (click)="subirArchivos()"
-      >
+      <button mat-flat-button class="px-4 py-2 rounded-lg bg-[#691C32] text-white flex items-center"
+        [disabled]="cargandoArchivos" (click)="subirArchivos()">
         <mat-icon *ngIf="!cargandoArchivos" class="mr-1">cloud_upload</mat-icon>
         <span *ngIf="!cargandoArchivos">Subir Archivos</span>
         <div *ngIf="cargandoArchivos" class="flex items-center">
@@ -1338,30 +1387,35 @@
     <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-5">
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+          <div
+            class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
             <mat-icon class="text-white">folder_copy</mat-icon>
           </div>
           <h2 class="text-xl font-bold text-white">Documentos Adjuntos</h2>
         </div>
         <div class="flex items-center gap-2">
-          <button mat-stroked-button class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center" (click)="abrirSelectorArchivos()">
+          <button mat-stroked-button
+            class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center"
+            (click)="abrirSelectorArchivos()">
             <mat-icon class="mr-2">upload_file</mat-icon>
             <span>Subir archivos</span>
           </button>
-          <button mat-stroked-button class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center" (click)="refrescarArchivosAdjuntos()">
+          <button mat-stroked-button
+            class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center"
+            (click)="refrescarArchivosAdjuntos()">
             <mat-icon class="mr-2">refresh</mat-icon>
             <span>Actualizar</span>
           </button>
         </div>
       </div>
     </div>
-    
+
     <div class="p-6 bg-gradient-to-br from-white to-[#f9f7f3]">
       <!-- Spinner de carga -->
       <div *ngIf="cargandoArchivosAdjuntos" class="flex justify-center items-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
-      
+
       <!-- Mensaje de error -->
       <div *ngIf="errorArchivosAdjuntos && !cargandoArchivosAdjuntos" class="py-8 text-center">
         <div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
@@ -1373,10 +1427,11 @@
           <span>Reintentar</span>
         </button>
       </div>
-      
+
       <!-- Lista de archivos -->
       <div *ngIf="archivosAdjuntos.length > 0 && !cargandoArchivosAdjuntos" class="space-y-3">
-        <div *ngFor="let archivo of archivosAdjuntos" class="flex items-center justify-between p-4 rounded-lg bg-white border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all">
+        <div *ngFor="let archivo of archivosAdjuntos"
+          class="flex items-center justify-between p-4 rounded-lg bg-white border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all">
           <div class="flex items-center min-w-0">
             <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3 border border-blue-200">
               <mat-icon class="text-blue-600">description</mat-icon>
@@ -1385,33 +1440,39 @@
               <p class="font-medium text-blue-900 truncate mb-1">{{archivo.nombre}}</p>
               <div class="flex flex-wrap text-xs text-gray-500">
                 <span class="flex items-center mr-4">
-                  <mat-icon class="text-blue-400 mr-1" style="font-size: 16px; width: 16px; height: 16px;">description</mat-icon>
+                  <mat-icon class="text-blue-400 mr-1"
+                    style="font-size: 16px; width: 16px; height: 16px;">description</mat-icon>
                   <span>{{archivo.tamano}}</span>
                 </span>
                 <span class="flex items-center">
-                  <mat-icon class="text-blue-400 mr-1" style="font-size: 16px; width: 16px; height: 16px;">calendar_today</mat-icon>
+                  <mat-icon class="text-blue-400 mr-1"
+                    style="font-size: 16px; width: 16px; height: 16px;">calendar_today</mat-icon>
                   <span>{{formatearFechaArchivo(archivo.ultima_modificacion)}}</span>
                 </span>
               </div>
             </div>
           </div>
           <div class="flex gap-2 flex-shrink-0">
-            <button mat-icon-button class="bg-blue-50 hover:bg-blue-100 transition-all" matTooltip="Ver archivo" (click)="verArchivoPdf(archivo.nombre)">
+            <button mat-icon-button class="bg-blue-50 hover:bg-blue-100 transition-all" matTooltip="Ver archivo"
+              (click)="verArchivoPdf(archivo.nombre)">
               <mat-icon class="text-blue-600">visibility</mat-icon>
             </button>
           </div>
         </div>
       </div>
-      
+
       <!-- Estado vacío motivacional para asuntos PENDIENTES -->
-      <div *ngIf="esEstadoPendienteSinDocumentos && !cargandoArchivosAdjuntos" class="flex flex-col items-center justify-center py-12 text-center">
-        <div class="w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center border-2 border-amber-200 shadow-lg">
+      <div *ngIf="esEstadoPendienteSinDocumentos && !cargandoArchivosAdjuntos"
+        class="flex flex-col items-center justify-center py-12 text-center">
+        <div
+          class="w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center border-2 border-amber-200 shadow-lg">
           <mat-icon class="text-amber-600" style="font-size: 40px; width: 40px; height: 40px;">assignment_add</mat-icon>
         </div>
         <h3 class="text-amber-800 mb-3 text-xl font-bold">¡Asunto Listo para Trabajar!</h3>
         <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-md mb-4">
           <p class="text-amber-700 mb-2 font-medium">📋 Estado: PENDIENTE</p>
-          <p class="text-sm text-amber-600">Este asunto está asignado y esperando que subas los documentos necesarios para iniciar su procesamiento.</p>
+          <p class="text-sm text-amber-600">Este asunto está asignado y esperando que subas los documentos necesarios
+            para iniciar su procesamiento.</p>
         </div>
         <div class="space-y-2 text-sm text-gray-600 max-w-lg mb-6">
           <div class="flex items-center justify-center">
@@ -1427,19 +1488,24 @@
             <span>Una vez subidos, el asunto pasará a estado "EN PROCESO"</span>
           </div>
         </div>
-        <button mat-flat-button color="primary" class="mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg" (click)="abrirSelectorArchivos()">
+        <button mat-flat-button color="primary"
+          class="mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg"
+          (click)="abrirSelectorArchivos()">
           <mat-icon class="mr-2">file_upload</mat-icon>
           <span>Comenzar - Subir Documentos</span>
         </button>
       </div>
-      
+
       <!-- Estado vacío genérico para otros casos -->
-      <div *ngIf="archivosAdjuntos.length === 0 && !cargandoArchivosAdjuntos && !errorArchivosAdjuntos && !esEstadoPendienteSinDocumentos" class="flex flex-col items-center justify-center py-12 text-center">
+      <div
+        *ngIf="archivosAdjuntos.length === 0 && !cargandoArchivosAdjuntos && !errorArchivosAdjuntos && !esEstadoPendienteSinDocumentos"
+        class="flex flex-col items-center justify-center py-12 text-center">
         <div class="w-20 h-20 mb-6 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
           <mat-icon class="text-blue-400" style="font-size: 36px; width: 36px; height: 36px;">folder_open</mat-icon>
         </div>
         <p class="text-gray-700 mb-2 text-lg font-medium">No hay documentos adjuntos</p>
-        <p class="text-sm text-gray-500 max-w-sm">Los documentos que se adjunten a este asunto aparecerán en esta sección</p>
+        <p class="text-sm text-gray-500 max-w-sm">Los documentos que se adjunten a este asunto aparecerán en esta
+          sección</p>
         <button mat-flat-button color="primary" class="mt-4" (click)="abrirSelectorArchivos()">
           <mat-icon class="mr-2">attach_file</mat-icon>
           <span>Adjuntar documentos</span>
@@ -1450,30 +1516,32 @@
 </div>
 
 <!-- Modal para visualizar PDFs -->
-<div *ngIf="mostrarModalPdf" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
+<div *ngIf="mostrarModalPdf"
+  class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
   <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[80vh] overflow-hidden animate-zoomIn">
     <!-- Encabezado del modal -->
     <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-4 text-white flex justify-between items-center">
       <div class="flex items-center">
-        <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+        <div
+          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
           <mat-icon class="text-white">picture_as_pdf</mat-icon>
         </div>
         <h2 class="text-xl font-bold truncate">{{nombrePdfActual}}</h2>
       </div>
       <div class="flex items-center gap-2">
-        <button *ngIf="!cargandoPdf && !errorPdf" 
-                (click)="descargarPdfActual()" 
-                class="bg-white/10 hover:bg-white/20 text-white py-1 px-3 rounded flex items-center border border-white/30 transition-all">
+        <button *ngIf="!cargandoPdf && !errorPdf" (click)="descargarPdfActual()"
+          class="bg-white/10 hover:bg-white/20 text-white py-1 px-3 rounded flex items-center border border-white/30 transition-all">
           <mat-icon class="mr-1">download</mat-icon>
           <span class="text-sm">Descargar</span>
         </button>
-        <button (click)="cerrarModalPdf()" class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
+        <button (click)="cerrarModalPdf()"
+          class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
           <mat-icon>close</mat-icon>
         </button>
       </div>
     </div>
-    
-          <!-- Contenido del PDF -->
+
+    <!-- Contenido del PDF -->
     <div class="h-full bg-gray-800 overflow-auto">
       <!-- Spinner de carga -->
       <div *ngIf="cargandoPdf" class="h-full flex justify-center items-center">
@@ -1482,7 +1550,7 @@
           <p class="text-white text-lg">Cargando documento...</p>
         </div>
       </div>
-      
+
       <!-- Mensaje de error -->
       <div *ngIf="errorPdf && !cargandoPdf" class="h-full flex justify-center items-center">
         <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg max-w-md text-center">
@@ -1492,9 +1560,10 @@
           <button mat-stroked-button color="warn" class="mt-4" (click)="cerrarModalPdf()">Cerrar</button>
         </div>
       </div>
-      
+
       <!-- PDF -->
-      <iframe *ngIf="!cargandoPdf && !errorPdf" [src]="sanitizeUrl(urlPdfActual)" class="w-full h-full" frameborder="0"></iframe>
+      <iframe *ngIf="!cargandoPdf && !errorPdf" [src]="sanitizeUrl(urlPdfActual)" class="w-full h-full"
+        frameborder="0"></iframe>
     </div>
   </div>
-</div> 
+</div>
