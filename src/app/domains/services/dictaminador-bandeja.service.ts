@@ -63,7 +63,13 @@ export class DictaminadorBandejaService {
             rfc_dictaminador: item.rfc_asignado,
             nombre_dictaminador: item.rfc_asignado
           };
-
+          // Propagar observaciones desde raíz o desde los datos del asunto
+          const obsFuente = (
+            (typeof (item as any).observaciones === 'string' && (item as any).observaciones) ||
+            (typeof (asuntoData as any)?.observaciones === 'string' && (asuntoData as any).observaciones) ||
+            ''
+          );
+          (normalizado as any).observaciones = obsFuente.trim();
           (normalizado as any).id_asunto = normalizado.id_asunto;
           return normalizado;
         }).filter((item): item is tableAsuntosPorDictaminar => item !== null);
@@ -131,6 +137,13 @@ export class DictaminadorBandejaService {
           };
 
           // Agregar propiedades adicionales que espera el componente (as any para bypass TypeScript)
+          // Propagar observaciones desde raíz o desde los datos del asunto
+          const obsFuente = (
+            (typeof (item as any).observaciones === 'string' && (item as any).observaciones) ||
+            (typeof (asuntoData as any)?.observaciones === 'string' && (asuntoData as any).observaciones) ||
+            ''
+          );
+          (normalizado as any).observaciones = obsFuente.trim();
           (normalizado as any).id_asunto = normalizado.id_asunto; // Para compatibilidad
 
           return normalizado;

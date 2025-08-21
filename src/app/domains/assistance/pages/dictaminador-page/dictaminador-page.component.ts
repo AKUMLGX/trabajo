@@ -186,9 +186,9 @@ export class DictaminadorPageComponent implements OnInit {
             estadoAtencion = 'Atención Total';
           }
           const obsFuente = (
-            (typeof item.observaciones === 'string' && item.observaciones) ||
-            (typeof item?.asunto?.datos?.observaciones === 'string' && item.asunto.datos.observaciones) ||
-            (typeof item?.asunto?.observaciones === 'string' && item.asunto.observaciones) ||
+            (typeof (item as any).observaciones === 'string' && (item as any).observaciones) ||
+            (typeof (item as any)?.asunto?.datos?.observaciones === 'string' && (item as any).asunto.datos.observaciones) ||
+            (typeof (item as any)?.asunto?.observaciones === 'string' && (item as any).asunto.observaciones) ||
             ''
           );
           const observaciones = obsFuente.trim();
