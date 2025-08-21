@@ -24,9 +24,17 @@
 
     <!-- Contenido del Modal -->
     <div class="modal-body">
-      
+
+      <!-- Tabs -->
+      <div class="mb-4 border-b">
+        <div class="flex gap-2">
+          <button type="button" class="px-3 py-2 text-sm" [class.border-b-2]="pestanaActiva==='detalles'" (click)="cambiarPestana('detalles')">Detalles</button>
+          <button type="button" class="px-3 py-2 text-sm" [class.border-b-2]="pestanaActiva==='documentos'" (click)="cambiarPestana('documentos')">Documentos</button>
+        </div>
+      </div>
+
       <!-- Información del Asunto -->
-      <div class="asunto-info-section">
+      <div *ngIf="pestanaActiva==='detalles'" class="asunto-info-section">
         <h3 class="section-title">
           <mat-icon class="section-icon">info</mat-icon>
           Información del Asunto
@@ -52,7 +60,7 @@
       </div>
 
       <!-- Datos de Respuesta a FGR -->
-      <div class="respuesta-fgr-section">
+      <div *ngIf="pestanaActiva==='detalles'" class="respuesta-fgr-section">
         <h3 class="section-title">
           <mat-icon class="section-icon">gavel</mat-icon>
           Respuesta a FGR
@@ -129,6 +137,42 @@
           <mat-icon class="warning-icon">info</mat-icon>
           <p>No se han registrado datos de respuesta a FGR para este asunto.</p>
           <p class="warning-text">Complete el expediente antes de finalizar la atención.</p>
+        </div>
+      </div>
+
+      <!-- Documentos -->
+      <div *ngIf="pestanaActiva==='documentos'" class="respuesta-fgr-section">
+        <h3 class="section-title">
+          <mat-icon class="section-icon">folder</mat-icon>
+          Documentos
+        </h3>
+
+        <!-- Acciones de lista -->
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm text-gray-600">{{archivos?.length || 0}} documento(s)</span>
+          <button class="btn-visualizar-pdf" type="button" (click)="recargarArchivos()">
+            <mat-icon>refresh</mat-icon>
+            <span>Recargar</span>
+          </button>
+        </div>
+
+        <!-- Lista / estados -->
+        <div *ngIf="cargandoArchivos" class="text-sm text-gray-500">Cargando documentos…</div>
+        <div *ngIf="!cargandoArchivos && (!archivos || archivos.length===0)" class="text-sm text-gray-500">No hay documentos disponibles</div>
+
+        <div class="grid grid-cols-3 gap-4" *ngIf="!cargandoArchivos && archivos && archivos.length>0">
+          <div class="col-span-1 border rounded p-2 max-h-64 overflow-auto">
+            <div *ngFor="let a of archivos; let i=index" (click)="seleccionarArchivo(a)" class="px-2 py-1 rounded cursor-pointer hover:bg-gray-50" [class.bg-red-50]="pdfActual===a">
+              <mat-icon class="mr-1 text-red-600">picture_as_pdf</mat-icon>
+              <span class="text-sm">{{a.nombre}}</span>
+            </div>
+          </div>
+          <div class="col-span-2 border rounded p-2 min-h-[320px] flex items-center justify-center">
+            <div *ngIf="pdfCargando" class="text-sm text-gray-500">Cargando PDF…</div>
+            <div *ngIf="pdfError" class="text-sm text-red-600">Error al cargar PDF</div>
+            <iframe *ngIf="!pdfCargando && !pdfError && pdfUrl" [src]="pdfUrl" class="w-full h-[480px] border-0"></iframe>
+            <div *ngIf="!pdfCargando && !pdfError && !pdfUrl" class="text-sm text-gray-500">Selecciona un documento</div>
+          </div>
         </div>
       </div>
 

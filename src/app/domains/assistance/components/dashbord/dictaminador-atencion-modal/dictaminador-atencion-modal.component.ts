@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/archivos-atencion.service';
 
 interface DatosRespuestaFGR {
   folioInterno: string;
@@ -56,18 +57,37 @@ export class DictaminadorAtencionModalComponent implements OnInit {
   paginaActualPDF = 1;
   totalPaginasPDF = 1;
 
+  // ==== Integración de documentos (endpoints) ====
+  pestanaActiva: 'detalles' | 'documentos' = 'detalles';
+  archivos: ArchivoAdjunto[] = [];
+  cargandoArchivos = false;
+  pdfActual: ArchivoAdjunto | null = null;
+  pdfUrl: SafeResourceUrl | null = null;
+  pdfCargando = false;
+  pdfError = false;
+  private origenArchivos: 'raiz' | 'atencion' = 'raiz';
+
   // Estado del modal
   procesandoFinalizacion = false;
 
   constructor(
     private domSanitizer: DomSanitizer,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private archivosService: ArchivosAtencionService
   ) {}
 
   ngOnInit(): void {
     // Inicializar datos si existen
     if (this.asunto?.datosRespuestaFGR?.urlPDF) {
       this.prepararPDF(this.asunto.datosRespuestaFGR.urlPDF);
+    }
+  }
+
+  // Cambio de pestaña
+  cambiarPestana(pestana: 'detalles' | 'documentos'): void {
+    this.pestanaActiva = pestana;
+    if (pestana === 'documentos' && this.archivos.length === 0 && !this.cargandoArchivos) {
+      this.cargarArchivos();
     }
   }
 
@@ -203,6 +223,89 @@ export class DictaminadorAtencionModalComponent implements OnInit {
     } catch {
       return fecha;
     }
+  }
+
+  // ========== DOCUMENTOS (lista y visor) ==========
+  private obtenerFolio(): string | null {
+    return this.asunto?.folio || null;
+  }
+
+  cargarArchivos(): void {
+    const folio = this.obtenerFolio();
+    if (!folio) { return; }
+
+    this.cargandoArchivos = true;
+    this.archivos = [];
+
+    // Intento 1: endpoint de carpeta raíz (modal guinda)
+    this.archivosService.listarArchivosPdfAtencion(folio).subscribe({
+      next: (archs) => {
+        if (archs && archs.length > 0) {
+          this.archivos = archs;
+          this.origenArchivos = 'raiz';
+          this.cargandoArchivos = false;
+        } else {
+          // Fallback: carpeta 'atencion'
+          this.archivosService.listarArchivosPdf(folio).subscribe({
+            next: (archs2) => {
+              this.archivos = archs2 || [];
+              this.origenArchivos = this.archivos.length > 0 ? 'atencion' : 'raiz';
+              this.cargandoArchivos = false;
+            },
+            error: () => { this.cargandoArchivos = false; }
+          });
+        }
+      },
+      error: () => {
+        // Si falla raíz, probar 'atencion'
+        this.archivosService.listarArchivosPdf(folio).subscribe({
+          next: (archs2) => {
+            this.archivos = archs2 || [];
+            this.origenArchivos = this.archivos.length > 0 ? 'atencion' : 'raiz';
+            this.cargandoArchivos = false;
+          },
+          error: () => { this.cargandoArchivos = false; }
+        });
+      }
+    });
+  }
+
+  recargarArchivos(): void {
+    this.cargarArchivos();
+  }
+
+  seleccionarArchivo(archivo: ArchivoAdjunto): void {
+    const folio = this.obtenerFolio();
+    if (!folio) { return; }
+
+    this.pdfActual = archivo;
+    this.pdfCargando = true;
+    this.pdfError = false;
+    this.pdfUrl = null;
+
+    // Normalizar nombres tipo nombre_1234567890.pdf o nombre.pdf-123
+    let nombre = archivo.nombre;
+    const matchUnderscore = nombre.match(/^(.+)_\d{10}(\.[^.]+)$/);
+    if (matchUnderscore) { nombre = matchUnderscore[1] + matchUnderscore[2]; }
+    const matchDashAfterExt = nombre.match(/(.+\.pdf)-\d+$/);
+    if (matchDashAfterExt && matchDashAfterExt[1]) { nombre = matchDashAfterExt[1]; }
+
+    const obs = this.origenArchivos === 'atencion'
+      ? this.archivosService.obtenerPdf(folio, nombre, 'atencion')
+      : this.archivosService.obtenerPdf(folio, nombre);
+
+    obs.subscribe({
+      next: (data: string) => {
+        try {
+          const src = `data:application/pdf;base64,${data}`;
+          this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(src);
+          this.pdfCargando = false;
+        } catch {
+          this.pdfError = true; this.pdfCargando = false;
+        }
+      },
+      error: () => { this.pdfError = true; this.pdfCargando = false; }
+    });
   }
 
   // Datos de ejemplo para demostración
