@@ -103,45 +103,21 @@
       </div>
     </div>
 
-    <!-- Filtros -->
-    <div class="flex justify-between items-center mb-6">
-      <div class="flex gap-4">
-        <div>
-          <label class="text-sm text-gray-600 block mb-1">Estado</label>
-          <select [(ngModel)]="filtroEstado" (change)="aplicarFiltros()" 
-                  class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
-            <option value="Todos">Todos los estados</option>
-            <option value="Pendiente">Pendiente</option>
-            <option value="En Proceso">En Proceso</option>
-            <option value="Atendido">Atendido</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-sm text-gray-600 block mb-1">Prioridad</label>
-          <select [(ngModel)]="filtroPrioridad" (change)="aplicarFiltros()"
-                  class="border border-gray-300 rounded px-3 py-1 text-sm min-w-[200px]">
-            <option value="Todas">Todas las prioridades</option>
-            <option value="Alta">Alta</option>
-            <option value="Media">Media</option>
-            <option value="Baja">Baja</option>
-          </select>
-        </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="flex gap-2">
-          <button (click)="cambiarVista('tarjetas')" 
-                  class="p-1.5 rounded hover:bg-gray-100">
-            <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tarjetas'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-            </svg>
-          </button>
-          <button (click)="cambiarVista('tabla')"
-                  class="p-1.5 rounded hover:bg-gray-100">
-            <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tabla'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-          </button>
-        </div>
+    <!-- Controles de vista (filtros eliminados por solicitud) -->
+    <div class="flex justify-end items-center mb-6">
+      <div class="flex gap-2">
+        <button (click)="cambiarVista('tarjetas')" 
+                class="p-1.5 rounded hover:bg-gray-100">
+          <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tarjetas'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+        </button>
+        <button (click)="cambiarVista('tabla')"
+                class="p-1.5 rounded hover:bg-gray-100">
+          <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tabla'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -259,20 +235,15 @@
             </td>
             <td class="px-4 py-3 text-right sticky right-0 bg-white z-10">
               <div class="flex justify-end gap-2">
-                <!-- Botones en pantallas medianas y grandes -->
-                <div class="hidden md:flex gap-2">
-                  <button class="bg-[#691C32] text-white px-3 py-1 rounded text-xs" 
-                          (click)="abrirModalAtencionDictaminador(asunto)">Atender</button>
-                  <button class="border border-[#691C32] text-[#691C32] px-3 py-1 rounded text-xs flex items-center" (click)="verDetalle(asunto['ID_ASUNTO'])">Ver</button>
-                  <button class="bg-[#691C32] text-white px-3 py-1 rounded text-xs flex items-center hover:bg-[#4F1524] transition-colors" (click)="revisarAsunto(asunto['ID_ASUNTO'])">Revisar</button>
+                <!-- Acción única: Ver Detalle -->
+                <div class="hidden md:flex">
+                  <button class="border border-[#691C32] text-[#691C32] px-3 py-1 rounded text-xs flex items-center" (click)="verDetalle(asunto['ID_ASUNTO'])">Ver Detalle</button>
                 </div>
                 <!-- Menú compacto en pantallas pequeñas -->
                 <div class="relative md:hidden">
                   <button class="border border-[#691C32] text-[#691C32] px-2 py-1 rounded text-xs" (click)="asunto._menu = !asunto._menu">⋮</button>
                   <div *ngIf="asunto._menu" class="absolute right-0 mt-1 w-32 bg-white border rounded shadow z-20">
-                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="abrirModalAtencionDictaminador(asunto); asunto._menu=false">Atender</button>
-                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="verDetalle(asunto['ID_ASUNTO']); asunto._menu=false">Ver</button>
-                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="revisarAsunto(asunto['ID_ASUNTO']); asunto._menu=false">Revisar</button>
+                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="verDetalle(asunto['ID_ASUNTO']); asunto._menu=false">Ver Detalle</button>
                   </div>
                 </div>
               </div>
