@@ -207,10 +207,10 @@ export class DictaminadorPageComponent implements OnInit {
             'FOLIO SCANNER': item.folio_scanner,
             'AUTORIDAD REMITENTE': item.autoridad_remitente,
             'TIPO DOCUMENTO': DOCUMENTO_DESCRIPCION[item.id_documento_fk] || '',
+            'OBSERVACIONES': observaciones,
             'PLAZO ATENCION': plazoAtencionVisual,
             'DICTAMINADOR': item.rfc_dictaminador || item.rfc_asignado || 'Sin asignar',
-            'ID_ASUNTO': item.id_asunto,
-            'OBSERVACIONES': observaciones
+            'ID_ASUNTO': item.id_asunto
           };
         });
         // Cargar información de documentos adjuntos para todos los asuntos
