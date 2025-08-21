@@ -136,6 +136,11 @@ export class DictaminadorPageComponent implements OnInit {
       next: (res) => {
         console.log('Respuesta del backend:', res); // Imprimir la respuesta para inspección
         this.asuntos = res.map((item: any) => {
+          // Debug: mostrar estructura completa del item para verificar observaciones
+          console.log('🔍 Item completo:', item);
+          console.log('🔍 item.observaciones:', item.observaciones);
+          console.log('🔍 item.asunto?.datos?.observaciones:', item.asunto?.datos?.observaciones);
+          
           // Calcular días transcurridos
           let diasTranscurridos = 0;
           if (item.fecha_recepcion) {
@@ -189,11 +194,14 @@ export class DictaminadorPageComponent implements OnInit {
           const observaciones = obsFuente.trim();
           
           // Debug: verificar si hay observaciones
+          console.log('🟡 Observaciones procesadas para folio', item.folio_interno || 'N/A', ':', observaciones.length > 0 ? observaciones : 'VACÍAS');
           if (observaciones) {
-            console.log('🔍 Observaciones encontradas para folio', item?.asunto?.datos?.folio_interno || 'N/A', ':', observaciones);
+            console.log('✅ OBSERVACIONES ENCONTRADAS para folio', item.folio_interno || 'N/A', ':', observaciones);
+          } else {
+            console.log('❌ Sin observaciones para folio', item.folio_interno || 'N/A');
           }
 
-          return {
+          const asuntoMapeado = {
             'FOLIO INTERNO': item.folio_interno,
             'CARPETA INVESTIGACION': item.carpeta_investigacion,
             'PERSONA RELACIONADA': item.persona_relacionada,
@@ -212,6 +220,11 @@ export class DictaminadorPageComponent implements OnInit {
             'DICTAMINADOR': item.rfc_dictaminador || item.rfc_asignado || 'Sin asignar',
             'ID_ASUNTO': item.id_asunto
           };
+          
+          // Debug: mostrar objeto final que se pasa a la vista
+          console.log('📋 Objeto final para vista - Folio:', asuntoMapeado['FOLIO INTERNO'], 'OBSERVACIONES:', asuntoMapeado['OBSERVACIONES']);
+          
+          return asuntoMapeado;
         });
         // Cargar información de documentos adjuntos para todos los asuntos
         this.verificarDocumentosAsuntos().then(() => {
