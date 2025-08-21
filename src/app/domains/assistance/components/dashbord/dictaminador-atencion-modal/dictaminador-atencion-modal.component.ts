@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,7 +42,7 @@ interface AsuntoDictaminador {
   templateUrl: './dictaminador-atencion-modal.component.html',
   styleUrl: './dictaminador-atencion-modal.component.css'
 })
-export class DictaminadorAtencionModalComponent implements OnInit {
+export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
   @Input() mostrarModal = false;
   @Input() asunto: AsuntoDictaminador | null = null;
   @Output() cerrarModal = new EventEmitter<void>();
@@ -80,6 +80,17 @@ export class DictaminadorAtencionModalComponent implements OnInit {
     // Inicializar datos si existen
     if (this.asunto?.datosRespuestaFGR?.urlPDF) {
       this.prepararPDF(this.asunto.datosRespuestaFGR.urlPDF);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Cuando se abre el modal con un asunto, precargar pestaña Documentos
+    if ((changes['mostrarModal'] && this.mostrarModal) || changes['asunto']) {
+      // Si hay folio, cargar lista y mostrar pestaña documentos
+      if (this.obtenerFolio()) {
+        this.pestanaActiva = 'documentos';
+        this.cargarArchivos();
+      }
     }
   }
 
