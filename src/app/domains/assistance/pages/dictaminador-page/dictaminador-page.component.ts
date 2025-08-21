@@ -180,6 +180,8 @@ export class DictaminadorPageComponent implements OnInit {
           } else if (item.id_atencion_fk === 3) {
             estadoAtencion = 'Atención Total';
           }
+          const observaciones = typeof item.observaciones === 'string' ? item.observaciones.trim() : '';
+
           return {
             'FOLIO INTERNO': item.folio_interno,
             'CARPETA INVESTIGACION': item.carpeta_investigacion,
@@ -196,7 +198,8 @@ export class DictaminadorPageComponent implements OnInit {
             'TIPO DOCUMENTO': DOCUMENTO_DESCRIPCION[item.id_documento_fk] || '',
             'PLAZO ATENCION': plazoAtencionVisual,
             'DICTAMINADOR': item.rfc_dictaminador || item.rfc_asignado || 'Sin asignar',
-            'ID_ASUNTO': item.id_asunto
+            'ID_ASUNTO': item.id_asunto,
+            'OBSERVACIONES': observaciones
           };
         });
         // Cargar información de documentos adjuntos para todos los asuntos
