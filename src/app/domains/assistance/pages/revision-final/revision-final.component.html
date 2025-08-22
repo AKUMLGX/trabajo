@@ -303,26 +303,7 @@
                 <span>{{todosProntosSeleccionados() ? 'Deseleccionar' : 'Seleccionar'}} listos</span>
               </button>
 
-              <!-- Botón enviar seleccionados -->
-              <button class="flex items-center px-4 py-2 bg-[#691C32] hover:bg-[#4F1524] text-white rounded-md text-sm transition-colors shadow-sm"
-                      (click)="enviarAsuntosSeleccionados()"
-                      [disabled]="asuntosSeleccionados.length === 0"
-                      [class.opacity-50]="asuntosSeleccionados.length === 0"
-                      [class.cursor-not-allowed]="asuntosSeleccionados.length === 0">
-                <mat-icon class="mr-2 text-sm">send</mat-icon>
-                <span>Enviar al Akamba 3</span>
-              </button>
-
-              <!-- Nuevo botón para asignar directamente -->
-              <button class="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm transition-colors shadow-sm"
-                      (click)="asignarAsuntosDirectamente()"
-                      [disabled]="asuntosSeleccionados.length === 0"
-                      [class.opacity-50]="asuntosSeleccionados.length === 0"
-                      [class.cursor-not-allowed]="asuntosSeleccionados.length === 0"
-                      matTooltip="Asignar asuntos directamente a la administración sin requerir aprobación previa">
-                <mat-icon class="mr-2 text-sm">assignment_turned_in</mat-icon>
-                <span>Asignar Directamente</span>
-              </button>
+              
             </div>
           </div>
         </div>
@@ -416,15 +397,6 @@
                       <span>Plazo Atención</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-36 px-6 py-4 text-left text-sm font-bold text-slate-700">
-                    <div class="flex items-center gap-2">
-                      <div class="w-8 h-8 bg-sky-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-sky-600 text-lg">flag</mat-icon>
-                      </div>
-                      <span>Estado Revisión</span>
-                    </div>
-                  </th>
-
                   <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-bold text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -438,7 +410,7 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 <!-- Mensaje cuando no hay resultados -->
                 <tr *ngIf="getAsuntosCapturasFiltrados().length === 0">
-                  <td colspan="7" class="px-8 py-16 text-center">
+                  <td colspan="8" class="px-8 py-16 text-center">
                     <div class="flex flex-col items-center justify-center text-gray-500">
                       <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                         <mat-icon class="text-3xl text-gray-400">search_off</mat-icon>
@@ -509,17 +481,6 @@
                       <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
                             [ngClass]="obtenerClasePlazo(asunto.plazo_atencion ?? null)">
                         {{interpretarPlazoAtencion(asunto.plazo_atencion ?? null)}}
-                      </span>
-                  </td>
-
-                  <!-- Estado de Revisión -->
-                  <td class="w-36 px-6 py-5">
-                    <span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold" 
-                          [ngClass]="asunto.estado_revision === 'PENDIENTE' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700'">
-                      <mat-icon class="text-lg">{{
-                        asunto.estado_revision === 'PENDIENTE' ? 'schedule' : 'check_circle'
-                        }}</mat-icon>
-                      {{asunto.estado_revision === 'PENDIENTE' ? 'Pendiente' : 'Aprobado'}}
                       </span>
                   </td>
 
