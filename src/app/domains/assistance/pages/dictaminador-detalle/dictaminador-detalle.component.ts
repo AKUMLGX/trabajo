@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
 
 interface Evento {
   id: string;
@@ -239,16 +240,19 @@ export class DictaminadorDetalleComponent implements OnInit {
     private dictaminadorBandejaService: DictaminadorBandejaService,
     private archivosAtencionService: ArchivosAtencionService,
     private snackBar: MatSnackBar,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+        private pdfAcuse: PdfAcuseService,
   ) {
 
   }
 
-  folioInternoForm:string =""
-  personaRelacionadaForm:string=""
+  folioInternoForm: string = ""
+  personaRelacionadaForm: string = ""
   adminitracionForm: number = 0
-  carpetaInvestigacionForm:string=""
-  idAsuntoForm: number=0
+  carpetaInvestigacionForm: string = ""
+  idAsuntoForm: number = 0
+  folio_interno: string = ""
+  atencion: string = "NO APLICA"
 
 
 
@@ -264,7 +268,7 @@ export class DictaminadorDetalleComponent implements OnInit {
             const encontrado = res.find((item: any) => item.id_asunto.toString() === this.asuntoId
 
 
-          );
+            );
 
             if (encontrado) {
               // Mapear los campos igual que en la card
@@ -330,14 +334,17 @@ export class DictaminadorDetalleComponent implements OnInit {
               this.cargarArchivosAdjuntos();
 
 
-this.folioInternoForm = encontrado.folio_interno,
-this.adminitracionForm= encontrado.id_administracion_fk
-this.personaRelacionadaForm = encontrado.persona_relacionada
-this.carpetaInvestigacionForm = encontrado.carpeta_investigacion
-this.idAsuntoForm = encontrado.id_asignacion
+              this.folioInternoForm = encontrado.folio_interno,
+                this.adminitracionForm = encontrado.id_administracion_fk
+              this.personaRelacionadaForm = encontrado.persona_relacionada
+              this.carpetaInvestigacionForm = encontrado.carpeta_investigacion
+              this.idAsuntoForm = encontrado.id_asignacion
 
 
-this.requestformSolicitudDeInformacion()
+
+
+
+              // this.requestformSolicitudDeInformacion()
 
             }
           },
@@ -347,6 +354,7 @@ this.requestformSolicitudDeInformacion()
         });
       }
     });
+
 
     // Verificar si viene de asuntos rechazados
     this.route.queryParams.subscribe(params => {
@@ -391,6 +399,22 @@ this.requestformSolicitudDeInformacion()
 
 
 
+  }
+
+
+  getAdministracion(administracion: number): string {
+    if (administracion === 1) {
+      return "a_1"
+    } else if (administracion === 2) {
+      return "a_2"
+    } else if (administracion === 3) {
+      return "a_3"
+    } else if (administracion === 4) {
+      return "a_4"
+    } else if (administracion) {
+      return "a_5"
+    }
+    return ""
   }
 
   // Método para cargar datos del asunto desde el backend
@@ -587,71 +611,77 @@ this.requestformSolicitudDeInformacion()
       // No llamamos a goBack() para permanecer en la misma vista
     }, 1000);
   }
-//#region  Formularios
+  //#region  Formularios
 
-selecionarFormularioOne = ""
-selecionarFormularioTwo = ""
-selecionarFormularioThree = ""
-selecionarFormulario=""
+  selecionarFormularioOne = ""
+  selecionarFormularioTwo = ""
+  selecionarFormularioThree = ""
+  selecionarFormulario = ""
 
- onSelectedOption(event: Event) {
+  onSelectedOption(event: Event) {
     const target = event.target as HTMLSelectElement
-    this.selecionarFormulario= target.value
+    this.selecionarFormulario = target.value
   }
 
- public formSolicitudDeInformacion : FormGroup = this.fb.group({
-      // Campos de Solicitud de Información
-      solicitudFolioInterno: ['', Validators.required],
-      solicitudFechaAcuse: ['', Validators.required],
-      solicitudNumeroOficio: [''],
-      solicitudAreaDestino: ['', Validators.required],
-      solicitudDescripcion: ['', Validators.required],
-      solicitudDocumentoEscaneado: ["",Validators.required],
-    });
+  public formSolicitudDeInformacion: FormGroup = this.fb.group({
+    // Campos de Solicitud de Información
+    folio_scanner: ['', Validators.required],
+    fecha_atencion: ['', Validators.required],
+    oficio: [''],
+    autoridad_remitente: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    documento_escaneado:   ["", Validators.required],
+  });
 
-    public formRespuestaInterna:FormGroup = this.fb.group({
-      // Campos de Respuesta Interna
-      respuestaInternaFolioInterno: ['', Validators.required],
-      respuestaInternaFecha: ['', Validators.required],
-      respuestaInternaNumeroOficio: [''],
-      respuestaInternaAreaOrigen: ['', Validators.required],
-      respuestaInternaDescripcion: ['', Validators.required],
-      respuestaInternaDocumentoEscaneado: ['',Validators.required],
-    });
+  public formRespuestaInterna: FormGroup = this.fb.group({
+    // Campos de Respuesta Interna
+    respuestaInternaFolioInterno: ['', Validators.required],
+    respuestaInternaFecha: ['', Validators.required],
+    respuestaInternaNumeroOficio: [''],
+    respuestaInternaAreaOrigen: ['', Validators.required],
+    respuestaInternaDescripcion: ['', Validators.required],
+    respuestaInternaDocumentoEscaneado: ['', Validators.required],
+  });
 
-    public formRespuestaAFGR: FormGroup = this.fb.group({
-   // Campos de Respuesta a FGR
-      respuestaFgrFolioInterno: ['', Validators.required],
-      respuestaFgrNumeroOficio: ['', Validators.required],
-      respuestaFgrFechaAcuse: ['', Validators.required],
-      respuestaFgrOficioAtiende: ['', Validators.required],
-      respuestaFgrEstadoAtencion: ['', Validators.required],
-      respuestaFgrDocumentoEscaneado: ['',Validators.required],
-    });
+  public formRespuestaAFGR: FormGroup = this.fb.group({
+    // Campos de Respuesta a FGR
+    respuestaFgrFolioInterno: ['', Validators.required],
+    respuestaFgrNumeroOficio: ['', Validators.required],
+    respuestaFgrFechaAcuse: ['', Validators.required],
+    respuestaFgrOficioAtiende: ['', Validators.required],
+    respuestaFgrEstadoAtencion: ['', Validators.required],
+    respuestaFgrDocumentoEscaneado: ['', Validators.required],
+  });
+  selectedFile!: File;
 
-
-
-    requestformSolicitudDeInformacion():void{
-      const dataformSolicitudInterno= this.formSolicitudDeInformacion.value;
-
-    this.folioInternoForm
-  this.personaRelacionadaForm
-  this.adminitracionForm
-  this.carpetaInvestigacionForm
-  this.idAsuntoForm
-
-
-      console.log("Data:", dataformSolicitudInterno) ;
-
-      console.log("form:",    this.folioInternoForm ,this.personaRelacionadaForm
-  ,this.adminitracionForm
-  ,this.carpetaInvestigacionForm
-  ,this.idAsuntoForm
- );
+  onFileChanged(event: any) {
+    event.target as HTMLInputElement;
+    this.selectedFile = event.target.files[0]
+    if (this.selectedFile)
+      this.formSolicitudDeInformacion.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+  }
 
 
 
+  requestformSolicitudDeInformacion(): void {
+    const dataformSolicitudInterno = this.formSolicitudDeInformacion.value;
+    const payloadData = {
+      ...dataformSolicitudInterno,
+      folio_interno: this.folioInternoForm,
+      persona_relacionada: this.personaRelacionadaForm,
+      administracion: this.getAdministracion(this.adminitracionForm),
+      carpeta_investigacion: this.carpetaInvestigacionForm,
+      id_req: this.idAsuntoForm,
+      atencion: this.atencion,
+      documento: "SOLICITUD INTERNA"
     }
+    const selectedFile = this.selectedFile;
+    console.log("Payloada", payloadData);
+ this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadData, selectedFile).subscribe(
+  resp=>{
+    this.pdfAcuse.generatePDF(resp)
+  });
+  }
 
 
 
@@ -730,7 +760,7 @@ selecionarFormulario=""
       },
       error: (error) => {
         console.error('Error al finalizar atención:', error);
-    this.mostrarModalConfirmacion = false;
+        this.mostrarModalConfirmacion = false;
 
         // Mejorar el manejo de errores
         let mensajeError = 'Error al enviar asunto a revisión';
@@ -848,7 +878,7 @@ selecionarFormulario=""
   getEstadoAtencionText(): string {
     if (!this.asunto.id_atencion_fk) return 'Desconocido';
 
-    switch(this.asunto.id_atencion_fk) {
+    switch (this.asunto.id_atencion_fk) {
       case 1: return 'TOTAL';
       case 2: return 'PARCIAL';
       case 3: return 'EN TRAMITE';
@@ -861,7 +891,7 @@ selecionarFormulario=""
   getDocumentoText(): string {
     if (!this.asunto.id_documento_fk) return 'No especificado';
 
-    switch(this.asunto.id_documento_fk) {
+    switch (this.asunto.id_documento_fk) {
       case 1: return 'RESPUESTA';
       case 2: return 'REQUERIMIENTO';
       case 3: return 'REQUERIMIENTO Y RESPUESTA';
@@ -981,9 +1011,9 @@ selecionarFormulario=""
           this.snackBar.open(
             error.error || 'Error al subir los archivos. Intente nuevamente.',
             'Cerrar', {
-              duration: 7000,
-              panelClass: ['error-snackbar']
-            }
+            duration: 7000,
+            panelClass: ['error-snackbar']
+          }
           );
         }
       });
@@ -1104,15 +1134,15 @@ selecionarFormulario=""
 
       // Si es hoy, mostrar "Hoy, HH:MM"
       if (fecha.getDate() === hoy.getDate() &&
-          fecha.getMonth() === hoy.getMonth() &&
-          fecha.getFullYear() === hoy.getFullYear()) {
+        fecha.getMonth() === hoy.getMonth() &&
+        fecha.getFullYear() === hoy.getFullYear()) {
         return `Hoy, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
       }
 
       // Si es ayer, mostrar "Ayer, HH:MM"
       if (fecha.getDate() === ayer.getDate() &&
-          fecha.getMonth() === ayer.getMonth() &&
-          fecha.getFullYear() === ayer.getFullYear()) {
+        fecha.getMonth() === ayer.getMonth() &&
+        fecha.getFullYear() === ayer.getFullYear()) {
         return `Ayer, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
       }
 

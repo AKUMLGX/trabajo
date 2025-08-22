@@ -342,10 +342,10 @@
             <div class="col-span-1">
               <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
                 <mat-icon class="text-blue-600 mr-2 text-lg">confirmation_number</mat-icon>
-                Número de folio interno (folio scan) *
+            folio scan
               </label>
               <div class="relative">
-                <input type="text" formControlName="solicitudFolioInterno"
+                <input type="number" formControlName="folio_scanner"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
                   placeholder="Ej: 12345">
                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -361,7 +361,7 @@
                 Fecha del acuse de solicitud *
               </label>
               <div class="relative">
-                <input type="date" formControlName="solicitudFechaAcuse"
+                <input type="date" formControlName="fecha_atencion"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800">
                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
                   <mat-icon class="text-blue-400 text-lg">calendar_today</mat-icon>
@@ -376,7 +376,7 @@
                 Número de oficio (cuando aplique)
               </label>
               <div class="relative">
-                <input type="text" formControlName="solicitudNumeroOficio"
+                <input type="text" formControlName="oficio"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
                   placeholder="Ej: SAT/001/2025">
                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -392,7 +392,7 @@
                 Área a quien se solicita información *
               </label>
               <div class="relative">
-                <select formControlName="solicitudAreaDestino"
+                <select type="text"  formControlName="autoridad_remitente"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 appearance-none">
                   <option value="">Seleccionar área...</option>
                   <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
@@ -423,7 +423,7 @@
                 Breve descripción de lo solicitado *
               </label>
               <div class="relative">
-                <textarea formControlName="solicitudDescripcion" rows="4"
+                <textarea formControlName="descripcion" rows="4"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400 resize-none"
                   placeholder="Describa brevemente la información solicitada..."></textarea>
                 <div class="absolute left-4 top-4">
@@ -442,7 +442,7 @@
                 <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
                     class="text-purple-600 font-medium cursor-pointer">examina</span></p>
                 <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
-                <input type="file" formControlName="formSolicitudDeInformacion" accept=".pdf">
+                <input type="file" formControlName="documento_escaneado"  (change)="onFileChanged($event)"  accept=".pdf">
               </div>
             </div>
           </div>
@@ -457,6 +457,7 @@
           <div class="flex gap-4">
 
             <button type="button"
+              (click)="requestformSolicitudDeInformacion()"
               class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
               <mat-icon class="mr-3">save</mat-icon>
@@ -557,6 +558,7 @@
           <div class="flex gap-4">
 
             <button type="button"
+
               class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <mat-icon class="mr-3">save</mat-icon>
