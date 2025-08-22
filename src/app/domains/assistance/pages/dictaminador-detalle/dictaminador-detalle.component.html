@@ -342,7 +342,7 @@
             <div class="col-span-1">
               <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
                 <mat-icon class="text-blue-600 mr-2 text-lg">confirmation_number</mat-icon>
-            folio scan
+                Folio Scanner
               </label>
               <div class="relative">
                 <input type="number" formControlName="folio_scanner"
@@ -392,7 +392,7 @@
                 Área a quien se solicita información *
               </label>
               <div class="relative">
-                <select type="text"  formControlName="autoridad_remitente"
+                <select type="text" formControlName="autoridad_remitente"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 appearance-none">
                   <option value="">Seleccionar área...</option>
                   <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
@@ -433,7 +433,7 @@
             </div>
 
             <!-- Adjuntar archivo -->
-                 <div class="col-span-2">
+            <div class="col-span-2">
               <label class="text-sm font-medium text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta emitida
                 *</label>
               <div
@@ -442,7 +442,7 @@
                 <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
                     class="text-purple-600 font-medium cursor-pointer">examina</span></p>
                 <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
-                <input type="file" formControlName="documento_escaneado"  (change)="onFileChanged($event)"  accept=".pdf">
+                <input type="file" formControlName="documento_escaneado" (change)="onFileChangedSolicitudInterna($event)" accept=".pdf">
               </div>
             </div>
           </div>
@@ -457,9 +457,8 @@
           <div class="flex gap-4">
 
             <button type="button"
-              (click)="requestformSolicitudDeInformacion()"
-              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
+            (click)="requestformSolicitudDeInformacion()"
+              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
               <mat-icon class="mr-3">save</mat-icon>
               Guardar expediente
             </button>
@@ -486,8 +485,8 @@
           <div class="grid grid-cols-2 gap-4 space-y-4">
             <!-- Número de folio interno -->
             <div class="col-span-1">
-              <label class="text-sm font-medium text-gray-700 block mb-2">Número de folio interno (folio scan) *</label>
-              <input type="text" formControlName="respuestaInternaFolioInterno"
+              <label class="text-sm font-medium text-gray-700 block mb-2"> Folio Scanner *</label>
+              <input type="number" formControlName="folio_scanner"
                 class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
                 placeholder="Ej: 12346">
             </div>
@@ -495,7 +494,7 @@
             <!-- Fecha de respuesta -->
             <div class="col-span-1">
               <label class="text-sm font-medium text-gray-700 block mb-2">Fecha de respuesta *</label>
-              <input type="date" formControlName="respuestaInternaFecha"
+              <input type="date" formControlName="fecha_atencion"
                 class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
             </div>
 
@@ -503,7 +502,7 @@
             <div class="col-span-1">
               <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio o atenta nota (cuando
                 aplique)</label>
-              <input type="text" formControlName="respuestaInternaNumeroOficio"
+              <input type="text" formControlName="oficio"
                 class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
                 placeholder="Ej: AGAFF/002/2025">
             </div>
@@ -511,7 +510,7 @@
             <!-- Área que responde -->
             <div class="col-span-1">
               <label class="text-sm font-medium text-gray-700 block mb-2">Área que responde *</label>
-              <select formControlName="respuestaInternaAreaOrigen"
+              <select type="text"  formControlName="autoridad_remitente"
                 class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
                 <option value="">Seleccionar área...</option>
                 <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
@@ -530,7 +529,7 @@
             <!-- Descripción de la respuesta -->
             <div class="col-span-2">
               <label class="text-sm font-medium text-gray-700 block mb-2">Breve descripción de la respuesta *</label>
-              <textarea formControlName="respuestaInternaDescripcion" rows="3"
+              <textarea formControlName="descripcion" rows="3"
                 class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
                 placeholder="Describa brevemente el contenido de la respuesta recibida..."></textarea>
             </div>
@@ -544,7 +543,7 @@
                 <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
                     class="text-green-600 font-medium cursor-pointer">examina</span></p>
                 <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
-                <input type="file" formControlName="respuestaInternaDocumentoEscaneado"  accept=".pdf">
+                <input type="file" formControlName="documento_escaneado" (change)="onFileChangedRespuestaInterna($event)" accept=".pdf">
               </div>
             </div>
           </div>
@@ -557,17 +556,15 @@
           </div>
           <div class="flex gap-4">
 
-            <button type="button"
-
-              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
+            <button type="button" (click)="requestformRespuestaInterna()"
+              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
               <mat-icon class="mr-3">save</mat-icon>
               Guardar expediente
             </button>
           </div>
         </div>
       </form>
-    }
+      }
       @if (selecionarFormulario === "selecionarFormularioThree") {
       <form [formGroup]="formRespuestaAFGR" class="space-y-8">
 
@@ -581,14 +578,12 @@
               </div>
               Respuesta a FGR
             </h3>
-
           </div>
-
           <div class="grid grid-cols-2 gap-4 space-y-4">
             <!-- Número de folio interno -->
             <div class="col-span-1">
-              <label class="text-sm font-medium text-gray-700 block mb-2">Número de folio interno *</label>
-              <input type="text" formControlName="respuestaFgrFolioInterno"
+              <label class="text-sm font-medium text-gray-700 block mb-2"> Folio Scanner:</label>
+              <input type="number" formControlName="folio_scanner"
                 class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
                 placeholder="Ej: 12347">
             </div>
@@ -596,7 +591,7 @@
             <!-- Número de oficio -->
             <div class="col-span-1">
               <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio *</label>
-              <input type="text" formControlName="respuestaFgrNumeroOficio"
+              <input type="text" formControlName="oficio"
                 class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
                 placeholder="Ej: SAT/RES/001/2025">
             </div>
@@ -605,30 +600,22 @@
             <div class="col-span-1">
               <label class="text-sm font-medium text-gray-700 block mb-2">Fecha del acuse de entrega del oficio a FGR
                 *</label>
-              <input type="date" formControlName="respuestaFgrFechaAcuse"
+              <input type="date" formControlName="fecha_atencion"
                 class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white">
             </div>
 
-            <!-- Número de oficio de FGR que se atiende -->
-            <div class="col-span-1">
-              <label class="text-sm font-medium text-gray-700 block mb-2">Número de oficio de FGR que se atiende
-                *</label>
-              <input type="text" formControlName="respuestaFgrOficioAtiende"
-                class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
-                placeholder="Número del oficio original de FGR">
-            </div>
 
             <!-- Estado de atención -->
             <div class="col-span-2">
               <label class="text-sm font-medium text-gray-700 block mb-2">Estado de atención *</label>
               <div class="flex gap-4">
                 <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="estadoAtencion" value="Parcial" formControlName="respuestaFgrEstadoAtencion"
+                  <input type="radio" name="estadoAtencion" value="PARCIAL" formControlName="atencion" name="atencion"
                     class="mr-2 text-purple-600 focus:ring-purple-500">
                   <span class="text-sm font-medium text-gray-700">Parcial</span>
                 </label>
                 <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="estadoAtencion" value="Total" formControlName="respuestaFgrEstadoAtencion"
+                  <input type="radio" name="estadoAtencion" value="TOTAL"  formControlName="atencion" name="atencion"
                     class="mr-2 text-purple-600 focus:ring-purple-500">
                   <span class="text-sm font-medium text-gray-700">Total</span>
                 </label>
@@ -647,7 +634,7 @@
                 <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
                     class="text-purple-600 font-medium cursor-pointer">examina</span></p>
                 <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
-                <input type="file" formControlName="respuestaFgrDocumentoEscaneado" accept=".pdf">
+                <input type="file" formControlName="documento_escaneado"  (change)="onFileChangedRespuestaFGR($event)"  accept=".pdf">
               </div>
             </div>
           </div>
@@ -661,9 +648,8 @@
           </div>
           <div class="flex gap-4">
 
-            <button type="button"
-              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-        >
+            <button type="button" (click)="requestformRespuestaAFGR()"
+              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
               <mat-icon class="mr-3">save</mat-icon>
               Guardar expediente
             </button>

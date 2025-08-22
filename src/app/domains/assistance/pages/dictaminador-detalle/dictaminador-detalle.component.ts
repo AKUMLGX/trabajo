@@ -241,7 +241,7 @@ export class DictaminadorDetalleComponent implements OnInit {
     private archivosAtencionService: ArchivosAtencionService,
     private snackBar: MatSnackBar,
     private domSanitizer: DomSanitizer,
-        private pdfAcuse: PdfAcuseService,
+    private pdfAcuse: PdfAcuseService,
   ) {
 
   }
@@ -630,42 +630,53 @@ export class DictaminadorDetalleComponent implements OnInit {
     oficio: [''],
     autoridad_remitente: ['', Validators.required],
     descripcion: ['', Validators.required],
-    documento_escaneado:   ["", Validators.required],
+    documento_escaneado: ["", Validators.required],
   });
 
   public formRespuestaInterna: FormGroup = this.fb.group({
     // Campos de Respuesta Interna
-    respuestaInternaFolioInterno: ['', Validators.required],
-    respuestaInternaFecha: ['', Validators.required],
-    respuestaInternaNumeroOficio: [''],
-    respuestaInternaAreaOrigen: ['', Validators.required],
-    respuestaInternaDescripcion: ['', Validators.required],
-    respuestaInternaDocumentoEscaneado: ['', Validators.required],
+    folio_scanner: ['', Validators.required],
+    fecha_atencion: ['', Validators.required],
+    oficio: [''],
+    autoridad_remitente: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    documento_escaneado: ["", Validators.required],
   });
 
   public formRespuestaAFGR: FormGroup = this.fb.group({
     // Campos de Respuesta a FGR
-    respuestaFgrFolioInterno: ['', Validators.required],
-    respuestaFgrNumeroOficio: ['', Validators.required],
-    respuestaFgrFechaAcuse: ['', Validators.required],
-    respuestaFgrOficioAtiende: ['', Validators.required],
-    respuestaFgrEstadoAtencion: ['', Validators.required],
-    respuestaFgrDocumentoEscaneado: ['', Validators.required],
+    folio_scanner: ['', Validators.required],
+    fecha_atencion: ['', Validators.required],
+    oficio: ['', Validators.required],
+    autoridad_remitente: [''],
+    descripcion: [""],
+    documento_escaneado: ["", Validators.required],
+    atencion:["",Validators.required]
   });
   selectedFile!: File;
 
-  onFileChanged(event: any) {
+  onFileChangedSolicitudInterna(event: any) {
+    event.target as HTMLInputElement;
+    this.selectedFile = event.target.files[0]
+    if (this.selectedFile)
+      this.formRespuestaInterna.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+  }
+  onFileChangedRespuestaInterna(event: any) {
     event.target as HTMLInputElement;
     this.selectedFile = event.target.files[0]
     if (this.selectedFile)
       this.formSolicitudDeInformacion.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
   }
-
-
+  onFileChangedRespuestaFGR(event: any) {
+    event.target as HTMLInputElement;
+    this.selectedFile = event.target.files[0]
+    if (this.selectedFile)
+      this.formRespuestaAFGR.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+  }
 
   requestformSolicitudDeInformacion(): void {
     const dataformSolicitudInterno = this.formSolicitudDeInformacion.value;
-    const payloadData = {
+    const payloadDataSolicitudInformacion = {
       ...dataformSolicitudInterno,
       folio_interno: this.folioInternoForm,
       persona_relacionada: this.personaRelacionadaForm,
@@ -676,40 +687,54 @@ export class DictaminadorDetalleComponent implements OnInit {
       documento: "SOLICITUD INTERNA"
     }
     const selectedFile = this.selectedFile;
-    console.log("Payloada", payloadData);
- this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadData, selectedFile).subscribe(
-  resp=>{
-    this.pdfAcuse.generatePDF(resp)
-  });
+    this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadDataSolicitudInformacion, selectedFile).subscribe(
+      resp => {
+        this.pdfAcuse.generatePDF(resp)
+          window.location.reload()
+      });
   }
 
+  requestformRespuestaInterna(): void {
+    const dataformRespuestaInterna = this.formRespuestaInterna.value;
+    const payloadDataRespuestaInterna = {
+      ...dataformRespuestaInterna,
+      folio_interno: this.folioInternoForm,
+      persona_relacionada: this.personaRelacionadaForm,
+      administracion: this.getAdministracion(this.adminitracionForm),
+      carpeta_investigacion: this.carpetaInvestigacionForm,
+      id_req: this.idAsuntoForm,
+         atencion: this.atencion,
+      documento: "RESPUESTA INTERNA"
+    };
+    console.log("payloadDataRespuestaInterna",payloadDataRespuestaInterna);
 
+    const selectedFile = this.selectedFile;
+    this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadDataRespuestaInterna, selectedFile).subscribe(
+      resp => {
+        this.pdfAcuse.generatePDF(resp)
+          window.location.reload()
+      });
+  }
 
+  requestformRespuestaAFGR(): void {
+    const dataRespuestaAFGR = this.formRespuestaAFGR.value;
+    const payloadDataRespuestaAFGR = {
+      ...dataRespuestaAFGR,
+      folio_interno: this.folioInternoForm,
+      persona_relacionada: this.personaRelacionadaForm,
+      administracion: this.getAdministracion(this.adminitracionForm),
+      carpeta_investigacion: this.carpetaInvestigacionForm,
+      id_req: this.idAsuntoForm,
+      documento: "RESPUESTA A FGR"
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    const selectedFile = this.selectedFile;
+    this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadDataRespuestaAFGR, selectedFile).subscribe(
+      resp => {
+        this.pdfAcuse.generatePDF(resp)
+           window.location.reload()
+      });
+  }
 
   // guardarDictamen(): void {
   //   if (this.dictamenForm.valid) {
