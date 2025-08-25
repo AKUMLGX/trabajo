@@ -1,3 +1,4 @@
+import { respuestaFormularioDictaminadorRequest } from './../../../interfaces/respuestaFormulariosDictamindadorRequest';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
@@ -8,12 +9,15 @@ import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../domains/ser
 import { environment } from '../../../../../environments/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
+import { MatDialogModule } from '@angular/material/dialog';
+
 // Material Modules
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
 
 interface Evento {
   id: string;
@@ -78,20 +82,23 @@ interface AsuntoDictaminador {
   id_administracion_fk?: number;
   plazo_atencion_original?: number;
   id_asunto?: number;
+
 }
 
 @Component({
   selector: 'app-dictaminador-detalle',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatIconModule, 
-    MatButtonModule, 
-    MatProgressBarModule, 
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressBarModule,
     MatTooltipModule,
     MatSnackBarModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+
   ],
   templateUrl: './dictaminador-detalle.component.html',
   styleUrl: './dictaminador-detalle.component.css'
@@ -117,51 +124,51 @@ export class DictaminadorDetalleComponent implements OnInit {
     tipoDocumento: '',
     plazoAtencion: 'Sin plazo de atención'
   };
-  
+
   // Para acceso desde la plantilla
   environment = environment;
-  
+
   // Formulario para el dictamen
-  dictamenForm: FormGroup;
-  
+
+
   // Para el modal de confirmación
   mostrarModalConfirmacion = false;
-  
+
   // Para el modal de revisión
   mostrarModalRevision = false;
   motivoRechazo = '';
   asuntoEnRevision: any = null;
-  
+
   // Para el modal de confirmación de aprobación
   mostrarModalAprobacion = false;
-  
+
   // Para la vista de documentos
   vistaActual = 'dictamen'; // 'dictamen' o 'documentos'
   documentoSeleccionado = 0;
-  
+
   // Para mensajes de estado
   mensajeEstado = '';
   tipoMensajeEstado = ''; // 'success' o 'error'
   mostrarMensajeEstado = false;
-  
+
   // Parámetros de la URL
   asuntoId = '';
   origenRechazado = false;
-  
+
   // Para la subida de archivos
   @ViewChild('fileInput') fileInput!: ElementRef;
   archivosSeleccionados: File[] = [];
   cargandoArchivos = false;
   mostrarModalArchivos = false;
-  
+
   // Para manejar archivos adjuntos
   archivosAdjuntos: ArchivoAdjunto[] = [];
   cargandoArchivosAdjuntos = false;
   errorArchivosAdjuntos = '';
-  
+
   // Para detección inteligente de estado sin documentos
   esEstadoPendienteSinDocumentos = false;
-  
+
   // Variables para el modal de visualización de PDF
   mostrarModalPdf = false;
   urlPdfActual = '';
@@ -169,7 +176,7 @@ export class DictaminadorDetalleComponent implements OnInit {
   pdfBase64 = '';
   cargandoPdf = false;
   errorPdf = '';
-  
+
   // Variables para el checklist de seguimiento de áreas
   seguimientoAreas: SeguimientoArea[] = [
     {
@@ -197,21 +204,21 @@ export class DictaminadorDetalleComponent implements OnInit {
       respuestaRecordatorio: false
     }
   ];
-  
+
   // Variables para modales de gestión de áreas
   mostrarModalAgregarArea = false;
   areaSeleccionadaParaAgregar = '';
-  
+
   mostrarModalEditarArea = false;
   areaEnEdicion: SeguimientoArea | null = null;
   fechaSolicitudEdicion = '';
   fechaRespuestaEdicion = '';
   fechaRecordatorioEdicion = '';
   fechaRespuestaRecordatorioEdicion = '';
-  
+
   mostrarModalEliminar = false;
   areaParaEliminar: SeguimientoArea | null = null;
-  
+
   // Áreas SAT disponibles
   areasSAT = [
     { codigo: 'ACOP', nombre: 'Administración Central de Operación de Padrones' },
@@ -224,7 +231,7 @@ export class DictaminadorDetalleComponent implements OnInit {
     { codigo: 'AGACE', nombre: 'Administración General de Auditoria de Comercio Exterior' },
     { codigo: 'AGGC', nombre: 'Administración General de Grandes Contribuyentes' }
   ];
-  
+
   constructor(
     private location: Location,
     private fb: FormBuilder,
@@ -233,32 +240,22 @@ export class DictaminadorDetalleComponent implements OnInit {
     private dictaminadorBandejaService: DictaminadorBandejaService,
     private archivosAtencionService: ArchivosAtencionService,
     private snackBar: MatSnackBar,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private pdfAcuse: PdfAcuseService,
   ) {
-    this.dictamenForm = this.fb.group({
-      // Campos de Solicitud de Información
-      solicitudFolioInterno: ['', Validators.required],
-      solicitudFechaAcuse: ['', Validators.required],
-      solicitudNumeroOficio: [''],
-      solicitudAreaDestino: ['', Validators.required],
-      solicitudDescripcion: ['', Validators.required],
-      
-      // Campos de Respuesta Interna
-      respuestaInternaFolioInterno: ['', Validators.required],
-      respuestaInternaFecha: ['', Validators.required],
-      respuestaInternaNumeroOficio: [''],
-      respuestaInternaAreaOrigen: ['', Validators.required],
-      respuestaInternaDescripcion: ['', Validators.required],
-      
-      // Campos de Respuesta a FGR
-      respuestaFgrFolioInterno: ['', Validators.required],
-      respuestaFgrNumeroOficio: ['', Validators.required],
-      respuestaFgrFechaAcuse: ['', Validators.required],
-      respuestaFgrOficioAtiende: ['', Validators.required],
-      respuestaFgrEstadoAtencion: ['', Validators.required]
-    });
+
   }
-  
+
+  folioInternoForm: string = ""
+  personaRelacionadaForm: string = ""
+  adminitracionForm: number = 0
+  carpetaInvestigacionForm: string = ""
+  idAsuntoForm: number = 0
+  folio_interno: string = ""
+  atencion: string = "NO APLICA"
+
+
+
   ngOnInit(): void {
     // Obtener el ID de la URL
     this.route.params.subscribe(params => {
@@ -268,7 +265,11 @@ export class DictaminadorDetalleComponent implements OnInit {
         this.dictaminadorBandejaService.obtenerAsuntosAsignados().subscribe({
           next: (res) => {
             // Buscar el asunto con el ID recibido
-            const encontrado = res.find((item: any) => item.id_asunto.toString() === this.asuntoId);
+            const encontrado = res.find((item: any) => item.id_asunto.toString() === this.asuntoId
+
+
+            );
+
             if (encontrado) {
               // Mapear los campos igual que en la card
               let diasTranscurridos = 0;
@@ -323,14 +324,28 @@ export class DictaminadorDetalleComponent implements OnInit {
                 plazo_atencion_original: encontrado.plazo_atencion,
                 id_asunto: encontrado.id_asunto
               };
-              
+
               // Para debug: mostrar todos los campos disponibles
               console.log('Datos completos del asunto:', encontrado);
               console.log('Datos mapeados:', this.asunto);
               console.log('🔍 Folio para cargar archivos:', this.asunto.folio);
-              
+
               // Una vez que tenemos el asunto con su folio, cargamos los archivos adjuntos
               this.cargarArchivosAdjuntos();
+
+
+              this.folioInternoForm = encontrado.folio_interno,
+                this.adminitracionForm = encontrado.id_administracion_fk
+              this.personaRelacionadaForm = encontrado.persona_relacionada
+              this.carpetaInvestigacionForm = encontrado.carpeta_investigacion
+              this.idAsuntoForm = encontrado.id_asignacion
+
+
+
+
+
+              // this.requestformSolicitudDeInformacion()
+
             }
           },
           error: (err) => {
@@ -339,16 +354,17 @@ export class DictaminadorDetalleComponent implements OnInit {
         });
       }
     });
-    
+
+
     // Verificar si viene de asuntos rechazados
     this.route.queryParams.subscribe(params => {
       this.origenRechazado = params['origen'] === 'rechazado';
-      
+
       // Si es un asunto rechazado, cargar datos específicos
       if (this.origenRechazado) {
         this.cargarDatosAsuntoRechazado(this.asuntoId);
       }
-      
+
       // Verificar si se debe mostrar el modal de revisión automáticamente
       if (params['revision'] === 'true') {
         // Pequeño delay para asegurar que los datos estén cargados
@@ -356,8 +372,10 @@ export class DictaminadorDetalleComponent implements OnInit {
           this.mostrarRevision();
         }, 300);
       }
+
+
     });
-    
+
     // Inicialización del formulario con datos de muestra - COMENTADO TEMPORALMENTE
     // Se comentó porque los campos del formulario han cambiado para el nuevo sistema de expedientes
     /*
@@ -368,7 +386,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       conclusion: 'Con base en la revisión efectuada, se determina procedente la solicitud de la autoridad.'
     });
     */
-    
+
     // Inicializar datos de revisión
     this.asuntoEnRevision = {
       folio: `EUCAPE/${this.asunto.id}/2024`,
@@ -378,8 +396,27 @@ export class DictaminadorDetalleComponent implements OnInit {
       estado: 'En revisión',
       documentos: this.asunto.documentos
     };
+
+
+
   }
-  
+
+
+  getAdministracion(administracion: number): string {
+    if (administracion === 1) {
+      return "a_1"
+    } else if (administracion === 2) {
+      return "a_2"
+    } else if (administracion === 3) {
+      return "a_3"
+    } else if (administracion === 4) {
+      return "a_4"
+    } else if (administracion) {
+      return "a_5"
+    }
+    return ""
+  }
+
   // Método para cargar datos del asunto desde el backend
   cargarDatosAsunto(id: string): void {
     console.log(`Cargando datos del asunto con ID: ${id}`);
@@ -387,7 +424,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       .subscribe({
         next: (response: tableAsuntosPorDictaminar) => {
           console.log('Respuesta del backend:', response);
-          
+
           // Estado de Atención basado en id_atencion_fk
           let estadoAtencion = 'Desconocido';
           if (response.id_atencion_fk === 1) {
@@ -397,10 +434,10 @@ export class DictaminadorDetalleComponent implements OnInit {
           } else if (response.id_atencion_fk === 3) {
             estadoAtencion = 'Total';
           }
-          
+
           // Calcular días transcurridos
           const diasTranscurridos = this.calcularDiasTranscurridos(response.fecha_recepcion);
-          
+
           // Plazo: null = Normal/no urgente, 0 o mayor = Urgente
           let plazoUrgente = false;
           let plazoAtencionVisual = 'Sin plazo de atención';
@@ -414,7 +451,7 @@ export class DictaminadorDetalleComponent implements OnInit {
             plazoUrgente = true;
             plazoAtencionVisual = `${response.plazo_atencion} días`;
           }
-          
+
           // Prioridad visual para el semáforo
           let prioridad = '';
           let prioridadColor = '';
@@ -425,7 +462,7 @@ export class DictaminadorDetalleComponent implements OnInit {
             prioridad = 'Normal';
             prioridadColor = 'verde';
           }
-          
+
           this.asunto = {
             id: response.id_asunto.toString(),
             folio: response.folio_interno,
@@ -462,11 +499,11 @@ export class DictaminadorDetalleComponent implements OnInit {
     const diffTime = Math.abs(hoy.getTime() - fecha.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
-  
+
   // Método para cargar datos específicos de un asunto rechazado
   cargarDatosAsuntoRechazado(id: string): void {
     console.log(`Cargando datos del asunto rechazado con ID: ${id}`);
-    
+
     // Aquí iría la llamada al servicio para obtener los datos reales
     // Por ahora, simulamos los datos de un asunto rechazado
     this.asunto.esRechazado = true;
@@ -474,7 +511,7 @@ export class DictaminadorDetalleComponent implements OnInit {
     this.asunto.motivoRechazo = 'Información incompleta';
     this.asunto.rechazadoPor = 'Ana Martínez - Coordinadora';
     this.asunto.observacionesRechazo = 'El dictamen carece de fundamento jurídico en los artículos 145 y 146 del Código Fiscal. Se requiere completar la información y volver a presentar.';
-    
+
     // Agregar evento de rechazo al historial
     this.asunto.eventos.unshift({
       id: (this.asunto.eventos.length + 1).toString(),
@@ -483,7 +520,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       fecha: this.asunto.fechaRechazo,
       tipo: 'evento'
     });
-    
+
     // Actualizar datos del formulario con la observación del rechazo - COMENTADO TEMPORALMENTE
     // Se comentó porque el campo 'observaciones' ya no existe en el nuevo formulario de expedientes
     /*
@@ -491,7 +528,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       observaciones: `[CORRECCIÓN SOLICITADA] ${this.asunto.observacionesRechazo}\n\n${this.dictamenForm.get('observaciones')?.value}`
     });
     */
-    
+
     // Actualizar datos para el modal de revisión
     this.motivoRechazo = this.asunto.observacionesRechazo;
     this.asuntoEnRevision = {
@@ -532,13 +569,13 @@ export class DictaminadorDetalleComponent implements OnInit {
   mostrarMensaje(mensaje: string, tipo = 'success'): void {
     // Configurar el color según el tipo de mensaje
     let panelClass = ['mat-snackbar-success'];
-    
+
     if (tipo === 'error') {
       panelClass = ['mat-snackbar-error'];
     } else if (tipo === 'info') {
       panelClass = ['mat-snackbar-info'];
     }
-    
+
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: 5000,
       horizontalPosition: 'center',
@@ -574,21 +611,145 @@ export class DictaminadorDetalleComponent implements OnInit {
       // No llamamos a goBack() para permanecer en la misma vista
     }, 1000);
   }
+  //#region  Formularios
 
-  guardarDictamen(): void {
-    if (this.dictamenForm.valid) {
-      console.log('Datos del dictamen guardados:', this.dictamenForm.value);
-      // Aquí iría la lógica para guardar los datos
-      this.mostrarMensaje('Datos guardados correctamente', 'success');
-    } else {
-      // Marcar controles como tocados para mostrar errores de validación
-      Object.keys(this.dictamenForm.controls).forEach(key => {
-        const control = this.dictamenForm.get(key);
-        control?.markAsTouched();
-      });
-      this.mostrarMensaje('Por favor complete todos los campos requeridos', 'error');
-    }
+  selecionarFormularioOne = ""
+  selecionarFormularioTwo = ""
+  selecionarFormularioThree = ""
+  selecionarFormulario = ""
+
+  onSelectedOption(event: Event) {
+    const target = event.target as HTMLSelectElement
+    this.selecionarFormulario = target.value
   }
+
+  public formSolicitudDeInformacion: FormGroup = this.fb.group({
+    // Campos de Solicitud de Información
+    folio_scanner: ['', Validators.required],
+    fecha_atencion: ['', Validators.required],
+    oficio: [''],
+    autoridad_remitente: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    documento_escaneado: ["", Validators.required],
+  });
+
+  public formRespuestaInterna: FormGroup = this.fb.group({
+    // Campos de Respuesta Interna
+    folio_scanner: ['', Validators.required],
+    fecha_atencion: ['', Validators.required],
+    oficio: [''],
+    autoridad_remitente: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    documento_escaneado: ["", Validators.required],
+  });
+
+  public formRespuestaAFGR: FormGroup = this.fb.group({
+    // Campos de Respuesta a FGR
+    folio_scanner: ['', Validators.required],
+    fecha_atencion: ['', Validators.required],
+    oficio: ['', Validators.required],
+    autoridad_remitente: [''],
+    descripcion: [""],
+    documento_escaneado: ["", Validators.required],
+    atencion:["",Validators.required]
+  });
+  selectedFile!: File;
+
+  onFileChangedSolicitudInterna(event: any) {
+    event.target as HTMLInputElement;
+    this.selectedFile = event.target.files[0]
+    if (this.selectedFile)
+      this.formRespuestaInterna.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+  }
+  onFileChangedRespuestaInterna(event: any) {
+    event.target as HTMLInputElement;
+    this.selectedFile = event.target.files[0]
+    if (this.selectedFile)
+      this.formSolicitudDeInformacion.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+  }
+  onFileChangedRespuestaFGR(event: any) {
+    event.target as HTMLInputElement;
+    this.selectedFile = event.target.files[0]
+    if (this.selectedFile)
+      this.formRespuestaAFGR.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+  }
+
+  requestformSolicitudDeInformacion(): void {
+    const dataformSolicitudInterno = this.formSolicitudDeInformacion.value;
+    const payloadDataSolicitudInformacion = {
+      ...dataformSolicitudInterno,
+      folio_interno: this.folioInternoForm,
+      persona_relacionada: this.personaRelacionadaForm,
+      administracion: this.getAdministracion(this.adminitracionForm),
+      carpeta_investigacion: this.carpetaInvestigacionForm,
+      id_req: this.idAsuntoForm,
+      atencion: this.atencion,
+      documento: "SOLICITUD INTERNA"
+    }
+    const selectedFile = this.selectedFile;
+    this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadDataSolicitudInformacion, selectedFile).subscribe(
+      resp => {
+        this.pdfAcuse.generatePDF(resp)
+          window.location.reload()
+      });
+  }
+
+  requestformRespuestaInterna(): void {
+    const dataformRespuestaInterna = this.formRespuestaInterna.value;
+    const payloadDataRespuestaInterna = {
+      ...dataformRespuestaInterna,
+      folio_interno: this.folioInternoForm,
+      persona_relacionada: this.personaRelacionadaForm,
+      administracion: this.getAdministracion(this.adminitracionForm),
+      carpeta_investigacion: this.carpetaInvestigacionForm,
+      id_req: this.idAsuntoForm,
+         atencion: this.atencion,
+      documento: "RESPUESTA INTERNA"
+    };
+    console.log("payloadDataRespuestaInterna",payloadDataRespuestaInterna);
+
+    const selectedFile = this.selectedFile;
+    this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadDataRespuestaInterna, selectedFile).subscribe(
+      resp => {
+        this.pdfAcuse.generatePDF(resp)
+          window.location.reload()
+      });
+  }
+
+  requestformRespuestaAFGR(): void {
+    const dataRespuestaAFGR = this.formRespuestaAFGR.value;
+    const payloadDataRespuestaAFGR = {
+      ...dataRespuestaAFGR,
+      folio_interno: this.folioInternoForm,
+      persona_relacionada: this.personaRelacionadaForm,
+      administracion: this.getAdministracion(this.adminitracionForm),
+      carpeta_investigacion: this.carpetaInvestigacionForm,
+      id_req: this.idAsuntoForm,
+      documento: "RESPUESTA A FGR"
+    }
+
+    const selectedFile = this.selectedFile;
+    this.dictaminadorBandejaService.asignarRespuestasDictaminadorFormularios(payloadDataRespuestaAFGR, selectedFile).subscribe(
+      resp => {
+        this.pdfAcuse.generatePDF(resp)
+           window.location.reload()
+      });
+  }
+
+  // guardarDictamen(): void {
+  //   if (this.dictamenForm.valid) {
+  //     console.log('Datos del dictamen guardados:', this.dictamenForm.value);
+  //     // Aquí iría la lógica para guardar los datos
+  //     this.mostrarMensaje('Datos guardados correctamente', 'success');
+  //   } else {
+  //     // Marcar controles como tocados para mostrar errores de validación
+  //     Object.keys(this.dictamenForm.controls).forEach(key => {
+  //       const control = this.dictamenForm.get(key);
+  //       control?.markAsTouched();
+  //     });
+  //     this.mostrarMensaje('Por favor complete todos los campos requeridos', 'error');
+  //   }
+  // }
 
   confirmarFinalizacion(): void {
     this.mostrarModalConfirmacion = true;
@@ -608,13 +769,13 @@ export class DictaminadorDetalleComponent implements OnInit {
 
     // Mostrar indicador de carga
     this.mostrarMensaje('Enviando asunto a revisión...', 'info');
-    
+
     // Llamar al servicio para finalizar la atención
     this.dictaminadorBandejaService.finalizarAtencion(this.asunto.id_asunto).subscribe({
       next: (respuesta) => {
         console.log('Respuesta del servidor:', respuesta);
         this.mostrarModalConfirmacion = false;
-        
+
         // La respuesta ahora es texto plano
         if (respuesta && respuesta.includes('fue enviado a revisión')) {
           this.mostrarMensaje('Asunto enviado a revisión correctamente', 'success');
@@ -624,11 +785,11 @@ export class DictaminadorDetalleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al finalizar atención:', error);
-    this.mostrarModalConfirmacion = false;
-        
+        this.mostrarModalConfirmacion = false;
+
         // Mejorar el manejo de errores
         let mensajeError = 'Error al enviar asunto a revisión';
-        
+
         // Intentar extraer mensaje de error
         if (error.error && typeof error.error === 'string') {
           mensajeError += ': ' + error.error;
@@ -637,7 +798,7 @@ export class DictaminadorDetalleComponent implements OnInit {
         } else if (typeof error === 'string') {
           mensajeError += ': ' + error;
         }
-        
+
         this.mostrarMensaje(mensajeError, 'error');
       }
     });
@@ -699,7 +860,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       default: return 'gray';
     }
   }
-  
+
   getProgressColor(): string {
     const estado = this.getEstadoAtencionText();
     switch (estado) {
@@ -741,8 +902,8 @@ export class DictaminadorDetalleComponent implements OnInit {
   // Método para obtener el texto del estado de atención basado en el ID
   getEstadoAtencionText(): string {
     if (!this.asunto.id_atencion_fk) return 'Desconocido';
-    
-    switch(this.asunto.id_atencion_fk) {
+
+    switch (this.asunto.id_atencion_fk) {
       case 1: return 'TOTAL';
       case 2: return 'PARCIAL';
       case 3: return 'EN TRAMITE';
@@ -754,8 +915,8 @@ export class DictaminadorDetalleComponent implements OnInit {
   // Método para obtener el texto del tipo de documento basado en el ID
   getDocumentoText(): string {
     if (!this.asunto.id_documento_fk) return 'No especificado';
-    
-    switch(this.asunto.id_documento_fk) {
+
+    switch (this.asunto.id_documento_fk) {
       case 1: return 'RESPUESTA';
       case 2: return 'REQUERIMIENTO';
       case 3: return 'REQUERIMIENTO Y RESPUESTA';
@@ -798,7 +959,7 @@ export class DictaminadorDetalleComponent implements OnInit {
   abrirSelectorArchivos(): void {
     this.fileInput.nativeElement.click();
   }
-  
+
   /**
    * Maneja la selección de archivos PDF
    */
@@ -809,22 +970,22 @@ export class DictaminadorDetalleComponent implements OnInit {
       this.archivosSeleccionados = Array.from(files as FileList).filter(
         (file: File) => file.type === 'application/pdf'
       );
-      
+
       // Si hay archivos no PDF, mostrar advertencia
       if (Array.from(files as FileList).length !== this.archivosSeleccionados.length) {
-        this.snackBar.open('Solo se permiten archivos PDF', 'Cerrar', { 
+        this.snackBar.open('Solo se permiten archivos PDF', 'Cerrar', {
           duration: 5000,
           panelClass: ['warning-snackbar']
         });
       }
-      
+
       // Mostrar modal de confirmación solo si hay archivos válidos
       if (this.archivosSeleccionados.length > 0) {
         this.mostrarModalArchivos = true;
       }
     }
   }
-  
+
   /**
    * Cancela la subida de archivos
    */
@@ -833,18 +994,18 @@ export class DictaminadorDetalleComponent implements OnInit {
     this.mostrarModalArchivos = false;
     this.fileInput.nativeElement.value = '';
   }
-  
+
   /**
    * Sube los archivos seleccionados al servidor
    */
   subirArchivos(): void {
     if (this.archivosSeleccionados.length === 0) return;
-    
+
     this.cargandoArchivos = true;
-    
+
     // Obtener el folio del asunto actual
     const folio = this.asunto.folio;
-    
+
     this.archivosAtencionService.subirArchivosPdf(folio, this.archivosSeleccionados)
       .subscribe({
         next: (response) => {
@@ -852,32 +1013,32 @@ export class DictaminadorDetalleComponent implements OnInit {
           this.mostrarModalArchivos = false;
           this.archivosSeleccionados = [];
           this.fileInput.nativeElement.value = '';
-          
+
           // Mostrar mensaje de éxito mejorado
           let mensajeExito = response;
           if (this.esEstadoPendienteSinDocumentos) {
             mensajeExito += ' 🎉 ¡Asunto cambió a estado EN PROCESO!';
           }
-          
-          this.snackBar.open(mensajeExito, 'Cerrar', { 
+
+          this.snackBar.open(mensajeExito, 'Cerrar', {
             duration: 6000,
             panelClass: ['success-snackbar']
           });
-          
+
           // Refrescar la lista de archivos adjuntos
           this.refrescarArchivosAdjuntos();
         },
         error: (error) => {
           this.cargandoArchivos = false;
           console.error('Error al subir archivos:', error);
-          
+
           // Mostrar mensaje de error
           this.snackBar.open(
-            error.error || 'Error al subir los archivos. Intente nuevamente.', 
-            'Cerrar', { 
-              duration: 7000,
-              panelClass: ['error-snackbar']
-            }
+            error.error || 'Error al subir los archivos. Intente nuevamente.',
+            'Cerrar', {
+            duration: 7000,
+            panelClass: ['error-snackbar']
+          }
           );
         }
       });
@@ -894,18 +1055,18 @@ export class DictaminadorDetalleComponent implements OnInit {
       });
       return;
     }
-    
+
     console.log('🚀 Iniciando carga de archivos para folio:', this.asunto.folio);
     this.cargandoArchivosAdjuntos = true;
     this.errorArchivosAdjuntos = '';
     this.esEstadoPendienteSinDocumentos = false;
-    
+
     this.archivosAtencionService.listarArchivosPdf(this.asunto.folio)
       .subscribe({
         next: (archivos) => {
           this.archivosAdjuntos = archivos;
           this.cargandoArchivosAdjuntos = false;
-          
+
           // Si no hay archivos, pero la consulta fue exitosa, es estado PENDIENTE
           if (archivos.length === 0) {
             this.esEstadoPendienteSinDocumentos = true;
@@ -915,7 +1076,7 @@ export class DictaminadorDetalleComponent implements OnInit {
         error: (error) => {
           console.error('Error al cargar archivos adjuntos:', error);
           this.cargandoArchivosAdjuntos = false;
-          
+
           // Si el error es 404, es estado PENDIENTE (sin documentos)
           if (error.status === 404) {
             this.archivosAdjuntos = [];
@@ -930,7 +1091,7 @@ export class DictaminadorDetalleComponent implements OnInit {
         }
       });
   }
-  
+
   /**
    * Formatea el tamaño de archivo en bytes a una representación más legible (KB, MB)
    */
@@ -938,7 +1099,7 @@ export class DictaminadorDetalleComponent implements OnInit {
     if (!bytes && bytes !== 0) {
       return 'Tamaño desconocido';
     }
-    
+
     try {
       if (bytes < 1024) {
         return bytes + ' B';
@@ -977,59 +1138,59 @@ export class DictaminadorDetalleComponent implements OnInit {
       return 'Tamaño desconocido';
     }
   }
-  
+
   /**
    * Formatea la fecha de última modificación a un formato legible
    */
   formatearFechaArchivo(fechaStr: string): string {
     try {
       const fecha = new Date(fechaStr);
-      
+
       // Verificar si la fecha es válida
       if (isNaN(fecha.getTime())) {
         return 'Fecha no disponible';
       }
-      
+
       // Obtener fecha actual para comparaciones
       const ahora = new Date();
       const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
       const ayer = new Date(hoy);
       ayer.setDate(ayer.getDate() - 1);
-      
+
       // Si es hoy, mostrar "Hoy, HH:MM"
-      if (fecha.getDate() === hoy.getDate() && 
-          fecha.getMonth() === hoy.getMonth() && 
-          fecha.getFullYear() === hoy.getFullYear()) {
+      if (fecha.getDate() === hoy.getDate() &&
+        fecha.getMonth() === hoy.getMonth() &&
+        fecha.getFullYear() === hoy.getFullYear()) {
         return `Hoy, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
       }
-      
+
       // Si es ayer, mostrar "Ayer, HH:MM"
-      if (fecha.getDate() === ayer.getDate() && 
-          fecha.getMonth() === ayer.getMonth() && 
-          fecha.getFullYear() === ayer.getFullYear()) {
+      if (fecha.getDate() === ayer.getDate() &&
+        fecha.getMonth() === ayer.getMonth() &&
+        fecha.getFullYear() === ayer.getFullYear()) {
         return `Ayer, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
       }
-      
+
       // Si es este año, mostrar "DD MMM, HH:MM"
       if (fecha.getFullYear() === ahora.getFullYear()) {
-        return fecha.toLocaleDateString('es-MX', { 
-          day: '2-digit', 
+        return fecha.toLocaleDateString('es-MX', {
+          day: '2-digit',
           month: 'short'
         }) + `, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
       }
-      
+
       // Para otros años, mostrar "DD MMM YYYY, HH:MM"
-      return fecha.toLocaleDateString('es-MX', { 
-        day: '2-digit', 
-        month: 'short', 
-        year: 'numeric' 
+      return fecha.toLocaleDateString('es-MX', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
       }) + `, ${fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
     } catch (error) {
       console.error('Error al formatear fecha:', error);
       return 'Fecha no disponible';
     }
   }
-  
+
   /**
    * Refresca la lista de archivos después de una nueva subida
    */
@@ -1044,12 +1205,12 @@ export class DictaminadorDetalleComponent implements OnInit {
    */
   verArchivoPdf(nombreArchivo: string): void {
     if (!this.asunto || !this.asunto.folio) return;
-    
+
     this.nombrePdfActual = nombreArchivo;
     this.cargandoPdf = true;
     this.errorPdf = '';
     this.mostrarModalPdf = true;
-    
+
     // Obtener el PDF usando el nuevo endpoint
     this.archivosAtencionService.obtenerPdf(this.asunto.folio, nombreArchivo, 'atencion')
       .subscribe({
@@ -1066,7 +1227,7 @@ export class DictaminadorDetalleComponent implements OnInit {
         }
       });
   }
-  
+
   /**
    * Cierra el modal de visualización de PDF
    */
@@ -1087,7 +1248,7 @@ export class DictaminadorDetalleComponent implements OnInit {
    */
   descargarPdfActual(): void {
     if (!this.pdfBase64 || this.cargandoPdf || this.errorPdf) return;
-    
+
     try {
       // Crear un elemento <a> para la descarga
       const enlace = document.createElement('a');
@@ -1096,7 +1257,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       document.body.appendChild(enlace);
       enlace.click();
       document.body.removeChild(enlace);
-      
+
       this.snackBar.open('Descarga iniciada', 'Cerrar', {
         duration: 3000,
         panelClass: ['success-snackbar']
@@ -1129,7 +1290,7 @@ export class DictaminadorDetalleComponent implements OnInit {
   // ========== MÉTODOS PARA CHECKLIST DE SEGUIMIENTO DE ÁREAS ==========
 
   // ========== GESTIÓN DE MODAL AGREGAR ÁREA ==========
-  
+
   // Abrir modal para agregar área
   agregarArea(): void {
     const areasDisponibles = this.getAreasDisponibles();
@@ -1140,17 +1301,17 @@ export class DictaminadorDetalleComponent implements OnInit {
       });
       return;
     }
-    
+
     this.mostrarModalAgregarArea = true;
     this.areaSeleccionadaParaAgregar = '';
   }
-  
+
   // Cerrar modal agregar área
   cerrarModalAgregarArea(): void {
     this.mostrarModalAgregarArea = false;
     this.areaSeleccionadaParaAgregar = '';
   }
-  
+
   // Confirmar agregar nueva área
   confirmarAgregarArea(): void {
     if (!this.areaSeleccionadaParaAgregar) {
@@ -1160,7 +1321,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       });
       return;
     }
-    
+
     // Verificar que el área no esté ya agregada
     const yaExiste = this.seguimientoAreas.some(area => area.area === this.areaSeleccionadaParaAgregar);
     if (yaExiste) {
@@ -1170,7 +1331,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       });
       return;
     }
-    
+
     const areaInfo = this.getAreaPorCodigo(this.areaSeleccionadaParaAgregar);
     if (areaInfo) {
       const nuevaArea: SeguimientoArea = {
@@ -1183,24 +1344,24 @@ export class DictaminadorDetalleComponent implements OnInit {
         recordatorioEnviado: false,
         respuestaRecordatorio: false
       };
-      
+
       this.seguimientoAreas.push(nuevaArea);
       this.cerrarModalAgregarArea();
-      
+
       this.snackBar.open(`Área ${areaInfo.codigo} agregada al seguimiento`, 'Cerrar', {
         duration: 3000,
         panelClass: ['success-snackbar']
       });
     }
   }
-  
+
   // Obtener áreas disponibles (que no están ya agregadas)
   getAreasDisponibles() {
-    return this.areasSAT.filter(area => 
+    return this.areasSAT.filter(area =>
       !this.seguimientoAreas.some(seguimiento => seguimiento.area === area.codigo)
     );
   }
-  
+
   // Obtener información de área por código
   getAreaPorCodigo(codigo: string) {
     return this.areasSAT.find(area => area.codigo === codigo);
@@ -1290,7 +1451,7 @@ export class DictaminadorDetalleComponent implements OnInit {
   }
 
   // ========== GESTIÓN DE MODAL ELIMINAR ÁREA ==========
-  
+
   // Abrir modal de confirmación para eliminar área
   eliminarArea(areaId: string): void {
     const area = this.seguimientoAreas.find(a => a.id === areaId);
@@ -1299,13 +1460,13 @@ export class DictaminadorDetalleComponent implements OnInit {
       this.mostrarModalEliminar = true;
     }
   }
-  
+
   // Cerrar modal de eliminación
   cerrarModalEliminar(): void {
     this.mostrarModalEliminar = false;
     this.areaParaEliminar = null;
   }
-  
+
   // Confirmar eliminación del área
   confirmarEliminarArea(): void {
     if (this.areaParaEliminar) {
@@ -1314,7 +1475,7 @@ export class DictaminadorDetalleComponent implements OnInit {
         const areaNombre = this.areaParaEliminar.area;
         this.seguimientoAreas.splice(index, 1);
         this.cerrarModalEliminar();
-        
+
         this.snackBar.open(`Área ${areaNombre} eliminada del seguimiento`, 'Cerrar', {
           duration: 3000,
           panelClass: ['success-snackbar']
@@ -1324,14 +1485,14 @@ export class DictaminadorDetalleComponent implements OnInit {
   }
 
   // ========== GESTIÓN DE MODAL EDITAR ÁREA ==========
-  
+
   // Abrir modal para editar área
   editarArea(areaId: string): void {
     const area = this.seguimientoAreas.find(a => a.id === areaId);
     if (area) {
       this.areaEnEdicion = { ...area }; // Crear copia para edición
       this.mostrarModalEditarArea = true;
-      
+
       // Cargar fechas existentes para la edición
       this.fechaSolicitudEdicion = this.convertirFechaParaInput(area.fechaSolicitud);
       this.fechaRespuestaEdicion = this.convertirFechaParaInput(area.fechaRespuesta);
@@ -1339,7 +1500,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       this.fechaRespuestaRecordatorioEdicion = this.convertirFechaParaInput(area.fechaRespuestaRecordatorio);
     }
   }
-  
+
   // Cerrar modal editar área
   cerrarModalEditarArea(): void {
     this.mostrarModalEditarArea = false;
@@ -1349,32 +1510,32 @@ export class DictaminadorDetalleComponent implements OnInit {
     this.fechaRecordatorioEdicion = '';
     this.fechaRespuestaRecordatorioEdicion = '';
   }
-  
+
   // Convertir fecha para input type="date"
   private convertirFechaParaInput(fecha?: string): string {
     if (!fecha) return '';
-    
+
     // Si la fecha está en formato DD/MM/YYYY, convertir a YYYY-MM-DD
     const partes = fecha.split('/');
     if (partes.length === 3) {
       return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
     }
-    
+
     return fecha;
   }
-  
+
   // Convertir fecha de input a formato DD/MM/YYYY
   private convertirFechaDeInput(fecha: string): string {
     if (!fecha) return '';
-    
+
     const partes = fecha.split('-');
     if (partes.length === 3) {
       return `${partes[2]}/${partes[1]}/${partes[0]}`;
     }
-    
+
     return fecha;
   }
-  
+
   // Eventos de cambio en el modal de edición
   onEditarSolicitudEnviada(): void {
     if (this.areaEnEdicion) {
@@ -1395,7 +1556,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       }
     }
   }
-  
+
   onEditarRespuestaRecibida(): void {
     if (this.areaEnEdicion) {
       if (this.areaEnEdicion.respuestaRecibida) {
@@ -1411,7 +1572,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       }
     }
   }
-  
+
   onEditarRecordatorioEnviado(): void {
     if (this.areaEnEdicion) {
       if (this.areaEnEdicion.recordatorioEnviado) {
@@ -1425,7 +1586,7 @@ export class DictaminadorDetalleComponent implements OnInit {
       }
     }
   }
-  
+
   onEditarRespuestaRecordatorio(): void {
     if (this.areaEnEdicion) {
       if (this.areaEnEdicion.respuestaRecordatorio) {
@@ -1437,29 +1598,29 @@ export class DictaminadorDetalleComponent implements OnInit {
       }
     }
   }
-  
+
   // Guardar cambios de edición
   guardarEdicionArea(): void {
     if (!this.areaEnEdicion) return;
-    
+
     // Encontrar el área original y actualizar
     const indice = this.seguimientoAreas.findIndex(a => a.id === this.areaEnEdicion!.id);
     if (indice > -1) {
       // Actualizar fechas desde los inputs
-      this.areaEnEdicion.fechaSolicitud = this.fechaSolicitudEdicion ? 
+      this.areaEnEdicion.fechaSolicitud = this.fechaSolicitudEdicion ?
         this.convertirFechaDeInput(this.fechaSolicitudEdicion) : undefined;
-      this.areaEnEdicion.fechaRespuesta = this.fechaRespuestaEdicion ? 
+      this.areaEnEdicion.fechaRespuesta = this.fechaRespuestaEdicion ?
         this.convertirFechaDeInput(this.fechaRespuestaEdicion) : undefined;
-      this.areaEnEdicion.fechaRecordatorio = this.fechaRecordatorioEdicion ? 
+      this.areaEnEdicion.fechaRecordatorio = this.fechaRecordatorioEdicion ?
         this.convertirFechaDeInput(this.fechaRecordatorioEdicion) : undefined;
-      this.areaEnEdicion.fechaRespuestaRecordatorio = this.fechaRespuestaRecordatorioEdicion ? 
+      this.areaEnEdicion.fechaRespuestaRecordatorio = this.fechaRespuestaRecordatorioEdicion ?
         this.convertirFechaDeInput(this.fechaRespuestaRecordatorioEdicion) : undefined;
-      
+
       // Reemplazar el área en el arreglo
       this.seguimientoAreas[indice] = { ...this.areaEnEdicion };
-      
+
       this.cerrarModalEditarArea();
-      
+
       this.snackBar.open(`Seguimiento de ${this.areaEnEdicion.area} actualizado`, 'Cerrar', {
         duration: 3000,
         panelClass: ['success-snackbar']
@@ -1473,7 +1634,7 @@ export class DictaminadorDetalleComponent implements OnInit {
     const respuestasCompletas = this.seguimientoAreas.filter(a => a.tipoRespuesta === 'completa').length;
     const recordatoriosEnviados = this.seguimientoAreas.filter(a => a.recordatorioEnviado).length;
     const respuestasPendientes = this.seguimientoAreas.filter(a => a.solicitudEnviada && !a.respuestaRecibida).length;
-    
+
     return {
       areasContactadas,
       respuestasCompletas,
@@ -1481,4 +1642,4 @@ export class DictaminadorDetalleComponent implements OnInit {
       respuestasPendientes
     };
   }
-} 
+}
