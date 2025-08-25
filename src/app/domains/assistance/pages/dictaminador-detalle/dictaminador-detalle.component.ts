@@ -629,6 +629,9 @@ export class DictaminadorDetalleComponent implements OnInit {
     const target = event.target as HTMLSelectElement
     this.selecionarFormulario = target.value
     // Cargar respuestas del endpoint cuando aplique
+    if (this.selecionarFormulario === 'selecionarFormularioOne') {
+      this.cargarRespuestasAsunto('SOLICITUD INTERNA');
+    }
     if (this.selecionarFormulario === 'selecionarFormularioTwo') {
       this.cargarRespuestasAsunto('RESPUESTA INTERNA');
     } else if (this.selecionarFormulario === 'selecionarFormularioThree') {
