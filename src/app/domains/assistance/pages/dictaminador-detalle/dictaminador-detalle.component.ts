@@ -671,20 +671,32 @@ export class DictaminadorDetalleComponent implements OnInit {
   onFileChangedSolicitudInterna(event: any) {
     event.target as HTMLInputElement;
     this.selectedFile = event.target.files[0]
-    if (this.selectedFile)
-      this.formSolicitudDeInformacion.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+    if (this.selectedFile) {
+      const nombre = this.selectedFile.name.toString().replaceAll(' ', '_');
+      this.formSolicitudDeInformacion.patchValue({ documento_escaneado: nombre });
+      this.formSolicitudDeInformacion.get('documento_escaneado')?.markAsDirty();
+      this.formSolicitudDeInformacion.get('documento_escaneado')?.markAsTouched();
+    }
   }
   onFileChangedRespuestaInterna(event: any) {
     event.target as HTMLInputElement;
     this.selectedFile = event.target.files[0]
-    if (this.selectedFile)
-      this.formRespuestaInterna.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+    if (this.selectedFile) {
+      const nombre = this.selectedFile.name.toString().replaceAll(' ', '_');
+      this.formRespuestaInterna.patchValue({ documento_escaneado: nombre });
+      this.formRespuestaInterna.get('documento_escaneado')?.markAsDirty();
+      this.formRespuestaInterna.get('documento_escaneado')?.markAsTouched();
+    }
   }
   onFileChangedRespuestaFGR(event: any) {
     event.target as HTMLInputElement;
     this.selectedFile = event.target.files[0]
-    if (this.selectedFile)
-      this.formRespuestaAFGR.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+    if (this.selectedFile) {
+      const nombre = this.selectedFile.name.toString().replaceAll(' ', '_');
+      this.formRespuestaAFGR.patchValue({ documento_escaneado: nombre });
+      this.formRespuestaAFGR.get('documento_escaneado')?.markAsDirty();
+      this.formRespuestaAFGR.get('documento_escaneado')?.markAsTouched();
+    }
   }
 
   requestformSolicitudDeInformacion(): void {
