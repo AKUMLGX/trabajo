@@ -21,10 +21,10 @@
 				EUACAPES
 			</a>
 		</li>
-      	<li class="dropdown">
-          	<a 
+      	<!-- <li class="dropdown">
+          	<a
 		  		class="w-72 bg-white rounded-b-md border-x-[#691C32] border-b-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap"
-				(click)="selectedOption = undefined; showSubmenuHandler()"				
+				(click)="selectedOption = undefined; showSubmenuHandler()"
 				>
 					GENERALIDADES
 			</a>
@@ -74,7 +74,7 @@
 						</a>
 				</ul>
 			}
-      	</li>
+      	</li> -->
 		<!-- <li>
 			<a class="rounded-b-md bg-white border-y-[#691C32] border-x-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap"
 				(click)="selectedOption = asuntos[1];
@@ -84,30 +84,30 @@
 			</a>
 		</li> -->
 
-		<!-- Las siguientes lineas están siendo comentadas hoy 29.07.24 a petición 
+		<!-- Las siguientes lineas están siendo comentadas hoy 29.07.24 a petición
 		del negocio de ACAPE pues luego de regresar de vacaciones me encuentro
 		con la sorpresa de que al final del día no fueron requeridas las
 		opciones de CIVIL, PENAL & CONCURSO MERCANTIL. Por lo tanto, se van
 		a desenchufar del dropdown de tipo de asunto hasta nuevo aviso (LAMC). -->
 
 		<!-- <li>
-			<a 
+			<a
 				class="w-72 bg-white border-x-[#691C32] border-y-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap"
 			  	(click)="
-				  	selectedOption = asuntos[8]; 
+				  	selectedOption = asuntos[8];
 					selectedOptionHandler()
-				"				
+				"
 			  >
 				  CIVIL
 			</a>
 		</li>
 		<li>
-			<a 
+			<a
 				class="w-72 bg-white border-x-[#691C32] border-2 hover:bg-[#691C32] hover:text-white text-center py-2 px-4 block whitespace-nowrap"
 			  	(click)="
-				  	selectedOption = asuntos[9]; 
+				  	selectedOption = asuntos[9];
 					selectedOptionHandler()
-				"				
+				"
 			  >
 				  PENAL
 			</a>

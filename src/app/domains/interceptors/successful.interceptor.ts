@@ -47,7 +47,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
               }
             }
           }
-        }else if ( request.method === 'POST' && request.url.includes('asunto/nuevo/euacape/apertura/') ){
+        }else if ( request.method === 'POST' && request.url.includes('asunto/nuevo/euacape/apertura/') , request.url.includes('asunto/nuevo/euacape/segunda_pieza/')   ){
           if (event instanceof HttpResponse) {
             if (event.status === 200){
                matDialog_.open(SuccessfulDialogComponent, {

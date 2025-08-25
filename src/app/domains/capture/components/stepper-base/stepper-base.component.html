@@ -51,7 +51,7 @@
                         </mat-step>
                     }
 
-                    @case ('Penal') {
+                    <!-- @case ('Penal') {
                         <mat-step label="Formulario Generalidades Asunto Penal (parte I)"
                             [completed]="thirdStepChild.preliminarForm.valid"
                             [editable]="true">
@@ -162,7 +162,7 @@
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
                     }
-                    
+
                     @case ('PENAL') {
                         <mat-step label="Formulario Penal (parte I)"
                             [completed]="thirdStepChild.preliminarForm.valid"
@@ -189,7 +189,7 @@
                         <mat-step label="Formulario Concurso mercantil (parte II)">
                             <app-fourth-step [dropdownChoice]="dropdownChoice" />
                         </mat-step>
-                    }
+                    } -->
                 }
             </div>
 
@@ -215,10 +215,10 @@
                         <app-second-pieces-form />
                     </div>
                 </mat-step>
-                
+
             }
 
-            
+
         }
 
     </mat-vertical-stepper>
