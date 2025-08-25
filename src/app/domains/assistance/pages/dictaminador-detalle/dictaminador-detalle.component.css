@@ -333,7 +333,7 @@
   .grid-cols-3 {
     grid-template-columns: 1fr;
   }
-  
+
   .col-span-2 {
     grid-column: span 1;
   }
@@ -448,7 +448,7 @@ textarea:focus, input:focus {
 .sticky.top-0.z-10 {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-} 
+}
 
 /* Estilos para los Snackbars */
 ::ng-deep .mat-snackbar-success {
@@ -489,4 +489,14 @@ textarea:focus, input:focus {
 
 .animate-zoomIn {
   animation: zoomIn 0.25s ease-out;
-} 
+}
+
+
+
+.next-button {
+    @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+}
+
+.next-button-disabled {
+    @apply bg-wine/40 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow outline-none mr-1
+}

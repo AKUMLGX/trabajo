@@ -438,10 +438,6 @@
                 *</label>
               <div
                 class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
-                <mat-icon class="text-purple-500 text-3xl mb-2">upload_file</mat-icon>
-                <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
-                    class="text-purple-600 font-medium cursor-pointer">examina</span></p>
-                <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
                 <input type="file" formControlName="documento_escaneado" (change)="onFileChangedSolicitudInterna($event)" accept=".pdf">
               </div>
             </div>
@@ -449,20 +445,43 @@
         </div>
 
         <!-- Botones de acción -->
+
         <div class="flex justify-between items-center pt-8 border-t border-gray-200">
           <div class="text-sm text-gray-600 flex items-center">
-            <mat-icon class="text-lg mr-2 text-gray-500">info</mat-icon>
-            Los campos marcados con * son obligatorios
-          </div>
-          <div class="flex gap-4">
+            @if(
+              (formSolicitudDeInformacion.controls['folio_scanner'].invalid && (formSolicitudDeInformacion.controls['folio_scanner'].dirty || formSolicitudDeInformacion.controls['folio_scanner'].touched))
+             ||(formSolicitudDeInformacion.controls['fecha_atencion'].invalid && (formSolicitudDeInformacion.controls['fecha_atencion'].dirty || formSolicitudDeInformacion.controls['fecha_atencion'].touched))
+             ||(formSolicitudDeInformacion.controls['oficio'].invalid && (formSolicitudDeInformacion.controls['oficio'].dirty || formSolicitudDeInformacion.controls['oficio'].touched))
+             ||(formSolicitudDeInformacion.controls['autoridad_remitente'].invalid && (formSolicitudDeInformacion.controls['autoridad_remitente'].dirty || formSolicitudDeInformacion.controls['autoridad_remitente'].touched))
+             ||(formSolicitudDeInformacion.controls['descripcion'].invalid && (formSolicitudDeInformacion.controls['descripcion'].dirty || formSolicitudDeInformacion.controls['descripcion'].touched))
+             ||(formSolicitudDeInformacion.controls['documento_escaneado'].invalid && (formSolicitudDeInformacion.controls['documento_escaneado'].dirty || formSolicitudDeInformacion.controls['documento_escaneado'].touched))
+            ){
+                @if (
+                     (formSolicitudDeInformacion.get('folio_scanner')?.errors?.['required'])
+                    || (formSolicitudDeInformacion.get('fecha_atencion')?.errors?.['required'])
+                    || (formSolicitudDeInformacion.get('oficio')?.errors?.['required'])
+                    || (formSolicitudDeInformacion.get('autoridad_remitente')?.errors?.['required'])
+                    || (formSolicitudDeInformacion.get('descripcion')?.errors?.['required'])
+                    || (formSolicitudDeInformacion.get('documento_escaneado')?.errors?.['required'])
 
-            <button type="button"
-            (click)="requestformSolicitudDeInformacion()"
-              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-              <mat-icon class="mr-3">save</mat-icon>
-              Guardar expediente
-            </button>
+                ) {
+                    <div class="text-wine text-base p-3 flex gap-3">
+                                        <span>REQUERIDO</span>
+                                        <mat-icon>error</mat-icon>
+                                    </div>
+                }
+            }
           </div>
+      <div class="flex gap-4">
+        <button [disabled]="!formSolicitudDeInformacion.valid"
+          [ngClass]="formSolicitudDeInformacion.valid ? 'next-button ': 'next-button-disabled'"
+          (click)="requestformSolicitudDeInformacion()"
+
+       >
+   <mat-icon class="mr-3">save</mat-icon>
+          Guardar expediente
+        </button>
+      </div>
         </div>
       </form>
       }
@@ -539,10 +558,6 @@
               <label class="text-sm font-medium text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta *</label>
               <div
                 class="border-2 border-dashed border-green-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
-                <mat-icon class="text-green-500 text-3xl mb-2">upload_file</mat-icon>
-                <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
-                    class="text-green-600 font-medium cursor-pointer">examina</span></p>
-                <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
                 <input type="file" formControlName="documento_escaneado" (change)="onFileChangedRespuestaInterna($event)" accept=".pdf">
               </div>
             </div>
@@ -550,17 +565,41 @@
         </div>
 
         <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-          <div class="text-sm text-gray-600 flex items-center">
-            <mat-icon class="text-lg mr-2 text-gray-500">info</mat-icon>
-            Los campos marcados con * son obligatorios
+                    <div class="text-sm text-gray-600 flex items-center">
+            @if(
+              (formRespuestaInterna.controls['folio_scanner'].invalid && (formRespuestaInterna.controls['folio_scanner'].dirty || formRespuestaInterna.controls['folio_scanner'].touched))
+             ||(formRespuestaInterna.controls['fecha_atencion'].invalid && (formSolicitudDeInformacion.controls['fecha_atencion'].dirty || formRespuestaInterna.controls['fecha_atencion'].touched))
+             ||(formRespuestaInterna.controls['oficio'].invalid && (formRespuestaInterna.controls['oficio'].dirty || formRespuestaInterna.controls['oficio'].touched))
+             ||(formRespuestaInterna.controls['autoridad_remitente'].invalid && (formRespuestaInterna.controls['autoridad_remitente'].dirty || formRespuestaInterna.controls['autoridad_remitente'].touched))
+             ||(formRespuestaInterna.controls['descripcion'].invalid && (formRespuestaInterna.controls['descripcion'].dirty || formRespuestaInterna.controls['descripcion'].touched))
+             ||(formRespuestaInterna.controls['documento_escaneado'].invalid && (formRespuestaInterna.controls['documento_escaneado'].dirty || formRespuestaInterna.controls['documento_escaneado'].touched))
+            ){
+                @if (
+                     (formRespuestaInterna.get('folio_scanner')?.errors?.['required'])
+                    || (formRespuestaInterna.get('fecha_atencion')?.errors?.['required'])
+                    || (formRespuestaInterna.get('oficio')?.errors?.['required'])
+                    || (formRespuestaInterna.get('autoridad_remitente')?.errors?.['required'])
+                    || (formRespuestaInterna.get('descripcion')?.errors?.['required'])
+                    || (formRespuestaInterna.get('documento_escaneado')?.errors?.['required'])
+
+                ) {
+                    <div class="text-wine text-base p-3 flex gap-3">
+                                        <span>REQUERIDO</span>
+                                        <mat-icon>error</mat-icon>
+                                    </div>
+                }
+            }
           </div>
           <div class="flex gap-4">
 
-            <button type="button" (click)="requestformRespuestaInterna()"
-              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-              <mat-icon class="mr-3">save</mat-icon>
-              Guardar expediente
-            </button>
+    <button [disabled]="!formRespuestaInterna.valid"
+          [ngClass]="formRespuestaInterna.valid ? 'next-button ': 'next-button-disabled'"
+          (click)="requestformSolicitudDeInformacion()"
+
+       >
+   <mat-icon class="mr-3">save</mat-icon>
+          Guardar expediente
+        </button>
           </div>
         </div>
       </form>
@@ -630,29 +669,49 @@
                 *</label>
               <div
                 class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
-                <mat-icon class="text-purple-500 text-3xl mb-2">upload_file</mat-icon>
-                <p class="text-sm text-gray-600 mb-2">Arrastra el archivo aquí o <span
-                    class="text-purple-600 font-medium cursor-pointer">examina</span></p>
-                <p class="text-xs text-gray-500">Solo archivos PDF, máximo 10MB</p>
                 <input type="file" formControlName="documento_escaneado"  (change)="onFileChangedRespuestaFGR($event)"  accept=".pdf">
               </div>
             </div>
           </div>
         </div>
 
-
         <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-          <div class="text-sm text-gray-600 flex items-center">
-            <mat-icon class="text-lg mr-2 text-gray-500">info</mat-icon>
-            Los campos marcados con * son obligatorios
+           <div class="text-sm text-gray-600 flex items-center">
+            @if(
+              (formRespuestaAFGR.controls['folio_scanner'].invalid && (formRespuestaAFGR.controls['folio_scanner'].dirty || formRespuestaAFGR.controls['folio_scanner'].touched))
+             ||(formRespuestaAFGR.controls['fecha_atencion'].invalid && (formRespuestaAFGR.controls['fecha_atencion'].dirty || formRespuestaAFGR.controls['fecha_atencion'].touched))
+             ||(formRespuestaAFGR.controls['oficio'].invalid && (formRespuestaAFGR.controls['oficio'].dirty || formRespuestaAFGR.controls['oficio'].touched))
+             ||(formRespuestaAFGR.controls['autoridad_remitente'].invalid && (formRespuestaAFGR.controls['autoridad_remitente'].dirty || formRespuestaAFGR.controls['autoridad_remitente'].touched))
+             ||(formRespuestaAFGR.controls['descripcion'].invalid && (formRespuestaAFGR.controls['descripcion'].dirty || formRespuestaAFGR.controls['descripcion'].touched))
+             ||(formRespuestaAFGR.controls['documento_escaneado'].invalid && (formRespuestaAFGR.controls['documento_escaneado'].dirty || formRespuestaAFGR.controls['documento_escaneado'].touched))
+            ){
+                @if (
+                     (formRespuestaAFGR.get('folio_scanner')?.errors?.['required'])
+                    || (formRespuestaAFGR.get('fecha_atencion')?.errors?.['required'])
+                    || (formRespuestaAFGR.get('oficio')?.errors?.['required'])
+                    || (formRespuestaAFGR.get('autoridad_remitente')?.errors?.['required'])
+                    || (formRespuestaAFGR.get('descripcion')?.errors?.['required'])
+                    || (formRespuestaAFGR.get('documento_escaneado')?.errors?.['required'])
+
+                ) {
+                    <div class="text-wine text-base p-3 flex gap-3">
+                                        <span>REQUERIDO</span>
+                                        <mat-icon>error</mat-icon>
+                                    </div>
+                }
+            }
           </div>
           <div class="flex gap-4">
+      <div class="flex gap-4">
+        <button [disabled]="!formRespuestaAFGR.valid"
+          [ngClass]="formRespuestaAFGR.valid ? 'next-button ': 'next-button-disabled'"
+          (click)="requestformSolicitudDeInformacion()"
 
-            <button type="button" (click)="requestformRespuestaAFGR()"
-              class="bg-gradient-to-r from-[#691C32] to-[#8a2541] hover:from-[#8a2541] hover:to-[#691C32] text-white font-semibold py-3 px-8 rounded-xl transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-              <mat-icon class="mr-3">save</mat-icon>
-              Guardar expediente
-            </button>
+       >
+   <mat-icon class="mr-3">save</mat-icon>
+          Guardar expediente
+        </button>
+      </div>
           </div>
         </div>
       </form>
