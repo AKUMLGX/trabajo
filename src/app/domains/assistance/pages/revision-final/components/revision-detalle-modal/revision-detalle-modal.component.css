@@ -1,3 +1,39 @@
+/* ==== ESTILOS PARA DOCUMENTOS CON ENDPOINTS REALES ==== */
+
+/* Estado seleccionado para documentos */
+.document-card.selected {
+  border-color: #3b82f6 !important;
+  background-color: #eff6ff !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.document-card.selected .document-icon mat-icon {
+  color: #3b82f6 !important;
+}
+
+.document-card.selected h4 {
+  color: #1e40af !important;
+}
+
+/* Fecha del documento */
+.document-date {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* Estados de carga y error en visor */
+.error-viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
 /* Estilos para íconos */
 .text-3xl {
   font-size: 32px;

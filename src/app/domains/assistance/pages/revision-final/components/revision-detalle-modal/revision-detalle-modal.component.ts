@@ -13,6 +13,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatRadioModule } from '@angular/material/radio';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DictaminadorBandejaService } from '../../../../../services/dictaminador-bandeja.service';
+import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../../services/archivos-atencion.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 interface Asunto {
   id: string;
@@ -63,18 +65,23 @@ export class RevisionDetalleModalComponent implements OnInit {
   tipoAtencion = 'total';
   documentoSeleccionado = '';
   pdfCargando = false;
-  modoComparacion = false;
-  expandido = false;
   resolviendo = false;
 
-  // URLs de ejemplo para documentos PDF
-  documentosPDF: Record<string, string> = {
-    'Dictamen_Técnico.pdf': 'assets/pdfs/dictamen_tecnico_ejemplo.pdf',
-    'Análisis_Fiscal.pdf': 'assets/pdfs/analisis_fiscal_ejemplo.pdf',
-    'Evidencia_Documental.pdf': 'assets/pdfs/evidencia_documental_ejemplo.pdf'
-  };
+  // ==== IMPLEMENTACIÓN DE ENDPOINTS REALES ====
+  // Lista de archivos desde el backend
+  archivos: ArchivoAdjunto[] = [];
+  cargandoArchivos = false;
+  errorArchivos = '';
+  archivoSeleccionado: ArchivoAdjunto | null = null;
+  
+  // PDF actual para visualización
+  pdfUrl: SafeResourceUrl | null = null;
+  pdfError = false;
+  
+  // Control de origen de archivos (igual que en modal-atencion)
+  private origenArchivos: 'raiz' | 'atencion' = 'raiz';
 
-  // Documento para comparación
+  // Documento para comparación (se mantiene funcionalidad de comparación)
   documentoComparacion = 'Evidencia_Documental.pdf';
 
   motivosRechazo: string[] = [
@@ -91,7 +98,9 @@ export class RevisionDetalleModalComponent implements OnInit {
     private dialogRef: MatDialogRef<RevisionDetalleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private fb: FormBuilder,
-    private dictaminadorBandejaService: DictaminadorBandejaService
+    private dictaminadorBandejaService: DictaminadorBandejaService,
+    private archivosService: ArchivosAtencionService,
+    private domSanitizer: DomSanitizer
   ) {
     this.asunto = data.asunto;
     this.soloLectura = data.soloLectura || false;
@@ -102,10 +111,31 @@ export class RevisionDetalleModalComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Cargar archivos automáticamente al abrir el modal
+    this.cargarArchivos();
+  }
 
   formatDate(date: Date): string {
     return date ? new Date(date).toLocaleDateString('es-MX') : '';
+  }
+
+  /**
+   * Formatea la fecha de un documento
+   */
+  formatDocumentDate(fecha: string): string {
+    if (!fecha) return 'Sin fecha';
+    
+    try {
+      const fechaObj = new Date(fecha);
+      return fechaObj.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch {
+      return fecha;
+    }
   }
 
   getColorPrioridad(prioridad: string): string {
@@ -117,42 +147,167 @@ export class RevisionDetalleModalComponent implements OnInit {
     }
   }
 
-  mostrarDocumento(nombreDocumento: string): void {
-    this.documentoSeleccionado = nombreDocumento;
+  // ==== MÉTODOS DE GESTIÓN DE ARCHIVOS (IMPLEMENTACIÓN REAL) ====
+  
+  /**
+   * Carga la lista de archivos PDF usando los endpoints reales
+   * Usa la misma lógica que dictaminador-atencion-modal con fallback
+   */
+  cargarArchivos(): void {
+    const folio = this.obtenerFolio();
+    if (!folio) {
+      console.warn('[RevisionDetalle] No hay folio disponible para cargar archivos');
+      return;
+    }
+
+    console.log('🔍 [RevisionDetalle] Cargando archivos para folio:', folio);
+    this.cargandoArchivos = true;
+    this.archivos = [];
+    this.errorArchivos = '';
+
+    // Intento 1: endpoint de carpeta raíz (modal guinda) - IGUAL QUE EN MODAL-ATENCION
+    this.archivosService.listarArchivosPdfAtencion(folio).subscribe({
+      next: (archs) => {
+        if (archs && archs.length > 0) {
+          this.archivos = archs;
+          this.origenArchivos = 'raiz';
+          this.cargandoArchivos = false;
+          console.log('✅ [RevisionDetalle] Archivos cargados desde raíz:', archs.length);
+        } else {
+          // Fallback: carpeta 'atencion' - IGUAL QUE EN MODAL-ATENCION
+          this.archivosService.listarArchivosPdf(folio).subscribe({
+            next: (archs2) => {
+              this.archivos = archs2 || [];
+              this.origenArchivos = this.archivos.length > 0 ? 'atencion' : 'raiz';
+              this.cargandoArchivos = false;
+              console.log('✅ [RevisionDetalle] Archivos cargados desde atencion:', archs2?.length || 0);
+            },
+            error: (err) => {
+              this.cargandoArchivos = false;
+              this.errorArchivos = 'Error al cargar archivos desde atencion';
+              console.error('❌ [RevisionDetalle] Error cargando desde atencion:', err);
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.warn('⚠️ [RevisionDetalle] Error en raíz, intentando fallback:', err);
+        // Si falla raíz, probar 'atencion' - IGUAL QUE EN MODAL-ATENCION
+        this.archivosService.listarArchivosPdf(folio).subscribe({
+          next: (archs2) => {
+            this.archivos = archs2 || [];
+            this.origenArchivos = this.archivos.length > 0 ? 'atencion' : 'raiz';
+            this.cargandoArchivos = false;
+            console.log('✅ [RevisionDetalle] Archivos cargados desde atencion (fallback):', archs2?.length || 0);
+          },
+          error: (err2) => {
+            this.cargandoArchivos = false;
+            this.errorArchivos = 'Error al cargar archivos';
+            console.error('❌ [RevisionDetalle] Error en ambos endpoints:', err2);
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Selecciona y carga un archivo PDF para visualización
+   * Usa la misma lógica que dictaminador-atencion-modal
+   */
+  seleccionarArchivo(archivo: ArchivoAdjunto): void {
+    const folio = this.obtenerFolio();
+    if (!folio) return;
+
+    console.log('📄 [RevisionDetalle] Seleccionando archivo:', archivo.nombre);
+    this.archivoSeleccionado = archivo;
+    this.documentoSeleccionado = archivo.nombre;
     this.pdfCargando = true;
+    this.pdfError = false;
+    this.pdfUrl = null;
 
-    // Simular carga del PDF
-    setTimeout(() => {
-      this.pdfCargando = false;
-    }, 1000);
+    // Normalizar nombres tipo nombre_1234567890.pdf o nombre.pdf-123 - IGUAL QUE EN MODAL-ATENCION
+    let nombre = archivo.nombre;
+    const matchUnderscore = nombre.match(/^(.+)_\d{10}(\.[^.]+)$/);
+    if (matchUnderscore) { nombre = matchUnderscore[1] + matchUnderscore[2]; }
+    const matchDashAfterExt = nombre.match(/(.+\.pdf)-\d+$/);
+    if (matchDashAfterExt && matchDashAfterExt[1]) { nombre = matchDashAfterExt[1]; }
 
-    console.log(`Mostrando documento: ${nombreDocumento}`);
+    // Seleccionar endpoint según el origen - IGUAL QUE EN MODAL-ATENCION
+    const obs = this.origenArchivos === 'atencion'
+      ? this.archivosService.obtenerPdf(folio, nombre, 'atencion')
+      : this.archivosService.obtenerPdf(folio, nombre);
+
+    obs.subscribe({
+      next: (data: string) => {
+        try {
+          const src = `data:application/pdf;base64,${data}`;
+          this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(src);
+          this.pdfCargando = false;
+          console.log('✅ [RevisionDetalle] PDF cargado exitosamente');
+        } catch (error) {
+          this.pdfError = true;
+          this.pdfCargando = false;
+          console.error('❌ [RevisionDetalle] Error procesando PDF:', error);
+        }
+      },
+      error: (error) => {
+        this.pdfError = true;
+        this.pdfCargando = false;
+        console.error('❌ [RevisionDetalle] Error obteniendo PDF:', error);
+      }
+    });
   }
 
+  /**
+   * Recarga la lista de archivos
+   */
+  recargarArchivos(): void {
+    this.cargarArchivos();
+  }
+
+  /**
+   * Obtiene el folio del asunto actual
+   */
+  private obtenerFolio(): string | null {
+    return this.asunto?.folio || null;
+  }
+
+  // ==== MÉTODOS COMPATIBILIDAD CON FUNCIONALIDAD EXISTENTE ====
+  
+  /**
+   * Muestra un documento (mantiene compatibilidad con template existente)
+   * Ahora busca el archivo en la lista real y lo selecciona
+   */
+  mostrarDocumento(nombreDocumento: string): void {
+    // Buscar el archivo en la lista cargada
+    const archivo = this.archivos.find(a => a.nombre === nombreDocumento);
+    if (archivo) {
+      this.seleccionarArchivo(archivo);
+    } else {
+      console.warn('[RevisionDetalle] Documento no encontrado en la lista:', nombreDocumento);
+      // Fallback: intentar cargar con el nombre proporcionado
+      this.documentoSeleccionado = nombreDocumento;
+      this.pdfCargando = true;
+      setTimeout(() => {
+        this.pdfCargando = false;
+        console.log(`[RevisionDetalle] Documento no encontrado: ${nombreDocumento}`);
+      }, 1000);
+    }
+  }
+
+  /**
+   * Obtiene la URL del documento actual
+   * Ahora usa la URL real del PDF cargado
+   */
   obtenerUrlDocumento(): string {
-    if (this.documentoSeleccionado && this.documentosPDF[this.documentoSeleccionado]) {
-      return this.documentosPDF[this.documentoSeleccionado];
+    if (this.pdfUrl) {
+      // Convertir SafeResourceUrl a string para ngx-extended-pdf-viewer
+      return (this.pdfUrl as any).changingThisBreaksApplicationSecurity || '';
     }
-    return 'assets/pdfs/documento_default.pdf';
+    return '';
   }
 
-  descargarDocumento(): void {
-    if (this.documentoSeleccionado) {
-      // En una implementación real, aquí se manejaría la descarga del documento
-      console.log(`Descargando documento: ${this.documentoSeleccionado}`);
 
-      // Simulación de descarga - en producción esto sería un servicio real
-      const link = document.createElement('a');
-      link.href = this.obtenerUrlDocumento();
-      link.download = this.documentoSeleccionado;
-      link.click();
-    }
-  }
-
-  toggleComparacion(): void {
-    this.modoComparacion = !this.modoComparacion;
-    console.log(`Modo comparación: ${this.modoComparacion ? 'Activado' : 'Desactivado'}`);
-  }
 
   setTipoAtencion(tipo: string): void {
     this.tipoAtencion = tipo;
@@ -274,17 +429,19 @@ export class RevisionDetalleModalComponent implements OnInit {
     return Math.min(Math.round((tiempoTranscurrido / tiempoTotal) * 100), 100);
   }
 
-  /**
-   * Alterna el modo de expansión del visualizador de PDF
-   */
-  toggleExpansion(): void {
-    this.expandido = !this.expandido;
-  }
+
 
   /**
    * Obtiene la URL del documento para comparación
    */
   obtenerUrlDocumentoComparacion(): string {
-    return this.documentosPDF[this.documentoComparacion] || 'assets/pdfs/documento_default.pdf';
+    // Usar el primer archivo disponible para comparación
+    if (this.archivos.length > 1) {
+      const archivoComparacion = this.archivos.find(a => a.nombre !== this.documentoSeleccionado);
+      if (archivoComparacion && this.pdfUrl) {
+        return this.pdfUrl as string;
+      }
+    }
+    return 'assets/pdfs/documento_default.pdf';
   }
 }

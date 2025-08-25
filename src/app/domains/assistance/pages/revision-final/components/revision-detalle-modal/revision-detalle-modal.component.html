@@ -89,101 +89,140 @@
           </ng-template>
           
           <div class="tab-content">
-            <!-- Resumen de acciones rápidas -->
-            <div class="action-summary">
-              <div class="action-card" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
-                <mat-icon>visibility</mat-icon>
-                <span>Ver dictamen</span>
-              </div>
-              <div class="action-card" (click)="mostrarDocumento('Análisis_Fiscal.pdf')">
-                <mat-icon>assessment</mat-icon>
-                <span>Ver análisis</span>
-              </div>
-              <div class="action-card" (click)="mostrarDocumento('Evidencia_Documental.pdf')">
-                <mat-icon>folder</mat-icon>
-                <span>Ver evidencias</span>
+            <!-- Acciones rápidas dinámicas -->
+            <div class="action-summary" *ngIf="archivos.length > 0">
+              <div *ngFor="let archivo of archivos.slice(0, 3)" 
+                   class="action-card" 
+                   (click)="seleccionarArchivo(archivo)">
+                <mat-icon>picture_as_pdf</mat-icon>
+                <span>{{archivo.nombre.length > 20 ? archivo.nombre.substring(0, 20) + '...' : archivo.nombre}}</span>
               </div>
             </div>
             
             <div class="section">
-              <h2>Resumen del Asunto</h2>
+              <h2>Información del Asunto</h2>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Folio:</label>
+                  <span>{{asunto.folio}}</span>
+                </div>
+                <div class="info-item">
+                  <label>Persona Relacionada:</label>
+                  <span>{{asunto.personaRelacionada}}</span>
+                </div>
+                <div class="info-item">
+                  <label>Carpeta de Investigación:</label>
+                  <span>{{asunto.carpetaInvestigacion}}</span>
+                </div>
+                <div class="info-item">
+                  <label>Dictaminador:</label>
+                  <span>{{asunto.dictaminador}}</span>
+                </div>
+                <div class="info-item">
+                  <label>Estado Actual:</label>
+                  <span [ngClass]="{
+                    'text-green-600': asunto.estadoAtencion === 'Aprobado',
+                    'text-red-600': asunto.estadoAtencion === 'Rechazado',
+                    'text-blue-600': asunto.estadoAtencion === 'Finalizado',
+                    'text-orange-600': asunto.estadoAtencion === 'Pendiente'
+                  }">{{asunto.estadoAtencion}}</span>
+                </div>
+                <div class="info-item">
+                  <label>Prioridad:</label>
+                  <span [ngClass]="{
+                    'text-red-600': asunto.prioridad === 'Alta',
+                    'text-yellow-600': asunto.prioridad === 'Media',
+                    'text-green-600': asunto.prioridad === 'Baja'
+                  }">{{asunto.prioridad}}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="section">
+              <h2>Fechas del Proceso</h2>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Fecha de Recepción:</label>
+                  <span>{{formatDate(asunto.fechaRecepcion)}}</span>
+                </div>
+                <div class="info-item">
+                  <label>Fecha Límite:</label>
+                  <span [ngClass]="{'text-red-600 font-medium': esFechaProxima(asunto.fechaLimite)}">
+                    {{formatDate(asunto.fechaLimite)}}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <label>Días Transcurridos:</label>
+                  <span [ngClass]="{
+                    'text-red-600': asunto.diasTranscurridos > 15,
+                    'text-yellow-600': asunto.diasTranscurridos > 7 && asunto.diasTranscurridos <= 15,
+                    'text-green-600': asunto.diasTranscurridos <= 7
+                  }">{{asunto.diasTranscurridos}} días</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="section" *ngIf="archivos.length > 0">
+              <h2>Resumen de Documentos</h2>
               <p class="text-content">
-                El asunto presentado por {{asunto.dictaminador}} respecto al folio {{asunto.folio}} 
-                contiene un análisis detallado de la situación fiscal del contribuyente relacionado. 
-                Los hallazgos principales indican cumplimiento parcial de las obligaciones fiscales.
+                Se han adjuntado {{archivos.length}} documento(s) al expediente. 
+                Puedes visualizar cualquier documento seleccionándolo de la lista inferior.
               </p>
             </div>
             
-            <div class="dual-section">
-              <div class="section">
-                <h2>Documentos Analizados</h2>
-                <ul class="list-content">
-                  <li>Declaraciones anuales (2021-2023)</li>
-                  <li>Comprobantes fiscales emitidos</li>
-                  <li>Estados de cuenta bancarios</li>
-                  <li>Reportes de auditoría previa</li>
-                </ul>
+            <!-- Sección para documentación adjunta (cards) - IMPLEMENTACIÓN REAL -->
+            <div class="section">
+              <div class="flex items-center justify-between mb-4">
+                <h2>Documentación Adjunta</h2>
+                <button mat-icon-button (click)="recargarArchivos()" 
+                        class="text-blue-600 hover:bg-blue-50 rounded-full"
+                        matTooltip="Recargar archivos">
+                  <mat-icon>refresh</mat-icon>
+                </button>
               </div>
               
-              <div class="section">
-                <h2>Hallazgos Principales</h2>
-                <ul class="list-content">
-                  <li>Diferencias en ingresos declarados</li>
-                  <li>Gastos sin comprobación adecuada</li>
-                  <li>Inconsistencias en deducciones aplicadas</li>
-                  <li>Omisión parcial de ingresos</li>
-                </ul>
+              <!-- Estado de carga -->
+              <div *ngIf="cargandoArchivos" class="flex items-center justify-center py-8">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span class="ml-3 text-gray-600">Cargando documentos...</span>
               </div>
-            </div>
-            
-            <div class="section">
-              <h2>Conclusiones del Encargado</h2>
-              <p class="text-content">
-                Con base en el análisis realizado, se determina que existen elementos suficientes para 
-                considerar que el contribuyente ha incumplido parcialmente sus obligaciones fiscales.
-                Se recomienda iniciar el proceso de determinación de crédito fiscal por las diferencias encontradas.
-              </p>
-              <p class="text-content">
-                La documentación presentada muestra inconsistencias en los periodos fiscales 2022 y 2023, 
-                mientras que el ejercicio 2021 presenta cumplimiento adecuado de obligaciones.
-              </p>
-            </div>
-            
-            <!-- Sección para documentación adjunta (cards) -->
-            <div class="section">
-              <h2>Documentación Adjunta</h2>
-              <div class="documents-grid">
-                <div class="document-card" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
+              
+              <!-- Mensaje de error -->
+              <div *ngIf="errorArchivos && !cargandoArchivos" class="py-8 text-center">
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <mat-icon class="text-red-600 mb-2">error_outline</mat-icon>
+                  <p class="text-red-600 mb-2">{{errorArchivos}}</p>
+                  <button mat-stroked-button color="primary" (click)="recargarArchivos()">
+                    <mat-icon class="mr-2">refresh</mat-icon>
+                    Reintentar
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Lista de documentos reales desde el backend -->
+              <div *ngIf="!cargandoArchivos && !errorArchivos && archivos.length > 0" class="documents-grid">
+                <div *ngFor="let archivo of archivos" 
+                     class="document-card" 
+                     [class.selected]="archivoSeleccionado?.nombre === archivo.nombre"
+                     (click)="seleccionarArchivo(archivo)">
                   <div class="document-icon">
                     <mat-icon>picture_as_pdf</mat-icon>
                   </div>
                   <div class="document-info">
-                    <h4>Dictamen Técnico</h4>
-                    <p>Análisis detallado del caso</p>
-                    <span class="document-meta">PDF · 1.2 MB</span>
+                    <h4>{{archivo.nombre}}</h4>
+                    <p>Documento del expediente</p>
+                    <span class="document-meta">PDF · {{archivo.tamano}}</span>
+                    <span class="document-date">{{formatDocumentDate(archivo.ultima_modificacion)}}</span>
                   </div>
                 </div>
-                
-                <div class="document-card" (click)="mostrarDocumento('Análisis_Fiscal.pdf')">
-                  <div class="document-icon">
-                    <mat-icon>picture_as_pdf</mat-icon>
-                  </div>
-                  <div class="document-info">
-                    <h4>Análisis Fiscal</h4>
-                    <p>Estudio de cumplimiento de obligaciones</p>
-                    <span class="document-meta">PDF · 3.5 MB</span>
-                  </div>
-                </div>
-                
-                <div class="document-card" (click)="mostrarDocumento('Evidencia_Documental.pdf')">
-                  <div class="document-icon">
-                    <mat-icon>picture_as_pdf</mat-icon>
-                  </div>
-                  <div class="document-info">
-                    <h4>Evidencia Documental</h4>
-                    <p>Pruebas y anexos del caso</p>
-                    <span class="document-meta">PDF · 5.8 MB</span>
-                  </div>
+              </div>
+              
+              <!-- Estado vacío -->
+              <div *ngIf="!cargandoArchivos && !errorArchivos && archivos.length === 0" class="text-center py-8">
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-8">
+                  <mat-icon class="text-gray-400 text-4xl mb-3">folder_open</mat-icon>
+                  <p class="text-gray-600 mb-2">No hay documentos adjuntos</p>
+                  <p class="text-sm text-gray-500">Los documentos del expediente aparecerán aquí</p>
                 </div>
               </div>
             </div>
@@ -298,100 +337,54 @@
             </div>
           </div>
           <div class="viewer-actions">
-            <button mat-icon-button matTooltip="Descargar documento" *ngIf="documentoSeleccionado" (click)="descargarDocumento()">
-              <mat-icon>file_download</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Comparar documentos" *ngIf="documentoSeleccionado" (click)="toggleComparacion()">
-              <mat-icon>compare</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Expandir visualizador" *ngIf="documentoSeleccionado" (click)="toggleExpansion()">
-              <mat-icon>fullscreen</mat-icon>
+            <!-- Acciones simplificadas solo para recargar -->
+            <button mat-icon-button matTooltip="Recargar documento" *ngIf="documentoSeleccionado" (click)="seleccionarArchivo(archivoSeleccionado!)">
+              <mat-icon>refresh</mat-icon>
             </button>
           </div>
         </div>
         
         <!-- Contenido del visor de PDF maximizado -->
-        <div class="pdf-viewer-content" [ngClass]="{'expanded': expandido}">
+        <div class="pdf-viewer-content">
           <!-- Mensaje cuando no hay documento seleccionado -->
           <div *ngIf="!documentoSeleccionado" class="empty-viewer-message">
             <mat-icon>info</mat-icon>
             <p>Selecciona un documento para visualizarlo</p>
-            <button mat-stroked-button color="primary" (click)="mostrarDocumento('Dictamen_Técnico.pdf')">
-              <mat-icon class="mr-2">description</mat-icon>
-              Ver dictamen técnico
-            </button>
+            <div *ngIf="archivos.length > 0">
+              <button mat-stroked-button color="primary" (click)="seleccionarArchivo(archivos[0])">
+                <mat-icon class="mr-2">description</mat-icon>
+                Ver primer documento
+              </button>
+            </div>
+            <div *ngIf="archivos.length === 0 && !cargandoArchivos">
+              <p class="text-sm text-gray-500 mt-2">No hay documentos disponibles</p>
+            </div>
           </div>
           
           <!-- Indicador de carga -->
           <div *ngIf="documentoSeleccionado && pdfCargando" class="loading-viewer">
             <div class="loading-spinner"></div>
-            <p>Cargando documento...</p>
+            <p>Cargando documento: {{documentoSeleccionado}}</p>
           </div>
           
-          <!-- Visualizador de PDF -->
-          <div *ngIf="documentoSeleccionado && !pdfCargando" class="pdf-document-container">
-            <!-- Modo comparación -->
-            <div *ngIf="modoComparacion" class="comparison-view">
-              <div class="comparison-header">
-                <h4>Comparación de Documentos</h4>
-                <button mat-icon-button class="close-comparison" (click)="toggleComparacion()">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-              
-              <div class="comparison-container">
-                <!-- Documento principal -->
-                <div class="comparison-panel">
-                  <div class="comparison-panel-header">
-                    <h5>{{documentoSeleccionado}}</h5>
-                  </div>
-                  <div class="comparison-panel-content">
-                    <ngx-extended-pdf-viewer
-                      [src]="obtenerUrlDocumento()"
-                      [height]="'100%'"
-                      [useBrowserLocale]="true"
-                      [showToolbar]="false"
-                      zoom="page-width">
-                    </ngx-extended-pdf-viewer>
-                  </div>
-                </div>
-                
-                <!-- Documento secundario (para comparar) -->
-                <div class="comparison-panel">
-                  <div class="comparison-panel-header">
-                    <h5>{{documentoComparacion}}</h5>
-                  </div>
-                  <div class="comparison-panel-content">
-                    <ngx-extended-pdf-viewer
-                      [src]="obtenerUrlDocumentoComparacion()"
-                      [height]="'100%'"
-                      [useBrowserLocale]="true"
-                      [showToolbar]="false"
-                      zoom="page-width">
-                    </ngx-extended-pdf-viewer>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Modo normal (visor individual) maximizado -->
-            <div *ngIf="!modoComparacion" class="full-pdf-container">
-              <ngx-extended-pdf-viewer
-                [src]="obtenerUrlDocumento()"
-                [height]="'100%'"
-                [useBrowserLocale]="true"
-                [showOpenFileButton]="false"
-                [showBookmarkButton]="false"
-                [showSecondaryToolbarButton]="true"
-                [showRotateButton]="true"
-                [showHandToolButton]="true"
-                [showPresentationModeButton]="false"
-                [showDownloadButton]="true"
-                [showPrintButton]="true"
-                [showZoomButtons]="true"
-                zoom="page-fit">
-              </ngx-extended-pdf-viewer>
-            </div>
+          <!-- Error al cargar PDF -->
+          <div *ngIf="documentoSeleccionado && pdfError && !pdfCargando" class="error-viewer">
+            <mat-icon class="text-red-600 text-4xl mb-3">error_outline</mat-icon>
+            <p class="text-red-600 mb-2">Error al cargar el documento</p>
+            <p class="text-sm text-gray-500 mb-4">{{documentoSeleccionado}}</p>
+            <button mat-stroked-button color="primary" (click)="seleccionarArchivo(archivoSeleccionado!)">
+              <mat-icon class="mr-2">refresh</mat-icon>
+              Reintentar
+            </button>
+          </div>
+          
+          <!-- Visualizador de PDF básico con iframe -->
+          <div *ngIf="documentoSeleccionado && !pdfCargando && !pdfError && pdfUrl" class="pdf-document-container">
+            <iframe 
+              [src]="pdfUrl"
+              class="w-full h-full border-0 rounded-lg"
+              style="height: calc(100vh - 300px); min-height: 600px;">
+            </iframe>
           </div>
         </div>
       </div>
