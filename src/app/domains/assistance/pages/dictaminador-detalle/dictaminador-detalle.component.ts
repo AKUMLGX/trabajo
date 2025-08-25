@@ -777,7 +777,8 @@ export class DictaminadorDetalleComponent implements OnInit {
         this.cargandoRespuestas = false;
         console.log('✅ Respuestas cargadas', documento, this.respuestasCargadas);
         if (this.respuestasCargadas.length > 0) {
-          this.aplicarPrefillDesdeRespuesta(this.respuestasCargadas[0], documento);
+          const ultima = this.seleccionarUltimaRespuesta(this.respuestasCargadas);
+          this.aplicarPrefillDesdeRespuesta(ultima, documento);
         }
       },
       error: (err) => {
@@ -786,6 +787,24 @@ export class DictaminadorDetalleComponent implements OnInit {
         console.error('❌ Error al cargar respuestas', err);
       }
     });
+  }
+
+  private seleccionarUltimaRespuesta(respuestas: AsuntoNuevo[]): AsuntoNuevo {
+    const getTs = (a: AsuntoNuevo): number => {
+      // Prioridad: fecha_captura > fecha_atencion > 0
+      const fc = a.fecha_captura ? Date.parse(a.fecha_captura as unknown as string) : 0;
+      const fa = a.fecha_atencion ? Date.parse(a.fecha_atencion as unknown as string) : 0;
+      return Math.max(fc || 0, fa || 0);
+    };
+
+    return respuestas.reduce((acc, cur) => {
+      const tsAcc = getTs(acc);
+      const tsCur = getTs(cur);
+      if (tsCur > tsAcc) return cur;
+      if (tsCur < tsAcc) return acc;
+      // Si las fechas son iguales o no existen, usar el mayor id_asunto_nuevo como desempate
+      return (cur.id_asunto_nuevo ?? 0) > (acc.id_asunto_nuevo ?? 0) ? cur : acc;
+    }, respuestas[0]);
   }
 
   private aplicarPrefillDesdeRespuesta(respuesta: AsuntoNuevo, documento: string): void {
