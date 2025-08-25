@@ -18,6 +18,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
+import { AsuntoNuevo } from '../../../../domains/interfaces/asuntoPorAtencion.interface';
 
 interface Evento {
   id: string;
@@ -176,6 +177,11 @@ export class DictaminadorDetalleComponent implements OnInit {
   pdfBase64 = '';
   cargandoPdf = false;
   errorPdf = '';
+
+  // Respuestas desde el endpoint get_respuesta_asunto
+  respuestasCargadas: AsuntoNuevo[] = [];
+  cargandoRespuestas = false;
+  errorRespuestas = '';
 
   // Variables para el checklist de seguimiento de áreas
   seguimientoAreas: SeguimientoArea[] = [
@@ -621,6 +627,12 @@ export class DictaminadorDetalleComponent implements OnInit {
   onSelectedOption(event: Event) {
     const target = event.target as HTMLSelectElement
     this.selecionarFormulario = target.value
+    // Cargar respuestas del endpoint cuando aplique
+    if (this.selecionarFormulario === 'selecionarFormularioTwo') {
+      this.cargarRespuestasAsunto('RESPUESTA INTERNA');
+    } else if (this.selecionarFormulario === 'selecionarFormularioThree') {
+      this.cargarRespuestasAsunto('RESPUESTA A FGR');
+    }
   }
 
   public formSolicitudDeInformacion: FormGroup = this.fb.group({
@@ -734,6 +746,27 @@ export class DictaminadorDetalleComponent implements OnInit {
         this.pdfAcuse.generatePDF(resp)
            window.location.reload()
       });
+  }
+
+  // ==== Carga de respuestas por documento (backend: get_respuesta_asunto) ====
+  cargarRespuestasAsunto(documento: string): void {
+    if (!this.idAsuntoForm) {
+      return;
+    }
+    this.cargandoRespuestas = true;
+    this.errorRespuestas = '';
+    this.dictaminadorBandejaService.getRespuestasAsunto(this.idAsuntoForm, documento).subscribe({
+      next: (res) => {
+        this.respuestasCargadas = res || [];
+        this.cargandoRespuestas = false;
+        console.log('✅ Respuestas cargadas', documento, this.respuestasCargadas);
+      },
+      error: (err) => {
+        this.cargandoRespuestas = false;
+        this.errorRespuestas = 'No se pudieron cargar las respuestas';
+        console.error('❌ Error al cargar respuestas', err);
+      }
+    });
   }
 
   // guardarDictamen(): void {

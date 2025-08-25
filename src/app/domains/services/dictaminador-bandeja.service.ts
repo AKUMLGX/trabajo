@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { porAsignarRequest, tableAsuntosPorDictaminar } from '../interfaces/porAsignarRequest.interface';
-import { AsuntoPorEstadoAtencionRequest, AsuntoPorEstadoAtencionResponse, AsuntoAsignacion } from '../interfaces/asuntoPorAtencion.interface';
+import { AsuntoPorEstadoAtencionRequest, AsuntoPorEstadoAtencionResponse, AsuntoAsignacion, AsuntoNuevo } from '../interfaces/asuntoPorAtencion.interface';
 import { respuestaFormularioDictaminadorRequest } from './../interfaces/respuestaFormulariosDictamindadorRequest';
 
 
@@ -210,6 +210,13 @@ export class DictaminadorBandejaService {
     formData.append('file', selectedFile, selectedFile.name);
 
     return this.http.post(tarjetURL, formData, { responseType: 'text' })
+  }
+
+  // ==== Nuevo: obtener respuestas por id_req y documento ====
+  getRespuestasAsunto(idReq: number, documento: string): Observable<AsuntoNuevo[]> {
+    const url = environment.baseUrl + 'asunto/atencion/get_respuesta_asunto';
+    const params = { documento, id_req: idReq } as const;
+    return this.http.post<AsuntoNuevo[]>(url, params);
   }
 
 }
