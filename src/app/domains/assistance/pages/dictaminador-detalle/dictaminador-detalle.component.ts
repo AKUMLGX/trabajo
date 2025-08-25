@@ -182,6 +182,7 @@ export class DictaminadorDetalleComponent implements OnInit {
   respuestasCargadas: AsuntoNuevo[] = [];
   cargandoRespuestas = false;
   errorRespuestas = '';
+  archivoPrefill = '';
 
   // Variables para el checklist de seguimiento de áreas
   seguimientoAreas: SeguimientoArea[] = [
@@ -760,6 +761,9 @@ export class DictaminadorDetalleComponent implements OnInit {
         this.respuestasCargadas = res || [];
         this.cargandoRespuestas = false;
         console.log('✅ Respuestas cargadas', documento, this.respuestasCargadas);
+        if (this.respuestasCargadas.length > 0) {
+          this.aplicarPrefillDesdeRespuesta(this.respuestasCargadas[0], documento);
+        }
       },
       error: (err) => {
         this.cargandoRespuestas = false;
@@ -767,6 +771,40 @@ export class DictaminadorDetalleComponent implements OnInit {
         console.error('❌ Error al cargar respuestas', err);
       }
     });
+  }
+
+  private aplicarPrefillDesdeRespuesta(respuesta: AsuntoNuevo, documento: string): void {
+    // Preparar valores comunes
+    const valores = {
+      folio_scanner: respuesta.folio_scanner ?? '',
+      fecha_atencion: respuesta.fecha_atencion ?? '',
+      oficio: respuesta.oficio ?? '',
+      autoridad_remitente: respuesta.autoridad_remitente ?? '',
+      descripcion: respuesta.descripcion ?? '',
+      documento_escaneado: respuesta.documento_escaneado ?? ''
+    } as any;
+
+    this.archivoPrefill = respuesta.documento_escaneado || '';
+
+    if (documento === 'RESPUESTA INTERNA') {
+      this.formRespuestaInterna.patchValue(valores);
+    }
+
+    if (documento === 'RESPUESTA A FGR') {
+      const atencion = this.mapAtencion(respuesta.id_atencion_fk);
+      this.formRespuestaAFGR.patchValue({ ...valores, atencion });
+    }
+
+    // También soportar prefill para solicitud de información si aplica
+    if (documento === 'SOLICITUD INTERNA') {
+      this.formSolicitudDeInformacion.patchValue(valores);
+    }
+  }
+
+  private mapAtencion(idAtencion?: number | null): string {
+    if (idAtencion === 2) return 'PARCIAL';
+    if (idAtencion === 1) return 'TOTAL';
+    return '';
   }
 
   // guardarDictamen(): void {

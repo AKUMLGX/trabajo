@@ -485,6 +485,7 @@
               <div
                 class="border-2 border-dashed border-green-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
                 <input type="file" formControlName="documento_escaneado" (change)="onFileChangedRespuestaInterna($event)" accept=".pdf">
+                <div class="text-xs text-gray-500 mt-2" *ngIf="archivoPrefill">Archivo encontrado: {{archivoPrefill}}</div>
               </div>
             </div>
           </div>
@@ -596,6 +597,7 @@
               <div
                 class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
                 <input type="file" formControlName="documento_escaneado"  (change)="onFileChangedRespuestaFGR($event)"  accept=".pdf">
+                <div class="text-xs text-gray-500 mt-2" *ngIf="archivoPrefill">Archivo encontrado: {{archivoPrefill}}</div>
               </div>
             </div>
           </div>
