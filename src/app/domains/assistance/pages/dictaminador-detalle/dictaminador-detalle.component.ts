@@ -659,13 +659,13 @@ export class DictaminadorDetalleComponent implements OnInit {
     event.target as HTMLInputElement;
     this.selectedFile = event.target.files[0]
     if (this.selectedFile)
-      this.formRespuestaInterna.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+      this.formSolicitudDeInformacion.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
   }
   onFileChangedRespuestaInterna(event: any) {
     event.target as HTMLInputElement;
     this.selectedFile = event.target.files[0]
     if (this.selectedFile)
-      this.formSolicitudDeInformacion.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
+      this.formRespuestaInterna.value.documento_escaneado = this.selectedFile.name.toString().replaceAll(' ', '_')
   }
   onFileChangedRespuestaFGR(event: any) {
     event.target as HTMLInputElement;
