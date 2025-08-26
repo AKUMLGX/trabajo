@@ -122,12 +122,7 @@ export class ArchivosAtencionService {
     let params = new HttpParams()
       .set('folio', folio)
       .set('file_name', fileName);
-    
-    // Agregar el parámetro de carpeta solo si se proporciona
-    if (carpeta) {
-      params = params.set('carpeta', carpeta);
-    }
-    
+        
     const targetUrl = environment.baseUrl + environment.getPdfEndpoint;
     return this.http.get(targetUrl, { params, responseType: 'text' });
   }
