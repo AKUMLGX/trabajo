@@ -549,9 +549,10 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
   // 🏷️ BADGE SECUNDARIO PARA PLAZO (Diferenciador Visual)
   getBadgePlazo(asunto: tableAsuntosPorDictaminar): { clase: string, texto: string } | null {
     if (asunto.plazo_atencion && asunto.plazo_atencion > 0) {
+      const textoPlazo = this.formatearPlazoHoras(asunto.plazo_atencion);
       return {
         clase: 'bg-orange-100 text-orange-800 border border-orange-300 ml-2',
-        texto: `⏱️ PLAZO: ${asunto.plazo_atencion}d`
+        texto: `⏱️ PLAZO: ${textoPlazo}`
       };
     }
     return null;
@@ -731,6 +732,19 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
     return `Administración ${idAdministracion}`;
   }
 
+  // Convierte un plazo dado en HORAS a un texto legible (horas/días)
+  private formatearPlazoHoras(plazoHoras: number): string {
+    if (plazoHoras < 24) {
+      return `${plazoHoras} ${plazoHoras === 1 ? 'hora' : 'horas'}`;
+    }
+    const dias = Math.floor(plazoHoras / 24);
+    const horasRestantes = plazoHoras % 24;
+    if (horasRestantes === 0) {
+      return `${dias} ${dias === 1 ? 'día' : 'días'}`;
+    }
+    return `${dias} ${dias === 1 ? 'día' : 'días'} ${horasRestantes} ${horasRestantes === 1 ? 'hora' : 'horas'}`;
+  }
+
   getDescripcionPlazoAtencion(plazo: number | null | undefined): string {
     if (plazo === null || plazo === undefined) {
       return 'Sin plazo definido';
@@ -739,7 +753,8 @@ export class AsignacionPageComponent implements OnInit, AfterViewInit, OnDestroy
       return 'URGENTE';
     }
     if (plazo > 0) {
-      return `${plazo} ${plazo === 1 ? 'día' : 'días'}`;
+      // El backend envía horas. Convertimos a días/horas legibles
+      return this.formatearPlazoHoras(plazo);
     }
     return 'Sin plazo definido';
   }
