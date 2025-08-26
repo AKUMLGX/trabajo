@@ -244,26 +244,7 @@
               <p>Como revisor, debes evaluar la calidad y precisión del asunto para aprobar o rechazar la resolución.</p>
             </div>
             
-            <!-- Sección de tipo de atención -->
-            <div class="section">
-              <h2>Tipo de Atención</h2>
-              <div class="atencion-options">
-                <div class="radio-option" [class.selected]="tipoAtencion === 'total'" (click)="setTipoAtencion('total')">
-                  <div class="radio-header">
-                    <mat-radio-button value="total" [checked]="tipoAtencion === 'total'" (change)="setTipoAtencion('total')"></mat-radio-button>
-                    <h3>Atención Total</h3>
-                  </div>
-                  <p class="option-description">El asunto fue atendido completamente y no requiere seguimiento adicional</p>
-                </div>
-                <div class="radio-option" [class.selected]="tipoAtencion === 'parcial'" (click)="setTipoAtencion('parcial')">
-                  <div class="radio-header">
-                    <mat-radio-button value="parcial" [checked]="tipoAtencion === 'parcial'" (change)="setTipoAtencion('parcial')"></mat-radio-button>
-                    <h3>Atención Parcial</h3>
-                  </div>
-                  <p class="option-description">El asunto fue atendido parcialmente y requiere seguimiento posterior</p>
-                </div>
-              </div>
-            </div>
+            
             
             <h2>Opciones de Revisión</h2>
             
@@ -285,29 +266,7 @@
               </div>
             </div>
             
-            <!-- Formulario de rechazo -->
-            <form [formGroup]="motivoForm" (ngSubmit)="rechazar()" class="rejection-form">
-              <h2>Detalles del Rechazo</h2>
-              
-              <div class="form-field">
-                <label>Observaciones del Rechazo</label>
-                <mat-form-field appearance="outline">
-                  <textarea matInput formControlName="observaciones" 
-                            placeholder="Describe los detalles del rechazo y qué debe corregirse"
-                            rows="6"></textarea>
-                  <mat-error *ngIf="motivoForm.controls['observaciones'].hasError('required')">
-                    Las observaciones son obligatorias
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              
-              <div class="form-actions">
-                <button mat-button type="button" (click)="cerrar()">Cancelar</button>
-                <button mat-raised-button color="warn" type="submit" [disabled]="motivoForm.invalid">
-                  Confirmar Rechazo
-                </button>
-              </div>
-            </form>
+            
           </div>
         </mat-tab>
       </mat-tab-group>

@@ -264,8 +264,10 @@ button.mat-mdc-button-base:hover {
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 8px;
+  align-items: start;
 }
 
 .info-item {
@@ -284,6 +286,11 @@ button.mat-mdc-button-base:hover {
   font-size: 14px;
   font-weight: 500;
   color: #1F2937;
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .info-item .estado {
