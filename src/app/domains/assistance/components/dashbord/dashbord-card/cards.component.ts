@@ -331,15 +331,9 @@ export class CardsComponent implements OnInit {
           this.regenerarPaginacionRapida();
         }
 
-        // Actualizar conteo de asuntos urgentes
-        const fitrarPlazo = res.filter((item: any) => item.plazo_atencion !== null);
-        this.asuntosUrgentes = fitrarPlazo.length;
-
-        // 🔥 FORZAR VALOR DE PRUEBA PARA VER EL BANNER (REMOVER DESPUÉS)
-        if (this.asuntosUrgentes === 0) {
-          this.asuntosUrgentes = 3; // Valor de prueba
-          console.log('🔥 Banner urgente forzado con valor de prueba:', this.asuntosUrgentes);
-        }
+        // Actualizar conteo de asuntos urgentes (regla real: plazo_atencion === 0)
+        const urgentes = res.filter((item: any) => item.plazo_atencion === 0);
+        this.asuntosUrgentes = urgentes.length;
         this.cargandoAsuntos = false;
       },
       error: (err) => {
