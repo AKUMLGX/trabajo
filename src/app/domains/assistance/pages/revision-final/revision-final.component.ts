@@ -1666,7 +1666,40 @@ export class RevisionFinalComponent implements OnInit {
     this.pdfUrl = null;
     this.pdfTitulo = `Documento ${folio}`;
 
-    // Primero intentar listar archivos reales del folio
+    // 1) Intentar con el documento escaneado si viene en el contexto actual (desde modal/tabla)
+    const documentoPreferidoRaw: any = (this as any).documentoPreferidoActual || '';
+    const documentoPreferido = documentoPreferidoRaw
+      ? String(documentoPreferidoRaw).split(/[\\\/]+/).pop()!
+      : '';
+
+    if (documentoPreferido) {
+      console.log('🔍 [RevisionFinal] Intentando cargar documento preferido:', documentoPreferido);
+      this.archivosAtencionService.obtenerPdf(folio, documentoPreferido).subscribe({
+        next: (data: string) => {
+          if (!data || data.trim() === '') {
+            console.log('⚠️ [RevisionFinal] Documento preferido vacío, intentar listado/nombres');
+            this.probarArchivosPorNombre(folio, path);
+            return;
+          }
+          try {
+            const pdfSrc = `data:application/pdf;base64,${data}`;
+            this.pdfUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+            this.visualizarPdf = true;
+            this.pdfCargando = false;
+          } catch (error) {
+            console.error('❌ [RevisionFinal] Error procesando documento preferido, intentar listado:', error);
+            this.probarArchivosPorNombre(folio, path);
+          }
+        },
+        error: () => {
+          console.log('⚠️ [RevisionFinal] Error al cargar documento preferido, intentar listado');
+          this.probarArchivosPorNombre(folio, path);
+        }
+      });
+      return;
+    }
+
+    // 2) Si no hay documento preferido, intentar listar archivos reales del folio
     console.log('🔍 [RevisionFinal] Intentando listar archivos reales para:', folio);
 
     this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({

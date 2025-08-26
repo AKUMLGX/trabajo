@@ -271,6 +271,14 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     
     const folio = this.data?.asunto?.folio_interno || this.data?.asunto?.datos?.folio_interno;
     const path = this.data?.asunto?.folio_scanner || this.data?.asunto?.datos?.folio_scanner || 1;
+    // Intentar usar primero el documento escaneado que venga en los datos
+    const documentoPreferidoRaw =
+      this.data?.jsonOriginal?.asunto?.datos?.documento_escaneado ||
+      this.data?.asunto?.datos?.documento_escaneado ||
+      this.data?.asunto?.documento_escaneado || '';
+    const documentoPreferido = documentoPreferidoRaw
+      ? String(documentoPreferidoRaw).split(/[\\\/]+/).pop()!
+      : '';
     
     if (!folio) {
       console.log('⚠️ [RevisionCapturaModal] No se encontró folio para cargar PDF');
@@ -282,7 +290,39 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
     this.pdfCargando = true;
     this.pdfError = false;
     this.pdfOriginalUrl = null;
+    // 1) Intentar con el documento escaneado indicado
+    if (documentoPreferido && documentoPreferido.trim().length > 0) {
+      console.log('🔍 [RevisionCapturaModal] Intentando cargar documento preferido:', documentoPreferido);
+      this.archivosAtencionService.obtenerPdf(folio, documentoPreferido).subscribe({
+        next: (data: string) => {
+          if (!data || data.trim() === '') {
+            console.log('⚠️ [RevisionCapturaModal] Documento preferido vacío, se intentará con listado/alternativos');
+            this.intentarListadoYOtrosNombres(folio, path);
+            return;
+          }
+          try {
+            const pdfSrc = `data:application/pdf;base64,${data}`;
+            this.pdfOriginalUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfSrc);
+            this.pdfCargando = false;
+            console.log('✅ [RevisionCapturaModal] Documento preferido cargado exitosamente');
+          } catch (error) {
+            console.error('❌ [RevisionCapturaModal] Error procesando documento preferido, se intentará listado:', error);
+            this.intentarListadoYOtrosNombres(folio, path);
+          }
+        },
+        error: (error: any) => {
+          console.log('⚠️ [RevisionCapturaModal] Error al cargar documento preferido, se intentará listado:', error?.status);
+          this.intentarListadoYOtrosNombres(folio, path);
+        }
+      });
+      return;
+    }
 
+    // 2) Si no hay documento preferido, continuar con el flujo existente
+    this.intentarListadoYOtrosNombres(folio, path);
+  }
+
+  private intentarListadoYOtrosNombres(folio: string, path: number): void {
     // Primero intentar listar archivos reales del folio
     this.archivosAtencionService.listarArchivosPdfAtencion(folio).subscribe({
       next: (archivos: any[]) => {
@@ -624,8 +664,8 @@ export class RevisionCapturaModalComponent implements OnInit, OnChanges {
   obtenerNombreArchivo(rutaCompleta: string): string {
     if (!rutaCompleta) return 'No disponible';
     
-    // Extraer solo el nombre del archivo de la ruta completa
-    const partes = rutaCompleta.split('\\');
+    // Extraer solo el nombre del archivo de la ruta completa (Windows/Unix)
+    const partes = rutaCompleta.split(/[\\\/]+/);
     return partes[partes.length - 1] || 'Archivo no identificado';
   }
 
