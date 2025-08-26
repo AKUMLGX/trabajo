@@ -827,6 +827,8 @@ export class DictaminadorDetalleComponent implements OnInit {
     if (documento === 'RESPUESTA A FGR') {
       const atencion = this.mapAtencion(respuesta.id_atencion_fk);
       this.formRespuestaAFGR.patchValue({ ...valores, atencion });
+      // Asegurar que el radio se marque visualmente
+      this.formRespuestaAFGR.get('atencion')?.setValue(atencion);
     }
 
     // También soportar prefill para solicitud de información si aplica
