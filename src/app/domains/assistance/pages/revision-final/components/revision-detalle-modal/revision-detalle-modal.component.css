@@ -1292,4 +1292,13 @@ h2 {
 
 .mr-2 {
   margin-right: 8px;
+}
+
+/* Estilos para truncar texto largo */
+.truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  display: inline-block;
 } 

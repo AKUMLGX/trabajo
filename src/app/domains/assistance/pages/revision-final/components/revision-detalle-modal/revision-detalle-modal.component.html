@@ -35,11 +35,11 @@
     <div class="info-grid">
       <div class="info-item">
         <label>Persona</label>
-        <span>{{asunto.personaRelacionada}}</span>
+        <span class="truncate-text" [title]="asunto.personaRelacionada">{{asunto.personaRelacionada}}</span>
       </div>
       <div class="info-item">
         <label>Encargado</label>
-        <span>{{asunto.dictaminador}}</span>
+        <span class="truncate-text" [title]="asunto.dictaminador">{{asunto.dictaminador}}</span>
       </div>
       <div class="info-item">
         <label>Estado</label>
@@ -108,15 +108,15 @@
                 </div>
                 <div class="info-item">
                   <label>Persona Relacionada:</label>
-                  <span>{{asunto.personaRelacionada}}</span>
+                  <span class="truncate-text" [title]="asunto.personaRelacionada">{{asunto.personaRelacionada}}</span>
                 </div>
                 <div class="info-item">
                   <label>Carpeta de Investigación:</label>
-                  <span>{{asunto.carpetaInvestigacion}}</span>
+                  <span class="truncate-text" [title]="asunto.carpetaInvestigacion">{{asunto.carpetaInvestigacion}}</span>
                 </div>
                 <div class="info-item">
                   <label>Dictaminador:</label>
-                  <span>{{asunto.dictaminador}}</span>
+                  <span class="truncate-text" [title]="asunto.dictaminador">{{asunto.dictaminador}}</span>
                 </div>
                 <div class="info-item">
                   <label>Estado Actual:</label>
@@ -290,23 +290,11 @@
               <h2>Detalles del Rechazo</h2>
               
               <div class="form-field">
-                <label>Motivo del Rechazo</label>
-                <mat-form-field appearance="outline">
-                  <mat-select formControlName="motivo" placeholder="Selecciona un motivo">
-                    <mat-option *ngFor="let motivo of motivosRechazo" [value]="motivo">{{motivo}}</mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="motivoForm.controls['motivo'].hasError('required')">
-                    El motivo de rechazo es obligatorio
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              
-              <div class="form-field">
-                <label>Observaciones Detalladas</label>
+                <label>Observaciones del Rechazo</label>
                 <mat-form-field appearance="outline">
                   <textarea matInput formControlName="observaciones" 
                             placeholder="Describe los detalles del rechazo y qué debe corregirse"
-                            rows="4"></textarea>
+                            rows="6"></textarea>
                   <mat-error *ngIf="motivoForm.controls['observaciones'].hasError('required')">
                     Las observaciones son obligatorias
                   </mat-error>
