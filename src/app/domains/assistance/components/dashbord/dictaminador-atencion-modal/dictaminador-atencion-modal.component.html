@@ -66,7 +66,7 @@
           Respuesta a FGR
         </h3>
         
-        <div *ngIf="asunto?.datosRespuestaFGR || obtenerDatosEjemplo(); let datos" class="respuesta-content">
+        <div *ngIf="(datosRespuestaFGR || asunto?.datosRespuestaFGR) as datos" class="respuesta-content">
           
           <!-- Grid de datos principales -->
           <div class="respuesta-grid">
@@ -97,38 +97,14 @@
             <div class="estado-badge">
               <mat-icon [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</mat-icon>
               <span [class]="obtenerClaseEstadoAtencion()">
-                {{datos.estadoAtencion === 'total' ? 'Atención Total' : 'Atención Parcial'}}
+                {{(datos.estadoAtencion || 'total') === 'total' ? 'Atención Total' : 'Atención Parcial'}}
               </span>
             </div>
           </div>
 
-          <!-- Descripción de la Respuesta -->
-          <div class="descripcion-respuesta">
-            <span class="respuesta-label">Descripción de la Respuesta:</span>
-            <div class="descripcion-content">
-              {{datos.descripcionRespuesta}}
-            </div>
-          </div>
 
-          <!-- Documento PDF -->
-          <div class="documento-pdf-section">
-            <div class="pdf-header">
-              <span class="respuesta-label">Documento PDF de Respuesta:</span>
-              <div class="pdf-actions">
-                <button *ngIf="datos.urlPDF" 
-                        class="btn-visualizar-pdf" 
-                        (click)="abrirVisorPDF()"
-                        type="button">
-                  <mat-icon>visibility</mat-icon>
-                  <span>Visualizar PDF</span>
-                </button>
-                <div *ngIf="!datos.urlPDF" class="no-pdf-message">
-                  <mat-icon class="warning-icon">warning</mat-icon>
-                  <span>No hay documento PDF adjunto</span>
-                </div>
-              </div>
-            </div>
-          </div>
+
+
 
         </div>
 
@@ -203,83 +179,9 @@
   </div>
 </div>
 
-<!-- Modal Visor PDF -->
+<!-- Modal Visor PDF - YA NO SE USA, SE REEMPLAZÓ POR APARTADO DOCUMENTOS -->
+<!--
 <div *ngIf="mostrarVisorPDF" class="pdf-modal-overlay">
-  <!-- Backdrop -->
-  <div class="pdf-modal-backdrop" (click)="cerrarVisorPDF()"></div>
-  
-  <!-- Modal Content -->
-  <div class="pdf-modal-container">
-    
-    <!-- Header del Visor PDF -->
-    <div class="pdf-modal-header">
-      <div class="pdf-header-content">
-        <div class="pdf-title-section">
-          <mat-icon class="pdf-title-icon">picture_as_pdf</mat-icon>
-          <div>
-            <h3 class="pdf-title">Documento de Respuesta a FGR</h3>
-            <p class="pdf-subtitle">{{asunto?.folio || 'N/A'}}</p>
-          </div>
-        </div>
-        
-        <!-- Controles del PDF -->
-        <div class="pdf-controls">
-          <button class="pdf-control-btn" (click)="paginaAnterior()" [disabled]="paginaActualPDF <= 1" type="button">
-            <mat-icon>navigate_before</mat-icon>
-          </button>
-          
-          <span class="pdf-page-info">{{paginaActualPDF}} / {{totalPaginasPDF}}</span>
-          
-          <button class="pdf-control-btn" (click)="paginaSiguiente()" [disabled]="paginaActualPDF >= totalPaginasPDF" type="button">
-            <mat-icon>navigate_next</mat-icon>
-          </button>
-          
-          <div class="pdf-separator"></div>
-          
-          <button class="pdf-control-btn" (click)="disminuirZoom()" [disabled]="zoomPDF <= 50" type="button">
-            <mat-icon>zoom_out</mat-icon>
-          </button>
-          
-          <span class="pdf-zoom-info">{{zoomPDF}}%</span>
-          
-          <button class="pdf-control-btn" (click)="aumentarZoom()" [disabled]="zoomPDF >= 200" type="button">
-            <mat-icon>zoom_in</mat-icon>
-          </button>
-          
-          <button class="pdf-control-btn" (click)="ajustarPantalla()" type="button">
-            <mat-icon>fit_screen</mat-icon>
-          </button>
-        </div>
-        
-        <button class="pdf-close-btn" (click)="cerrarVisorPDF()" type="button">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-    </div>
-
-    <!-- Contenido del PDF -->
-    <div class="pdf-modal-body">
-      <!-- Loading state -->
-      <div *ngIf="cargandoPDF" class="pdf-loading">
-        <mat-icon class="loading-spinner">refresh</mat-icon>
-        <p>Cargando documento PDF...</p>
-      </div>
-
-      <!-- Error state -->
-      <div *ngIf="errorPDF && !cargandoPDF" class="pdf-error">
-        <mat-icon class="error-icon">error</mat-icon>
-        <p>Error al cargar el documento PDF</p>
-        <p class="error-detail">{{errorPDF}}</p>
-      </div>
-
-      <!-- PDF Viewer -->
-      <div *ngIf="!cargandoPDF && !errorPDF && urlPDFSegura" class="pdf-viewer">
-        <iframe [src]="urlPDFSegura" 
-                class="pdf-iframe"
-                [style.transform]="'scale(' + (zoomPDF / 100) + ')'">
-        </iframe>
-      </div>
-    </div>
-
-  </div>
-</div> 
+  ...Modal content removido para evitar error 404...
+</div>
+--> 

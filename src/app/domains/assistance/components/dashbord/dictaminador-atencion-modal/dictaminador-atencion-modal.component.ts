@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../services/archivos-atencion.service';
+import { DictaminadorBandejaService } from '../../../../services/dictaminador-bandeja.service';
+import { AsuntoNuevo } from '../../../../interfaces/asuntoPorAtencion.interface';
 
 interface DatosRespuestaFGR {
   folioInterno: string;
@@ -12,9 +14,6 @@ interface DatosRespuestaFGR {
   fechaAcuseEntrega: string;
   numeroOficioFGRAtiende: string;
   estadoAtencion: 'parcial' | 'total';
-  descripcionRespuesta: string;
-  archivoPDF?: File;
-  urlPDF?: string;
 }
 
 interface AsuntoDictaminador {
@@ -45,17 +44,18 @@ interface AsuntoDictaminador {
 export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
   @Input() mostrarModal = false;
   @Input() asunto: AsuntoDictaminador | null = null;
+  @Input() idReq?: number | null;
   @Output() cerrarModal = new EventEmitter<void>();
   @Output() finalizarAtencion = new EventEmitter<string>();
 
-  // Variables para visualización de PDF
-  mostrarVisorPDF = false;
-  urlPDFSegura: SafeResourceUrl | null = null;
-  cargandoPDF = false;
-  errorPDF = '';
-  zoomPDF = 100;
-  paginaActualPDF = 1;
-  totalPaginasPDF = 1;
+  // Variables para visualización de PDF (YA NO SE USA - SE USA APARTADO DOCUMENTOS)
+  // mostrarVisorPDF = false;
+  // urlPDFSegura: SafeResourceUrl | null = null;
+  // cargandoPDF = false;
+  // errorPDF = '';
+  // zoomPDF = 100;
+  // paginaActualPDF = 1;
+  // totalPaginasPDF = 1;
 
   // ==== Integración de documentos (endpoints) ====
   pestanaActiva: 'detalles' | 'documentos' = 'detalles';
@@ -70,17 +70,20 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
   // Estado del modal
   procesandoFinalizacion = false;
 
+  // Datos precargados de Respuesta a FGR
+  datosRespuestaFGR: DatosRespuestaFGR | null = null;
+  cargandoDatosFGR = false;
+  errorDatosFGR = '';
+
   constructor(
     private domSanitizer: DomSanitizer,
     private snackBar: MatSnackBar,
-    private archivosService: ArchivosAtencionService
+    private archivosService: ArchivosAtencionService,
+    private dictaminadorService: DictaminadorBandejaService
   ) {}
 
   ngOnInit(): void {
-    // Inicializar datos si existen
-    if (this.asunto?.datosRespuestaFGR?.urlPDF) {
-      this.prepararPDF(this.asunto.datosRespuestaFGR.urlPDF);
-    }
+    // Ya no inicializamos PDF automáticamente - se usa apartado Documentos
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -91,6 +94,8 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
         this.pestanaActiva = 'documentos';
         this.cargarArchivos();
       }
+      // Precargar datos reales de Respuesta a FGR
+      this.precargarDatosFGR();
     }
   }
 
@@ -105,42 +110,81 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
   // ========== GESTIÓN DEL MODAL ==========
   
   onCerrarModal(): void {
-    this.mostrarVisorPDF = false;
-    this.urlPDFSegura = null;
+    // this.mostrarVisorPDF = false;
+    // this.urlPDFSegura = null;
     this.cerrarModal.emit();
   }
 
   onFinalizarYEnviarRevision(): void {
-    if (!this.asunto) return;
+    if (!this.asunto?.id) {
+      this.snackBar.open('No se pudo identificar el asunto a finalizar', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
 
     this.procesandoFinalizacion = true;
     
-    // Simular proceso de finalización
-    setTimeout(() => {
-      this.procesandoFinalizacion = false;
-      this.finalizarAtencion.emit(this.asunto!.id);
-      
-      this.snackBar.open(
-        `Asunto ${this.asunto!.folio} enviado a revisión exitosamente`,
-        'Cerrar',
-        {
-          duration: 4000,
-          panelClass: ['success-snackbar']
+    // Usar el mismo endpoint que funciona en dictaminador-detalle
+    this.dictaminadorService.finalizarAtencion(Number(this.asunto.id)).subscribe({
+      next: (respuesta) => {
+        console.log('✅ [Modal] Respuesta del servidor:', respuesta);
+        this.procesandoFinalizacion = false;
+        
+        // La respuesta es texto plano
+        if (respuesta && respuesta.includes('fue enviado a revisión')) {
+          this.snackBar.open('Asunto enviado a revisión correctamente', 'Cerrar', {
+            duration: 4000,
+            panelClass: ['success-snackbar']
+          });
+        } else {
+          this.snackBar.open(respuesta || 'Operación completada', 'Cerrar', {
+            duration: 4000,
+            panelClass: ['success-snackbar']
+          });
         }
-      );
-      
-      this.onCerrarModal();
-    }, 2000);
+        
+        // Emitir evento y cerrar modal
+        this.finalizarAtencion.emit(this.asunto!.id);
+        this.onCerrarModal();
+      },
+      error: (error) => {
+        console.error('❌ [Modal] Error al finalizar atención:', error);
+        this.procesandoFinalizacion = false;
+
+        // Mejorar el manejo de errores
+        let mensajeError = 'Error al enviar asunto a revisión';
+        
+        if (error.error && typeof error.error === 'string') {
+          mensajeError += ': ' + error.error;
+        } else if (error.message) {
+          mensajeError += ': ' + error.message;
+        } else if (typeof error === 'string') {
+          mensajeError += ': ' + error;
+        }
+
+        this.snackBar.open(mensajeError, 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 
   // ========== GESTIÓN DE PDF ==========
   
+  // YA NO SE USA - PDF se maneja en apartado Documentos
+  /*
   prepararPDF(url: string): void {
     if (url) {
       this.urlPDFSegura = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
     }
   }
+  */
 
+  // YA NO SE USA - QUITADO PARA EVITAR ERROR 404
+  /*
   abrirVisorPDF(): void {
     if (this.asunto?.datosRespuestaFGR?.urlPDF) {
       this.mostrarVisorPDF = true;
@@ -158,11 +202,17 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
       });
     }
   }
+  */
 
+  // YA NO SE USA
+  /*
   cerrarVisorPDF(): void {
     this.mostrarVisorPDF = false;
   }
+  */
 
+  // MÉTODOS DE CONTROL PDF YA NO SE USAN - SE USA APARTADO DOCUMENTOS
+  /*
   // Control de zoom del PDF
   aumentarZoom(): void {
     if (this.zoomPDF < 200) {
@@ -192,13 +242,15 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
       this.paginaActualPDF++;
     }
   }
+  */
 
   // ========== UTILIDADES ==========
   
   obtenerIconoEstadoAtencion(): string {
-    if (!this.asunto?.datosRespuestaFGR) return 'pending';
+    if (!(this.asunto?.datosRespuestaFGR || this.datosRespuestaFGR)) return 'pending';
     
-    switch (this.asunto.datosRespuestaFGR.estadoAtencion) {
+    const estado = (this.asunto?.datosRespuestaFGR || this.datosRespuestaFGR)!.estadoAtencion;
+    switch (estado) {
       case 'total':
         return 'check_circle';
       case 'parcial':
@@ -209,9 +261,10 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
   }
 
   obtenerClaseEstadoAtencion(): string {
-    if (!this.asunto?.datosRespuestaFGR) return 'text-gray-500';
+    if (!(this.asunto?.datosRespuestaFGR || this.datosRespuestaFGR)) return 'text-gray-500';
     
-    switch (this.asunto.datosRespuestaFGR.estadoAtencion) {
+    const estado = (this.asunto?.datosRespuestaFGR || this.datosRespuestaFGR)!.estadoAtencion;
+    switch (estado) {
       case 'total':
         return 'text-green-600';
       case 'parcial':
@@ -239,6 +292,89 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
   // ========== DOCUMENTOS (lista y visor) ==========
   private obtenerFolio(): string | null {
     return this.asunto?.folio || null;
+  }
+
+  private obtenerIdReq(): number | null {
+    console.log('🔍 [Modal] obtenerIdReq() - idReq recibido:', this.idReq);
+    console.log('🔍 [Modal] obtenerIdReq() - asunto:', this.asunto);
+    if (this.idReq && this.idReq > 0) return this.idReq;
+    const posible = (this.asunto as any)?.id_asignacion || (this.asunto as any)?.idReq || (this.asunto as any)?.ID_REQ;
+    console.log('🔍 [Modal] obtenerIdReq() - posible encontrado:', posible);
+    return typeof posible === 'number' && posible > 0 ? posible : null;
+  }
+
+  private seleccionarUltimaRespuesta(respuestas: AsuntoNuevo[]): AsuntoNuevo {
+    const getTs = (a: AsuntoNuevo): number => {
+      const fc = a.fecha_captura ? Date.parse(a.fecha_captura as unknown as string) : 0;
+      const fa = a.fecha_atencion ? Date.parse(a.fecha_atencion as unknown as string) : 0;
+      return Math.max(fc || 0, fa || 0);
+    };
+    return respuestas.reduce((acc, cur) => {
+      const tsAcc = getTs(acc);
+      const tsCur = getTs(cur);
+      if (tsCur > tsAcc) return cur;
+      if (tsCur < tsAcc) return acc;
+      return (cur.id_asunto_nuevo ?? 0) > (acc.id_asunto_nuevo ?? 0) ? cur : acc;
+    }, respuestas[0]);
+  }
+
+  private mapEstadoAtencion(idAtencion?: number | null): 'total' | 'parcial' {
+    if (idAtencion === 2) return 'parcial';
+    return 'total';
+  }
+
+  private extraerNombreArchivo(ruta: string): string {
+    if (!ruta) return '';
+    const partes = String(ruta).split(/[\\\/]+/);
+    return partes[partes.length - 1] || '';
+  }
+
+  private precargarDatosFGR(): void {
+    const idReq = this.obtenerIdReq();
+    console.log('🔍 [Modal] precargarDatosFGR() - idReq final:', idReq);
+    if (!idReq) { 
+      console.log('❌ [Modal] No se encontró idReq, no se puede precargar datos');
+      return; 
+    }
+
+    this.cargandoDatosFGR = true;
+    this.errorDatosFGR = '';
+    console.log('🔍 [Modal] Llamando getRespuestasAsunto con idReq:', idReq, 'documento: RESPUESTA A FGR');
+
+    this.dictaminadorService.getRespuestasAsunto(idReq, 'RESPUESTA A FGR').subscribe({
+      next: (respuestas) => {
+        console.log('✅ [Modal] Respuestas recibidas:', respuestas);
+        this.cargandoDatosFGR = false;
+        if (!respuestas || respuestas.length === 0) { 
+          console.log('❌ [Modal] No se encontraron respuestas para RESPUESTA A FGR');
+          return; 
+        }
+        const ultima = this.seleccionarUltimaRespuesta(respuestas);
+        console.log('🔍 [Modal] Última respuesta seleccionada:', ultima);
+
+        const datos: DatosRespuestaFGR = {
+          folioInterno: (ultima as any).folio_interno || String(ultima.folio_scanner || ''),
+          numeroOficio: ultima.oficio || '',
+          fechaAcuseEntrega: (ultima as any).fecha_acuse_entrega || (ultima as any).fecha_atencion || '',
+          numeroOficioFGRAtiende: (ultima as any).oficio_fgr || '',
+          estadoAtencion: this.mapEstadoAtencion(ultima.id_atencion_fk),
+        };
+
+        console.log('🔍 [Modal] Datos mapeados:', datos);
+        this.datosRespuestaFGR = datos;
+        if (this.asunto) {
+          this.asunto = { ...this.asunto, datosRespuestaFGR: datos };
+        }
+        console.log('✅ [Modal] datosRespuestaFGR asignado:', this.datosRespuestaFGR);
+
+        // Ya no intentamos cargar PDF aquí - se usa el apartado "Documentos" del modal
+      },
+      error: (err) => {
+        this.cargandoDatosFGR = false;
+        this.errorDatosFGR = 'No se pudo precargar la Respuesta a FGR';
+        console.error('❌ Error precargando Respuesta a FGR en modal:', err);
+      }
+    });
   }
 
   cargarArchivos(): void {
@@ -326,9 +462,7 @@ export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
       numeroOficio: 'SAT/FGR/001/2025',
       fechaAcuseEntrega: '2025-01-28',
       numeroOficioFGRAtiende: 'FGR/UEAF/456/2025',
-      estadoAtencion: 'total',
-      descripcionRespuesta: 'Se atiende en su totalidad el requerimiento de información fiscal solicitado por la FGR, proporcionando todos los documentos y datos requeridos para el expediente de investigación.',
-      urlPDF: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+      estadoAtencion: 'total'
     };
   }
 } 

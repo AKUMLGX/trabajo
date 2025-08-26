@@ -218,7 +218,9 @@ export class DictaminadorPageComponent implements OnInit {
             'OBSERVACIONES': observaciones,
             'PLAZO ATENCION': plazoAtencionVisual,
             'DICTAMINADOR': item.rfc_dictaminador || item.rfc_asignado || 'Sin asignar',
-            'ID_ASUNTO': item.id_asunto
+            'ID_ASUNTO': item.id_asunto,
+            // Agregar datos que necesita el modal
+            'ID_ASIGNACION': item.id_asignacion
           };
           
           // Debug: mostrar objeto final que se pasa a la vista
@@ -522,17 +524,11 @@ export class DictaminadorPageComponent implements OnInit {
       fechaRecepcion: new Date(asunto['FECHA RECEPCION'] || asunto.fechaRecepcion),
       diasTranscurridos: asunto['DIAS TRANSCURRIDOS'] || asunto.diasTranscurridos,
       plazoUrgente: asunto.plazoUrgente || false,
-      // Agregar datos de ejemplo de respuesta a FGR
-      datosRespuestaFGR: {
-        folioInterno: 'FGR-2025-001',
-        numeroOficio: 'SAT/FGR/001/2025',
-        fechaAcuseEntrega: '2025-01-28',
-        numeroOficioFGRAtiende: 'FGR/UEAF/456/2025',
-        estadoAtencion: 'total',
-        descripcionRespuesta: 'Se atiende en su totalidad el requerimiento de información fiscal solicitado por la FGR, proporcionando todos los documentos y datos requeridos para el expediente de investigación.',
-        urlPDF: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
-      }
+      // Pasar id de asignación que necesita el modal
+      id_asignacion: asunto['ID_ASIGNACION'] || asunto.id_asignacion || asunto.ID_REQ
     };
+    
+    console.log('🔍 [DictaminadorPage] Asunto transformado para modal:', this.asuntoParaAtencion);
     
     this.mostrarModalAtencionDictaminador = true;
   }
@@ -587,6 +583,124 @@ export class DictaminadorPageComponent implements OnInit {
     
     // Cerrar el modal
     this.cerrarModalAtencionDictaminador();
+    
+    // Recargar datos completos del servidor para refrescar la pantalla
+    console.log('🔄 [DictaminadorPage] Recargando datos del servidor para refrescar pantalla...');
+    setTimeout(() => {
+      this.recargarDatosCompletos();
+    }, 1000); // Pequeño delay para que el servidor procese la finalización
+  }
+
+  /**
+   * Recarga completa de datos desde el servidor
+   */
+  private recargarDatosCompletos(): void {
+    // Obtener el número de administración primero
+    this.obtenerNumeroAdministracion();
+    
+    this.dictaminadorBandejaService.obtenerAsuntosAsignados().subscribe({
+      next: (res) => {
+        console.log('🔄 [DictaminadorPage] Datos recargados desde servidor:', res);
+        this.asuntos = res.map((item: any) => {
+          // Debug: mostrar estructura completa del item para verificar observaciones
+          console.log('🔍 Item completo:', item);
+          console.log('🔍 item.observaciones:', item.observaciones);
+          console.log('🔍 item.asunto?.datos?.observaciones:', item.asunto?.datos?.observaciones);
+          
+          // Calcular días transcurridos
+          let diasTranscurridos = 0;
+          if (item.fecha_recepcion) {
+            const fechaRecepcion = new Date(item.fecha_recepcion);
+            const fechaActual = new Date();
+            const diferencia = fechaActual.getTime() - fechaRecepcion.getTime();
+            diasTranscurridos = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+          }
+          
+          // Lógica de prioridad y color
+          let prioridad = '';
+          let prioridadColor = '';
+          let plazoAtencionVisual = this.interpretarPlazoAtencion(item.plazo_atencion);
+          let plazoUrgente = false;
+          if (item.plazo_atencion === null || item.plazo_atencion === undefined) {
+            prioridad = 'Normal';
+            prioridadColor = 'verde';
+            plazoUrgente = false;
+          } else if (item.plazo_atencion === 0) {
+            prioridad = 'Urgente';
+            prioridadColor = 'rojo';
+            plazoUrgente = true;
+          } else if (item.plazo_atencion > 0) {
+            // Determinar prioridad basada en las horas
+            if (item.plazo_atencion <= 24) {
+              prioridad = 'Crítico';
+              prioridadColor = 'naranja';
+            } else if (item.plazo_atencion <= 72) {
+              prioridad = 'Moderado';
+              prioridadColor = 'amarillo';
+            } else {
+              prioridad = 'Normal';
+              prioridadColor = 'verde';
+            }
+            plazoUrgente = item.plazo_atencion <= 24;
+          }
+          
+          // Estado de atención
+          let estadoAtencion = '';
+          let colorEstado = '';
+          
+          if (item.estado_atencion_fk === 2) {
+            estadoAtencion = 'Atención Parcial';
+            colorEstado = 'bg-yellow-100 text-yellow-800';
+          } else if (item.estado_atencion_fk === 1) {
+            estadoAtencion = 'Atención Total';
+            colorEstado = 'bg-green-100 text-green-800';
+          } else if (item.estado_atencion_fk === 3) {
+            estadoAtencion = 'En Trámite';
+            colorEstado = 'bg-blue-100 text-blue-800';
+          } else if (item.estado_atencion_fk === 4) {
+            estadoAtencion = 'En Revisión';
+            colorEstado = 'bg-purple-100 text-purple-800';
+          } else {
+            estadoAtencion = 'Desconocido';
+            colorEstado = 'bg-gray-100 text-gray-800';
+          }
+
+          const observaciones = item.observaciones || item.asunto?.datos?.observaciones || '';
+
+          return {
+            'FOLIO INTERNO': item.folio_interno,
+            'PERSONA RELACIONADA': item.persona_relacionada,
+            'CARPETA INVESTIGACION': item.carpeta_investigacion,
+            'FECHA RECEPCION': item.fecha_recepcion,
+            'DIAS TRANSCURRIDOS': diasTranscurridos,
+            'ESTADO ATENCION': estadoAtencion,
+            'PRIORIDAD': prioridad,
+            prioridadColor: prioridadColor,
+            plazoUrgente: plazoUrgente,
+            colorEstado: colorEstado,
+            'NUMERO OFICIO': item.numero_oficio,
+            'TURNO JEFATURA': item.turno_jefatura,
+            'FOLIO SCANNER': item.folio_scanner,
+            'AUTORIDAD REMITENTE': item.autoridad_remitente,
+            'TIPO DOCUMENTO': item.id_documento_fk ? `Tipo ${item.id_documento_fk}` : '',
+            'OBSERVACIONES': observaciones,
+            'PLAZO ATENCION': plazoAtencionVisual,
+            'DICTAMINADOR': item.rfc_dictaminador || item.rfc_asignado || 'Sin asignar',
+            'ID_ASUNTO': item.id_asunto,
+            'ID_ASIGNACION': item.id_asignacion
+          };
+        });
+
+        // Aplicar filtros y actualizar estadísticas
+        this.aplicarFiltros();
+        this.actualizarEstadisticas();
+        
+        console.log('✅ [DictaminadorPage] Pantalla completamente refrescada. Total asuntos:', this.asuntos.length);
+      },
+      error: (error) => {
+        console.error('❌ [DictaminadorPage] Error al recargar datos:', error);
+      }
+    });
   }
 
   /**

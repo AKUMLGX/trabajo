@@ -826,9 +826,17 @@ export class DictaminadorDetalleComponent implements OnInit {
 
     if (documento === 'RESPUESTA A FGR') {
       const atencion = this.mapAtencion(respuesta.id_atencion_fk);
+      console.log('🔍 [DictaminadorDetalle] Prellenando Respuesta a FGR:');
+      console.log('🔍 respuesta.id_atencion_fk:', respuesta.id_atencion_fk);
+      console.log('🔍 atencion mapeada:', atencion);
       this.formRespuestaAFGR.patchValue({ ...valores, atencion });
       // Asegurar que el radio se marque visualmente
-      this.formRespuestaAFGR.get('atencion')?.setValue(atencion);
+      const ctrl = this.formRespuestaAFGR.get('atencion');
+      ctrl?.setValue(atencion);
+      ctrl?.markAsTouched();
+      ctrl?.markAsDirty();
+      this.formRespuestaAFGR.updateValueAndValidity({ onlySelf: false, emitEvent: true });
+      console.log('🔍 Valor final del control atencion:', this.formRespuestaAFGR.get('atencion')?.value);
     }
 
     // También soportar prefill para solicitud de información si aplica

@@ -185,6 +185,7 @@
 <app-dictaminador-atencion-modal 
   [mostrarModal]="mostrarModalAtencionDictaminador"
   [asunto]="asuntoParaAtencion"
+  [idReq]="asuntoParaAtencion?.id_asignacion"
   (cerrarModal)="cerrarModalAtencionDictaminador()"
   (finalizarAtencion)="finalizarAtencionAsunto($event)">
 </app-dictaminador-atencion-modal>
