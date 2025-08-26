@@ -50,7 +50,7 @@ export class ArchivosAtencionService {
     console.log('🟢 [ArchivosService] listarArchivosPdf (MODAL VERDE) iniciado para folio:', folio);
     
     const params = new HttpParams().set('folio', folio);
-    const endpoint = (environment as any)['listarArchivosAtencion'];
+    const endpoint = (environment as any)['listarArchivosAtencionModal'];
     const targetUrl = environment.baseUrl + endpoint;
     const fullUrl = `${targetUrl}?${params.toString()}`;
     
