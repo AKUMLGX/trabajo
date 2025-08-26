@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SuccessfulDialogComponent } from '../components/successful-dialog/successful-dialog.component';
 import { environment } from '../../../environments/environment';
 import { LoginDialogComponent } from '../components/login-dialog/login-dialog.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 export const successfullInterceptor: HttpInterceptorFn = (
@@ -26,7 +26,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
         if (event instanceof HttpResponse) {
           if (event.status === 200) {
             matDialog_.open(LoginDialogComponent, {
-              disableClose:true,
+              disableClose: true,
               data: {
                 msjTitle: "Exito",
                 msjDescription: "Login Exitoso"
@@ -34,24 +34,36 @@ export const successfullInterceptor: HttpInterceptorFn = (
             })
           }
         }
-      }else{
-        if (request.method === "GET"  ){
+      } else {
+        if (request.method === "GET") {
           if (event instanceof HttpResponse) {
             if (event.status === 200) {
               if (event.status === 200) {
-                _snackBar.open("Exito","Cerrar", {
-                  duration:2000,
-                  horizontalPosition:'center',
-                  verticalPosition:'bottom'
+                _snackBar.open("Exito", "Cerrar", {
+                  duration: 2000,
+                  horizontalPosition: 'center',
+                  verticalPosition: 'bottom'
                 })
               }
             }
           }
-        }else if ( request.method === 'POST' && request.url.includes('asunto/nuevo/euacape/apertura/') , request.url.includes('asunto/nuevo/euacape/segunda_pieza/')   ){
+        } else if (request.method === 'POST' && request.url.includes('asunto/nuevo/euacape/apertura/')) {
           if (event instanceof HttpResponse) {
-            if (event.status === 200){
-               matDialog_.open(SuccessfulDialogComponent, {
-                disableClose:true,
+            if (event.status === 200) {
+              matDialog_.open(SuccessfulDialogComponent, {
+                disableClose: true,
+                data: {
+                  msjTitle: "Exito",
+                  msjDescription: "Acción realizada con exito"
+                }
+              })
+            }
+          }
+        } else if (request.url.includes('asunto/nuevo/euacape/segunda_pieza/')) {
+          if (event instanceof HttpResponse) {
+            if (event.status === 200) {
+              matDialog_.open(SuccessfulDialogComponent, {
+                disableClose: true,
                 data: {
                   msjTitle: "Exito",
                   msjDescription: "Acción realizada con exito"
@@ -60,13 +72,13 @@ export const successfullInterceptor: HttpInterceptorFn = (
             }
           }
         }
-         else if (request.method == "POST" ){
+        else if (request.method == "POST") {
           if (event instanceof HttpResponse) {
             if (event.status === 200) {
-              _snackBar.open("Exito","Cerrar", {
-                duration:2000,
-                horizontalPosition:'center',
-                verticalPosition:'bottom'
+              _snackBar.open("Exito", "Cerrar", {
+                duration: 2000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom'
               })
             }
           }
