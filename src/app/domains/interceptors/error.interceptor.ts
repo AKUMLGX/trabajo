@@ -22,7 +22,7 @@ export const errorInterceptor: HttpInterceptorFn = (
     catchError((err) => {
       // No mostrar modal de error para peticiones de verificación de archivos (404 esperado)
       const isFileCheckRequest = request.headers.has('X-Skip-Error-Handler') || 
-                                request.url.includes('listar_archivos_atencion');
+                                request.url.includes('listar_archivos');
       
       if (err.status !== 401) {
         // Solo mostrar modal si no es una petición de verificación de archivos o si no es un 404
