@@ -330,16 +330,19 @@ export class RevisionDetalleModalComponent implements OnInit {
     this.dictaminadorBandejaService.resolverAsunto(idAsunto, true, this.motivoForm.value.observaciones).subscribe({
       next: () => {
         this.resolviendo = false;
+        console.log('✅ [RevisionDetalle] Asunto aprobado exitosamente');
         this.dialogRef.close({
           accion: 'aprobar',
           asunto: this.asunto,
           tipoAtencion: this.tipoAtencion,
-          resuelto: true
+          resuelto: true,
+          mensaje: 'Asunto aprobado exitosamente'
         });
       },
       error: (err) => {
         this.resolviendo = false;
         console.error('[RevisionDetalle] Error al aprobar/resolver asunto:', err);
+        alert('Error al aprobar el asunto. Por favor, intente nuevamente.');
       }
     });
   }
@@ -357,18 +360,21 @@ export class RevisionDetalleModalComponent implements OnInit {
     this.dictaminadorBandejaService.resolverAsunto(idAsunto, false,"").subscribe({
       next: () => {
         this.resolviendo = false;
+        console.log('✅ [RevisionDetalle] Asunto rechazado exitosamente');
         this.dialogRef.close({
           accion: 'rechazar',
           asunto: this.asunto,
           motivo: this.motivoForm.value.motivo,
           observaciones: this.motivoForm.value.observaciones,
           tipoAtencion: this.tipoAtencion,
-          resuelto: true
+          resuelto: true,
+          mensaje: 'Asunto rechazado exitosamente'
         });
       },
       error: (err) => {
         this.resolviendo = false;
         console.error('[RevisionDetalle] Error al rechazar/resolver asunto:', err);
+        alert('Error al rechazar el asunto. Por favor, intente nuevamente.');
       }
     });
   }
@@ -381,9 +387,19 @@ export class RevisionDetalleModalComponent implements OnInit {
     this.dictaminadorBandejaService.resolverAsunto(idAsunto, false, this.motivoForm.value.observaciones).subscribe({
       next: () => {
         this.resolviendo = false;
-        this.dialogRef.close({ accion: 'rechazar', asunto: this.asunto, resuelto: true });
+        console.log('✅ [RevisionDetalle] Asunto rechazado rápidamente');
+        this.dialogRef.close({ 
+          accion: 'rechazar', 
+          asunto: this.asunto, 
+          resuelto: true,
+          mensaje: 'Asunto rechazado exitosamente'
+        });
       },
-      error: (err) => { this.resolviendo = false; console.error('[RevisionDetalle] Error rechazar rápido:', err); }
+      error: (err) => { 
+        this.resolviendo = false; 
+        console.error('[RevisionDetalle] Error rechazar rápido:', err);
+        alert('Error al rechazar el asunto. Por favor, intente nuevamente.');
+      }
     });
   }
 

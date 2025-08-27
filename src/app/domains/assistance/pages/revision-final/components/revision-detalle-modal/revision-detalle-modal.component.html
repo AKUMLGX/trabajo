@@ -250,19 +250,25 @@
             <h2>Opciones de Revisión</h2>
             
             <div class="decision-cards">
-              <div class="card approve" (click)="aprobar()">
+              <div class="card approve" 
+                   [class.disabled]="resolviendo"
+                   (click)="!resolviendo && aprobar()">
                 <div class="card-icon">
-                  <mat-icon>check_circle</mat-icon>
+                  <div *ngIf="resolviendo" class="loading-spinner-small"></div>
+                  <mat-icon *ngIf="!resolviendo">check_circle</mat-icon>
                 </div>
-                <h3>Aprobar Asunto</h3>
+                <h3>{{resolviendo ? 'Aprobando...' : 'Aprobar Asunto'}}</h3>
                 <p>El asunto es correcto y cumple con todos los requisitos</p>
               </div>
               
-              <div class="card reject" (click)="rechazarRapido()">
+              <div class="card reject" 
+                   [class.disabled]="resolviendo"
+                   (click)="!resolviendo && rechazarRapido()">
                 <div class="card-icon">
-                  <mat-icon>cancel</mat-icon>
+                  <div *ngIf="resolviendo" class="loading-spinner-small"></div>
+                  <mat-icon *ngIf="!resolviendo">cancel</mat-icon>
                 </div>
-                <h3>Rechazar Asunto</h3>
+                <h3>{{resolviendo ? 'Rechazando...' : 'Rechazar Asunto'}}</h3>
                 <p>El asunto tiene errores o carece de elementos necesarios</p>
               </div>
             </div>

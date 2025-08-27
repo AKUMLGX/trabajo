@@ -484,14 +484,35 @@ export class RevisionFinalComponent implements OnInit {
       if (result) {
         // Si resolvió en backend, refrescar lista desde backend y salir
         if (result.resuelto === true) {
+          console.log('🔄 [RevisionFinal] Refrescando lista después de resolver asunto');
+          
+          // Mostrar mensaje de éxito si está disponible
+          if (result.mensaje) {
+            console.log('✅ [RevisionFinal]', result.mensaje);
+            // Opcional: agregar notificación toast/snackbar aquí
+          }
+          
+          // Recargar todos los datos para refrescar la vista
           this.cargarDictamenesPendientesDesdeBackend();
+          this.cargarAsuntosRevisadosDesdeBackend();
+          
+          // Actualizar estadísticas después de un pequeño delay para asegurar que los datos se cargaron
+          setTimeout(() => {
+            this.actualizarEstadisticas();
+          }, 500);
+          
           return;
         }
+        
+        // Fallback para procesamiento local (si no se resolvió en backend)
         if (result.accion === 'aprobar') {
           this.aprobarAsunto(result.asunto);
         } else if (result.accion === 'rechazar') {
           this.rechazarAsunto(result.asunto);
         }
+        
+        // Actualizar estadísticas después de cualquier acción
+        this.actualizarEstadisticas();
       }
     });
   }
