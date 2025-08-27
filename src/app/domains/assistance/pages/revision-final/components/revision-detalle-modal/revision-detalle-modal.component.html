@@ -135,6 +135,7 @@
                     'text-green-600': asunto.prioridad === 'Baja'
                   }">{{asunto.prioridad}}</span>
                 </div>
+
               </div>
             </div>
             
@@ -263,6 +264,28 @@
                 </div>
                 <h3>Rechazar Asunto</h3>
                 <p>El asunto tiene errores o carece de elementos necesarios</p>
+              </div>
+            </div>
+
+            <!-- 🆕 Atención propuesta destacada -->
+            <div class="atencion-propuesta-container" *ngIf="asunto?.observaciones">
+              <div class="atencion-propuesta-card">
+                <div class="atencion-header">
+                  <mat-icon class="atencion-icon">person</mat-icon>
+                  <h3>Atención Propuesta por Usuario Akamba 3</h3>
+                </div>
+                <div class="atencion-content">
+                  <div class="atencion-badge" [ngClass]="{
+                    'badge-parcial': asunto.observaciones?.toLowerCase() === 'parcial',
+                    'badge-total': asunto.observaciones?.toLowerCase() === 'total',
+                    'badge-default': asunto.observaciones?.toLowerCase() !== 'parcial' && asunto.observaciones?.toLowerCase() !== 'total'
+                  }">
+                    {{asunto.observaciones}}
+                  </div>
+                  <p class="atencion-description">
+                    Esta es la atención sugerida por un usuario con rol Akamba 3 basada en su revisión del expediente.
+                  </p>
+                </div>
               </div>
             </div>
             

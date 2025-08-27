@@ -28,6 +28,8 @@ interface Asunto {
   dictaminador: string;
   carpetaInvestigacion: string;
   estado: string;
+  // 🆕 Observaciones/Atención propuesta
+  observaciones?: string;
 }
 
 interface DialogData {

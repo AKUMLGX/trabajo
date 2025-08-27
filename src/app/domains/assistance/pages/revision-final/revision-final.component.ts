@@ -37,6 +37,8 @@ interface Asunto {
   dictaminador?: string;
   carpetaInvestigacion?: string;
   estado?: string;
+  // 🆕 Observaciones/Atención propuesta desde backend
+  observaciones?: string;
   oficio?: string; // 🆕 Agregada la propiedad oficio
 }
 
@@ -218,7 +220,8 @@ export class RevisionFinalComponent implements OnInit {
             prioridad: (it.plazo_atencion ?? 0) > 15 ? 'Alta' : (it.plazo_atencion ?? 0) > 7 ? 'Media' : 'Baja',
             dictaminador: (it as any).nombre_dictaminador ?? '',
             carpetaInvestigacion: it.carpeta_investigacion ?? '',
-            estado: 'Pendiente'
+            estado: 'Pendiente',
+            observaciones: (it as any).observaciones ?? ''
           }));
         },
         error: (e) => {
