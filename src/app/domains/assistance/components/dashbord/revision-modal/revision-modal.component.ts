@@ -302,7 +302,9 @@ export class RevisionModalComponent implements OnInit {
     }
 
     this.enviandoAprobacion = true;
-    this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), true,this.tipoAprobacionSeleccionada ).subscribe({
+    // Enviar al backend exactamente lo que seleccionó el usuario: 'parcial' | 'total'
+    const observacionSeleccion = this.tipoAtencionSeleccionada;
+    this.dictaminadorBandejaService.resolverAsunto(Number(idAsunto), true, observacionSeleccion ).subscribe({
       next: (resp) => {
         console.log('[RevisionModal] Resolver OK:', resp);
         this.enviandoAprobacion = false;
