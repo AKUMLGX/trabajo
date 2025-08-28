@@ -28,7 +28,7 @@ import { ValidadorDeRespuestasComponent } from './validador-de-respuestas/valida
 })
 export class NotificationsComponent {
 
-  selecionarOpcion:string=''
+  selecionarOpcion=''
 
   onSelectedOption(event: Event){
       const target = event.target as HTMLSelectElement

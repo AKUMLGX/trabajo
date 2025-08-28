@@ -54,13 +54,13 @@ export class PreliminarFormComponent {
 
   // @Input() stepper!: MatStepper
 
-  @Input() tipo: string = "";
+  @Input() tipo = "";
 
   carpetaResultList: Asunto[] = []
 
-  canProceed: boolean = false
+  canProceed = false
 
-  isCarpetaNull: boolean = true
+  isCarpetaNull = true
 
 
   openCustomModalWithTemplate(template: TemplateRef<any>) {

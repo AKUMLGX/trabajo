@@ -1,0 +1,316 @@
+<!-- OVERLAY DEL MODAL -->
+<div class="modal-overlay" (click)="cerrarModal()">
+  
+  <!-- CONTENEDOR PRINCIPAL DEL MODAL -->
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    
+    <!-- HEADER DEL MODAL -->
+    <div class="modal-header">
+      <div class="header-content">
+        <div class="title-section">
+          <mat-icon class="header-icon">edit_document</mat-icon>
+          <div>
+            <h2 class="modal-title">Revisión de Asunto Capturado</h2>
+            <p class="modal-subtitle">Folio: {{ data.jsonOriginal?.asunto?.datos?.folio_interno || data.asunto.datos?.folio_interno || data.asunto.folio_interno || 'No disponible' }}</p>
+          </div>
+        </div>
+        
+        <!-- Estado -->
+        <div class="status-chips">
+          <span [class]="'chip-estado estado-' + data.asunto.estado_revision.toLowerCase()">
+            {{ data.asunto.estado_revision }}
+          </span>
+        </div>
+      </div>
+      
+      <button mat-icon-button class="close-button" (click)="cerrarModal()" 
+              matTooltip="Cerrar modal">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- BARRA DE PROGRESO SI ESTÁ GUARDANDO -->
+    <mat-progress-bar *ngIf="guardando" mode="indeterminate" class="progress-bar"></mat-progress-bar>
+
+    <!-- CUERPO DEL MODAL -->
+    <div class="modal-body">
+      
+      <!-- INFORMACIÓN ORIGINAL DEL ASUNTO -->
+      <div class="seccion-info-original">
+        <div class="seccion-header">
+          <div class="header-icon">
+            <mat-icon>source</mat-icon>
+          </div>
+          <div class="header-text">
+            <h3 class="seccion-titulo">Información Original</h3>
+            <p class="seccion-subtitulo">Datos capturados en Akamba 1</p>
+          </div>
+        </div>
+        
+        <!-- Información Original Unificada -->
+        <div class="info-original-unificada">
+          <div class="info-grid">
+            <!-- Folio Interno -->
+            <div class="info-row" data-field="folio_interno">
+              <span class="info-label">Folio Interno</span>
+              <span class="info-value highlight-value">{{ data.jsonOriginal?.asunto?.datos?.folio_interno || data.asunto.datos?.folio_interno || data.asunto.folio_interno }}</span>
+            </div>
+
+            <!-- Carpeta de Investigación -->
+            <div class="info-row" data-field="carpeta_investigacion">
+              <span class="info-label">Carpeta de Investigación</span>
+              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.carpeta_investigacion || data.asunto.datos?.carpeta_investigacion || data.asunto.carpeta_investigacion }}</span>
+            </div>
+
+            <!-- Folio Scanner -->
+            <div class="info-row" data-field="folio_scanner">
+              <span class="info-label">Folio Scanner</span>
+              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.folio_scanner || data.asunto.datos?.folio_scanner || data.asunto.folio_scanner }}</span>
+            </div>
+
+            <!-- Oficio -->
+            <div class="info-row" data-field="oficio">
+              <span class="info-label">Oficio</span>
+              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.oficio || data.asunto.datos?.oficio || data.asunto.oficio }}</span>
+            </div>
+
+            <!-- Documento Escaneado -->
+            <div class="info-row" data-field="documento_escaneado">
+              <span class="info-label">Documento Escaneado</span>
+              <span class="info-value">{{ obtenerNombreArchivo(data.jsonOriginal?.asunto?.datos?.documento_escaneado || data.asunto.datos?.documento_escaneado || data.asunto.documento_escaneado || '') }}</span>
+            </div>
+
+            <!-- Persona Relacionada -->
+            <div class="info-row" data-field="persona_relacionada">
+              <span class="info-label">Persona Relacionada</span>
+              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.persona_relacionada || data.asunto.datos?.persona_relacionada || data.asunto.persona_relacionada || 'No disponible' }}</span>
+            </div>
+
+            <!-- Descripción -->
+            <div class="info-row" data-field="descripcion">
+              <span class="info-label">Descripción</span>
+              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.descripcion || data.asunto.datos?.descripcion || data.asunto.descripcion }}</span>
+            </div>
+
+            <!-- Fecha de Recepción -->
+            <div class="info-row" data-field="fecha_recepcion">
+              <span class="info-label">Fecha de Recepción</span>
+              <span class="info-value">{{ data.jsonOriginal?.asunto?.datos?.fecha_recepcion || data.asunto.datos?.fecha_recepcion || data.asunto.fecha_recepcion | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <!-- Fecha de Captura -->
+            <div class="info-row" data-field="fecha_captura">
+              <span class="info-label">Fecha de Captura</span>
+              <span class="info-value">{{ (data.jsonOriginal?.asunto?.datos?.fecha_captura || data.asunto.datos?.fecha_captura || data.asunto.fecha_captura) ? ((data.jsonOriginal?.asunto?.datos?.fecha_captura || data.asunto.datos?.fecha_captura || data.asunto.fecha_captura) | date:'dd/MM/yyyy') : 'No definida' }}</span>
+            </div>
+
+            <!-- Documento -->
+            <div class="info-row" data-field="id_documento_fk">
+              <span class="info-label">Documento</span>
+              <span class="info-value">{{ interpretarIdDocumento(data.jsonOriginal?.asunto?.datos?.id_documento_fk || data.asunto.datos?.id_documento_fk || data.asunto.id_documento_fk) }}</span>
+            </div>
+
+            <!-- Atención -->
+            <div class="info-row" data-field="id_atencion_fk">
+              <span class="info-label">Atención</span>
+              <span class="info-value">{{ interpretarIdAtencion(data.jsonOriginal?.asunto?.datos?.id_atencion_fk || data.asunto.datos?.id_atencion_fk || data.asunto.id_atencion_fk) }}</span>
+            </div>
+
+            <!-- Administración -->
+            <div class="info-row" data-field="id_administracion_fk">
+              <span class="info-label">Administración</span>
+              <span class="info-value">{{ interpretarIdAdministracion(data.jsonOriginal?.asunto?.datos?.id_administracion_fk || data.asunto.datos?.id_administracion_fk || data.asunto.id_administracion_fk) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULARIO DE CORRECCIÓN -->
+      <div class="seccion-formulario">
+        <div class="seccion-header">
+          <div class="header-icon">
+            <mat-icon>edit_note</mat-icon>
+          </div>
+          <div class="header-text">
+            <h3 class="seccion-titulo">Revisión y Corrección</h3>
+            <p class="seccion-subtitulo">Selecciona la acción a realizar</p>
+          </div>
+        </div>
+        
+        <form [formGroup]="correccionForm" class="formulario-correccion">
+          
+          <!-- Campo oculto para mantener sincronización del FormGroup -->
+          <input type="hidden" formControlName="accion">
+          
+          <!-- TIPO DE ACCIÓN MEJORADO -->
+          <div class="campo-grupo campo-accion-moderna">
+            <label class="campo-label-moderna">¿Qué acción deseas realizar?</label>
+            
+            <!-- Botones de acción como tabs modernos -->
+            <div class="acciones-tabs">
+              <button type="button" 
+                      class="accion-tab tab-corregir"
+                      [class.tab-activo]="accionSeleccionada === 'CORREGIR'"
+                      (click)="abrirTrackingEnNuevaPestana()">
+                <div class="tab-icon">
+                  <mat-icon>edit_note</mat-icon>
+                </div>
+                <div class="tab-content">
+                  <span class="tab-title">Corregir</span>
+                  <span class="tab-description">Ir a bandeja de seguimiento</span>
+                </div>
+              </button>
+
+              <button type="button" 
+                      class="accion-tab tab-aprobar"
+                      [class.tab-activo]="accionSeleccionada === 'APROBAR'"
+                      (click)="correccionForm.patchValue({accion: 'APROBAR'})">
+                <div class="tab-icon">
+                  <mat-icon>verified</mat-icon>
+                </div>
+                <div class="tab-content">
+                  <span class="tab-title">Aprobar</span>
+                  <span class="tab-description">Enviar a Akamba 3</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Información contextual de la acción seleccionada -->
+            <div class="accion-info" *ngIf="accionSeleccionada">
+              <div *ngIf="accionSeleccionada === 'CORREGIR'" class="info-corregir">
+                <mat-icon>info_outline</mat-icon>
+                <span>Haz clic en "Corregir" para ir directamente a la bandeja de seguimiento donde podrás editar el asunto.</span>
+              </div>
+              <div *ngIf="accionSeleccionada === 'APROBAR'" class="info-aprobar">
+                <mat-icon>check_circle_outline</mat-icon>
+                <span>El asunto se enviará directamente al Administrador (Akamba 3) sin modificaciones.</span>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- SECCIÓN DE PDFs -->
+      <div class="seccion-pdfs">
+        <div class="seccion-header">
+          <div class="header-icon">
+          <mat-icon>picture_as_pdf</mat-icon>
+          </div>
+          <div class="header-text">
+            <h3 class="seccion-titulo">Documentos PDF</h3>
+            <p class="seccion-subtitulo">Visualiza y gestiona los archivos del asunto</p>
+          </div>
+        </div>
+
+
+
+        <!-- Controles de PDF -->
+        <div class="pdf-controles">
+          <div class="pdf-tabs">
+            <button type="button" 
+                    [class]="mostrarPdfOriginal ? 'tab-activo' : 'tab-inactivo'"
+                    (click)="cambiarVistaPdf(true)">
+              <mat-icon>description</mat-icon>
+              PDF Original (Akamba 1)
+            </button>
+
+          </div>
+
+
+        </div>
+
+        <!-- Visualizador de PDF -->
+        <div class="pdf-viewer-container">
+          
+          <!-- PDF Cargando -->
+          <div *ngIf="pdfCargando" class="pdf-loading">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <p>Cargando documento PDF...</p>
+          </div>
+
+          <!-- PDF Error -->
+          <div *ngIf="pdfError && !pdfCargando" class="pdf-error">
+            <mat-icon>error</mat-icon>
+            <p>Error al cargar el documento PDF</p>
+            <button mat-button color="primary" (click)="cargarPdfAutomatico()">
+              Reintentar
+            </button>
+          </div>
+
+          <!-- PDF Original -->
+          <iframe *ngIf="mostrarPdfOriginal && pdfOriginalUrl && !pdfCargando && !pdfError"
+                  [src]="pdfOriginalUrl" 
+                  class="pdf-iframe">
+          </iframe>
+
+          <!-- PDF Corregido -->
+          <iframe *ngIf="!mostrarPdfOriginal && pdfCorregidoUrl"
+                  [src]="pdfCorregidoUrl" 
+                  class="pdf-iframe">
+          </iframe>
+
+          <!-- No hay PDF corregido -->
+          <div *ngIf="!mostrarPdfOriginal && !pdfCorregidoUrl" class="no-pdf-corregido">
+            <mat-icon>upload_file</mat-icon>
+            <p>No has seleccionado un PDF corregido</p>
+            <button mat-button color="primary" (click)="triggerFileInput()">
+              Seleccionar archivo PDF
+            </button>
+          </div>
+
+          <!-- No hay PDF original -->
+          <div *ngIf="mostrarPdfOriginal && !pdfOriginalUrl && !pdfCargando && !pdfError" 
+               class="no-pdf-original">
+            <mat-icon>description</mat-icon>
+            <p>No hay PDF original disponible</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER CON BOTONES DE ACCIÓN -->
+    <div class="modal-footer">
+      
+
+
+      <!-- Botones de acción -->
+      <div class="footer-botones">
+        
+        <!-- Botón Cancelar -->
+        <button mat-stroked-button 
+                (click)="cerrarModal()" 
+                [disabled]="guardando"
+                class="btn-cancelar">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+
+
+
+        <!-- Botones principales según la acción -->
+        <ng-container [ngSwitch]="accionSeleccionada">
+          
+
+
+          <!-- Botón Aprobar -->
+          <button *ngSwitchCase="'APROBAR'" 
+                  mat-flat-button 
+                  style="background: linear-gradient(135deg, #10b981, #059669); color: white;"
+                  (click)="aprobarAsunto()"
+                  [disabled]="guardando"
+                  class="btn-aprobar">
+            <mat-icon *ngIf="!guardando">verified</mat-icon>
+            <mat-icon *ngIf="guardando" class="loading-icon">hourglass_empty</mat-icon>
+            {{ guardando ? 'Procesando...' : 'Aprobar y Enviar' }}
+          </button>
+
+        </ng-container>
+
+      </div>
+    </div>
+
+  </div>
+</div> 

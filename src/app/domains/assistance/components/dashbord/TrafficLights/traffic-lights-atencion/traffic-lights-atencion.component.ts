@@ -17,10 +17,10 @@ import { ReaplyComponent } from './reaply/reply.component';
 })
 
 export class TrafficLightsAtencionComponent {
-  mostrarRespuesta: boolean = false
-  mostrarGrafico: boolean = true
+  mostrarRespuesta = false
+  mostrarGrafico = true
   filaSeleccionada: any
-  cantidadDeSolicitudes: number = 10
+  cantidadDeSolicitudes = 10
   numero: number | null = null
   fechaActual = new Date()
 

@@ -16,7 +16,7 @@ import { CaptureLandingPageComponent } from '../../components/capture-landing-pa
 })
 export class CapturePageComponent {
 
-  isStepperInitialized: boolean = false;
+  isStepperInitialized = false;
 
   startStepperFromChild(event: boolean){
     this.isStepperInitialized = event;

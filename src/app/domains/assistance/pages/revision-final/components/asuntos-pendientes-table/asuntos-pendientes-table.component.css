@@ -1,0 +1,81 @@
+/* Estilos para la tabla de Material */
+.mat-mdc-table {
+  width: 100%;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600;
+  color: #374151;
+  padding: 12px 16px;
+}
+
+.mat-mdc-cell {
+  padding: 12px 16px;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Ajustes para los botones de acción */
+.action-button .mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+/* Estilos para el paginador */
+::ng-deep .mat-mdc-paginator {
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Estilo para filas en hover */
+.mat-mdc-row:hover {
+  background-color: #f3f4f6;
+}
+
+/* Estilos para íconos en cabeceras de ordenación */
+::ng-deep .mat-sort-header-arrow {
+  color: #691C32;
+}
+
+/* Personalización de colores para el tema */
+::ng-deep .mat-primary .mat-sort-header-arrow {
+  color: #691C32;
+}
+
+/* Sombra para la tabla */
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Bordes redondeados para la tabla */
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+/* Estilos para las acciones */
+.mat-column-acciones {
+  width: 150px;
+  text-align: center;
+}
+
+/* Ancho para columnas específicas */
+.mat-column-folio {
+  width: 140px;
+}
+
+.mat-column-diasTranscurridos {
+  width: 80px;
+  text-align: center;
+}
+
+.mat-column-prioridad {
+  width: 120px;
+}
+
+/* Transición suave para elementos interactivos */
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+} 

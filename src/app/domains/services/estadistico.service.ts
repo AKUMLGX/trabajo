@@ -13,27 +13,27 @@ export class EstadisticoService {
 
   getQuerybyDay(data:EstadisticosRequest)
   {
-    let targetUrl = environment.baseUrl + environment.chartPieEstaditicos
+    const targetUrl = environment.baseUrl + environment.chartPieEstaditicos
     return this.http.post<EstadisticosResponse ['data']>(targetUrl,data)
   }
 
 
   getConteoDia(data:EstadisticosRequest): Observable <{ registros:
      [string , number,number,number,number][] }> {
-    let targetUrl = environment.baseUrl + environment.tableEstaditicas_Diarias
+    const targetUrl = environment.baseUrl + environment.tableEstaditicas_Diarias
     return this.http.post<{ registros: [string,number,number,number,number][]}>(targetUrl,data)
   }
 
 
   getConteoDiasAperturaSegundas(data:EstadisticosRequest):Observable <{ registros:
      [string , number,number,number,number][] }>{
-   let targetUrl = environment.baseUrl + environment.tableEstaditicas_DiariasAperturas_Segunda
+   const targetUrl = environment.baseUrl + environment.tableEstaditicas_DiariasAperturas_Segunda
     return this.http.post<{ registros: [string,number,number,number,number][]}>(targetUrl,data)
   }
 
   donwnloadExcel(startDate:string,endDate:string,documento:string, administracion:string ){
-    let url = environment.baseUrl + environment.generateEstadistico;
-    let params: DownloadExcel = {
+    const url = environment.baseUrl + environment.generateEstadistico;
+    const params: DownloadExcel = {
       fecha_inicial: startDate,
       fecha_final: endDate,
       documento:documento,
@@ -45,7 +45,7 @@ export class EstadisticoService {
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');
@@ -55,8 +55,8 @@ export class EstadisticoService {
    })
   }
   donwnloadExcelAS(startDate:string,endDate:string,tipo:string,documento:string, administracion:string ){
-    let url = environment.baseUrl + environment.generateEstadistico;
-    let params: DownloadExcelAperturaYSgundaPieza = {
+    const url = environment.baseUrl + environment.generateEstadistico;
+    const params: DownloadExcelAperturaYSgundaPieza = {
       fecha_inicial: startDate,
       fecha_final: endDate,
       documento:documento,
@@ -69,7 +69,7 @@ export class EstadisticoService {
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-      let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: type });
       const link = document.createElement('a');

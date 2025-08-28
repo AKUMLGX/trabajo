@@ -39,12 +39,12 @@ export class FormComponent {
     private collectFormInfoService: CollectFormInfoService,
     ){}
 
-    isApertura: boolean = true; //este campo debe venir en un futuro desde la search bar
+    isApertura = true; //este campo debe venir en un futuro desde la search bar
 
-    documentoEscaneadoName: string = '';
+    documentoEscaneadoName = '';
     documentoEscaneadoFile?:File;
 
-    @Input() dropdownChoice: string = '';
+    @Input() dropdownChoice = '';
 
     public euacapeForm: FormGroup = this.fb.group({
       administracion: [null, [Validators.required]],

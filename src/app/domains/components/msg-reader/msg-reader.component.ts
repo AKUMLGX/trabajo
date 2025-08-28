@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import MsgReader, { FieldsData } from '@kenjiuno/msgreader';
 import { FileService } from '../../services/file.service';
 
@@ -9,7 +9,7 @@ import { FileService } from '../../services/file.service';
   templateUrl: './msg-reader.component.html',
   styleUrl: './msg-reader.component.css',
 })
-export class MsgReaderComponent {
+export class MsgReaderComponent implements OnInit {
 
   public senderName: string | undefined = '';
   public senderEmail: string | undefined = '';
@@ -19,7 +19,7 @@ export class MsgReaderComponent {
   public body: string | undefined = '';
   public attachments: FieldsData[] | undefined = [];
 
-  public msg: string = '';
+  public msg = '';
 
   constructor(private fileService: FileService) { }
 

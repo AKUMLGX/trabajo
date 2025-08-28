@@ -1,0 +1,1468 @@
+/* ==== ESTILOS PARA DOCUMENTOS CON ENDPOINTS REALES ==== */
+
+/* Estado seleccionado para documentos */
+.document-card.selected {
+  border-color: #3b82f6 !important;
+  background-color: #eff6ff !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.document-card.selected .document-icon mat-icon {
+  color: #3b82f6 !important;
+}
+
+.document-card.selected h4 {
+  color: #1e40af !important;
+}
+
+/* Fecha del documento */
+.document-date {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* Estados de carga y error en visor */
+.error-viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Estilos para íconos */
+.text-3xl {
+  font-size: 32px;
+  height: 32px;
+  width: 32px;
+}
+
+.text-sm {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+/* Animaciones y transiciones */
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Ajustes para elementos de formulario */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Estilos para pestañas */
+::ng-deep .mat-mdc-tab-body-content {
+  padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-tab-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+::ng-deep .mat-mdc-tab-label-active {
+  opacity: 1;
+  color: #691C32;
+}
+
+::ng-deep .mat-mdc-tab-label {
+  transition: background-color 0.3s ease;
+}
+
+::ng-deep .mat-mdc-tab-label:hover {
+  background-color: rgba(105, 28, 50, 0.04);
+}
+
+::ng-deep .mat-mdc-tab-header-pagination-chevron {
+  border-color: #691C32;
+}
+
+/* Efectos para las tarjetas de opciones */
+.hover\:bg-green-100:hover {
+  background-color: rgba(209, 250, 229, 1);
+}
+
+.hover\:bg-red-100:hover {
+  background-color: rgba(254, 226, 226, 1);
+}
+
+/* Ajuste para los botones de acción */
+button.mat-mdc-button-base {
+  transition: all 0.2s ease;
+}
+
+button.mat-mdc-button-base:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Color principal del tema */
+.text-\[\#691C32\] {
+  color: #691C32;
+}
+
+.bg-\[\#691C32\] {
+  background-color: #691C32;
+}
+
+/* Estilos para la insignia de prioridad */
+.px-3.py-1.rounded-full {
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+/* Efecto de elevación para botones */
+.hover\:shadow-md:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Estilos para el fondo degradado con patrón */
+.bg-pattern {
+  background-image: url('../../../../../../../assets/images/pattern.png');
+  background-color: #f9f5f2;
+  background-repeat: repeat;
+  background-size: 200px;
+  background-blend-mode: multiply;
+  opacity: 0.1;
+}
+
+/* Estilos para bordes redondeados */
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+/* Estilos principales del modal */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: #fff;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Modal a pantalla completa */
+.wide-modal {
+  max-width: none;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos del encabezado */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #691C32, #9A2845);
+  padding: 8px 16px;
+  color: #fff;
+  min-height: 56px;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+}
+
+.document-icon {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.document-icon mat-icon {
+  color: #691C32;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.folio-info h1 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+
+.folio-info p {
+  font-size: 13px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.priority-badge {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 16px;
+  margin-right: 16px;
+  letter-spacing: 0.5px;
+}
+
+.priority-badge.alta {
+  background-color: #DC2626;
+  color: white;
+}
+
+.priority-badge.media {
+  background-color: #F59E0B;
+  color: white;
+}
+
+.priority-badge.baja {
+  background-color: #10B981;
+  color: white;
+}
+
+.close-button {
+  color: white;
+}
+
+/* Estilos de la sección de información */
+.info-section {
+  padding: 8px 16px;
+  background-color: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 8px;
+  align-items: start;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item label {
+  font-size: 12px;
+  color: #6B7280;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.info-item span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1F2937;
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info-item .estado {
+  color: #2563EB;
+  font-weight: 600;
+}
+
+.info-item .dias {
+  color: #DC2626;
+  font-weight: 600;
+}
+
+/* Estilos para el contenedor dividido */
+.split-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0; /* Importante para que flex funcione correctamente */
+}
+
+.left-panel {
+  flex: 0 0 30%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #E5E7EB;
+}
+
+.right-panel {
+  flex: 0 0 70%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Estilos de las pestañas */
+.custom-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+::ng-deep .mat-mdc-tab-header {
+  background-color: #fff;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+::ng-deep .mat-mdc-tab-label {
+  height: 48px;
+  opacity: 1;
+  color: #6B7280;
+}
+
+::ng-deep .mat-mdc-tab-label-active {
+  color: #691C32;
+  font-weight: 500;
+}
+
+.tab-label {
+  display: flex;
+  align-items: center;
+}
+
+.tab-label mat-icon {
+  margin-right: 8px;
+  color: inherit;
+}
+
+/* Estilos del contenido de pestañas */
+.tab-content {
+  padding: 16px;
+  overflow: auto;
+  height: 100%;
+}
+
+.section {
+  background-color: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.dual-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.text-content {
+  font-size: 13px;
+  color: #4B5563;
+  line-height: 1.4;
+  margin: 0 0 10px 0;
+}
+
+.text-content:last-child {
+  margin-bottom: 0;
+}
+
+.list-content {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.list-content li {
+  font-size: 13px;
+  color: #4B5563;
+  margin-bottom: 6px;
+}
+
+.list-content li:last-child {
+  margin-bottom: 0;
+}
+
+/* Estilos para la sección de PDF */
+.pdf-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pdf-item {
+  display: flex;
+  align-items: center;
+  background-color: #F9FAFB;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pdf-item:hover {
+  background-color: #EFF6FF;
+}
+
+.pdf-icon {
+  background-color: #EFF6FF;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.pdf-icon mat-icon {
+  color: #2563EB;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.pdf-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pdf-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.pdf-size {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.pdf-button {
+  font-size: 13px;
+}
+
+/* Estilos para la sección de revisión */
+.info-banner {
+  display: flex;
+  align-items: flex-start;
+  background-color: #EFF6FF;
+  border-left: 4px solid #3B82F6;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  border-radius: 0 4px 4px 0;
+}
+
+.info-banner mat-icon {
+  color: #3B82F6;
+  margin-right: 12px;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  margin-top: 2px;
+}
+
+.info-banner p {
+  font-size: 14px;
+  color: #1E40AF;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Estilos para las opciones de atención */
+.atencion-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.radio-option {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.radio-option:hover {
+  background-color: #F9FAFB;
+}
+
+.option-description {
+  margin: 8px 0 0 24px;
+  font-size: 13px;
+  color: #6B7280;
+}
+
+/* Estilos para las tarjetas de decisión */
+.decision-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card.approve {
+  background-color: #ECFDF5;
+  border: 1px solid #D1FAE5;
+}
+
+.card.approve:hover {
+  background-color: #D1FAE5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card.reject {
+  background-color: #FEF2F2;
+  border: 1px solid #FEE2E2;
+}
+
+.card.reject:hover {
+  background-color: #FEE2E2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card-icon {
+  margin-bottom: 12px;
+}
+
+.card.approve .card-icon mat-icon {
+  color: #059669;
+  font-size: 32px;
+  height: 32px;
+  width: 32px;
+}
+
+.card.reject .card-icon mat-icon {
+  color: #DC2626;
+  font-size: 32px;
+  height: 32px;
+  width: 32px;
+}
+
+.card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.card.approve h3 {
+  color: #065F46;
+}
+
+.card.reject h3 {
+  color: #991B1B;
+}
+
+.card p {
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.card.approve p {
+  color: #065F46;
+}
+
+.card.reject p {
+  color: #991B1B;
+}
+
+/* Estilos del formulario de rechazo */
+.rejection-form {
+  background-color: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.form-field mat-form-field {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  height: 0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.form-actions button {
+  margin-left: 12px;
+}
+
+/* Estilos para el visualizador de PDF */
+.pdf-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  overflow: hidden;
+}
+
+.pdf-viewer-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.document-info {
+  display: flex;
+  align-items: center;
+  background-color: #EFF6FF;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.document-info mat-icon {
+  color: #2563EB;
+  margin-right: 8px;
+}
+
+.pdf-viewer-content {
+  flex-grow: 1;
+  overflow: hidden;
+  background-color: #F3F4F6;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  position: relative;
+  height: auto;
+  min-height: calc(100vh - 250px);
+}
+
+.empty-viewer-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: #F9FAFB;
+  border: 1px dashed #D1D5DB;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.empty-viewer-message mat-icon {
+  color: #9CA3AF;
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-viewer-message p {
+  color: #6B7280;
+  text-align: center;
+  margin: 0;
+}
+
+/* Estilos para el contenedor del PDF */
+.pdf-document-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Estilos para el indicador de carga */
+.loading-viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: #F9FAFB;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #691C32;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-viewer p {
+  color: #6B7280;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Información adicional del encargado */
+.additional-info {
+  margin-top: 20px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  padding: 16px;
+}
+
+.additional-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.info-data {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-row {
+  display: flex;
+  font-size: 14px;
+}
+
+.info-row label {
+  width: 140px;
+  font-weight: 500;
+  color: #4B5563;
+}
+
+.info-row span {
+  flex-grow: 1;
+  color: #1F2937;
+}
+
+/* Optimizaciones para tamaños de pantalla más pequeños */
+@media (max-width: 1366px) {
+  .split-container {
+    flex-direction: column;
+  }
+  
+  .left-panel, .right-panel {
+    flex: 1 1 auto;
+    width: 100%;
+    max-height: 50%;
+  }
+  
+  .left-panel {
+    border-right: none;
+    border-bottom: 1px solid #E5E7EB;
+  }
+}
+
+@media (min-width: 1367px) {
+  .wide-modal {
+    height: 95vh;
+  }
+  
+  .pdf-viewer-content {
+    min-height: 750px;
+  }
+}
+
+/* Estilos específicos para el visor de PDF ngx-extended-pdf-viewer */
+::ng-deep .ngx-extended-pdf-viewer-container {
+  height: 100% !important;
+}
+
+::ng-deep .toolbar {
+  background-color: #F9FAFB !important;
+  border-bottom: 1px solid #E5E7EB !important;
+}
+
+::ng-deep #toolbarViewer {
+  padding: 4px !important;
+}
+
+::ng-deep #viewerContainer {
+  background-color: #F3F4F6 !important;
+}
+
+/* Estilos para los controles del PDF */
+.pdf-controls {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  background-color: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.control-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.control-button {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.control-button:hover {
+  background-color: #F3F4F6;
+  border-color: #9CA3AF;
+  transform: translateY(-1px);
+}
+
+.control-button mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  margin-right: 6px;
+}
+
+.control-tips {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #E5E7EB;
+}
+
+.control-tips p {
+  font-size: 13px;
+  color: #6B7280;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Estilos para la vista de comparación */
+.comparison-view {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #F3F4F6;
+}
+
+.comparison-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #691C32;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+.comparison-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.close-comparison {
+  color: white;
+}
+
+.comparison-container {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  padding: 8px;
+  height: calc(100% - 44px);
+  overflow: hidden;
+}
+
+.comparison-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+}
+
+.comparison-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.comparison-panel-header h5 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.select-button {
+  font-size: 12px;
+  color: #691C32;
+  padding: 2px 8px;
+}
+
+.select-button mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+.comparison-panel-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.empty-comparison {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #F9FAFB;
+}
+
+.empty-comparison mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  margin-bottom: 16px;
+  color: #9CA3AF;
+}
+
+.empty-comparison p {
+  color: #6B7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Contenedor PDF a pantalla completa */
+.full-pdf-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ajustes para aprovechar el espacio horizontal */
+::ng-deep .pdfViewer .page {
+  margin: 0 auto 8px auto !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+/* Ajustes para la visualización del PDF a pantalla completa */
+::ng-deep ngx-extended-pdf-viewer {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+::ng-deep .ng2-pdf-viewer-container {
+  height: 100% !important;
+  overflow: auto !important;
+}
+
+/* Compactar toolbar del PDF */
+::ng-deep .toolbar {
+  padding: 0 !important;
+  min-height: 32px !important;
+}
+
+::ng-deep .toolbarButton {
+  min-width: 20px !important;
+  height: 20px !important;
+}
+
+/* Estilos específicos para dispositivos grandes */
+@media (min-width: 1920px) {
+  .info-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .left-panel {
+    flex: 0 0 25%;
+  }
+  
+  .right-panel {
+    flex: 0 0 75%;
+  }
+} 
+
+/* Indicador de progreso */
+.progress-container {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(to right, #10B981, #059669);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4B5563;
+}
+
+/* Badges en el header */
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dias-badge {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.dias-badge .icon-small {
+  font-size: 14px;
+  height: 14px;
+  width: 14px;
+  margin-right: 4px;
+}
+
+/* Tarjetas de acción rápida */
+.action-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-color: #d1d5db;
+}
+
+.action-card mat-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  margin-bottom: 8px;
+  color: #691C32;
+}
+
+.action-card span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4B5563;
+}
+
+/* Cuadrícula de documentos */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.document-card {
+  display: flex;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  align-items: center;
+}
+
+.document-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-color: #d1d5db;
+}
+
+.document-card .document-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #FEF2F2;
+  border-radius: 8px;
+  margin-right: 12px;
+}
+
+.document-card .document-icon mat-icon {
+  color: #DC2626;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.document-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.document-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1F2937;
+}
+
+.document-info p {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #6B7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.document-meta {
+  font-size: 11px;
+  color: #9CA3AF;
+  display: block;
+}
+
+/* Mejoras para las opciones de radio */
+.radio-option {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.radio-option:hover {
+  background-color: #f9fafb;
+}
+
+.radio-option.selected {
+  border-color: #691C32;
+  background-color: rgba(105, 28, 50, 0.05);
+}
+
+.radio-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.radio-header h3 {
+  margin: 0 0 0 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1F2937;
+}
+
+/* Mejora para el visualizador de PDF */
+.viewer-title {
+  display: flex;
+  align-items: center;
+}
+
+.viewer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pdf-viewer-content {
+  transition: all 0.3s ease;
+}
+
+.pdf-viewer-content.expanded {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: white;
+  padding: 20px;
+}
+
+.empty-viewer-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  gap: 16px;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+/* Estilos para truncar texto largo */
+.truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  display: inline-block;
+}
+
+/* 🆕 Estilos para la sección de Atención Propuesta */
+.atencion-propuesta-container {
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.atencion-propuesta-card {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 2px solid #3B82F6;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.atencion-propuesta-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3B82F6, #1D4ED8, #3B82F6);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.atencion-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.atencion-icon {
+  color: #3B82F6;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  margin-right: 12px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.atencion-header h3 {
+  color: #1E40AF;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.025em;
+}
+
+.atencion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.atencion-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  position: relative;
+  overflow: hidden;
+}
+
+.atencion-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.atencion-badge:hover::before {
+  left: 100%;
+}
+
+.badge-parcial {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+  border: 2px solid #F59E0B;
+}
+
+.badge-total {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
+  border: 2px solid #10B981;
+}
+
+.badge-default {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  color: white;
+  border: 2px solid #6366F1;
+}
+
+.atencion-description {
+  color: #1E40AF;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* 🆕 Estilos para estados de carga y deshabilitado */
+.card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+}
+
+.loading-spinner-small {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.card.approve .loading-spinner-small {
+  border: 3px solid rgba(5, 150, 105, 0.3);
+  border-top: 3px solid #059669;
+}
+
+.card.reject .loading-spinner-small {
+  border: 3px solid rgba(220, 38, 38, 0.3);
+  border-top: 3px solid #DC2626;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 

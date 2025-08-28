@@ -1,0 +1,502 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.main-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-sm;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card:hover {
+  @apply shadow-md;
+  transform: translateY(-2px);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.info-item {
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  background-color: #f3f4f6;
+}
+
+.info-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.priority-badge {
+  @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium;
+}
+
+.priority-badge.bg-red-100 {
+  @apply bg-red-50 text-red-700 ring-1 ring-red-600/10;
+}
+
+.priority-badge.bg-yellow-100 {
+  @apply bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/10;
+}
+
+.priority-badge.bg-green-100 {
+  @apply bg-green-50 text-green-700 ring-1 ring-green-600/10;
+}
+
+.status-badge {
+  @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium;
+}
+
+.status-badge.bg-blue-100 {
+  @apply bg-blue-50 text-blue-700 ring-1 ring-blue-600/10;
+}
+
+.status-badge.bg-orange-100 {
+  @apply bg-orange-50 text-orange-700 ring-1 ring-orange-600/10;
+}
+
+.status-badge.bg-green-100 {
+  @apply bg-green-50 text-green-700 ring-1 ring-green-600/10;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.875rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #e5e7eb;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 2rem;
+  padding-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #e5e7eb;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-title {
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-description {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.document-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+  transition: background-color 0.3s ease;
+}
+
+.document-item:hover {
+  background-color: #f3f4f6;
+}
+
+.document-icon {
+  color: #6b7280;
+}
+
+.document-info {
+  flex: 1;
+}
+
+.document-name {
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.document-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  transform: translateY(-1px);
+}
+
+.progress-section {
+  margin-top: 1rem;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stats-number {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #1f2937;
+}
+
+.stats-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.side-panel {
+  position: sticky;
+  top: 5rem;
+  height: fit-content;
+}
+
+.progress-card {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.progress-value {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 1rem 0;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.mat-mdc-card {
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.mat-mdc-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.mat-mdc-button-base {
+  height: 48px !important;
+}
+
+.mat-mdc-button-base.mat-flat-button {
+  @apply bg-blue-600 text-white;
+}
+
+.mat-mdc-button-base.mat-flat-button:hover {
+  @apply bg-blue-700;
+}
+
+.mat-mdc-button-base.mat-stroked-button {
+  @apply border border-gray-300 bg-white text-gray-700;
+}
+
+.mat-mdc-button-base.mat-stroked-button:hover {
+  @apply bg-gray-50;
+}
+
+.mat-mdc-button-base.mat-stroked-button.mat-warn {
+  @apply border-red-300 text-red-700;
+}
+
+.mat-mdc-button-base.mat-stroked-button.mat-warn:hover {
+  @apply bg-red-50;
+}
+
+::ng-deep .mat-mdc-progress-bar {
+  height: 8px !important;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
+  border-radius: 4px !important;
+}
+
+.mat-icon {
+  @apply h-5 w-5;
+  font-size: 20px !important;
+}
+
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (max-width: 1024px) {
+  .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .col-span-2 {
+    grid-column: span 1;
+  }
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.hover\:shadow-md:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.timeline-dot {
+  @apply absolute -left-[5px] top-0 w-3 h-3 bg-blue-500 rounded-full;
+  border: 2px solid white;
+}
+
+/* Animación para el fade-in del modal */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Nueva animación para fadeIn */
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Efecto para los elementos del modal de revisión */
+.bg-gradient-to-r.from-\[\#691C32\].to-\[\#8B2A44\] {
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+  transition: background-position 0.5s ease;
+}
+
+.bg-gradient-to-r.from-\[\#691C32\].to-\[\#8B2A44\]:hover {
+  background-position: 100% 0%;
+}
+
+/* Estilo para controles de formulario en el modal */
+.shadow-sm.focus\:ring-\[\#691C32\].focus\:border-\[\#691C32\]:focus {
+  box-shadow: 0 0 0 3px rgba(105, 28, 50, 0.2);
+}
+
+/* Transiciones suaves para botones del modal */
+.transition-colors {
+  transition: all 0.2s ease;
+}
+
+/* Estilos para el visor de PDF */
+.bg-gray-800.overflow-auto.flex.justify-center {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 10px,
+    rgba(0, 0, 0, 0.2) 10px,
+    rgba(0, 0, 0, 0.2) 20px
+  );
+}
+
+/* Hover effects para los elementos interactivos */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+/* Estilos para los paneles */
+.shadow-lg, .shadow-md, .shadow-xl {
+  transition: all 0.3s ease;
+}
+
+/* Estilo para los campos de formulario */
+textarea:focus, input:focus {
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 3px rgba(105, 28, 50, 0.2);
+}
+
+/* Efecto hover para documentos adjuntos */
+.flex.items-center.p-4.border.border-blue-200.rounded-lg {
+  transition: all 0.2s ease;
+}
+
+.flex.items-center.p-4.border.border-blue-200.rounded-lg:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Efecto para el historial de eventos */
+.rounded-xl.p-5.border.mb-2.shadow-md {
+  transition: all 0.2s ease;
+}
+
+.rounded-xl.p-5.border.mb-2.shadow-md:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Mejora visual para el encabezado pegajoso */
+.sticky.top-0.z-10 {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Estilos para los Snackbars */
+::ng-deep .mat-snackbar-success {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+::ng-deep .mat-snackbar-error {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+::ng-deep .mat-snackbar-info {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+::ng-deep .mat-snackbar-success .mat-simple-snackbar-action,
+::ng-deep .mat-snackbar-error .mat-simple-snackbar-action,
+::ng-deep .mat-snackbar-info .mat-simple-snackbar-action {
+  color: white !important;
+}
+
+/* Animaciones para el modal */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.animate-zoomIn {
+  animation: zoomIn 0.25s ease-out;
+}
+
+
+
+.next-button {
+    @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+}
+
+.next-button-disabled {
+    @apply bg-wine/40 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow outline-none mr-1
+}

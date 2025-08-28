@@ -11,7 +11,7 @@ import { CustomModalWithTemplateComponent } from '../components/custom-modal-wit
 })
 export class ModalService {
 
-  showError: EventEmitter<boolean> = new EventEmitter();
+  showError = new EventEmitter<boolean>();
 
   constructor(private matDialog: MatDialog) { }
   
@@ -22,7 +22,11 @@ export class ModalService {
   
   openCustomDialogWithTemplate(data: TemplateModalData){
     return this.matDialog.open(
-      CustomModalWithTemplateComponent, {data, disableClose: true}
+      CustomModalWithTemplateComponent, {data, disableClose: false}
     )
+  }
+
+  closeAllDialogs() {
+    this.matDialog.closeAll();
   }
 }

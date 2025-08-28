@@ -12,7 +12,7 @@ export class DropdownComponent {
 
   selectedOption: any;
 
-  isSubmenuDeployed: boolean = false;
+  isSubmenuDeployed = false;
 
   asuntos = [
     { name: 'EUACAPES', value: 'option-1' },

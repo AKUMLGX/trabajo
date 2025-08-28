@@ -21,7 +21,7 @@ export class CustomSidenavComponent {
   // }
 
   constructor(private logoutService: LogoutService) {}
-  @Input() collapsed: boolean = false;
+  @Input() collapsed = false;
 
   public environment = environment;
 
@@ -35,6 +35,11 @@ export class CustomSidenavComponent {
       icon: 'dashboard',
       label: 'Bandeja de atención',
       route: '/layout/assistance',
+    },
+    {
+      icon: 'gavel',
+      label: 'Bandeja de dictaminador',
+      route: '/layout/dictaminador',
     },
     {
       icon: 'analytics',

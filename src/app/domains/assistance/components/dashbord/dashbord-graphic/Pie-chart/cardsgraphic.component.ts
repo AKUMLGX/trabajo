@@ -20,10 +20,10 @@ export class CardsgraphicComponent {
   view : [number,number] = [400, 150];
 
   // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = true;
-  isDoughnut: boolean = false;
+  gradient = true;
+  showLegend = true;
+  showLabels = true;
+  isDoughnut = false;
 
 
 

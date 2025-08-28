@@ -1,0 +1,163 @@
+<!-- Contenedor principal sin mat-card para mejor control del diseño -->
+<div class="user-profile-container" [ngClass]="{'compact': compact}">
+  <!-- Header elegante con gradiente y efectos -->
+  <div class="profile-header-elegant">
+    <!-- Fondo decorativo con patrones -->
+    <div class="header-background">
+      <div class="pattern-overlay"></div>
+      <div class="gradient-overlay"></div>
+    </div>
+    
+    <!-- Contenido del header -->
+    <div class="header-content">
+      <!-- Avatar mejorado con efectos -->
+      <div class="avatar-container">
+        <div class="avatar-ring"></div>
+        <div class="user-avatar-elegant">
+          <span class="avatar-text-elegant">{{ getIniciales() }}</span>
+        </div>
+        <!-- Badge de estado -->
+        <div class="status-badge" [ngClass]="getBadgeColor()">
+          <mat-icon>{{ getTipoUsuarioIcon() }}</mat-icon>
+        </div>
+      </div>
+      
+      <!-- Información principal -->
+      <div class="user-info-main">
+        <h1 class="user-name-elegant">{{ usuario?.nombre || 'Usuario SAT' }}</h1>
+        <p class="user-position-elegant">{{ getTipoUsuarioDescripcion() }}</p>
+        <div class="user-rfc-badge">
+          <mat-icon class="rfc-icon">badge</mat-icon>
+          <span>{{ usuario?.rfc || 'No disponible' }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Indicador de tiempo de sesión mejorado -->
+    <div class="session-indicator" *ngIf="usuario">
+      <div class="session-info">
+        <div class="session-time" [ngClass]="{'warning': usuario.sesionProximaExpirar, 'normal': !usuario.sesionProximaExpirar}">
+          <mat-icon class="time-icon">schedule</mat-icon>
+          <span class="time-text">{{ getTiempoRestanteTexto() }}</span>
+        </div>
+      </div>
+      <div class="session-progress-container">
+        <div class="session-progress-bar" [style.width.%]="getPorcentajeSesion()"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal mejorado -->
+  <div class="profile-content-elegant" *ngIf="usuario">
+    <!-- Información básica -->
+    <div class="info-section" *ngIf="!compact">
+      <h4 class="section-title">
+        <mat-icon>info</mat-icon>
+        Información General
+      </h4>
+      
+      <div class="info-grid">
+        <!-- Información de Administración -->
+        <div class="info-item administracion-item">
+          <mat-icon class="info-icon">corporate_fare</mat-icon>
+          <div class="info-content">
+            <span class="info-label">Administración SAT</span>
+            <div class="administracion-info">
+              <span class="administracion-numero">{{ usuario.administracion || 'No asignada' }}</span>
+              <span class="administracion-descripcion">{{ usuario.descripcionAdministracion }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="info-item" *ngIf="usuario.tipoContribuyente">
+          <mat-icon class="info-icon">business</mat-icon>
+          <div class="info-content">
+            <span class="info-label">Tipo Contribuyente</span>
+            <span class="info-value">{{ usuario.tipoContribuyente }}</span>
+          </div>
+        </div>
+        
+        <div class="info-item" *ngIf="usuario.tipoPersona">
+          <mat-icon class="info-icon">person_outline</mat-icon>
+          <div class="info-content">
+            <span class="info-label">Tipo Persona</span>
+            <span class="info-value">{{ usuario.tipoPersona }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider *ngIf="!compact"></mat-divider>
+
+    <!-- Roles del usuario -->
+    <div class="roles-section">
+      <h4 class="section-title" *ngIf="!compact">
+        <mat-icon>verified_user</mat-icon>
+        Roles y Permisos
+      </h4>
+      
+      <div class="roles-container">
+        <mat-chip-listbox class="roles-list">
+          <mat-chip-option 
+            *ngFor="let rol of usuario.rolesArray" 
+            [color]="getRolColor(rol)"
+            selected>
+            <mat-icon matChipAvatar>{{ getRolIcon(rol) }}</mat-icon>
+            {{ rol | titlecase }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+    </div>
+
+    <!-- Información de sesión avanzada -->
+    <div class="session-section" *ngIf="showAdvancedInfo && !compact">
+      <mat-divider></mat-divider>
+      
+      <h4 class="section-title">
+        <mat-icon>access_time</mat-icon>
+        Información de Sesión
+      </h4>
+      
+      <div class="session-grid">
+        <div class="session-item">
+          <mat-icon class="session-icon">login</mat-icon>
+          <div class="session-content">
+            <span class="session-label">Inicio de Sesión</span>
+            <span class="session-value">{{ formatearFecha(usuario.fechaEmision) }}</span>
+          </div>
+        </div>
+        
+        <div class="session-item">
+          <mat-icon class="session-icon">logout</mat-icon>
+          <div class="session-content">
+            <span class="session-label">Expiración</span>
+            <span class="session-value">{{ formatearFecha(usuario.fechaExpiracion) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alertas de seguridad -->
+    <div class="security-alerts" *ngIf="usuario.sesionProximaExpirar">
+      <div class="alert warning">
+        <mat-icon>warning</mat-icon>
+        <span>Tu sesión expirará pronto. Guarda tu trabajo.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Versión compacta para espacios pequeños -->
+  <div class="compact-content" *ngIf="compact && usuario">
+    <div class="compact-roles">
+      <mat-chip-option 
+        *ngFor="let rol of usuario.rolesArray.slice(0, 2)" 
+        [color]="getRolColor(rol)"
+        selected>
+        {{ rol.substring(0, 10) }}...
+      </mat-chip-option>
+      <span class="more-roles" *ngIf="usuario.rolesArray.length > 2">
+        +{{ usuario.rolesArray.length - 2 }} más
+      </span>
+    </div>
+  </div>
+</div> 

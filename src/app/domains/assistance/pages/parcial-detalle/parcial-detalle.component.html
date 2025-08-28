@@ -1,0 +1,170 @@
+<div class=" border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto ">
+  <!-- Título principal con botón de regreso -->
+  <div
+    class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] text-white py-4 px-6 mb-5 rounded-t-lg shadow-md flex items-center">
+    <button (click)="volver()" class="mr-4 hover:text-gray-200 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+    </button>
+    <h1 class="text-2xl font-bold text-center">Asuntos atendidos de forma parcial</h1>
+  </div>
+
+  <!-- Filtros  -->
+  <div class="px-6 pb-6">
+    <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-[#691C32]">Filtros de Búsqueda</h2>
+        <button (click)="descargarExcel()"
+          class="flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Descargar Excel
+        </button>
+      </div>
+
+      <!-- Filtros  -->
+      <div class="p-4 bg-gray-50 mt-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Filtro Folio -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Folio Interno:</label>
+            <input type="search" [(ngModel)]="searchfolio_interno" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por Folio Interno:...">
+          </div>
+          <!-- Filtro Carpeta -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Carpeta de investigación :</label>
+            <input type="search" [(ngModel)]="searchcarpeta_investigacion" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por  Carpeta de investigación...">
+          </div>
+          <!-- Filtro  N° Oficio -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Número de Oficio :</label>
+            <input type="search" [(ngModel)]="searchTextNoOficio" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por Número de Oficio...">
+          </div>
+          <!-- filtro Persona  -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"> Persona relacionada:</label>
+            <input type="search" [(ngModel)]=" searchPersona_relacionada" (ngModelChange)="onSearchChange()"
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
+              placeholder="Buscar por  Persona relacionada ...">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tabla de asuntos -->
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-[#691C32] text-white">
+            <tr>
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio Interno
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Carpeta de
+                Investigación</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Persona
+                Relacionada</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Número de Oficio
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Recepción
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Plazo de atención
+              </th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <ng-container
+              *ngFor="let asunto of ( filteredDataMul$ | async)?.slice((pageSelected-1)*itemsPerPage,pageSelected*itemsPerPage ); let i = index">
+              <tr [class]="i % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'" class="cursor-pointer">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.folio_interno }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.carpeta_investigacion }}</td>
+                <td class="px-6 py-4  max-w-[250px] truncate whitespace-nowrap overflow-hidden  text-sm text-gray-500">
+                  <label title="{{ asunto.persona_relacionada }}" class="block truncate cursor-pointer">
+                    {{ asunto.persona_relacionada }}
+                  </label>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.oficio }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.fecha_recepcion }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ asunto.plazo_atencion | plazo }} </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <div class="flex justify-center space-x-2">
+                    <button (click)="abrirModalPDF(templatePDF)"
+                      (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)">
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
+        <div>
+          @if (pages.length > 0) {
+          <ul>
+            <li *ngFor="
+                          let document of allData
+                            | paginate
+                              : {
+                                  itemsPerPage: itemsPerPage,
+                                  currentPage: pageSelected
+                                }
+                        "></li>
+          </ul>
+          <div class="has-text-centered">
+            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+              [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+          </div>
+          }
+        </div>
+      </div>
+      <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
+        <p class="text-sm leading-5 text-wine">
+          Mostrando
+          <span class="font-medium">{{
+            (pageSelected - 1) * itemsPerPage + 1
+            }}</span>
+          a
+          <span class="font-medium">{{
+            (pageSelected - 1) * itemsPerPage + itemsPerPage < allData.length ? (pageSelected - 1) * itemsPerPage +
+              itemsPerPage : allData.length }}</span>
+              de
+              <span class="font-medium">{{ allData.length }}</span>
+              resultados
+        </p>
+      </div>
+    </div>
+
+
+    <ng-template #templatePDF>
+      @if (visualizarPdf) {
+      <div class="p-6 w-[800px] h-[750px]">
+        <div class="p-6  bg-white rounded shadow-xl">
+          <app-pdf-viewer [mostrarBotonCerrar]="false"></app-pdf-viewer>
+        </div>
+        <div class="flex justify-center mb-4">
+          <button mat-dialog-close (click)="cerrarVisualizadorPdf()" class=" bg-wine text-white active:bg-pink-600 font-bold
+        uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
+        focus:outline-none mr-1 ease-linear transition-all duration-150">
+            Cerrar
+          </button>
+        </div>
+      </div>
+      }
+    </ng-template>
+
+  </div>

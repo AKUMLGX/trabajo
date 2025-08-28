@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AsuntoService } from '../../services/asunto.service';
@@ -11,11 +11,17 @@ import { AsuntoService } from '../../services/asunto.service';
   templateUrl: './pdf-viewer.component.html',
   styleUrl: './pdf-viewer.component.css',
 })
-export class PdfViewerComponent {
-  pdfUrl: string = '';
+export class PdfViewerComponent implements OnInit {
+  pdfUrl = '';
 
   @Output() showTablePDF = new EventEmitter<void>()
+
+    @Input() mostrarBotonCerrar = true;
+
+  @Output() cerrado = new EventEmitter<void>()
+
   mostrarTablaPDF: boolean = true
+  mostrarBtnclose: boolean = true
 
   constructor(private fileService: FileService) { }
 
@@ -35,5 +41,9 @@ export class PdfViewerComponent {
   showAgain() {
     this.showTablePDF.emit()
     this.mostrarTablaPDF = false
+  }
+
+  showButton() {
+this.showTablePDF.emit();
   }
 }

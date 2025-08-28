@@ -1,0 +1,129 @@
+/* Estilos para los paneles de estadísticas */
+.mat-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
+}
+
+/* Estilos para las pestañas */
+::ng-deep .mat-mdc-tab-header {
+  background-color: #ffffff;
+  border-radius: 8px 8px 0 0;
+}
+
+::ng-deep .mat-mdc-tab-labels {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+::ng-deep .mat-mdc-tab-label-active {
+  opacity: 1;
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+  background-color: #ffffff;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Estilos para los componentes de tabla */
+app-asuntos-pendientes-table, app-asuntos-revisados-table {
+  display: block;
+  width: 100%;
+}
+
+/* Animaciones */
+.transition-shadow {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Utilidades */
+.bg-gradient-pattern {
+  /* Comentamos la referencia a la imagen que falta */
+  /* background-image: url('assets/images/pattern.png'); */
+  background-color: #f9f5f2;
+  background-repeat: repeat;
+  background-size: 300px;
+  background-blend-mode: multiply;
+}
+
+/* Estilos para los botones de acciones */
+.action-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+}
+
+/* Estilo para indicadores de prioridad */
+.priority-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.priority-high {
+  background-color: #ef4444;
+}
+
+.priority-medium {
+  background-color: #f59e0b;
+}
+
+.priority-low {
+  background-color: #10b981;
+} 
+
+/* 🆕 ESTILOS PARA TOOLTIP GRANDE */
+::ng-deep .tooltip-large {
+  max-width: 400px !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+}
+
+/* ✅ ESTILOS PARA MODAL PDF VIEWER */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+}
+
+/* Estilos para el modal PDF */
+.pdf-modal {
+  backdrop-filter: blur(4px);
+}
+
+.pdf-modal-content {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Estilos para el iframe del PDF */
+.pdf-iframe {
+  border: none;
+  border-radius: 8px;
+}
+
+/* Estilos para el botón de cerrar */
+.pdf-close-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.pdf-close-button:hover {
+  transform: scale(1.1);
+} 

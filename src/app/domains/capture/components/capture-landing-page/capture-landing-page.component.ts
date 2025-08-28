@@ -12,7 +12,7 @@ export class CaptureLandingPageComponent {
 
   @Output() startStepper = new EventEmitter;
 
-  isStepperInitialized: boolean = false;
+  isStepperInitialized = false;
 
   public environment =  environment;
 

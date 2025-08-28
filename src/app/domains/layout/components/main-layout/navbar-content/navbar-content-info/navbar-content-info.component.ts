@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
@@ -8,10 +8,10 @@ import { NavigationEnd, Router } from '@angular/router';
   templateUrl: './navbar-content-info.component.html',
   styleUrl: './navbar-content-info.component.css'
 })
-export class NavbarContentInfoComponent {
-  path: string = '';
-  moduleDescription: string = '';
-  dashboard: string = 'Dashboard';
+export class NavbarContentInfoComponent implements OnInit, OnDestroy {
+  path = '';
+  moduleDescription = '';
+  dashboard = 'Dashboard';
   routerEvents: any;
   constructor(private router: Router) { 
     this.routerEvents = this.router.events.subscribe(
@@ -24,6 +24,9 @@ export class NavbarContentInfoComponent {
           } else if(this.path === '/layout/assistance') {
             this.path = 'Bandeja de atención';
             this.moduleDescription = 'Funcionalidades para la atención de asuntos';
+          } else if(this.path === '/layout/asignacion') {
+            this.path = 'Asuntos por asignar';
+            this.moduleDescription = 'Funcionalidades para la asignación de asuntos';
           } else if(this.path === '/layout/tracking') {
             this.path = 'Bandeja de seguimiento';
             this.moduleDescription = 'Funcionalidades para la consulta de las bandejas de captura y atención';
