@@ -429,7 +429,11 @@
                 <!-- Filas de datos modernizadas -->
                 <tr *ngFor="let asunto of asuntosPaginados; let i = index"
                     class="hover:bg-slate-50 transition-all duration-200 group border-b border-slate-100"
-                    [ngClass]="{'bg-red-50 border-red-200': isAsuntoSeleccionado(asunto.id)}">
+                    [ngClass]="{
+                      'bg-red-50 border-red-200': isAsuntoSeleccionado(asunto.id),
+                      'bg-emerald-50 border-emerald-200': asunto.estado_revision === 'APROBADO'
+                    }"
+                    [class.row-aprobado]="asunto.estado_revision === 'APROBADO' || (asuntosAprobados?.includes(asunto.id))">
                   
                   <!-- Checkbox de selección -->
                   <td class="w-16 px-4 py-5 text-center">

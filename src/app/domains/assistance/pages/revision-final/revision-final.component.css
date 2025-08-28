@@ -1,3 +1,9 @@
+/* Resaltado robusto para filas aprobadas (persiste ante recargas) */
+.row-aprobado {
+  background-color: #ecfdf5 !important; /* emerald-50 */
+  border-color: #a7f3d0 !important;     /* emerald-200 */
+}
+
 /* Estilos para los paneles de estadísticas */
 .mat-icon {
   height: 24px;
