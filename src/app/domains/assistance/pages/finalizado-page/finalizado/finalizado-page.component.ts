@@ -142,8 +142,7 @@ export class FinalizadoComponent implements OnInit {
   visualizarPdf: boolean = false;
 
   openPdfViewer(folio: string, path: string) {
-    let fileNamePath = path
-    let fileName = `${fileNamePath}`
+    const fileName = this.getFileName(path)
     if (folio == null) folio = "sinAsignar";
     this.fileService.updatePdfFileBandejaAtencion(folio.toString(), fileName)
   }
@@ -161,6 +160,22 @@ export class FinalizadoComponent implements OnInit {
 
   }
   //#endregion
+
+  descargarPdf(folio: string, path: string): void {
+    const fileName = this.getFileName(path);
+    if (folio == null) folio = "sinAsignar";
+    this.fileService.downloadPdfFileBandejaAtencion(
+      folio.toString(),
+      fileName,
+      fileName
+    );
+  }
+
+  private getFileName(path: string): string {
+    const split: string[] = path.replace('\\\\', '\\').split('\\');
+    const name = split.pop()?.replaceAll(' ', '_');
+    return name != undefined ? name.replaceAll('#', '') : '';
+  }
 
   //#region Navegación
   volver(): void {

@@ -95,8 +95,11 @@
             <td class="px-6 py-4 whitespace-nowrap text-center">
               <div class="flex justify-center space-x-2">
                 <button (click)="abrirModalPDF(templatePDF)"
-                  (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)">
+                  (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)" title="Ver PDF">
                   <mat-icon>remove_red_eye</mat-icon>
+                </button>
+                <button (click)="descargarPdf(asunto.folio_interno, asunto.documento_escaneado)" title="Descargar PDF">
+                  <mat-icon>download</mat-icon>
                 </button>
               </div>
             </td>
