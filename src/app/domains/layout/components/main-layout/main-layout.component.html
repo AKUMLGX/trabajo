@@ -12,7 +12,7 @@
     <button mat-icon-button class="text-white" (click)="openModal(userInfoModal)">
       <mat-icon>person</mat-icon >
     </button>
-    <button mat-icon-button class="text-white" [matTooltip]="'Revisión Final de Asuntos'" [routerLink]="'/layout/revision-final'">
+    <button mat-icon-button class="text-white" [matTooltip]="'Revisión Final de Asuntos'" [routerLink]="'/layout/revision-final'" *ngIf="puedeVerRevisionFinal">
       <mat-icon>approval</mat-icon>
     </button>
   </div>

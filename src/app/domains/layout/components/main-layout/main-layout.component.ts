@@ -18,6 +18,7 @@ import { LoadAnimationComponent } from '../../../components/load-animation/load-
 import { UserService } from '../../../services/user.service';
 import { UserProfileComponent } from '../../../components/user-profile/user-profile.component';
 import { Subject, takeUntil } from 'rxjs';
+import { PermissionsService } from '../../../services/permissions.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -49,11 +50,13 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   usuarioActual: UsuarioCompleto | null = null;
+  puedeVerRevisionFinal = false;
 
   constructor(
     private oauth2Service: Oauth2Service, 
     private modalService: ModalService,
-    private userService: UserService
+    private userService: UserService,
+    private permissionsService: PermissionsService
   ) { }
 
   collapsed = signal(false);
@@ -80,6 +83,12 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
         this.usuarioActual = usuario;
         this.actualizarInformacionUsuario(usuario);
       });
+
+    // Determinar si el usuario puede ver "Revisión Final de Asuntos"
+    this.permissionsService
+      .canAccessBandeja('revisionFinal')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(can => (this.puedeVerRevisionFinal = !!can));
   }
 
   ngOnDestroy(): void {
