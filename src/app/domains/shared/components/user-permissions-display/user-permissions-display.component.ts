@@ -60,11 +60,11 @@ import { Subscription } from 'rxjs';
               </mat-icon>
               <span class="font-medium">Bandeja de Captura</span>
             </div>
-            <mat-chip 
-              [color]="permissions?.captura ? 'accent' : 'warn'"
-              [selected]="true">
+            <span 
+              class="px-3 py-1 rounded-full text-xs font-medium"
+              [class]="permissions?.captura ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.captura ? 'Acceso Permitido' : 'Acceso Denegado' }}
-            </mat-chip>
+            </span>
           </div>
 
           <!-- Bandeja de Atención -->
@@ -76,11 +76,11 @@ import { Subscription } from 'rxjs';
               </mat-icon>
               <span class="font-medium">Bandeja de Atención</span>
             </div>
-            <mat-chip 
-              [color]="permissions?.atencion ? 'accent' : 'warn'"
-              [selected]="true">
+            <span 
+              class="px-3 py-1 rounded-full text-xs font-medium"
+              [class]="permissions?.atencion ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.atencion ? 'Acceso Permitido' : 'Acceso Denegado' }}
-            </mat-chip>
+            </span>
           </div>
 
           <!-- Bandeja de Dictaminador -->
@@ -92,11 +92,11 @@ import { Subscription } from 'rxjs';
               </mat-icon>
               <span class="font-medium">Bandeja de Dictaminador</span>
             </div>
-            <mat-chip 
-              [color]="permissions?.dictaminador ? 'accent' : 'warn'"
-              [selected]="true">
+            <span 
+              class="px-3 py-1 rounded-full text-xs font-medium"
+              [class]="permissions?.dictaminador ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.dictaminador ? 'Acceso Permitido' : 'Acceso Denegado' }}
-            </mat-chip>
+            </span>
           </div>
 
           <!-- Bandeja de Seguimiento -->
@@ -108,11 +108,11 @@ import { Subscription } from 'rxjs';
               </mat-icon>
               <span class="font-medium">Bandeja de Seguimiento</span>
             </div>
-            <mat-chip 
-              [color]="permissions?.seguimiento ? 'accent' : 'warn'"
-              [selected]="true">
+            <span 
+              class="px-3 py-1 rounded-full text-xs font-medium"
+              [class]="permissions?.seguimiento ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.seguimiento ? 'Acceso Permitido' : 'Acceso Denegado' }}
-            </mat-chip>
+            </span>
           </div>
 
           <!-- Bandeja de Reportes -->
@@ -124,11 +124,11 @@ import { Subscription } from 'rxjs';
               </mat-icon>
               <span class="font-medium">Bandeja de Reportes</span>
             </div>
-            <mat-chip 
-              [color]="permissions?.reportes ? 'accent' : 'warn'"
-              [selected]="true">
+            <span 
+              class="px-3 py-1 rounded-full text-xs font-medium"
+              [class]="permissions?.reportes ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.reportes ? 'Acceso Permitido' : 'Acceso Denegado' }}
-            </mat-chip>
+            </span>
           </div>
 
           <!-- Revisión Final de Asuntos -->
@@ -140,11 +140,11 @@ import { Subscription } from 'rxjs';
               </mat-icon>
               <span class="font-medium">Revisión Final de Asuntos</span>
             </div>
-            <mat-chip 
-              [color]="permissions?.revisionFinal ? 'accent' : 'warn'"
-              [selected]="true">
+            <span 
+              class="px-3 py-1 rounded-full text-xs font-medium"
+              [class]="permissions?.revisionFinal ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.revisionFinal ? 'Acceso Permitido' : 'Acceso Denegado' }}
-            </mat-chip>
+            </span>
           </div>
         </div>
       </div>
