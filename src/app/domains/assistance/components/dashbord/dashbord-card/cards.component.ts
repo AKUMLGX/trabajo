@@ -196,6 +196,10 @@ export class CardsComponent implements OnInit {
   paginaActual = 1;
   escalaZoom = 1.0;
 
+  // ✅ Persistencia local de aprobaciones (front-only)
+  private readonly localAprobKey: string = 'akamba:aprobados:v1';
+  private aprobadosLocales: Set<string> = new Set<string>();
+
   // Propiedades para el modal de detalles
   mostrarDetalleModal: boolean = false;
   asuntoSeleccionado: any = null;
@@ -283,6 +287,9 @@ export class CardsComponent implements OnInit {
 
     // Inicializar la paginación
     this.aplicarPaginacion();
+
+    // Cargar aprobaciones locales persistidas
+    this.cargarAprobadosLocal();
 
 
   }
@@ -814,6 +821,9 @@ export class CardsComponent implements OnInit {
     const tipoTexto = datos.tipoAprobacion === 'parcial' ? 'Parcial' : 'Total';
     this.mostrarMensaje(`Asunto ${datos.id} aprobado como Atención ${tipoTexto}`);
 
+    // Guardar aprobación local para persistir estilo/insignia tras refresh
+    this.marcarAprobadoLocal(String(datos.id));
+
     // Actualizar listas desde el servidor para reflejar cambio de estado
     this.cargarAsuntosPorAprobar();
     this.cargarAsuntosEnAtencion();
@@ -932,6 +942,48 @@ export class CardsComponent implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  // =====================
+  // Persistencia local (front)
+  // =====================
+  private cargarAprobadosLocal(): void {
+    try {
+      const raw = localStorage.getItem(this.localAprobKey);
+      if (raw) {
+        const ids: string[] = JSON.parse(raw);
+        if (Array.isArray(ids)) {
+          this.aprobadosLocales = new Set(ids.map(String));
+        }
+      }
+    } catch (e) {
+      console.warn('[Cards] No se pudo cargar aprobados locales:', e);
+      this.aprobadosLocales = new Set<string>();
+    }
+  }
+
+  private snapshotAprobadosLocal(): void {
+    try {
+      localStorage.setItem(this.localAprobKey, JSON.stringify(Array.from(this.aprobadosLocales)));
+    } catch (e) {
+      console.warn('[Cards] No se pudo guardar aprobados locales:', e);
+    }
+  }
+
+  private marcarAprobadoLocal(idAsunto: string): void {
+    if (!idAsunto) return;
+    this.aprobadosLocales.add(String(idAsunto));
+    this.snapshotAprobadosLocal();
+  }
+
+  private obtenerId(asunto: any): string {
+    const d = this.obtenerDatos(asunto) || {};
+    const id = d.id_asunto ?? d.id_asunto_nuevo ?? d.id_asunto_historico ?? asunto?.id_asunto ?? asunto?.id_asunto_nuevo ?? asunto?.id_asunto_historico;
+    return String(id ?? '');
+  }
+
+  estaAprobadoLocal(asunto: any): boolean {
+    return this.aprobadosLocales.has(this.obtenerId(asunto));
   }
 
   // Método para cambiar página

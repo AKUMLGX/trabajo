@@ -21,6 +21,26 @@
             {{ data.asunto.estado_revision }}
           </span>
         </div>
+        
+        <!-- Acciones principales en encabezado -->
+        <div class="header-acciones">
+          <button mat-button 
+                  class="btn-accion btn-corregir"
+                  (click)="abrirTrackingEnNuevaPestana()"
+                  [disabled]="guardando"
+                  matTooltip="Enviar a bandeja de seguimiento para correcciones">
+            <mat-icon>edit</mat-icon>
+            Solicitar Corrección
+          </button>
+          <button mat-button 
+                  class="btn-accion btn-aprobar"
+                  (click)="aprobarAsunto()"
+                  [disabled]="guardando"
+                  matTooltip="Aprobar asunto y enviar a Akamba 3">
+            <mat-icon>check</mat-icon>
+            Aprobar Asunto
+          </button>
+        </div>
       </div>
       
       <button mat-icon-button class="close-button" (click)="cerrarModal()" 
@@ -125,71 +145,7 @@
         </div>
       </div>
 
-      <!-- FORMULARIO DE CORRECCIÓN -->
-      <div class="seccion-formulario">
-        <div class="seccion-header">
-          <div class="header-icon">
-            <mat-icon>edit_note</mat-icon>
-          </div>
-          <div class="header-text">
-            <h3 class="seccion-titulo">Revisión y Corrección</h3>
-            <p class="seccion-subtitulo">Selecciona la acción a realizar</p>
-          </div>
-        </div>
-        
-        <form [formGroup]="correccionForm" class="formulario-correccion">
-          
-          <!-- Campo oculto para mantener sincronización del FormGroup -->
-          <input type="hidden" formControlName="accion">
-          
-          <!-- TIPO DE ACCIÓN MEJORADO -->
-          <div class="campo-grupo campo-accion-moderna">
-            <label class="campo-label-moderna">¿Qué acción deseas realizar?</label>
-            
-            <!-- Botones de acción como tabs modernos -->
-            <div class="acciones-tabs">
-              <button type="button" 
-                      class="accion-tab tab-corregir"
-                      [class.tab-activo]="accionSeleccionada === 'CORREGIR'"
-                      (click)="abrirTrackingEnNuevaPestana()">
-                <div class="tab-icon">
-                  <mat-icon>edit_note</mat-icon>
-                </div>
-                <div class="tab-content">
-                  <span class="tab-title">Corregir</span>
-                  <span class="tab-description">Ir a bandeja de seguimiento</span>
-                </div>
-              </button>
 
-              <button type="button" 
-                      class="accion-tab tab-aprobar"
-                      [class.tab-activo]="accionSeleccionada === 'APROBAR'"
-                      (click)="correccionForm.patchValue({accion: 'APROBAR'})">
-                <div class="tab-icon">
-                  <mat-icon>verified</mat-icon>
-                </div>
-                <div class="tab-content">
-                  <span class="tab-title">Aprobar</span>
-                  <span class="tab-description">Enviar a Akamba 3</span>
-                </div>
-              </button>
-            </div>
-
-            <!-- Información contextual de la acción seleccionada -->
-            <div class="accion-info" *ngIf="accionSeleccionada">
-              <div *ngIf="accionSeleccionada === 'CORREGIR'" class="info-corregir">
-                <mat-icon>info_outline</mat-icon>
-                <span>Haz clic en "Corregir" para ir directamente a la bandeja de seguimiento donde podrás editar el asunto.</span>
-              </div>
-              <div *ngIf="accionSeleccionada === 'APROBAR'" class="info-aprobar">
-                <mat-icon>check_circle_outline</mat-icon>
-                <span>El asunto se enviará directamente al Administrador (Akamba 3) sin modificaciones.</span>
-              </div>
-            </div>
-          </div>
-
-        </form>
-      </div>
 
       <!-- SECCIÓN DE PDFs -->
       <div class="seccion-pdfs">
@@ -276,39 +232,16 @@
       
 
 
-      <!-- Botones de acción -->
+      <!-- Botones simplificados -->
       <div class="footer-botones">
-        
-        <!-- Botón Cancelar -->
+        <!-- Solo botón Cerrar -->
         <button mat-stroked-button 
                 (click)="cerrarModal()" 
                 [disabled]="guardando"
                 class="btn-cancelar">
           <mat-icon>close</mat-icon>
-          Cancelar
+          Cerrar
         </button>
-
-
-
-        <!-- Botones principales según la acción -->
-        <ng-container [ngSwitch]="accionSeleccionada">
-          
-
-
-          <!-- Botón Aprobar -->
-          <button *ngSwitchCase="'APROBAR'" 
-                  mat-flat-button 
-                  style="background: linear-gradient(135deg, #10b981, #059669); color: white;"
-                  (click)="aprobarAsunto()"
-                  [disabled]="guardando"
-                  class="btn-aprobar">
-            <mat-icon *ngIf="!guardando">verified</mat-icon>
-            <mat-icon *ngIf="guardando" class="loading-icon">hourglass_empty</mat-icon>
-            {{ guardando ? 'Procesando...' : 'Aprobar y Enviar' }}
-          </button>
-
-        </ng-container>
-
       </div>
     </div>
 

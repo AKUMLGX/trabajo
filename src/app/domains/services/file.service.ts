@@ -52,6 +52,42 @@ export class FileService {
       });
   }
 
+  /**
+   * Descarga un PDF consultándolo por folio y nombre de archivo.
+   * Usa el mismo endpoint que el visor, pero en lugar de emitir el evento,
+   * construye el Blob y dispara una descarga automática.
+   */
+  downloadPdfFileBandejaAtencion(
+    folio: string,
+    fileName: string,
+    suggestedName?: string
+  ): void {
+    const params = {
+      folio: folio,
+      file_name: fileName,
+    };
+    this.httpClient
+      .get(environment.baseUrl + environment.getPdfEndpoint, { params: params, responseType: 'text' })
+      .subscribe((data) => {
+        const byteCharacters = atob(data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const blobURL = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = blobURL;
+        link.download = (suggestedName || fileName || 'documento.pdf').toString();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobURL);
+      });
+  }
+
   printPdf(folio: string, fileName: string): void {
     const params = {
       folio: folio,

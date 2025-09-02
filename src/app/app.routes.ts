@@ -7,6 +7,8 @@ import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tr
 import { ReportsPageComponent } from './domains/reports/pages/reports-page/reports-page.component';
 import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
 import { loginGuard } from './domains/guards/login.guard';
+import { capturaGuard, atencionGuard, dictaminadorGuard, seguimientoGuard, reportesGuard, revisionFinalGuard } from './domains/guards/bandeja.guard';
+import { AccessDeniedComponent } from './domains/shared/pages/access-denied/access-denied.component';
 import { PdfViewerComponent } from './domains/components/pdf-viewer/pdf-viewer.component';
 import { TramitePageComponent } from './domains/assistance/pages/tramite-page/tramite-page.component';
 import { TrafficLightsAtencionComponent } from './domains/assistance/components/dashbord/TrafficLights/traffic-lights-atencion/traffic-lights-atencion.component';
@@ -36,10 +38,12 @@ export const routes: Routes = [
       {
         path: 'capture',
         component: CapturePageComponent,
+        canActivate: [capturaGuard],
       },
       {
         path: 'assistance',
         component: AssistancePageComponent,
+        canActivate: [atencionGuard],
       },
       {
         path: "tramite-card",
@@ -75,11 +79,13 @@ export const routes: Routes = [
       },
       {
         path: 'tracking',
-        component: TrackingPageComponent
+        component: TrackingPageComponent,
+        canActivate: [seguimientoGuard]
       },
       {
         path: 'reports',
-        component: ReportsPageComponent
+        component: ReportsPageComponent,
+        canActivate: [reportesGuard]
       },
       {
         path: 'asignacion',
@@ -106,14 +112,21 @@ export const routes: Routes = [
       {
         path: 'dictaminador',
         component: DictaminadorPageComponent,
+        canActivate: [dictaminadorGuard],
       },
       {
         path: 'dictaminador/detalle/:id',
-        component: DictaminadorDetalleComponent
+        component: DictaminadorDetalleComponent,
+        canActivate: [dictaminadorGuard],
       },
       {
         path: 'revision-final',
-        component: RevisionFinalComponent
+        component: RevisionFinalComponent,
+        canActivate: [revisionFinalGuard],
+      },
+      {
+        path: 'access-denied',
+        component: AccessDeniedComponent
       }
     ]
   },

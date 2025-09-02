@@ -94,81 +94,7 @@
       <!-- Dashboard quitado como solicitado -->
     </div>
 
-    <!-- 📚 DASHBOARD PARA ASUNTOS REVISADOS (HISTÓRICO) -->
-    <div *ngIf="tabActiva === 'revisados'">
-      <div class="grid grid-cols-4 gap-4 mb-4">
-        
-        <!-- Total Histórico -->
-        <div class="bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl shadow-sm border border-slate-200 p-5">
-          <div class="flex items-start justify-between">
-      <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
-                <mat-icon class="text-slate-600 text-lg">history</mat-icon>
-                <p class="text-sm font-medium text-slate-700">Total Histórico</p>
-        </div>
-              <p class="text-2xl font-bold text-slate-800">{{getTotalRevisados()}}</p>
-              <p class="text-xs text-slate-600 mt-1">Asuntos procesados</p>
-            </div>
-            <div class="w-12 h-12 bg-slate-200 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-slate-700 text-xl">folder_shared</mat-icon>
-      </div>
-    </div>
-  </div>
 
-        <!-- Revisados Hoy -->
-        <div class="bg-gradient-to-br from-cyan-50 to-blue-100 rounded-xl shadow-sm border border-cyan-200 p-5">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
-                <mat-icon class="text-cyan-600 text-lg">today</mat-icon>
-                <p class="text-sm font-medium text-cyan-700">Revisados Hoy</p>
-      </div>
-              <p class="text-2xl font-bold text-cyan-800">{{getRevisadosHoyHistorico()}}</p>
-              <p class="text-xs text-cyan-600 mt-1">En el día actual</p>
-        </div>
-            <div class="w-12 h-12 bg-cyan-200 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-cyan-700 text-xl">event_available</mat-icon>
-        </div>
-      </div>
-    </div>
-
-        <!-- Esta Semana -->
-        <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-sm border border-green-200 p-5">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
-                <mat-icon class="text-green-600 text-lg">date_range</mat-icon>
-                <p class="text-sm font-medium text-green-700">Esta Semana</p>
-              </div>
-              <p class="text-2xl font-bold text-green-800">{{getRevisadosEstaSemana()}}</p>
-              <p class="text-xs text-green-600 mt-1">Últimos 7 días</p>
-            </div>
-            <div class="w-12 h-12 bg-green-200 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-green-700 text-xl">calendar_view_week</mat-icon>
-            </div>
-          </div>
-        </div>
-
-        <!-- Calidad Promedio -->
-        <div class="bg-gradient-to-br from-amber-50 to-yellow-100 rounded-xl shadow-sm border border-amber-200 p-5">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
-                <mat-icon class="text-amber-600 text-lg">grade</mat-icon>
-                <p class="text-sm font-medium text-amber-700">Calidad Promedio</p>
-              </div>
-              <p class="text-2xl font-bold text-amber-800">{{getPromedioCalidad()}}%</p>
-              <p class="text-xs text-amber-600 mt-1">Precisión histórica</p>
-            </div>
-            <div class="w-12 h-12 bg-amber-200 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-amber-700 text-xl">emoji_events</mat-icon>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      
-    </div>
   </div>
 
   <!-- Pestañas de navegación -->
@@ -429,7 +355,11 @@
                 <!-- Filas de datos modernizadas -->
                 <tr *ngFor="let asunto of asuntosPaginados; let i = index"
                     class="hover:bg-slate-50 transition-all duration-200 group border-b border-slate-100"
-                    [ngClass]="{'bg-red-50 border-red-200': isAsuntoSeleccionado(asunto.id)}">
+                    [ngClass]="{
+                      'bg-red-50 border-red-200': isAsuntoSeleccionado(asunto.id),
+                      'bg-emerald-50 border-emerald-200': asunto.estado_revision === 'APROBADO'
+                    }"
+                    [class.row-aprobado]="asunto.estado_revision === 'APROBADO' || (asuntosAprobados?.includes(asunto.id))">
                   
                   <!-- Checkbox de selección -->
                   <td class="w-16 px-4 py-5 text-center">

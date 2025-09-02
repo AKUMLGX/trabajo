@@ -184,6 +184,8 @@ export class RevisionFinalComponent implements OnInit {
   itemsPorPagina: number = 10;
   asuntosPaginados: AsuntoCapturado[] = [];
 
+  // 🆕 Persistencia local: aprobados y enviados
+  asuntosAprobados: string[] = []; // IDs aprobados (persistente)
   constructor(
     private dialog: MatDialog,
     private cardsService: CardsInfoBandejadeAtencionService,
@@ -193,6 +195,8 @@ export class RevisionFinalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // 🆕 Cargar estados persistentes desde localStorage
+    this.cargarAsuntosAprobadosDesdeStorage();
     // 🆕 Cargar asuntos enviados desde localStorage
     this.cargarAsuntosEnviadosDesdeStorage();
     
@@ -368,6 +372,8 @@ export class RevisionFinalComponent implements OnInit {
             return asuntoCapturado;
           }).filter((item): item is AsuntoCapturado => item !== null); // Filtrar elementos nulos con type guard
 
+          // 🆕 Aplicar estados persistentes locales
+          this.aplicarEstadosAprobados();
           // 🆕 Aplicar estado ENVIADO a asuntos que están en localStorage
           this.aplicarEstadosEnviados();
 
@@ -815,6 +821,49 @@ export class RevisionFinalComponent implements OnInit {
     this.cargarAsuntosCapturados();
   }
 
+  // 🆕===========================
+  // Persistencia: APROBADOS
+  // ==========================
+  private cargarAsuntosAprobadosDesdeStorage(): void {
+    const aprobadosStorage = localStorage.getItem('akamba_asuntos_aprobados');
+    if (aprobadosStorage) {
+      try {
+        this.asuntosAprobados = JSON.parse(aprobadosStorage);
+      } catch {
+        this.asuntosAprobados = [];
+      }
+    }
+  }
+
+  private guardarAsuntosAprobadosEnStorage(): void {
+    try {
+      localStorage.setItem('akamba_asuntos_aprobados', JSON.stringify(this.asuntosAprobados));
+    } catch {}
+  }
+
+  private aplicarEstadosAprobados(): void {
+    this.asuntosCapturados.forEach(a => {
+      if (this.asuntosAprobados.includes(a.id)) {
+        a.estado_revision = 'APROBADO';
+      }
+    });
+  }
+
+  private marcarAsuntoAprobado(asuntoId: string): void {
+    if (!this.asuntosAprobados.includes(asuntoId)) {
+      this.asuntosAprobados.push(asuntoId);
+      this.guardarAsuntosAprobadosEnStorage();
+    }
+  }
+
+  private desmarcarAsuntoAprobado(asuntoId: string): void {
+    const idx = this.asuntosAprobados.indexOf(asuntoId);
+    if (idx > -1) {
+      this.asuntosAprobados.splice(idx, 1);
+      this.guardarAsuntosAprobadosEnStorage();
+    }
+  }
+
   /**
    * Verifica si un asunto está seleccionado
    * @param asuntoId ID del asunto
@@ -950,16 +999,29 @@ export class RevisionFinalComponent implements OnInit {
     );
 
     if (confirmacion) {
-      // TODO: Implementar llamada al servicio de envío
-      console.log('Enviando asuntos:', asuntosParaEnviar);
+      // Front-only: marcar como ENVIADO y persistir en localStorage
+      asuntosParaEnviar.forEach(asunto => {
+        // Marcar en la lista principal
+        const idx = this.asuntosCapturados.findIndex(a => a.id === asunto.id);
+        if (idx !== -1) {
+          this.asuntosCapturados[idx].estado_revision = 'ENVIADO';
+        }
+        // Persistir en enviados
+        if (!this.asuntosEnviados.includes(asunto.id)) {
+          this.asuntosEnviados.push(asunto.id);
+        }
+        // Si se envía, dejar de contarlo como aprobado localmente
+        this.desmarcarAsuntoAprobado(asunto.id);
+      });
 
-      // Simular envío exitoso
-      alert(`Se han enviado ${asuntosParaEnviar.length} asunto(s) exitosamente al Akamba 3`);
+      // Guardar y actualizar UI
+      this.guardarAsuntosEnviadosEnStorage();
+      this.actualizarEstadisticas();
+      this.calcularPaginacion();
 
-      // Limpiar selección
+      // Limpiar selección y notificar
       this.asuntosSeleccionados = [];
-
-      // En un escenario real, estos asuntos se eliminarían de la lista o cambiarían de estado
+      alert(`Se han enviado ${asuntosParaEnviar.length} asunto(s) exitosamente al Akamba 3`);
     }
   }
 
@@ -978,8 +1040,7 @@ export class RevisionFinalComponent implements OnInit {
     );
 
     const confirmacion = confirm(
-      `¿Está seguro de asignar ${asuntosParaAsignar.length} asunto(s) directamente a la administración?\n\n` +
-      `Nota: Los asuntos se enviarán sin requerir aprobación previa.`
+      `¿Está seguro de asignar ${asuntosParaAsignar.length} asunto(s) directamente a la administración?`
     );
 
     if (confirmacion) {
@@ -1482,9 +1543,11 @@ export class RevisionFinalComponent implements OnInit {
           switch (resultado.accion) {
             case 'CORREGIR':
               this.asuntosCapturados[index].estado_revision = 'PENDIENTE';
+              this.desmarcarAsuntoAprobado(asunto.id);
               break;
             case 'APROBAR':
               this.asuntosCapturados[index].estado_revision = 'APROBADO';
+              this.marcarAsuntoAprobado(asunto.id);
               break;
           }
 
@@ -1501,8 +1564,7 @@ export class RevisionFinalComponent implements OnInit {
    */
   asignarAsuntoIndividual(asunto: AsuntoCapturado): void {
     const confirmacion = confirm(
-      `¿Está seguro de asignar el asunto ${asunto.folio_interno} directamente a la administración?\n\n` +
-      `Nota: El asunto se enviará sin requerir aprobación previa.`
+      `¿Está seguro de asignar el asunto ${asunto.folio_interno} directamente a la administración?`
     );
 
     if (confirmacion) {
@@ -1538,6 +1600,8 @@ export class RevisionFinalComponent implements OnInit {
           if (index !== -1) {
             this.asuntosCapturados[index].estado_revision = 'ENVIADO';
             this.marcarAsuntoComoEnviado(asunto.id);
+            // Si fue enviado, dejar de marcarlo como aprobado en local
+            this.desmarcarAsuntoAprobado(asunto.id);
             this.actualizarEstadisticas();
           }
 
