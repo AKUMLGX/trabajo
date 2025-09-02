@@ -28,7 +28,9 @@ export const bandejaGuard = (bandeja: string): CanActivateFn => {
           !!route?.queryParamMap?.get('folioInterno') ||
           !!route?.queryParamMap?.get('oficio');
 
-        if (bandeja === 'seguimiento' && hasDirectSearchParam && (perms.atencion || perms.dictaminador)) {
+        // Permitir a cualquier usuario hacer una búsqueda directa en Seguimiento
+        // cuando venga con query param de búsqueda (no expone la bandeja completa)
+        if (bandeja === 'seguimiento' && hasDirectSearchParam) {
           return true;
         }
 
