@@ -191,8 +191,18 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(params => {
       console.log('🔍 [TrackingForm] QueryParams recibidos:', params);
       const oficio = params['oficio'];
+      const folio = params['folio'] || params['folio_interno'] || params['folioInterno'];
       
-      if (oficio) {
+      if (folio) {
+        // Autollenado y búsqueda por folio interno
+        console.log('🔍 [TrackingForm] Folio detectado en URL:', folio);
+        this.consultForm.patchValue({ folioInterno: folio });
+        this.formData.folio_interno = folio;
+        setTimeout(() => {
+          console.log('🔍 [TrackingForm] Ejecutando búsqueda automática por folio...');
+          this.onSave();
+        }, 800);
+      } else if (oficio) {
         console.log('🔍 [TrackingForm] Oficio detectado en URL:', oficio);
         
         // Llenar el campo oficio
@@ -219,8 +229,20 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     // Verificar si hay parámetro oficio en la URL después de que el DOM esté listo
     this.route.queryParams.subscribe(params => {
       const oficio = params['oficio'];
+      const folio = params['folio'] || params['folio_interno'] || params['folioInterno'];
       
-      if (oficio) {
+      if (folio) {
+        // Autollenado y búsqueda por folio interno
+        console.log('🔍 [TrackingForm] ngAfterViewInit - Folio detectado:', folio);
+        setTimeout(() => {
+          this.consultForm.patchValue({ folioInterno: folio });
+          this.formData.folio_interno = folio;
+          setTimeout(() => {
+            console.log('🔍 [TrackingForm] ngAfterViewInit - Ejecutando búsqueda por folio...');
+            this.onSave();
+          }, 600);
+        }, 300);
+      } else if (oficio) {
         console.log('🔍 [TrackingForm] ngAfterViewInit - Oficio detectado:', oficio);
         
         // Llenar el campo oficio usando setTimeout para asegurar que el DOM esté listo
