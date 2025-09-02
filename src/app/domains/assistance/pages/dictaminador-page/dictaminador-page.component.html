@@ -176,6 +176,8 @@
               </button>
             <button class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm" 
                     (click)="abrirModalAtencionDictaminador(asunto)">Atender</button>
+            <button class="flex-1 bg-yellow-100 text-yellow-900 border border-yellow-300 px-4 py-2 rounded text-sm"
+                    (click)="abrirModalReasignar(asunto)">Reasignar</button>
           </div>
         </div>
       </div>
@@ -240,6 +242,7 @@
                 <div class="hidden md:flex gap-2">
                   <button class="bg-[#691C32] text-white px-3 py-1 rounded text-xs" (click)="abrirModalAtencionDictaminador(asunto)">Atender</button>
                   <button class="border border-[#691C32] text-[#691C32] px-3 py-1 rounded text-xs flex items-center" (click)="verDetalle(asunto['ID_ASUNTO'])">Ver Detalle</button>
+                  <button class="border border-yellow-300 text-yellow-900 px-3 py-1 rounded text-xs flex items-center bg-yellow-100" (click)="abrirModalReasignar(asunto)">Reasignar</button>
                 </div>
                 <!-- Menú compacto en pantallas pequeñas -->
                 <div class="relative md:hidden">
@@ -247,6 +250,7 @@
                   <div *ngIf="asunto._menu" class="absolute right-0 mt-1 w-32 bg-white border rounded shadow z-20">
                     <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="abrirModalAtencionDictaminador(asunto); asunto._menu=false">Atender</button>
                     <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="verDetalle(asunto['ID_ASUNTO']); asunto._menu=false">Ver Detalle</button>
+                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="abrirModalReasignar(asunto); asunto._menu=false">Reasignar</button>
                   </div>
                 </div>
               </div>
@@ -374,3 +378,61 @@
   (cerrarModal)="cerrarModalAtencionDictaminador()"
   (finalizarAtencion)="finalizarAtencionAsunto($event)">
 </app-dictaminador-atencion-modal> 
+
+<!-- Modal de Reasignación -->
+<div *ngIf="mostrarModalReasignar" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10500] p-4">
+  <div class="bg-white rounded-lg shadow-xl w-[600px] max-w-[95vw] overflow-hidden">
+    <!-- Header -->
+    <div class="bg-[#691C32] text-white py-3 px-5 flex items-center justify-between">
+      <h2 class="text-lg font-semibold flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+        </svg>
+        Reasignar asunto
+      </h2>
+      <button (click)="cerrarModalReasignar()" class="text-white hover:text-gray-200">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-5 space-y-5">
+      <div class="bg-blue-50 border border-blue-200 rounded p-4 text-sm">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <span class="text-gray-600 font-medium">Folio:</span>
+            <span class="ml-2 text-gray-800">{{asuntoParaReasignar?.folio}}</span>
+          </div>
+          <div>
+            <span class="text-gray-600 font-medium">ID Asignación:</span>
+            <span class="ml-2 text-gray-800">{{asuntoParaReasignar?.id_asignacion}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Seleccione dictaminador</label>
+        <div class="relative">
+          <select [(ngModel)]="abogadoSeleccionado" class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
+            <option value="" disabled selected>Seleccione un dictaminador...</option>
+            <option *ngFor="let user of usuariosAsignar" [value]="user.rfc">{{user.nombre}}</option>
+          </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-50 px-5 py-4 flex justify-end gap-3 border-t">
+      <button (click)="cerrarModalReasignar()" class="px-5 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</button>
+      <button (click)="confirmarReasignacion()" [disabled]="!abogadoSeleccionado" class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-medium hover:bg-[#8B1D3C] disabled:opacity-50">Reasignar</button>
+    </div>
+  </div>
+  
+</div>

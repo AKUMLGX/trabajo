@@ -11,6 +11,8 @@ import { AdministracionResponse, CardsResponse } from '../../../interfaces/datos
 import { DictaminadorAtencionModalComponent } from '../../components/dashbord/dictaminador-atencion-modal/dictaminador-atencion-modal.component';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { usuariosPorAdministracion } from '../../../interfaces/usuarios-Por-administracion.interface';
+import { UserService } from '../../../services/user.service';
 
 interface Dictaminador {
   nombre: string;
@@ -111,17 +113,25 @@ export class DictaminadorPageComponent implements OnInit {
   mostrarModalAtencionDictaminador = false;
   asuntoParaAtencion: any = null;
 
+  // ========== Variables para modal de Reasignación ==========
+  mostrarModalReasignar = false;
+  usuariosAsignar: usuariosPorAdministracion[] = [];
+  abogadoSeleccionado: string = '';
+  asuntoParaReasignar: { id_asignacion: number | null; id_asunto: number | null; folio?: string } | null = null;
+
   // Variables para el control de estados con documentos
   asuntosConDocumentos = new Set<string>(); // Folio de asuntos que tienen documentos
   asuntosFinalizados = new Set<string>(); // Folio de asuntos finalizados
   cargandoEstadosDocumentos = false;
+  rfcUsuario: string = '';
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private dictaminadorBandejaService: DictaminadorBandejaService,
     private cards: CardsInfoBandejadeAtencionService,
-    private archivosAtencionService: ArchivosAtencionService
+    private archivosAtencionService: ArchivosAtencionService,
+    private userService: UserService
   ) {
     this.formularioAtencion = this.fb.group({
       observaciones: ['', Validators.required]
@@ -129,13 +139,20 @@ export class DictaminadorPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Capturar RFC del usuario autenticado
+    this.userService.estadoAutenticacion$.subscribe((estado) => {
+      this.rfcUsuario = estado?.usuario?.rfc || '';
+    });
     // Obtener el número de administración primero
     this.obtenerNumeroAdministracion();
     
     this.dictaminadorBandejaService.obtenerAsuntosAsignados().subscribe({
       next: (res) => {
         console.log('Respuesta del backend:', res); // Imprimir la respuesta para inspección
-        this.asuntos = res.map((item: any) => {
+        // Filtrar por RFC asignado al usuario actual
+        const propios = (res as any[]).filter((it: any) => !it?.rfc_dictaminador || it.rfc_dictaminador === this.rfcUsuario);
+
+        this.asuntos = propios.map((item: any) => {
           // Debug: mostrar estructura completa del item para verificar observaciones
           console.log('🔍 Item completo:', item);
           console.log('🔍 item.observaciones:', item.observaciones);
@@ -601,7 +618,8 @@ export class DictaminadorPageComponent implements OnInit {
     this.dictaminadorBandejaService.obtenerAsuntosAsignados().subscribe({
       next: (res) => {
         console.log('🔄 [DictaminadorPage] Datos recargados desde servidor:', res);
-        this.asuntos = res.map((item: any) => {
+        const propios = (res as any[]).filter((it: any) => !it?.rfc_dictaminador || it.rfc_dictaminador === this.rfcUsuario);
+        this.asuntos = propios.map((item: any) => {
           // Debug: mostrar estructura completa del item para verificar observaciones
           console.log('🔍 Item completo:', item);
           console.log('🔍 item.observaciones:', item.observaciones);
@@ -787,5 +805,61 @@ export class DictaminadorPageComponent implements OnInit {
       return 'bg-yellow-100 text-yellow-700'; // Moderado
     }
     return 'bg-green-100 text-green-700'; // Normal
+  }
+
+  // ========== MÉTODOS PARA MODAL DE REASIGNACIÓN ==========
+  abrirModalReasignar(asunto: any): void {
+    // Preparar contexto del asunto
+    const id_asignacion = asunto['ID_ASIGNACION'] || asunto.id_asignacion || null;
+    const id_asunto = asunto['ID_ASUNTO'] || asunto.id || null;
+    this.asuntoParaReasignar = { id_asignacion, id_asunto, folio: asunto['FOLIO INTERNO'] || asunto.folio };
+    this.abogadoSeleccionado = '';
+    // Cargar usuarios de la misma administración
+    this.cargarUsuariosAdministracion();
+    this.mostrarModalReasignar = true;
+  }
+
+  private cargarUsuariosAdministracion(): void {
+    this.cards.usuariosPorAdminitracion().subscribe({
+      next: (res) => {
+        this.usuariosAsignar = Array.isArray(res) ? res : [];
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar usuarios por administración:', err);
+        this.usuariosAsignar = [];
+      }
+    });
+  }
+
+  confirmarReasignacion(): void {
+    if (!this.asuntoParaReasignar || !this.asuntoParaReasignar.id_asignacion || !this.asuntoParaReasignar.id_asunto || !this.abogadoSeleccionado) {
+      return;
+    }
+
+    const payload = {
+      id_asignacion: this.asuntoParaReasignar.id_asignacion,
+      id_asunto: this.asuntoParaReasignar.id_asunto,
+      rfc: this.abogadoSeleccionado,
+      tipo_asunto: 'nuevo',
+      estado_atencion: 2,
+      fecha_asignacion: null,
+    };
+
+    this.cards.asignarAsunto(payload).subscribe({
+      next: () => {
+        // Cerrar modal y refrescar datos para reflejar el cambio
+        this.cerrarModalReasignar();
+        this.recargarDatosCompletos();
+      },
+      error: (err) => {
+        console.error('❌ Error al reasignar asunto:', err);
+      }
+    });
+  }
+
+  cerrarModalReasignar(): void {
+    this.mostrarModalReasignar = false;
+    this.asuntoParaReasignar = null;
+    this.abogadoSeleccionado = '';
   }
 } 
