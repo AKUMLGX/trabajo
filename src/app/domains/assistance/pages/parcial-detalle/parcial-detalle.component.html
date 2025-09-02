@@ -108,6 +108,10 @@
                     <button (click)="descargarPdf(asunto.folio_interno, asunto.documento_escaneado)" title="Descargar PDF">
                       <mat-icon>download</mat-icon>
                     </button>
+                    <!-- Ir a Seguimiento con folio prellenado -->
+                    <a [routerLink]="['/layout/tracking']" [queryParams]="{ folio: asunto.folio_interno }" title="Seguimiento">
+                      <mat-icon>open_in_new</mat-icon>
+                    </a>
                   </div>
                 </td>
               </tr>
