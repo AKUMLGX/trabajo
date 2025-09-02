@@ -8,21 +8,34 @@ import { map, take } from 'rxjs/operators';
  * @param bandeja - Nombre de la bandeja a verificar (captura, atencion, dictaminador, seguimiento, reportes, revisionFinal)
  */
 export const bandejaGuard = (bandeja: string): CanActivateFn => {
-  return () => {
+  return (route, state) => {
     const permissionsService = inject(PermissionsService);
     const router = inject(Router);
 
-    return permissionsService.canAccessBandeja(bandeja as any).pipe(
+    return permissionsService.getUserPermissions().pipe(
       take(1),
-      map(hasAccess => {
-        if (hasAccess) {
-          return true; // ✅ Usuario tiene acceso
-        } else {
-          // ❌ Usuario no tiene acceso, redirigir a página de acceso denegado
-          console.warn(`Acceso denegado a bandeja: ${bandeja}`);
-          router.navigate(['/layout/access-denied']);
-          return false;
+      map((perms) => {
+        // Acceso directo por permiso
+        if ((perms as any)[bandeja]) {
+          return true;
         }
+
+        // Excepción controlada: permitir acceso a Seguimiento SOLO si viene con query param de búsqueda
+        // y el usuario tiene permisos de Atención o Dictaminador (no abre toda la bandeja, solo permite búsqueda directa)
+        const hasDirectSearchParam =
+          !!route?.queryParamMap?.get('folio') ||
+          !!route?.queryParamMap?.get('folio_interno') ||
+          !!route?.queryParamMap?.get('folioInterno') ||
+          !!route?.queryParamMap?.get('oficio');
+
+        if (bandeja === 'seguimiento' && hasDirectSearchParam && (perms.atencion || perms.dictaminador)) {
+          return true;
+        }
+
+        // Denegar y enviar a Access Denied
+        console.warn(`Acceso denegado a bandeja: ${bandeja}`);
+        router.navigate(['/layout/access-denied']);
+        return false;
       })
     );
   };
