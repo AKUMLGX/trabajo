@@ -19,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PdfAcuseService } from '../../../shared/services/pdf-acuse.service';
 import { AsuntoNuevo } from '../../../../domains/interfaces/asuntoPorAtencion.interface';
+import { AreaDisponible, NewChecklistRequerimiento, ChecklistRequerimiento, AreaSeguimiento } from '../../../../domains/interfaces/seguimiento-areas.interface';
 
 interface Evento {
   id: string;
@@ -48,6 +49,7 @@ interface SeguimientoArea {
   fechaRecordatorio?: string;
   respuestaRecordatorio: boolean;
   fechaRespuestaRecordatorio?: string;
+  observaciones?: string;
 }
 
 interface AsuntoDictaminador {
@@ -184,33 +186,8 @@ export class DictaminadorDetalleComponent implements OnInit {
   errorRespuestas = '';
   archivoPrefill = '';
 
-  // Variables para el checklist de seguimiento de áreas
-  seguimientoAreas: SeguimientoArea[] = [
-    {
-      id: '1',
-      area: 'ACOP',
-      nombreCompleto: 'Administración Central de Operación de Padrones',
-      solicitudEnviada: true,
-      fechaSolicitud: '15/01/2025',
-      respuestaRecibida: true,
-      fechaRespuesta: '22/01/2025',
-      tipoRespuesta: 'completa',
-      recordatorioEnviado: false,
-      respuestaRecordatorio: false
-    },
-    {
-      id: '2',
-      area: 'AGR',
-      nombreCompleto: 'Administración General de Recaudación',
-      solicitudEnviada: true,
-      fechaSolicitud: '18/01/2025',
-      respuestaRecibida: false,
-      tipoRespuesta: 'pendiente',
-      recordatorioEnviado: true,
-      fechaRecordatorio: '25/01/2025',
-      respuestaRecordatorio: false
-    }
-  ];
+  // Variables para el checklist de seguimiento de áreas (solo datos reales)
+  seguimientoAreas: SeguimientoArea[] = [];
 
   // Variables para modales de gestión de áreas
   mostrarModalAgregarArea = false;
@@ -226,7 +203,7 @@ export class DictaminadorDetalleComponent implements OnInit {
   mostrarModalEliminar = false;
   areaParaEliminar: SeguimientoArea | null = null;
 
-  // Áreas SAT disponibles
+  // Áreas SAT disponibles (datos estáticos - se reemplazarán con datos del backend)
   areasSAT = [
     { codigo: 'ACOP', nombre: 'Administración Central de Operación de Padrones' },
     { codigo: 'ACSTC', nombre: 'Administración Central de Servicios Tributarios al Contribuyente' },
@@ -238,6 +215,40 @@ export class DictaminadorDetalleComponent implements OnInit {
     { codigo: 'AGACE', nombre: 'Administración General de Auditoria de Comercio Exterior' },
     { codigo: 'AGGC', nombre: 'Administración General de Grandes Contribuyentes' }
   ];
+
+  // ==== NUEVAS PROPIEDADES PARA CONECTAR CON BACKEND ====
+  
+  // Áreas disponibles desde el backend
+  areasDisponiblesBackend: AreaDisponible[] = [];
+  
+  // Estado de carga
+  cargandoAreas = false;
+  cargandoSeguimiento = false;
+  
+  // Mensajes de error
+  errorAreas = '';
+  errorSeguimiento = '';
+
+  // ==== PROPIEDADES PARA FORMULARIO TIPO EXCEL ====
+  mostrarFormularioNuevaArea: boolean = false;
+  guardandoNuevaArea: boolean = false;
+  nuevaAreaForm: {
+    area: string;
+    id_estado_respuesta?: number;
+    fecha_solicitud?: string;
+    fecha_respuesta?: string;
+    fecha_recordatorio_envio?: string;
+    fecha_recordatorio_respuesta?: string;
+    observaciones?: string;
+  } = {
+    area: '',
+    id_estado_respuesta: undefined,
+    fecha_solicitud: new Date().toISOString().split('T')[0],
+    fecha_respuesta: undefined,
+    fecha_recordatorio_envio: undefined,
+    fecha_recordatorio_respuesta: undefined,
+    observaciones: undefined
+  };
 
   constructor(
     private location: Location,
@@ -251,6 +262,18 @@ export class DictaminadorDetalleComponent implements OnInit {
     private pdfAcuse: PdfAcuseService,
   ) {
 
+  }
+
+  // Formatea fecha a 'YYYY-MM-DDTHH:mm:ss' para backend Rust (NaiveDateTime)
+  private formatFechaSql(date: Date): string {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const yyyy = date.getFullYear();
+    const MM = pad(date.getMonth() + 1);
+    const dd = pad(date.getDate());
+    const HH = pad(date.getHours());
+    const mm = pad(date.getMinutes());
+    const ss = pad(date.getSeconds());
+    return `${yyyy}-${MM}-${dd}T${HH}:${mm}:${ss}`;
   }
 
   folioInternoForm: string = ""
@@ -346,6 +369,8 @@ export class DictaminadorDetalleComponent implements OnInit {
               this.personaRelacionadaForm = encontrado.persona_relacionada
               this.carpetaInvestigacionForm = encontrado.carpeta_investigacion
               this.idAsuntoForm = encontrado.id_asignacion
+              // Cargar checklist existente para esta asignación
+              this.cargarChecklistExistente();
 
 
 
@@ -404,7 +429,8 @@ export class DictaminadorDetalleComponent implements OnInit {
       documentos: this.asunto.documentos
     };
 
-
+    // Cargar áreas disponibles del backend
+    this.cargarAreasDisponibles();
 
   }
 
@@ -919,8 +945,256 @@ export class DictaminadorDetalleComponent implements OnInit {
     });
   }
 
+  // ==== MÉTODOS DE PRUEBA PARA CONECTAR CON BACKEND ====
+  
+  // Método para probar que podemos obtener las áreas del backend
+  probarCargarAreas(): void {
+    console.log('🧪 Probando carga de áreas desde backend...');
+    this.cargandoAreas = true;
+    this.errorAreas = '';
+
+    this.dictaminadorBandejaService.getAreasDisponibles().subscribe({
+      next: (areas) => {
+        console.log('✅ Áreas cargadas desde backend:', areas);
+        this.areasDisponiblesBackend = areas;
+        this.cargandoAreas = false;
+        
+        // Mostrar mensaje de éxito
+        this.snackBar.open(`Se cargaron ${areas.length} áreas desde el backend`, 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('❌ Error cargando áreas:', error);
+        this.errorAreas = 'Error al cargar áreas desde el backend';
+        this.cargandoAreas = false;
+        
+        // Mostrar mensaje de error
+        this.snackBar.open('Error al cargar áreas desde el backend', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
+
+  // Método para cargar áreas automáticamente
+  cargarAreasDisponibles(): void {
+    this.cargandoAreas = true;
+    this.errorAreas = '';
+
+    this.dictaminadorBandejaService.getAreasDisponibles().subscribe({
+      next: (areas) => {
+        console.log('✅ Áreas cargadas automáticamente:', areas);
+        this.areasDisponiblesBackend = areas;
+        this.cargandoAreas = false;
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar áreas automáticamente:', error);
+        this.errorAreas = 'Error al cargar áreas del backend';
+        this.cargandoAreas = false;
+        
+        this.snackBar.open('Error al cargar las áreas disponibles', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
+
   goBack(): void {
     this.location.back();
+  }
+
+  // ==== MÉTODOS PARA FORMULARIO TIPO EXCEL ====
+
+  // Resetear formulario de nueva área
+  private resetNuevaAreaForm() {
+    return {
+      area: '',
+      id_estado_respuesta: undefined as number | undefined,
+      fecha_solicitud: new Date().toISOString().split('T')[0] as string | undefined,
+      fecha_respuesta: undefined as string | undefined,
+      fecha_recordatorio_envio: undefined as string | undefined,
+      fecha_recordatorio_respuesta: undefined as string | undefined,
+      observaciones: undefined as string | undefined
+    };
+  }
+
+  // Mostrar formulario para nueva área
+  agregarNuevaFilaArea(): void {
+    this.mostrarFormularioNuevaArea = true;
+    this.nuevaAreaForm = this.resetNuevaAreaForm();
+  }
+
+  // Cancelar formulario
+  cancelarNuevaArea(): void {
+    this.mostrarFormularioNuevaArea = false;
+    this.nuevaAreaForm = this.resetNuevaAreaForm();
+  }
+
+  // Obtener áreas disponibles para el formulario (excluyendo las ya agregadas)
+  getAreasDisponiblesParaFormulario(): AreaDisponible[] {
+    const areasEnSeguimiento = this.seguimientoAreas.map(area => area.area);
+    return this.areasDisponiblesBackend.filter(area => !areasEnSeguimiento.includes(area.area));
+  }
+
+  // ==== Cargar checklist existente desde backend ====
+  private cargarChecklistExistente(): void {
+    if (!this.idAsuntoForm) return;
+    this.cargandoSeguimiento = true;
+    this.errorSeguimiento = '';
+
+    this.dictaminadorBandejaService.getChecklistPorAsignacion(this.idAsuntoForm).subscribe({
+      next: (items) => {
+        // Mapear backend -> UI
+        this.seguimientoAreas = (items || []).map((i) => {
+          const areaInfo = this.areasDisponiblesBackend.find(a => a.area === i.area);
+          return {
+            id: String(i.id_check),
+            area: i.area,
+            nombreCompleto: areaInfo?.descripcion_area || i.area,
+            solicitudEnviada: !!i.fecha_solicitud,
+            fechaSolicitud: i.fecha_solicitud ? this.formatearFechaTabla(i.fecha_solicitud) : undefined,
+            respuestaRecibida: !!i.fecha_respuesta,
+            fechaRespuesta: i.fecha_respuesta ? this.formatearFechaTabla(i.fecha_respuesta) : undefined,
+            tipoRespuesta: this.mapTipoRespuesta(i.id_estado_respuesta),
+            recordatorioEnviado: !!i.fecha_recordatorio_envio,
+            fechaRecordatorio: i.fecha_recordatorio_envio ? this.formatearFechaTabla(i.fecha_recordatorio_envio) : undefined,
+            respuestaRecordatorio: !!i.fecha_recordatorio_respuesta,
+            fechaRespuestaRecordatorio: i.fecha_recordatorio_respuesta ? this.formatearFechaTabla(i.fecha_recordatorio_respuesta) : undefined,
+            observaciones: i.observaciones || ''
+          };
+        });
+        this.cargandoSeguimiento = false;
+      },
+      error: (err) => {
+        console.error('❌ Error cargando checklist:', err);
+        this.errorSeguimiento = 'No se pudo cargar el checklist';
+        this.cargandoSeguimiento = false;
+      }
+    });
+  }
+
+  private formatearFechaTabla(fechaIso: string): string {
+    try {
+      const d = new Date(fechaIso);
+      const dia = String(d.getDate()).padStart(2, '0');
+      const mes = String(d.getMonth() + 1).padStart(2, '0');
+      const anio = d.getFullYear();
+      return `${dia}/${mes}/${anio}`;
+    } catch {
+      return '';
+    }
+  }
+
+  private mapTipoRespuesta(idEstado?: number): 'pendiente' | 'completa' | 'parcial' {
+    if (idEstado === 3) return 'completa';
+    if (idEstado === 2) return 'parcial';
+    return 'pendiente';
+  }
+
+  // Guardar nueva área usando el endpoint
+  guardarNuevaArea(): void {
+    if (!this.nuevaAreaForm.area) {
+      this.snackBar.open('Debe seleccionar un área', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    this.guardandoNuevaArea = true;
+
+    // Crear payload simplificado primero con solo campos requeridos
+    const nuevaSolicitud: NewChecklistRequerimiento = {
+      id_asignacion_fk: this.idAsuntoForm,
+      area: this.nuevaAreaForm.area,
+      fecha_solicitud: this.formatFechaSql(
+        new Date(this.nuevaAreaForm.fecha_solicitud || new Date())
+      )
+    };
+
+    // Agregar campos opcionales solo si tienen valor
+    if (this.nuevaAreaForm.id_estado_respuesta) {
+      nuevaSolicitud.id_estado_respuesta = Number(this.nuevaAreaForm.id_estado_respuesta);
+    }
+    
+    if (this.nuevaAreaForm.fecha_respuesta) {
+      nuevaSolicitud.fecha_respuesta = this.formatFechaSql(new Date(this.nuevaAreaForm.fecha_respuesta));
+    }
+    
+    if (this.nuevaAreaForm.fecha_recordatorio_envio) {
+      nuevaSolicitud.fecha_recordatorio_envio = this.formatFechaSql(new Date(this.nuevaAreaForm.fecha_recordatorio_envio));
+    }
+    
+    if (this.nuevaAreaForm.fecha_recordatorio_respuesta) {
+      nuevaSolicitud.fecha_recordatorio_respuesta = this.formatFechaSql(new Date(this.nuevaAreaForm.fecha_recordatorio_respuesta));
+    }
+    
+    if (this.nuevaAreaForm.observaciones && this.nuevaAreaForm.observaciones.trim().length > 0) {
+      nuevaSolicitud.observaciones = this.nuevaAreaForm.observaciones.trim();
+    }
+
+    // Verificar que no hay caracteres especiales problemáticos
+    const jsonString = JSON.stringify(nuevaSolicitud);
+    const hasInvalidChars = /[^\x20-\x7E]/.test(jsonString);
+    
+    console.log('🚀 Enviando nueva área al backend:', nuevaSolicitud);
+    console.log('📝 JSON string length:', jsonString.length);
+    console.log('📝 Tiene caracteres inválidos:', hasInvalidChars);
+    console.log('📝 JSON completo:', jsonString);
+    
+    // Si hay caracteres inválidos, mostrar dónde están
+    if (hasInvalidChars) {
+      for (let i = 0; i < jsonString.length; i++) {
+        const char = jsonString[i];
+        if (!/[\x20-\x7E]/.test(char)) {
+          console.error(`❌ Carácter inválido en posición ${i}: "${char}" (código: ${char.charCodeAt(0)})`);
+        }
+      }
+    }
+
+    // Llamar al endpoint del backend
+    this.dictaminadorBandejaService.crearSolicitudInformacion(nuevaSolicitud).subscribe({
+      next: (respuesta) => {
+        console.log('✅ Área guardada exitosamente:', respuesta);
+        
+        // Buscar la información del área en el backend
+        const areaInfo = this.areasDisponiblesBackend.find(a => a.area === this.nuevaAreaForm.area);
+        
+        // Agregar el área al seguimiento local
+        const areaAgregada: SeguimientoArea = {
+          id: respuesta.id_check?.toString() || Date.now().toString(),
+          area: this.nuevaAreaForm.area,
+          nombreCompleto: areaInfo?.descripcion_area || 'Área no encontrada',
+          solicitudEnviada: false,
+          respuestaRecibida: false,
+          tipoRespuesta: 'pendiente',
+          recordatorioEnviado: false,
+          respuestaRecordatorio: false
+        };
+
+        this.seguimientoAreas.push(areaAgregada);
+        this.guardandoNuevaArea = false;
+        this.cancelarNuevaArea();
+
+        this.snackBar.open(`Área ${this.nuevaAreaForm.area} agregada exitosamente`, 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('❌ Error al guardar área:', error);
+        this.guardandoNuevaArea = false;
+        
+        this.snackBar.open('Error al guardar el área. Inténtalo de nuevo.', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 
   getPriorityClass(): string {
@@ -1447,39 +1721,87 @@ export class DictaminadorDetalleComponent implements OnInit {
       return;
     }
 
-    const areaInfo = this.getAreaPorCodigo(this.areaSeleccionadaParaAgregar);
-    if (areaInfo) {
-      const nuevaArea: SeguimientoArea = {
-        id: Date.now().toString(),
-        area: areaInfo.codigo,
-        nombreCompleto: areaInfo.nombre,
-        solicitudEnviada: false,
-        respuestaRecibida: false,
-        tipoRespuesta: 'pendiente',
-        recordatorioEnviado: false,
-        respuestaRecordatorio: false
-      };
+    // Crear la solicitud para el backend tomando id_asignacion del endpoint ya cargado (idAsuntoForm)
+    const nuevaSolicitud: NewChecklistRequerimiento = {
+      id_asignacion_fk: this.idAsuntoForm, // viene de obtenerAsuntosAsignados (no mover endpoints existentes)
+      area: this.areaSeleccionadaParaAgregar,
+      id_estado_respuesta: undefined, // Opcional
+      // Formato requerido por NaiveDateTime: 'YYYY-MM-DD HH:mm:ss'
+      fecha_solicitud: this.formatFechaSql(new Date()),
+      fecha_respuesta: undefined, // Opcional
+      fecha_recordatorio_envio: undefined, // Opcional
+      fecha_recordatorio_respuesta: undefined, // Opcional
+      observaciones: undefined // Opcional
+    };
 
-      this.seguimientoAreas.push(nuevaArea);
-      this.cerrarModalAgregarArea();
+    console.log('🚀 Creando solicitud en backend:', nuevaSolicitud);
 
-      this.snackBar.open(`Área ${areaInfo.codigo} agregada al seguimiento`, 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
-    }
+    // Llamar al endpoint del backend
+    this.dictaminadorBandejaService.crearSolicitudInformacion(nuevaSolicitud).subscribe({
+      next: (respuesta) => {
+        console.log('✅ Solicitud creada exitosamente:', respuesta);
+        
+        // Buscar la información del área en el backend
+        const areaSeleccionada = this.areaSeleccionadaParaAgregar;
+        const areaInfo = this.areasDisponiblesBackend.find(a => a.area === areaSeleccionada);
+        
+        // Agregar el área al seguimiento local
+        const areaAgregada: SeguimientoArea = {
+          id: respuesta.id_check?.toString() || Date.now().toString(), // Usar ID del backend o temporal
+          area: this.areaSeleccionadaParaAgregar,
+          nombreCompleto: areaInfo?.descripcion_area || 'Área no encontrada',
+          solicitudEnviada: false,
+          respuestaRecibida: false,
+          tipoRespuesta: 'pendiente',
+          recordatorioEnviado: false,
+          respuestaRecordatorio: false
+        };
+
+        this.seguimientoAreas.push(areaAgregada);
+        this.areaSeleccionadaParaAgregar = '';
+        this.cerrarModalAgregarArea();
+
+        this.snackBar.open(`Área ${areaSeleccionada} agregada exitosamente al seguimiento`, 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('❌ Error al crear solicitud:', error);
+        this.snackBar.open('Error al agregar el área. Inténtalo de nuevo.', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 
   // Obtener áreas disponibles (que no están ya agregadas)
   getAreasDisponibles() {
-    return this.areasSAT.filter(area =>
-      !this.seguimientoAreas.some(seguimiento => seguimiento.area === area.codigo)
-    );
+    // Filtrar áreas que ya están en seguimiento
+    const areasEnSeguimiento = this.seguimientoAreas.map(area => area.area);
+    
+    return this.areasDisponiblesBackend
+      .filter(area => !areasEnSeguimiento.includes(area.area))
+      .map(area => ({
+        id: 0, // Temporal
+        area: area.area,
+        nombreCompleto: area.descripcion_area,
+        solicitudEnviada: false,
+        fechaSolicitud: null,
+        respuestaRecibida: false,
+        fechaRespuesta: null,
+        tipoRespuesta: 'pendiente',
+        recordatorioEnviado: false,
+        fechaRecordatorio: null,
+        respuestaRecordatorio: false,
+        fechaRespuestaRecordatorio: null
+      }));
   }
 
   // Obtener información de área por código
   getAreaPorCodigo(codigo: string) {
-    return this.areasSAT.find(area => area.codigo === codigo);
+    return this.areasDisponiblesBackend.find(area => area.area === codigo);
   }
 
   // Actualizar checkbox de solicitud enviada

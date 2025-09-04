@@ -675,32 +675,33 @@
             </label>
             <select [(ngModel)]="areaSeleccionadaParaAgregar"
               class="w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800"
-              [disabled]="getAreasDisponibles().length === 0">
+              [disabled]="areasDisponiblesBackend.length === 0">
               <option value="">
-                {{getAreasDisponibles().length === 0 ? '-- No hay áreas disponibles --' : '-- Selecciona un área --'}}
+                {{areasDisponiblesBackend.length === 0 ? '-- No hay áreas disponibles --' : '-- Selecciona un área --'}}
               </option>
-              <option *ngFor="let area of getAreasDisponibles()" [value]="area.codigo">
-                {{area.codigo}} - {{area.nombre}}
+              <option *ngFor="let area of areasDisponiblesBackend" [value]="area.area">
+                {{area.area}} - {{area.descripcion_area}}
               </option>
             </select>
 
             <!-- Mensaje cuando no hay áreas disponibles -->
-            <div *ngIf="getAreasDisponibles().length === 0"
+            <div *ngIf="areasDisponiblesBackend.length === 0"
               class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
               <div class="flex items-center">
                 <mat-icon class="text-yellow-600 mr-2">info</mat-icon>
                 <p class="text-sm text-yellow-800 font-medium">
-                  Todas las áreas SAT ya están en seguimiento
+                  No hay áreas disponibles para agregar
                 </p>
               </div>
               <p class="text-xs text-yellow-700 mt-1 ml-7">
-                Puedes eliminar un área existente para agregar otra diferente.
+                Verifica la conexión con el backend o contacta al administrador.
               </p>
             </div>
 
             <!-- Descripción del área seleccionada -->
             <div *ngIf="areaSeleccionadaParaAgregar" class="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
-              <p class="text-sm text-indigo-800 font-medium">{{getAreaPorCodigo(areaSeleccionadaParaAgregar)?.nombre}}
+              <p class="text-sm text-indigo-800 font-medium">
+                {{getAreaPorCodigo(areaSeleccionadaParaAgregar)?.descripcion_area}}
               </p>
             </div>
           </div>
@@ -737,8 +738,8 @@
       </div>
     </div>
 
-    <!-- MODAL EDITAR ÁREA -->
-    <div *ngIf="mostrarModalEditarArea && areaEnEdicion"
+    <!-- MODAL EDITAR ÁREA DESHABILITADO -->
+    <div *ngIf="false"
       class="fixed inset-0 z-[10600] flex items-center justify-center">
       <!-- Backdrop -->
       <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEditarArea()"></div>
@@ -750,7 +751,7 @@
           <div class="flex items-center justify-between">
             <h3 class="text-xl font-bold text-white flex items-center">
               <mat-icon class="mr-3">edit</mat-icon>
-              Editar Seguimiento - {{areaEnEdicion.area}}
+              Editar Seguimiento
             </h3>
             <button (click)="cerrarModalEditarArea()" class="text-white hover:text-blue-200 transition-colors">
               <mat-icon>close</mat-icon>
@@ -764,9 +765,9 @@
           <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div class="flex items-center mb-2">
               <mat-icon class="text-blue-600 mr-2">business</mat-icon>
-              <span class="font-semibold text-blue-800">{{areaEnEdicion.area}}</span>
+              <span class="font-semibold text-blue-800"></span>
             </div>
-            <p class="text-sm text-blue-700">{{areaEnEdicion.nombreCompleto}}</p>
+            <p class="text-sm text-blue-700"></p>
           </div>
 
           <!-- Solicitud Enviada -->
@@ -775,101 +776,47 @@
               <mat-icon class="text-indigo-600 mr-2 text-sm">send</mat-icon>
               Solicitud Enviada
             </h4>
-            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <label class="flex items-center cursor-pointer">
-                <input type="checkbox" [(ngModel)]="areaEnEdicion.solicitudEnviada"
-                  (change)="onEditarSolicitudEnviada()"
-                  class="form-checkbox h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                <span class="ml-3 text-sm font-medium text-gray-700">Solicitud enviada</span>
-              </label>
-              <input *ngIf="areaEnEdicion.solicitudEnviada" type="date" [(ngModel)]="fechaSolicitudEdicion"
-                class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500">
-            </div>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
           </div>
 
           <!-- Respuesta Recibida -->
-          <div class="mb-6" *ngIf="areaEnEdicion.solicitudEnviada">
+          <div class="mb-6" *ngIf="false">
             <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
               <mat-icon class="text-green-600 mr-2 text-sm">reply</mat-icon>
               Respuesta Recibida
             </h4>
             <div class="space-y-3">
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" [(ngModel)]="areaEnEdicion.respuestaRecibida"
-                    (change)="onEditarRespuestaRecibida()"
-                    class="form-checkbox h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
-                  <span class="ml-3 text-sm font-medium text-gray-700">Respuesta recibida</span>
-                </label>
-                <input *ngIf="areaEnEdicion.respuestaRecibida" type="date" [(ngModel)]="fechaRespuestaEdicion"
-                  class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
 
               <div class="pl-7">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Tipo de respuesta:</label>
-                <select [(ngModel)]="areaEnEdicion.tipoRespuesta"
-                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                  <option value="pendiente">Pendiente</option>
-                  <option value="completa">Completa</option>
-                  <option value="parcial">Parcial</option>
-                </select>
+                <div></div>
               </div>
             </div>
           </div>
 
           <!-- Recordatorio -->
-          <div class="mb-6" *ngIf="areaEnEdicion.solicitudEnviada">
+          <div class="mb-6" *ngIf="false">
             <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
               <mat-icon class="text-yellow-600 mr-2 text-sm">schedule_send</mat-icon>
               Recordatorio
             </h4>
             <div class="space-y-3">
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" [(ngModel)]="areaEnEdicion.recordatorioEnviado"
-                    (change)="onEditarRecordatorioEnviado()"
-                    class="form-checkbox h-4 w-4 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500">
-                  <span class="ml-3 text-sm font-medium text-gray-700">Recordatorio enviado</span>
-                </label>
-                <input *ngIf="areaEnEdicion.recordatorioEnviado" type="date" [(ngModel)]="fechaRecordatorioEdicion"
-                  class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500">
-              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
 
               <!-- Respuesta a recordatorio -->
-              <div *ngIf="areaEnEdicion.recordatorioEnviado" class="pl-7">
-                <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" [(ngModel)]="areaEnEdicion.respuestaRecordatorio"
-                      (change)="onEditarRespuestaRecordatorio()"
-                      class="form-checkbox h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500">
-                    <span class="ml-3 text-sm font-medium text-gray-700">Respuesta a recordatorio</span>
-                  </label>
-                  <input *ngIf="areaEnEdicion.respuestaRecordatorio" type="date"
-                    [(ngModel)]="fechaRespuestaRecordatorioEdicion"
-                    class="px-3 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-orange-500">
-                </div>
-              </div>
+              <div class="pl-7"></div>
             </div>
           </div>
         </div>
 
         <!-- Actions -->
-        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-          <button (click)="cerrarModalEditarArea()"
-            class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-            Cancelar
-          </button>
-          <button (click)="guardarEdicionArea()"
-            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-lg flex items-center">
-            <mat-icon class="mr-2">save</mat-icon>
-            Guardar Cambios
-          </button>
-        </div>
+        <div class="p-6"></div>
       </div>
     </div>
 
-    <!-- MODAL CONFIRMAR ELIMINACIÓN -->
-    <div *ngIf="mostrarModalEliminar && areaParaEliminar"
+    <!-- MODAL CONFIRMAR ELIMINACIÓN DESHABILITADO -->
+    <div *ngIf="false"
       class="fixed inset-0 z-[10600] flex items-center justify-center">
       <!-- Backdrop -->
       <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEliminar()"></div>
@@ -904,38 +851,27 @@
             <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
               <div class="flex items-center mb-2">
                 <mat-icon class="text-red-600 mr-2">business</mat-icon>
-                <span class="font-semibold text-red-800">{{areaParaEliminar.area}}</span>
+                <span class="font-semibold text-red-800"></span>
               </div>
-              <p class="text-sm text-red-700">{{areaParaEliminar.nombreCompleto}}</p>
+              <p class="text-sm text-red-700"></p>
 
               <!-- Estado actual -->
               <div class="mt-3 pt-3 border-t border-red-200">
                 <div class="grid grid-cols-2 gap-2 text-xs">
                   <div class="flex items-center">
-                    <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.solicitudEnviada ? 'check_circle' :
-                      'radio_button_unchecked'}}</mat-icon>
-                    <span [class]="areaParaEliminar.solicitudEnviada ? 'text-red-700' : 'text-red-500'">Solicitud</span>
+                    <mat-icon class="text-red-500 mr-1 text-sm">radio_button_unchecked</mat-icon>
+                    <span class="text-red-500">Solicitud</span>
                   </div>
                   <div class="flex items-center">
-                    <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.respuestaRecibida ? 'check_circle' :
-                      'radio_button_unchecked'}}</mat-icon>
-                    <span
-                      [class]="areaParaEliminar.respuestaRecibida ? 'text-red-700' : 'text-red-500'">Respuesta</span>
+                    <mat-icon class="text-red-500 mr-1 text-sm">radio_button_unchecked</mat-icon>
+                    <span class="text-red-500">Respuesta</span>
                   </div>
                   <div class="flex items-center">
-                    <mat-icon class="text-red-500 mr-1 text-sm">{{areaParaEliminar.recordatorioEnviado ? 'check_circle'
-                      : 'radio_button_unchecked'}}</mat-icon>
-                    <span
-                      [class]="areaParaEliminar.recordatorioEnviado ? 'text-red-700' : 'text-red-500'">Recordatorio</span>
+                    <mat-icon class="text-red-500 mr-1 text-sm">radio_button_unchecked</mat-icon>
+                    <span class="text-red-500">Recordatorio</span>
                   </div>
                   <div class="text-xs">
-                    <span class="px-2 py-1 rounded text-xs" [ngClass]="{
-                              'bg-green-100 text-green-700': areaParaEliminar.tipoRespuesta === 'completa',
-                              'bg-yellow-100 text-yellow-700': areaParaEliminar.tipoRespuesta === 'parcial',
-                              'bg-gray-100 text-gray-600': areaParaEliminar.tipoRespuesta === 'pendiente'
-                            }">
-                      {{areaParaEliminar.tipoRespuesta | titlecase}}
-                    </span>
+                    <span class="px-2 py-1 rounded text-xs bg-gray-100 text-gray-600">Pendiente</span>
                   </div>
                 </div>
               </div>
@@ -972,9 +908,8 @@
           <h3 class="text-xl font-bold text-indigo-800">Control de Seguimiento por Áreas</h3>
           <p class="text-sm text-indigo-600">
             {{seguimientoAreas.length}} área{{seguimientoAreas.length !== 1 ? 's' : ''}} en seguimiento
-            <span *ngIf="getAreasDisponibles().length > 0" class="ml-2 text-indigo-500">
-              • {{getAreasDisponibles().length}} disponible{{getAreasDisponibles().length !== 1 ? 's' : ''}} para
-              agregar
+            <span *ngIf="areasDisponiblesBackend.length > 0" class="ml-2 text-indigo-500">
+              • {{areasDisponiblesBackend.length}} disponible{{areasDisponiblesBackend.length !== 1 ? 's' : ''}} para agregar
             </span>
           </p>
         </div>
@@ -988,11 +923,109 @@
         </div>
         <button
           class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center text-sm shadow-md hover:shadow-lg"
-          [disabled]="getAreasDisponibles().length === 0" [class.opacity-50]="getAreasDisponibles().length === 0"
-          [class.cursor-not-allowed]="getAreasDisponibles().length === 0" (click)="agregarArea()">
+          [disabled]="areasDisponiblesBackend.length === 0"
+          [class.opacity-50]="areasDisponiblesBackend.length === 0"
+          [class.cursor-not-allowed]="areasDisponiblesBackend.length === 0" 
+          (click)="agregarNuevaFilaArea()">
           <mat-icon class="mr-2 text-lg">add</mat-icon>
-          Agregar Área
+          Nueva Área
         </button>
+      </div>
+    </div>
+
+    <!-- FORMULARIO TIPO EXCEL PARA AGREGAR NUEVA ÁREA -->
+    <div *ngIf="mostrarFormularioNuevaArea" class="bg-white rounded-lg shadow-sm border border-green-200 overflow-hidden mb-6">
+      <div class="bg-green-50 px-4 py-2 border-b border-green-200">
+        <h4 class="text-sm font-medium text-green-800 flex items-center">
+          <mat-icon class="mr-2 text-sm">add_circle</mat-icon>
+          Agregar Nueva Área de Seguimiento
+        </h4>
+      </div>
+      <div class="p-4">
+        <div class="grid grid-cols-8 gap-3 items-end">
+          <!-- Área (obligatorio) -->
+          <div class="col-span-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Área Solicitada *</label>
+            <select [(ngModel)]="nuevaAreaForm.area" 
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+              <option value="">Seleccionar área...</option>
+              <option *ngFor="let area of getAreasDisponiblesParaFormulario()" [value]="area.area">
+                {{area.area}} - {{area.descripcion_area}}
+              </option>
+            </select>
+          </div>
+
+          <!-- Estado Respuesta (opcional) -->
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Estado</label>
+            <select [(ngModel)]="nuevaAreaForm.id_estado_respuesta" 
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+              <option [value]="undefined">N/A</option>
+              <option [value]="1">Pendiente</option>
+              <option [value]="2">En Proceso</option>
+              <option [value]="3">Completado</option>
+            </select>
+          </div>
+
+          <!-- Fecha Solicitud (requerida) -->
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Fecha Solicitud *</label>
+            <input type="date" 
+                   [(ngModel)]="nuevaAreaForm.fecha_solicitud"
+                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+
+          <!-- Fecha Respuesta (opcional) -->
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Fecha Respuesta</label>
+            <input type="date" 
+                   [(ngModel)]="nuevaAreaForm.fecha_respuesta"
+                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+
+          <!-- Fecha Recordatorio Envío (opcional) -->
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Recordatorio Envío</label>
+            <input type="date" 
+                   [(ngModel)]="nuevaAreaForm.fecha_recordatorio_envio"
+                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+
+          <!-- Fecha Recordatorio Respuesta (opcional) -->
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Recordatorio Respuesta</label>
+            <input type="date" 
+                   [(ngModel)]="nuevaAreaForm.fecha_recordatorio_respuesta"
+                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+
+          <!-- Observaciones (opcional) -->
+          <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Observaciones</label>
+            <input type="text" 
+                   [(ngModel)]="nuevaAreaForm.observaciones"
+                   placeholder="Opcional..."
+                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+
+          <!-- Acciones -->
+          <div class="flex gap-2">
+            <button 
+              (click)="guardarNuevaArea()"
+              [disabled]="!nuevaAreaForm.area || guardandoNuevaArea"
+              class="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+              <mat-icon *ngIf="!guardandoNuevaArea" class="mr-1 text-sm">save</mat-icon>
+              <div *ngIf="guardandoNuevaArea" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1"></div>
+              {{guardandoNuevaArea ? 'Guardando...' : 'Guardar'}}
+            </button>
+            <button 
+              (click)="cancelarNuevaArea()"
+              [disabled]="guardandoNuevaArea"
+              class="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+              Cancelar
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1009,7 +1042,7 @@
               <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Recordatorio Enviado</th>
               <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Respuesta a Recordatorio
               </th>
-              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+              <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Observaciones</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -1037,80 +1070,47 @@
 
               <!-- Solicitud Enviada -->
               <td class="px-4 py-4 text-center">
-                <label class="inline-flex items-center cursor-pointer">
-                  <input type="checkbox" [checked]="area.solicitudEnviada"
-                    (change)="actualizarSolicitudEnviada(area.id, $any($event.target).checked)"
-                    class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-indigo-500">
-                  <span class="ml-2 text-sm" [ngClass]="area.solicitudEnviada ? 'text-gray-700' : 'text-gray-500'">
-                    {{area.fechaSolicitud || 'Pendiente'}}
-                  </span>
-                </label>
+                <span class="text-sm" [ngClass]="area.solicitudEnviada ? 'text-gray-700' : 'text-gray-500'">
+                  {{area.fechaSolicitud || 'Pendiente'}}
+                </span>
               </td>
 
               <!-- Respuesta Recibida -->
               <td class="px-4 py-4 text-center">
-                <label class="inline-flex items-center cursor-pointer">
-                  <input type="checkbox" [checked]="area.respuestaRecibida" [disabled]="!area.solicitudEnviada"
-                    (change)="actualizarRespuestaRecibida(area.id, $any($event.target).checked)"
-                    class="form-checkbox h-4 w-4 text-green-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-green-500">
-                  <span class="ml-2 text-sm" [ngClass]="area.respuestaRecibida ? 'text-gray-700' : 'text-gray-500'">
-                    {{area.fechaRespuesta || (area.solicitudEnviada ? 'Pendiente' : 'N/A')}}
-                  </span>
-                </label>
+                <span class="text-sm" [ngClass]="area.respuestaRecibida ? 'text-gray-700' : 'text-gray-500'">
+                  {{area.fechaRespuesta || (area.solicitudEnviada ? 'Pendiente' : 'N/A')}}
+                </span>
               </td>
 
               <!-- Tipo de Respuesta -->
               <td class="px-4 py-4 text-center">
-                <select [value]="area.tipoRespuesta" [disabled]="!area.solicitudEnviada"
-                  (change)="actualizarTipoRespuesta(area.id, $any($event.target).value)"
-                  class="text-xs rounded-full px-2 py-1 font-medium border-0 focus:ring-2 focus:ring-indigo-500"
+                <span class="text-xs rounded-full px-2 py-1 font-medium"
                   [ngClass]="{
                              'bg-green-100 text-green-800': area.tipoRespuesta === 'completa',
                              'bg-yellow-100 text-yellow-800': area.tipoRespuesta === 'parcial',
-                             'bg-gray-100 text-gray-500': area.tipoRespuesta === 'pendiente' || !area.solicitudEnviada
+                             'bg-gray-100 text-gray-500': area.tipoRespuesta === 'pendiente'
                            }">
-                  <option value="pendiente">Pendiente</option>
-                  <option value="completa">Completa</option>
-                  <option value="parcial">Parcial</option>
-                </select>
+                  {{area.tipoRespuesta | titlecase}}
+                </span>
               </td>
 
               <!-- Recordatorio Enviado -->
               <td class="px-4 py-4 text-center">
-                <label class="inline-flex items-center cursor-pointer">
-                  <input type="checkbox" [checked]="area.recordatorioEnviado" [disabled]="!area.solicitudEnviada"
-                    (change)="actualizarRecordatorioEnviado(area.id, $any($event.target).checked)"
-                    class="form-checkbox h-4 w-4 text-yellow-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-yellow-500">
-                  <span class="ml-2 text-sm" [ngClass]="area.recordatorioEnviado ? 'text-gray-700' : 'text-gray-500'">
-                    {{area.fechaRecordatorio || (area.solicitudEnviada ? 'N/A' : 'N/A')}}
-                  </span>
-                </label>
+                <span class="text-sm" [ngClass]="area.recordatorioEnviado ? 'text-gray-700' : 'text-gray-500'">
+                  {{area.fechaRecordatorio || (area.solicitudEnviada ? 'N/A' : 'N/A')}}
+                </span>
               </td>
 
               <!-- Respuesta a Recordatorio -->
               <td class="px-4 py-4 text-center">
-                <label class="inline-flex items-center cursor-pointer">
-                  <input type="checkbox" [checked]="area.respuestaRecordatorio" [disabled]="!area.recordatorioEnviado"
-                    (change)="actualizarRespuestaRecordatorio(area.id, $any($event.target).checked)"
-                    class="form-checkbox h-4 w-4 text-gray-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-gray-500">
-                  <span class="ml-2 text-sm" [ngClass]="area.respuestaRecordatorio ? 'text-gray-700' : 'text-gray-500'">
-                    {{area.fechaRespuestaRecordatorio || (area.recordatorioEnviado ? 'Pendiente' : 'N/A')}}
-                  </span>
-                </label>
+                <span class="text-sm" [ngClass]="area.respuestaRecordatorio ? 'text-gray-700' : 'text-gray-500'">
+                  {{area.fechaRespuestaRecordatorio || (area.recordatorioEnviado ? 'Pendiente' : 'N/A')}}
+                </span>
               </td>
 
               <!-- Acciones -->
               <td class="px-4 py-4 text-center">
-                <div class="flex justify-center gap-1">
-                  <button class="p-1 rounded hover:bg-indigo-100 transition-colors" title="Editar"
-                    (click)="editarArea(area.id)">
-                    <mat-icon class="text-indigo-600 text-sm">edit</mat-icon>
-                  </button>
-                  <button class="p-1 rounded hover:bg-red-100 transition-colors" title="Eliminar"
-                    (click)="eliminarArea(area.id)">
-                    <mat-icon class="text-red-600 text-sm">delete</mat-icon>
-                  </button>
-                </div>
+                <span class="text-sm text-gray-700">{{area.observaciones || '—'}}</span>
               </td>
             </tr>
           </tbody>

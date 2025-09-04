@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { porAsignarRequest, tableAsuntosPorDictaminar } from '../interfaces/porAsignarRequest.interface';
 import { AsuntoPorEstadoAtencionRequest, AsuntoPorEstadoAtencionResponse, AsuntoAsignacion, AsuntoNuevo } from '../interfaces/asuntoPorAtencion.interface';
 import { respuestaFormularioDictaminadorRequest } from './../interfaces/respuestaFormulariosDictamindadorRequest';
+import { AreaDisponible, NewChecklistRequerimiento, ChecklistRequerimiento } from '../interfaces/seguimiento-areas.interface';
 
 
 
@@ -217,6 +218,48 @@ export class DictaminadorBandejaService {
     const url = environment.baseUrl + 'asunto/atencion/get_respuesta_asunto';
     const params = { documento, id_req: idReq } as const;
     return this.http.post<AsuntoNuevo[]>(url, params);
+  }
+
+  // ==== NUEVOS MÉTODOS PARA CONTROL DE SEGUIMIENTO DE ÁREAS ====
+  
+  // 1. Obtener áreas disponibles
+  getAreasDisponibles(): Observable<AreaDisponible[]> {
+    const url = environment.baseUrl + 'asunto/atencion/listar_areas';
+    return this.http.get<AreaDisponible[]>(url);
+  }
+
+  // 2. Crear solicitud de información
+  crearSolicitudInformacion(solicitud: NewChecklistRequerimiento): Observable<ChecklistRequerimiento> {
+    const url = environment.baseUrl + 'asunto/atencion/checklist_solicitud_areas';
+    
+    // Asegurar headers correctos para JSON
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    
+    console.log('📡 Enviando a URL:', url);
+    console.log('📡 Payload:', JSON.stringify(solicitud));
+    console.log('📡 Headers:', headers);
+    
+    return this.http.post<ChecklistRequerimiento>(url, solicitud, { headers });
+  }
+
+  // 3. Obtener checklist por asignación
+  getChecklistPorAsignacion(idAsignacion: number): Observable<ChecklistRequerimiento[]> {
+    // El backend deserializa la query como ChecklistRequerimiento completo,
+    // aunque solo usa id_asignacion_fk. Para evitar 400, enviamos los campos requeridos.
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const now = new Date();
+    const fecha = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const params = new URLSearchParams({
+      id_asignacion_fk: String(idAsignacion),
+      id_check: '0',
+      area: '-',
+      fecha_solicitud: fecha
+    }).toString();
+    const url = `${environment.baseUrl}asunto/atencion/obtener_checklist_por_asignacion?${params}`;
+    return this.http.get<ChecklistRequerimiento[]>(url);
   }
 
 }
