@@ -1,7 +1,169 @@
-<div class="w-full h-full">
-  <!-- TODO: Implementar formulario del Paso 1 - Información Básica -->
-  <div class="text-center p-8">
-    <p class="text-gray-500">Paso 1 - Información Básica del Expediente</p>
-    <p class="text-sm text-gray-400 mt-2">Contenido a implementar</p>
-  </div>
+<div class="w-full h-full bg-gradient-to-br from-white via-[#FEFEFE] to-[#F8FAFC] rounded-3xl border border-[#E2E8F0] p-8 shadow-2xl">
+    
+    <!-- Header del paso -->
+    <div class="mb-8">
+        <div class="flex items-center mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-[#691C32] to-[#8B2635] rounded-2xl flex items-center justify-center mr-6 shadow-lg">
+                <span class="text-white font-bold text-2xl">1</span>
+            </div>
+            <div>
+                <h3 class="text-3xl font-bold text-[#691C32] mb-2">Información Básica del Expediente</h3>
+                <p class="text-base text-gray-600">Complete la información básica del expediente. Los campos marcados con <span class="text-red-500 font-bold">*</span> son obligatorios.</p>
+            </div>
+        </div>
+        <div class="w-full h-1 bg-gradient-to-r from-[#691C32] to-[#9F2241] rounded-full opacity-30"></div>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+        
+        <!-- Sección: Datos del Expediente -->
+        <div class="mb-8">
+            <h4 class="text-xl font-bold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Datos del Expediente
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Expediente (obligatorio) -->
+                <div class="md:col-span-1">
+                    <app-custom-form-field
+                        label="Expediente"
+                        [required]="true"
+                        placeholder="Ej: Exp.001"
+                        hint="Formato: Exp.XXX"
+                        [errorMessage]="expedienteError"
+                        formControlName="expediente">
+                    </app-custom-form-field>
+                </div>
+
+                <!-- Oficio -->
+                <div class="md:col-span-1">
+                    <app-custom-form-field
+                        label="Oficio"
+                        placeholder="Ej: 199 06 02 00 00 2025-01"
+                        hint="Número de oficio correspondiente"
+                        [errorMessage]="oficioError"
+                        formControlName="oficio">
+                    </app-custom-form-field>
+                </div>
+
+                <!-- No. de Entrada del Central -->
+                <div class="md:col-span-1">
+                    <app-custom-form-field
+                        label="No. de Entrada del Central"
+                        placeholder="Ej: 2025-007"
+                        hint="Número de entrada en el sistema central"
+                        [errorMessage]="numeroEntradalError"
+                        formControlName="numero_entrada_central">
+                    </app-custom-form-field>
+                </div>
+
+                <!-- Remitente (Área) -->
+                <div class="md:col-span-1">
+                    <app-custom-form-field
+                        label="Remitente (Área)"
+                        placeholder="Ej: AGSC, AGE/CPP, OIC"
+                        hint="Área que remite el expediente"
+                        [errorMessage]="remitenteError"
+                        formControlName="remitente_area">
+                    </app-custom-form-field>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Fechas del Expediente -->
+        <div class="mb-8">
+            <h4 class="text-xl font-bold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Fechas del Expediente
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Fecha del Documento -->
+                <div class="md:col-span-1">
+                    <app-custom-form-field
+                        label="Fecha del Documento"
+                        type="date"
+                        placeholder="Seleccionar fecha"
+                        hint="Fecha del documento original"
+                        [errorMessage]="fechaDocumentoError"
+                        formControlName="fecha_documento">
+                    </app-custom-form-field>
+                </div>
+
+                <!-- Fecha en la que se recibió -->
+                <div class="md:col-span-1">
+                    <app-custom-form-field
+                        label="Fecha en la que se recibió"
+                        type="date"
+                        placeholder="Seleccionar fecha"
+                        hint="Fecha de recepción del expediente"
+                        [errorMessage]="fechaRecibidoError"
+                        formControlName="fecha_recibido">
+                    </app-custom-form-field>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Descripción y Plazo -->
+        <div class="mb-8">
+            <h4 class="text-xl font-bold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Descripción y Plazo
+            </h4>
+            
+            <!-- Referencia / Asunto (ancho completo) -->
+            <div class="mb-6">
+                <app-custom-textarea
+                    label="Referencia / Asunto"
+                    placeholder="Descripción detallada del asunto del expediente"
+                    hint="Máximo 1000 caracteres"
+                    [rows]="4"
+                    [errorMessage]="referenciaError"
+                    formControlName="referencia_asunto">
+                </app-custom-textarea>
+            </div>
+
+            <!-- Plazo de vencimiento y Prioridad -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-1">
+                    <app-custom-form-field
+                        label="Plazo de vencimiento y Prioridad"
+                        type="number"
+                        placeholder="Ej: 20"
+                        hint="Días para vencimiento (1-365)"
+                        [errorMessage]="plazoError"
+                        formControlName="plazo_vencimiento_prioridad">
+                    </app-custom-form-field>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de envío (oculto, se maneja desde el stepper) -->
+        <button type="submit" class="hidden">Siguiente</button>
+    </form>
+
+    <!-- Información adicional -->
+    <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+        <div class="flex items-start">
+            <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="text-sm text-blue-800">
+                <p class="font-semibold mb-1">Información importante:</p>
+                <ul class="list-disc list-inside space-y-1 text-blue-700">
+                    <li>El campo <strong>Expediente</strong> es obligatorio y debe seguir el formato Exp.XXX</li>
+                    <li>La fecha de recepción debe ser igual o posterior a la fecha del documento</li>
+                    <li>El plazo de vencimiento se utilizará para calcular automáticamente la fecha límite</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
