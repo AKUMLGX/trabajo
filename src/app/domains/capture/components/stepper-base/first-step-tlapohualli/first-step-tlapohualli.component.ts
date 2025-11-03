@@ -25,15 +25,16 @@ export class FirstStepTlapohualliComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.formulario = this.fb.group({
-      expediente: ['', [
-        Validators.required,
-        Validators.maxLength(50),
-        ExpedienteValidators.expedienteFormat()
-      ]],
+      // OFICIO: Campo más importante (clave única)
       oficio: ['', [
         Validators.required,
         Validators.maxLength(100),
         ExpedienteValidators.oficioFormat()
+      ]],
+      expediente: ['', [
+        Validators.required,
+        Validators.maxLength(50),
+        ExpedienteValidators.expedienteFormat()
       ]],
       numero_entrada_central: ['', [
         Validators.required,
@@ -56,11 +57,16 @@ export class FirstStepTlapohualliComponent implements OnInit {
         Validators.required,
         Validators.maxLength(1000)
       ]],
-      plazo_vencimiento_prioridad: ['', [
+      // PLAZO DE ATENCIÓN: Valor entero
+      plazo_valor: ['', [
         Validators.required,
         Validators.min(1),
-        Validators.max(365)
-      ]]
+        Validators.max(999)
+      ]],
+      // Unidad de tiempo: dias, horas, ambos
+      plazo_unidad: ['dias', Validators.required],
+      // Checkbox urgente
+      es_urgente: [false]
     });
   }
 
@@ -73,11 +79,26 @@ export class FirstStepTlapohualliComponent implements OnInit {
 
   onSubmit() {
     if (this.formulario.valid) {
-      this.formularioCompletado.emit(this.formulario.value);
+      // Construir objeto de plazo completo
+      const datosFormulario = {
+        ...this.formulario.value,
+        plazo_vencimiento_prioridad: this.construirPlazo()
+      };
+      
+      this.formularioCompletado.emit(datosFormulario);
       this.siguientePaso.emit();
     } else {
       this.marcarCamposInvalidos();
     }
+  }
+
+  // Construir objeto de plazo con toda la información
+  private construirPlazo() {
+    return {
+      valor: parseInt(this.formulario.get('plazo_valor')?.value),
+      unidad: this.formulario.get('plazo_unidad')?.value,
+      es_urgente: this.formulario.get('es_urgente')?.value
+    };
   }
 
   private marcarCamposInvalidos() {
@@ -89,22 +110,22 @@ export class FirstStepTlapohualliComponent implements OnInit {
   }
   
   // Getters para mensajes de error
+  get oficioError(): string | null {
+    const control = this.formulario.get('oficio');
+    if (control?.touched && control?.errors) {
+      if (control.errors['required']) return 'Campo clave única obligatorio';
+      if (control.errors['maxlength']) return 'Máximo 100 caracteres';
+      if (control.errors['oficioFormat']) return control.errors['oficioFormat'].message;
+    }
+    return null;
+  }
+
   get expedienteError(): string | null {
     const control = this.formulario.get('expediente');
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Obligatorio';
       if (control.errors['maxlength']) return 'Máximo 50 caracteres';
       if (control.errors['expedienteFormat']) return control.errors['expedienteFormat'].message;
-    }
-    return null;
-  }
-  
-  get oficioError(): string | null {
-    const control = this.formulario.get('oficio');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-      if (control.errors['maxlength']) return 'Máximo 100 caracteres';
-      if (control.errors['oficioFormat']) return control.errors['oficioFormat'].message;
     }
     return null;
   }
@@ -155,13 +176,18 @@ export class FirstStepTlapohualliComponent implements OnInit {
     return null;
   }
   
-  get plazoError(): string | null {
-    const control = this.formulario.get('plazo_vencimiento_prioridad');
+  get plazoValorError(): string | null {
+    const control = this.formulario.get('plazo_valor');
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Obligatorio';
-      if (control.errors['min']) return 'Mínimo 1 día';
-      if (control.errors['max']) return 'Máximo 365 días';
+      if (control.errors['min']) return 'Mínimo 1';
+      if (control.errors['max']) return 'Máximo 999';
     }
     return null;
+  }
+
+  // Verificar si el formulario puede continuar
+  get puedeAvanzar(): boolean {
+    return this.formulario.valid;
   }
 }

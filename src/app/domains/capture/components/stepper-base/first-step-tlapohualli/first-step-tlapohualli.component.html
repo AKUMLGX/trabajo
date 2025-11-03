@@ -1,15 +1,43 @@
-<!-- OPCIÓN 1 ULTRA SIMPLIFICADA: Diseño Limpio y Eficiente -->
+<!-- DISEÑO ULTRA SIMPLIFICADO - OFICIO COMO CLAVE ÚNICA -->
 <div class="w-full h-full bg-gray-50 p-6">
     
-    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="max-w-7xl mx-auto">
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="max-w-7xl mx-auto space-y-6">
         
-        <!-- Grid de 2 Columnas -->
+        <!-- OFICIO: Campo MÁS IMPORTANTE (Clave Única) - DESTACADO -->
+        <div class="bg-gradient-to-r from-[#691C32] to-[#9F2241] rounded-xl shadow-lg p-6 border-4 border-[#DDC9A4]">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-white/20 backdrop-blur rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-white font-bold text-lg flex items-center gap-2">
+                        NÚMERO DE OFICIO
+                        <span class="text-xs bg-yellow-400 text-gray-900 px-2 py-1 rounded-full font-semibold">CLAVE ÚNICA</span>
+                    </h3>
+                    <p class="text-white/80 text-sm mt-1">Campo identificador principal del expediente</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg p-4">
+                <app-custom-form-field
+                    label="Oficio"
+                    [required]="true"
+                    placeholder="199 06 02 00 00 2025-01"
+                    [errorMessage]="oficioError"
+                    formControlName="oficio">
+                </app-custom-form-field>
+            </div>
+        </div>
+
+        <!-- Grid de 2 Columnas - Resto de Campos -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
             
             <!-- COLUMNA IZQUIERDA -->
             <div class="space-y-5">
                 
-                <!-- Card 1: Identificación -->
+                <!-- Card 1: Identificación Adicional -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
                         <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
@@ -17,7 +45,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-base font-semibold text-gray-800">Identificación</h3>
+                        <h3 class="text-base font-semibold text-gray-800">Identificación Adicional</h3>
                     </div>
                     
                     <div class="space-y-4">
@@ -27,14 +55,6 @@
                             placeholder="Exp.001"
                             [errorMessage]="expedienteError"
                             formControlName="expediente">
-                        </app-custom-form-field>
-
-                        <app-custom-form-field
-                            label="Oficio"
-                            [required]="true"
-                            placeholder="199 06 02 00 00 2025-01"
-                            [errorMessage]="oficioError"
-                            formControlName="oficio">
                         </app-custom-form-field>
 
                         <app-custom-form-field
@@ -82,7 +102,7 @@
             <!-- COLUMNA DERECHA -->
             <div class="space-y-5">
                 
-                <!-- Card 3: Origen y Plazo -->
+                <!-- Card 3: Origen -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
                         <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -90,31 +110,112 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                             </svg>
                         </div>
-                        <h3 class="text-base font-semibold text-gray-800">Origen y Plazo</h3>
+                        <h3 class="text-base font-semibold text-gray-800">Origen</h3>
                     </div>
                     
-                    <div class="space-y-4">
-                        <app-custom-form-field
-                            label="Remitente (Área)"
-                            [required]="true"
-                            placeholder="AGSC, AGE/CPP, OIC"
-                            [errorMessage]="remitenteError"
-                            formControlName="remitente_area">
-                        </app-custom-form-field>
+                    <app-custom-form-field
+                        label="Remitente (Área)"
+                        [required]="true"
+                        placeholder="AGSC, AGE/CPP, OIC"
+                        [errorMessage]="remitenteError"
+                        formControlName="remitente_area">
+                    </app-custom-form-field>
+                </div>
 
+                <!-- Card 4: Plazo de Atención (Mejorado) -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                        <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-base font-semibold text-gray-800">Plazo de Atención</h3>
+                    </div>
+                    
+                    <!-- Valor del Plazo -->
+                    <div class="mb-4">
                         <app-custom-form-field
-                            label="Plazo (días)"
+                            label="Cantidad"
                             [required]="true"
                             type="number"
                             placeholder="20"
-                            hint="Entre 1 y 365 días"
-                            [errorMessage]="plazoError"
-                            formControlName="plazo_vencimiento_prioridad">
+                            hint="Valor entre 1 y 999"
+                            [errorMessage]="plazoValorError"
+                            formControlName="plazo_valor">
                         </app-custom-form-field>
+                    </div>
+
+                    <!-- Unidad de Tiempo -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Unidad de Tiempo <span class="text-red-500">*</span>
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="relative flex items-center justify-center px-4 py-3 border-2 rounded-lg cursor-pointer transition-all"
+                                   [class.border-blue-600]="formulario.get('plazo_unidad')?.value === 'dias'"
+                                   [class.bg-blue-50]="formulario.get('plazo_unidad')?.value === 'dias'"
+                                   [class.border-gray-300]="formulario.get('plazo_unidad')?.value !== 'dias'">
+                                <input type="radio" 
+                                       formControlName="plazo_unidad" 
+                                       value="dias" 
+                                       class="sr-only">
+                                <span class="text-sm font-semibold"
+                                      [class.text-blue-700]="formulario.get('plazo_unidad')?.value === 'dias'"
+                                      [class.text-gray-700]="formulario.get('plazo_unidad')?.value !== 'dias'">
+                                    Días
+                                </span>
+                            </label>
+
+                            <label class="relative flex items-center justify-center px-4 py-3 border-2 rounded-lg cursor-pointer transition-all"
+                                   [class.border-blue-600]="formulario.get('plazo_unidad')?.value === 'horas'"
+                                   [class.bg-blue-50]="formulario.get('plazo_unidad')?.value === 'horas'"
+                                   [class.border-gray-300]="formulario.get('plazo_unidad')?.value !== 'horas'">
+                                <input type="radio" 
+                                       formControlName="plazo_unidad" 
+                                       value="horas" 
+                                       class="sr-only">
+                                <span class="text-sm font-semibold"
+                                      [class.text-blue-700]="formulario.get('plazo_unidad')?.value === 'horas'"
+                                      [class.text-gray-700]="formulario.get('plazo_unidad')?.value !== 'horas'">
+                                    Horas
+                                </span>
+                            </label>
+
+                            <label class="relative flex items-center justify-center px-4 py-3 border-2 rounded-lg cursor-pointer transition-all"
+                                   [class.border-blue-600]="formulario.get('plazo_unidad')?.value === 'ambos'"
+                                   [class.bg-blue-50]="formulario.get('plazo_unidad')?.value === 'ambos'"
+                                   [class.border-gray-300]="formulario.get('plazo_unidad')?.value !== 'ambos'">
+                                <input type="radio" 
+                                       formControlName="plazo_unidad" 
+                                       value="ambos" 
+                                       class="sr-only">
+                                <span class="text-sm font-semibold"
+                                      [class.text-blue-700]="formulario.get('plazo_unidad')?.value === 'ambos'"
+                                      [class.text-gray-700]="formulario.get('plazo_unidad')?.value !== 'ambos'">
+                                    Ambos
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Checkbox Urgente -->
+                    <div class="flex items-center p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" 
+                                   formControlName="es_urgente"
+                                   class="w-5 h-5 text-red-600 border-red-300 rounded focus:ring-red-500 cursor-pointer">
+                            <span class="ml-3 text-sm font-semibold text-red-700 flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                Marcar como URGENTE
+                            </span>
+                        </label>
                     </div>
                 </div>
 
-                <!-- Card 4: Descripción -->
+                <!-- Card 5: Asunto -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
                         <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
@@ -129,7 +230,7 @@
                         label="Referencia / Asunto"
                         [required]="true"
                         placeholder="Descripción del asunto..."
-                        [rows]="6"
+                        [rows]="5"
                         [errorMessage]="referenciaError"
                         formControlName="referencia_asunto">
                     </app-custom-textarea>

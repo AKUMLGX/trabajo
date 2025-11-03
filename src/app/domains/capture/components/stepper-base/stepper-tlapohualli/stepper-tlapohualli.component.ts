@@ -171,8 +171,8 @@ export class StepperTlapohualliComponent implements OnInit {
 
   // Getters para el estado del stepper
   get puedeAvanzarPaso1(): boolean {
-    // Permitir avanzar libremente para pruebas
-    return true;
+    // VALIDACIÓN ESTRICTA: Solo avanzar si el formulario del paso 1 está completo
+    return this.datosPaso1 !== null;
   }
 
   get puedeAvanzarPaso2(): boolean {
