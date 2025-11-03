@@ -13,8 +13,11 @@ export interface SelectOption {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="custom-select" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="hasError" [class.disabled]="disabled">
-      <label class="custom-label" [for]="fieldId">{{ label }}</label>
+    <div class="custom-select" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage" [class.disabled]="disabled">
+      <label class="custom-label" [for]="fieldId">
+        {{ label }}
+        <span *ngIf="required" class="text-red-500 font-bold ml-1">*</span>
+      </label>
       <div class="select-container">
         <select
           [id]="fieldId"
@@ -43,8 +46,8 @@ export interface SelectOption {
         <div class="select-border"></div>
         <div class="select-highlight"></div>
       </div>
-      <div class="hint-text" *ngIf="hint">{{ hint }}</div>
-      <div class="error-text" *ngIf="hasError && errorMessage">{{ errorMessage || '' }}</div>
+      <div class="hint-text" *ngIf="hint && !errorMessage">{{ hint }}</div>
+      <div class="error-text" *ngIf="errorMessage">{{ errorMessage }}</div>
     </div>
   `,
   styleUrls: ['./custom-select.component.css'],
@@ -63,11 +66,11 @@ export class CustomSelectComponent implements ControlValueAccessor {
   @Input() hint: string = '';
   @Input() errorMessage: string | null = '';
   @Input() disabled: boolean = false;
+  @Input() required: boolean = false;
 
   value: any = '';
   isFocused: boolean = false;
   hasValue: boolean = false;
-  hasError: boolean = false;
   fieldId: string = '';
 
   private onChange = (value: any) => {};
