@@ -1,0 +1,108 @@
+<div class="w-full h-full bg-gradient-to-br from-white via-[#FEFEFE] to-[#F8FAFC] rounded-3xl border border-[#E2E8F0] p-10 shadow-2xl">
+    <div class="mb-8">
+        <div class="flex items-center mb-4">
+            <div class="w-16 h-16 bg-gradient-to-br from-[#691C32] to-[#8B2635] rounded-2xl flex items-center justify-center mr-6 shadow-lg">
+                <span class="text-white font-bold text-xl">1</span>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-[#691C32] mb-1">Información Básica del Expediente</h3>
+                <p class="text-sm text-gray-600">Complete la información básica del expediente. Los campos marcados con * son obligatorios.</p>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="formularioPaso1" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Expediente (obligatorio) -->
+            <div class="md:col-span-1">
+                <app-custom-form-field
+                    label="Expediente *"
+                    placeholder="Ej: Exp.001"
+                    hint="Identificador único del expediente"
+                    [errorMessage]="expedienteError"
+                    formControlName="expediente">
+                </app-custom-form-field>
+            </div>
+
+            <!-- Oficio -->
+            <div class="md:col-span-1">
+                <app-custom-form-field
+                    label="Oficio"
+                    placeholder="Ej: 199 06 02 00 00 2025-01"
+                    hint="Número de oficio correspondiente"
+                    [errorMessage]="oficioError"
+                    formControlName="oficio">
+                </app-custom-form-field>
+            </div>
+
+            <!-- No. de Entrada del Central -->
+            <div class="md:col-span-1">
+                <app-custom-form-field
+                    label="No. de Entrada del Central"
+                    placeholder="Número de entrada central"
+                    hint="Número de entrada en el sistema central"
+                    formControlName="numero_entrada_central">
+                </app-custom-form-field>
+            </div>
+
+            <!-- Remitente (Área) -->
+            <div class="md:col-span-1">
+                <app-custom-form-field
+                    label="Remitente (Área)"
+                    placeholder="Ej: AGSC"
+                    hint="Área que remite el expediente"
+                    [errorMessage]="remitenteAreaError"
+                    formControlName="remitente_area">
+                </app-custom-form-field>
+            </div>
+        </div>
+
+        <!-- Referencia / Asunto (ancho completo) -->
+        <div class="mt-6">
+            <app-custom-textarea
+                label="Referencia / Asunto"
+                placeholder="Descripción detallada del asunto"
+                hint="Descripción detallada del asunto"
+                [rows]="4"
+                formControlName="referencia_asunto">
+            </app-custom-textarea>
+        </div>
+
+        <!-- Fechas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <!-- Fecha del Documento -->
+            <div class="md:col-span-1">
+                <app-custom-form-field
+                    label="Fecha del Documento"
+                    type="date"
+                    placeholder="Seleccionar fecha"
+                    hint="Fecha del documento original"
+                    formControlName="fecha_documento">
+                </app-custom-form-field>
+            </div>
+
+            <!-- Mes del Documento -->
+            <div class="md:col-span-1">
+                <app-custom-select
+                    label="Mes del Documento"
+                    placeholder="Seleccionar mes"
+                    hint="Seleccione el mes correspondiente"
+                    [options]="mesesOptions"
+                    formControlName="mes_documento">
+                </app-custom-select>
+            </div>
+
+            <!-- Fecha en la que se recibió -->
+            <div class="md:col-span-1">
+                <app-custom-form-field
+                    label="Fecha en la que se recibió"
+                    type="date"
+                    placeholder="Seleccionar fecha"
+                    hint="Fecha de recepción del expediente"
+                    formControlName="fecha_recibido">
+                </app-custom-form-field>
+            </div>
+        </div>
+
+    </form>
+</div>

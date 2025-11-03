@@ -1,0 +1,154 @@
+/* ESTILOS GLOBALES FORZADOS PARA EL FORMULARIO */
+
+/* INPUTS CON MARGEN GUINDA */
+.mat-form-field-appearance-outline .mat-form-field-outline-start,
+.mat-form-field-appearance-outline .mat-form-field-outline-end,
+.mat-form-field-appearance-outline .mat-form-field-outline-gap {
+  border-color: #691C32 !important;
+  border-width: 2px !important;
+  background-color: rgba(105, 28, 50, 0.08) !important;
+}
+
+.mat-form-field:not(.mat-form-field-disabled) .mat-form-field-outline:hover .mat-form-field-outline-start,
+.mat-form-field:not(.mat-form-field-disabled) .mat-form-field-outline:hover .mat-form-field-outline-end,
+.mat-form-field:not(.mat-form-field-disabled) .mat-form-field-outline:hover .mat-form-field-outline-gap {
+  border-color: #691C32 !important;
+  background-color: rgba(105, 28, 50, 0.12) !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-outline-start,
+.mat-form-field.mat-focused .mat-form-field-outline-end,
+.mat-form-field.mat-focused .mat-form-field-outline-gap {
+  border-color: #691C32 !important;
+  background-color: rgba(105, 28, 50, 0.15) !important;
+}
+
+.mat-form-field-label {
+  color: #663442 !important;
+  font-weight: 500 !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #691C32 !important;
+}
+
+.mat-input-element {
+  color: #2D2A26 !important;
+  font-size: 0.95rem !important;
+  padding: 1rem 1.25rem !important;
+  background-color: rgba(105, 28, 50, 0.05) !important;
+}
+
+.mat-form-field-infix {
+  padding: 0.75rem 0 !important;
+}
+
+.mat-form-field-ripple {
+  background-color: transparent !important;
+}
+
+/* SELECTORES */
+.mat-select-trigger {
+  padding: 1rem 1.25rem !important;
+  background-color: rgba(105, 28, 50, 0.05) !important;
+}
+
+.mat-select-arrow {
+  color: #691C32 !important;
+}
+
+/* DATE PICKER */
+.mat-datepicker-toggle {
+  color: #691C32 !important;
+}
+
+/* BOTONES GUINDA */
+.modern-btn-primary,
+.modern-btn-secondary,
+.modern-btn-success {
+  background: #691C32 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(105, 28, 50, 0.3) !important;
+}
+
+.modern-btn-primary:hover:not(:disabled),
+.modern-btn-secondary:hover:not(:disabled),
+.modern-btn-success:hover:not(:disabled) {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+  box-shadow: 0 6px 20px rgba(221, 201, 164, 0.4) !important;
+}
+
+/* MATERIAL BUTTONS */
+.mat-button.modern-btn-primary,
+.mat-raised-button.modern-btn-primary,
+.mat-stroked-button.modern-btn-secondary,
+.mat-raised-button.modern-btn-success {
+  background: #691C32 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.mat-button.modern-btn-primary:hover,
+.mat-raised-button.modern-btn-primary:hover,
+.mat-stroked-button.modern-btn-secondary:hover,
+.mat-raised-button.modern-btn-success:hover {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+}
+
+/* TODOS LOS BOTONES DEL STEPPER - ESTILOS ULTRA ESPECÍFICOS */
+.step-actions button,
+.step-actions .mat-button,
+.step-actions .mat-raised-button,
+.step-actions .mat-stroked-button {
+  background: #691C32 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.step-actions button:hover,
+.step-actions .mat-button:hover,
+.step-actions .mat-raised-button:hover,
+.step-actions .mat-stroked-button:hover {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+}
+
+/* ESTILOS ESPECÍFICOS PARA MAT-STROKED-BUTTON (ANTERIOR) */
+.mat-stroked-button.modern-btn-secondary {
+  background: #691C32 !important;
+  color: white !important;
+  border: 2px solid #691C32 !important;
+}
+
+.mat-stroked-button.modern-btn-secondary:hover {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+  border-color: #DDC9A4 !important;
+}
+
+/* ESTILOS ESPECÍFICOS PARA MAT-RAISED-BUTTON (SIGUIENTE) */
+.mat-raised-button.modern-btn-primary {
+  background: #691C32 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.mat-raised-button.modern-btn-primary:hover {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+}
+
+/* ESTILOS ESPECÍFICOS PARA MAT-RAISED-BUTTON (GUARDAR) */
+.mat-raised-button.modern-btn-success {
+  background: #691C32 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.mat-raised-button.modern-btn-success:hover {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+}

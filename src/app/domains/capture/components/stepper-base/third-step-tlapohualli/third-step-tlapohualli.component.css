@@ -1,0 +1,468 @@
+/* Estilos específicos para el tercer paso de Tlapohualli */
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+}
+
+/* DISEÑO COMPLETAMENTE PERSONALIZADO - Sin Material Design */
+.mat-mdc-form-field {
+  display: block !important;
+  margin-bottom: 24px !important;
+  position: relative !important;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background: linear-gradient(145deg, #ffffff, #f8fafc) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 2px solid #e2e8f0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.mat-mdc-text-field-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(105, 28, 50, 0.1), rgba(105, 28, 50, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+}
+
+.mat-mdc-text-field-wrapper:hover {
+  background: linear-gradient(145deg, #ffffff, #f1f5f9);
+  box-shadow: 
+    0 10px 25px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  border-color: rgba(105, 28, 50, 0.2);
+}
+
+.mat-mdc-text-field-wrapper:hover::before {
+  opacity: 1;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background: transparent;
+  border-radius: 16px;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-focus-overlay {
+  background: linear-gradient(135deg, rgba(105, 28, 50, 0.08), rgba(105, 28, 50, 0.03));
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  background: linear-gradient(145deg, #ffffff, #fefefe);
+  border: 2px solid #691C32;
+  box-shadow: 
+    0 0 0 4px rgba(105, 28, 50, 0.1),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+  color: #691C32;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(105, 28, 50, 0.1);
+}
+
+/* ELIMINAR COMPLETAMENTE TODAS LAS LÍNEAS DIVISORAS */
+.mat-mdc-form-field .mat-mdc-form-field-outline,
+.mat-mdc-form-field .mat-mdc-form-field-outline-start,
+.mat-mdc-form-field .mat-mdc-form-field-outline-end,
+.mat-mdc-form-field .mat-mdc-form-field-outline-gap,
+.mat-mdc-form-field .mat-mdc-form-field-outline-thick,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-start,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-end,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-gap,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-thick,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-start-thick,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-end-thick,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-gap-thick,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-start-thin,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-end-thin,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-gap-thin,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-start-thin-thick,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-end-thin-thick,
+.mat-mdc-form-field .mat-mdc-form-field-outline-notch-gap-thin-thick {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  border: none !important;
+  background: none !important;
+}
+
+/* Eliminar también las líneas internas del input */
+.mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline,
+.mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline-start,
+.mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline-end,
+.mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline-gap,
+.mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline-thick {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  border: none !important;
+  background: none !important;
+}
+
+/* Estilos para inputs con error */
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper {
+  border: 2px solid #ef4444;
+  box-shadow: 
+    0 0 0 4px rgba(239, 68, 68, 0.1),
+    0 10px 15px -3px rgba(239, 68, 68, 0.1);
+  background: linear-gradient(145deg, #fef2f2, #ffffff);
+}
+
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-form-field-label {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+/* Mejorar la apariencia de los labels */
+.mat-mdc-form-field-label {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Estilos para los hints */
+.mat-mdc-form-field-hint {
+  color: #6b7280;
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* Estilos para los errores */
+.mat-mdc-form-field-error {
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.mat-mdc-button.mat-primary {
+  background-color: #691C32;
+  color: white;
+}
+
+.mat-mdc-button.mat-primary:hover {
+  background-color: #8B2635;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: #691C32;
+  color: white;
+}
+
+.mat-mdc-raised-button.mat-primary:hover {
+  background-color: #8B2635;
+}
+
+.mat-mdc-button.mat-primary[disabled] {
+  background-color: #ccc;
+  color: #666;
+}
+
+.mat-mdc-raised-button.mat-primary[disabled] {
+  background-color: #ccc;
+  color: #666;
+}
+
+/* Estilos para los hints */
+.mat-mdc-form-field-hint {
+  color: #666;
+  font-size: 12px;
+}
+
+/* Estilos para los errores */
+.mat-mdc-form-field-error {
+  color: #d32f2f;
+  font-size: 12px;
+}
+
+/* Estilos para las secciones */
+.bg-white\/50 {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+/* Estilos para los títulos de sección */
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.text-\[\#691C32\] {
+  color: #691C32;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+/* Estilos para el grid */
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Estilos para los botones */
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.space-x-4 > * + * {
+  margin-left: 1rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+/* Estilos para los chips */
+.mat-mdc-chip-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mat-mdc-chip {
+  background-color: #691C32;
+  color: white;
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mat-mdc-chip .mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.mat-mdc-chip-remove {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.mat-mdc-chip-remove:hover {
+  opacity: 1;
+}
+
+/* Estilos para el checkbox */
+.mat-mdc-checkbox {
+  margin-right: 8px;
+}
+
+.mat-mdc-checkbox .mat-mdc-checkbox-label {
+  font-size: 14px;
+}
+
+/* Estilos para el textarea */
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Estilos para el resumen */
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.max-h-40 {
+  max-height: 10rem;
+}
+
+/* Estilos para el contenedor principal */
+.bg-\[\#D9BCA3\]\/30 {
+  background-color: rgba(217, 188, 163, 0.3);
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-\[\#691C32\] {
+  border-color: #691C32;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+/* Estilos para el título principal */
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+/* Estilos para el texto descriptivo */
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Espaciado entre elementos */
+.space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+/* Estilos para los iconos de emoji en los títulos de sección */
+.text-lg::before {
+  margin-right: 0.5rem;
+}
+
+/* Estilos para los selects */
+.mat-mdc-select {
+  min-width: 200px;
+}
+
+/* Estilos para los campos de entrada */
+input, textarea, select {
+  font-family: inherit;
+}
+
+/* Estilos para el estado del checkbox */
+.mat-mdc-checkbox-checked .mat-mdc-checkbox-background {
+  background-color: #691C32;
+}
+
+.mat-mdc-checkbox-checked .mat-mdc-checkbox-ripple {
+  background-color: #691C32;
+}
+
+/* Estilos para los campos deshabilitados */
+.mat-mdc-form-field-disabled .mat-mdc-form-field-outline {
+  color: #ccc;
+}
+
+.mat-mdc-form-field-disabled .mat-mdc-form-field-label {
+  color: #999;
+}
+
+/* Estilos para el input de anexos */
+.flex-1 .mat-mdc-form-field {
+  margin-bottom: 0;
+}
+
+/* Estilos para los botones de acción */
+button[mat-raised-button] {
+  min-width: 120px;
+}
+
+button[mat-stroked-button] {
+  min-width: 100px;
+}

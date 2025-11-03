@@ -4,7 +4,8 @@
     <app-init-template></app-init-template>
     <h1>Aquí va el componente de Bienvenida (landing starting point)</h1> -->
     @if (isStepperInitialized) {
-        <app-stepper-base></app-stepper-base>
+        <!-- Usar el nuevo stepper de Tlapohualli -->
+        <app-stepper-tlapohualli></app-stepper-tlapohualli>
     } @else {
         <app-capture-landing-page (startStepper)="startStepperFromChild($event)" />
     }

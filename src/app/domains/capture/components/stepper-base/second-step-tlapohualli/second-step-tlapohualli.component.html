@@ -1,0 +1,162 @@
+<div class="w-full h-full bg-gradient-to-br from-white via-[#FEFEFE] to-[#F8FAFC] rounded-3xl border border-[#E2E8F0] p-10 shadow-2xl">
+    <div class="mb-8">
+        <div class="flex items-center mb-4">
+            <div class="w-16 h-16 bg-gradient-to-br from-[#691C32] to-[#8B2635] rounded-2xl flex items-center justify-center mr-6 shadow-lg">
+                <span class="text-white font-bold text-xl">2</span>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-[#691C32] mb-1">Plazos y Seguimiento</h3>
+                <p class="text-sm text-gray-600">Configure los plazos, seguimiento y estado del expediente.</p>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="formularioPaso2" (ngSubmit)="onSubmit()">
+        <!-- Sección de Plazos y Fechas -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Plazos y Fechas
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <app-custom-form-field
+                    label="Plazo de Vencimiento (días)"
+                    type="number"
+                    placeholder="20"
+                    hint="Días para vencimiento"
+                    [errorMessage]="plazoError"
+                    formControlName="plazo_vencimiento_prioridad">
+                </app-custom-form-field>
+
+                <app-custom-form-field
+                    label="Fecha de Vencimiento"
+                    type="date"
+                    placeholder="Seleccionar fecha"
+                    hint="Se calcula automáticamente"
+                    formControlName="fecha_vencimiento">
+                </app-custom-form-field>
+
+                <app-custom-form-field
+                    label="Días de Retraso"
+                    type="number"
+                    placeholder="0"
+                    hint="Calculado automáticamente"
+                    [disabled]="true"
+                    formControlName="dias_retraso">
+                </app-custom-form-field>
+
+                <app-custom-form-field
+                    label="Fecha de Notificación"
+                    type="date"
+                    placeholder="Seleccionar fecha"
+                    hint="Fecha de notificación al usuario"
+                    formControlName="fecha_notificacion">
+                </app-custom-form-field>
+            </div>
+        </div>
+
+        <!-- Sección de Sistema y Responsables -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                Sistema y Responsables
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <app-custom-select
+                    label="Sistema/Aplicativo"
+                    placeholder="Seleccionar sistema"
+                    hint="Sistema donde se procesa el expediente"
+                    [options]="sistemasOptions"
+                    formControlName="sistema_aplicativo">
+                </app-custom-select>
+
+                <app-custom-form-field
+                    label="Responsable y Fecha de Asignación"
+                    placeholder="Ej: 059 Víctor 2025"
+                    hint="Ej: 059 Víctor 2025"
+                    [errorMessage]="responsableError"
+                    formControlName="responsable_fecha_asignacion">
+                </app-custom-form-field>
+
+                <app-custom-form-field
+                    label="WOOS"
+                    placeholder="Ej: REQS00002058748"
+                    hint="Ej: REQS00002058748"
+                    [errorMessage]="woosError"
+                    formControlName="woos">
+                </app-custom-form-field>
+
+                <app-custom-form-field
+                    label="Número de Solicitudes Reales"
+                    type="text"
+                    placeholder="1"
+                    hint="Cantidad de solicitudes reales"
+                    [errorMessage]="numeroSolicitudesError"
+                    formControlName="numero_solicitudes_reales">
+                </app-custom-form-field>
+            </div>
+        </div>
+
+        <!-- Sección de Estado y Seguimiento -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                Estado y Seguimiento
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <app-custom-select
+                    label="Estatus"
+                    placeholder="Seleccionar estatus"
+                    hint="Estado actual del expediente"
+                    [options]="estatusOptions"
+                    formControlName="estatus">
+                </app-custom-select>
+
+                <app-custom-select
+                    label="Ubicación (Carpeta)"
+                    placeholder="Seleccionar ubicación"
+                    hint="Ubicación física o digital del expediente"
+                    [options]="ubicacionesOptions"
+                    formControlName="ubicacion_carpeta">
+                </app-custom-select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <app-custom-select
+                    label="Respuesta Total y/o Parcial"
+                    placeholder="Seleccionar tipo de respuesta"
+                    hint="Tipo de respuesta proporcionada"
+                    [options]="tiposRespuestaOptions"
+                    formControlName="respuesta_total_parcial">
+                </app-custom-select>
+
+                <app-custom-form-field
+                    label="Referencia de Respuesta"
+                    placeholder="Ej: 102 06 00 00 00 2025-059"
+                    hint="Ej: 102 06 00 00 00 2025-059"
+                    [errorMessage]="respuestaError"
+                    formControlName="referencia_respuesta">
+                </app-custom-form-field>
+            </div>
+
+            <app-custom-textarea
+                label="Observaciones"
+                placeholder="Observaciones adicionales sobre el expediente"
+                hint="Máximo 1000 caracteres"
+                [rows]="4"
+                [errorMessage]="observacionesError"
+                formControlName="observaciones">
+            </app-custom-textarea>
+        </div>
+
+    </form>
+</div>

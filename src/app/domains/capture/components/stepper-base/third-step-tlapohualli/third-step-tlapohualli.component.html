@@ -1,0 +1,156 @@
+<div class="w-full h-full bg-gradient-to-br from-white via-[#FEFEFE] to-[#F8FAFC] rounded-3xl border border-[#E2E8F0] p-10 shadow-2xl">
+    <div class="mb-8">
+        <div class="flex items-center mb-4">
+            <div class="w-16 h-16 bg-gradient-to-br from-[#691C32] to-[#8B2635] rounded-2xl flex items-center justify-center mr-6 shadow-lg">
+                <span class="text-white font-bold text-xl">3</span>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-[#691C32] mb-1">Documentos y Respuestas</h3>
+                <p class="text-sm text-gray-600">Complete la información sobre documentos, anexos y respuestas del expediente.</p>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="formularioPaso3" (ngSubmit)="onSubmit()">
+        <!-- Sección de Oficios y Comisiones -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Oficios y Comisiones
+            </h4>
+            
+            <div class="grid grid-cols-1 gap-6">
+                <app-custom-form-field
+                    label="Oficios Comisión/Apoyo/Designación/Aceptación"
+                    placeholder="Ej: N/A"
+                    hint="Información sobre oficios de comisión, apoyo, designación o aceptación"
+                    [errorMessage]="oficiosError"
+                    formControlName="oficios_comision_apoyo">
+                </app-custom-form-field>
+            </div>
+        </div>
+
+        <!-- Sección de Documentos de Respuesta -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Documentos de Respuesta
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <app-custom-select
+                    label="Dictamen/Reporte/Acta de Hechos/Memoria Técnica"
+                    placeholder="Seleccionar tipo de documento"
+                    hint="Tipo de documento de respuesta generado"
+                    [options]="tiposDocumentoOptions"
+                    formControlName="dictamen_reporte_acta">
+                </app-custom-select>
+
+                <app-custom-form-field
+                    label="Anexos"
+                    placeholder="Ej: OUJD835K_20250109.E.1 RRI-2501-001"
+                    hint="Lista de anexos del expediente"
+                    formControlName="anexos">
+                </app-custom-form-field>
+            </div>
+        </div>
+
+        <!-- Sección de Acuses y Expedientes -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                Acuses y Expedientes
+            </h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <app-custom-select
+                    label="Acuse Físico – Digital"
+                    placeholder="Seleccionar acuse"
+                    hint="Tipo de acuse generado"
+                    [options]="acuseOptions"
+                    formControlName="acuse_fisico_digital">
+                </app-custom-select>
+
+                <app-custom-select
+                    label="Expediente Físico y Digital"
+                    placeholder="Seleccionar opción"
+                    hint="Disponibilidad del expediente"
+                    [options]="expedienteFisicoDigitalOptions"
+                    formControlName="expediente_fisico_digital">
+                </app-custom-select>
+            </div>
+        </div>
+
+        <!-- Sección de Comentarios -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                Comentarios y Observaciones
+            </h4>
+            
+            <div class="grid grid-cols-1 gap-6">
+                <app-custom-textarea
+                    label="Comentarios Omega"
+                    placeholder="Validar que la Información este en el servidor, el expediente esta completo validar que regreso el disco duro F40550090801202"
+                    hint="Comentarios adicionales sobre el expediente"
+                    [rows]="4"
+                    [errorMessage]="comentariosError"
+                    formControlName="comentarios_omega">
+                </app-custom-textarea>
+            </div>
+        </div>
+
+        <!-- Sección de Anexos con Chips -->
+        <div class="mb-8">
+            <h4 class="text-lg font-semibold text-[#691C32] mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                Gestión de Anexos
+            </h4>
+            
+            <div class="space-y-4">
+                <div class="flex gap-4">
+                    <app-custom-form-field
+                        label="Agregar Anexo"
+                        placeholder="Escriba el nombre del anexo y presione Enter"
+                        hint="Presione Enter para agregar el anexo"
+                        [(ngModel)]="nuevoAnexo"
+                        (keypress)="onKeyPress($event)">
+                    </app-custom-form-field>
+                    <button type="button" 
+                            (click)="agregarAnexo()"
+                            class="px-6 py-4 bg-gradient-to-r from-[#691C32] to-[#8B2635] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 self-end">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Agregar
+                    </button>
+                </div>
+                
+                <div *ngIf="anexosChips.length > 0" class="flex flex-wrap gap-2">
+                    <div *ngFor="let anexo of anexosChips" 
+                         class="bg-gradient-to-r from-[#691C32] to-[#8B2635] text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-lg">
+                        <span class="text-sm font-medium">{{ anexo }}</span>
+                        <button type="button" 
+                                (click)="removerAnexo(anexo)"
+                                class="text-white hover:text-red-200 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

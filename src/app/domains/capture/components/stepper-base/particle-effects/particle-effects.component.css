@@ -1,0 +1,76 @@
+/* EFECTOS DE PARTÍCULAS SÚPER ATRACTIVOS */
+.particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  background: transparent;
+}
+
+.particle-canvas.dark-mode {
+  background: transparent;
+}
+
+/* Efectos de ondas de agua */
+.particle-canvas::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(105, 28, 50, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(139, 38, 53, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(160, 51, 66, 0.1) 0%, transparent 50%);
+  animation: waterWaves 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.particle-canvas.dark-mode::before {
+  background: radial-gradient(circle at 20% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(217, 119, 6, 0.1) 0%, transparent 50%);
+}
+
+@keyframes waterWaves {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1) rotate(180deg);
+    opacity: 0.6;
+  }
+}
+
+/* Efectos de brillo flotante */
+.particle-canvas::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.particle-canvas.dark-mode::after {
+  background: linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.1) 50%, transparent 70%);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+
+

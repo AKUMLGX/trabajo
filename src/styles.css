@@ -4,3 +4,35 @@
 @tailwind utilities;
 html, body { height: 100%; }
 body { margin: 0; font-family: Montserrat; }
+
+/* ESTILOS GLOBALES FORZADOS PARA BOTONES DEL FORMULARIO */
+.mat-stroked-button.modern-btn-secondary,
+.mat-raised-button.modern-btn-primary,
+.mat-raised-button.modern-btn-success {
+  background: #691C32 !important;
+  color: white !important;
+  border: 2px solid #691C32 !important;
+}
+
+.mat-stroked-button.modern-btn-secondary:hover,
+.mat-raised-button.modern-btn-primary:hover,
+.mat-raised-button.modern-btn-success:hover {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+  border-color: #DDC9A4 !important;
+}
+
+/* FORZAR TODOS LOS BOTONES MATERIAL EN EL STEPPER */
+app-stepper-tlapohualli .mat-button,
+app-stepper-tlapohualli .mat-raised-button,
+app-stepper-tlapohualli .mat-stroked-button {
+  background: #691C32 !important;
+  color: white !important;
+}
+
+app-stepper-tlapohualli .mat-button:hover,
+app-stepper-tlapohualli .mat-raised-button:hover,
+app-stepper-tlapohualli .mat-stroked-button:hover {
+  background: #DDC9A4 !important;
+  color: #691C32 !important;
+}

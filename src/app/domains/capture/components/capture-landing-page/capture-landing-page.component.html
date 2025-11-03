@@ -1,30 +1,85 @@
-<div class="h-full w-full flex flex-col justify-around items-center bg-[#D9BCA3]/30">
-    <div class="mt-10">
-        <div class=" bg-white rounded-full flex justify-center items-center">
-            <img
-            src="{{environment.base}}/assets/images/capture_init.png"
-            alt="Imagen de inicio de captura"
-            width="200"
-        />
-        </div>
+<div class="h-full w-full flex flex-col justify-center items-center bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 relative overflow-hidden">
+    <!-- Patrón de fondo sutil -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute inset-0 bg-dot-pattern"></div>
     </div>
-    <div class="flex flex-col justify-center items-center">
-        <div class="mb-4 mx-4 text-black sm:text-base md:text-2xl text-center">
-            ¡Bienvenido a la Bandeja de Captura ACAPE!
+    
+    <!-- Contenido principal -->
+    <div class="relative z-10 flex flex-col items-center max-w-4xl mx-auto px-6">
+        <!-- Icono principal -->
+        <div class="mb-8">
+            <div class="w-32 h-32 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-transform duration-300" style="background: linear-gradient(135deg, #691C32 0%, #235B4E 100%);">
+                <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
         </div>
-        <div class="mb-4 mx-4 text-black sm:text-xs md:text-base text-center">
-            Estimado usuario, 
+
+        <!-- Título principal -->
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6 text-center leading-tight">
+            Bandeja de Captura
+        </h1>
+        
+        <!-- Subtítulo -->
+        <h2 class="text-xl md:text-2xl font-semibold mb-8 text-center" style="color: #691C32;">
+            Sistema de Registro
+        </h2>
+
+        <!-- Descripción -->
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/20 mb-8 max-w-3xl">
+            <p class="text-gray-700 text-lg leading-relaxed text-center mb-6">
+                Bienvenido a la Bandeja de Captura. 
+                Esta plataforma está diseñada para facilitar el registro 
+                y gestión de información de manera segura y eficiente.
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3" style="background-color: rgba(105, 28, 50, 0.1);">
+                        <svg class="w-6 h-6" style="color: #691C32;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">Captura</h3>
+                    <p class="text-sm text-gray-600">Registro de información</p>
+                </div>
+                
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3" style="background-color: rgba(35, 91, 78, 0.1);">
+                        <svg class="w-6 h-6" style="color: #235B4E;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">Procesamiento</h3>
+                    <p class="text-sm text-gray-600">Gestión eficiente de datos</p>
+                </div>
+                
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3" style="background-color: rgba(188, 149, 92, 0.1);">
+                        <svg class="w-6 h-6" style="color: #BC955C;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">Control</h3>
+                    <p class="text-sm text-gray-600">Seguimiento de registros</p>
+                </div>
+            </div>
         </div>
-        <div class="mb-4 mx-4 text-black sm:text-xs md:text-base text-center">
-            Le extendemos una cálida bienvenida a la Bandeja de Captura de asuntos de la Administración Central de Asuntos Penales y Especiales (ACAPE). Este apartado está dirigido al personal de Control de Gestión y está diseñado para facilitar el registro y gestión eficiente de los asuntos.
-        </div>
-        <div class="mb-4 mx-4 text-black sm:text-xs md:text-base text-center">
-            Antes de continuar, asegúrese de contar con toda la documentación requerida para el registro de su caso. La preparación de su documentación es esencial para un proceso fluido y sin contratiempos.
-        </div>  
-        <div>
-            <button class="button" style="vertical-align:middle" (click)="startStepperHandler()">
-                <span>Iniciar captura </span>
-            </button>
-        </div>
+
+        <!-- Botón de inicio -->
+        <button 
+            class="text-white font-bold py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center gap-3 text-lg"
+            style="background: linear-gradient(135deg, #691C32 0%, #235B4E 100%);"
+            (click)="startStepperHandler()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            Iniciar Captura
+        </button>
     </div>
+
+    <!-- Elementos decorativos -->
+    <div class="absolute top-10 left-10 w-20 h-20 rounded-full blur-xl" style="background-color: rgba(105, 28, 50, 0.1);"></div>
+    <div class="absolute bottom-10 right-10 w-32 h-32 rounded-full blur-xl" style="background-color: rgba(35, 91, 78, 0.1);"></div>
+    <div class="absolute top-1/2 left-5 w-16 h-16 rounded-full blur-lg" style="background-color: rgba(188, 149, 92, 0.1);"></div>
 </div>
