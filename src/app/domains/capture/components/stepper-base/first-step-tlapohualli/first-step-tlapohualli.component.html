@@ -1,217 +1,418 @@
-<!-- OPCIÓN 1: DISEÑO COMPACTO Y MODERNO -->
-<div class="min-h-full bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
+<!-- OPCIÓN 5: DISEÑO DASHBOARD CON TABS -->
+<div class="min-h-full bg-gradient-to-br from-gray-50 to-gray-100 p-6">
     
-    <!-- Header Minimalista con Barra de Progreso -->
-    <div class="max-w-6xl mx-auto mb-6">
-        <!-- Título Principal -->
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-gradient-to-br from-[#691C32] to-[#9F2241] rounded-2xl flex items-center justify-center shadow-lg">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Paso 1: Información Básica</h2>
-                    <p class="text-sm text-gray-600 mt-0.5">Complete todos los campos del expediente</p>
-                </div>
+    <!-- Header Principal -->
+    <div class="max-w-7xl mx-auto mb-6">
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-[#691C32] to-[#9F2241] rounded-2xl flex items-center justify-center shadow-xl">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
             </div>
-            
-            <!-- Badge de Progreso -->
-            <div class="flex flex-col items-end">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-sm font-semibold text-gray-700">Progreso</span>
-                    <div class="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-green-500 to-emerald-600 transition-all duration-500 rounded-full" 
-                             [style.width.%]="porcentajeCompletado">
-                        </div>
-                    </div>
-                    <span class="text-sm font-bold text-[#691C32]">{{ porcentajeCompletado }}%</span>
-                </div>
-                <span class="text-xs text-gray-500">{{ formularioValido ? '✓ Completo' : '8 campos obligatorios' }}</span>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Panel de Captura de Expedientes</h1>
+                <p class="text-gray-600 mt-1">Paso 1: Complete la información básica del expediente</p>
             </div>
         </div>
     </div>
 
-    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="max-w-6xl mx-auto">
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="max-w-7xl mx-auto">
         
-        <!-- Grid de 2 Columnas para Formulario -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             
-            <!-- COLUMNA IZQUIERDA -->
-            <div class="space-y-6">
+            <!-- COLUMNA PRINCIPAL: TABS Y CONTENIDO (3 columnas) -->
+            <div class="lg:col-span-3">
                 
-                <!-- Card: Identificación del Expediente -->
-                <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition-all duration-300">
-                    <div class="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-900">Identificación</h3>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <app-custom-form-field
-                            label="Número de Expediente"
-                            [required]="true"
-                            placeholder="Exp.001"
-                            hint="Formato requerido: Exp.XXX"
-                            [errorMessage]="expedienteError"
-                            formControlName="expediente">
-                        </app-custom-form-field>
+                <!-- Tabs Navigation -->
+                <div class="bg-white rounded-t-2xl shadow-lg border-b-2 border-gray-200">
+                    <div class="flex overflow-x-auto">
+                        
+                        <!-- Tab 1: Identificación -->
+                        <button type="button"
+                                (click)="tabActivo = 1"
+                                [class.active-tab]="tabActivo === 1"
+                                class="tab-button flex-1 min-w-[160px] px-6 py-4 text-sm font-semibold border-b-4 transition-all duration-300 hover:bg-gray-50"
+                                [class.border-blue-600]="tabActivo === 1"
+                                [class.text-blue-700]="tabActivo === 1"
+                                [class.bg-blue-50]="tabActivo === 1"
+                                [class.border-transparent]="tabActivo !== 1"
+                                [class.text-gray-600]="tabActivo !== 1">
+                            <div class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                                <span>Identificación</span>
+                                <span *ngIf="isSeccionCompleta(1)" class="ml-1 text-green-600">✓</span>
+                            </div>
+                        </button>
 
-                        <app-custom-form-field
-                            label="Número de Oficio"
-                            [required]="true"
-                            placeholder="199 06 02 00 00 2025-01"
-                            hint="Número completo del oficio"
-                            [errorMessage]="oficioError"
-                            formControlName="oficio">
-                        </app-custom-form-field>
+                        <!-- Tab 2: Fechas -->
+                        <button type="button"
+                                (click)="tabActivo = 2"
+                                [class.active-tab]="tabActivo === 2"
+                                class="tab-button flex-1 min-w-[160px] px-6 py-4 text-sm font-semibold border-b-4 transition-all duration-300 hover:bg-gray-50"
+                                [class.border-purple-600]="tabActivo === 2"
+                                [class.text-purple-700]="tabActivo === 2"
+                                [class.bg-purple-50]="tabActivo === 2"
+                                [class.border-transparent]="tabActivo !== 2"
+                                [class.text-gray-600]="tabActivo !== 2">
+                            <div class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span>Fechas</span>
+                                <span *ngIf="isSeccionCompleta(2)" class="ml-1 text-green-600">✓</span>
+                            </div>
+                        </button>
 
-                        <app-custom-form-field
-                            label="No. Entrada Central"
-                            [required]="true"
-                            placeholder="2025-007"
-                            hint="Número de registro central"
-                            [errorMessage]="numeroEntradaError"
-                            formControlName="numero_entrada_central">
-                        </app-custom-form-field>
+                        <!-- Tab 3: Origen -->
+                        <button type="button"
+                                (click)="tabActivo = 3"
+                                [class.active-tab]="tabActivo === 3"
+                                class="tab-button flex-1 min-w-[160px] px-6 py-4 text-sm font-semibold border-b-4 transition-all duration-300 hover:bg-gray-50"
+                                [class.border-orange-600]="tabActivo === 3"
+                                [class.text-orange-700]="tabActivo === 3"
+                                [class.bg-orange-50]="tabActivo === 3"
+                                [class.border-transparent]="tabActivo !== 3"
+                                [class.text-gray-600]="tabActivo !== 3">
+                            <div class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                                <span>Origen</span>
+                                <span *ngIf="isSeccionCompleta(3)" class="ml-1 text-green-600">✓</span>
+                            </div>
+                        </button>
+
+                        <!-- Tab 4: Descripción -->
+                        <button type="button"
+                                (click)="tabActivo = 4"
+                                [class.active-tab]="tabActivo === 4"
+                                class="tab-button flex-1 min-w-[160px] px-6 py-4 text-sm font-semibold border-b-4 transition-all duration-300 hover:bg-gray-50"
+                                [class.border-teal-600]="tabActivo === 4"
+                                [class.text-teal-700]="tabActivo === 4"
+                                [class.bg-teal-50]="tabActivo === 4"
+                                [class.border-transparent]="tabActivo !== 4"
+                                [class.text-gray-600]="tabActivo !== 4">
+                            <div class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <span>Descripción</span>
+                                <span *ngIf="isSeccionCompleta(4)" class="ml-1 text-green-600">✓</span>
+                            </div>
+                        </button>
+
                     </div>
                 </div>
 
-                <!-- Card: Fechas -->
-                <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition-all duration-300">
-                    <div class="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
-                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-900">Fechas Importantes</h3>
-                    </div>
+                <!-- Tab Content -->
+                <div class="bg-white rounded-b-2xl shadow-lg p-8 min-h-[500px]">
                     
-                    <div class="space-y-4">
-                        <app-custom-form-field
-                            label="Fecha del Documento"
-                            [required]="true"
-                            type="date"
-                            hint="Fecha original del documento"
-                            [errorMessage]="fechaDocumentoError"
-                            formControlName="fecha_documento">
-                        </app-custom-form-field>
+                    <!-- Contenido Tab 1: Identificación -->
+                    <div *ngIf="tabActivo === 1" class="animate-fadeIn">
+                        <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-blue-100">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Identificación del Expediente</h3>
+                                <p class="text-sm text-gray-600">Complete los datos de identificación básicos</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <app-custom-form-field
+                                label="Número de Expediente"
+                                [required]="true"
+                                placeholder="Exp.001"
+                                hint="Formato requerido: Exp.XXX"
+                                [errorMessage]="expedienteError"
+                                formControlName="expediente">
+                            </app-custom-form-field>
 
-                        <app-custom-form-field
-                            label="Fecha de Recepción"
-                            [required]="true"
-                            type="date"
-                            hint="Debe ser igual o posterior a la fecha del documento"
-                            [errorMessage]="fechaRecibidoError"
-                            formControlName="fecha_recibido">
-                        </app-custom-form-field>
+                            <app-custom-form-field
+                                label="Número de Oficio"
+                                [required]="true"
+                                placeholder="199 06 02 00 00 2025-01"
+                                hint="Número completo del oficio"
+                                [errorMessage]="oficioError"
+                                formControlName="oficio">
+                            </app-custom-form-field>
+
+                            <app-custom-form-field
+                                label="No. de Entrada del Central"
+                                [required]="true"
+                                placeholder="2025-007"
+                                hint="Número de registro en el sistema central"
+                                [errorMessage]="numeroEntradaError"
+                                formControlName="numero_entrada_central">
+                            </app-custom-form-field>
+                        </div>
                     </div>
+
+                    <!-- Contenido Tab 2: Fechas -->
+                    <div *ngIf="tabActivo === 2" class="animate-fadeIn">
+                        <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-purple-100">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Fechas Importantes</h3>
+                                <p class="text-sm text-gray-600">Registre las fechas del expediente</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <app-custom-form-field
+                                label="Fecha del Documento"
+                                [required]="true"
+                                type="date"
+                                hint="Fecha en la que se emitió el documento original"
+                                [errorMessage]="fechaDocumentoError"
+                                formControlName="fecha_documento">
+                            </app-custom-form-field>
+
+                            <app-custom-form-field
+                                label="Fecha en la que se Recibió"
+                                [required]="true"
+                                type="date"
+                                hint="Fecha en la que el expediente fue recibido (debe ser igual o posterior a la fecha del documento)"
+                                [errorMessage]="fechaRecibidoError"
+                                formControlName="fecha_recibido">
+                            </app-custom-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Contenido Tab 3: Origen -->
+                    <div *ngIf="tabActivo === 3" class="animate-fadeIn">
+                        <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-orange-100">
+                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Origen del Expediente</h3>
+                                <p class="text-sm text-gray-600">Indique la procedencia y el plazo</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <app-custom-form-field
+                                label="Área Remitente"
+                                [required]="true"
+                                placeholder="Ej: AGSC, AGE/CPP, OIC"
+                                hint="Área o dependencia que envía el expediente"
+                                [errorMessage]="remitenteError"
+                                formControlName="remitente_area">
+                            </app-custom-form-field>
+
+                            <app-custom-form-field
+                                label="Plazo de Vencimiento y Prioridad"
+                                [required]="true"
+                                type="number"
+                                placeholder="20"
+                                hint="Número de días disponibles para la atención del expediente (entre 1 y 365 días)"
+                                [errorMessage]="plazoError"
+                                formControlName="plazo_vencimiento_prioridad">
+                            </app-custom-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Contenido Tab 4: Descripción -->
+                    <div *ngIf="tabActivo === 4" class="animate-fadeIn">
+                        <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-teal-100">
+                            <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Descripción del Asunto</h3>
+                                <p class="text-sm text-gray-600">Describa detalladamente el contenido del expediente</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <app-custom-textarea
+                                label="Referencia / Asunto"
+                                [required]="true"
+                                placeholder="Describa detalladamente el asunto, motivo o referencia del expediente..."
+                                hint="Descripción completa del contenido y motivo del expediente"
+                                [rows]="10"
+                                [errorMessage]="referenciaError"
+                                formControlName="referencia_asunto">
+                            </app-custom-textarea>
+
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Caracteres utilizados:</span>
+                                <span class="font-mono font-semibold" 
+                                      [class.text-red-600]="(formulario.get('referencia_asunto')?.value?.length || 0) > 1000"
+                                      [class.text-gray-700]="(formulario.get('referencia_asunto')?.value?.length || 0) <= 1000">
+                                    {{ formulario.get('referencia_asunto')?.value?.length || 0 }} / 1000
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
-            <!-- COLUMNA DERECHA -->
-            <div class="space-y-6">
-                
-                <!-- Card: Origen -->
-                <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition-all duration-300">
-                    <div class="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
-                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+            <!-- COLUMNA LATERAL: PANEL DE RESUMEN (1 columna) -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
+                    
+                    <!-- Header del Panel -->
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="w-10 h-10 bg-gradient-to-br from-[#691C32] to-[#9F2241] rounded-xl flex items-center justify-center">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900">Origen del Expediente</h3>
+                        <h3 class="text-lg font-bold text-gray-900">Resumen</h3>
                     </div>
-                    
-                    <div class="space-y-4">
-                        <app-custom-form-field
-                            label="Área Remitente"
-                            [required]="true"
-                            placeholder="AGSC, AGE/CPP, OIC, etc."
-                            hint="Área que envía el expediente"
-                            [errorMessage]="remitenteError"
-                            formControlName="remitente_area">
-                        </app-custom-form-field>
 
-                        <app-custom-form-field
-                            label="Plazo de Vencimiento"
-                            [required]="true"
-                            type="number"
-                            placeholder="20"
-                            hint="Días disponibles para atención (1-365)"
-                            [errorMessage]="plazoError"
-                            formControlName="plazo_vencimiento_prioridad">
-                        </app-custom-form-field>
-                    </div>
-                </div>
-
-                <!-- Card: Descripción -->
-                <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition-all duration-300">
-                    <div class="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
-                        <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
+                    <!-- Progreso General -->
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700">Progreso Total</span>
+                            <span class="text-lg font-bold text-[#691C32]">{{ porcentajeCompletado }}%</span>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900">Descripción del Asunto</h3>
+                        <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-[#691C32] to-[#9F2241] transition-all duration-500 rounded-full" 
+                                 [style.width.%]="porcentajeCompletado">
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">
+                            {{ getCamposCompletados() }} de 8 campos completados
+                        </p>
                     </div>
-                    
-                    <app-custom-textarea
-                        label="Referencia / Asunto"
-                        [required]="true"
-                        placeholder="Describa detalladamente el asunto del expediente..."
-                        hint="Máximo 1000 caracteres"
-                        [rows]="8"
-                        [errorMessage]="referenciaError"
-                        formControlName="referencia_asunto">
-                    </app-custom-textarea>
 
-                    <div class="mt-4 text-right">
-                        <span class="text-xs text-gray-500">
-                            {{ formulario.get('referencia_asunto')?.value?.length || 0 }} / 1000 caracteres
-                        </span>
+                    <!-- Estado por Sección -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center justify-between p-3 rounded-lg" 
+                             [class.bg-blue-50]="isSeccionCompleta(1)"
+                             [class.bg-gray-50]="!isSeccionCompleta(1)">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl" [class.opacity-30]="!isSeccionCompleta(1)">
+                                    {{ isSeccionCompleta(1) ? '✓' : '○' }}
+                                </span>
+                                <span class="text-sm font-medium" [class.text-blue-700]="isSeccionCompleta(1)" [class.text-gray-600]="!isSeccionCompleta(1)">
+                                    Identificación
+                                </span>
+                            </div>
+                            <span class="text-xs font-semibold" [class.text-blue-600]="isSeccionCompleta(1)" [class.text-gray-500]="!isSeccionCompleta(1)">
+                                3/3
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-lg" 
+                             [class.bg-purple-50]="isSeccionCompleta(2)"
+                             [class.bg-gray-50]="!isSeccionCompleta(2)">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl" [class.opacity-30]="!isSeccionCompleta(2)">
+                                    {{ isSeccionCompleta(2) ? '✓' : '○' }}
+                                </span>
+                                <span class="text-sm font-medium" [class.text-purple-700]="isSeccionCompleta(2)" [class.text-gray-600]="!isSeccionCompleta(2)">
+                                    Fechas
+                                </span>
+                            </div>
+                            <span class="text-xs font-semibold" [class.text-purple-600]="isSeccionCompleta(2)" [class.text-gray-500]="!isSeccionCompleta(2)">
+                                2/2
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-lg" 
+                             [class.bg-orange-50]="isSeccionCompleta(3)"
+                             [class.bg-gray-50]="!isSeccionCompleta(3)">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl" [class.opacity-30]="!isSeccionCompleta(3)">
+                                    {{ isSeccionCompleta(3) ? '✓' : '○' }}
+                                </span>
+                                <span class="text-sm font-medium" [class.text-orange-700]="isSeccionCompleta(3)" [class.text-gray-600]="!isSeccionCompleta(3)">
+                                    Origen
+                                </span>
+                            </div>
+                            <span class="text-xs font-semibold" [class.text-orange-600]="isSeccionCompleta(3)" [class.text-gray-500]="!isSeccionCompleta(3)">
+                                2/2
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-lg" 
+                             [class.bg-teal-50]="isSeccionCompleta(4)"
+                             [class.bg-gray-50]="!isSeccionCompleta(4)">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl" [class.opacity-30]="!isSeccionCompleta(4)">
+                                    {{ isSeccionCompleta(4) ? '✓' : '○' }}
+                                </span>
+                                <span class="text-sm font-medium" [class.text-teal-700]="isSeccionCompleta(4)" [class.text-gray-600]="!isSeccionCompleta(4)">
+                                    Descripción
+                                </span>
+                            </div>
+                            <span class="text-xs font-semibold" [class.text-teal-600]="isSeccionCompleta(4)" [class.text-gray-500]="!isSeccionCompleta(4)">
+                                1/1
+                            </span>
+                        </div>
                     </div>
+
+                    <!-- Estado Final -->
+                    <div class="pt-4 border-t-2 border-gray-200">
+                        <div *ngIf="!formularioValido" class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-xs font-semibold text-amber-800">Pendiente</p>
+                                    <p class="text-xs text-amber-700 mt-1">Complete todos los campos</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="formularioValido" class="p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-xs font-semibold text-green-800">Completo</p>
+                                    <p class="text-xs text-green-700 mt-1">Listo para continuar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-
             </div>
+
         </div>
 
         <!-- Botón de Envío (oculto, se maneja desde el stepper padre) -->
         <button type="submit" class="hidden">Siguiente</button>
     </form>
 
-    <!-- Indicador de Estado del Formulario -->
-    <div class="max-w-6xl mx-auto mt-6">
-        <div *ngIf="!formularioValido" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg">
-            <div class="flex items-start">
-                <svg class="w-5 h-5 text-amber-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-                <div>
-                    <p class="text-sm font-medium text-amber-800">Complete todos los campos obligatorios para continuar</p>
-                    <p class="text-xs text-amber-700 mt-1">Todos los campos marcados con <span class="text-red-500 font-bold">*</span> son requeridos</p>
-                </div>
-            </div>
-        </div>
-
-        <div *ngIf="formularioValido" class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-            <div class="flex items-start">
-                <svg class="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div>
-                    <p class="text-sm font-medium text-green-800">✓ Formulario completado correctamente</p>
-                    <p class="text-xs text-green-700 mt-1">Puede continuar al siguiente paso</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
+
+<!-- Estilos para animación -->
+<style>
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+</style>

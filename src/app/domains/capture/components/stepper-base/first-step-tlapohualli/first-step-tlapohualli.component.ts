@@ -22,6 +22,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
   @Output() siguientePaso = new EventEmitter<void>();
 
   formulario: FormGroup;
+  tabActivo: number = 1; // Tab activo actual (1-4)
 
   constructor(private fb: FormBuilder) {
     this.formulario = this.fb.group({
@@ -86,6 +87,37 @@ export class FirstStepTlapohualliComponent implements OnInit {
       control?.markAsTouched();
       control?.markAsDirty();
     });
+  }
+
+  // Verificar si una sección está completa
+  isSeccionCompleta(seccion: number): boolean {
+    switch(seccion) {
+      case 1: // Identificación
+        return this.formulario.get('expediente')?.valid === true &&
+               this.formulario.get('oficio')?.valid === true &&
+               this.formulario.get('numero_entrada_central')?.valid === true;
+      
+      case 2: // Fechas
+        return this.formulario.get('fecha_documento')?.valid === true &&
+               this.formulario.get('fecha_recibido')?.valid === true;
+      
+      case 3: // Origen
+        return this.formulario.get('remitente_area')?.valid === true &&
+               this.formulario.get('plazo_vencimiento_prioridad')?.valid === true;
+      
+      case 4: // Descripción
+        return this.formulario.get('referencia_asunto')?.valid === true;
+      
+      default:
+        return false;
+    }
+  }
+
+  // Obtener número de campos completados
+  getCamposCompletados(): number {
+    return Object.keys(this.formulario.controls).filter(
+      key => this.formulario.get(key)?.valid
+    ).length;
   }
   
   // Getters para errores de validación
