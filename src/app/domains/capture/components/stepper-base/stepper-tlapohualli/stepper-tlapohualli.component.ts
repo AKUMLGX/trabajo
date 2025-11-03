@@ -7,8 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FirstStepTlapohualliComponent } from '../first-step-tlapohualli/first-step-tlapohualli.component';
 import { SecondStepTlapohualliComponent } from '../second-step-tlapohualli/second-step-tlapohualli.component';
 import { ThirdStepTlapohualliComponent } from '../third-step-tlapohualli/third-step-tlapohualli.component';
-import { DocumentUploadComponent, UploadedDocument } from '../document-upload/document-upload.component';
-// Removed theme toggle and particle effects for cleaner design
+// DocumentUploadComponent eliminado - no se necesita subida de archivos
 import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
 import { 
   FormularioPaso1, 
@@ -32,8 +31,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     MatDialogModule,
     FirstStepTlapohualliComponent,
     SecondStepTlapohualliComponent,
-    ThirdStepTlapohualliComponent,
-    DocumentUploadComponent
+    ThirdStepTlapohualliComponent
   ],
   templateUrl: './stepper-tlapohualli.component.html',
   styleUrls: ['./stepper-tlapohualli.component.css', './stepper-tlapohualli-global.css']
@@ -44,9 +42,6 @@ export class StepperTlapohualliComponent implements OnInit {
   datosPaso2: FormularioPaso2 | null = null;
   datosPaso3: FormularioPaso3 | null = null;
   
-  // Documentos subidos
-  documentosSubidos: UploadedDocument[] = [];
-
   // Estado del stepper
   pasoActual = 0;
   expedienteGuardado = false;
@@ -205,12 +200,6 @@ export class StepperTlapohualliComponent implements OnInit {
     };
   }
 
-
-  // Manejar documentos subidos
-  onDocumentosChange(documentos: UploadedDocument[]) {
-    this.documentosSubidos = documentos;
-    console.log('Documentos actualizados:', documentos);
-  }
 
   // Método para transiciones suaves entre pasos
   private transicionarPaso(nuevoPaso: number) {

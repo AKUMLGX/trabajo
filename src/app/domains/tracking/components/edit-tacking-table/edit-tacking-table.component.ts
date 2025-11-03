@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { FormComponent } from '../../../capture/components/stepper-base/third-step/preliminar-form/form/form.component';
+// FormComponent eliminado - componente de capture refactorizado
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';

@@ -7,8 +7,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="custom-textarea" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="hasError" [class.disabled]="disabled">
-      <label class="custom-label" [for]="fieldId">{{ label }}</label>
+    <div class="custom-textarea" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage" [class.disabled]="disabled">
+      <label class="custom-label" [for]="fieldId">
+        {{ label }}
+        <span *ngIf="required" class="text-red-500 font-bold ml-1">*</span>
+      </label>
       <div class="textarea-container">
         <textarea
           [id]="fieldId"
@@ -24,8 +27,8 @@ import { CommonModule } from '@angular/common';
         <div class="textarea-border"></div>
         <div class="textarea-highlight"></div>
       </div>
-      <div class="hint-text" *ngIf="hint">{{ hint }}</div>
-      <div class="error-text" *ngIf="hasError && errorMessage">{{ errorMessage || '' }}</div>
+      <div class="hint-text" *ngIf="hint && !errorMessage">{{ hint }}</div>
+      <div class="error-text" *ngIf="errorMessage">{{ errorMessage }}</div>
     </div>
   `,
   styleUrls: ['./custom-textarea.component.css'],
@@ -44,11 +47,11 @@ export class CustomTextareaComponent implements ControlValueAccessor {
   @Input() errorMessage: string | null = '';
   @Input() disabled: boolean = false;
   @Input() rows: number = 4;
+  @Input() required: boolean = false;
 
   value: string = '';
   isFocused: boolean = false;
   hasValue: boolean = false;
-  hasError: boolean = false;
   fieldId: string = '';
 
   private onChange = (value: string) => {};
