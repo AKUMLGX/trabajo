@@ -15,14 +15,18 @@ export class ExpedienteAutocompleteService {
    * Formato: Exp.001, Exp.002, Exp.003...
    */
   obtenerSiguienteExpediente(): Observable<string> {
-    // TODO: Conectar con el backend cuando esté listo
-    // return this.http.get<{siguiente: string}>('/api/expedientes/siguiente')
-    //   .pipe(map(response => response.siguiente));
-    
-    // Por ahora retornamos un valor mock
-    const ultimoNumero = this.getUltimoNumeroLocal();
-    const siguiente = ultimoNumero + 1;
-    return of(this.formatearExpediente(siguiente));
+    // Conectar con el backend
+    return this.http.get<{success: boolean, siguiente: string}>('/tlapohualli/api/v1/api/expedientes/siguiente')
+      .pipe(
+        map(response => response.siguiente),
+        catchError(error => {
+          console.error('Error al obtener siguiente expediente:', error);
+          // Fallback a LocalStorage
+          const ultimoNumero = this.getUltimoNumeroLocal();
+          const siguiente = ultimoNumero + 1;
+          return of(this.formatearExpediente(siguiente));
+        })
+      );
   }
 
   /**
