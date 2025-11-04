@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
 import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
 import { ExpedienteValidators } from '../../../utils/form-validators';
+import { ExpedienteAutocompleteService } from '../../../services/expediente-autocomplete.service';
 
 @Component({
   selector: 'app-first-step-tlapohualli',
@@ -22,8 +23,12 @@ export class FirstStepTlapohualliComponent implements OnInit {
   @Output() siguientePaso = new EventEmitter<void>();
 
   formulario: FormGroup;
+  siguienteExpediente: string = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private autocompleteService: ExpedienteAutocompleteService
+  ) {
     this.formulario = this.fb.group({
       // OFICIO: Campo más importante (clave única)
       oficio: ['', [
@@ -75,10 +80,40 @@ export class FirstStepTlapohualliComponent implements OnInit {
     this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
       this.formulario.get('fecha_recibido')?.updateValueAndValidity();
     });
+
+    // Obtener sugerencia del siguiente expediente
+    this.cargarSiguienteExpediente();
+  }
+
+  // Cargar el siguiente número de expediente sugerido
+  cargarSiguienteExpediente() {
+    this.autocompleteService.obtenerSiguienteExpediente().subscribe({
+      next: (siguiente) => {
+        this.siguienteExpediente = siguiente;
+      },
+      error: (err) => {
+        console.error('Error al obtener siguiente expediente:', err);
+      }
+    });
+  }
+
+  // Aplicar el expediente sugerido
+  aplicarExpedienteSugerido() {
+    if (this.siguienteExpediente) {
+      this.formulario.patchValue({
+        expediente: this.siguienteExpediente
+      });
+    }
   }
 
   onSubmit() {
     if (this.formulario.valid) {
+      // Guardar expediente usado para próxima sugerencia
+      const expedienteUsado = this.formulario.get('expediente')?.value;
+      if (expedienteUsado) {
+        this.autocompleteService.guardarUltimoExpediente(expedienteUsado);
+      }
+
       // Construir objeto de plazo completo
       const datosFormulario = {
         ...this.formulario.value,

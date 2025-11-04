@@ -1,7 +1,150 @@
-<div class="w-full h-full">
-  <!-- TODO: Implementar formulario del Paso 3 - Documentos y Respuestas -->
-  <div class="text-center p-8">
-    <p class="text-gray-500">Paso 3 - Documentos y Respuestas</p>
-    <p class="text-sm text-gray-400 mt-2">Contenido a implementar</p>
-  </div>
+<!-- PASO 3: DOCUMENTOS Y CIERRE -->
+<div class="w-full h-full bg-gray-50 p-6">
+    
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Información de Contexto -->
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg p-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 backdrop-blur rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-white font-bold text-lg">Paso Final: Documentos y Cierre</h3>
+                    <p class="text-white/80 text-sm mt-1">Completa la información de documentación y comentarios finales</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid de 2 Columnas -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            
+            <!-- COLUMNA IZQUIERDA -->
+            <div class="space-y-5">
+                
+                <!-- Card 1: Tipo de Documento -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                        <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-base font-semibold text-gray-800">Documento Principal</h3>
+                    </div>
+                    
+                    <app-custom-select
+                        label="Tipo de Documento"
+                        [required]="true"
+                        [options]="opcionesTipoDocumento"
+                        placeholder="Seleccionar tipo"
+                        hint="Dictamen, Reporte, Acta de Hechos, etc."
+                        [errorMessage]="tipoDocumentoError"
+                        formControlName="tipo_documento">
+                    </app-custom-select>
+                </div>
+
+                <!-- Card 2: Anexos -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                        <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-base font-semibold text-gray-800">Anexos</h3>
+                    </div>
+                    
+                    <app-custom-form-field
+                        label="Anexos"
+                        placeholder="Lista de anexos adjuntos"
+                        hint="Opcional - Separar con comas si son varios"
+                        formControlName="anexos">
+                    </app-custom-form-field>
+                </div>
+
+                <!-- Card 3: Acuse -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-base font-semibold text-gray-800">Acuse</h3>
+                    </div>
+                    
+                    <app-custom-form-field
+                        label="Acuse Físico - Digital"
+                        placeholder="RRI-2501-001"
+                        hint="Opcional - Número de acuse"
+                        formControlName="acuse_fisico_digital">
+                    </app-custom-form-field>
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA -->
+            <div class="space-y-5">
+                
+                <!-- Card 4: Expediente Físico/Digital -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                        <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-base font-semibold text-gray-800">Formato del Expediente</h3>
+                    </div>
+                    
+                    <app-custom-select
+                        label="Expediente Físico y Digital"
+                        [required]="true"
+                        [options]="opcionesExpedienteFisicoDigital"
+                        placeholder="Seleccionar formato"
+                        hint="Indicar si es físico, digital o ambos"
+                        [errorMessage]="expedienteFisicoDigitalError"
+                        formControlName="expediente_fisico_digital">
+                    </app-custom-select>
+                </div>
+
+                <!-- Card 5: Comentarios Omega (Cierre) -->
+                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl shadow-sm border-2 border-purple-200 p-6">
+                    <div class="flex items-center gap-2 mb-4 pb-3 border-b-2 border-purple-200">
+                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-base font-semibold text-purple-800">Comentarios Finales (Omega)</h3>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-4">
+                        <app-custom-textarea
+                            label="Comentarios Omega"
+                            placeholder="Comentarios adicionales sobre el proceso del expediente..."
+                            hint="Opcional - Se llena al final del proceso"
+                            [rows]="6"
+                            formControlName="comentarios_omega">
+                        </app-custom-textarea>
+                    </div>
+                    
+                    <div class="mt-3 p-3 bg-purple-100 rounded-lg">
+                        <p class="text-xs text-purple-700">
+                            <span class="font-semibold">💡 Nota:</span> 
+                            Este campo es para observaciones finales después de completar el proceso del expediente.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Botón oculto para submit desde el stepper -->
+        <button type="submit" class="hidden">Enviar</button>
+    </form>
+
 </div>

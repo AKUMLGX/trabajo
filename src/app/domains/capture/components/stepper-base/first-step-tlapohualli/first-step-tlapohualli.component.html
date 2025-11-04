@@ -49,13 +49,28 @@
                     </div>
                     
                     <div class="space-y-4">
-                        <app-custom-form-field
-                            label="Expediente"
-                            [required]="true"
-                            placeholder="Exp.001"
-                            [errorMessage]="expedienteError"
-                            formControlName="expediente">
-                        </app-custom-form-field>
+                        <!-- Campo Expediente con Autocompletado -->
+                        <div class="relative">
+                            <app-custom-form-field
+                                label="Expediente"
+                                [required]="true"
+                                placeholder="Exp.001"
+                                [errorMessage]="expedienteError"
+                                formControlName="expediente">
+                            </app-custom-form-field>
+                            
+                            <!-- Botón de Autocompletado -->
+                            <button
+                                type="button"
+                                *ngIf="siguienteExpediente"
+                                (click)="aplicarExpedienteSugerido()"
+                                class="absolute right-2 top-9 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md transition-all duration-200 flex items-center gap-1.5 hover:scale-105">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <span>{{ siguienteExpediente }}</span>
+                            </button>
+                        </div>
 
                         <app-custom-form-field
                             label="No. Entrada Central"
