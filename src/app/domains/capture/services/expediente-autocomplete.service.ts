@@ -16,7 +16,7 @@ export class ExpedienteAutocompleteService {
    */
   obtenerSiguienteExpediente(): Observable<string> {
     // Conectar con el backend
-    return this.http.get<{success: boolean, siguiente: string}>('/tlapohualli/api/v1/api/expedientes/siguiente')
+    return this.http.get<{success: boolean, siguiente: string}>('/tlapohualli/api/v1/expedientes/siguiente')
       .pipe(
         map(response => response.siguiente),
         catchError(error => {

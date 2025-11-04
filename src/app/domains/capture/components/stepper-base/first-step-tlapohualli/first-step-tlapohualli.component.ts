@@ -132,7 +132,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
         ...this.formulario.value,
         plazo_vencimiento_prioridad: this.construirPlazo()
       };
-      
+
       this.formularioCompletado.emit(datosFormulario);
       this.siguientePaso.emit();
     } else {
@@ -156,7 +156,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
       control?.markAsDirty();
     });
   }
-  
+
   // Getters para mensajes de error
   get oficioError(): string | null {
     const control = this.formulario.get('oficio');
@@ -177,7 +177,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
     }
     return null;
   }
-  
+
   get numeroEntradaError(): string | null {
     const control = this.formulario.get('numero_entrada_central');
     if (control?.touched && control?.errors) {
@@ -186,7 +186,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
     }
     return null;
   }
-  
+
   get remitenteError(): string | null {
     const control = this.formulario.get('remitente_area');
     if (control?.touched && control?.errors) {
@@ -223,7 +223,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
     }
     return null;
   }
-  
+
   get plazoValorError(): string | null {
     const control = this.formulario.get('plazo_valor');
     if (control?.touched && control?.errors) {

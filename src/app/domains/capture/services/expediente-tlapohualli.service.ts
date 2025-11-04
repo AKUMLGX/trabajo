@@ -48,7 +48,7 @@ export interface FormularioExpedienteCompleto {
   providedIn: 'root'
 })
 export class ExpedienteTlapohualliService {
-  private readonly BASE_URL = '/tlapohualli/api/v1/api/expedientes';
+  private readonly BASE_URL = '/tlapohualli/api/v1/expedientes';
 
   constructor(private http: HttpClient) {}
 
