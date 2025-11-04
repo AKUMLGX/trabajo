@@ -21,9 +21,14 @@ import { ExpedienteAutocompleteService } from '../../../services/expediente-auto
 export class FirstStepTlapohualliComponent implements OnInit {
   @Output() formularioCompletado = new EventEmitter<any>();
   @Output() siguientePaso = new EventEmitter<void>();
+  @Output() validezCambiada = new EventEmitter<boolean>();
 
   formulario: FormGroup;
   siguienteExpediente: string = '';
+
+  get formularioValido(): boolean {
+    return this.formulario.valid;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -80,6 +85,14 @@ export class FirstStepTlapohualliComponent implements OnInit {
     this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
       this.formulario.get('fecha_recibido')?.updateValueAndValidity();
     });
+
+    // Emitir validez del formulario cuando cambia
+    this.formulario.statusChanges.subscribe(() => {
+      this.validezCambiada.emit(this.formulario.valid);
+    });
+
+    // Emitir validez inicial
+    this.validezCambiada.emit(this.formulario.valid);
 
     // Obtener sugerencia del siguiente expediente
     this.cargarSiguienteExpediente();

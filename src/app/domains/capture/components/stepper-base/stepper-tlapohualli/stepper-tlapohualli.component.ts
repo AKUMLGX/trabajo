@@ -53,6 +53,11 @@ export class StepperTlapohualliComponent implements OnInit {
   // Estado de transición
   isTransitioning = false;
 
+  // Validez de cada paso
+  paso1Valido = false;
+  paso2Valido = false;
+  paso3Valido = false;
+
   constructor(
     private expedienteService: ExpedienteTlapohualliService,
     private snackBar: MatSnackBar,
@@ -64,6 +69,10 @@ export class StepperTlapohualliComponent implements OnInit {
   }
 
   // Eventos del Paso 1
+  onPaso1ValidezCambiada(valido: boolean) {
+    this.paso1Valido = valido;
+  }
+
   onPaso1Completado(datos: FormularioPaso1) {
     this.datosPaso1 = datos;
     this.transicionarPaso(1);
@@ -171,8 +180,8 @@ export class StepperTlapohualliComponent implements OnInit {
 
   // Getters para el estado del stepper
   get puedeAvanzarPaso1(): boolean {
-    // VALIDACIÓN ESTRICTA: Solo avanzar si el formulario del paso 1 está completo
-    return this.datosPaso1 !== null;
+    // VALIDACIÓN ESTRICTA: Solo avanzar si el formulario del paso 1 es válido
+    return this.paso1Valido;
   }
 
   get puedeAvanzarPaso2(): boolean {

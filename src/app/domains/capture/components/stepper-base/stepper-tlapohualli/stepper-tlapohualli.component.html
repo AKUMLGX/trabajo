@@ -44,7 +44,8 @@
             <div class="step-content">
                 <app-first-step-tlapohualli
                     (formularioCompletado)="onPaso1Completado($event)"
-                    (siguientePaso)="onPaso1Siguiente()">
+                    (siguientePaso)="onPaso1Siguiente()"
+                    (validezCambiada)="onPaso1ValidezCambiada($event)">
                 </app-first-step-tlapohualli>
             </div>
             
