@@ -29,17 +29,35 @@ export const errorInterceptor: HttpInterceptorFn = (
                                      request.url.includes('tlapohualli/api/v1');
       const isTlapohualli404 = isTlapohualliEndpoint && err.status === 404;
       
+      // No mostrar modal para errores 409 (conflictos) - el componente los manejará
+      const is409Conflict = err.status === 409;
+      
+      // No mostrar modal para POST/PUT de expedientes - el componente maneja los errores
+      const isExpedienteRequest = request.url.includes('expedientes') && 
+                                   (request.method === 'POST' || request.method === 'PUT');
+      
       if (err.status !== 401) {
-        // Solo mostrar modal si no es una petición especial o endpoint de Tlapohualli no implementado
-        if (!isFileCheckRequest && !isTlapohualli404 && !(isFileCheckRequest && err.status === 404)) {
+        // Solo mostrar modal si no es una petición especial
+        const shouldShowModal = !isFileCheckRequest && 
+                                !isTlapohualli404 && 
+                                !is409Conflict &&
+                                !isExpedienteRequest &&
+                                !(isFileCheckRequest && err.status === 404);
+        
+        if (shouldShowModal) {
+          // Extraer mensaje de error del backend si existe
+          const errorMsg = err.error?.message || err.error?.error || err.message || 'Error desconocido';
+          
           matDialog.open(ErrorDialogComponent, {
             data: {
               errorTittle: 'Ha ocurrido un error',
-              errorDescription: err.message,
+              errorDescription: errorMsg,
             },
           });
         } else if (isTlapohualli404) {
           console.warn('⚠️ [HTTP Interceptor] Endpoint Tlapohualli no disponible:', request.url);
+        } else if (is409Conflict) {
+          console.warn('⚠️ [HTTP Interceptor] Conflicto 409 - Será manejado por el componente');
         }
       } else {
         // Para el error 401, intentar refresh token usando HttpClient directamente

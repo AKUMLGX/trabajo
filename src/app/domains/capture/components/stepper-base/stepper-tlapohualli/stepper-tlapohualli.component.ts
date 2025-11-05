@@ -175,26 +175,45 @@ export class StepperTlapohualliComponent implements OnInit {
       this.mostrarResumenExpediente(expediente);
 
     } catch (error: any) {
-      console.error('Error al guardar expediente:', error);
+      console.error('❌ Error al guardar expediente:', error);
       
       // Mejorar mensaje de error según el tipo
       let mensajeError = 'Error al guardar el expediente';
+      let errorType: 'success' | 'error' | 'info' | 'warning' = 'error';
       
       if (error?.status === 409) {
         // Error de conflicto - registro duplicado
-        mensajeError = '⚠️ El Oficio o Expediente ya existe en el sistema. Por favor, verifica los datos.';
+        errorType = 'warning';
+        const errorDetail = error?.error?.message || error?.error || '';
+        
+        if (errorDetail.toLowerCase().includes('oficio')) {
+          mensajeError = '⚠️ OFICIO DUPLICADO\n\nEste número de oficio ya existe en el sistema. Por favor, verifica el dato.';
+        } else if (errorDetail.toLowerCase().includes('expediente')) {
+          mensajeError = '⚠️ EXPEDIENTE DUPLICADO\n\nEste número de expediente ya existe. Usa el botón "Sugerencia" para obtener el siguiente disponible.';
+        } else {
+          mensajeError = '⚠️ REGISTRO DUPLICADO\n\nEl Oficio o Expediente ya existe en el sistema. Por favor, verifica los datos.';
+        }
+        
+        console.warn('⚠️ [DUPLICADO]', errorDetail);
       } else if (error?.status === 400) {
         // Error de validación
-        mensajeError = '⚠️ Error de validación: ' + (error?.error?.message || 'Datos incorrectos');
+        errorType = 'warning';
+        mensajeError = '⚠️ DATOS INVÁLIDOS\n\n' + (error?.error?.message || 'Por favor revisa los campos del formulario.');
       } else if (error?.status === 500) {
         // Error del servidor
-        mensajeError = '❌ Error del servidor. Por favor, contacta al administrador.';
+        mensajeError = '❌ ERROR DEL SERVIDOR\n\nNo se pudo procesar la solicitud. Por favor, contacta al administrador.';
       } else if (error?.status === 0) {
         // Error de conexión
-        mensajeError = '❌ No se pudo conectar al servidor. Verifica tu conexión.';
+        mensajeError = '❌ SIN CONEXIÓN\n\nNo se pudo conectar al servidor. Verifica tu conexión a internet.';
       }
       
-      this.mostrarMensaje(mensajeError, 'error');
+      // Mostrar mensaje con duración más larga para errores
+      this.mostrarMensaje(mensajeError, errorType, 8000);
+      
+      // Mostrar alerta adicional para errores críticos
+      if (error?.status === 409 || error?.status === 400) {
+        alert(mensajeError);
+      }
     } finally {
       this.guardando = false;
     }
@@ -220,9 +239,11 @@ export class StepperTlapohualliComponent implements OnInit {
 
 
   // Mostrar mensaje
-  private mostrarMensaje(mensaje: string, tipo: 'success' | 'error' | 'info' | 'warning') {
+  private mostrarMensaje(mensaje: string, tipo: 'success' | 'error' | 'info' | 'warning', duracion: number = 5000) {
     this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
+      duration: duracion,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
       panelClass: [`${tipo}-snackbar`]
     });
   }
