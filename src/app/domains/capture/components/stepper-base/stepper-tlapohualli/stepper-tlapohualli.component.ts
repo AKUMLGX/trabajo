@@ -164,9 +164,27 @@ export class StepperTlapohualliComponent implements OnInit {
       // Mostrar resumen del expediente creado
       this.mostrarResumenExpediente(expediente);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al guardar expediente:', error);
-      this.mostrarMensaje('Error al guardar el expediente', 'error');
+      
+      // Mejorar mensaje de error según el tipo
+      let mensajeError = 'Error al guardar el expediente';
+      
+      if (error?.status === 409) {
+        // Error de conflicto - registro duplicado
+        mensajeError = '⚠️ El Oficio o Expediente ya existe en el sistema. Por favor, verifica los datos.';
+      } else if (error?.status === 400) {
+        // Error de validación
+        mensajeError = '⚠️ Error de validación: ' + (error?.error?.message || 'Datos incorrectos');
+      } else if (error?.status === 500) {
+        // Error del servidor
+        mensajeError = '❌ Error del servidor. Por favor, contacta al administrador.';
+      } else if (error?.status === 0) {
+        // Error de conexión
+        mensajeError = '❌ No se pudo conectar al servidor. Verifica tu conexión.';
+      }
+      
+      this.mostrarMensaje(mensajeError, 'error');
     } finally {
       this.guardando = false;
     }
