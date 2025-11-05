@@ -1,7 +1,7 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, timer } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
 /**
@@ -26,11 +26,13 @@ export function oficioExistenteValidator(http: HttpClient): AsyncValidatorFn {
     // Debounce de 800ms para evitar múltiples llamadas mientras el usuario escribe
     return timer(800).pipe(
       switchMap(() => {
-        const url = `/tlapohualli/api/v1/expedientes/validar-oficio/${encodeURIComponent(oficio)}`;
+        // Construir URL correctamente para que funcione con el proxy
+        const oficioEncoded = encodeURIComponent(oficio);
+        const url = `${environment.baseUrl}/tlapohualli/api/v1/expedientes/validar-oficio/${oficioEncoded}`;
         
         console.log('🔍 [VALIDADOR] Validando oficio:', oficio);
-        console.log('🔍 [VALIDADOR] URL:', url);
-        console.log('🔍 [VALIDADOR] Oficio encoded:', encodeURIComponent(oficio));
+        console.log('🔍 [VALIDADOR] URL completa:', url);
+        console.log('🔍 [VALIDADOR] Oficio encoded:', oficioEncoded);
         
         return http.get<{success: boolean, existe: boolean, mensaje: string, oficio_buscado?: string, id_expediente_duplicado?: number}>(url).pipe(
           map(response => {
@@ -86,7 +88,7 @@ export function expedienteExistenteValidator(http: HttpClient): AsyncValidatorFn
     // Debounce de 500ms
     return timer(500).pipe(
       switchMap(() => {
-        const url = `/tlapohualli/api/v1/expedientes?expediente=${encodeURIComponent(expediente)}`;
+        const url = `${environment.baseUrl}/tlapohualli/api/v1/expedientes?expediente=${encodeURIComponent(expediente)}`;
         
         return http.get<{success: boolean, data: any[]}>(url).pipe(
           map(response => {
