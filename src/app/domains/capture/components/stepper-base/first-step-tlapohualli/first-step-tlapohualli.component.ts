@@ -139,8 +139,8 @@ export class FirstStepTlapohualliComponent implements OnInit {
         plazo_vencimiento_prioridad: this.construirPlazo()
       };
 
+      // Solo emitir formularioCompletado, el stepper se encargará de avanzar
       this.formularioCompletado.emit(datosFormulario);
-      this.siguientePaso.emit();
     } else {
       console.error('❌ Paso 1 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();

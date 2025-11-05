@@ -77,8 +77,8 @@ export class SecondStepTlapohualliComponent implements OnInit {
     
     if (this.formulario.valid) {
       console.log('✅ Paso 2 VÁLIDO - Continuando...');
+      // Solo emitir formularioCompletado, el stepper se encargará de avanzar
       this.formularioCompletado.emit(this.formulario.value);
-      this.siguientePaso.emit();
     } else {
       console.error('❌ Paso 2 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();

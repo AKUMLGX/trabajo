@@ -75,8 +75,8 @@ export class ThirdStepTlapohualliComponent implements OnInit {
       console.log('✅ Paso 3 VÁLIDO - Finalizando...');
       const datosFormulario = this.formulario.value;
       
+      // Solo emitir formularioCompletado, el stepper se encargará de finalizar
       this.formularioCompletado.emit(datosFormulario);
-      this.finalizar.emit();
     } else {
       console.error('❌ Paso 3 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();
