@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Output, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
 import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
-import { DateUtils } from '../../../utils/date-utils';
 import { ExpedienteValidators } from '../../../utils/form-validators';
 
 @Component({
@@ -18,17 +17,13 @@ import { ExpedienteValidators } from '../../../utils/form-validators';
   templateUrl: './second-step-tlapohualli.component.html',
   styleUrl: './second-step-tlapohualli.component.css'
 })
-export class SecondStepTlapohualliComponent implements OnInit, OnChanges {
+export class SecondStepTlapohualliComponent implements OnInit {
   @Input() datosPaso1: any = {};
   @Output() formularioCompletado = new EventEmitter<any>();
   @Output() siguientePaso = new EventEmitter<void>();
   @Output() pasoAnterior = new EventEmitter<void>();
 
   formulario: FormGroup;
-  
-  // Campos calculados automáticamente
-  fechaVencimiento: Date | null = null;
-  diasRetraso: number = 0;
   
   // Opciones para los selects
   opcionesEstatus: SelectOption[] = [
@@ -51,9 +46,9 @@ export class SecondStepTlapohualliComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder) {
     this.formulario = this.fb.group({
-      // Campos calculados (readonly)
-      fecha_vencimiento: [{ value: '', disabled: true }],
-      dias_retraso: [{ value: 0, disabled: true }],
+      // Campos de fechas (EDITABLES AHORA)
+      fecha_vencimiento: ['', Validators.required],
+      dias_retraso: [0, [Validators.required, Validators.min(0)]],
       
       // Campos de entrada
       sistema_aplicativo: ['', Validators.maxLength(100)],
@@ -72,74 +67,12 @@ export class SecondStepTlapohualliComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.calcularCamposAutomaticos();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['datosPaso1'] && !changes['datosPaso1'].firstChange) {
-      console.log('Datos del Paso 1 recibidos:', this.datosPaso1);
-      this.calcularCamposAutomaticos();
-    }
-  }
-
-  // Calcular fecha de vencimiento y días de retraso
-  private calcularCamposAutomaticos() {
-    console.log('Calculando campos automáticos con:', this.datosPaso1);
-    
-    if (!this.datosPaso1) {
-      console.log('No hay datos del Paso 1');
-      return;
-    }
-
-    if (this.datosPaso1.fecha_recibido && this.datosPaso1.plazo_vencimiento_prioridad) {
-      console.log('Fecha recibido:', this.datosPaso1.fecha_recibido);
-      console.log('Plazo:', this.datosPaso1.plazo_vencimiento_prioridad);
-      
-      const fechaRecibido = new Date(this.datosPaso1.fecha_recibido);
-      const plazo = this.datosPaso1.plazo_vencimiento_prioridad.valor;
-      
-      // Calcular fecha de vencimiento
-      this.fechaVencimiento = DateUtils.calcularFechaVencimiento(fechaRecibido, plazo);
-      
-      // Calcular días de retraso
-      if (this.fechaVencimiento) {
-        this.diasRetraso = DateUtils.calcularDiasRetraso(this.fechaVencimiento);
-      }
-      
-      console.log('Fecha vencimiento calculada:', this.fechaVencimiento);
-      console.log('Días retraso:', this.diasRetraso);
-      
-      // Actualizar formulario
-      this.formulario.patchValue({
-        fecha_vencimiento: DateUtils.formatearFechaInput(this.fechaVencimiento),
-        dias_retraso: this.diasRetraso
-      });
-    } else {
-      console.log('Faltan datos para calcular:', {
-        fecha_recibido: this.datosPaso1.fecha_recibido,
-        plazo: this.datosPaso1.plazo_vencimiento_prioridad
-      });
-    }
-  }
-
-  // Getters para el badge de días de retraso
-  get colorRetraso(): string {
-    return DateUtils.getClaseRetraso(this.diasRetraso);
-  }
-
-  get textoRetraso(): string {
-    return DateUtils.getTextoRetraso(this.diasRetraso);
+    // Ya no hay cálculos automáticos
   }
 
   onSubmit() {
     if (this.formulario.valid) {
-      const datosFormulario = {
-        ...this.formulario.getRawValue(), // getRawValue() incluye campos disabled
-        fecha_vencimiento: this.fechaVencimiento,
-        dias_retraso: this.diasRetraso
-      };
-      
-      this.formularioCompletado.emit(datosFormulario);
+      this.formularioCompletado.emit(this.formulario.value);
       this.siguientePaso.emit();
     } else {
       this.marcarCamposInvalidos();
