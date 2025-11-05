@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
           [placeholder]="placeholder"
           [value]="value"
           [disabled]="disabled"
-          [list]="datalistOptions && datalistOptions.length > 0 ? fieldId + '-list' : null"
+          [attr.list]="datalistOptions && datalistOptions.length > 0 ? fieldId + '-list' : null"
           (input)="onInput($event)"
           (focus)="onFocus()"
           (blur)="onBlur()"

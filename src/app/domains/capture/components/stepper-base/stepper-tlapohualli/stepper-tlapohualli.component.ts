@@ -168,7 +168,7 @@ export class StepperTlapohualliComponent implements OnInit {
         this.datosPaso1,
         this.datosPaso2,
         this.datosPaso3,
-        this.expedienteId
+        this.expedienteId || undefined
       );
       
       // Mostrar resumen del expediente creado
