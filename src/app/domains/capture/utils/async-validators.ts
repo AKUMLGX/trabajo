@@ -28,22 +28,32 @@ export function oficioExistenteValidator(http: HttpClient): AsyncValidatorFn {
       switchMap(() => {
         const url = `/tlapohualli/api/v1/expedientes/validar-oficio/${encodeURIComponent(oficio)}`;
         
-        return http.get<{success: boolean, existe: boolean, mensaje: string}>(url).pipe(
+        console.log('🔍 [VALIDADOR] Validando oficio:', oficio);
+        console.log('🔍 [VALIDADOR] URL:', url);
+        console.log('🔍 [VALIDADOR] Oficio encoded:', encodeURIComponent(oficio));
+        
+        return http.get<{success: boolean, existe: boolean, mensaje: string, oficio_buscado?: string, id_expediente_duplicado?: number}>(url).pipe(
           map(response => {
+            console.log('📡 [VALIDADOR] Respuesta del servidor:', response);
+            
             // Si el oficio YA EXISTE, retornar error
             if (response.existe) {
+              console.warn('❌ [VALIDADOR] Oficio DUPLICADO detectado');
               return {
                 oficioExistente: {
-                  message: '⚠️ Este oficio ya está registrado en el sistema',
+                  message: `⚠️ Este oficio ya está registrado${response.id_expediente_duplicado ? ` (ID: ${response.id_expediente_duplicado})` : ''}`,
                   detalle: response.mensaje
                 }
               };
             }
             // Si el oficio NO EXISTE, está disponible
+            console.log('✅ [VALIDADOR] Oficio disponible');
             return null;
           }),
           catchError(error => {
-            console.error('Error al validar oficio:', error);
+            console.error('❌ [VALIDADOR] Error al validar oficio:', error);
+            console.error('❌ [VALIDADOR] Status:', error.status);
+            console.error('❌ [VALIDADOR] Error completo:', JSON.stringify(error));
             // Si hay error en la conexión, no bloquear el formulario
             // pero mostrar advertencia en consola
             return of(null);
