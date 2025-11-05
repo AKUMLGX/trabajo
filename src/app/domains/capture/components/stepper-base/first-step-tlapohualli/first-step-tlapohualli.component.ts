@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
 import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
 import { ExpedienteValidators } from '../../../utils/form-validators';
-import { oficioExistenteValidator } from '../../../utils/async-validators';
 import { ExpedienteAutocompleteService } from '../../../services/expediente-autocomplete.service';
 import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
 
@@ -28,6 +27,8 @@ export class FirstStepTlapohualliComponent implements OnInit {
   formulario: FormGroup;
   siguienteExpediente: string = '';
   validandoOficio: boolean = false; // Indicador de validación en progreso
+  errorOficioDuplicado = false; // Si el oficio ya existe en BD
+  idOficioDuplicado: number | null = null; // ID del expediente con oficio duplicado
 
   // Catálogos para autocompletado
   remitentesComunes: string[] = [
@@ -51,16 +52,14 @@ export class FirstStepTlapohualliComponent implements OnInit {
     private expedienteService: ExpedienteTlapohualliService
   ) {
     this.formulario = this.fb.group({
-      // OFICIO: Campo más importante (clave única) con validación asíncrona
+      // OFICIO: Campo más importante (clave única)
+      // Validación de duplicados se hace al hacer submit
       oficio: ['', 
-        // Validadores síncronos
         [
           Validators.required,
           Validators.maxLength(100),
           ExpedienteValidators.oficioFormat()
-        ],
-        // Validadores asíncronos (verificar si ya existe)
-        [oficioExistenteValidator(this.expedienteService)]
+        ]
       ],
       // EXPEDIENTE: Auto-rellenado y no editable
       expediente: [{ value: '', disabled: false }, [
@@ -116,10 +115,10 @@ export class FirstStepTlapohualliComponent implements OnInit {
       this.actualizarValidadoresPlazo(unidad);
     });
 
-    // Observar el estado de validación del oficio (para mostrar indicador)
-    this.formulario.get('oficio')?.statusChanges.subscribe((status) => {
-      this.validandoOficio = (status === 'PENDING');
-      console.log('📝 Estado del campo oficio:', status, '- Validando:', this.validandoOficio);
+    // Limpiar error de duplicado cuando el usuario modifica el oficio
+    this.formulario.get('oficio')?.valueChanges.subscribe(() => {
+      this.errorOficioDuplicado = false;
+      this.idOficioDuplicado = null;
     });
 
     // Emitir validez del formulario cuando cambia
@@ -193,30 +192,89 @@ export class FirstStepTlapohualliComponent implements OnInit {
     console.log('Formulario válido:', this.formulario.valid);
     console.log('Valores del formulario:', this.formulario.value);
     
-    if (this.formulario.valid) {
-      console.log('✅ Paso 1 VÁLIDO - Continuando...');
-      
-      // Obtener valor del expediente (aunque esté deshabilitado)
-      const expedienteUsado = this.formulario.get('expediente')?.value || this.siguienteExpediente;
-      if (expedienteUsado) {
-        this.autocompleteService.guardarUltimoExpediente(expedienteUsado);
-      }
-
-      // Construir objeto completo incluyendo campos deshabilitados
-      const datosFormulario = {
-        ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
-        plazo_vencimiento_prioridad: this.construirPlazo()
-      };
-
-      console.log('📦 Datos Paso 1:', datosFormulario);
-
-      // Solo emitir formularioCompletado, el stepper se encargará de avanzar
-      this.formularioCompletado.emit(datosFormulario);
-    } else {
+    if (!this.formulario.valid) {
       console.error('❌ Paso 1 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();
       this.mostrarCamposInvalidos();
+      return;
     }
+
+    // Validar que el oficio no exista en la BD
+    const oficioValue = this.formulario.get('oficio')?.value?.trim();
+    
+    if (!oficioValue) {
+      alert('⚠️ El campo Oficio es obligatorio');
+      return;
+    }
+
+    console.log('🔍 Validando oficio en BD:', oficioValue);
+    this.validandoOficio = true;
+    this.errorOficioDuplicado = false;
+
+    // Llamar al servicio para validar
+    this.expedienteService.validarOficioExistente(oficioValue).subscribe({
+      next: (response) => {
+        this.validandoOficio = false;
+        console.log('📡 Respuesta validación oficio:', response);
+
+        if (response.existe) {
+          // ❌ El oficio YA EXISTE
+          this.errorOficioDuplicado = true;
+          this.idOficioDuplicado = response.id_expediente_duplicado || null;
+          
+          const mensaje = this.idOficioDuplicado 
+            ? `⚠️ El oficio "${oficioValue}" ya está registrado (ID: ${this.idOficioDuplicado})`
+            : `⚠️ El oficio "${oficioValue}" ya está registrado`;
+          
+          alert(mensaje + '\n\nPor favor, usa un número de oficio diferente.');
+          console.error('❌ OFICIO DUPLICADO:', mensaje);
+        } else {
+          // ✅ Oficio disponible - Continuar
+          console.log('✅ Oficio disponible - Continuando...');
+          this.errorOficioDuplicado = false;
+          this.idOficioDuplicado = null;
+          this.continuarConFormulario();
+        }
+      },
+      error: (error) => {
+        this.validandoOficio = false;
+        console.error('❌ Error al validar oficio:', error);
+        
+        // Si hay error de conexión, preguntar si desea continuar
+        const continuar = confirm(
+          '⚠️ No se pudo validar el oficio (error de conexión).\n\n' +
+          '¿Deseas continuar de todos modos?\n' +
+          '(Puede haber problemas si el oficio ya existe)'
+        );
+        
+        if (continuar) {
+          this.errorOficioDuplicado = false;
+          this.continuarConFormulario();
+        }
+      }
+    });
+  }
+
+  /**
+   * Continuar con el envío del formulario después de validar oficio
+   */
+  private continuarConFormulario() {
+    // Obtener valor del expediente (aunque esté deshabilitado)
+    const expedienteUsado = this.formulario.get('expediente')?.value || this.siguienteExpediente;
+    if (expedienteUsado) {
+      this.autocompleteService.guardarUltimoExpediente(expedienteUsado);
+    }
+
+    // Construir objeto completo incluyendo campos deshabilitados
+    const datosFormulario = {
+      ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
+      plazo_vencimiento_prioridad: this.construirPlazo()
+    };
+
+    console.log('📦 Datos Paso 1:', datosFormulario);
+
+    // Solo emitir formularioCompletado, el stepper se encargará de avanzar
+    this.formularioCompletado.emit(datosFormulario);
   }
 
   // Construir objeto de plazo con toda la información
@@ -287,28 +345,22 @@ export class FirstStepTlapohualliComponent implements OnInit {
   get oficioError(): string | null {
     const control = this.formulario.get('oficio');
     
-    // Mostrar indicador de validación
-    if (control?.status === 'PENDING') {
-      return 'Verificando disponibilidad...';
+    // Si hay error de duplicado (desde onSubmit)
+    if (this.errorOficioDuplicado) {
+      const mensaje = this.idOficioDuplicado 
+        ? `⚠️ Este oficio ya está registrado (ID: ${this.idOficioDuplicado})`
+        : '⚠️ Este oficio ya está registrado';
+      return mensaje;
     }
     
-    // Errores después de tocar el campo
+    // Errores de validación del formulario
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Campo clave única obligatorio';
       if (control.errors['maxlength']) return 'Máximo 100 caracteres';
       if (control.errors['oficioFormat']) return control.errors['oficioFormat'].message;
-      
-      // ERROR DE DUPLICADO
-      if (control.errors['oficioExistente']) {
-        return control.errors['oficioExistente'].message;
-      }
     }
     
-    // Sin errores - mostrar ícono de éxito si ya fue validado
-    if (control?.valid && control?.value && control?.value.length >= 5) {
-      return '✅ Oficio disponible';
-    }
-    
+    // Sin errores
     return null;
   }
 
