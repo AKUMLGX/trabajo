@@ -26,6 +26,18 @@ export class FirstStepTlapohualliComponent implements OnInit {
   formulario: FormGroup;
   siguienteExpediente: string = '';
 
+  // Catálogos para autocompletado
+  remitentesComunes: string[] = [
+    'Dirección General de Auditoría',
+    'Subdirección de Revisión Fiscal',
+    'Administración Local SAT',
+    'Área Jurídica',
+    'Área de Fiscalización',
+    'Coordinación de Dictámenes',
+    'Subdirección de Recursos',
+    'Área de Cobranza'
+  ];
+
   get formularioValido(): boolean {
     return this.formulario.valid;
   }

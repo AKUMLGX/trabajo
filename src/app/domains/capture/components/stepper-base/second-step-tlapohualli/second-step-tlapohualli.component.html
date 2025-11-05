@@ -63,7 +63,8 @@
                         <app-custom-form-field
                             label="Responsable"
                             [required]="true"
-                            placeholder="Nombre del responsable"
+                            placeholder="Escribe o selecciona un responsable"
+                            [datalistOptions]="responsablesComunes"
                             [errorMessage]="responsableError"
                             formControlName="responsable">
                         </app-custom-form-field>

@@ -19,11 +19,15 @@ import { CommonModule } from '@angular/common';
           [placeholder]="placeholder"
           [value]="value"
           [disabled]="disabled"
+          [list]="datalistOptions && datalistOptions.length > 0 ? fieldId + '-list' : null"
           (input)="onInput($event)"
           (focus)="onFocus()"
           (blur)="onBlur()"
           class="custom-input"
         />
+        <datalist *ngIf="datalistOptions && datalistOptions.length > 0" [id]="fieldId + '-list'">
+          <option *ngFor="let option of datalistOptions" [value]="option">
+        </datalist>
         <div class="input-border"></div>
         <div class="input-highlight"></div>
       </div>
@@ -48,6 +52,7 @@ export class CustomFormFieldComponent implements ControlValueAccessor {
   @Input() errorMessage: string | null = '';
   @Input() disabled: boolean = false;
   @Input() required: boolean = false;
+  @Input() datalistOptions: string[] = [];
 
   value: string = '';
   isFocused: boolean = false;

@@ -131,7 +131,8 @@
                     <app-custom-form-field
                         label="Remitente (Área)"
                         [required]="true"
-                        placeholder="AGSC, AGE/CPP, OIC"
+                        placeholder="Escribe o selecciona un área"
+                        [datalistOptions]="remitentesComunes"
                         [errorMessage]="remitenteError"
                         formControlName="remitente_area">
                     </app-custom-form-field>

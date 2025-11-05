@@ -25,6 +25,18 @@ export class SecondStepTlapohualliComponent implements OnInit {
 
   formulario: FormGroup;
   
+  // Catálogo de responsables frecuentes
+  responsablesComunes: string[] = [
+    'Juan Pérez García',
+    'María López Sánchez',
+    'Carlos Rodríguez Díaz',
+    'Ana Martínez Gómez',
+    'Luis Hernández Torres',
+    'Patricia González Ramírez',
+    'Jorge Sánchez Flores',
+    'Laura Díaz Castro'
+  ];
+  
   // Opciones para los selects
   opcionesEstatus: SelectOption[] = [
     { value: 'EN_TRAMITE', label: 'En Trámite' },
@@ -45,6 +57,9 @@ export class SecondStepTlapohualliComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder) {
+    // Obtener fecha de hoy en formato YYYY-MM-DD
+    const hoy = new Date().toISOString().split('T')[0];
+    
     this.formulario = this.fb.group({
       // Campos de fechas (EDITABLES AHORA)
       fecha_vencimiento: ['', Validators.required],
@@ -53,15 +68,15 @@ export class SecondStepTlapohualliComponent implements OnInit {
       // Campos de entrada
       sistema_aplicativo: ['', Validators.maxLength(100)],
       responsable: ['', [Validators.required, Validators.maxLength(100)]],
-      fecha_asignacion: ['', Validators.required],
+      fecha_asignacion: [hoy, Validators.required], // HOY por defecto
       woos: ['', [
         Validators.required,
         ExpedienteValidators.woosFormat()
       ]],
-      estatus: ['', Validators.required],
-      ubicacion: ['', Validators.required],
+      estatus: ['PENDIENTE', Validators.required], // PENDIENTE por defecto
+      ubicacion: ['CARPETA_GENERAL', Validators.required], // CARPETA_GENERAL por defecto
       oficios_comision: ['', Validators.maxLength(200)],
-      tipo_respuesta: ['', Validators.required],
+      tipo_respuesta: ['PENDIENTE', Validators.required], // PENDIENTE por defecto
       fecha_notificacion: ['']
     });
   }
