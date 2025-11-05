@@ -67,13 +67,20 @@ export class ThirdStepTlapohualliComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('=== VALIDACIÓN PASO 3 ===');
+    console.log('Formulario válido:', this.formulario.valid);
+    console.log('Valores del formulario:', this.formulario.value);
+    
     if (this.formulario.valid) {
+      console.log('✅ Paso 3 VÁLIDO - Finalizando...');
       const datosFormulario = this.formulario.value;
       
       this.formularioCompletado.emit(datosFormulario);
       this.finalizar.emit();
     } else {
+      console.error('❌ Paso 3 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();
+      this.mostrarCamposInvalidos();
     }
   }
 
@@ -83,6 +90,26 @@ export class ThirdStepTlapohualliComponent implements OnInit {
       control?.markAsTouched();
       control?.markAsDirty();
     });
+  }
+
+  private mostrarCamposInvalidos() {
+    const camposInvalidos: string[] = [];
+    Object.keys(this.formulario.controls).forEach(key => {
+      const control = this.formulario.get(key);
+      if (control?.invalid) {
+        console.error(`  ❌ ${key}:`, {
+          value: control.value,
+          errors: control.errors,
+          touched: control.touched,
+          dirty: control.dirty
+        });
+        camposInvalidos.push(key);
+      }
+    });
+    
+    if (camposInvalidos.length > 0) {
+      alert(`⚠️ PASO 3 - Faltan los siguientes campos:\n\n${camposInvalidos.join('\n')}`);
+    }
   }
 
   goBack() {

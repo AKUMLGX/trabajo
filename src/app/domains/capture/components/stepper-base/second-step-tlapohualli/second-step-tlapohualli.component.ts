@@ -71,11 +71,18 @@ export class SecondStepTlapohualliComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('=== VALIDACIÓN PASO 2 ===');
+    console.log('Formulario válido:', this.formulario.valid);
+    console.log('Valores del formulario:', this.formulario.value);
+    
     if (this.formulario.valid) {
+      console.log('✅ Paso 2 VÁLIDO - Continuando...');
       this.formularioCompletado.emit(this.formulario.value);
       this.siguientePaso.emit();
     } else {
+      console.error('❌ Paso 2 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();
+      this.mostrarCamposInvalidos();
     }
   }
 
@@ -85,6 +92,26 @@ export class SecondStepTlapohualliComponent implements OnInit {
       control?.markAsTouched();
       control?.markAsDirty();
     });
+  }
+
+  private mostrarCamposInvalidos() {
+    const camposInvalidos: string[] = [];
+    Object.keys(this.formulario.controls).forEach(key => {
+      const control = this.formulario.get(key);
+      if (control?.invalid) {
+        console.error(`  ❌ ${key}:`, {
+          value: control.value,
+          errors: control.errors,
+          touched: control.touched,
+          dirty: control.dirty
+        });
+        camposInvalidos.push(key);
+      }
+    });
+    
+    if (camposInvalidos.length > 0) {
+      alert(`⚠️ PASO 2 - Faltan los siguientes campos:\n\n${camposInvalidos.join('\n')}`);
+    }
   }
 
   goBack() {

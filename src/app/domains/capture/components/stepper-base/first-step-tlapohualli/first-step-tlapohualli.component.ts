@@ -120,7 +120,13 @@ export class FirstStepTlapohualliComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('=== VALIDACIÓN PASO 1 ===');
+    console.log('Formulario válido:', this.formulario.valid);
+    console.log('Valores del formulario:', this.formulario.value);
+    
     if (this.formulario.valid) {
+      console.log('✅ Paso 1 VÁLIDO - Continuando...');
+      
       // Guardar expediente usado para próxima sugerencia
       const expedienteUsado = this.formulario.get('expediente')?.value;
       if (expedienteUsado) {
@@ -136,7 +142,9 @@ export class FirstStepTlapohualliComponent implements OnInit {
       this.formularioCompletado.emit(datosFormulario);
       this.siguientePaso.emit();
     } else {
+      console.error('❌ Paso 1 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();
+      this.mostrarCamposInvalidos();
     }
   }
 
@@ -155,6 +163,26 @@ export class FirstStepTlapohualliComponent implements OnInit {
       control?.markAsTouched();
       control?.markAsDirty();
     });
+  }
+
+  private mostrarCamposInvalidos() {
+    const camposInvalidos: string[] = [];
+    Object.keys(this.formulario.controls).forEach(key => {
+      const control = this.formulario.get(key);
+      if (control?.invalid) {
+        console.error(`  ❌ ${key}:`, {
+          value: control.value,
+          errors: control.errors,
+          touched: control.touched,
+          dirty: control.dirty
+        });
+        camposInvalidos.push(key);
+      }
+    });
+    
+    if (camposInvalidos.length > 0) {
+      alert(`⚠️ PASO 1 - Faltan los siguientes campos:\n\n${camposInvalidos.join('\n')}`);
+    }
   }
 
   // Getters para mensajes de error
