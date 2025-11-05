@@ -168,4 +168,11 @@ export class ExpedienteTlapohualliService {
       })
     );
   }
+
+  /**
+   * Validar si un oficio ya existe en la BD
+   */
+  validarOficioExistente(oficio: string): Observable<{success: boolean, existe: boolean, mensaje: string, oficio_buscado?: string, id_expediente_duplicado?: number}> {
+    return this.http.get<any>(`${this.BASE_URL}/validar-oficio/${encodeURIComponent(oficio)}`);
+  }
 }

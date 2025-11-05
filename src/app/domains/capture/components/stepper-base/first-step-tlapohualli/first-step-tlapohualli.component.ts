@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
 import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
 import { ExpedienteValidators } from '../../../utils/form-validators';
 import { oficioExistenteValidator } from '../../../utils/async-validators';
 import { ExpedienteAutocompleteService } from '../../../services/expediente-autocomplete.service';
+import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
 
 @Component({
   selector: 'app-first-step-tlapohualli',
@@ -48,7 +48,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private autocompleteService: ExpedienteAutocompleteService,
-    private http: HttpClient
+    private expedienteService: ExpedienteTlapohualliService
   ) {
     this.formulario = this.fb.group({
       // OFICIO: Campo más importante (clave única) con validación asíncrona
@@ -60,7 +60,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
           ExpedienteValidators.oficioFormat()
         ],
         // Validadores asíncronos (verificar si ya existe)
-        [oficioExistenteValidator(this.http)]
+        [oficioExistenteValidator(this.expedienteService)]
       ],
       // EXPEDIENTE: Auto-rellenado y no editable
       expediente: [{ value: '', disabled: false }, [
