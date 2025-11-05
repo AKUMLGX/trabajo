@@ -390,12 +390,10 @@ export class UserService {
       },
       error: (error) => {
         clearTimeout(timeoutId);
-        console.error('❌ [UserService] Error al cargar información de administración:', error);
+        console.warn('⚠️ [UserService] Error al cargar información de administración (endpoint no disponible):', error.status);
         
-        // Si es un error de red, intentar continuar sin bloquear la app
-        if (error.status === 0 || error.status >= 500) {
-          console.warn('⚠️ [UserService] Error de conectividad, continuando sin administración');
-        }
+        // Continuar sin bloquear la app - el endpoint de Tlapohualli aún no está implementado
+        console.warn('⚠️ [UserService] Continuando con administración por defecto...');
         
         this.establecerAdministracionPorDefecto(usuarioActual);
       }

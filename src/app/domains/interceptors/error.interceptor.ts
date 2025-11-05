@@ -24,15 +24,22 @@ export const errorInterceptor: HttpInterceptorFn = (
       const isFileCheckRequest = request.headers.has('X-Skip-Error-Handler') || 
                                 request.url.includes('listar_archivos');
       
+      // No mostrar modal para endpoints de Tlapohualli que aún no están implementados
+      const isTlapohualliEndpoint = request.url.includes('expedientes/buscar') || 
+                                     request.url.includes('tlapohualli/api/v1');
+      const isTlapohualli404 = isTlapohualliEndpoint && err.status === 404;
+      
       if (err.status !== 401) {
-        // Solo mostrar modal si no es una petición de verificación de archivos o si no es un 404
-        if (!isFileCheckRequest || (isFileCheckRequest && err.status !== 404)) {
-        matDialog.open(ErrorDialogComponent, {
-          data: {
-            errorTittle: 'Ha ocurrido un error',
-            errorDescription: err.message,
-          },
-        });
+        // Solo mostrar modal si no es una petición especial o endpoint de Tlapohualli no implementado
+        if (!isFileCheckRequest && !isTlapohualli404 && !(isFileCheckRequest && err.status === 404)) {
+          matDialog.open(ErrorDialogComponent, {
+            data: {
+              errorTittle: 'Ha ocurrido un error',
+              errorDescription: err.message,
+            },
+          });
+        } else if (isTlapohualli404) {
+          console.warn('⚠️ [HTTP Interceptor] Endpoint Tlapohualli no disponible:', request.url);
         }
       } else {
         // Para el error 401, intentar refresh token usando HttpClient directamente
