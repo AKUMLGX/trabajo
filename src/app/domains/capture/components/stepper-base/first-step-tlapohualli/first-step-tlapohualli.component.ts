@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
 import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
 import { ExpedienteValidators } from '../../../utils/form-validators';
+import { oficioExistenteValidator } from '../../../utils/async-validators';
 import { ExpedienteAutocompleteService } from '../../../services/expediente-autocomplete.service';
 
 @Component({
@@ -25,6 +27,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
 
   formulario: FormGroup;
   siguienteExpediente: string = '';
+  validandoOficio: boolean = false; // Indicador de validación en progreso
 
   // Catálogos para autocompletado
   remitentesComunes: string[] = [
@@ -44,15 +47,21 @@ export class FirstStepTlapohualliComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private autocompleteService: ExpedienteAutocompleteService
+    private autocompleteService: ExpedienteAutocompleteService,
+    private http: HttpClient
   ) {
     this.formulario = this.fb.group({
-      // OFICIO: Campo más importante (clave única)
-      oficio: ['', [
-        Validators.required,
-        Validators.maxLength(100),
-        ExpedienteValidators.oficioFormat()
-      ]],
+      // OFICIO: Campo más importante (clave única) con validación asíncrona
+      oficio: ['', 
+        // Validadores síncronos
+        [
+          Validators.required,
+          Validators.maxLength(100),
+          ExpedienteValidators.oficioFormat()
+        ],
+        // Validadores asíncronos (verificar si ya existe)
+        [oficioExistenteValidator(this.http)]
+      ],
       // EXPEDIENTE: Auto-rellenado y no editable
       expediente: [{ value: '', disabled: false }, [
         Validators.required,
@@ -105,6 +114,12 @@ export class FirstStepTlapohualliComponent implements OnInit {
     // Validación dinámica de plazo según unidad seleccionada
     this.formulario.get('plazo_unidad')?.valueChanges.subscribe((unidad) => {
       this.actualizarValidadoresPlazo(unidad);
+    });
+
+    // Observar el estado de validación del oficio (para mostrar indicador)
+    this.formulario.get('oficio')?.statusChanges.subscribe((status) => {
+      this.validandoOficio = (status === 'PENDING');
+      console.log('📝 Estado del campo oficio:', status, '- Validando:', this.validandoOficio);
     });
 
     // Emitir validez del formulario cuando cambia
@@ -271,11 +286,29 @@ export class FirstStepTlapohualliComponent implements OnInit {
   // Getters para mensajes de error
   get oficioError(): string | null {
     const control = this.formulario.get('oficio');
+    
+    // Mostrar indicador de validación
+    if (control?.status === 'PENDING') {
+      return 'Verificando disponibilidad...';
+    }
+    
+    // Errores después de tocar el campo
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Campo clave única obligatorio';
       if (control.errors['maxlength']) return 'Máximo 100 caracteres';
       if (control.errors['oficioFormat']) return control.errors['oficioFormat'].message;
+      
+      // ERROR DE DUPLICADO
+      if (control.errors['oficioExistente']) {
+        return control.errors['oficioExistente'].message;
+      }
     }
+    
+    // Sin errores - mostrar ícono de éxito si ya fue validado
+    if (control?.valid && control?.value && control?.value.length >= 5) {
+      return '✅ Oficio disponible';
+    }
+    
     return null;
   }
 
