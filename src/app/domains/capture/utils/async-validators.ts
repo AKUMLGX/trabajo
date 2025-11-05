@@ -63,6 +63,10 @@ export function oficioExistenteValidator(expedienteService: ExpedienteTlapohuall
  * Validador asíncrono para verificar si un expediente ya existe en la BD
  * @param expedienteService Servicio de expedientes Tlapohualli
  * @returns AsyncValidatorFn
+ * 
+ * NOTA: Este validador NO es necesario actualmente porque el campo
+ * "expediente" está bloqueado y se genera automáticamente.
+ * Se mantiene para uso futuro si se requiere.
  */
 export function expedienteExistenteValidator(expedienteService: ExpedienteTlapohualliService): AsyncValidatorFn {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
@@ -81,10 +85,10 @@ export function expedienteExistenteValidator(expedienteService: ExpedienteTlapoh
     // Debounce de 500ms
     return timer(500).pipe(
       switchMap(() => {
-        return expedienteService.listarExpedientes().pipe(
-          map(expedientes => {
+        return expedienteService.obtenerExpedientes().pipe(
+          map((expedientes: any[]) => {
             // Buscar si existe un expediente con ese número
-            const existe = expedientes.some(exp => exp.expediente === expediente);
+            const existe = expedientes.some((exp: any) => exp.expediente === expediente);
             
             if (existe) {
               return {
