@@ -37,7 +37,7 @@
 
     <!-- Contenido del stepper -->
     <div class="stepper-container bg-gradient-to-br from-white to-[#DDC9A4]/5 rounded-3xl shadow-xl border border-[#DDC9A4]/30 overflow-hidden">
-        <mat-stepper #stepper [selectedIndex]="pasoActual" orientation="horizontal" class="w-full custom-mat-stepper">
+        <mat-stepper #stepper [selectedIndex]="pasoActual" orientation="horizontal" [linear]="true" class="w-full custom-mat-stepper">
         
         <!-- Paso 1: Información Básica -->
         <mat-step label="Información Básica">
@@ -71,13 +71,7 @@
                 </app-second-step-tlapohualli>
             </div>
             
-                   <div class="step-actions">
-                       <button mat-stroked-button 
-                               matStepperPrevious
-                               class="modern-btn modern-btn-secondary">
-                           <mat-icon class="mr-2">arrow_back</mat-icon>
-                           <span>Anterior</span>
-                       </button>
+                   <div class="step-actions justify-end">
                        <button mat-raised-button 
                                (click)="onPaso2Siguiente()"
                                class="modern-btn modern-btn-primary">
@@ -99,13 +93,7 @@
                 </app-third-step-tlapohualli>
             </div>
             
-                   <div class="step-actions">
-                       <button mat-stroked-button 
-                               matStepperPrevious
-                               class="modern-btn modern-btn-secondary">
-                           <mat-icon class="mr-2">arrow_back</mat-icon>
-                           <span>Anterior</span>
-                       </button>
+                   <div class="step-actions justify-end">
                        <button mat-raised-button 
                                [disabled]="guardando"
                                (click)="onPaso3Finalizar()"
@@ -138,7 +126,16 @@
                         </ul>
                     </div>
 
-                    <div class="flex justify-center gap-4">
+                    <div class="flex justify-center gap-4 flex-wrap">
+                        <!-- Botón para RE-DESCARGAR PDF -->
+                        <button mat-raised-button 
+                                color="accent"
+                                (click)="regenerarPDF()"
+                                class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white">
+                            <mat-icon>picture_as_pdf</mat-icon>
+                            Descargar PDF Nuevamente
+                        </button>
+                        
                         <button mat-raised-button 
                                 color="primary"
                                 (click)="crearNuevoExpediente()">

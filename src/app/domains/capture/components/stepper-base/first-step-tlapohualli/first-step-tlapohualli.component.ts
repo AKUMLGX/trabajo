@@ -53,7 +53,8 @@ export class FirstStepTlapohualliComponent implements OnInit {
         Validators.maxLength(100),
         ExpedienteValidators.oficioFormat()
       ]],
-      expediente: ['', [
+      // EXPEDIENTE: Auto-rellenado y no editable
+      expediente: [{ value: '', disabled: false }, [
         Validators.required,
         Validators.maxLength(50),
         ExpedienteValidators.expedienteFormat()
@@ -79,10 +80,13 @@ export class FirstStepTlapohualliComponent implements OnInit {
         Validators.required,
         Validators.maxLength(1000)
       ]],
-      // PLAZO DE ATENCIÓN: Valor entero
-      plazo_valor: ['', [
-        Validators.required,
-        Validators.min(1),
+      // PLAZO DE ATENCIÓN: Valores separados para días y horas
+      plazo_dias: ['', [
+        Validators.min(0),
+        Validators.max(999)
+      ]],
+      plazo_horas: ['', [
+        Validators.min(0),
         Validators.max(999)
       ]],
       // Unidad de tiempo: dias, horas, ambos
@@ -98,6 +102,11 @@ export class FirstStepTlapohualliComponent implements OnInit {
       this.formulario.get('fecha_recibido')?.updateValueAndValidity();
     });
 
+    // Validación dinámica de plazo según unidad seleccionada
+    this.formulario.get('plazo_unidad')?.valueChanges.subscribe((unidad) => {
+      this.actualizarValidadoresPlazo(unidad);
+    });
+
     // Emitir validez del formulario cuando cambia
     this.formulario.statusChanges.subscribe(() => {
       this.validezCambiada.emit(this.formulario.valid);
@@ -106,29 +115,62 @@ export class FirstStepTlapohualliComponent implements OnInit {
     // Emitir validez inicial
     this.validezCambiada.emit(this.formulario.valid);
 
-    // Obtener sugerencia del siguiente expediente
-    this.cargarSiguienteExpediente();
+    // Obtener y AUTO-CARGAR el siguiente expediente
+    this.cargarYAplicarSiguienteExpediente();
   }
 
-  // Cargar el siguiente número de expediente sugerido
-  cargarSiguienteExpediente() {
+  // Actualizar validadores de plazo según la unidad seleccionada
+  actualizarValidadoresPlazo(unidad: string) {
+    const plazo_dias = this.formulario.get('plazo_dias');
+    const plazo_horas = this.formulario.get('plazo_horas');
+
+    // Limpiar validadores previos
+    plazo_dias?.clearValidators();
+    plazo_horas?.clearValidators();
+
+    if (unidad === 'dias') {
+      // Solo días es obligatorio
+      plazo_dias?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
+      plazo_horas?.setValidators([Validators.min(0), Validators.max(999)]);
+      this.formulario.patchValue({ plazo_horas: '' }, { emitEvent: false });
+    } else if (unidad === 'horas') {
+      // Solo horas es obligatorio
+      plazo_horas?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
+      plazo_dias?.setValidators([Validators.min(0), Validators.max(999)]);
+      this.formulario.patchValue({ plazo_dias: '' }, { emitEvent: false });
+    } else if (unidad === 'ambos') {
+      // Ambos son obligatorios
+      plazo_dias?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
+      plazo_horas?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
+    }
+
+    plazo_dias?.updateValueAndValidity();
+    plazo_horas?.updateValueAndValidity();
+  }
+
+  // Cargar y APLICAR AUTOMÁTICAMENTE el siguiente expediente
+  cargarYAplicarSiguienteExpediente() {
     this.autocompleteService.obtenerSiguienteExpediente().subscribe({
       next: (siguiente) => {
         this.siguienteExpediente = siguiente;
+        // AUTO-APLICAR el expediente y BLOQUEAR el campo
+        this.formulario.patchValue({
+          expediente: siguiente
+        });
+        this.formulario.get('expediente')?.disable();
+        console.log('✅ Expediente auto-cargado y bloqueado:', siguiente);
       },
       error: (err) => {
         console.error('Error al obtener siguiente expediente:', err);
+        // Si falla, dejar el campo editable
+        this.formulario.get('expediente')?.enable();
       }
     });
   }
 
-  // Aplicar el expediente sugerido
-  aplicarExpedienteSugerido() {
-    if (this.siguienteExpediente) {
-      this.formulario.patchValue({
-        expediente: this.siguienteExpediente
-      });
-    }
+  // Recargar expediente (por si el usuario necesita uno nuevo)
+  recargarExpediente() {
+    this.cargarYAplicarSiguienteExpediente();
   }
 
   onSubmit() {
@@ -139,17 +181,19 @@ export class FirstStepTlapohualliComponent implements OnInit {
     if (this.formulario.valid) {
       console.log('✅ Paso 1 VÁLIDO - Continuando...');
       
-      // Guardar expediente usado para próxima sugerencia
-      const expedienteUsado = this.formulario.get('expediente')?.value;
+      // Obtener valor del expediente (aunque esté deshabilitado)
+      const expedienteUsado = this.formulario.get('expediente')?.value || this.siguienteExpediente;
       if (expedienteUsado) {
         this.autocompleteService.guardarUltimoExpediente(expedienteUsado);
       }
 
-      // Construir objeto de plazo completo
+      // Construir objeto completo incluyendo campos deshabilitados
       const datosFormulario = {
-        ...this.formulario.value,
+        ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
         plazo_vencimiento_prioridad: this.construirPlazo()
       };
+
+      console.log('📦 Datos Paso 1:', datosFormulario);
 
       // Solo emitir formularioCompletado, el stepper se encargará de avanzar
       this.formularioCompletado.emit(datosFormulario);
@@ -162,10 +206,37 @@ export class FirstStepTlapohualliComponent implements OnInit {
 
   // Construir objeto de plazo con toda la información
   private construirPlazo() {
+    const unidad = this.formulario.get('plazo_unidad')?.value;
+    const dias = parseInt(this.formulario.get('plazo_dias')?.value || '0');
+    const horas = parseInt(this.formulario.get('plazo_horas')?.value || '0');
+    const es_urgente = this.formulario.get('es_urgente')?.value;
+
+    let textoCompleto = '';
+    let valorTotal = 0;
+
+    if (unidad === 'dias') {
+      textoCompleto = `${dias} día${dias !== 1 ? 's' : ''}`;
+      valorTotal = dias;
+    } else if (unidad === 'horas') {
+      textoCompleto = `${horas} hora${horas !== 1 ? 's' : ''}`;
+      valorTotal = horas;
+    } else if (unidad === 'ambos') {
+      textoCompleto = `${dias} día${dias !== 1 ? 's' : ''} y ${horas} hora${horas !== 1 ? 's' : ''}`;
+      // Convertir todo a horas para cálculos: días*24 + horas
+      valorTotal = (dias * 24) + horas;
+    }
+
+    if (es_urgente) {
+      textoCompleto += ' (URGENTE)';
+    }
+
     return {
-      valor: parseInt(this.formulario.get('plazo_valor')?.value),
-      unidad: this.formulario.get('plazo_unidad')?.value,
-      es_urgente: this.formulario.get('es_urgente')?.value
+      valor: valorTotal,
+      dias: dias,
+      horas: horas,
+      unidad: unidad,
+      texto_completo: textoCompleto,
+      es_urgente: es_urgente
     };
   }
 

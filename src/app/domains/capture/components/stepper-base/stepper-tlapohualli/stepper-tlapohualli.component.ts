@@ -297,6 +297,22 @@ export class StepperTlapohualliComponent implements OnInit {
     }, 200);
   }
 
+  // RE-GENERAR PDF del expediente guardado
+  regenerarPDF() {
+    if (this.datosPaso1 && this.datosPaso2 && this.datosPaso3) {
+      console.log('📄 Re-generando PDF...');
+      this.pdfService.generarPDFExpediente(
+        this.datosPaso1,
+        this.datosPaso2,
+        this.datosPaso3,
+        this.expedienteId || undefined
+      );
+      this.mostrarMensaje('PDF generado nuevamente', 'success', 3000);
+    } else {
+      this.mostrarMensaje('⚠️ No hay datos para generar el PDF', 'warning', 3000);
+    }
+  }
+
   // Método mejorado para reiniciar formulario
   reiniciarFormulario() {
     this.isTransitioning = true;
