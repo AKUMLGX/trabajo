@@ -9,6 +9,7 @@ import { SecondStepTlapohualliComponent } from '../second-step-tlapohualli/secon
 import { ThirdStepTlapohualliComponent } from '../third-step-tlapohualli/third-step-tlapohualli.component';
 // DocumentUploadComponent eliminado - no se necesita subida de archivos
 import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
+import { PdfGeneratorService } from '../../../services/pdf-generator.service';
 import { 
   FormularioPaso1, 
   FormularioPaso2, 
@@ -66,6 +67,7 @@ export class StepperTlapohualliComponent implements OnInit {
 
   constructor(
     private expedienteService: ExpedienteTlapohualliService,
+    private pdfService: PdfGeneratorService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
@@ -160,6 +162,14 @@ export class StepperTlapohualliComponent implements OnInit {
       this.pasoActual = 3;
 
       this.mostrarMensaje('Expediente guardado exitosamente', 'success');
+      
+      // Generar PDF automáticamente
+      this.pdfService.generarPDFExpediente(
+        this.datosPaso1,
+        this.datosPaso2,
+        this.datosPaso3,
+        this.expedienteId
+      );
       
       // Mostrar resumen del expediente creado
       this.mostrarResumenExpediente(expediente);
