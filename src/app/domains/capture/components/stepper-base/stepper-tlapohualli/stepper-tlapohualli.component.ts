@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatStepperModule } from '@angular/material/stepper';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -37,6 +37,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   styleUrls: ['./stepper-tlapohualli.component.css', './stepper-tlapohualli-global.css']
 })
 export class StepperTlapohualliComponent implements OnInit {
+  // Referencias a los componentes hijo
+  @ViewChild(MatStepper) stepper!: MatStepper;
+  @ViewChild(FirstStepTlapohualliComponent) paso1Component!: FirstStepTlapohualliComponent;
+  @ViewChild(SecondStepTlapohualliComponent) paso2Component!: SecondStepTlapohualliComponent;
+  @ViewChild(ThirdStepTlapohualliComponent) paso3Component!: ThirdStepTlapohualliComponent;
+  
   // Datos de los formularios
   datosPaso1: FormularioPaso1 | null = null;
   datosPaso2: FormularioPaso2 | null = null;
@@ -74,30 +80,38 @@ export class StepperTlapohualliComponent implements OnInit {
   }
 
   onPaso1Completado(datos: FormularioPaso1) {
+    console.log('✅ [Stepper] Paso 1 completado, datos guardados:', datos);
     this.datosPaso1 = datos;
     this.transicionarPaso(1);
     this.mostrarMensaje('Paso 1 completado correctamente', 'success');
   }
 
   onPaso1Siguiente() {
-    // Si no hay datos del paso 1, intentar obtenerlos del componente
-    if (!this.datosPaso1) {
-      // Emitir evento para que el componente del paso 1 complete sus datos
-      this.mostrarMensaje('Por favor, complete los campos obligatorios del paso 1', 'warning');
-      return;
+    console.log('🔄 [Stepper] Intentando avanzar del Paso 1');
+    // Llamar al método onSubmit del componente hijo para validar y guardar
+    if (this.paso1Component) {
+      this.paso1Component.onSubmit();
+    } else {
+      console.error('❌ [Stepper] No se pudo acceder al componente del Paso 1');
     }
-    this.transicionarPaso(1);
   }
 
   // Eventos del Paso 2
   onPaso2Completado(datos: FormularioPaso2) {
+    console.log('✅ [Stepper] Paso 2 completado, datos guardados:', datos);
     this.datosPaso2 = datos;
     this.transicionarPaso(2);
     this.mostrarMensaje('Paso 2 completado correctamente', 'success');
   }
 
   onPaso2Siguiente() {
-    this.transicionarPaso(2);
+    console.log('🔄 [Stepper] Intentando avanzar del Paso 2');
+    // Llamar al método onSubmit del componente hijo para validar y guardar
+    if (this.paso2Component) {
+      this.paso2Component.onSubmit();
+    } else {
+      console.error('❌ [Stepper] No se pudo acceder al componente del Paso 2');
+    }
   }
 
   onPaso2Anterior() {
@@ -106,12 +120,19 @@ export class StepperTlapohualliComponent implements OnInit {
 
   // Eventos del Paso 3
   onPaso3Completado(datos: FormularioPaso3) {
+    console.log('✅ [Stepper] Paso 3 completado, datos guardados:', datos);
     this.datosPaso3 = datos;
     this.finalizarExpediente();
   }
 
   onPaso3Finalizar() {
-    this.finalizarExpediente();
+    console.log('🔄 [Stepper] Intentando finalizar (Paso 3)');
+    // Llamar al método onSubmit del componente hijo para validar y guardar
+    if (this.paso3Component) {
+      this.paso3Component.onSubmit();
+    } else {
+      console.error('❌ [Stepper] No se pudo acceder al componente del Paso 3');
+    }
   }
 
   onPaso3Anterior() {

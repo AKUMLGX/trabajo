@@ -51,7 +51,7 @@
             
                    <div class="step-actions">
                        <button mat-raised-button 
-                               matStepperNext
+                               (click)="onPaso1Siguiente()"
                                [disabled]="!puedeAvanzarPaso1"
                                class="modern-btn modern-btn-primary">
                            <span>Siguiente</span>
@@ -79,8 +79,7 @@
                            <span>Anterior</span>
                        </button>
                        <button mat-raised-button 
-                               matStepperNext
-                               [disabled]="!puedeAvanzarPaso2"
+                               (click)="onPaso2Siguiente()"
                                class="modern-btn modern-btn-primary">
                            <span>Siguiente</span>
                            <mat-icon class="ml-2">arrow_forward</mat-icon>
@@ -108,8 +107,8 @@
                            <span>Anterior</span>
                        </button>
                        <button mat-raised-button 
-                               [disabled]="!puedeFinalizar || guardando"
-                               (click)="finalizarExpediente()"
+                               [disabled]="guardando"
+                               (click)="onPaso3Finalizar()"
                                class="modern-btn modern-btn-success">
                            <mat-icon *ngIf="!guardando" class="mr-2">save</mat-icon>
                            <mat-icon *ngIf="guardando" class="animate-spin mr-2">refresh</mat-icon>
