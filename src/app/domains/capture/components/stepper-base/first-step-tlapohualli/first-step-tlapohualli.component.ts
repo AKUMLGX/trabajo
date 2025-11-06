@@ -199,7 +199,17 @@ export class FirstStepTlapohualliComponent implements OnInit {
       return;
     }
 
-    // Validar que el oficio no exista en la BD
+    // ⚠️ VALIDACIÓN DE OFICIO TEMPORALMENTE DESHABILITADA
+    // TODO: Arreglar problema de conexión con endpoint de validación
+    
+    console.log('⚠️ Validación de oficio DESHABILITADA temporalmente');
+    console.log('📦 Continuando sin validar oficio (el backend validará al guardar)');
+    
+    // Continuar directamente sin validar
+    this.continuarConFormulario();
+    
+    /* 
+    // CÓDIGO DE VALIDACIÓN (DESHABILITADO)
     const oficioValue = this.formulario.get('oficio')?.value?.trim();
     
     if (!oficioValue) {
@@ -211,14 +221,12 @@ export class FirstStepTlapohualliComponent implements OnInit {
     this.validandoOficio = true;
     this.errorOficioDuplicado = false;
 
-    // Llamar al servicio para validar
     this.expedienteService.validarOficioExistente(oficioValue).subscribe({
       next: (response) => {
         this.validandoOficio = false;
         console.log('📡 Respuesta validación oficio:', response);
 
         if (response.existe) {
-          // ❌ El oficio YA EXISTE - BLOQUEAR AVANCE
           this.errorOficioDuplicado = true;
           this.idOficioDuplicado = response.id_expediente_duplicado || null;
           
@@ -228,12 +236,9 @@ export class FirstStepTlapohualliComponent implements OnInit {
           
           alert(mensaje + '\n\nPor favor, usa un número de oficio diferente.');
           console.error('❌ OFICIO DUPLICADO - AVANCE BLOQUEADO:', mensaje);
-          
-          // ⛔ IMPORTANTE: NO continuar, bloquear el avance
           return;
         }
         
-        // ✅ Oficio disponible - Continuar
         console.log('✅ Oficio disponible - Continuando...');
         this.errorOficioDuplicado = false;
         this.idOficioDuplicado = null;
@@ -242,23 +247,11 @@ export class FirstStepTlapohualliComponent implements OnInit {
       error: (error) => {
         this.validandoOficio = false;
         console.error('❌ Error al validar oficio:', error);
-        
-        // ⛔ NO permitir continuar si la validación falla
-        // Es mejor bloquear que arriesgar duplicados
-        alert(
-          '⚠️ ERROR: No se pudo validar el oficio.\n\n' +
-          'Posibles causas:\n' +
-          '• El backend no está corriendo\n' +
-          '• Problemas de conexión\n' +
-          '• El endpoint no está disponible\n\n' +
-          '❌ No se puede continuar por seguridad.\n' +
-          'Por favor, verifica la conexión e intenta de nuevo.'
-        );
-        
-        // NO continuar - bloquear por seguridad
-        console.error('🚫 BLOQUEADO: No se puede continuar sin validar oficio');
+        alert('⚠️ ERROR: No se pudo validar el oficio.');
+        console.error('🚫 BLOQUEADO');
       }
     });
+    */
   }
 
   /**
