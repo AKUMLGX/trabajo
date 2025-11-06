@@ -1,6 +1,6 @@
 {
   "/tlapohualli/api/v1/*": {
-    "target": "http://localhost:8090",
+    "target": "http://localhost:8090/akamba",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true

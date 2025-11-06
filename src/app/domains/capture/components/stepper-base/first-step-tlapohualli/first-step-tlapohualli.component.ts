@@ -243,17 +243,20 @@ export class FirstStepTlapohualliComponent implements OnInit {
         this.validandoOficio = false;
         console.error('❌ Error al validar oficio:', error);
         
-        // Si hay error de conexión, preguntar si desea continuar
-        const continuar = confirm(
-          '⚠️ No se pudo validar el oficio (error de conexión).\n\n' +
-          '¿Deseas continuar de todos modos?\n' +
-          '(Puede haber problemas si el oficio ya existe)'
+        // ⛔ NO permitir continuar si la validación falla
+        // Es mejor bloquear que arriesgar duplicados
+        alert(
+          '⚠️ ERROR: No se pudo validar el oficio.\n\n' +
+          'Posibles causas:\n' +
+          '• El backend no está corriendo\n' +
+          '• Problemas de conexión\n' +
+          '• El endpoint no está disponible\n\n' +
+          '❌ No se puede continuar por seguridad.\n' +
+          'Por favor, verifica la conexión e intenta de nuevo.'
         );
         
-        if (continuar) {
-          this.errorOficioDuplicado = false;
-          this.continuarConFormulario();
-        }
+        // NO continuar - bloquear por seguridad
+        console.error('🚫 BLOQUEADO: No se puede continuar sin validar oficio');
       }
     });
   }
