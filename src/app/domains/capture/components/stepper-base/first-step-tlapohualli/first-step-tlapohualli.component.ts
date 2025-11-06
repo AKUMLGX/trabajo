@@ -218,7 +218,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
         console.log('📡 Respuesta validación oficio:', response);
 
         if (response.existe) {
-          // ❌ El oficio YA EXISTE
+          // ❌ El oficio YA EXISTE - BLOQUEAR AVANCE
           this.errorOficioDuplicado = true;
           this.idOficioDuplicado = response.id_expediente_duplicado || null;
           
@@ -227,14 +227,17 @@ export class FirstStepTlapohualliComponent implements OnInit {
             : `⚠️ El oficio "${oficioValue}" ya está registrado`;
           
           alert(mensaje + '\n\nPor favor, usa un número de oficio diferente.');
-          console.error('❌ OFICIO DUPLICADO:', mensaje);
-        } else {
-          // ✅ Oficio disponible - Continuar
-          console.log('✅ Oficio disponible - Continuando...');
-          this.errorOficioDuplicado = false;
-          this.idOficioDuplicado = null;
-          this.continuarConFormulario();
+          console.error('❌ OFICIO DUPLICADO - AVANCE BLOQUEADO:', mensaje);
+          
+          // ⛔ IMPORTANTE: NO continuar, bloquear el avance
+          return;
         }
+        
+        // ✅ Oficio disponible - Continuar
+        console.log('✅ Oficio disponible - Continuando...');
+        this.errorOficioDuplicado = false;
+        this.idOficioDuplicado = null;
+        this.continuarConFormulario();
       },
       error: (error) => {
         this.validandoOficio = false;
