@@ -24,7 +24,8 @@ export const authInterceptor: HttpInterceptorFn = (
     }
   }
   return next(request).pipe(catchError((err: HttpErrorResponse) => {
-    return throwError(() => new Error('Exception'));
+    // Re-lanzar el error original para que el componente pueda manejarlo correctamente
+    return throwError(() => err);
   }));
 };
 

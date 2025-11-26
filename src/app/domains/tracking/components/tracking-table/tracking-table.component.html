@@ -1,10 +1,104 @@
-@if (documents.length > 0 && !fileIsOpen && mostrarTabla ) {
-<div class="flex justify-center items-center text-xl mt-2">Resultados </div>
+@if ((documents.length > 0 || expedientesTlapohualli.length > 0) && !fileIsOpen && mostrarTabla ) {
+<div class="flex justify-center items-center text-xl mt-2">
+  Resultados {{ tipoBusqueda === 'Tlapohualli' ? '(Tlapohualli)' : '(AKAMBA)' }}
+</div>
 <section class="py-1 bg-blueGray-50" id="sectionTable">
   <div class="w-full lg:w-12/12 mx-auto mt-2">
     <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         <div class="overflow-x-auto">
+          <!-- TABLA PARA EXPEDIENTES TLAPOHUALLI -->
+          @if (tipoBusqueda === 'Tlapohualli' && expedientesTlapohualli.length > 0) {
+          <table class="min-w-full border-collapse bg-white">
+            <thead>
+              <tr>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">VER</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Expediente</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Oficio</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Tipo Medio Recepción</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Remitente (Área)</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Número Entrada Central</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Fecha Documento</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Fecha Recibido</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Referencia/Asunto</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Responsable</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Estatus</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">WOOS</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Fecha Vencimiento</th>
+                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Días Retraso</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
+              <tr>
+                <td class="px-2 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                  <button mat-button class="text-wine leading-5" (click)="verDetalleExpediente(expediente)">
+                    <mat-icon>remove_red_eye</mat-icon>
+                  </button>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.expediente || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.oficio || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.tipo_medio_recepcion || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.remitente_area || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.numero_entrada_central || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">
+                    {{ expediente.fecha_documento ? (formatearFecha(expediente.fecha_documento)) : '-' }}
+                  </div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">
+                    {{ expediente.fecha_recibido ? (formatearFecha(expediente.fecha_recibido)) : '-' }}
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">
+                    @if (expediente.referencia_asunto && expediente.referencia_asunto.length >= 30) {
+                      {{ expediente.referencia_asunto | slice: 0 : 30 }}...
+                    } @else {
+                      {{ expediente.referencia_asunto || '-' }}
+                    }
+                  </div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.responsable || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.estatus || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.woos || '-' }}</div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">
+                    {{ expediente.fecha_vencimiento ? (formatearFecha(expediente.fecha_vencimiento)) : '-' }}
+                  </div>
+                </td>
+                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
+                  <div class="text-sm leading-5 text-wine text-left">
+                    <span [class.text-red-600]="expediente.dias_retraso && expediente.dias_retraso > 0">
+                      {{ expediente.dias_retraso !== null && expediente.dias_retraso !== undefined ? expediente.dias_retraso : '-' }}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+          }
+          
+          <!-- TABLA PARA ASUNTOS AKAMBA (original) -->
+          @if (tipoBusqueda !== 'Tlapohualli' && documents.length > 0) {
           <table class="min-w-full border-collapse bg-white">
             <thead>
               <tr>
@@ -196,19 +290,31 @@
               }
             </tbody>
           </table>
+          }
         </div>
         <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
           <div>
-            @if (pages.length > 0) {
+            @if ((tipoBusqueda === 'Tlapohualli' && pagesExpedientes.length > 0) || (tipoBusqueda !== 'Tlapohualli' && pages.length > 0)) {
             <ul>
+              @if (tipoBusqueda === 'Tlapohualli') {
               <li *ngFor="
-                      let document of documents
+                      let item of expedientesTlapohualli
                         | paginate
                           : {
                               itemsPerPage: itemsPerPage,
                               currentPage: pageSelected
                             }
                     "></li>
+              } @else {
+              <li *ngFor="
+                      let item of documents
+                        | paginate
+                          : {
+                              itemsPerPage: itemsPerPage,
+                              currentPage: pageSelected
+                            }
+                    "></li>
+              }
             </ul>
             <div class="has-text-centered">
               <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labels.nextLabel"
@@ -225,10 +331,12 @@
               }}</span>
             a
             <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage +
-                itemsPerPage : documents.length }}</span>
+              tipoBusqueda === 'Tlapohualli' 
+                ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlapohualli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlapohualli.length)
+                : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
+            }}</span>
                 de
-                <span class="font-medium">{{ documents.length }}</span>
+                <span class="font-medium">{{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}</span>
                 resultados
           </p>
           </div>

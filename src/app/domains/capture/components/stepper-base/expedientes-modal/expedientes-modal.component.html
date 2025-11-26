@@ -1,0 +1,128 @@
+<div class="expedientes-modal">
+  <!-- Header del Modal -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <svg class="header-icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h2 class="modal-title">Búsqueda de Oficio</h2>
+        <p class="modal-subtitle">Oficio: <strong>{{ oficio }}</strong></p>
+      </div>
+    </div>
+    <button mat-icon-button class="close-button" (click)="cerrarSinSeleccionar()" aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Contenido del Modal -->
+  <div class="modal-content">
+    <!-- Estado: Nuevo Oficio (sin expedientes) -->
+    <div *ngIf="expedientes.length === 0" class="estado-nuevo">
+      <div class="estado-icon">
+        <svg class="estado-icon-svg estado-icon-svg-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="estado-titulo">Oficio Nuevo</h3>
+      <p class="estado-descripcion">
+        Este oficio no tiene requerimientos asociados en el sistema.
+      </p>
+      <p class="estado-hint">
+        Puedes continuar capturando un nuevo expediente con este oficio.
+      </p>
+    </div>
+
+    <!-- Estado: Oficio con Requerimientos (con expedientes) -->
+    <div *ngIf="expedientes.length > 0" class="estado-con-expedientes">
+      <div class="estado-alerta">
+        <svg class="estado-alerta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        <div>
+          <h3 class="estado-alerta-titulo">Oficio con Requerimientos Asociados</h3>
+          <p class="estado-alerta-texto">
+            Se encontraron <strong>{{ total }} expediente(s)</strong> con este oficio. 
+            Selecciona uno para pre-cargar sus datos o crea un nuevo expediente.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tabla de Expedientes -->
+      <div class="tabla-container">
+        <table class="tabla-expedientes">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Expediente</th>
+              <th>Remitente</th>
+              <th>Asunto</th>
+              <th>Estatus</th>
+              <th>Fecha</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let expediente of expedientes"
+              class="fila-expediente"
+            >
+              <td class="col-id">
+                <span class="badge-id">#{{ expediente.id_expediente }}</span>
+              </td>
+              <td class="col-expediente">
+                <strong>{{ expediente.expediente }}</strong>
+              </td>
+              <td class="col-remitente">
+                {{ expediente.remitente_area || 'N/A' }}
+              </td>
+              <td class="col-asunto">
+                <span class="texto-truncado" [title]="expediente.referencia_asunto || 'N/A'">
+                  {{ (expediente.referencia_asunto || 'N/A') | slice:0:50 }}{{ (expediente.referencia_asunto || '').length > 50 ? '...' : '' }}
+                </span>
+              </td>
+              <td class="col-estatus">
+                <span class="estatus-badge" [class]="'estatus-' + (expediente.estatus || '').toLowerCase()">
+                  {{ formatearEstatus(expediente.estatus) }}
+                </span>
+              </td>
+              <td class="col-fecha">
+                {{ formatearFecha(expediente.fecha_creacion) }}
+              </td>
+              <td class="col-accion">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="btn-seleccionar"
+                  (click)="seleccionarExpediente(expediente)"
+                >
+                  <mat-icon>check_circle</mat-icon>
+                  Seleccionar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer del Modal -->
+  <div class="modal-footer">
+    <button mat-stroked-button (click)="cerrarSinSeleccionar()" class="btn-cancelar">
+      <mat-icon>close</mat-icon>
+      {{ expedientes.length === 0 ? 'Continuar con nuevo expediente' : 'Crear nuevo expediente' }}
+    </button>
+    <p class="footer-hint">
+      <span *ngIf="expedientes.length === 0">
+        Puedes continuar capturando un nuevo expediente.
+      </span>
+      <span *ngIf="expedientes.length > 0">
+        Selecciona un expediente para pre-cargar sus datos, o crea uno nuevo.
+      </span>
+    </p>
+  </div>
+</div>
+

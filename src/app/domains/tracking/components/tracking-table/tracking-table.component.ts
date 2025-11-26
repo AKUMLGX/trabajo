@@ -1,5 +1,7 @@
 import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, effect, ElementRef, inject, ViewChild, OnInit } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
+import { ExpedienteTlapohualliService } from '../../../../domains/capture/services/expediente-tlapohualli.service';
+import { ExpedienteTlapohualli } from '../../../../domains/capture/interfaces/expediente-tlapohualli.interface';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatIcon } from '@angular/material/icon';
@@ -90,8 +92,13 @@ export class TrackingTableComponent implements OnInit {
   volante_jefatura= ""
   turno_jefatura= ""
 
+  // Expedientes Tlapohualli
+  public expedientesTlapohualli: ExpedienteTlapohualli[] = [];
+  public pagesExpedientes: ExpedienteTlapohualli[][] = [];
+  
   constructor(
     private asuntoService: AsuntoService,
+    private expedienteService: ExpedienteTlapohualliService,
     private fileService: FileService,
   ) {
     effect(()=>{
@@ -112,6 +119,7 @@ export class TrackingTableComponent implements OnInit {
       this.fileIsOpen = fileIsOpen;
 
     });
+    // Suscripción a resultados de AKAMBA (AsuntoService)
     this.asuntoService.documentsUpdated.subscribe((documents) => {
       this.fileIsOpen = false;
       this.mostrarTabla = true;
@@ -137,6 +145,48 @@ export class TrackingTableComponent implements OnInit {
         }
       });
       if (page.length !== 0) this.pages.push(page);
+    });
+    
+    // Suscripción a resultados de TLAPOHUALLI (ExpedienteTlapohualliService)
+    this.expedienteService.expedientesConsultados.subscribe((expedientes) => {
+      console.log('📋 [TrackingTable] Expedientes Tlapohualli recibidos:', expedientes);
+      console.log('📋 [TrackingTable] Cantidad de expedientes:', expedientes.length);
+      
+      this.fileIsOpen = false;
+      this.mostrarTabla = true;
+      this.visualizarPdf = false;
+      this.visualizarMsg = false;
+      this.editar = false;
+      this.tipoBusqueda = 'Tlapohualli';
+      this.newTableIsRendered = false;
+      this.pdfIsRendered = false;
+      this.formUpdateIsRendered = false;
+      
+      // Asignar expedientes recibidos
+      this.expedientesTlapohualli = expedientes || [];
+      console.log('📋 [TrackingTable] expedientesTlapohualli asignados:', this.expedientesTlapohualli.length);
+      
+      // Limpiar y crear páginas
+      let index = 0;
+      let page: ExpedienteTlapohualli[] = [];
+      this.pagesExpedientes = [];
+      this.pageSelected = 1;
+      
+      this.expedientesTlapohualli.forEach((expediente) => {
+        page.push(expediente);
+        index += 1;
+        if (index === this.itemsPerPage) {
+          this.pagesExpedientes.push(page);
+          index = 0;
+          page = [];
+        }
+      });
+      if (page.length !== 0) {
+        this.pagesExpedientes.push(page);
+      }
+      
+      console.log('📋 [TrackingTable] Páginas creadas:', this.pagesExpedientes.length);
+      console.log('📋 [TrackingTable] Primera página tiene:', this.pagesExpedientes[0]?.length || 0, 'expedientes');
     });
   }
 
@@ -180,6 +230,35 @@ export class TrackingTableComponent implements OnInit {
     this.isExpanded = false;
     // console.log("isExpanded", this.isExpanded);
     // console.log("INDEX",this.index);
+  }
+
+  verDetalleExpediente(expediente: ExpedienteTlapohualli): void {
+    console.log('👁️ Ver detalle de expediente:', expediente);
+    // TODO: Implementar vista de detalle o edición del expediente
+    // Por ahora solo logueamos
+  }
+
+  /**
+   * Formatear fecha que viene como string del backend (YYYY-MM-DD) a DD/MM/YYYY
+   */
+  formatearFecha(fecha: string | Date | null | undefined): string {
+    if (!fecha) return '-';
+    
+    // Si ya es un Date, formatearlo
+    if (fecha instanceof Date) {
+      return fecha.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+    
+    // Si es string (formato YYYY-MM-DD del backend)
+    if (typeof fecha === 'string') {
+      const partes = fecha.split('-');
+      if (partes.length === 3) {
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+      }
+      return fecha;
+    }
+    
+    return '-';
   }
 
 

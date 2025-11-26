@@ -1,14 +1,30 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { LoggerService } from './logger.service';
+
+// Construir la URL base correcta para Tlapohualli
+// environment.baseUrl es: http://localhost:8090/akamba/api/v1/
+// Necesitamos: http://localhost:8090/akamba/tlapohualli/api/v1/
+// Por lo tanto, eliminamos /api/v1/ del final y agregamos /tlapohualli/api/v1/
+let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
+// Eliminar /api/v1 del final si existe (con o sin trailing slash)
+baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
+// Asegurar que termine con / para la concatenación
+const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+const TLAPOHUALLI_BASE = `${baseWithoutApi}tlapohualli/api/v1/`;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExpedienteAutocompleteService {
   
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private logger: LoggerService
+  ) {}
 
   /**
    * Obtiene el siguiente número de expediente sugerido
@@ -16,11 +32,11 @@ export class ExpedienteAutocompleteService {
    */
   obtenerSiguienteExpediente(): Observable<string> {
     // Conectar con el backend
-    return this.http.get<{success: boolean, siguiente: string}>('/tlapohualli/api/v1/expedientes/siguiente')
+    return this.http.get<{success: boolean, siguiente: string}>(`${TLAPOHUALLI_BASE}expedientes/siguiente`, { withCredentials: true })
       .pipe(
         map(response => response.siguiente),
         catchError(error => {
-          console.error('Error al obtener siguiente expediente:', error);
+          this.logger.error('Error al obtener siguiente expediente:', error);
           // Fallback a LocalStorage
           const ultimoNumero = this.getUltimoNumeroLocal();
           const siguiente = ultimoNumero + 1;

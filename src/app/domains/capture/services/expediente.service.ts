@@ -66,7 +66,6 @@ export class ExpedienteService {
         throw new Error(response.message || 'Error al crear expediente');
       }),
       catchError(error => {
-        console.error('Error al crear expediente:', error);
         const message = error.error?.message || error.message || 'Error desconocido';
         return throwError(() => new Error(message));
       })
@@ -85,7 +84,6 @@ export class ExpedienteService {
         throw new Error(response.message || 'Error al listar expedientes');
       }),
       catchError(error => {
-        console.error('Error al listar expedientes:', error);
         return throwError(() => error);
       })
     );
@@ -103,7 +101,6 @@ export class ExpedienteService {
         throw new Error(response.message || 'Error al obtener expediente');
       }),
       catchError(error => {
-        console.error('Error al obtener expediente:', error);
         return throwError(() => error);
       })
     );
@@ -123,7 +120,6 @@ export class ExpedienteService {
         throw new Error(response.message || 'Error al actualizar expediente');
       }),
       catchError(error => {
-        console.error('Error al actualizar expediente:', error);
         return throwError(() => error);
       })
     );
@@ -140,7 +136,6 @@ export class ExpedienteService {
         }
       }),
       catchError(error => {
-        console.error('Error al eliminar expediente:', error);
         return throwError(() => error);
       })
     );
@@ -158,7 +153,6 @@ export class ExpedienteService {
         throw new Error(response.message || 'Error al obtener dashboard');
       }),
       catchError(error => {
-        console.error('Error al obtener dashboard:', error);
         return throwError(() => error);
       })
     );

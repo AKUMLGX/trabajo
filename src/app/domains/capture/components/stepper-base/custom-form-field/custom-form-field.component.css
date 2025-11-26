@@ -27,7 +27,7 @@
 .input-container {
   position: relative;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 16px;
 }
 
@@ -43,7 +43,7 @@
   border-radius: 20px;
   outline: none;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(0, 0, 0, 0.1);
@@ -51,6 +51,10 @@
   letter-spacing: 0.01em;
   position: relative;
   overflow: hidden;
+}
+
+.custom-input.with-dropdown {
+  padding-right: 60px;
 }
 
 .custom-input::before {
@@ -71,7 +75,7 @@
 .custom-input:focus {
   background: linear-gradient(145deg, #ffffff, #fefefe);
   border: 3px solid #691C32;
-  box-shadow: 
+  box-shadow:
     0 0 0 6px rgba(105, 28, 50, 0.1),
     0 8px 25px rgba(0, 0, 0, 0.15),
     0 4px 12px rgba(105, 28, 50, 0.1),
@@ -82,7 +86,7 @@
 .custom-input:hover:not(:focus) {
   background: linear-gradient(145deg, #ffffff, #f1f5f9);
   border: 3px solid rgba(105, 28, 50, 0.2);
-  box-shadow: 
+  box-shadow:
     0 6px 20px rgba(0, 0, 0, 0.1),
     0 2px 8px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -167,7 +171,7 @@
 .custom-form-field.error .custom-input {
   border: 3px solid #ef4444;
   background: linear-gradient(145deg, #fef2f2, #ffffff);
-  box-shadow: 
+  box-shadow:
     0 0 0 6px rgba(239, 68, 68, 0.1),
     0 8px 25px rgba(239, 68, 68, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -232,28 +236,93 @@
   animation: pulse 2s infinite;
 }
 
-/* Efectos especiales */
-.custom-form-field::before {
-  content: '';
+.autocomplete-toggle {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  background: linear-gradient(135deg, #691C32, #8B2635, #A03342, #691C32);
-  border-radius: 20px;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: -2;
-  filter: blur(8px);
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  background: rgba(105, 28, 50, 0.08);
+  border: 2px solid rgba(105, 28, 50, 0.25);
+  color: #691C32;
+  border-radius: 12px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.custom-form-field.focused::before {
-  opacity: 0.2;
+.autocomplete-toggle:hover {
+  background: rgba(105, 28, 50, 0.15);
+  border-color: rgba(105, 28, 50, 0.4);
 }
 
-.custom-form-field:hover::before {
-  opacity: 0.1;
+.autocomplete-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(105, 28, 50, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 40;
+  padding: 6px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.autocomplete-option {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.autocomplete-option:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+.autocomplete-option:hover,
+.autocomplete-option.active {
+  background: rgba(105, 28, 50, 0.12);
+  color: #691C32;
+  transform: translateX(4px);
+}
+
+.autocomplete-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.autocomplete-panel::-webkit-scrollbar-thumb {
+  background: rgba(105, 28, 50, 0.35);
+  border-radius: 6px;
+}
+
+.autocomplete-panel::-webkit-scrollbar-track {
+  background: rgba(105, 28, 50, 0.08);
+  border-radius: 6px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive */
@@ -262,11 +331,11 @@
     padding: 16px 20px;
     font-size: 16px;
   }
-  
+
   .custom-label {
     font-size: 14px;
   }
-  
+
   .hint-text,
   .error-text {
     font-size: 12px;

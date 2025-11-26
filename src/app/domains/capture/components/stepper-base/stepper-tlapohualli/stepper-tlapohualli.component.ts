@@ -6,18 +6,16 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FirstStepTlapohualliComponent } from '../first-step-tlapohualli/first-step-tlapohualli.component';
 import { SecondStepTlapohualliComponent } from '../second-step-tlapohualli/second-step-tlapohualli.component';
-import { ThirdStepTlapohualliComponent } from '../third-step-tlapohualli/third-step-tlapohualli.component';
-// DocumentUploadComponent eliminado - no se necesita subida de archivos
 import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
 import { PdfGeneratorService } from '../../../services/pdf-generator.service';
-import { 
-  FormularioPaso1, 
-  FormularioPaso2, 
-  FormularioPaso3, 
-  ExpedienteTlapohualli 
+import { LoggerService } from '../../../services/logger.service';
+import {
+  FormularioPaso1,
+  FormularioPaso2,
+  FormularioPaso3,
+  ExpedienteTlapohualli
 } from '../../../interfaces/expediente-tlapohualli.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-stepper-tlapohualli',
@@ -29,90 +27,75 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    MatDialogModule,
     FirstStepTlapohualliComponent,
-    SecondStepTlapohualliComponent,
-    ThirdStepTlapohualliComponent
+    SecondStepTlapohualliComponent
   ],
   templateUrl: './stepper-tlapohualli.component.html',
   styleUrls: ['./stepper-tlapohualli.component.css', './stepper-tlapohualli-global.css']
 })
 export class StepperTlapohualliComponent implements OnInit {
-  // Referencias a los componentes hijo
   @ViewChild(MatStepper) stepper!: MatStepper;
   @ViewChild(FirstStepTlapohualliComponent) paso1Component!: FirstStepTlapohualliComponent;
   @ViewChild(SecondStepTlapohualliComponent) paso2Component!: SecondStepTlapohualliComponent;
-  @ViewChild(ThirdStepTlapohualliComponent) paso3Component!: ThirdStepTlapohualliComponent;
-  
-  // Datos de los formularios
+
   datosPaso1: FormularioPaso1 | null = null;
   datosPaso2: FormularioPaso2 | null = null;
-  datosPaso3: FormularioPaso3 | null = null;
-  
-  // Estado del stepper
+  documentoPasoFinal: FormularioPaso3 | null = null;
+
   pasoActual = 0;
   expedienteGuardado = false;
   expedienteId: number | null = null;
-
-  // Estado de carga
   guardando = false;
-
-  // Estado de transición
   isTransitioning = false;
-
-  // Validez de cada paso
   paso1Valido = false;
-  paso2Valido = false;
-  paso3Valido = false;
 
   constructor(
     private expedienteService: ExpedienteTlapohualliService,
     private pdfService: PdfGeneratorService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private logger: LoggerService
   ) {}
 
-  ngOnInit(): void {
-    // Inicializar datos si es necesario
-  }
+  ngOnInit(): void {}
 
-  // Eventos del Paso 1
+  // Paso 1
   onPaso1ValidezCambiada(valido: boolean) {
     this.paso1Valido = valido;
   }
 
   onPaso1Completado(datos: FormularioPaso1) {
-    console.log('✅ [Stepper] Paso 1 completado, datos guardados:', datos);
     this.datosPaso1 = datos;
     this.transicionarPaso(1);
     this.mostrarMensaje('Paso 1 completado correctamente', 'success');
   }
 
   onPaso1Siguiente() {
-    console.log('🔄 [Stepper] Intentando avanzar del Paso 1');
-    // Llamar al método onSubmit del componente hijo para validar y guardar
     if (this.paso1Component) {
       this.paso1Component.onSubmit();
-    } else {
-      console.error('❌ [Stepper] No se pudo acceder al componente del Paso 1');
     }
   }
 
-  // Eventos del Paso 2
-  onPaso2Completado(datos: FormularioPaso2) {
-    console.log('✅ [Stepper] Paso 2 completado, datos guardados:', datos);
-    this.datosPaso2 = datos;
-    this.transicionarPaso(2);
-    this.mostrarMensaje('Paso 2 completado correctamente', 'success');
+  // Paso 2 (seguimiento + documento)
+  onPaso2Completado(datos: any) {
+    if (!datos) {
+      this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
+      return;
+    }
+
+    const { documento_pdf, campos_pospuestos, ...seguimiento } = datos;
+    this.datosPaso2 = seguimiento as FormularioPaso2;
+    this.documentoPasoFinal = {
+      documento_pdf: documento_pdf as File,
+      documento_pdf_nombre: documento_pdf ? documento_pdf.name : undefined,
+      campos_pospuestos: campos_pospuestos || []
+    };
+
+    this.finalizarExpediente();
   }
 
   onPaso2Siguiente() {
-    console.log('🔄 [Stepper] Intentando avanzar del Paso 2');
-    // Llamar al método onSubmit del componente hijo para validar y guardar
     if (this.paso2Component) {
       this.paso2Component.onSubmit();
-    } else {
-      console.error('❌ [Stepper] No se pudo acceder al componente del Paso 2');
     }
   }
 
@@ -120,106 +103,86 @@ export class StepperTlapohualliComponent implements OnInit {
     this.transicionarPaso(0);
   }
 
-  // Eventos del Paso 3
-  onPaso3Completado(datos: FormularioPaso3) {
-    console.log('✅ [Stepper] Paso 3 completado, datos guardados:', datos);
-    this.datosPaso3 = datos;
-    this.finalizarExpediente();
-  }
-
-  onPaso3Finalizar() {
-    console.log('🔄 [Stepper] Intentando finalizar (Paso 3)');
-    // Llamar al método onSubmit del componente hijo para validar y guardar
-    if (this.paso3Component) {
-      this.paso3Component.onSubmit();
-    } else {
-      console.error('❌ [Stepper] No se pudo acceder al componente del Paso 3');
-    }
-  }
-
-  onPaso3Anterior() {
-    this.transicionarPaso(1);
-  }
-
   // Finalizar expediente
   async finalizarExpediente() {
-    if (!this.datosPaso1 || !this.datosPaso2 || !this.datosPaso3) {
-      this.mostrarMensaje('Faltan datos en algunos pasos', 'error');
+    if (!this.datosPaso1 || !this.datosPaso2 || !this.documentoPasoFinal) {
+      this.mostrarMensaje('Faltan datos en el formulario', 'error');
+      return;
+    }
+
+    if (!this.documentoPasoFinal.documento_pdf) {
+      this.mostrarMensaje('Carga el documento PDF para continuar', 'warning');
       return;
     }
 
     this.guardando = true;
 
     try {
-      const expediente = await this.expedienteService.crearExpedienteDesdePasos(
-        this.datosPaso1,
-        this.datosPaso2,
-        this.datosPaso3
-      ).toPromise();
+      const expediente = await this.expedienteService
+        .crearExpedienteDesdePasos(
+          this.datosPaso1,
+          this.datosPaso2,
+          this.documentoPasoFinal
+        )
+        .toPromise();
 
       this.expedienteId = expediente?.id_expediente || null;
       this.expedienteGuardado = true;
-      this.pasoActual = 3;
-
+      this.transicionarPaso(2);
       this.mostrarMensaje('Expediente guardado exitosamente', 'success');
-      
-      // Generar PDF automáticamente
+
       this.pdfService.generarPDFExpediente(
         this.datosPaso1,
         this.datosPaso2,
-        this.datosPaso3,
+        this.documentoPasoFinal,
         this.expedienteId || undefined
       );
-      
-      // Mostrar resumen del expediente creado
-      this.mostrarResumenExpediente(expediente);
 
+      this.mostrarResumenExpediente(expediente);
     } catch (error: any) {
-      console.error('❌ Error al guardar expediente:', error);
-      
-      // Mejorar mensaje de error según el tipo
-      let mensajeError = 'Error al guardar el expediente';
-      let errorType: 'success' | 'error' | 'info' | 'warning' = 'error';
-      
-      if (error?.status === 409) {
-        // Error de conflicto - registro duplicado
-        errorType = 'warning';
-        const errorDetail = error?.error?.message || error?.error || '';
-        
-        if (errorDetail.toLowerCase().includes('oficio')) {
-          mensajeError = '⚠️ OFICIO DUPLICADO\n\nEste número de oficio ya existe en el sistema. Por favor, verifica el dato.';
-        } else if (errorDetail.toLowerCase().includes('expediente')) {
-          mensajeError = '⚠️ EXPEDIENTE DUPLICADO\n\nEste número de expediente ya existe. Usa el botón "Sugerencia" para obtener el siguiente disponible.';
-        } else {
-          mensajeError = '⚠️ REGISTRO DUPLICADO\n\nEl Oficio o Expediente ya existe en el sistema. Por favor, verifica los datos.';
-        }
-        
-        console.warn('⚠️ [DUPLICADO]', errorDetail);
-      } else if (error?.status === 400) {
-        // Error de validación
-        errorType = 'warning';
-        mensajeError = '⚠️ DATOS INVÁLIDOS\n\n' + (error?.error?.message || 'Por favor revisa los campos del formulario.');
-      } else if (error?.status === 500) {
-        // Error del servidor
-        mensajeError = '❌ ERROR DEL SERVIDOR\n\nNo se pudo procesar la solicitud. Por favor, contacta al administrador.';
-      } else if (error?.status === 0) {
-        // Error de conexión
-        mensajeError = '❌ SIN CONEXIÓN\n\nNo se pudo conectar al servidor. Verifica tu conexión a internet.';
-      }
-      
-      // Mostrar mensaje con duración más larga para errores
-      this.mostrarMensaje(mensajeError, errorType, 8000);
-      
-      // Mostrar alerta adicional para errores críticos
-      if (error?.status === 409 || error?.status === 400) {
-        alert(mensajeError);
-      }
+      this.manejarError(error);
     } finally {
       this.guardando = false;
     }
   }
 
-  // Mostrar resumen del expediente
+  private manejarError(error: any) {
+    this.logger.error('Error al guardar expediente:', error);
+
+    let mensajeError = 'Error al guardar el expediente';
+    let tipo: 'success' | 'error' | 'info' | 'warning' = 'error';
+
+    if (error?.status === 409) {
+      tipo = 'warning';
+      const detalle = (error?.error?.message || error?.error || '').toLowerCase();
+      if (detalle.includes('oficio')) {
+        mensajeError = '⚠️ OFICIO DUPLICADO\n\nEste número de oficio ya existe en el sistema.';
+      } else if (detalle.includes('expediente')) {
+        mensajeError = '⚠️ EXPEDIENTE DUPLICADO\n\nEste número de expediente ya existe.';
+      } else {
+        mensajeError = '⚠️ REGISTRO DUPLICADO\n\nVerifica la información indicada.';
+      }
+    } else if (error?.status === 400) {
+      tipo = 'warning';
+      mensajeError = '⚠️ DATOS INVÁLIDOS\n\n' + (error?.error?.message || 'Revisa los campos del formulario.');
+    } else if (error?.status === 500) {
+      mensajeError = '❌ ERROR DEL SERVIDOR\n\nNo se pudo procesar la solicitud.';
+    } else if (error?.status === 0) {
+      mensajeError = '❌ SIN CONEXIÓN\n\nVerifica tu conexión a internet.';
+    }
+
+    this.mostrarMensaje(mensajeError, tipo, 8000);
+    // Mostrar modal para errores importantes
+    if (tipo === 'warning' || tipo === 'error') {
+      // TODO: Reemplazar con modal de confirmación
+      // Por ahora mantener alert para errores críticos
+      if (tipo === 'warning') {
+        alert(mensajeError);
+      }
+    }
+  }
+
+  // Utilidades
   mostrarResumenExpediente(expediente: ExpedienteTlapohualli | undefined) {
     if (!expediente) return;
 
@@ -228,7 +191,7 @@ export class StepperTlapohualliComponent implements OnInit {
       Oficio: ${expediente.oficio || 'N/A'}
       Remitente: ${expediente.remitente_area || 'N/A'}
       Estatus: ${expediente.estatus || 'N/A'}
-      Fecha de Creación: ${expediente.fecha_creacion ? new Date(expediente.fecha_creacion).toLocaleDateString() : 'N/A'}
+      Fecha de creación: ${expediente.fecha_creacion ? new Date(expediente.fecha_creacion).toLocaleDateString() : 'N/A'}
     `;
 
     this.snackBar.open(resumen, 'Cerrar', {
@@ -237,8 +200,6 @@ export class StepperTlapohualliComponent implements OnInit {
     });
   }
 
-
-  // Mostrar mensaje
   private mostrarMensaje(mensaje: string, tipo: 'success' | 'error' | 'info' | 'warning', duracion: number = 5000) {
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: duracion,
@@ -248,63 +209,39 @@ export class StepperTlapohualliComponent implements OnInit {
     });
   }
 
-  // Getters para el estado del stepper
   get puedeAvanzarPaso1(): boolean {
-    // VALIDACIÓN ESTRICTA: Solo avanzar si el formulario del paso 1 es válido
     return this.paso1Valido;
-  }
-
-  get puedeAvanzarPaso2(): boolean {
-    // Permitir avanzar libremente como en el paso 1
-    return true;
-  }
-
-  get puedeFinalizar(): boolean {
-    // Permitir finalizar libremente para pruebas
-    return true;
   }
 
   get estaCompletado(): boolean {
     return this.expedienteGuardado;
   }
 
-  // Método para obtener el resumen completo
   obtenerResumenCompleto() {
     return {
       paso1: this.datosPaso1,
       paso2: this.datosPaso2,
-      paso3: this.datosPaso3,
+      documento: this.documentoPasoFinal,
       expedienteId: this.expedienteId,
       fechaCreacion: new Date().toISOString()
     };
   }
 
-
-  // Método para transiciones suaves entre pasos
   private transicionarPaso(nuevoPaso: number) {
     this.isTransitioning = true;
-    
-    // Pequeño delay para mostrar la transición
     setTimeout(() => {
       this.pasoActual = nuevoPaso;
       this.isTransitioning = false;
-      
-      // Efecto de scroll suave hacia arriba
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 200);
   }
 
-  // RE-GENERAR PDF del expediente guardado
   regenerarPDF() {
-    if (this.datosPaso1 && this.datosPaso2 && this.datosPaso3) {
-      console.log('📄 Re-generando PDF...');
+    if (this.datosPaso1 && this.datosPaso2 && this.documentoPasoFinal) {
       this.pdfService.generarPDFExpediente(
         this.datosPaso1,
         this.datosPaso2,
-        this.datosPaso3,
+        this.documentoPasoFinal,
         this.expedienteId || undefined
       );
       this.mostrarMensaje('PDF generado nuevamente', 'success', 3000);
@@ -313,14 +250,12 @@ export class StepperTlapohualliComponent implements OnInit {
     }
   }
 
-  // Método mejorado para reiniciar formulario
   reiniciarFormulario() {
     this.isTransitioning = true;
-    
     setTimeout(() => {
       this.datosPaso1 = null;
       this.datosPaso2 = null;
-      this.datosPaso3 = null;
+      this.documentoPasoFinal = null;
       this.pasoActual = 0;
       this.expedienteGuardado = false;
       this.expedienteId = null;
@@ -329,7 +264,6 @@ export class StepperTlapohualliComponent implements OnInit {
     }, 300);
   }
 
-  // Método mejorado para crear nuevo expediente
   crearNuevoExpediente() {
     this.reiniciarFormulario();
   }

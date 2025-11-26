@@ -1,0 +1,44 @@
+<div class="confirmacion-modal">
+  <!-- Header del Modal -->
+  <div class="modal-header" [class]="'header-' + tipo">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon *ngIf="tipo === 'success'" class="icon-success">check_circle</mat-icon>
+        <mat-icon *ngIf="tipo === 'info'" class="icon-info">info</mat-icon>
+        <mat-icon *ngIf="tipo === 'warning'" class="icon-warning">warning</mat-icon>
+        <mat-icon *ngIf="tipo === 'error'" class="icon-error">error</mat-icon>
+      </div>
+      <div class="header-text">
+        <h2 class="modal-title">{{ titulo }}</h2>
+      </div>
+    </div>
+    <button mat-icon-button class="close-button" (click)="aceptar()" aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Contenido del Modal -->
+  <div class="modal-content">
+    <div class="mensaje-container">
+      <p class="mensaje-principal">{{ mensaje }}</p>
+      <p *ngIf="detalle" class="mensaje-detalle">{{ detalle }}</p>
+    </div>
+  </div>
+
+  <!-- Footer del Modal -->
+  <div class="modal-footer">
+    <button 
+      mat-raised-button 
+      [class]="'btn-' + tipo"
+      (click)="aceptar()"
+      class="btn-aceptar">
+      <mat-icon>check</mat-icon>
+      {{ botonTexto }}
+    </button>
+  </div>
+</div>
+
+
+
+
+

@@ -25,15 +25,10 @@ export function oficioExistenteValidator(expedienteService: ExpedienteTlapohuall
     // Debounce de 800ms para evitar múltiples llamadas mientras el usuario escribe
     return timer(800).pipe(
       switchMap(() => {
-        console.log('🔍 [VALIDADOR] Validando oficio:', oficio);
-        
         return expedienteService.validarOficioExistente(oficio).pipe(
           map(response => {
-            console.log('📡 [VALIDADOR] Respuesta del servidor:', response);
-            
             // Si el oficio YA EXISTE, retornar error
             if (response.existe) {
-              console.warn('❌ [VALIDADOR] Oficio DUPLICADO detectado');
               return {
                 oficioExistente: {
                   message: `⚠️ Este oficio ya está registrado${response.id_expediente_duplicado ? ` (ID: ${response.id_expediente_duplicado})` : ''}`,
@@ -42,15 +37,10 @@ export function oficioExistenteValidator(expedienteService: ExpedienteTlapohuall
               };
             }
             // Si el oficio NO EXISTE, está disponible
-            console.log('✅ [VALIDADOR] Oficio disponible');
             return null;
           }),
-          catchError(error => {
-            console.error('❌ [VALIDADOR] Error al validar oficio:', error);
-            console.error('❌ [VALIDADOR] Status:', error.status);
-            console.error('❌ [VALIDADOR] Error completo:', JSON.stringify(error));
+          catchError(() => {
             // Si hay error en la conexión, no bloquear el formulario
-            // pero mostrar advertencia en consola
             return of(null);
           })
         );
@@ -100,8 +90,7 @@ export function expedienteExistenteValidator(expedienteService: ExpedienteTlapoh
             }
             return null;
           }),
-          catchError(error => {
-            console.error('Error al validar expediente:', error);
+          catchError(() => {
             return of(null);
           })
         );

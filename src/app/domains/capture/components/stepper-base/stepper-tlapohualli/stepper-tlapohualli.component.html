@@ -1,171 +1,135 @@
 <div class="w-full h-full bg-gradient-to-br from-[#DDC9A4]/10 via-white to-[#DDC9A4]/5 rounded-3xl shadow-2xl border border-[#DDC9A4]/20 p-4 relative overflow-hidden">
-    
-    <!-- Header elegante con nueva paleta de colores -->
+    <!-- Header -->
     <div class="mb-4 text-center">
         <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#691C32] to-[#9F2241] rounded-3xl mb-6 shadow-xl relative overflow-hidden">
-            <!-- Efecto de brillo interno -->
             <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"></div>
-            <!-- Icono de expediente mejorado -->
             <svg class="w-10 h-10 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            <!-- Decoración adicional -->
             <div class="absolute -top-1 -right-1 w-6 h-6 bg-[#DDC9A4] rounded-full opacity-30"></div>
             <div class="absolute -bottom-1 -left-1 w-4 h-4 bg-[#235B4E] rounded-full opacity-40"></div>
         </div>
-        <h2 class="text-4xl font-bold text-[#2D2A26] mb-3 tracking-tight">
-            Captura de Expedientes
-        </h2>
+        <h2 class="text-4xl font-bold text-[#2D2A26] mb-3 tracking-tight">Captura de Expedientes</h2>
         <div class="w-24 h-1 bg-gradient-to-r from-[#691C32] to-[#9F2241] mx-auto mb-4 rounded-full"></div>
         <p class="text-[#663442] text-lg font-medium">Complete la información del expediente en los siguientes pasos</p>
     </div>
 
-    <!-- Barra de progreso con nueva paleta -->
+    <!-- Progreso -->
     <div class="mb-4">
         <div class="flex items-center justify-between mb-4">
             <span class="text-sm font-semibold text-[#2D2A26]">Progreso del Formulario</span>
-            <span class="text-sm font-medium text-[#663442] bg-[#DDC9A4]/20 px-3 py-1 rounded-full">{{ pasoActual + 1 }} de 4 pasos</span>
+            <span class="text-sm font-medium text-[#663442] bg-[#DDC9A4]/20 px-3 py-1 rounded-full">{{ pasoActual + 1 }} de 3 pasos</span>
         </div>
         <div class="w-full bg-[#E2E2E2] rounded-full h-3 overflow-hidden shadow-inner">
-            <div class="h-full bg-gradient-to-r from-[#691C32] via-[#9F2241] to-[#663442] rounded-full transition-all duration-700 ease-out shadow-lg relative" 
-                 [style.width.%]="((pasoActual + 1) / 4) * 100">
-                <!-- Efecto de brillo en la barra -->
+            <div class="h-full bg-gradient-to-r from-[#691C32] via-[#9F2241] to-[#663442] rounded-full transition-all duration-700 ease-out shadow-lg relative"
+                 [style.width.%]="((pasoActual + 1) / 3) * 100">
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-full"></div>
             </div>
         </div>
     </div>
 
-    <!-- Contenido del stepper -->
+    <!-- Stepper -->
     <div class="stepper-container bg-gradient-to-br from-white to-[#DDC9A4]/5 rounded-3xl shadow-xl border border-[#DDC9A4]/30 overflow-hidden">
         <mat-stepper #stepper [selectedIndex]="pasoActual" orientation="horizontal" [linear]="true" class="w-full custom-mat-stepper">
-        
-        <!-- Paso 1: Información Básica -->
-        <mat-step label="Información Básica">
-            <div class="step-content">
-                <app-first-step-tlapohualli
-                    (formularioCompletado)="onPaso1Completado($event)"
-                    (siguientePaso)="onPaso1Siguiente()"
-                    (validezCambiada)="onPaso1ValidezCambiada($event)">
-                </app-first-step-tlapohualli>
-            </div>
-            
-                   <div class="step-actions">
-                       <button mat-raised-button 
-                               (click)="onPaso1Siguiente()"
-                               [disabled]="!puedeAvanzarPaso1"
-                               class="modern-btn modern-btn-primary">
-                           <span>Siguiente</span>
-                           <mat-icon class="ml-2">arrow_forward</mat-icon>
-                       </button>
-                   </div>
-        </mat-step>
+            <!-- Paso 1 -->
+            <mat-step label="Información Básica">
+                <div class="step-content">
+                    <app-first-step-tlapohualli
+                        (formularioCompletado)="onPaso1Completado($event)"
+                        (siguientePaso)="onPaso1Siguiente()"
+                        (validezCambiada)="onPaso1ValidezCambiada($event)">
+                    </app-first-step-tlapohualli>
+                </div>
+                <div class="step-actions">
+                    <button mat-raised-button
+                            (click)="onPaso1Siguiente()"
+                            [disabled]="!puedeAvanzarPaso1"
+                            class="modern-btn modern-btn-primary">
+                        <span>Siguiente</span>
+                        <mat-icon class="ml-2">arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </mat-step>
 
-        <!-- Paso 2: Plazos y Seguimiento -->
-        <mat-step label="Plazos y Seguimiento">
-            <div class="step-content">
-                <app-second-step-tlapohualli
-                    [datosPaso1]="datosPaso1"
-                    (formularioCompletado)="onPaso2Completado($event)"
-                    (siguientePaso)="onPaso2Siguiente()"
-                    (pasoAnterior)="onPaso2Anterior()">
-                </app-second-step-tlapohualli>
-            </div>
-            
-                   <div class="step-actions justify-end">
-                       <button mat-raised-button 
-                               (click)="onPaso2Siguiente()"
-                               class="modern-btn modern-btn-primary">
-                           <span>Siguiente</span>
-                           <mat-icon class="ml-2">arrow_forward</mat-icon>
-                       </button>
-                   </div>
-        </mat-step>
+            <!-- Paso 2 -->
+            <mat-step label="Seguimiento y Documento">
+                <div class="step-content">
+                    <app-second-step-tlapohualli
+                        [datosPaso1]="datosPaso1"
+                        (formularioCompletado)="onPaso2Completado($event)"
+                        (siguientePaso)="onPaso2Siguiente()"
+                        (pasoAnterior)="onPaso2Anterior()">
+                    </app-second-step-tlapohualli>
+                </div>
+                <div class="step-actions justify-end">
+                    <button mat-raised-button
+                            [disabled]="guardando"
+                            (click)="onPaso2Siguiente()"
+                            class="modern-btn modern-btn-success">
+                        <mat-icon *ngIf="!guardando" class="mr-2">save</mat-icon>
+                        <mat-icon *ngIf="guardando" class="animate-spin mr-2">refresh</mat-icon>
+                        <span>{{ guardando ? 'Guardando...' : 'Finalizar expediente' }}</span>
+                    </button>
+                </div>
+            </mat-step>
 
-        <!-- Paso 3: Documentos y Respuestas -->
-        <mat-step label="Documentos y Respuestas">
-            <div class="step-content">
-                <app-third-step-tlapohualli
-                    [datosPaso1]="datosPaso1"
-                    [datosPaso2]="datosPaso2"
-                    (formularioCompletado)="onPaso3Completado($event)"
-                    (finalizar)="onPaso3Finalizar()"
-                    (pasoAnterior)="onPaso3Anterior()">
-                </app-third-step-tlapohualli>
-            </div>
-            
-                   <div class="step-actions justify-end">
-                       <button mat-raised-button 
-                               [disabled]="guardando"
-                               (click)="onPaso3Finalizar()"
-                               class="modern-btn modern-btn-success">
-                           <mat-icon *ngIf="!guardando" class="mr-2">save</mat-icon>
-                           <mat-icon *ngIf="guardando" class="animate-spin mr-2">refresh</mat-icon>
-                           <span>{{ guardando ? 'Guardando...' : 'Finalizar Expediente' }}</span>
-                       </button>
-                   </div>
-        </mat-step>
+            <!-- Resumen -->
+            <mat-step label="Resumen" [completed]="estaCompletado">
+                <div class="step-content">
+                    <div class="bg-green-50 rounded-lg p-6 text-center" *ngIf="estaCompletado">
+                        <mat-icon class="text-6xl text-green-600 mb-4">check_circle</mat-icon>
+                        <h3 class="text-2xl font-bold text-green-800 mb-2">¡Expediente Creado Exitosamente!</h3>
+                        <p class="text-green-600 mb-4">
+                            El expediente <strong>{{ datosPaso1?.expediente }}</strong> ha sido guardado correctamente.
+                        </p>
 
-        <!-- Paso 4: Resumen y Confirmación -->
-        <mat-step label="Resumen" [completed]="estaCompletado">
-            <div class="step-content">
-                <div class="bg-green-50 rounded-lg p-6 text-center" *ngIf="estaCompletado">
-                    <mat-icon class="text-6xl text-green-600 mb-4">check_circle</mat-icon>
-                    <h3 class="text-2xl font-bold text-green-800 mb-2">¡Expediente Creado Exitosamente!</h3>
-                    <p class="text-green-600 mb-4">
-                        El expediente <strong>{{ datosPaso1?.expediente }}</strong> ha sido guardado correctamente.
-                    </p>
-                    
-                    <div class="bg-white rounded-lg p-4 mb-4 text-left">
-                        <h4 class="font-semibold text-gray-800 mb-2">Resumen del Expediente:</h4>
-                        <ul class="text-sm text-gray-600 space-y-1">
-                            <li><strong>Expediente:</strong> {{ datosPaso1?.expediente }}</li>
-                            <li><strong>Oficio:</strong> {{ datosPaso1?.oficio || 'N/A' }}</li>
-                            <li><strong>Remitente:</strong> {{ datosPaso1?.remitente_area || 'N/A' }}</li>
-                            <li><strong>Estatus:</strong> {{ datosPaso2?.estatus || 'N/A' }}</li>
-                            <li><strong>ID:</strong> {{ expedienteId || 'N/A' }}</li>
-                        </ul>
+                        <div class="bg-white rounded-lg p-4 mb-4 text-left">
+                            <h4 class="font-semibold text-gray-800 mb-2">Resumen del Expediente:</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li><strong>Expediente:</strong> {{ datosPaso1?.expediente }}</li>
+                                <li><strong>Oficio:</strong> {{ datosPaso1?.oficio || 'N/A' }}</li>
+                                <li><strong>Remitente:</strong> {{ datosPaso1?.remitente_area || 'N/A' }}</li>
+                                <li><strong>Estatus:</strong> {{ datosPaso2?.estatus || 'N/A' }}</li>
+                                <li><strong>Documento PDF:</strong> {{ documentoPasoFinal?.documento_pdf_nombre || documentoPasoFinal?.documento_pdf?.name || 'N/A' }}</li>
+                                <li><strong>ID:</strong> {{ expedienteId || 'N/A' }}</li>
+                            </ul>
+                        </div>
+
+                        <div class="flex justify-center gap-4 flex-wrap">
+                            <button mat-raised-button
+                                    (click)="regenerarPDF()"
+                                    class="bg-gradient-to-r from-[#691C32] to-[#9F2241] hover:from-[#83354A] hover:to-[#B63C54] text-white">
+                                <mat-icon>picture_as_pdf</mat-icon>
+                                Descargar PDF nuevamente
+                            </button>
+
+                            <button mat-raised-button
+                                    color="primary"
+                                    (click)="crearNuevoExpediente()">
+                                <mat-icon>add</mat-icon>
+                                Crear nuevo expediente
+                            </button>
+                            <button mat-stroked-button
+                                    color="primary"
+                                    (click)="reiniciarFormulario()">
+                                <mat-icon>refresh</mat-icon>
+                                Reiniciar
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="flex justify-center gap-4 flex-wrap">
-                        <!-- Botón para RE-DESCARGAR PDF -->
-                        <button mat-raised-button 
-                                color="accent"
-                                (click)="regenerarPDF()"
-                                class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white">
-                            <mat-icon>picture_as_pdf</mat-icon>
-                            Descargar PDF Nuevamente
-                        </button>
-                        
-                        <button mat-raised-button 
-                                color="primary"
-                                (click)="crearNuevoExpediente()">
-                            <mat-icon>add</mat-icon>
-                            Crear Nuevo Expediente
-                        </button>
-                        <button mat-stroked-button 
-                                color="primary"
-                                (click)="reiniciarFormulario()">
-                            <mat-icon>refresh</mat-icon>
-                            Reiniciar
-                        </button>
+                    <div class="bg-yellow-50 rounded-lg p-6 text-center" *ngIf="!estaCompletado">
+                        <mat-icon class="text-6xl text-yellow-600 mb-4">warning</mat-icon>
+                        <h3 class="text-2xl font-bold text-yellow-800 mb-2">Expediente incompleto</h3>
+                        <p class="text-yellow-600 mb-4">
+                            Complete los pasos anteriores para finalizar el expediente.
+                        </p>
                     </div>
                 </div>
-
-                <div class="bg-yellow-50 rounded-lg p-6 text-center" *ngIf="!estaCompletado">
-                    <mat-icon class="text-6xl text-yellow-600 mb-4">warning</mat-icon>
-                    <h3 class="text-2xl font-bold text-yellow-800 mb-2">Expediente Incompleto</h3>
-                    <p class="text-yellow-600 mb-4">
-                        Complete todos los pasos anteriores para finalizar el expediente.
-                    </p>
-                </div>
-            </div>
-        </mat-step>
-
+            </mat-step>
         </mat-stepper>
     </div>
 
-
-    <!-- Información de debug (solo en desarrollo) -->
     <div class="mt-4 p-4 bg-gray-100 rounded-lg" *ngIf="false">
         <h4 class="font-semibold mb-2">Debug Info:</h4>
         <pre class="text-xs">{{ obtenerResumenCompleto() | json }}</pre>

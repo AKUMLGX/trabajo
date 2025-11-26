@@ -351,28 +351,6 @@ export class PdfGeneratorService {
     </div>
   </div>
 
-  <!-- PLAZOS -->
-  <div class="seccion">
-    <div class="seccion-titulo"><span class="seccion-icon">⏱️</span> PLAZOS Y PRIORIDAD</div>
-    <div class="campo-grupo">
-      <div class="campo ${paso1.plazo_vencimiento_prioridad?.es_urgente ? 'urgente' : ''}">
-        <div class="campo-label">Plazo de Atención</div>
-        <div class="campo-valor">
-          ${paso1.plazo_vencimiento_prioridad?.texto_completo || `${paso1.plazo_vencimiento_prioridad?.valor || '0'} ${this.obtenerTextoUnidad(paso1.plazo_vencimiento_prioridad?.unidad)}`}
-          ${paso1.plazo_vencimiento_prioridad?.es_urgente ? '<span class="badge badge-urgente">⚠️ URGENTE</span>' : ''}
-        </div>
-      </div>
-      <div class="campo">
-        <div class="campo-label">Fecha de Vencimiento</div>
-        <div class="campo-valor">${this.formatearFecha(paso2.fecha_vencimiento)}</div>
-      </div>
-      <div class="campo ${paso2.dias_retraso > 0 ? 'urgente' : ''}">
-        <div class="campo-label">Días de Retraso</div>
-        <div class="campo-valor">${paso2.dias_retraso || 0} días ${paso2.dias_retraso > 0 ? '⚠️' : '✅'}</div>
-      </div>
-    </div>
-  </div>
-
   <!-- SEGUIMIENTO -->
   <div class="seccion">
     <div class="seccion-titulo"><span class="seccion-icon">👤</span> SEGUIMIENTO Y CONTROL</div>
@@ -390,10 +368,6 @@ export class PdfGeneratorService {
         <div class="campo-valor">${paso2.sistema_aplicativo || 'No especificado'}</div>
       </div>
       <div class="campo">
-        <div class="campo-label">WOOS</div>
-        <div class="campo-valor">${paso2.woos || 'N/A'}</div>
-      </div>
-      <div class="campo">
         <div class="campo-label">Estatus</div>
         <div class="campo-valor">${this.formatearEstatus(paso2.estatus)}</div>
       </div>
@@ -401,22 +375,6 @@ export class PdfGeneratorService {
         <div class="campo-label">Ubicación</div>
         <div class="campo-valor">${this.formatearUbicacion(paso2.ubicacion)}</div>
       </div>
-      ${paso2.oficios_comision ? `
-      <div class="campo campo-completo">
-        <div class="campo-label">Oficios Comisión / Apoyo / Designación</div>
-        <div class="campo-valor">${paso2.oficios_comision}</div>
-      </div>
-      ` : ''}
-      <div class="campo">
-        <div class="campo-label">Tipo de Respuesta</div>
-        <div class="campo-valor">${this.formatearTipoRespuesta(paso2.tipo_respuesta)}</div>
-      </div>
-      ${paso2.fecha_notificacion ? `
-      <div class="campo">
-        <div class="campo-label">Fecha de Notificación</div>
-        <div class="campo-valor">${this.formatearFecha(paso2.fecha_notificacion)}</div>
-      </div>
-      ` : ''}
     </div>
   </div>
 
@@ -424,30 +382,14 @@ export class PdfGeneratorService {
   <div class="seccion">
     <div class="seccion-titulo"><span class="seccion-icon">📄</span> DOCUMENTACIÓN Y CIERRE</div>
     <div class="campo-grupo">
-      <div class="campo">
-        <div class="campo-label">Tipo de Documento</div>
-        <div class="campo-valor">${this.formatearTipoDocumento(paso3.tipo_documento)}</div>
-      </div>
-      <div class="campo">
-        <div class="campo-label">Expediente Físico/Digital</div>
-        <div class="campo-valor">${this.formatearExpedienteFisico(paso3.expediente_fisico_digital)}</div>
-      </div>
-      ${paso3.anexos ? `
       <div class="campo campo-completo">
-        <div class="campo-label">Anexos</div>
-        <div class="campo-valor">${paso3.anexos}</div>
+        <div class="campo-label">Documento PDF principal</div>
+        <div class="campo-valor">${paso3.documento_pdf_nombre || 'No adjuntado'}</div>
       </div>
-      ` : ''}
-      ${paso3.acuse_fisico_digital ? `
+      ${(paso3.campos_documentos_pospuestos && paso3.campos_documentos_pospuestos.length) ? `
       <div class="campo campo-completo">
-        <div class="campo-label">Acuse Físico - Digital</div>
-        <div class="campo-valor">${paso3.acuse_fisico_digital}</div>
-      </div>
-      ` : ''}
-      ${paso3.comentarios_omega ? `
-      <div class="campo campo-completo">
-        <div class="campo-label">Comentarios Omega</div>
-        <div class="campo-valor">${paso3.comentarios_omega}</div>
+        <div class="campo-label">Campos documentales pendientes</div>
+        <div class="campo-valor">${paso3.campos_documentos_pospuestos.join(', ')}</div>
       </div>
       ` : ''}
     </div>
@@ -505,19 +447,16 @@ export class PdfGeneratorService {
 
   private formatearUbicacion(ubicacion: string): string {
     const ubicaciones: any = {
-      'CARPETA_GENERAL': 'Carpeta General',
-      'CARPETA_INDIVIDUAL': 'Carpeta Individual'
+      'CARPETA_GENERAL_I': 'Carpeta General I',
+      'CARPETA_GENERAL_II': 'Carpeta General II',
+      'CARPETA_GENERAL_III': 'Carpeta General III',
+      'CARPETA_GENERAL_IV': 'Carpeta General IV',
+      'CARPETA_GENERAL_V': 'Carpeta General V',
+      '': 'N/A',
+      null: 'N/A',
+      undefined: 'N/A'
     };
-    return ubicaciones[ubicacion] || ubicacion;
-  }
-
-  private formatearTipoRespuesta(tipo: string): string {
-    const tipos: any = {
-      'TOTAL': 'Respuesta Total',
-      'PARCIAL': 'Respuesta Parcial',
-      'PENDIENTE': 'Pendiente de Respuesta'
-    };
-    return tipos[tipo] || tipo;
+    return ubicaciones.hasOwnProperty(ubicacion) ? ubicaciones[ubicacion] : ubicacion || 'N/A';
   }
 
   private formatearTipoDocumento(tipo: string): string {

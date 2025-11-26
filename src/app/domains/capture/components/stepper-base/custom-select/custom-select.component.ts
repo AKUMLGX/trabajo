@@ -84,8 +84,6 @@ export class CustomSelectComponent implements ControlValueAccessor {
     const target = event.target as HTMLSelectElement;
     const newValue = target.value;
     
-    console.log('CustomSelect onSelectChange - Raw value:', newValue);
-    
     // Convertir a número si es posible
     let finalValue: any = newValue;
     if (newValue !== '' && !isNaN(Number(newValue))) {
@@ -94,9 +92,6 @@ export class CustomSelectComponent implements ControlValueAccessor {
     
     this.value = finalValue;
     this.hasValue = Boolean(finalValue && finalValue !== '');
-    
-    console.log('CustomSelect onSelectChange - Final value:', finalValue, 'type:', typeof finalValue);
-    console.log('CustomSelect hasValue:', this.hasValue);
     
     this.onChange(finalValue);
     this.cdr.detectChanges();
@@ -112,8 +107,6 @@ export class CustomSelectComponent implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    console.log('CustomSelect writeValue called with:', value, 'type:', typeof value);
-    
     if (value !== null && value !== undefined && value !== '') {
       this.value = value;
       this.hasValue = true;
@@ -123,7 +116,6 @@ export class CustomSelectComponent implements ControlValueAccessor {
     }
     
     this.cdr.detectChanges();
-    console.log('CustomSelect value updated to:', this.value);
   }
 
   registerOnChange(fn: (value: any) => void): void {

@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { dynamicHeight } from '../../../shared/animacion/dynamicHeight.trigger';
 import { AsuntoService } from '../../../services/asunto.service';
+import { ExpedienteTlapohualliService } from '../../../../domains/capture/services/expediente-tlapohualli.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -36,15 +37,17 @@ import { SharedDataFormService } from '../../../shared/services/shared-data-form
 
 })
 export class TrackingFormComponent implements OnInit, AfterViewInit {
+  // Formulario adaptado para campos de Tlapohualli
   public consultForm: FormGroup = this.fb.group({
-    folioInterno: new FormControl(''),
-    carpetaInvertigacion: new FormControl(''),
     oficio: new FormControl(''),
-    autoridadRemitente: new FormControl(''),
-    personaRelacionada: new FormControl(''),
-    volante_jefatura: new FormControl(''),
+    expediente: new FormControl(''),
+    tipo_medio_recepcion: new FormControl(''),
+    remitente_area: new FormControl(''),
+    numero_entrada_central: new FormControl(''),
+    responsable: new FormControl(''),
+    estatus: new FormControl(''),
+    woos: new FormControl(''),
     tipoBusqueda: new FormControl('Nuevos'),
-    turno_jefatura: new FormControl(''),
   });
 
   public fecha_inicial = new FormControl('');
@@ -63,21 +66,25 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: Record<string, boolean> = {};
   campoValor: Record<string, any> = {};
-  campos: string[] = ["persona_relacionada", "autoridad_remitente", "folio_interno"]
+  // Campos adaptados para Tlapohualli
+  campos: string[] = ["oficio", "expediente", "remitente_area", "responsable", "woos"]
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
+    private expedienteService: ExpedienteTlapohualliService,
     private shareData: SharedDataFormService,
     private route: ActivatedRoute
   ) {
+    // Campos adaptados para Tlapohualli
     this.campoValor = {
-      folioInterno: '',
-      carpetaInvertigacion: '',
       oficio: '',
-      autoridadRemitente: '',
-      personaRelacionada: '',
-      volante_jefatura: '',
-      turno_jefatura: '',
+      expediente: '',
+      tipo_medio_recepcion: '',
+      remitente_area: '',
+      numero_entrada_central: '',
+      responsable: '',
+      estatus: '',
+      woos: '',
     };
 
     const date = new Date();
@@ -111,17 +118,29 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
   onSave(): void {
     console.log('🔍 [TrackingForm] onSave ejecutado');
     console.log('🔍 [TrackingForm] Formulario actual:', this.consultForm.value);
-    this.asuntoService.filterDocuments(this.consultForm);
+    // Usar el servicio de expedientes Tlapohualli en lugar de AsuntoService
+    this.expedienteService.consultarExpedientes(this.consultForm.value).subscribe({
+      next: (expedientes) => {
+        console.log('✅ Expedientes encontrados:', expedientes);
+        // Emitir los resultados para que la tabla los muestre
+        this.expedienteService.expedientesConsultados.emit(expedientes);
+      },
+      error: (error) => {
+        console.error('❌ Error al consultar expedientes:', error);
+      }
+    });
   }
 
+  // Datos adaptados para Tlapohualli
   formData= {
-    folio_interno:"",
-    carpeta_investigacion:"",
-    oficio:"",
-    autoridad_remitente:"",
-    persona_relacionada:"",
-    volante_jefatura:"",
-    turno_jefatura:""
+    oficio: "",
+    expediente: "",
+    tipo_medio_recepcion: "",
+    remitente_area: "",
+    numero_entrada_central: "",
+    responsable: "",
+    estatus: "",
+    woos: ""
   }
 
   sendDatos():void{
@@ -140,10 +159,16 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
       return;
     }
     const valor_input = fomulario_control.value;
-    if (this.nombre_campo_input === "carpetaInvertigacion") {
-      this.nombre_campo_input = "carpetaInvestigacion";
+    // Mapear nombres de campos de formulario a nombres de BD
+    if (this.nombre_campo_input === "tipoMedioRecepcion") {
+      this.nombre_campo_input = "tipo_medio_recepcion";
+    } else if (this.nombre_campo_input === "remitenteArea") {
+      this.nombre_campo_input = "remitente_area";
+    } else if (this.nombre_campo_input === "numeroEntradaCentral") {
+      this.nombre_campo_input = "numero_entrada_central";
     }
-    this.asuntoService.searchBarCoincidencesIlike(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
+    // Usar el servicio de expedientes Tlapohualli para autocompletado
+    this.expedienteService.autocompletadoCampo(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
       this.coincidencias = coincidencias.slice(0, 5);
     });
   }
@@ -193,16 +218,7 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
       const oficio = params['oficio'];
       const folio = params['folio'] || params['folio_interno'] || params['folioInterno'];
       
-      if (folio) {
-        // Autollenado y búsqueda por folio interno
-        console.log('🔍 [TrackingForm] Folio detectado en URL:', folio);
-        this.consultForm.patchValue({ folioInterno: folio });
-        this.formData.folio_interno = folio;
-        setTimeout(() => {
-          console.log('🔍 [TrackingForm] Ejecutando búsqueda automática por folio...');
-          this.onSave();
-        }, 800);
-      } else if (oficio) {
+      if (oficio) {
         console.log('🔍 [TrackingForm] Oficio detectado en URL:', oficio);
         
         // Llenar el campo oficio
@@ -229,16 +245,16 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     // Verificar si hay parámetro oficio en la URL después de que el DOM esté listo
     this.route.queryParams.subscribe(params => {
       const oficio = params['oficio'];
-      const folio = params['folio'] || params['folio_interno'] || params['folioInterno'];
+      // Buscar por expediente si viene en la URL
+      const expediente = params['expediente'];
       
-      if (folio) {
-        // Autollenado y búsqueda por folio interno
-        console.log('🔍 [TrackingForm] ngAfterViewInit - Folio detectado:', folio);
+      if (expediente) {
+        console.log('🔍 [TrackingForm] ngAfterViewInit - Expediente detectado:', expediente);
         setTimeout(() => {
-          this.consultForm.patchValue({ folioInterno: folio });
-          this.formData.folio_interno = folio;
+          this.consultForm.patchValue({ expediente: expediente });
+          this.formData.expediente = expediente;
           setTimeout(() => {
-            console.log('🔍 [TrackingForm] ngAfterViewInit - Ejecutando búsqueda por folio...');
+            console.log('🔍 [TrackingForm] ngAfterViewInit - Ejecutando búsqueda por expediente...');
             this.onSave();
           }, 600);
         }, 300);

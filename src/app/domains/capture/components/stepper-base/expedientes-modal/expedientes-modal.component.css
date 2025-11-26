@@ -1,0 +1,372 @@
+.expedientes-modal {
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+.modal-header {
+  background: linear-gradient(135deg, #691C32 0%, #9F2241 100%);
+  color: white;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 3px solid #DDC9A4;
+}
+
+.header-content {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.header-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-icon-svg {
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: white;
+}
+
+.modal-subtitle {
+  font-size: 16px;
+  margin: 0 0 4px 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.modal-subtitle strong {
+  font-weight: 700;
+  color: #DDC9A4;
+}
+
+.modal-count {
+  font-size: 14px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.close-button {
+  color: white;
+  margin-left: 16px;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Content */
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+  background: #f9fafb;
+}
+
+/* Estado: Nuevo Oficio */
+.estado-nuevo {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-radius: 16px;
+  border: 2px solid #86efac;
+}
+
+.estado-icon {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.estado-icon-svg {
+  width: 80px;
+  height: 80px;
+}
+
+.estado-icon-svg-success {
+  color: #22c55e;
+}
+
+.estado-titulo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #166534;
+  margin: 0 0 12px 0;
+}
+
+.estado-descripcion {
+  font-size: 16px;
+  color: #15803d;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.estado-hint {
+  font-size: 14px;
+  color: #16a34a;
+  margin: 0;
+}
+
+/* Estado: Con Expedientes */
+.estado-con-expedientes {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.estado-alerta {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: #fffbeb;
+  border: 2px solid #fcd34d;
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.estado-alerta-icon {
+  width: 24px;
+  height: 24px;
+  color: #f59e0b;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.estado-alerta-titulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0 0 8px 0;
+}
+
+.estado-alerta-texto {
+  font-size: 14px;
+  color: #78350f;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.estado-alerta-texto strong {
+  color: #92400e;
+  font-weight: 700;
+}
+
+/* Tabla de Expedientes */
+.tabla-container {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow-x: auto;
+  overflow-y: visible;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tabla-expedientes {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.tabla-expedientes thead {
+  background: linear-gradient(135deg, #691C32 0%, #9F2241 100%);
+  color: white;
+}
+
+.tabla-expedientes th {
+  padding: 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-expedientes tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.tabla-expedientes tbody tr:hover {
+  background: #f9fafb;
+}
+
+.tabla-expedientes tbody tr:last-child {
+  border-bottom: none;
+}
+
+.tabla-expedientes td {
+  padding: 16px;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.col-id {
+  width: 80px;
+}
+
+.badge-id {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #691C32;
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.col-expediente {
+  font-weight: 600;
+  color: #691C32;
+  min-width: 120px;
+}
+
+.col-remitente {
+  min-width: 150px;
+  color: #4b5563;
+}
+
+.col-asunto {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.texto-truncado {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-estatus {
+  width: 120px;
+}
+
+.estatus-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.estatus-badge.estatus-en_tramite {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.estatus-badge.estatus-atendido {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.estatus-badge.estatus-pendiente {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.estatus-badge.estatus-cancelado {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.col-fecha {
+  width: 120px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.col-accion {
+  width: 140px;
+  text-align: center;
+}
+
+.btn-seleccionar {
+  background: linear-gradient(135deg, #691C32 0%, #9F2241 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 16px;
+  min-width: 120px;
+}
+
+.btn-seleccionar:hover {
+  background: linear-gradient(135deg, #9F2241 0%, #691C32 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(105, 28, 50, 0.3);
+}
+
+/* Footer */
+.modal-footer {
+  padding: 20px 24px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-cancelar {
+  color: #691C32;
+  border-color: #691C32;
+  font-weight: 600;
+}
+
+.btn-cancelar:hover {
+  background: rgba(105, 28, 50, 0.1);
+}
+
+.footer-hint {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  flex: 1;
+  text-align: right;
+  font-style: italic;
+}
+
+/* Scrollbar personalizado */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #691C32;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #9F2241;
+}
+

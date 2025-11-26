@@ -1,11 +1,19 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
 import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
+import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
+import { KeyboardNavigationDirective } from '../../../directives/keyboard-navigation.directive';
 import { ExpedienteValidators } from '../../../utils/form-validators';
 import { ExpedienteAutocompleteService } from '../../../services/expediente-autocomplete.service';
 import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
+import { LoggerService } from '../../../services/logger.service';
+import { FormHelperService } from '../../../services/form-helper.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpedientesModalComponent, ExpedientesModalData } from '../expedientes-modal/expedientes-modal.component';
+import { ConfirmacionModalComponent, ConfirmacionModalData } from '../confirmacion-modal/confirmacion-modal.component';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-first-step-tlapohualli',
@@ -14,12 +22,14 @@ import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapo
     CommonModule,
     ReactiveFormsModule,
     CustomFormFieldComponent,
-    CustomTextareaComponent
+    CustomTextareaComponent,
+    KeyboardNavigationDirective,
+    CustomSelectComponent
   ],
   templateUrl: './first-step-tlapohualli.component.html',
   styleUrl: './first-step-tlapohualli.component.css'
 })
-export class FirstStepTlapohualliComponent implements OnInit {
+export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   @Output() formularioCompletado = new EventEmitter<any>();
   @Output() siguientePaso = new EventEmitter<void>();
   @Output() validezCambiada = new EventEmitter<boolean>();
@@ -29,6 +39,14 @@ export class FirstStepTlapohualliComponent implements OnInit {
   validandoOficio: boolean = false; // Indicador de validación en progreso
   errorOficioDuplicado = false; // Si el oficio ya existe en BD
   idOficioDuplicado: number | null = null; // ID del expediente con oficio duplicado
+  buscandoExpedientes: boolean = false; // Indicador de búsqueda en progreso
+  modalAbierto: boolean = false; // Indicador si el modal está abierto
+  
+  // Detección de caracteres problemáticos en oficio
+  caracteresProblematicos: { caracter: string; posicion: number; sugerencia: string }[] = [];
+  tieneCaracteresProblematicos: boolean = false;
+  
+  private destroy$ = new Subject<void>();
 
   // Catálogos para autocompletado
   remitentesComunes: string[] = [
@@ -42,23 +60,104 @@ export class FirstStepTlapohualliComponent implements OnInit {
     'Área de Cobranza'
   ];
 
+  // Obtener opciones de autocompletado combinando comunes e historial
+  get remitentesConHistorial(): string[] {
+    const historial = this.formHelper.obtenerHistorial('remitente_area');
+    // Combinar historial primero (más recientes) y luego comunes
+    const todos = [...historial, ...this.remitentesComunes];
+    // Eliminar duplicados manteniendo el orden
+    return Array.from(new Set(todos));
+  }
+
   get formularioValido(): boolean {
     return this.formulario.valid;
+  }
+
+  // Progreso del formulario
+  progresoFormulario = 0;
+  camposCompletados = 0;
+  camposTotales = 0;
+
+  // Opciones para el tipo de medio de recepción
+  tipoMedioRecepcionOptions: SelectOption[] = [
+    { value: 'ATENTA_NOTA', label: 'Atenta nota' },
+    { value: 'OFICIO', label: 'Oficio' },
+    { value: 'REQUERIMIENTO_VERBAL', label: 'Requerimiento verbal (Petición interna)' },
+    { value: 'CORREO_ELECTRONICO', label: 'Correo electrónico' }
+  ];
+
+  // Catálogo de áreas Generales
+  remitentesGenerales: SelectOption[] = [
+    { value: 'AGSC', label: 'AGSC - Administración General de Servicios Centrales' },
+    { value: 'AGP', label: 'AGP - Administración General de Planeación' },
+    { value: 'AGR', label: 'AGR - Administración General de Recaudación' },
+    { value: 'AGGC', label: 'AGGC - Administración General de Grandes Contribuyentes' },
+    { value: 'AGACE', label: 'AGACE - Administración General de Auditoría de Comercio Exterior' },
+    { value: 'AGAF', label: 'AGAF - Administración General de Auditoría Fiscal' },
+    { value: 'AGAJ', label: 'AGAJ - Administración General de Asuntos Jurídicos' }
+  ];
+
+  // Relación: Cada General tiene sus Centrales asociadas
+  centralesPorGeneral: { [key: string]: SelectOption[] } = {
+    'AGSC': [
+      { value: 'ACOP', label: 'ACOP - Administración Central de Operación de Padrones' },
+      { value: 'ACSTC', label: 'ACSTC - Administración Central de Servicios Tributarios al Contribuyente' },
+      { value: 'ACATF', label: 'ACATF - Administración Central de Análisis Técnico Fiscal' },
+      { value: 'ACGSTME', label: 'ACGSTME - Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos' }
+    ],
+    'AGP': [
+      { value: 'ACPL', label: 'ACPL - Administración Central de Planeación' },
+      { value: 'ACPR', label: 'ACPR - Administración Central de Programación' }
+    ],
+    'AGR': [
+      { value: 'ACRE', label: 'ACRE - Administración Central de Recaudación' },
+      { value: 'ACCO', label: 'ACCO - Administración Central de Cobranza' }
+    ],
+    'AGGC': [
+      { value: 'ACGC', label: 'ACGC - Administración Central de Grandes Contribuyentes' },
+      { value: 'ACGF', label: 'ACGF - Administración Central de Grandes Contribuyentes y Fiscalización' }
+    ],
+    'AGACE': [
+      { value: 'ACCE', label: 'ACCE - Administración Central de Comercio Exterior' },
+      { value: 'ACAE', label: 'ACAE - Administración Central de Auditoría Exterior' }
+    ],
+    'AGAF': [
+      { value: 'ACAF', label: 'ACAF - Administración Central de Auditoría Fiscal' },
+      { value: 'ACDF', label: 'ACDF - Administración Central de Dictaminación Fiscal' }
+    ],
+    'AGAJ': [
+      { value: 'ACOJ', label: 'ACOJ - Administración Central de Operación Jurídica' },
+      { value: 'ACAJ', label: 'ACAJ - Administración Central de Asuntos Jurídicos' }
+    ]
+  };
+
+  // Obtener las Centrales según la General seleccionada
+  get remitenteCentralOptions(): SelectOption[] {
+    const generalSeleccionada = this.formulario.get('remitente_general')?.value;
+    if (generalSeleccionada && this.centralesPorGeneral[generalSeleccionada]) {
+      return this.centralesPorGeneral[generalSeleccionada];
+    }
+    return [];
   }
 
   constructor(
     private fb: FormBuilder,
     private autocompleteService: ExpedienteAutocompleteService,
-    private expedienteService: ExpedienteTlapohualliService
+    private expedienteService: ExpedienteTlapohualliService,
+    private dialog: MatDialog,
+    private logger: LoggerService,
+    private formHelper: FormHelperService
   ) {
     this.formulario = this.fb.group({
+      // TIPO DE MEDIO DE RECEPCIÓN: Campo obligatorio para clasificar el requerimiento
+      tipo_medio_recepcion: ['', [Validators.required]],
       // OFICIO: Campo más importante (clave única)
       // Validación de duplicados se hace al hacer submit
+      // Sin validación de formato - acepta cualquier string
       oficio: ['', 
         [
           Validators.required,
-          Validators.maxLength(100),
-          ExpedienteValidators.oficioFormat()
+          Validators.maxLength(100)
         ]
       ],
       // EXPEDIENTE: Auto-rellenado y no editable
@@ -68,18 +167,19 @@ export class FirstStepTlapohualliComponent implements OnInit {
         ExpedienteValidators.expedienteFormat()
       ]],
       numero_entrada_central: ['', [
-        Validators.required,
         Validators.maxLength(100)
       ]],
-      remitente_area: ['', [
-        Validators.required,
-        Validators.maxLength(50)
-      ]],
-      fecha_documento: ['', [
+      // Remitente: estructura jerárquica General -> Central -> Identificador
+      remitente_general: ['', [Validators.required]], // Área General (obligatorio)
+      remitente_central: [''], // Área Central (opcional, depende de la General)
+      remitente_identificador: ['', [
+        Validators.maxLength(10)
+      ]], // Identificador adicional (máximo 10 caracteres, opcional)
+      fecha_documento: [this.formHelper.getFechaActual(), [
         Validators.required,
         ExpedienteValidators.noFutureDate()
       ]],
-      fecha_recibido: ['', [
+      fecha_recibido: [this.formHelper.getFechaActual(), [
         Validators.required,
         ExpedienteValidators.noFutureDate(),
         ExpedienteValidators.fechaRecibidoValida()
@@ -121,6 +221,32 @@ export class FirstStepTlapohualliComponent implements OnInit {
       this.idOficioDuplicado = null;
     });
 
+    // Detectar y normalizar caracteres problemáticos en el oficio
+    this.formulario.get('oficio')?.valueChanges.subscribe((valor) => {
+      if (valor && valor.trim()) {
+        this.detectarCaracteresProblematicos(valor);
+      } else {
+        this.caracteresProblematicos = [];
+        this.tieneCaracteresProblematicos = false;
+      }
+    });
+
+    // Pre-llenar valores cuando cambia el tipo de medio de recepción
+    this.formulario.get('tipo_medio_recepcion')?.valueChanges.subscribe((tipo) => {
+      if (tipo) {
+        this.aplicarValoresInicialesPorTipo(tipo);
+      }
+    });
+
+    // Validar que al menos uno de los campos de remitente esté lleno
+    // Limpiar remitente_central cuando cambia remitente_general
+    this.formulario.get('remitente_general')?.valueChanges.subscribe((general) => {
+      if (general) {
+        // Limpiar la central cuando cambia la general
+        this.formulario.patchValue({ remitente_central: '' }, { emitEvent: false });
+      }
+    });
+
     // Emitir validez del formulario cuando cambia
     this.formulario.statusChanges.subscribe(() => {
       this.validezCambiada.emit(this.formulario.valid);
@@ -129,8 +255,71 @@ export class FirstStepTlapohualliComponent implements OnInit {
     // Emitir validez inicial
     this.validezCambiada.emit(this.formulario.valid);
 
+    // Calcular campos totales
+    this.camposTotales = Object.keys(this.formulario.controls).length;
+
+    // Calcular progreso inicial
+    this.calcularProgreso();
+
+    // Suscribirse a cambios para actualizar progreso
+    this.formulario.valueChanges
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.calcularProgreso();
+        // Guardar borrador automáticamente
+        this.guardarBorrador();
+      });
+
+    // Cargar borrador si existe
+    this.cargarBorrador();
+
     // Obtener y AUTO-CARGAR el siguiente expediente
     this.cargarYAplicarSiguienteExpediente();
+  }
+
+  /**
+   * Calcular progreso del formulario
+   */
+  calcularProgreso(): void {
+    let completados = 0;
+    Object.keys(this.formulario.controls).forEach(key => {
+      const control = this.formulario.get(key);
+      if (control && control.value !== null && control.value !== '' && control.value !== false) {
+        completados++;
+      }
+    });
+    this.camposCompletados = completados;
+    this.progresoFormulario = Math.round((completados / this.camposTotales) * 100);
+  }
+
+  /**
+   * Guardar borrador automáticamente
+   */
+  private guardarBorrador(): void {
+    const datos = this.formulario.getRawValue();
+    this.formHelper.guardarBorrador(1, datos);
+  }
+
+  /**
+   * Cargar borrador si existe
+   */
+  private cargarBorrador(): void {
+    const borrador = this.formHelper.obtenerBorrador(1);
+    if (borrador) {
+      // No sobreescribir campos críticos que ya tienen valor
+      const datosCargar: any = {};
+      Object.keys(borrador).forEach(key => {
+        const control = this.formulario.get(key);
+        if (control && (!control.value || control.value === '')) {
+          datosCargar[key] = borrador[key];
+        }
+      });
+      
+      if (Object.keys(datosCargar).length > 0) {
+        this.formulario.patchValue(datosCargar, { emitEvent: false });
+        this.logger.debug('Borrador cargado:', Object.keys(datosCargar).length, 'campos');
+      }
+    }
   }
 
   // Actualizar validadores de plazo según la unidad seleccionada
@@ -172,10 +361,10 @@ export class FirstStepTlapohualliComponent implements OnInit {
           expediente: siguiente
         });
         this.formulario.get('expediente')?.disable();
-        console.log('✅ Expediente auto-cargado y bloqueado:', siguiente);
+        this.logger.debug('Expediente auto-cargado y bloqueado:', siguiente);
       },
       error: (err) => {
-        console.error('Error al obtener siguiente expediente:', err);
+        this.logger.error('Error al obtener siguiente expediente:', err);
         // Si falla, dejar el campo editable
         this.formulario.get('expediente')?.enable();
       }
@@ -187,13 +376,216 @@ export class FirstStepTlapohualliComponent implements OnInit {
     this.cargarYAplicarSiguienteExpediente();
   }
 
-  onSubmit() {
-    console.log('=== VALIDACIÓN PASO 1 ===');
-    console.log('Formulario válido:', this.formulario.valid);
-    console.log('Valores del formulario:', this.formulario.value);
+  /**
+   * Abrir modal de búsqueda de expedientes
+   * Método público que se llama desde el botón de búsqueda
+   */
+  abrirModalBusqueda() {
+    const oficio = this.formulario.get('oficio')?.value?.trim();
     
+    this.logger.debug('Iniciando búsqueda de oficio:', oficio);
+    
+    if (!oficio || oficio.length < 3) {
+      this.mostrarModalError(
+        'Oficio inválido',
+        'Por favor, ingresa un número de oficio válido',
+        'El oficio debe tener al menos 3 caracteres para realizar la búsqueda.'
+      );
+      return;
+    }
+
+    // Evitar abrir múltiples modales
+    if (this.modalAbierto || this.buscandoExpedientes) {
+      this.logger.debug('Búsqueda ya en progreso o modal abierto');
+      return;
+    }
+
+    this.buscandoExpedientes = true;
+    this.logger.debug('Llamando al servicio para buscar expedientes por oficio:', oficio);
+    
+    // Buscar expedientes por oficio
+    this.expedienteService.buscarExpedientesPorOficio(oficio).subscribe({
+      next: (response) => {
+        this.buscandoExpedientes = false;
+        this.logger.debug('Respuesta del servicio - Total expedientes:', response.total);
+        
+        if (response.success) {
+          // Siempre abrir el modal, incluso si no hay expedientes
+          this.abrirModalExpedientes(oficio, response.data || [], response.total || 0);
+        } else {
+          this.logger.warn('Respuesta no exitosa, abriendo modal vacío');
+          // Abrir modal con lista vacía si hay error
+          this.abrirModalExpedientes(oficio, [], 0);
+        }
+      },
+      error: (error) => {
+        this.buscandoExpedientes = false;
+        this.logger.error('Error al buscar expedientes por oficio:', error);
+        
+        // Mostrar error al usuario con modal
+        this.mostrarModalError(
+          'Error en la búsqueda',
+          'No se pudo buscar expedientes',
+          error.message || 'Error desconocido. Por favor, intenta nuevamente.'
+        );
+        
+        // Abrir modal con lista vacía en caso de error
+        this.abrirModalExpedientes(oficio, [], 0);
+      }
+    });
+  }
+
+  /**
+   * Abrir modal con los expedientes encontrados
+   */
+  private abrirModalExpedientes(oficio: string, expedientes: any[], total: number) {
+    // Evitar abrir múltiples modales
+    if (this.modalAbierto) {
+      return;
+    }
+
+    this.modalAbierto = true;
+    const modalData: ExpedientesModalData = {
+      oficio: oficio,
+      expedientes: expedientes || [],
+      total: total
+    };
+
+    const dialogRef = this.dialog.open(ExpedientesModalComponent, {
+      width: '1000px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      data: modalData,
+      disableClose: false,
+      panelClass: 'expedientes-modal-container'
+    });
+
+    // Cuando el usuario selecciona un expediente
+    dialogRef.afterClosed().subscribe((expedienteSeleccionado: any) => {
+      this.modalAbierto = false;
+      
+      if (expedienteSeleccionado) {
+        this.logger.debug('Expediente seleccionado:', expedienteSeleccionado.id_expediente);
+        this.precargarDatosExpediente(expedienteSeleccionado);
+      } else {
+        this.logger.debug('Modal cerrado sin seleccionar expediente - Continuando con nuevo expediente');
+        // El usuario decidió crear un nuevo expediente, no hacer nada
+      }
+    });
+  }
+
+  /**
+   * Pre-cargar datos del expediente seleccionado en el formulario
+   */
+  private precargarDatosExpediente(expediente: any) {
+    this.logger.debug('Pre-cargando datos del expediente:', expediente.id_expediente);
+
+    // Función auxiliar para formatear fechas a formato YYYY-MM-DD para inputs de tipo date
+    const formatearFechaParaInput = (fecha: string | null | undefined): string | null => {
+      if (!fecha) return null;
+      try {
+        const date = new Date(fecha);
+        if (isNaN(date.getTime())) return null;
+        // Formatear a YYYY-MM-DD
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      } catch {
+        return null;
+      }
+    };
+
+    // Pre-cargar campos del formulario con los datos del expediente
+    const datosPrecargados: any = {
+      // Mantener el oficio que el usuario escribió
+      oficio: this.formulario.get('oficio')?.value || expediente.oficio,
+      
+      // Pre-cargar campos del expediente (solo si están disponibles)
+      remitente_area: expediente.remitente_area || this.formulario.get('remitente_area')?.value || '',
+      referencia_asunto: expediente.referencia_asunto || this.formulario.get('referencia_asunto')?.value || '',
+      numero_entrada_central: expediente.numero_entrada_central || this.formulario.get('numero_entrada_central')?.value || '',
+      
+      // Fechas (formateadas para inputs de tipo date)
+      fecha_documento: formatearFechaParaInput(expediente.fecha_documento) || this.formulario.get('fecha_documento')?.value || '',
+      fecha_recibido: formatearFechaParaInput(expediente.fecha_recibido) || this.formulario.get('fecha_recibido')?.value || '',
+      
+      // Mantener los valores de plazo y urgente del formulario actual
+      plazo_dias: this.formulario.get('plazo_dias')?.value || '',
+      plazo_horas: this.formulario.get('plazo_horas')?.value || '',
+      plazo_unidad: this.formulario.get('plazo_unidad')?.value || 'dias',
+      es_urgente: this.formulario.get('es_urgente')?.value || false
+    };
+
+    // Aplicar los datos pre-cargados al formulario
+    this.formulario.patchValue(datosPrecargados, { emitEvent: false });
+
+        // Mantener el expediente auto-generado (no usar el del expediente seleccionado)
+        // El expediente siempre será nuevo, pero podemos usar los datos del expediente seleccionado
+        
+        this.logger.debug('Datos pre-cargados en el formulario');
+        
+        // Mostrar modal de confirmación en lugar de alert
+        this.mostrarModalConfirmacion(expediente.id_expediente);
+  }
+
+  /**
+   * Mostrar modal de confirmación cuando se precargan datos
+   */
+  private mostrarModalConfirmacion(idExpediente: number) {
+    const modalData: ConfirmacionModalData = {
+      titulo: 'Datos pre-cargados',
+      mensaje: `Se han cargado los datos del expediente #${idExpediente}.`,
+      detalle: 'Puedes modificar cualquier campo antes de continuar.',
+      tipo: 'success',
+      botonTexto: 'Aceptar'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmacionModalComponent, {
+      width: '500px',
+      maxWidth: '95vw',
+      data: modalData,
+      disableClose: false,
+      panelClass: 'confirmacion-modal-container'
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.logger.debug('Modal de confirmación cerrado');
+    });
+  }
+
+  /**
+   * Mostrar modal de error
+   */
+  private mostrarModalError(titulo: string, mensaje: string, detalle?: string) {
+    const modalData: ConfirmacionModalData = {
+      titulo: titulo,
+      mensaje: mensaje,
+      detalle: detalle,
+      tipo: 'error',
+      botonTexto: 'Entendido'
+    };
+
+    this.dialog.open(ConfirmacionModalComponent, {
+      width: '500px',
+      maxWidth: '95vw',
+      data: modalData,
+      disableClose: false,
+      panelClass: 'confirmacion-modal-container'
+    });
+  }
+
+  /**
+   * Limpiar suscripciones al destruir el componente
+   */
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  onSubmit() {
+    // Validación del paso 1
     if (!this.formulario.valid) {
-      console.error('❌ Paso 1 INVÁLIDO - Campos con errores:');
       this.marcarCamposInvalidos();
       this.mostrarCamposInvalidos();
       return;
@@ -202,8 +594,7 @@ export class FirstStepTlapohualliComponent implements OnInit {
     // ⚠️ VALIDACIÓN DE OFICIO TEMPORALMENTE DESHABILITADA
     // TODO: Arreglar problema de conexión con endpoint de validación
     
-    console.log('⚠️ Validación de oficio DESHABILITADA temporalmente');
-    console.log('📦 Continuando sin validar oficio (el backend validará al guardar)');
+    // Validación de oficio deshabilitada temporalmente (el backend validará al guardar)
     
     // Continuar directamente sin validar
     this.continuarConFormulario();
@@ -217,40 +608,10 @@ export class FirstStepTlapohualliComponent implements OnInit {
       return;
     }
 
-    console.log('🔍 Validando oficio en BD:', oficioValue);
-    this.validandoOficio = true;
-    this.errorOficioDuplicado = false;
-
-    this.expedienteService.validarOficioExistente(oficioValue).subscribe({
-      next: (response) => {
-        this.validandoOficio = false;
-        console.log('📡 Respuesta validación oficio:', response);
-
-        if (response.existe) {
-          this.errorOficioDuplicado = true;
-          this.idOficioDuplicado = response.id_expediente_duplicado || null;
-          
-          const mensaje = this.idOficioDuplicado 
-            ? `⚠️ El oficio "${oficioValue}" ya está registrado (ID: ${this.idOficioDuplicado})`
-            : `⚠️ El oficio "${oficioValue}" ya está registrado`;
-          
-          alert(mensaje + '\n\nPor favor, usa un número de oficio diferente.');
-          console.error('❌ OFICIO DUPLICADO - AVANCE BLOQUEADO:', mensaje);
-          return;
-        }
-        
-        console.log('✅ Oficio disponible - Continuando...');
-        this.errorOficioDuplicado = false;
-        this.idOficioDuplicado = null;
-        this.continuarConFormulario();
-      },
-      error: (error) => {
-        this.validandoOficio = false;
-        console.error('❌ Error al validar oficio:', error);
-        alert('⚠️ ERROR: No se pudo validar el oficio.');
-        console.error('🚫 BLOQUEADO');
-      }
-    });
+    // Código comentado - validación de oficio deshabilitada
+    // this.validandoOficio = true;
+    // this.errorOficioDuplicado = false;
+    // ... resto del código comentado
     */
   }
 
@@ -264,13 +625,59 @@ export class FirstStepTlapohualliComponent implements OnInit {
       this.autocompleteService.guardarUltimoExpediente(expedienteUsado);
     }
 
+    // Construir remitente_area combinando los tres campos: General + Central + Identificador
+    const remitenteGeneral = this.formulario.get('remitente_general')?.value || '';
+    const remitenteCentral = this.formulario.get('remitente_central')?.value || '';
+    const remitenteIdentificador = this.formulario.get('remitente_identificador')?.value || '';
+    
+    // Validar que la General esté seleccionada (obligatorio)
+    if (!remitenteGeneral) {
+      this.mostrarModalError(
+        'Campo incompleto',
+        'Remitente (Área) es obligatorio',
+        'Debe seleccionar una opción en "Generales"'
+      );
+      return;
+    }
+    
+    // Combinar: General + Central + Identificador
+    // Orden: primero General, luego Central (si existe), luego Identificador (si existe)
+    const partes: string[] = [];
+    if (remitenteGeneral) partes.push(remitenteGeneral);
+    if (remitenteCentral) partes.push(remitenteCentral);
+    if (remitenteIdentificador && remitenteIdentificador.trim()) {
+      const identificadorLimpio = remitenteIdentificador.trim().substring(0, 10);
+      partes.push(identificadorLimpio);
+    }
+    
+    let remitenteCompleto = partes.join('');
+    
+    // El campo remitente_area en BD tiene límite, asegurar que no exceda
+    if (remitenteCompleto.length > 50) {
+      remitenteCompleto = remitenteCompleto.substring(0, 50);
+    }
+
     // Construir objeto completo incluyendo campos deshabilitados
     const datosFormulario = {
       ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
+      remitente_area: remitenteCompleto, // Reemplazar con el valor combinado
       plazo_vencimiento_prioridad: this.construirPlazo()
     };
 
-    console.log('📦 Datos Paso 1:', datosFormulario);
+    this.logger.debug('Datos Paso 1 preparados para envío', {
+      remitente_general: remitenteGeneral,
+      remitente_central: remitenteCentral,
+      remitente_identificador: remitenteIdentificador,
+      remitente_area_final: remitenteCompleto
+    });
+
+    // Guardar valores en historial para autocompletado futuro
+    if (remitenteCompleto) {
+      this.formHelper.guardarEnHistorial('remitente_area', remitenteCompleto);
+    }
+
+    // Limpiar borrador al completar
+    this.formHelper.limpiarBorrador(1);
 
     // Solo emitir formularioCompletado, el stepper se encargará de avanzar
     this.formularioCompletado.emit(datosFormulario);
@@ -325,22 +732,106 @@ export class FirstStepTlapohualliComponent implements OnInit {
     Object.keys(this.formulario.controls).forEach(key => {
       const control = this.formulario.get(key);
       if (control?.invalid) {
-        console.error(`  ❌ ${key}:`, {
-          value: control.value,
-          errors: control.errors,
-          touched: control.touched,
-          dirty: control.dirty
+        this.logger.debug(`Campo inválido: ${key}`, {
+          errors: control.errors
         });
         camposInvalidos.push(key);
       }
     });
     
     if (camposInvalidos.length > 0) {
-      alert(`⚠️ PASO 1 - Faltan los siguientes campos:\n\n${camposInvalidos.join('\n')}`);
+      this.mostrarModalError(
+        'Formulario incompleto',
+        'Faltan campos obligatorios',
+        `Los siguientes campos son requeridos:\n\n${camposInvalidos.map(c => `• ${c}`).join('\n')}`
+      );
     }
   }
 
+  /**
+   * Aplicar valores iniciales según el tipo de medio de recepción seleccionado
+   */
+  private aplicarValoresInicialesPorTipo(tipo: string): void {
+    const valores: any = {};
+    
+    switch (tipo) {
+      case 'ATENTA_NOTA':
+        // Valores sugeridos para atenta nota - no pre-llenar remitente
+        break;
+        
+      case 'OFICIO':
+        // Valores para oficio formal - no necesita pre-llenado especial
+        break;
+        
+      case 'REQUERIMIENTO_VERBAL':
+        // Valores para requerimiento verbal (petición interna) - no pre-llenar
+        break;
+        
+      case 'CORREO_ELECTRONICO':
+        // Valores para correo electrónico - no pre-llenar
+        break;
+    }
+    
+    // Aplicar valores solo si los campos están vacíos
+    Object.keys(valores).forEach(key => {
+      const control = this.formulario.get(key);
+      if (control && (!control.value || control.value === '')) {
+        control.patchValue(valores[key], { emitEvent: false });
+      }
+    });
+    
+    this.logger.debug('Valores iniciales aplicados para tipo de medio:', tipo, valores);
+  }
+
+  /**
+   * Detectar caracteres problemáticos en el oficio
+   * Detecta: l, I, O, o, 1, 0 (todos pueden causar confusión)
+   */
+  private detectarCaracteresProblematicos(valor: string): void {
+    this.caracteresProblematicos = [];
+    const problemas: { [key: string]: string } = {
+      'l': '1, I', // ele minúscula → puede confundirse con 1 o I
+      'I': '1, l', // i mayúscula → puede confundirse con 1 o l
+      'O': '0, o', // o mayúscula → puede confundirse con 0 o o
+      'o': '0, O', // o minúscula → puede confundirse con 0 o O
+      '1': 'l, I', // uno → puede confundirse con l o I
+      '0': 'O, o', // cero → puede confundirse con O o o
+    };
+
+    for (let i = 0; i < valor.length; i++) {
+      const char = valor[i];
+      if (problemas[char]) {
+        this.caracteresProblematicos.push({
+          caracter: char,
+          posicion: i + 1,
+          sugerencia: problemas[char]
+        });
+      }
+    }
+
+    this.tieneCaracteresProblematicos = this.caracteresProblematicos.length > 0;
+  }
+
+  /**
+   * Normalizar caracteres problemáticos (opcional, se puede activar)
+   */
+  normalizarOficio(valor: string): string {
+    return valor
+      .replace(/l/g, '1')  // ele minúscula → uno
+      .replace(/I/g, '1')  // i mayúscula → uno
+      .replace(/O/g, '0')  // o mayúscula → cero
+      .replace(/o/g, '0'); // o minúscula → cero
+  }
+
   // Getters para mensajes de error
+  get tipoMedioRecepcionError(): string | null {
+    const control = this.formulario.get('tipo_medio_recepcion');
+    if (control?.touched && control?.errors) {
+      if (control.errors['required']) return 'Este campo es obligatorio';
+    }
+    return null;
+  }
+
   get oficioError(): string | null {
     const control = this.formulario.get('oficio');
     
@@ -356,7 +847,6 @@ export class FirstStepTlapohualliComponent implements OnInit {
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Campo clave única obligatorio';
       if (control.errors['maxlength']) return 'Máximo 100 caracteres';
-      if (control.errors['oficioFormat']) return control.errors['oficioFormat'].message;
     }
     
     // Sin errores
@@ -376,17 +866,28 @@ export class FirstStepTlapohualliComponent implements OnInit {
   get numeroEntradaError(): string | null {
     const control = this.formulario.get('numero_entrada_central');
     if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
       if (control.errors['maxlength']) return 'Máximo 100 caracteres';
     }
     return null;
   }
 
-  get remitenteError(): string | null {
-    const control = this.formulario.get('remitente_area');
+  get remitenteGeneralError(): string | null {
+    const control = this.formulario.get('remitente_general');
     if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-      if (control.errors['maxlength']) return 'Máximo 50 caracteres';
+      if (control.errors['required']) return 'Este campo es obligatorio';
+    }
+    return null;
+  }
+
+  get remitenteCentralError(): string | null {
+    // Validación se hace al enviar, no hay error individual
+    return null;
+  }
+
+  get remitenteIdentificadorError(): string | null {
+    const control = this.formulario.get('remitente_identificador');
+    if (control?.touched && control?.errors) {
+      if (control.errors['maxlength']) return 'Máximo 10 caracteres';
     }
     return null;
   }

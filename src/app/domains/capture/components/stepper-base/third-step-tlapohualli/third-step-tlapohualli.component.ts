@@ -1,24 +1,18 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
-import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
-import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
 
 @Component({
   selector: 'app-third-step-tlapohualli',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    CustomFormFieldComponent,
-    CustomSelectComponent,
-    CustomTextareaComponent
+    ReactiveFormsModule
   ],
   templateUrl: './third-step-tlapohualli.component.html',
   styleUrl: './third-step-tlapohualli.component.css'
 })
-export class ThirdStepTlapohualliComponent implements OnInit {
+export class ThirdStepTlapohualliComponent {
   @Input() datosPaso1: any = {};
   @Input() datosPaso2: any = {};
   @Output() formularioCompletado = new EventEmitter<any>();
@@ -26,110 +20,81 @@ export class ThirdStepTlapohualliComponent implements OnInit {
   @Output() pasoAnterior = new EventEmitter<void>();
 
   formulario: FormGroup;
-  
-  // Opciones para los selects
-  opcionesTipoDocumento: SelectOption[] = [
-    { value: 'DICTAMEN', label: 'Dictamen' },
-    { value: 'REPORTE', label: 'Reporte' },
-    { value: 'ACTA_HECHOS', label: 'Acta de Hechos' },
-    { value: 'MEMORIA_TECNICA', label: 'Memoria Técnica' },
-    { value: 'SIN_INFO', label: 'Sin Información' }
-  ];
+  pdfSeleccionado: File | null = null;
+  pdfNombreMostrado = '';
+  pdfError: string | null = null;
 
-  opcionesExpedienteFisicoDigital: SelectOption[] = [
-    { value: 'FISICO', label: 'Solo Físico' },
-    { value: 'DIGITAL', label: 'Solo Digital' },
-    { value: 'AMBOS', label: 'Físico y Digital' },
-    { value: 'NINGUNO', label: 'Ninguno' }
+  /**
+   * Campos de documentación que se retiraron temporalmente en esta fase del proyecto.
+   * Se listan para retomarlos posteriormente cuando la app los requiera de nuevo.
+   */
+  readonly camposDocumentosPendientes = [
+    'tipo_documento',
+    'anexos',
+    'acuse_fisico_digital',
+    'expediente_fisico_digital',
+    'comentarios_omega'
   ];
 
   constructor(private fb: FormBuilder) {
     this.formulario = this.fb.group({
-      // Tipo de documento principal
-      tipo_documento: ['', Validators.required],
-      
-      // Anexos (opcional)
-      anexos: ['', Validators.maxLength(500)],
-      
-      // Acuse físico/digital
-      acuse_fisico_digital: ['', Validators.maxLength(100)],
-      
-      // Expediente físico y digital
-      expediente_fisico_digital: ['', Validators.required],
-      
-      // Comentarios finales (Omega)
-      comentarios_omega: ['', Validators.maxLength(2000)]
+      documento_pdf: [null, Validators.required]
     });
   }
 
-  ngOnInit() {
-    // Inicialización si es necesaria
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files.length > 0 ? input.files[0] : null;
+
+    if (!file) {
+      this.limpiarArchivo();
+      return;
+    }
+
+    if (file.type !== 'application/pdf') {
+      this.pdfError = 'Sólo se aceptan archivos PDF';
+      this.formulario.get('documento_pdf')?.setErrors({ formatoInvalido: true });
+      this.pdfSeleccionado = null;
+      this.pdfNombreMostrado = '';
+      return;
+    }
+
+    this.pdfSeleccionado = file;
+    this.pdfNombreMostrado = file.name;
+    this.pdfError = null;
+    this.formulario.get('documento_pdf')?.setValue(file);
+    this.formulario.get('documento_pdf')?.markAsTouched();
+    this.formulario.get('documento_pdf')?.updateValueAndValidity();
+  }
+
+  limpiarArchivo() {
+    this.pdfSeleccionado = null;
+    this.pdfNombreMostrado = '';
+    this.pdfError = null;
+    this.formulario.get('documento_pdf')?.setValue(null);
+    this.formulario.get('documento_pdf')?.markAsPristine();
+    this.formulario.get('documento_pdf')?.markAsUntouched();
+    this.formulario.get('documento_pdf')?.updateValueAndValidity();
   }
 
   onSubmit() {
-    console.log('=== VALIDACIÓN PASO 3 ===');
-    console.log('Formulario válido:', this.formulario.valid);
-    console.log('Valores del formulario:', this.formulario.value);
-    
-    if (this.formulario.valid) {
-      console.log('✅ Paso 3 VÁLIDO - Finalizando...');
-      const datosFormulario = this.formulario.value;
-      
-      // Solo emitir formularioCompletado, el stepper se encargará de finalizar
-      this.formularioCompletado.emit(datosFormulario);
-    } else {
-      console.error('❌ Paso 3 INVÁLIDO - Campos con errores:');
-      this.marcarCamposInvalidos();
-      this.mostrarCamposInvalidos();
-    }
-  }
-
-  private marcarCamposInvalidos() {
-    Object.keys(this.formulario.controls).forEach(key => {
-      const control = this.formulario.get(key);
-      control?.markAsTouched();
-      control?.markAsDirty();
-    });
-  }
-
-  private mostrarCamposInvalidos() {
-    const camposInvalidos: string[] = [];
-    Object.keys(this.formulario.controls).forEach(key => {
-      const control = this.formulario.get(key);
-      if (control?.invalid) {
-        console.error(`  ❌ ${key}:`, {
-          value: control.value,
-          errors: control.errors,
-          touched: control.touched,
-          dirty: control.dirty
-        });
-        camposInvalidos.push(key);
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      if (!this.pdfSeleccionado) {
+        this.pdfError = 'Selecciona un PDF para continuar';
       }
-    });
-    
-    if (camposInvalidos.length > 0) {
-      alert(`⚠️ PASO 3 - Faltan los siguientes campos:\n\n${camposInvalidos.join('\n')}`);
+      return;
     }
+
+    const datosFormulario = {
+      documento_pdf: this.pdfSeleccionado,
+      campos_pospuestos: this.camposDocumentosPendientes
+    };
+
+    this.formularioCompletado.emit(datosFormulario);
   }
 
   goBack() {
     this.pasoAnterior.emit();
-  }
-
-  // Getters para errores
-  get tipoDocumentoError(): string | null {
-    const control = this.formulario.get('tipo_documento');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-    }
-    return null;
-  }
-
-  get expedienteFisicoDigitalError(): string | null {
-    const control = this.formulario.get('expediente_fisico_digital');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-    }
-    return null;
   }
 }

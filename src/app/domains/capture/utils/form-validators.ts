@@ -6,17 +6,17 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export class ExpedienteValidators {
   
   /**
-   * Validar formato de expediente: Exp.001, Exp.002, etc.
-   * Patrón: Exp. seguido de 3 dígitos
+   * Validar formato de expediente: Exp.001-2025, Exp.002-2025, etc.
+   * Patrón: Exp. seguido de 3 dígitos, guión y año de 4 dígitos
    */
   static expedienteFormat(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
       
-      const pattern = /^Exp\.\d{3}$/i;
+      const pattern = /^Exp\.\d{3}-\d{4}$/i;
       return pattern.test(control.value) ? null : { 
         expedienteFormat: { 
-          message: 'Formato: Exp.XXX (Ejemplo: Exp.001)' 
+          message: 'Formato: Exp.XXX-YYYY (Ejemplo: Exp.001-2025)' 
         } 
       };
     };
