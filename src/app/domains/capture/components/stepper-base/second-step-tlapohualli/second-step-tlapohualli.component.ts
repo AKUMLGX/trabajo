@@ -109,14 +109,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     { value: 'CANCELADO', label: 'Cancelado' }
   ];
 
-  opcionesUbicacion: SelectOption[] = [
-    { value: 'CARPETA_GENERAL_I', label: 'Carpeta General I' },
-    { value: 'CARPETA_GENERAL_II', label: 'Carpeta General II' },
-    { value: 'CARPETA_GENERAL_III', label: 'Carpeta General III' },
-    { value: 'CARPETA_GENERAL_IV', label: 'Carpeta General IV' },
-    { value: 'CARPETA_GENERAL_V', label: 'Carpeta General V' },
-    { value: 'CARPETA_INDIVIDUAL', label: 'Carpeta Individual' }
-  ];
 
   pdfSeleccionado: File | null = null;
   pdfNombreMostrado = '';
@@ -145,7 +137,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
       responsable: ['', [Validators.required, Validators.maxLength(100)]],
       fecha_asignacion: [hoy, Validators.required], // HOY por defecto
       estatus: ['PENDIENTE', Validators.required], // PENDIENTE por defecto
-      ubicacion: ['', Validators.maxLength(50)],
       documento_pdf: [null, Validators.required]
     });
   }
@@ -364,14 +355,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     const control = this.formulario.get('estatus');
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Obligatorio';
-    }
-    return null;
-  }
-
-  get ubicacionError(): string | null {
-    const control = this.formulario.get('ubicacion');
-    if (control?.touched && control?.errors) {
-      if (control.errors['maxlength']) return 'Máximo 50 caracteres';
     }
     return null;
   }
