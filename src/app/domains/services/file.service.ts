@@ -26,8 +26,8 @@ export class FileService {
       .subscribe({
         next: (data) => {
           console.log('✅ [FileService] PDF recibido, tamaño:', data.length, 'caracteres');
-        this.pdf = data;
-        this.pdfUpdated.emit(this.pdf);
+          this.pdf = data;
+          this.pdfUpdated.emit(this.pdf);
         },
         error: (error) => {
           console.error('❌ [FileService] Error al obtener PDF:', error);

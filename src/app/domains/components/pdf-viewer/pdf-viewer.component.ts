@@ -65,15 +65,15 @@ export class PdfViewerComponent implements OnInit {
           URL.revokeObjectURL(this.pdfUrl);
         }
         
-      const byteCharacters = atob(file);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/pdf' });
-      var blobURL = URL.createObjectURL(blob);
-      this.pdfUrl = blobURL;
+        const byteCharacters = atob(file);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        var blobURL = URL.createObjectURL(blob);
+        this.pdfUrl = blobURL;
         this.mostrarTablaPDF = true; // Asegurar que se muestre el PDF
         console.log('✅ [PdfViewerComponent] PDF procesado correctamente');
         console.log('   - pdfUrl:', this.pdfUrl);

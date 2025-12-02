@@ -85,14 +85,14 @@
                             <app-custom-form-field
                                 label="Número de Oficio"
                                 [required]="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'"
-                            placeholder="199 06 02 00 00 2025-01"
-                            [errorMessage]="oficioError"
-                            formControlName="oficio"
-                            [appKeyboardNavigation]="true"
-                            [actionOnCtrlEnter]="abrirModalBusqueda.bind(this)"
-                            [skipOnEnter]="true">
-                        </app-custom-form-field>
-                    </div>
+                                placeholder="199 06 02 00 00 2025-01"
+                                [errorMessage]="oficioError"
+                                formControlName="oficio"
+                                [appKeyboardNavigation]="true"
+                                [actionOnCtrlEnter]="abrirModalBusqueda.bind(this)"
+                                [skipOnEnter]="true">
+                            </app-custom-form-field>
+                        </div>
                         
                         <!-- Sugerencia contextual (siempre visible) -->
                         <p class="text-xs text-gray-500 mt-1 ml-1" *ngIf="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'">
@@ -295,13 +295,13 @@
 
                     <!-- Identificador Adicional (máximo 10 caracteres) -->
                     <div class="mb-4" *ngIf="formulario.get('remitente_general')?.value">
-                    <app-custom-form-field
+                        <app-custom-form-field
                             label="Identificador del Remitente"
                             placeholder="Máximo 10 caracteres"
                             [errorMessage]="remitenteIdentificadorError"
                             formControlName="remitente_identificador"
                             [maxlength]="10">
-                    </app-custom-form-field>
+                        </app-custom-form-field>
                         <p class="text-xs text-gray-500 mt-1 ml-1">
                             Opcional: Agregue un identificador adicional (máximo 10 caracteres)
                         </p>
@@ -317,7 +317,7 @@
                             </svg>
                         </div>
                         <div class="flex-1">
-                        <h3 class="text-base font-semibold text-gray-800">Plazo de Atención</h3>
+                            <h3 class="text-base font-semibold text-gray-800">Plazo de Atención</h3>
                         </div>
                     </div>
 
@@ -425,14 +425,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Campos de Plazo de Atención (solo si SÍ tiene plazo) -->
                     <div *ngIf="formulario.get('tiene_plazo_atencion')?.value === 'si'" class="mt-4">
-                    <!-- Unidad de Tiempo (PRIMERO) -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Unidad de Tiempo <span class="text-red-500">*</span>
-                        </label>
+                        <!-- Unidad de Tiempo (PRIMERO) -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Unidad de Tiempo <span class="text-red-500">*</span>
+                            </label>
                         <div class="grid grid-cols-3 gap-2">
                             <label class="relative flex items-center justify-center px-4 py-3 border-2 rounded-lg cursor-pointer transition-all"
                                    [class.border-blue-600]="formulario.get('plazo_unidad')?.value === 'dias'"
@@ -479,10 +479,10 @@
                                 </span>
                             </label>
                         </div>
-                    </div>
+                        </div>
 
-                    <!-- Campos de Días y Horas (según unidad seleccionada) -->
-                    <div class="mb-4 space-y-3">
+                        <!-- Campos de Días y Horas (según unidad seleccionada) -->
+                        <div class="mb-4 space-y-3">
                         <!-- Días (visible solo si es 'dias' o 'ambos') -->
                         <div *ngIf="formulario.get('plazo_unidad')?.value === 'dias' || formulario.get('plazo_unidad')?.value === 'ambos'">
                             <app-custom-form-field
@@ -520,21 +520,21 @@
                                 = {{ (formulario.get('plazo_dias')?.value * 24) + formulario.get('plazo_horas')?.value }} horas totales
                             </p>
                         </div>
-                    </div>
+                        </div>
 
-                    <!-- Checkbox Urgente -->
-                    <div class="flex items-center p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" 
-                                   formControlName="es_urgente"
-                                   class="w-5 h-5 text-red-600 border-red-300 rounded focus:ring-red-500 cursor-pointer">
-                            <span class="ml-3 text-sm font-semibold text-red-700 flex items-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                </svg>
-                                Marcar como URGENTE
-                            </span>
-                        </label>
+                        <!-- Checkbox Urgente -->
+                        <div class="flex items-center p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" 
+                                       formControlName="es_urgente"
+                                       class="w-5 h-5 text-red-600 border-red-300 rounded focus:ring-red-500 cursor-pointer">
+                                <span class="ml-3 text-sm font-semibold text-red-700 flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                    Marcar como URGENTE
+                                </span>
+                            </label>
                         </div>
                     </div>
                 </div>

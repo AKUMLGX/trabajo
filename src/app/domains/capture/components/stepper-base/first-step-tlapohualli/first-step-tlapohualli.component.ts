@@ -154,9 +154,9 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       // OFICIO: Campo más importante (clave única)
       // Validación de duplicados se hace al hacer submit
       // Sin validación de formato - acepta cualquier string
-      // Validators.required se aplicará condicionalmente según tipo_medio_recepcion
       oficio: ['', 
         [
+          Validators.required,
           Validators.maxLength(100)
         ]
       ],
@@ -207,21 +207,6 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Aplicar validación inicial del campo oficio según el tipo de medio de recepción
-    const tipoMedioInicial = this.formulario.get('tipo_medio_recepcion')?.value;
-    const oficioControl = this.formulario.get('oficio');
-    if (tipoMedioInicial === 'REQUERIMIENTO_VERBAL') {
-      // Si ya está seleccionado REQUERIMIENTO_VERBAL, aplicar validación desde el inicio
-      oficioControl?.disable();
-      oficioControl?.setValue('');
-      oficioControl?.setValidators([Validators.maxLength(100)]);
-      oficioControl?.updateValueAndValidity({ emitEvent: false });
-    } else if (tipoMedioInicial) {
-      // Si hay otro tipo seleccionado, aplicar validación requerida
-      oficioControl?.setValidators([Validators.required, Validators.maxLength(100)]);
-      oficioControl?.updateValueAndValidity({ emitEvent: false });
-    }
-
     // Revalidar fecha_recibido cuando cambia fecha_documento
     this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
       this.formulario.get('fecha_recibido')?.updateValueAndValidity();
@@ -293,15 +278,15 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
           // Deshabilitar y limpiar el campo oficio
           oficioControl?.disable();
           oficioControl?.setValue('');
-          // Remover validación requerida, mantener maxLength
-          oficioControl?.setValidators([Validators.maxLength(100)]);
+          // Remover validación requerida
+          oficioControl?.clearValidators();
           oficioControl?.updateValueAndValidity({ emitEvent: false });
           this.logger.debug('Campo oficio deshabilitado por Requerimiento verbal');
         } else {
           // Habilitar el campo oficio para otros tipos
           oficioControl?.enable();
-          // Restaurar validación requerida y maxLength
-          oficioControl?.setValidators([Validators.required, Validators.maxLength(100)]);
+          // Restaurar validación requerida
+          oficioControl?.setValidators([Validators.required]);
           oficioControl?.updateValueAndValidity({ emitEvent: false });
           this.logger.debug('Campo oficio habilitado');
         }
@@ -774,11 +759,11 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     }
 
     // Construir objeto completo incluyendo campos deshabilitados
-        const datosFormulario = {
-          ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
+    const datosFormulario = {
+      ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
       remitente_area: remitenteCompleto, // Reemplazar con el valor combinado
-          plazo_vencimiento_prioridad: this.construirPlazo()
-        };
+      plazo_vencimiento_prioridad: this.construirPlazo()
+    };
 
     this.logger.debug('Datos Paso 1 preparados para envío', {
       remitente_general: remitenteGeneral,
@@ -787,16 +772,16 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       remitente_area_final: remitenteCompleto
     });
 
-        // Guardar valores en historial para autocompletado futuro
+    // Guardar valores en historial para autocompletado futuro
     if (remitenteCompleto) {
       this.formHelper.guardarEnHistorial('remitente_area', remitenteCompleto);
-        }
+    }
 
-        // Limpiar borrador al completar
-        this.formHelper.limpiarBorrador(1);
+    // Limpiar borrador al completar
+    this.formHelper.limpiarBorrador(1);
 
-        // Solo emitir formularioCompletado, el stepper se encargará de avanzar
-        this.formularioCompletado.emit(datosFormulario);
+    // Solo emitir formularioCompletado, el stepper se encargará de avanzar
+    this.formularioCompletado.emit(datosFormulario);
   }
 
   // Construir objeto de plazo con toda la información
@@ -961,12 +946,6 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
 
   get oficioError(): string | null {
     const control = this.formulario.get('oficio');
-    const tipoMedio = this.formulario.get('tipo_medio_recepcion')?.value;
-    
-    // Si es REQUERIMIENTO_VERBAL, no mostrar errores de validación
-    if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
-      return null;
-    }
     
     // Si hay error de duplicado (desde onSubmit)
     if (this.errorOficioDuplicado) {

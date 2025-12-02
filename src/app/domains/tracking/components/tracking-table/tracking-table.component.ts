@@ -97,7 +97,7 @@ export class TrackingTableComponent implements OnInit {
   // Expedientes Tlapohualli
   public expedientesTlapohualli: ExpedienteTlapohualli[] = [];
   public pagesExpedientes: ExpedienteTlapohualli[][] = [];
-
+  
   constructor(
     private asuntoService: AsuntoService,
     private expedienteService: ExpedienteTlapohualliService,
