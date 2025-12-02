@@ -20,11 +20,21 @@ export class FileService {
       folio: folio,
       file_name: fileName,
     };
+    console.log('📄 [FileService] Solicitando PDF:', { folio, fileName, endpoint: environment.baseUrl + environment.getPdfEndpoint });
     this.httpClient
       .get(environment.baseUrl + environment.getPdfEndpoint, { params: params, responseType: 'text' })
-      .subscribe((data) => {
+      .subscribe({
+        next: (data) => {
+          console.log('✅ [FileService] PDF recibido, tamaño:', data.length, 'caracteres');
         this.pdf = data;
         this.pdfUpdated.emit(this.pdf);
+        },
+        error: (error) => {
+          console.error('❌ [FileService] Error al obtener PDF:', error);
+          console.error('   - Status:', error.status);
+          console.error('   - Message:', error.message);
+          console.error('   - Error completo:', error);
+        }
       });
   }
  updatePdfFileBandejaAtencion(folio: string, fileName: string): void {

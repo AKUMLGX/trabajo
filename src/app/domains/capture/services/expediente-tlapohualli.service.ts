@@ -90,6 +90,21 @@ export class ExpedienteTlapohualliService {
     if (filtros.woos) params.woos = filtros.woos;
     
     return this.http.get<ExpedienteTlapohualli[]>(url, { params, withCredentials: true }).pipe(
+      map(expedientes => {
+        console.log('📥 [ExpedienteService] Expedientes recibidos del backend:', expedientes);
+        // Debug: Verificar documento_pdf_nombre en cada expediente
+        expedientes.forEach((exp, index) => {
+          console.log(`📄 [ExpedienteService] Expediente ${index + 1}:`, {
+            id: exp.id_expediente,
+            expediente: exp.expediente,
+            oficio: exp.oficio,
+            documento_pdf_nombre: exp.documento_pdf_nombre,
+            tipo: typeof exp.documento_pdf_nombre,
+            tienePdf: !!(exp.documento_pdf_nombre && exp.documento_pdf_nombre.trim && exp.documento_pdf_nombre.trim() !== '')
+          });
+        });
+        return expedientes;
+      }),
       catchError(error => {
         this.logger.error('Error al consultar expedientes:', error);
         return of([]);

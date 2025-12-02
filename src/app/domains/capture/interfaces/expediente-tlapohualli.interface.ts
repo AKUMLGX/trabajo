@@ -41,6 +41,7 @@ export interface ExpedienteTlapohualli {
   
   // Documentos y respuestas
   tipo_documento?: string;
+  documento_pdf_nombre?: string | null; // Nombre del PDF principal del expediente
   anexos?: string | null; // Lista de archivos separados por comas
   acuse_fisico_digital?: string | null; // Ej: "RRI-2501-001"
   expediente_fisico_digital?: string; // "SI" o "NO" del backend

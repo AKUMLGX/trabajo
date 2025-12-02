@@ -1,0 +1,267 @@
+<div class="expediente-detalle-modal">
+  <!-- Header del Modal -->
+  <div class="modal-header bg-wine text-white p-4 flex justify-between items-center">
+    <h2 class="text-xl font-bold">Detalle del Expediente</h2>
+    <div class="flex items-center gap-2">
+      <button *ngIf="tienePdf() && !mostrarPdf" mat-button (click)="verPdf()" class="text-white border border-white/30 hover:bg-white/10">
+        <mat-icon>picture_as_pdf</mat-icon>
+        Ver PDF
+      </button>
+      <button mat-icon-button (click)="cerrar()" class="text-white">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Visualizador de PDF -->
+  <div *ngIf="mostrarPdf" class="pdf-viewer-container bg-gray-100 p-4">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-wine">Visualizador de PDF</h3>
+      <button mat-button (click)="cerrarPdf()" class="bg-wine text-white">
+        <mat-icon>close</mat-icon>
+        Cerrar PDF
+      </button>
+    </div>
+    <div class="pdf-container bg-white" style="height: 70vh; overflow: auto;">
+      <pdf-viewer 
+        [src]="pdfUrl" 
+        [render-text]="true" 
+        [show-all]="true"
+        style="width: 100%; height: 100%;">
+      </pdf-viewer>
+    </div>
+  </div>
+
+  <!-- Contenido del Modal -->
+  <div class="modal-content p-6 max-h-[80vh] overflow-y-auto" [class.hidden]="mostrarPdf">
+    
+    <!-- Sección 1: Información Básica -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-wine mb-4 border-b-2 border-wine pb-2">
+        <mat-icon class="align-middle mr-2">info</mat-icon>
+        Información Básica
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Expediente:</label>
+          <p class="text-base text-gray-800 font-mono">{{ expediente.expediente || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Oficio:</label>
+          <p class="text-base text-gray-800 font-mono">{{ expediente.oficio || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Tipo de Medio de Recepción:</label>
+          <p class="text-base text-gray-800">{{ formatearTipoMedioRecepcion(expediente.tipo_medio_recepcion) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Número Entrada Central:</label>
+          <p class="text-base text-gray-800">{{ expediente.numero_entrada_central || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Remitente (Área):</label>
+          <p class="text-base text-gray-800">{{ expediente.remitente_area || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Referencia/Asunto:</label>
+          <p class="text-base text-gray-800">{{ expediente.referencia_asunto || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 2: Fechas y Plazos -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-wine mb-4 border-b-2 border-wine pb-2">
+        <mat-icon class="align-middle mr-2">event</mat-icon>
+        Fechas y Plazos
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Fecha Documento:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_documento) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Fecha Recibido:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_recibido) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Plazo:</label>
+          <p class="text-base text-gray-800">
+            {{ expediente.plazo_valor || 'N/A' }} 
+            {{ formatearPlazoUnidad(expediente.plazo_unidad) }}
+            <span *ngIf="expediente.plazo_es_urgente" class="ml-2 text-red-600 font-semibold">(URGENTE)</span>
+          </p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Fecha Vencimiento:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_vencimiento) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Días de Retraso:</label>
+          <p class="text-base" [ngClass]="getClaseDiasRetraso(expediente.dias_retraso)">
+            {{ getTextoDiasRetraso(expediente.dias_retraso) }}
+          </p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Fecha Notificación:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_notificacion) }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 3: Regla de 35 Días -->
+    <div class="mb-6" *ngIf="expediente.tiene_fecha_atencion_inicial || expediente.fecha_estimada_atencion || expediente.fecha_atencion_realizada">
+      <h3 class="text-lg font-semibold text-wine mb-4 border-b-2 border-wine pb-2">
+        <mat-icon class="align-middle mr-2">schedule</mat-icon>
+        Regla de 35 Días de Atención
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Tiene Fecha de Atención Inicial:</label>
+          <p class="text-base text-gray-800">{{ expediente.tiene_fecha_atencion_inicial ? 'Sí' : 'No' }}</p>
+        </div>
+        <div *ngIf="expediente.fecha_atencion_inicial">
+          <label class="text-sm font-semibold text-gray-600">Fecha Atención Inicial:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_atencion_inicial) }}</p>
+        </div>
+        <div *ngIf="expediente.fecha_estimada_atencion">
+          <label class="text-sm font-semibold text-gray-600">Fecha Estimada de Atención (72 hrs):</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_estimada_atencion) }}</p>
+        </div>
+        <div *ngIf="expediente.fecha_atencion_realizada">
+          <label class="text-sm font-semibold text-gray-600">Fecha Atención Realizada:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_atencion_realizada) }}</p>
+        </div>
+        <div *ngIf="expediente.fecha_vencimiento_35_dias">
+          <label class="text-sm font-semibold text-gray-600">Fecha Vencimiento 35 Días:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_vencimiento_35_dias) }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 4: Seguimiento y Asignación -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-wine mb-4 border-b-2 border-wine pb-2">
+        <mat-icon class="align-middle mr-2">assignment</mat-icon>
+        Seguimiento y Asignación
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Responsable:</label>
+          <p class="text-base text-gray-800">{{ expediente.responsable || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Fecha Asignación:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_asignacion) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Sistema Aplicativo:</label>
+          <p class="text-base text-gray-800">{{ expediente.sistema_aplicativo || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">WOOS:</label>
+          <p class="text-base text-gray-800 font-mono">{{ expediente.woos || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Estatus:</label>
+          <p class="text-base text-gray-800">{{ formatearEstatus(expediente.estatus) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Ubicación:</label>
+          <p class="text-base text-gray-800">{{ formatearUbicacion(expediente.ubicacion) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Oficios Comisión:</label>
+          <p class="text-base text-gray-800">{{ expediente.oficios_comision || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Tipo de Respuesta:</label>
+          <p class="text-base text-gray-800">{{ formatearTipoRespuesta(expediente.tipo_respuesta) }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 5: Documentos -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-wine mb-4 border-b-2 border-wine pb-2">
+        <mat-icon class="align-middle mr-2">description</mat-icon>
+        Documentos
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Tipo de Documento:</label>
+          <p class="text-base text-gray-800">{{ formatearTipoDocumento(expediente.tipo_documento) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Documento PDF Principal:</label>
+          <p class="text-base text-gray-800 font-mono">{{ expediente.documento_pdf_nombre || 'N/A' }}</p>
+          <div *ngIf="tienePdf()" class="mt-2 flex gap-2">
+            <button mat-button (click)="verPdf()" class="bg-wine text-white">
+              <mat-icon>remove_red_eye</mat-icon>
+              Ver PDF
+            </button>
+            <button mat-button (click)="descargarPdf()" class="bg-green-600 text-white">
+              <mat-icon>download</mat-icon>
+              Descargar
+            </button>
+            <button mat-button (click)="imprimirPdf()" class="bg-blue-600 text-white">
+              <mat-icon>print</mat-icon>
+              Imprimir
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Anexos:</label>
+          <p class="text-base text-gray-800">{{ expediente.anexos || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Acuse Físico/Digital:</label>
+          <p class="text-base text-gray-800 font-mono">{{ expediente.acuse_fisico_digital || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Expediente Físico/Digital:</label>
+          <p class="text-base text-gray-800">{{ formatearExpedienteFisicoDigital(expediente.expediente_fisico_digital) }}</p>
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-sm font-semibold text-gray-600">Comentarios Omega:</label>
+          <p class="text-base text-gray-800 whitespace-pre-wrap">{{ expediente.comentarios_omega || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 6: Control -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-wine mb-4 border-b-2 border-wine pb-2">
+        <mat-icon class="align-middle mr-2">settings</mat-icon>
+        Información de Control
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Fecha Creación:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_creacion) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Fecha Actualización:</label>
+          <p class="text-base text-gray-800">{{ formatearFecha(expediente.fecha_actualizacion) }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Usuario Creación:</label>
+          <p class="text-base text-gray-800">{{ expediente.usuario_creacion || 'N/A' }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-gray-600">Usuario Actualización:</label>
+          <p class="text-base text-gray-800">{{ expediente.usuario_actualizacion || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer del Modal -->
+  <div class="modal-footer bg-gray-100 p-4 flex justify-end">
+    <button mat-button (click)="cerrar()" class="bg-wine text-white px-6 py-2 rounded">
+      Cerrar
+    </button>
+  </div>
+</div>
+

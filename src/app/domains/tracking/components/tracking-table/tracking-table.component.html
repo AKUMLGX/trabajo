@@ -32,9 +32,18 @@
               @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
               <tr>
                 <td class="px-2 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
-                  <button mat-button class="text-wine leading-5" (click)="verDetalleExpediente(expediente)">
-                    <mat-icon>remove_red_eye</mat-icon>
-                  </button>
+                  <div class="flex gap-1 justify-end">
+                    <!-- Botón Ver Detalle -->
+                    <button mat-button class="text-wine leading-5" (click)="verDetalleExpediente(expediente)" title="Ver detalle">
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                    <!-- Botón Ver PDF (si existe) -->
+                    @if (expediente.documento_pdf_nombre && expediente.documento_pdf_nombre !== null && expediente.documento_pdf_nombre !== '' && expediente.documento_pdf_nombre.trim() !== '' && expediente.oficio) {
+                    <button mat-button class="text-wine leading-5" (click)="verPdfExpediente(expediente)" title="Ver PDF">
+                      <mat-icon>picture_as_pdf</mat-icon>
+                    </button>
+                    }
+                  </div>
                 </td>
                 <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
                   <div class="text-sm leading-5 text-wine text-left">{{ expediente.expediente || '-' }}</div>

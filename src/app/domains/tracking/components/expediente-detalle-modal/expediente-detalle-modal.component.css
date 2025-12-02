@@ -1,0 +1,57 @@
+.expediente-detalle-modal {
+  width: 90vw;
+  max-width: 1000px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal-header {
+  flex-shrink: 0;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  flex-shrink: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Estilos para las secciones */
+h3 {
+  color: #8B1538; /* Color wine */
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+p {
+  word-break: break-word;
+}
+
+/* Scrollbar personalizado */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #8B1538;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #6b1029;
+}
+

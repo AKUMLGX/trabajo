@@ -154,9 +154,9 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       // OFICIO: Campo más importante (clave única)
       // Validación de duplicados se hace al hacer submit
       // Sin validación de formato - acepta cualquier string
+      // Validators.required se aplicará condicionalmente según tipo_medio_recepcion
       oficio: ['', 
         [
-          Validators.required,
           Validators.maxLength(100)
         ]
       ],
@@ -197,14 +197,31 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
         Validators.min(0),
         Validators.max(999)
       ]],
+      // ¿Se cuenta con un plazo de atención?
+      tiene_plazo_atencion: ['', Validators.required],
       // Unidad de tiempo: dias, horas, ambos
-      plazo_unidad: ['dias', Validators.required],
+      plazo_unidad: ['dias'],
       // Checkbox urgente
       es_urgente: [false]
     });
   }
 
   ngOnInit() {
+    // Aplicar validación inicial del campo oficio según el tipo de medio de recepción
+    const tipoMedioInicial = this.formulario.get('tipo_medio_recepcion')?.value;
+    const oficioControl = this.formulario.get('oficio');
+    if (tipoMedioInicial === 'REQUERIMIENTO_VERBAL') {
+      // Si ya está seleccionado REQUERIMIENTO_VERBAL, aplicar validación desde el inicio
+      oficioControl?.disable();
+      oficioControl?.setValue('');
+      oficioControl?.setValidators([Validators.maxLength(100)]);
+      oficioControl?.updateValueAndValidity({ emitEvent: false });
+    } else if (tipoMedioInicial) {
+      // Si hay otro tipo seleccionado, aplicar validación requerida
+      oficioControl?.setValidators([Validators.required, Validators.maxLength(100)]);
+      oficioControl?.updateValueAndValidity({ emitEvent: false });
+    }
+
     // Revalidar fecha_recibido cuando cambia fecha_documento
     this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
       this.formulario.get('fecha_recibido')?.updateValueAndValidity();
@@ -215,10 +232,43 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       this.actualizarValidadoresPlazo(unidad);
     });
 
+    // Manejar cambios en "tiene_plazo_atencion"
+    this.formulario.get('tiene_plazo_atencion')?.valueChanges.subscribe((tienePlazo) => {
+      const plazoUnidadControl = this.formulario.get('plazo_unidad');
+      const plazoDiasControl = this.formulario.get('plazo_dias');
+      const plazoHorasControl = this.formulario.get('plazo_horas');
+      
+      if (tienePlazo === 'si') {
+        // Si tiene plazo, hacer obligatorios los campos de plazo
+        plazoUnidadControl?.setValidators([Validators.required]);
+        plazoUnidadControl?.updateValueAndValidity({ emitEvent: false });
+        // Actualizar validadores según la unidad seleccionada
+        const unidad = plazoUnidadControl?.value || 'dias';
+        this.actualizarValidadoresPlazo(unidad);
+      } else if (tienePlazo === 'no') {
+        // Si no tiene plazo, limpiar y deshabilitar campos
+        plazoUnidadControl?.clearValidators();
+        plazoUnidadControl?.setValue('dias', { emitEvent: false });
+        plazoDiasControl?.clearValidators();
+        plazoDiasControl?.setValue('', { emitEvent: false });
+        plazoHorasControl?.clearValidators();
+        plazoHorasControl?.setValue('', { emitEvent: false });
+        plazoUnidadControl?.updateValueAndValidity({ emitEvent: false });
+        plazoDiasControl?.updateValueAndValidity({ emitEvent: false });
+        plazoHorasControl?.updateValueAndValidity({ emitEvent: false });
+      }
+    });
+
     // Limpiar error de duplicado cuando el usuario modifica el oficio
-    this.formulario.get('oficio')?.valueChanges.subscribe(() => {
+    // Y verificar si el oficio ya tiene un expediente asignado
+    this.formulario.get('oficio')?.valueChanges.subscribe((valor) => {
       this.errorOficioDuplicado = false;
       this.idOficioDuplicado = null;
+      
+      // Si hay un oficio, verificar si ya tiene expediente y cargarlo
+      if (valor && valor.trim()) {
+        this.verificarYActualizarExpedientePorOficio(valor.trim());
+      }
     });
 
     // Detectar y normalizar caracteres problemáticos en el oficio
@@ -232,9 +282,29 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     });
 
     // Pre-llenar valores cuando cambia el tipo de medio de recepción
+    // Y deshabilitar/habilitar el campo oficio según el tipo
     this.formulario.get('tipo_medio_recepcion')?.valueChanges.subscribe((tipo) => {
       if (tipo) {
         this.aplicarValoresInicialesPorTipo(tipo);
+        
+        // Si es "Requerimiento verbal (petición interna)", deshabilitar el campo oficio
+        const oficioControl = this.formulario.get('oficio');
+        if (tipo === 'REQUERIMIENTO_VERBAL') {
+          // Deshabilitar y limpiar el campo oficio
+          oficioControl?.disable();
+          oficioControl?.setValue('');
+          // Remover validación requerida, mantener maxLength
+          oficioControl?.setValidators([Validators.maxLength(100)]);
+          oficioControl?.updateValueAndValidity({ emitEvent: false });
+          this.logger.debug('Campo oficio deshabilitado por Requerimiento verbal');
+        } else {
+          // Habilitar el campo oficio para otros tipos
+          oficioControl?.enable();
+          // Restaurar validación requerida y maxLength
+          oficioControl?.setValidators([Validators.required, Validators.maxLength(100)]);
+          oficioControl?.updateValueAndValidity({ emitEvent: false });
+          this.logger.debug('Campo oficio habilitado');
+        }
       }
     });
 
@@ -352,8 +422,11 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   }
 
   // Cargar y APLICAR AUTOMÁTICAMENTE el siguiente expediente
+  // Si hay un oficio, verifica si ya tiene expediente asignado
   cargarYAplicarSiguienteExpediente() {
-    this.autocompleteService.obtenerSiguienteExpediente().subscribe({
+    const oficioActual = this.formulario.get('oficio')?.value;
+    
+    this.autocompleteService.obtenerSiguienteExpediente(oficioActual).subscribe({
       next: (siguiente) => {
         this.siguienteExpediente = siguiente;
         // AUTO-APLICAR el expediente y BLOQUEAR el campo
@@ -362,11 +435,36 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
         });
         this.formulario.get('expediente')?.disable();
         this.logger.debug('Expediente auto-cargado y bloqueado:', siguiente);
+        
+        // Si el oficio ya tenía expediente, mostrar mensaje informativo
+        if (oficioActual && oficioActual.trim()) {
+          this.logger.info('Expediente asignado al oficio:', oficioActual, '->', siguiente);
+        }
       },
       error: (err) => {
         this.logger.error('Error al obtener siguiente expediente:', err);
         // Si falla, dejar el campo editable
         this.formulario.get('expediente')?.enable();
+      }
+    });
+  }
+
+  /**
+   * Verificar si el oficio ya tiene un expediente asignado y actualizarlo
+   */
+  verificarYActualizarExpedientePorOficio(oficio: string): void {
+    this.autocompleteService.obtenerExpedientePorOficio(oficio).subscribe({
+      next: (expedienteExistente) => {
+        this.logger.info('Oficio ya tiene expediente asignado:', oficio, '->', expedienteExistente);
+        this.siguienteExpediente = expedienteExistente;
+        this.formulario.patchValue({
+          expediente: expedienteExistente
+        });
+        this.formulario.get('expediente')?.disable();
+      },
+      error: (err) => {
+        // Si no existe, no hacer nada (se generará uno nuevo al guardar)
+        this.logger.debug('Oficio nuevo, se generará expediente nuevo al guardar');
       }
     });
   }
@@ -584,11 +682,29 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    // Si el tipo es REQUERIMIENTO_VERBAL, habilitar temporalmente el campo oficio para obtener su valor (vacío)
+    const tipoMedio = this.formulario.get('tipo_medio_recepcion')?.value;
+    const oficioControl = this.formulario.get('oficio');
+    
+    if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
+      // Habilitar temporalmente para obtener el valor (será vacío)
+      oficioControl?.enable({ emitEvent: false });
+    }
+    
     // Validación del paso 1
     if (!this.formulario.valid) {
+      // Si es REQUERIMIENTO_VERBAL, deshabilitar nuevamente después de la validación
+      if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
+        oficioControl?.disable({ emitEvent: false });
+      }
       this.marcarCamposInvalidos();
       this.mostrarCamposInvalidos();
       return;
+    }
+    
+    // Si es REQUERIMIENTO_VERBAL, deshabilitar nuevamente antes de continuar
+    if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
+      oficioControl?.disable({ emitEvent: false });
     }
 
     // ⚠️ VALIDACIÓN DE OFICIO TEMPORALMENTE DESHABILITADA
@@ -658,11 +774,11 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     }
 
     // Construir objeto completo incluyendo campos deshabilitados
-    const datosFormulario = {
-      ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
+        const datosFormulario = {
+          ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
       remitente_area: remitenteCompleto, // Reemplazar con el valor combinado
-      plazo_vencimiento_prioridad: this.construirPlazo()
-    };
+          plazo_vencimiento_prioridad: this.construirPlazo()
+        };
 
     this.logger.debug('Datos Paso 1 preparados para envío', {
       remitente_general: remitenteGeneral,
@@ -671,24 +787,35 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       remitente_area_final: remitenteCompleto
     });
 
-    // Guardar valores en historial para autocompletado futuro
+        // Guardar valores en historial para autocompletado futuro
     if (remitenteCompleto) {
       this.formHelper.guardarEnHistorial('remitente_area', remitenteCompleto);
-    }
+        }
 
-    // Limpiar borrador al completar
-    this.formHelper.limpiarBorrador(1);
+        // Limpiar borrador al completar
+        this.formHelper.limpiarBorrador(1);
 
-    // Solo emitir formularioCompletado, el stepper se encargará de avanzar
-    this.formularioCompletado.emit(datosFormulario);
+        // Solo emitir formularioCompletado, el stepper se encargará de avanzar
+        this.formularioCompletado.emit(datosFormulario);
   }
 
   // Construir objeto de plazo con toda la información
   private construirPlazo() {
-    const unidad = this.formulario.get('plazo_unidad')?.value;
+    const tienePlazo = this.formulario.get('tiene_plazo_atencion')?.value;
+    
+    // Si no tiene plazo, retornar valores por defecto
+    if (tienePlazo === 'no') {
+      return {
+        valor: 0,
+        unidad: 'dias',
+        es_urgente: false
+      };
+    }
+    
+    const unidad = this.formulario.get('plazo_unidad')?.value || 'dias';
     const dias = parseInt(this.formulario.get('plazo_dias')?.value || '0');
     const horas = parseInt(this.formulario.get('plazo_horas')?.value || '0');
-    const es_urgente = this.formulario.get('es_urgente')?.value;
+    const es_urgente = this.formulario.get('es_urgente')?.value || false;
 
     let textoCompleto = '';
     let valorTotal = 0;
@@ -834,6 +961,12 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
 
   get oficioError(): string | null {
     const control = this.formulario.get('oficio');
+    const tipoMedio = this.formulario.get('tipo_medio_recepcion')?.value;
+    
+    // Si es REQUERIMIENTO_VERBAL, no mostrar errores de validación
+    if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
+      return null;
+    }
     
     // Si hay error de duplicado (desde onSubmit)
     if (this.errorOficioDuplicado) {
@@ -916,6 +1049,14 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Obligatorio';
       if (control.errors['maxlength']) return 'Máximo 1000 caracteres';
+    }
+    return null;
+  }
+
+  get tienePlazoAtencionError(): string | null {
+    const control = this.formulario.get('tiene_plazo_atencion');
+    if (control?.touched && control?.errors) {
+      if (control.errors['required']) return 'Debe seleccionar una opción';
     }
     return null;
   }

@@ -13,6 +13,8 @@ import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-ta
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
 import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
 import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpedienteDetalleModalComponent } from '../expediente-detalle-modal/expediente-detalle-modal.component';
 
 
 
@@ -95,11 +97,12 @@ export class TrackingTableComponent implements OnInit {
   // Expedientes Tlapohualli
   public expedientesTlapohualli: ExpedienteTlapohualli[] = [];
   public pagesExpedientes: ExpedienteTlapohualli[][] = [];
-  
+
   constructor(
     private asuntoService: AsuntoService,
     private expedienteService: ExpedienteTlapohualliService,
     private fileService: FileService,
+    private dialog: MatDialog
   ) {
     effect(()=>{
       const datos = this.sharedDataService.formData();
@@ -152,6 +155,17 @@ export class TrackingTableComponent implements OnInit {
       console.log('📋 [TrackingTable] Expedientes Tlapohualli recibidos:', expedientes);
       console.log('📋 [TrackingTable] Cantidad de expedientes:', expedientes.length);
       
+      // Debug: Verificar documento_pdf_nombre en cada expediente
+      expedientes.forEach((exp, index) => {
+        console.log(`📄 [TrackingTable] Expediente ${index + 1}:`, {
+          id: exp.id_expediente,
+          expediente: exp.expediente,
+          oficio: exp.oficio,
+          documento_pdf_nombre: exp.documento_pdf_nombre,
+          tienePdf: !!(exp.documento_pdf_nombre && exp.oficio)
+        });
+      });
+      
       this.fileIsOpen = false;
       this.mostrarTabla = true;
       this.visualizarPdf = false;
@@ -173,6 +187,20 @@ export class TrackingTableComponent implements OnInit {
       this.pageSelected = 1;
       
       this.expedientesTlapohualli.forEach((expediente) => {
+        // Debug: Verificar documento_pdf_nombre antes de agregar a la página
+        const tienePdf = expediente.documento_pdf_nombre && 
+                         expediente.documento_pdf_nombre !== null && 
+                         expediente.documento_pdf_nombre !== '' && 
+                         expediente.documento_pdf_nombre.trim() !== '' &&
+                         expediente.oficio;
+        if (tienePdf) {
+          console.log('✅ [TrackingTable] Expediente con PDF encontrado:', {
+            id: expediente.id_expediente,
+            expediente: expediente.expediente,
+            oficio: expediente.oficio,
+            documento_pdf_nombre: expediente.documento_pdf_nombre
+          });
+        }
         page.push(expediente);
         index += 1;
         if (index === this.itemsPerPage) {
@@ -234,8 +262,45 @@ export class TrackingTableComponent implements OnInit {
 
   verDetalleExpediente(expediente: ExpedienteTlapohualli): void {
     console.log('👁️ Ver detalle de expediente:', expediente);
-    // TODO: Implementar vista de detalle o edición del expediente
-    // Por ahora solo logueamos
+    
+    // Abrir modal con el detalle del expediente
+    this.dialog.open(ExpedienteDetalleModalComponent, {
+      width: '90vw',
+      maxWidth: '1000px',
+      maxHeight: '90vh',
+      data: { expediente: expediente },
+      disableClose: false
+    });
+  }
+
+  /**
+   * Ver PDF directamente desde la tabla
+   */
+  verPdfExpediente(expediente: ExpedienteTlapohualli): void {
+    if (!expediente.oficio || !expediente.documento_pdf_nombre) {
+      console.error('❌ No se puede ver el PDF: falta oficio o nombre del archivo');
+      console.error('   Oficio:', expediente.oficio);
+      console.error('   documento_pdf_nombre:', expediente.documento_pdf_nombre);
+      return;
+    }
+
+    console.log('📄 [TrackingTable] Ver PDF del expediente:', {
+      oficio: expediente.oficio,
+      documento_pdf_nombre: expediente.documento_pdf_nombre
+    });
+    
+    // Limpiar espacios y caracteres especiales del nombre del archivo
+    const nombreArchivo = expediente.documento_pdf_nombre.replace(/\s+/g, '_');
+    
+    // Primero mostrar el visualizador y ocultar la tabla
+    this.visualizarPdf = true;
+    this.mostrarTabla = false;
+    this.editar = false;
+    
+    // El componente app-pdf-viewer se suscribe automáticamente a pdfUpdated
+    // Solo necesitamos solicitar el PDF
+    console.log('📄 [TrackingTable] Solicitando PDF al servidor...');
+    this.fileService.updatePdfFile(expediente.oficio, nombreArchivo);
   }
 
   /**

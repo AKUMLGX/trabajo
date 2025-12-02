@@ -84,19 +84,22 @@
                         <div [class.has-problematic-chars]="tieneCaracteresProblematicos">
                             <app-custom-form-field
                                 label="Número de Oficio"
-                                [required]="true"
-                                placeholder="199 06 02 00 00 2025-01"
-                                [errorMessage]="oficioError"
-                                formControlName="oficio"
-                                [appKeyboardNavigation]="true"
-                                [actionOnCtrlEnter]="abrirModalBusqueda.bind(this)"
-                                [skipOnEnter]="true">
-                            </app-custom-form-field>
-                        </div>
+                                [required]="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'"
+                            placeholder="199 06 02 00 00 2025-01"
+                            [errorMessage]="oficioError"
+                            formControlName="oficio"
+                            [appKeyboardNavigation]="true"
+                            [actionOnCtrlEnter]="abrirModalBusqueda.bind(this)"
+                            [skipOnEnter]="true">
+                        </app-custom-form-field>
+                    </div>
                         
                         <!-- Sugerencia contextual (siempre visible) -->
-                        <p class="text-xs text-gray-500 mt-1 ml-1">
+                        <p class="text-xs text-gray-500 mt-1 ml-1" *ngIf="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'">
                             Identificador único del documento
+                        </p>
+                        <p class="text-xs text-amber-600 mt-1 ml-1 font-semibold" *ngIf="formulario.get('tipo_medio_recepcion')?.value === 'REQUERIMIENTO_VERBAL'">
+                            ⚠️ Campo deshabilitado para Requerimiento verbal (petición interna)
                         </p>
                         <p class="text-xs text-blue-600 mt-1 ml-1 flex items-center gap-1">
                             <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -292,13 +295,13 @@
 
                     <!-- Identificador Adicional (máximo 10 caracteres) -->
                     <div class="mb-4" *ngIf="formulario.get('remitente_general')?.value">
-                        <app-custom-form-field
+                    <app-custom-form-field
                             label="Identificador del Remitente"
                             placeholder="Máximo 10 caracteres"
                             [errorMessage]="remitenteIdentificadorError"
                             formControlName="remitente_identificador"
                             [maxlength]="10">
-                        </app-custom-form-field>
+                    </app-custom-form-field>
                         <p class="text-xs text-gray-500 mt-1 ml-1">
                             Opcional: Agregue un identificador adicional (máximo 10 caracteres)
                         </p>
@@ -314,13 +317,117 @@
                             </svg>
                         </div>
                         <div class="flex-1">
-                            <h3 class="text-base font-semibold text-gray-800">Plazo de Atención</h3>
-                            <p class="text-xs text-gray-500 mt-0.5">
-                                Sin fecha de atención: 72 horas para responder • Con atención realizada: 35 días para completar
-                            </p>
+                        <h3 class="text-base font-semibold text-gray-800">Plazo de Atención</h3>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta: ¿Se cuenta con un plazo de atención? -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">
+                            ¿Se cuenta con un plazo de atención? <span class="text-red-500">*</span>
+                        </label>
+                        <p *ngIf="tienePlazoAtencionError" class="text-xs text-red-600 mt-1 ml-1">
+                            {{ tienePlazoAtencionError }}
+                        </p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative flex items-center justify-center px-6 py-4 border-2 rounded-lg cursor-pointer transition-all"
+                                   [class.border-green-600]="formulario.get('tiene_plazo_atencion')?.value === 'si'"
+                                   [class.bg-green-50]="formulario.get('tiene_plazo_atencion')?.value === 'si'"
+                                   [class.border-gray-300]="formulario.get('tiene_plazo_atencion')?.value !== 'si'">
+                                <input type="radio" 
+                                       formControlName="tiene_plazo_atencion" 
+                                       value="si" 
+                                       class="sr-only">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5" 
+                                         [class.text-green-700]="formulario.get('tiene_plazo_atencion')?.value === 'si'"
+                                         [class.text-gray-500]="formulario.get('tiene_plazo_atencion')?.value !== 'si'"
+                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span class="text-sm font-semibold"
+                                          [class.text-green-700]="formulario.get('tiene_plazo_atencion')?.value === 'si'"
+                                          [class.text-gray-700]="formulario.get('tiene_plazo_atencion')?.value !== 'si'">
+                                        Sí
+                                    </span>
+                                </div>
+                            </label>
+
+                            <label class="relative flex items-center justify-center px-6 py-4 border-2 rounded-lg cursor-pointer transition-all"
+                                   [class.border-red-600]="formulario.get('tiene_plazo_atencion')?.value === 'no'"
+                                   [class.bg-red-50]="formulario.get('tiene_plazo_atencion')?.value === 'no'"
+                                   [class.border-gray-300]="formulario.get('tiene_plazo_atencion')?.value !== 'no'">
+                                <input type="radio" 
+                                       formControlName="tiene_plazo_atencion" 
+                                       value="no" 
+                                       class="sr-only">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5" 
+                                         [class.text-red-700]="formulario.get('tiene_plazo_atencion')?.value === 'no'"
+                                         [class.text-gray-500]="formulario.get('tiene_plazo_atencion')?.value !== 'no'"
+                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span class="text-sm font-semibold"
+                                          [class.text-red-700]="formulario.get('tiene_plazo_atencion')?.value === 'no'"
+                                          [class.text-gray-700]="formulario.get('tiene_plazo_atencion')?.value !== 'no'">
+                                        No
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Recuadro Informativo: Regla de Plazo de Atención (solo si NO tiene plazo) -->
+                    <div *ngIf="formulario.get('tiene_plazo_atencion')?.value === 'no'" 
+                         class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-5 shadow-sm">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 mt-0.5">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold text-blue-900 mb-3 flex items-center gap-2">
+                                    <span class="bg-blue-600 text-white px-2 py-1 rounded text-xs">REGLA DE ATENCIÓN</span>
+                                    Procedimiento de Gestión de Plazos
+                                </h4>
+                                <div class="space-y-3 text-sm text-gray-800">
+                                    <div class="flex items-start gap-2">
+                                        <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+                                        <p class="flex-1">
+                                            <span class="font-semibold text-blue-900">Desde la recepción y captura:</span>
+                                            Desde el momento que se recibe cualquier oficio y se termina de capturar, inicia el proceso de atención.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+                                        <p class="flex-1">
+                                            <span class="font-semibold text-blue-900">Asignación a responsable (72 horas):</span>
+                                            Cuando el asunto es asignado a un responsable, este debe gestionar en un plazo máximo de <strong class="text-blue-700">72 horas</strong> la respuesta con fecha de atención estimada.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+                                        <p class="flex-1">
+                                            <span class="font-semibold text-blue-900">Definición de fecha de atención:</span>
+                                            De la fecha de atención estimada, el responsable decide en <strong class="text-blue-700">N días o meses</strong> y elige una fecha específica.
+                                        </p>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <span class="flex-shrink-0 w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">4</span>
+                                        <p class="flex-1">
+                                            <span class="font-semibold text-green-900">Plazo final (35 días hábiles):</span>
+                                            Al elegir la fecha de atención, se cuentan <strong class="text-green-700">35 días hábiles</strong> para atenderlo completamente.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
+                    <!-- Campos de Plazo de Atención (solo si SÍ tiene plazo) -->
+                    <div *ngIf="formulario.get('tiene_plazo_atencion')?.value === 'si'" class="mt-4">
                     <!-- Unidad de Tiempo (PRIMERO) -->
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -428,6 +535,7 @@
                                 Marcar como URGENTE
                             </span>
                         </label>
+                        </div>
                     </div>
                 </div>
 

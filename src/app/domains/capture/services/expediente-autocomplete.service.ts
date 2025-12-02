@@ -28,10 +28,46 @@ export class ExpedienteAutocompleteService {
 
   /**
    * Obtiene el siguiente número de expediente sugerido
-   * Formato: Exp.001, Exp.002, Exp.003...
+   * Formato: Exp.001-YYYY, Exp.002-YYYY, Exp.003-YYYY...
+   * Si se proporciona un oficio, verifica si ya existe y retorna su expediente
    */
-  obtenerSiguienteExpediente(): Observable<string> {
-    // Conectar con el backend
+  obtenerSiguienteExpediente(oficio?: string): Observable<string> {
+    // Si se proporciona un oficio, primero verificar si ya existe
+    if (oficio && oficio.trim()) {
+      return this.obtenerExpedientePorOficio(oficio.trim()).pipe(
+        catchError(() => {
+          // Si no existe, obtener el siguiente expediente nuevo
+          return this.obtenerSiguienteExpedienteNuevo();
+        })
+      );
+    }
+    
+    // Si no hay oficio, obtener el siguiente expediente nuevo
+    return this.obtenerSiguienteExpedienteNuevo();
+  }
+
+  /**
+   * Obtiene el expediente asociado a un oficio (si existe)
+   */
+  obtenerExpedientePorOficio(oficio: string): Observable<string> {
+    const url = `${TLAPOHUALLI_BASE}expedientes/por-oficio/${encodeURIComponent(oficio)}`;
+    return this.http.get<{success: boolean, expediente: string}>(url, { withCredentials: true })
+      .pipe(
+        map(response => {
+          this.logger.debug('Expediente encontrado para oficio:', oficio, response.expediente);
+          return response.expediente;
+        }),
+        catchError(error => {
+          this.logger.debug('No se encontró expediente para oficio:', oficio);
+          throw error; // Propagar el error para que se maneje en obtenerSiguienteExpediente
+        })
+      );
+  }
+
+  /**
+   * Obtiene el siguiente número de expediente nuevo (sin verificar oficio)
+   */
+  private obtenerSiguienteExpedienteNuevo(): Observable<string> {
     return this.http.get<{success: boolean, siguiente: string}>(`${TLAPOHUALLI_BASE}expedientes/siguiente`, { withCredentials: true })
       .pipe(
         map(response => response.siguiente),
