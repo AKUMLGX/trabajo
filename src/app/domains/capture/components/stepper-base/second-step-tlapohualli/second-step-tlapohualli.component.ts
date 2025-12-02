@@ -93,10 +93,11 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
   
   // Opciones para los selects
   opcionesEstatus: SelectOption[] = [
-    { value: 'URGENTE', label: 'Urgente' },
-    { value: 'ALTA', label: 'Alta' },
-    { value: 'MEDIA', label: 'Media' },
-    { value: 'BAJA', label: 'Baja' }
+    { value: 'ASIGNADO', label: 'Asignado' },
+    { value: 'PENDIENTE', label: 'Pendiente' },
+    { value: 'ATENCION_PARCIAL', label: 'Atención parcial' },
+    { value: 'ATENCION_TOTAL', label: 'Atención total' },
+    { value: 'REVISION_LEGAL', label: 'Revisión legal' }
   ];
 
 

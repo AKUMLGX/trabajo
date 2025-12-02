@@ -78,10 +78,11 @@ export class ExpedientesModalComponent {
 
   formatearEstatus(estatus: string): string {
     const estatusMap: { [key: string]: string } = {
-      'EN_TRAMITE': 'En Trámite',
-      'ATENDIDO': 'Atendido',
+      'ASIGNADO': 'Asignado',
       'PENDIENTE': 'Pendiente',
-      'CANCELADO': 'Cancelado'
+      'ATENCION_PARCIAL': 'Atención parcial',
+      'ATENCION_TOTAL': 'Atención total',
+      'REVISION_LEGAL': 'Revisión legal'
     };
     return estatusMap[estatus] || estatus;
   }
