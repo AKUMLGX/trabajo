@@ -33,16 +33,12 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
   camposCompletados = 0;
   camposTotales = 0;
   
-  // Catálogo de responsables frecuentes
-  responsablesComunes: string[] = [
-    'Juan Pérez García',
-    'María López Sánchez',
-    'Carlos Rodríguez Díaz',
-    'Ana Martínez Gómez',
-    'Luis Hernández Torres',
-    'Patricia González Ramírez',
-    'Jorge Sánchez Flores',
-    'Laura Díaz Castro'
+  // Opciones para el dropdown de responsables
+  opcionesResponsables: SelectOption[] = [
+    { value: 'Irma Guerrero', label: 'Irma Guerrero' },
+    { value: 'Karen Vazquez', label: 'Karen Vazquez' },
+    { value: 'Héctor Sanchez', label: 'Héctor Sanchez' },
+    { value: 'Carlos Hernández', label: 'Carlos Hernández' }
   ];
 
   sistemasAplicativos: string[] = [
@@ -88,12 +84,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     'Opinión de Cumplimiento'
   ];
 
-  // Obtener opciones de autocompletado combinando comunes e historial
-  get responsablesConHistorial(): string[] {
-    const historial = this.formHelper.obtenerHistorial('responsable');
-    const todos = [...historial, ...this.responsablesComunes];
-    return Array.from(new Set(todos));
-  }
 
   get sistemasConHistorial(): string[] {
     const historial = this.formHelper.obtenerHistorial('sistema_aplicativo');
@@ -103,10 +93,10 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
   
   // Opciones para los selects
   opcionesEstatus: SelectOption[] = [
-    { value: 'EN_TRAMITE', label: 'En Trámite' },
-    { value: 'ATENDIDO', label: 'Atendido' },
-    { value: 'PENDIENTE', label: 'Pendiente' },
-    { value: 'CANCELADO', label: 'Cancelado' }
+    { value: 'URGENTE', label: 'Urgente' },
+    { value: 'ALTA', label: 'Alta' },
+    { value: 'MEDIA', label: 'Media' },
+    { value: 'BAJA', label: 'Baja' }
   ];
 
 
@@ -136,7 +126,7 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
       sistema_aplicativo: ['', [Validators.required, Validators.maxLength(100)]],
       responsable: ['', [Validators.required, Validators.maxLength(100)]],
       fecha_asignacion: [hoy, Validators.required], // HOY por defecto
-      estatus: ['PENDIENTE', Validators.required], // PENDIENTE por defecto
+      estatus: ['', Validators.required], // Sin valor por defecto
       documento_pdf: [null, Validators.required]
     });
   }
