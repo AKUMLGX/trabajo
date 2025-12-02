@@ -101,10 +101,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
   ];
 
 
-  pdfSeleccionado: File | null = null;
-  pdfNombreMostrado = '';
-  pdfTamanoMostrado = '';
-  pdfError: string | null = null;
 
   readonly camposDocumentosPendientes = [
     'tipo_documento',
@@ -127,63 +123,10 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
       sistema_aplicativo: ['', [Validators.required, Validators.maxLength(100)]],
       responsable: ['', [Validators.required, Validators.maxLength(100)]],
       fecha_asignacion: [hoy, Validators.required], // HOY por defecto
-      estatus: ['', Validators.required], // Sin valor por defecto
-      documento_pdf: [null, Validators.required]
+      estatus: ['ASIGNADO', Validators.required] // ASIGNADO por defecto
     });
   }
 
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files && input.files.length > 0 ? input.files[0] : null;
-
-    if (!file) {
-      this.limpiarArchivo();
-      return;
-    }
-
-    // Validar tipo de archivo
-    if (file.type !== 'application/pdf') {
-      this.pdfError = 'Sólo se aceptan archivos PDF';
-      this.formulario.get('documento_pdf')?.setErrors({ formatoInvalido: true });
-      this.pdfSeleccionado = null;
-      this.pdfNombreMostrado = '';
-      return;
-    }
-
-    // Validar tamaño máximo (10MB)
-    const MAX_SIZE_MB = 10;
-    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
-    if (file.size > MAX_SIZE_BYTES) {
-      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      this.pdfError = `El archivo es demasiado grande (${fileSizeMB} MB). Tamaño máximo permitido: ${MAX_SIZE_MB} MB`;
-      this.formulario.get('documento_pdf')?.setErrors({ tamañoExcedido: true });
-      this.pdfSeleccionado = null;
-      this.pdfNombreMostrado = '';
-      return;
-    }
-
-    // Archivo válido
-    this.pdfSeleccionado = file;
-    this.pdfNombreMostrado = file.name;
-    // Mostrar tamaño del archivo
-    const tamañoMB = (file.size / (1024 * 1024)).toFixed(2);
-    this.pdfTamanoMostrado = `${tamañoMB} MB`;
-    this.pdfError = null;
-    this.formulario.get('documento_pdf')?.setValue(file);
-    this.formulario.get('documento_pdf')?.markAsTouched();
-    this.formulario.get('documento_pdf')?.updateValueAndValidity();
-  }
-
-  limpiarArchivo() {
-    this.pdfSeleccionado = null;
-    this.pdfNombreMostrado = '';
-    this.pdfTamanoMostrado = '';
-    this.pdfError = null;
-    this.formulario.get('documento_pdf')?.setValue(null);
-    this.formulario.get('documento_pdf')?.markAsPristine();
-    this.formulario.get('documento_pdf')?.markAsUntouched();
-    this.formulario.get('documento_pdf')?.updateValueAndValidity();
-  }
 
   ngOnInit() {
     // Calcular campos totales
@@ -216,10 +159,7 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     let completados = 0;
     Object.keys(this.formulario.controls).forEach(key => {
       const control = this.formulario.get(key);
-      // Para el PDF, verificar si está seleccionado
-      if (key === 'documento_pdf') {
-        if (this.pdfSeleccionado) completados++;
-      } else if (control && control.value !== null && control.value !== '' && control.value !== false) {
+      if (control && control.value !== null && control.value !== '' && control.value !== false) {
         completados++;
       }
     });
@@ -231,10 +171,7 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
    * Guardar borrador automáticamente
    */
   private guardarBorrador(): void {
-    const datos = {
-      ...this.formulario.getRawValue(),
-      documento_pdf_nombre: this.pdfNombreMostrado
-    };
+    const datos = this.formulario.getRawValue();
     this.formHelper.guardarBorrador(2, datos);
   }
 
@@ -264,12 +201,8 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.logger.debug('Validando Paso 2 - Formulario válido:', this.formulario.valid);
 
-    if (this.formulario.invalid || !this.pdfSeleccionado) {
+    if (this.formulario.invalid) {
       this.logger.warn('Paso 2 inválido - Campos con errores');
-      if (!this.pdfSeleccionado) {
-        this.pdfError = 'Selecciona un PDF para continuar';
-        this.formulario.get('documento_pdf')?.setErrors({ requerido: true });
-      }
       this.marcarCamposInvalidos();
       this.mostrarCamposInvalidos();
       return;
@@ -279,7 +212,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     const valores = this.formulario.getRawValue();
     this.formularioCompletado.emit({
       ...valores,
-      documento_pdf: this.pdfSeleccionado,
       campos_pospuestos: this.camposDocumentosPendientes
     });
   }
