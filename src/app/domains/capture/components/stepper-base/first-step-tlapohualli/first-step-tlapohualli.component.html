@@ -99,7 +99,7 @@
                             Identificador único del documento
                         </p>
                         <p class="text-xs text-amber-600 mt-1 ml-1 font-semibold" *ngIf="formulario.get('tipo_medio_recepcion')?.value === 'REQUERIMIENTO_VERBAL'">
-                            ⚠️ Campo deshabilitado para Requerimiento verbal (petición interna)
+                            ⚠️ Campo deshabilitado para Petición interna
                         </p>
                         <p class="text-xs text-blue-600 mt-1 ml-1 flex items-center gap-1">
                             <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,17 +293,17 @@
                         </p>
                     </div>
 
-                    <!-- Identificador Adicional (máximo 10 caracteres) -->
+                    <!-- Identificador Adicional (máximo 15 caracteres) -->
                     <div class="mb-4" *ngIf="formulario.get('remitente_general')?.value">
                         <app-custom-form-field
                             label="Identificador del Remitente"
-                            placeholder="Máximo 10 caracteres"
+                            placeholder="Máximo 15 caracteres"
                             [errorMessage]="remitenteIdentificadorError"
                             formControlName="remitente_identificador"
-                            [maxlength]="10">
+                            [maxlength]="15">
                         </app-custom-form-field>
                         <p class="text-xs text-gray-500 mt-1 ml-1">
-                            Opcional: Agregue un identificador adicional (máximo 10 caracteres)
+                            Opcional: Agregue un identificador adicional (máximo 15 caracteres)
                         </p>
                     </div>
                 </div>

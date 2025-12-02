@@ -82,7 +82,7 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   tipoMedioRecepcionOptions: SelectOption[] = [
     { value: 'ATENTA_NOTA', label: 'Atenta nota' },
     { value: 'OFICIO', label: 'Oficio' },
-    { value: 'REQUERIMIENTO_VERBAL', label: 'Requerimiento verbal (Petición interna)' },
+    { value: 'REQUERIMIENTO_VERBAL', label: 'Petición interna' },
     { value: 'CORREO_ELECTRONICO', label: 'Correo electrónico' }
   ];
 
@@ -94,7 +94,13 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     { value: 'AGGC', label: 'AGGC - Administración General de Grandes Contribuyentes' },
     { value: 'AGACE', label: 'AGACE - Administración General de Auditoría de Comercio Exterior' },
     { value: 'AGAF', label: 'AGAF - Administración General de Auditoría Fiscal' },
-    { value: 'AGAJ', label: 'AGAJ - Administración General de Asuntos Jurídicos' }
+    { value: 'AGAJ', label: 'AGAJ - Administración General de Asuntos Jurídicos' },
+    { value: 'AGH', label: 'AGH - Administración General de Hidrocarburos' },
+    { value: 'AGSAC', label: 'AGSAC - Administración General de Servicios al Contribuyente' },
+    { value: 'AGJ', label: 'AGJ - Administración General Jurídica' },
+    { value: 'AGRS', label: 'AGRS - Administración General de Recursos y Servicios' },
+    { value: 'AGCTI', label: 'AGCTI - Administración General de Comunicaciones y Tecnologías de la Información' },
+    { value: 'AGE', label: 'AGE - Administración General de Evaluación' }
   ];
 
   // Relación: Cada General tiene sus Centrales asociadas
@@ -106,28 +112,108 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       { value: 'ACGSTME', label: 'ACGSTME - Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos' }
     ],
     'AGP': [
-      { value: 'ACPL', label: 'ACPL - Administración Central de Planeación' },
-      { value: 'ACPR', label: 'ACPR - Administración Central de Programación' }
+      { value: 'ACEAI', label: 'ACEAI - Administración Central de Estudios, Análisis e Información' },
+      { value: 'ACPVI', label: 'ACPVI - Administración Central de Proyectos y Vinculación Institucional' },
+      { value: 'ACMII', label: 'ACMII - Administración Central de Modelos de Integración de Información' }
     ],
     'AGR': [
-      { value: 'ACRE', label: 'ACRE - Administración Central de Recaudación' },
-      { value: 'ACCO', label: 'ACCO - Administración Central de Cobranza' }
+      { value: 'ACDP', label: 'ACDP - Administración Central de Declaraciones y Pagos' },
+      { value: 'ACPVC', label: 'ACPVC - Administración Central de Promoción y Vigilancia del Cumplimiento' },
+      { value: 'ACCC', label: 'ACCC - Administración Central de Cobro Coactivo' },
+      { value: 'ACCPG', label: 'ACCPG - Administración Central de Cobro Persuasivo y Garantías' },
+      { value: 'ACPEC', label: 'ACPEC - Administración Central de Planeación y Estrategias de Cobro' },
+      { value: 'ACPOEF', label: 'ACPOEF - Administración Central de Programas Operativos con Entidades Federativas' },
+      { value: 'ACN', label: 'ACN - Administración Central de Notificación' },
+      { value: 'ACAJR', label: 'ACAJR - Administración Central de Apoyo Jurídico de Recaudación' }
     ],
     'AGGC': [
-      { value: 'ACGC', label: 'ACGC - Administración Central de Grandes Contribuyentes' },
-      { value: 'ACGF', label: 'ACGF - Administración Central de Grandes Contribuyentes y Fiscalización' }
+      { value: 'ACFSF', label: 'ACFSF - Administración Central de Fiscalización al Sector Financiero' },
+      { value: 'ACFGS', label: 'ACFGS - Administración Central de Fiscalización a Grupos de Sociedades' },
+      { value: 'ACPPFGC', label: 'ACPPFGC - Administración Central de Planeación y Programación de Fiscalización a Grandes Contribuyentes' },
+      { value: 'ACAJNI', label: 'ACAJNI - Administración Central de Apoyo Jurídico y Normatividad Internacional' },
+      { value: 'ACFGCD', label: 'ACFGCD - Administración Central de Fiscalización a Grandes Contribuyentes Diversos' },
+      { value: 'ACFPT', label: 'ACFPT - Administración Central de Fiscalización de Precios de Transferencia' },
+      { value: 'ACAJNGC', label: 'ACAJNGC - Administración Central de Apoyo Jurídico y Normatividad de Grandes Contribuyentes' },
+      { value: 'ACLCGC', label: 'ACLCGC - Administración Central de lo Contencioso de Grandes Contribuyentes' },
+      { value: 'ACCEGC', label: 'ACCEGC - Administración Central de Coordinación Estratégica de Grandes Contribuyentes' },
+      { value: 'ACIII', label: 'ACIII - Administración Central de Intercambio de Información Internacional' },
+      { value: 'ACDGC', label: 'ACDGC - Administración Central de Devoluciones de Grandes Contribuyentes' }
     ],
     'AGACE': [
-      { value: 'ACCE', label: 'ACCE - Administración Central de Comercio Exterior' },
-      { value: 'ACAE', label: 'ACAE - Administración Central de Auditoría Exterior' }
+      { value: 'ACIACE', label: 'ACIACE - Administración Central de Investigación y Análisis de Comercio Exterior' },
+      { value: 'ACAOCE', label: 'ACAOCE - Administración Central de Auditoría de Operaciones de Comercio Exterior' },
+      { value: 'ACPPCE', label: 'ACPPCE - Administración Central de Planeación y Programación de Comercio Exterior' },
+      { value: 'ACCAAIACE', label: 'ACCAAIACE - Administración Central de Certificación y Asuntos Internacionales de Auditoría de Comercio Exterior' },
+      { value: 'ACCEACE', label: 'ACCEACE - Administración Central de Coordinación Estratégica de Auditoría de Comercio Exterior' },
+      { value: 'ACAJACE', label: 'ACAJACE - Administración Central de Apoyo Jurídico de Auditoría de Comercio Exterior' },
+      { value: 'ACOECE', label: 'ACOECE - Administración Central de Operaciones Especiales de Comercio Exterior' }
     ],
     'AGAF': [
-      { value: 'ACAF', label: 'ACAF - Administración Central de Auditoría Fiscal' },
-      { value: 'ACDF', label: 'ACDF - Administración Central de Dictaminación Fiscal' }
+      { value: 'ACOFN', label: 'ACOFN - Administración Central de Operación de la Fiscalización Nacional' },
+      { value: 'ACAT', label: 'ACAT - Administración Central de Análisis Técnico' },
+      { value: 'ACPP', label: 'ACPP - Administración Central de Planeación y Programación' },
+      { value: 'ACVEEF', label: 'ACVEEF - Administración Central de Verificación y Evaluación de Entidades Federativas en Materia de Coordinación Fiscal' },
+      { value: 'ACFE', label: 'ACFE - Administración Central de Fiscalización Estratégica' },
+      { value: 'ACAJAF', label: 'ACAJAF - Administración Central de Apoyo Jurídico' },
+      { value: 'ACDC', label: 'ACDC - Administración Central de Devoluciones y Compensaciones' },
+      { value: 'ACAAJV', label: 'ACAAJV - Administración Central de Asuntos Jurídicos de Actividades Vulnerables' }
     ],
     'AGAJ': [
       { value: 'ACOJ', label: 'ACOJ - Administración Central de Operación Jurídica' },
       { value: 'ACAJ', label: 'ACAJ - Administración Central de Asuntos Jurídicos' }
+    ],
+    'AGH': [
+      { value: 'ACVH', label: 'ACVH - Administración Central de Verificación de Hidrocarburos' },
+      { value: 'ACFH', label: 'ACFH - Administración Central de Fiscalización de Hidrocarburos' },
+      { value: 'ACOH', label: 'ACOH - Administración Central de Operación de Hidrocarburos' }
+    ],
+    'AGSAC': [
+      { value: 'ACSTC', label: 'ACSTC - Administración Central de Servicios Tributarios al Contribuyente' },
+      { value: 'ACAJSC', label: 'ACAJSC - Administración Central de Apoyo Jurídico de Servicios al Contribuyente' },
+      { value: 'ACGSTME', label: 'ACGSTME - Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos' },
+      { value: 'ACOP', label: 'ACOP - Administración Central de Operación de Padrones' },
+      { value: 'ACCI', label: 'ACCI - Administración Central de Comunicación Institucional' },
+      { value: 'ACPIS', label: 'ACPIS - Administración Central de Programas Interinstitucionales de Servicios' },
+      { value: 'CNADSC', label: 'CNADSC - Coordinador Nacional de las Administraciones Desconcentradas de Servicios al Contribuyente' }
+    ],
+    'AGJ': [
+      { value: 'ACNII', label: 'ACNII - Administración Central de Normatividad en Impuestos Internos' },
+      { value: 'ACNCE', label: 'ACNCE - Administración Central de Normatividad en Comercio Exterior' },
+      { value: 'ACLC', label: 'ACLC - Administración Central de lo Contencioso' },
+      { value: 'ACAIJ', label: 'ACAIJ - Administración Central de Amparo e Instancias Judiciales' },
+      { value: 'ACAPE', label: 'ACAPE - Administración Central de Asuntos Penales y Especiales' },
+      { value: 'ACOJ', label: 'ACOJ - Administración Central de Operación Jurídica' }
+    ],
+    'AGRS': [
+      { value: 'ACRF', label: 'ACRF - Administración Central de Recursos Financieros' },
+      { value: 'ACCCAP', label: 'ACCCAP - Administración Central del Ciclo de Capital' },
+      { value: 'ACDB', label: 'ACDB - Administración Central de Destino de Bienes' },
+      { value: 'ACRM', label: 'ACRM - Administración Central de Recursos Materiales' },
+      { value: 'ACAJRS', label: 'ACAJRS - Administración Central de Apoyo Jurídico de Recursos y Servicios' },
+      { value: 'ACORS', label: 'ACORS - Administración Central de Operación de Recursos y Servicios' },
+      { value: 'ACCSI', label: 'ACCSI - Administración Central de Control y Seguridad Institucional' }
+    ],
+    'AGCTI': [
+      { value: 'ACPPI', label: 'ACPPI - Administración Central de Planeación y Programación Informática' },
+      { value: 'ACOST', label: 'ACOST - Administración Central de Operación y Servicios Tecnológicos' },
+      { value: 'ACSN', label: 'ACSN - Administración Central de Soluciones de Negocio' },
+      { value: 'ACTT', label: 'ACTT - Administración Central de Transformación Tecnológica' },
+      { value: 'ACDMA', label: 'ACDMA - Administración Central de Desarrollo y Mantenimiento de Aplicaciones' },
+      { value: 'ACSMYC', label: 'ACSMYC - Administración Central de Seguridad Monitoreo y Control' },
+      { value: 'ACJCTI', label: 'ACJCTI - Administración Central Jurídica en Comunicaciones y Tecnologías de la Información' },
+      { value: 'ACPT', label: 'ACPT - Administración Central de Proyectos Tecnológicos' }
+    ],
+    'AGE': [
+      { value: 'ACCE', label: 'ACCE - Administración Central de Coordinación Evaluatoria' },
+      { value: 'ACAER', label: 'ACAER - Administración Central de Análisis y Evaluación de Riesgos' },
+      { value: 'ACEC', label: 'ACEC - Administración Central de Evaluación de la Confiabilidad' },
+      { value: 'ACECE', label: 'ACECE - Administración Central de Evaluación de Comercio Exterior' },
+      { value: 'ACEII', label: 'ACEII - Administración Central de Evaluación de Impuestos Internos' },
+      { value: 'ACES', label: 'ACES - Administración Central de Evaluación de Seguimiento' },
+      { value: 'ACPE', label: 'ACPE - Administración Central de Procedimientos Especiales' },
+      { value: 'ACEPI', label: 'ACEPI - Administración Central de Evaluación de Procesos e Información' },
+      { value: 'CECTI', label: 'CECTI - Coordinador de Evaluación de Comunicaciones y Tecnologías de la Información' },
+      { value: 'CPP', label: 'CPP - Coordinador de Procedimientos Penales' }
     ]
   };
 
@@ -173,8 +259,8 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       remitente_general: ['', [Validators.required]], // Área General (obligatorio)
       remitente_central: [''], // Área Central (opcional, depende de la General)
       remitente_identificador: ['', [
-        Validators.maxLength(10)
-      ]], // Identificador adicional (máximo 10 caracteres, opcional)
+        Validators.maxLength(15)
+      ]], // Identificador adicional (máximo 15 caracteres, opcional)
       fecha_documento: [this.formHelper.getFechaActual(), [
         Validators.required,
         ExpedienteValidators.noFutureDate()
@@ -272,7 +358,7 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       if (tipo) {
         this.aplicarValoresInicialesPorTipo(tipo);
         
-        // Si es "Requerimiento verbal (petición interna)", deshabilitar el campo oficio
+        // Si es "Petición interna", deshabilitar el campo oficio
         const oficioControl = this.formulario.get('oficio');
         if (tipo === 'REQUERIMIENTO_VERBAL') {
           // Deshabilitar y limpiar el campo oficio
@@ -281,7 +367,7 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
           // Remover validación requerida
           oficioControl?.clearValidators();
           oficioControl?.updateValueAndValidity({ emitEvent: false });
-          this.logger.debug('Campo oficio deshabilitado por Requerimiento verbal');
+          this.logger.debug('Campo oficio deshabilitado por Petición interna');
         } else {
           // Habilitar el campo oficio para otros tipos
           oficioControl?.enable();
@@ -876,7 +962,7 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
         break;
         
       case 'REQUERIMIENTO_VERBAL':
-        // Valores para requerimiento verbal (petición interna) - no pre-llenar
+        // Valores para petición interna - no pre-llenar
         break;
         
       case 'CORREO_ELECTRONICO':
@@ -999,7 +1085,7 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   get remitenteIdentificadorError(): string | null {
     const control = this.formulario.get('remitente_identificador');
     if (control?.touched && control?.errors) {
-      if (control.errors['maxlength']) return 'Máximo 10 caracteres';
+      if (control.errors['maxlength']) return 'Máximo 15 caracteres';
     }
     return null;
   }

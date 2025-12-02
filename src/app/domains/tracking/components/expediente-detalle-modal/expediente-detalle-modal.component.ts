@@ -95,7 +95,7 @@ export class ExpedienteDetalleModalComponent implements OnInit {
     const tipos: { [key: string]: string } = {
       'ATENTA_NOTA': 'Atenta Nota',
       'OFICIO': 'Oficio',
-      'REQUERIMIENTO_VERBAL': 'Requerimiento Verbal (Petición Interna)',
+      'REQUERIMIENTO_VERBAL': 'Petición interna',
       'CORREO_ELECTRONICO': 'Correo Electrónico'
     };
     
