@@ -110,10 +110,7 @@ export class StepperTlapohualliComponent implements OnInit {
       return;
     }
 
-    if (!this.documentoPasoFinal.documento_pdf) {
-      this.mostrarMensaje('Carga el documento PDF para continuar', 'warning');
-      return;
-    }
+    // PDF ya no es requerido
 
     this.guardando = true;
 

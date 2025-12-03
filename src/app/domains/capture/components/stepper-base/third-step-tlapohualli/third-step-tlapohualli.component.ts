@@ -38,7 +38,7 @@ export class ThirdStepTlapohualliComponent {
 
   constructor(private fb: FormBuilder) {
     this.formulario = this.fb.group({
-      documento_pdf: [null, Validators.required]
+      documento_pdf: [null] // PDF ya no es requerido
     });
   }
 
@@ -78,16 +78,9 @@ export class ThirdStepTlapohualliComponent {
   }
 
   onSubmit() {
-    if (this.formulario.invalid) {
-      this.formulario.markAllAsTouched();
-      if (!this.pdfSeleccionado) {
-        this.pdfError = 'Selecciona un PDF para continuar';
-      }
-      return;
-    }
-
+    // PDF ya no es requerido, siempre se puede continuar
     const datosFormulario = {
-      documento_pdf: this.pdfSeleccionado,
+      documento_pdf: this.pdfSeleccionado || null, // Opcional
       campos_pospuestos: this.camposDocumentosPendientes
     };
 
