@@ -1,77 +1,123 @@
 @if ((documents.length > 0 || expedientesTlapohualli.length > 0) && !fileIsOpen && mostrarTabla ) {
-<div class="flex justify-center items-center text-xl mt-2">
-  Resultados {{ tipoBusqueda === 'Tlapohualli' ? '(Tlapohualli)' : '(AKAMBA)' }}
+<!-- Header de Resultados Mejorado -->
+<div class="mx-4 mb-4">
+  <div class="bg-white rounded-lg shadow-md px-6 py-4 border-l-4" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'border-[#691C32]' : 'border-[#235B4E]'">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 rounded-lg" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'bg-[#691C32]/10' : 'bg-[#235B4E]/10'">
+          <svg class="w-6 h-6" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#691C32]' : 'text-[#235B4E]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold text-gray-800">Resultados de Búsqueda</h2>
+          <p class="text-sm text-gray-600">
+            <span class="font-medium" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#691C32]' : 'text-[#235B4E]'">
+              {{ tipoBusqueda === 'Tlapohualli' ? 'Sistema Tlapohualli' : 'Sistema AKAMBA' }}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="text-2xl font-bold" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#691C32]' : 'text-[#235B4E]'">
+          {{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}
+        </div>
+        <div class="text-xs text-gray-500 uppercase tracking-wide">Expedientes</div>
+      </div>
+    </div>
+  </div>
 </div>
-<section class="py-1 bg-blueGray-50" id="sectionTable">
-  <div class="w-full lg:w-12/12 mx-auto mt-2">
-    <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
+
+<section class="py-1 bg-gray-50" id="sectionTable">
+  <div class="w-full mx-auto px-4">
+    <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-xl bg-white border border-gray-200">
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         <div class="overflow-x-auto">
           <!-- TABLA PARA EXPEDIENTES TLAPOHUALLI -->
           @if (tipoBusqueda === 'Tlapohualli' && expedientesTlapohualli.length > 0) {
-          <table class="min-w-full border-collapse bg-white">
-            <thead>
+          <table class="min-w-full border-collapse">
+            <thead class="bg-gradient-to-r from-[#691C32] to-[#8B2543]">
               <tr>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">VER</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Expediente</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Oficio</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Tipo Medio Recepción</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Remitente (Área)</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Número Entrada Central</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Fecha Documento</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Fecha Recibido</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Referencia/Asunto</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Responsable</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Estatus</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">WOOS</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Fecha Vencimiento</th>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">Días Retraso</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    Ver
+                  </div>
+                </th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Expediente</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Oficio</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Tipo Medio</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Remitente</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">N° Entrada</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Fecha Doc.</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Fecha Recib.</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Asunto</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Responsable</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Estatus</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">WOOS</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Vencimiento</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                  <div class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Retraso
+                  </div>
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-200 bg-white">
               @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-              <tr>
-                <td class="px-2 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
-                  <div class="flex gap-1 justify-end">
+              <tr class="hover:bg-gray-50 transition-colors duration-200">
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="flex gap-2 justify-start">
                     <!-- Botón Ver Detalle -->
-                    <button mat-button class="text-wine leading-5" (click)="verDetalleExpediente(expediente)" title="Ver detalle">
-                      <mat-icon>remove_red_eye</mat-icon>
+                    <button 
+                      class="p-2 rounded-lg bg-[#691C32]/10 text-[#691C32] hover:bg-[#691C32] hover:text-white transition-all duration-200 hover:shadow-md" 
+                      (click)="verDetalleExpediente(expediente)" 
+                      title="Ver detalle">
+                      <mat-icon class="!w-5 !h-5 !text-base">visibility</mat-icon>
                     </button>
                     <!-- Botón Ver PDF (si existe) -->
                     @if (expediente.documento_pdf_nombre && expediente.documento_pdf_nombre !== null && expediente.documento_pdf_nombre !== '' && expediente.documento_pdf_nombre.trim() !== '' && expediente.oficio) {
-                    <button mat-button class="text-wine leading-5" (click)="verPdfExpediente(expediente)" title="Ver PDF">
-                      <mat-icon>picture_as_pdf</mat-icon>
+                    <button 
+                      class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 hover:shadow-md" 
+                      (click)="verPdfExpediente(expediente)" 
+                      title="Ver PDF">
+                      <mat-icon class="!w-5 !h-5 !text-base">picture_as_pdf</mat-icon>
                     </button>
                     }
                   </div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.expediente || '-' }}</div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm font-semibold text-[#691C32]">{{ expediente.expediente || '-' }}</div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.oficio || '-' }}</div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-700">{{ expediente.oficio || '-' }}</div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.tipo_medio_recepcion || '-' }}</div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                    {{ expediente.tipo_medio_recepcion || '-' }}
+                  </span>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.remitente_area || '-' }}</div>
+                <td class="px-4 py-4">
+                  <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.remitente_area">
+                    {{ expediente.remitente_area || '-' }}
+                  </div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.numero_entrada_central || '-' }}</div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-700">{{ expediente.numero_entrada_central || '-' }}</div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-700">
                     {{ expediente.fecha_documento ? (formatearFecha(expediente.fecha_documento)) : '-' }}
                   </div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-700">
                     {{ expediente.fecha_recibido ? (formatearFecha(expediente.fecha_recibido)) : '-' }}
                   </div>
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
+                <td class="px-4 py-4">
+                  <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.referencia_asunto">
                     @if (expediente.referencia_asunto && expediente.referencia_asunto.length >= 30) {
                       {{ expediente.referencia_asunto | slice: 0 : 30 }}...
                     } @else {
@@ -79,26 +125,76 @@
                     }
                   </div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.responsable || '-' }}</div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-800">{{ expediente.responsable || '-' }}</div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.estatus || '-' }}</div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <!-- Badges de Estatus con colores -->
+                  @if (expediente.estatus === 'ASIGNADO') {
+                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                      🎯 Asignado
+                    </span>
+                  } @else if (expediente.estatus === 'PENDIENTE') {
+                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200">
+                      ⏳ Pendiente
+                    </span>
+                  } @else if (expediente.estatus === 'ATENCION_PARCIAL') {
+                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 border border-orange-200">
+                      📝 Atención Parcial
+                    </span>
+                  } @else if (expediente.estatus === 'ATENCION_TOTAL') {
+                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 border border-green-200">
+                      ✅ Atención Total
+                    </span>
+                  } @else if (expediente.estatus === 'REVISION_LEGAL') {
+                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+                      ⚖️ Revisión Legal
+                    </span>
+                  } @else {
+                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                      {{ expediente.estatus || '-' }}
+                    </span>
+                  }
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">{{ expediente.woos || '-' }}</div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-700">{{ expediente.woos || '-' }}</div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-700">
                     {{ expediente.fecha_vencimiento ? (formatearFecha(expediente.fecha_vencimiento)) : '-' }}
                   </div>
                 </td>
-                <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <div class="text-sm leading-5 text-wine text-left">
-                    <span [class.text-red-600]="expediente.dias_retraso && expediente.dias_retraso > 0">
-                      {{ expediente.dias_retraso !== null && expediente.dias_retraso !== undefined ? expediente.dias_retraso : '-' }}
-                    </span>
-                  </div>
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <!-- Indicador visual de días de retraso -->
+                  @if (expediente.dias_retraso !== null && expediente.dias_retraso !== undefined) {
+                    @if (expediente.dias_retraso > 10) {
+                      <div class="flex items-center gap-2">
+                        <span class="px-3 py-1.5 text-sm font-bold rounded-lg bg-red-100 text-red-800 border-2 border-red-300">
+                          🔴 {{ expediente.dias_retraso }} días
+                        </span>
+                      </div>
+                    } @else if (expediente.dias_retraso > 5) {
+                      <div class="flex items-center gap-2">
+                        <span class="px-3 py-1.5 text-sm font-semibold rounded-lg bg-orange-100 text-orange-800 border border-orange-300">
+                          🟠 {{ expediente.dias_retraso }} días
+                        </span>
+                      </div>
+                    } @else if (expediente.dias_retraso > 0) {
+                      <div class="flex items-center gap-2">
+                        <span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-yellow-100 text-yellow-800 border border-yellow-300">
+                          🟡 {{ expediente.dias_retraso }} días
+                        </span>
+                      </div>
+                    } @else {
+                      <div class="flex items-center gap-2">
+                        <span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-green-100 text-green-800 border border-green-300">
+                          🟢 A tiempo
+                        </span>
+                      </div>
+                    }
+                  } @else {
+                    <span class="text-sm text-gray-400">-</span>
+                  }
                 </td>
               </tr>
               }
@@ -332,38 +428,74 @@
             }
           </div>
         </div>
-        <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
-          <p class="text-sm leading-5 text-wine">
-            Mostrando
-            <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + 1
+        <!-- Información de paginación mejorada -->
+        <div class="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4 px-4">
+          <!-- Información de registros -->
+          <div class="flex items-center gap-3 bg-gradient-to-r from-[#691C32]/10 to-[#8B2543]/10 px-6 py-3 rounded-lg border border-[#691C32]/20">
+            <svg class="w-5 h-5 text-[#691C32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <p class="text-sm text-gray-700">
+              Mostrando
+              <span class="font-bold text-[#691C32]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
+              a
+              <span class="font-bold text-[#691C32]">{{
+                tipoBusqueda === 'Tlapohualli' 
+                  ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlapohualli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlapohualli.length)
+                  : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
               }}</span>
-            a
-            <span class="font-medium">{{
-              tipoBusqueda === 'Tlapohualli' 
-                ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlapohualli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlapohualli.length)
-                : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
-            }}</span>
-                de
-                <span class="font-medium">{{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}</span>
-                resultados
-          </p>
+              de
+              <span class="font-bold text-[#691C32]">{{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}</span>
+              expedientes
+            </p>
           </div>
-            <div class="flex flex-col items-end  p-4">
-              <itsi-button label="Descargar"
-                bgcolor="#235B4E"
-                 height="50px"
-                 hvbgcolor="#235B4E"
-                 hvtxcolor="white"
-                (click)="getDownloadExcel()" ></itsi-button>
-            </div>
+
+          <!-- Botón de descarga mejorado -->
+          <button 
+            (click)="getDownloadExcel()" 
+            class="flex items-center gap-2 bg-gradient-to-r from-[#235B4E] to-[#2d7360] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:from-[#2d7360] hover:to-[#235B4E]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span>Descargar Excel</span>
+          </button>
+        </div>
       </div>
     </div>
     {{ scrollToTable() }}
   </div>
 </section>
 }@else if(!fileIsOpen && mostrarTabla) {
-<div class="empty">No se encontraron resultados</div>
+<!-- Estado vacío mejorado -->
+<div class="flex flex-col items-center justify-center py-16 px-4">
+  <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-12 max-w-md w-full shadow-lg border border-gray-200">
+    <div class="flex flex-col items-center text-center">
+      <!-- Icono -->
+      <div class="mb-6 p-4 bg-white rounded-full shadow-md">
+        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <!-- Título -->
+      <h3 class="text-xl font-bold text-gray-800 mb-2">
+        No se encontraron resultados
+      </h3>
+      <!-- Descripción -->
+      <p class="text-gray-600 mb-6">
+        No hay expedientes que coincidan con los criterios de búsqueda especificados.
+      </p>
+      <!-- Sugerencias -->
+      <div class="bg-blue-50 rounded-lg p-4 w-full border border-blue-100">
+        <p class="text-sm text-blue-800 font-medium mb-2">💡 Sugerencias:</p>
+        <ul class="text-xs text-blue-700 text-left space-y-1">
+          <li>• Verifica los filtros aplicados</li>
+          <li>• Intenta con criterios más amplios</li>
+          <li>• Revisa la ortografía de la búsqueda</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 }
 @if (visualizarPdf) {
 <app-pdf-viewer id="sectionPDF" (showTablePDF)="mostrarTable()" />

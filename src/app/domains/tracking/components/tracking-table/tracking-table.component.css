@@ -1,42 +1,183 @@
 
 ::ng-deep .ngx-pagination .current {
   background-color: #691C32 !important;
-  border-color: red !important;
+  border-color: #691C32 !important;
+  color: white !important;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+::ng-deep .ngx-pagination .pagination-previous,
+::ng-deep .ngx-pagination .pagination-next {
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+::ng-deep .ngx-pagination .pagination-previous a,
+::ng-deep .ngx-pagination .pagination-next a,
+::ng-deep .ngx-pagination li a {
+  color: #691C32;
+  transition: all 0.2s;
+}
+
+::ng-deep .ngx-pagination li:hover a {
+  background-color: #691C32;
+  color: white;
+  border-radius: 0.5rem;
 }
 
 .options {
   display: flex;
   justify-content: space-evenly;
-
+  gap: 0.5rem;
 }
 
 .empty {
   font-size: 18px;
   text-align: center;
+  padding: 3rem;
+  color: #6b7280;
 }
 
- .is-expanded p {
+.is-expanded p {
   display: inline;
 }
 
-
 .button-read-more {
   text-decoration: underline #691C32;
-  color : #3b5998;
+  color: #3b5998;
+  transition: color 0.2s;
 }
 
- .button-read-less {
+.button-read-more:hover {
+  color: #691C32;
+}
+
+.button-read-less {
   @apply bg-wine text-white
    active:bg-pink-600
-     text-xs px-4 py-2 rounded
-    shadow hover:shadow-md outline-none
-   focus:outline-none mr-1 ease-linear
-   transition-all duration-150
- }
+    text-xs px-4 py-2 rounded
+   shadow hover:shadow-md outline-none
+  focus:outline-none mr-1 ease-linear
+  transition-all duration-150
+}
 
-
- .download{
+.download {
   @apply bg-verde-Akamba text-white active:bg-pink-600
-         font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
-         focus:outline-none mr-1 ease-linear transition-all duration-150
- }
+        font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
+        focus:outline-none mr-1 ease-linear transition-all duration-150
+}
+
+/* Animaciones y efectos visuales modernos */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table tbody tr {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Efecto hover en filas */
+table tbody tr:hover {
+  box-shadow: 0 4px 6px -1px rgba(105, 28, 50, 0.1), 0 2px 4px -1px rgba(105, 28, 50, 0.06);
+  transform: scale(1.001);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Scroll suave para la tabla */
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #691C32 #f3f4f6;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #691C32;
+  border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #8B2543;
+}
+
+/* Efecto para los badges */
+@keyframes pulse-badge {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.badge-pulse {
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+/* Mejora visual del estado de carga */
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Estilo para tooltips */
+[title] {
+  position: relative;
+}
+
+/* Mejora de accesibilidad */
+button:focus-visible {
+  outline: 2px solid #691C32;
+  outline-offset: 2px;
+}
+
+/* Efecto de card elevation */
+.shadow-card {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.shadow-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.875rem;
+  }
+  
+  th, td {
+    padding: 0.5rem !important;
+  }
+}
