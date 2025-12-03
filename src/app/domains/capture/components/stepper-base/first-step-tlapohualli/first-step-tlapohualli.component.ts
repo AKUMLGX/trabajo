@@ -874,10 +874,10 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   private construirPlazo() {
     const tienePlazo = this.formulario.get('tiene_plazo_atencion')?.value;
     
-    // Si no tiene plazo, retornar valores por defecto
+    // Si no tiene plazo específico, usar 20 días por defecto (constraint BD: plazo_valor >= 1)
     if (tienePlazo === 'no') {
       return {
-        valor: 0,
+        valor: 20, // Valor por defecto: 20 días hábiles
         unidad: 'dias',
         es_urgente: false
       };
@@ -901,6 +901,11 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       textoCompleto = `${dias} día${dias !== 1 ? 's' : ''} y ${horas} hora${horas !== 1 ? 's' : ''}`;
       // Convertir todo a horas para cálculos: días*24 + horas
       valorTotal = (dias * 24) + horas;
+    }
+
+    // Asegurar que el valor sea al menos 1 (constraint BD: plazo_valor >= 1 AND plazo_valor <= 999)
+    if (valorTotal < 1) {
+      valorTotal = 20; // Valor por defecto si no se especificó
     }
 
     if (es_urgente) {
