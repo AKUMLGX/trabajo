@@ -1,0 +1,80 @@
+
+> acamba@0.0.0 start
+> ng serve --proxy-config proxy.conf.json
+
+- Building...
+
+(node:984647) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    src/app/domains/assistance/pages/revision-final/revision-final.component.html:362:102:
+      362 │ ...ision === 'APROBADO' || (asuntosAprobados?.includes(asunto.id))">
+          ╵                                               ~~~~~~~~
+
+  Error occurs in the template of component RevisionFinalComponent.
+
+    src/app/domains/assistance/pages/revision-final/revision-final.component.ts:113:15:
+      113 │   templateUrl: './revision-final.component.html',
+          ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Initial Chunk Files | Names         |  Raw Size
+main.js             | main          |   2.63 MB |
+styles.css          | styles        | 184.79 kB |
+polyfills.js        | polyfills     |  88.09 kB |
+
+                    | Initial Total |   2.90 MB
+
+Application bundle generation complete. [16.119 seconds]
+Watch mode enabled. Watching for file changes...
+  ➜  Local:   http://localhost:4200/akamba
+1:11:59 p.m. [vite] warning: 
+/home/hemc9599@dssat.sat.gob.mx/Tlapohualli-Fullstack/frontend/.angular/cache/17.0.10/vite/deps/ng2-pdf-viewer.js
+12151|        const worker = yield import(
+12152|          /*webpackIgnore: true*/
+12153|          this.workerSrc
+   |          ^
+12154|        );
+12155|        return worker.WorkerMessageHandler;
+The above dynamic import cannot be analyzed by Vite.
+See https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations for supported dynamic import formats. If this is intended to be left as-is, you can use the /* @vite-ignore */ comment inside the import() call to suppress this warning.
+
+  Plugin: vite:import-analysis
+  File: /home/hemc9599@dssat.sat.gob.mx/Tlapohualli-Fullstack/frontend/.angular/cache/17.0.10/vite/deps/ng2-pdf-viewer.js?v=37332a64
+1:11:59 p.m. [vite] warning: 
+/home/hemc9599@dssat.sat.gob.mx/Tlapohualli-Fullstack/frontend/.angular/cache/17.0.10/vite/deps/ng2-pdf-viewer.js
+26487|        const sandbox = import(
+26488|          /*webpackIgnore: true*/
+26489|          sandboxBundleSrc
+   |          ^
+26490|        );
+26491|        sandbox.then((pdfjsSandbox) => {
+The above dynamic import cannot be analyzed by Vite.
+See https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations for supported dynamic import formats. If this is intended to be left as-is, you can use the /* @vite-ignore */ comment inside the import() call to suppress this warning.
+
+  Plugin: vite:import-analysis
+  File: /home/hemc9599@dssat.sat.gob.mx/Tlapohualli-Fullstack/frontend/.angular/cache/17.0.10/vite/deps/ng2-pdf-viewer.js?v=37332a64
+- Changes detected. Rebuilding...
+
+▲ [WARNING] NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. [plugin angular-compiler]
+
+    src/app/domains/assistance/pages/revision-final/revision-final.component.html:362:102:
+      362 │ ...ision === 'APROBADO' || (asuntosAprobados?.includes(asunto.id))">
+          ╵                                               ~~~~~~~~
+
+  Error occurs in the template of component RevisionFinalComponent.
+
+    src/app/domains/assistance/pages/revision-final/revision-final.component.ts:113:15:
+      113 │   templateUrl: './revision-final.component.html',
+          ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Initial Chunk Files | Names | Raw Size
+main.js             | main  |  2.63 MB |
+
+Unchanged output files: 2
+Application bundle generation complete. [6.431 seconds]
+Page reload sent to client(s).

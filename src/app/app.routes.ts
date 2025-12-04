@@ -23,6 +23,7 @@ import { AsuntoParcialComponent } from './domains/assistance/pages/asunto-parcia
 import { DictaminadorPageComponent } from './domains/assistance/pages/dictaminador-page/dictaminador-page.component';
 import { DictaminadorDetalleComponent } from './domains/assistance/pages/dictaminador-detalle/dictaminador-detalle.component';
 import { RevisionFinalComponent } from './domains/assistance/pages/revision-final/revision-final.component';
+import { ResponsablesPageComponent } from './domains/responsables/pages/responsables-page/responsables-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -127,6 +128,10 @@ export const routes: Routes = [
       {
         path: 'access-denied',
         component: AccessDeniedComponent
+      },
+      {
+        path: 'responsables',
+        component: ResponsablesPageComponent
       }
     ]
   },

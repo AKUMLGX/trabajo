@@ -1,0 +1,91 @@
+::ng-deep .ngx-pagination .current {
+  background-color: #691C32 !important;
+  border-color: #691C32 !important;
+  color: white !important;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+::ng-deep .ngx-pagination .pagination-previous,
+::ng-deep .ngx-pagination .pagination-next {
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+::ng-deep .ngx-pagination .pagination-previous a,
+::ng-deep .ngx-pagination .pagination-next a,
+::ng-deep .ngx-pagination li a {
+  color: #691C32;
+  transition: all 0.2s;
+}
+
+::ng-deep .ngx-pagination li:hover a {
+  background-color: #691C32;
+  color: white;
+  border-radius: 0.5rem;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table tbody tr {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Efecto hover en filas */
+table tbody tr:hover {
+  box-shadow: 0 4px 6px -1px rgba(105, 28, 50, 0.1), 0 2px 4px -1px rgba(105, 28, 50, 0.06);
+  transform: scale(1.001);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Scroll suave para la tabla */
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #691C32 #f3f4f6;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #691C32;
+  border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #8B2543;
+}
+
+/* Mejora de accesibilidad */
+button:focus-visible {
+  outline: 2px solid #691C32;
+  outline-offset: 2px;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.875rem;
+  }
+  
+  th, td {
+    padding: 0.5rem !important;
+  }
+}
+

@@ -93,6 +93,14 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
           });
         }
 
+        // Bandeja de Responsables - Disponible para todos los usuarios autenticados
+        // El backend filtra automáticamente por el responsable del JWT
+        menuItems.push({
+          icon: 'person',
+          label: 'Mi Bandeja de Expedientes',
+          route: '/layout/responsables',
+        });
+
         // Si no hay bandejas disponibles, mostrar mensaje
         if (menuItems.length === 0) {
           menuItems.push({
