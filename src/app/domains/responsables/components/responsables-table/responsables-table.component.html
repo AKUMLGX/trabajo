@@ -207,10 +207,9 @@
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
               @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-              @let semaforo = calcularSemaforo(expediente);
               <tr class="hover:bg-gray-50 transition-colors duration-200"
-                  [class.bg-red-50]="semaforo.nivel === 'VENCIDO' || semaforo.nivel === 'URGENTE'"
-                  [class.bg-orange-50]="semaforo.nivel === 'ALTA'">
+                  [class.bg-red-50]="calcularSemaforo(expediente).nivel === 'VENCIDO' || calcularSemaforo(expediente).nivel === 'URGENTE'"
+                  [class.bg-orange-50]="calcularSemaforo(expediente).nivel === 'ALTA'">
                 <td class="px-4 py-4 whitespace-nowrap">
                   <div class="flex gap-2 justify-start">
                     <button 
@@ -224,12 +223,12 @@
                 <td class="px-4 py-4 whitespace-nowrap">
                   <!-- Badge de prioridad con semáforo -->
                   <div class="flex flex-col items-start gap-1">
-                    <span class="px-3 py-1.5 text-sm font-bold rounded-lg {{ semaforo.bgColor }} {{ semaforo.color }} border-2 {{ semaforo.borderColor }}">
-                      {{ semaforo.emoji }} {{ semaforo.label }}
+                    <span [ngClass]="['px-3', 'py-1.5', 'text-sm', 'font-bold', 'rounded-lg', 'border-2', calcularSemaforo(expediente).bgColor, calcularSemaforo(expediente).color, calcularSemaforo(expediente).borderColor]">
+                      {{ calcularSemaforo(expediente).emoji }} {{ calcularSemaforo(expediente).label }}
                     </span>
-                    @if (semaforo.nivel !== 'VENCIDO') {
-                      <span class="text-xs {{ semaforo.color }} font-medium">
-                        {{ formatearHorasRestantes(semaforo.horasRestantes) }}
+                    @if (calcularSemaforo(expediente).nivel !== 'VENCIDO') {
+                      <span class="text-xs font-medium" [ngClass]="calcularSemaforo(expediente).color">
+                        {{ formatearHorasRestantes(calcularSemaforo(expediente).horasRestantes) }}
                       </span>
                     }
                   </div>
@@ -287,7 +286,7 @@
                   </div>
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
-                  @if (semaforo.nivel === 'VENCIDO') {
+                  @if (calcularSemaforo(expediente).nivel === 'VENCIDO') {
                     <div class="flex items-center gap-2">
                       <span class="px-3 py-1.5 text-sm font-bold rounded-lg bg-gray-800 text-white animate-pulse">
                         ⚠️ VENCIDO
@@ -295,8 +294,8 @@
                     </div>
                   } @else {
                     <div class="flex items-center gap-2">
-                      <span class="px-3 py-1.5 text-sm font-semibold rounded-lg {{ semaforo.bgColor }} {{ semaforo.color }} border {{ semaforo.borderColor }}">
-                        ⏱️ {{ formatearHorasRestantes(semaforo.horasRestantes) }}
+                      <span [ngClass]="['px-3', 'py-1.5', 'text-sm', 'font-semibold', 'rounded-lg', 'border', calcularSemaforo(expediente).bgColor, calcularSemaforo(expediente).color, calcularSemaforo(expediente).borderColor]">
+                        ⏱️ {{ formatearHorasRestantes(calcularSemaforo(expediente).horasRestantes) }}
                       </span>
                     </div>
                   }

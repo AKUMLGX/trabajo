@@ -163,12 +163,18 @@ export class ResponsablesTableComponent implements OnInit {
    */
   calcularSemaforo(expediente: ExpedienteTlapohualli): SemaforoPrioridad {
     const ahora = new Date();
-    const fechaCreacion = expediente.fecha_creacion 
-      ? new Date(expediente.fecha_creacion) 
-      : new Date(expediente.fecha_asignacion);
+    // Usar fecha_creacion si existe, sino fecha_asignacion, sino fecha actual
+    let fechaBase: Date;
+    if (expediente.fecha_creacion) {
+      fechaBase = new Date(expediente.fecha_creacion);
+    } else if (expediente.fecha_asignacion) {
+      fechaBase = new Date(expediente.fecha_asignacion);
+    } else {
+      fechaBase = new Date(); // Fallback a fecha actual
+    }
     
     // Calcular horas transcurridas desde la creación/asignación
-    const horasTranscurridas = Math.floor((ahora.getTime() - fechaCreacion.getTime()) / (1000 * 60 * 60));
+    const horasTranscurridas = Math.floor((ahora.getTime() - fechaBase.getTime()) / (1000 * 60 * 60));
     
     // Si es urgente según el plazo
     if (expediente.plazo_es_urgente) {
