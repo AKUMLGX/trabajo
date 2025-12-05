@@ -36,6 +36,9 @@ export interface SemaforoPrioridad {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ResponsablesTableComponent implements OnInit {
+  // Referencia a Math para usar en el template
+  Math = Math;
+  
   // Datos
   expedientes: ExpedienteTlapohualli[] = [];
   pagesExpedientes: ExpedienteTlapohualli[][] = [];

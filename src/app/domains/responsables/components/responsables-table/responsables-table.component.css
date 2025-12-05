@@ -1,35 +1,8 @@
-::ng-deep .ngx-pagination .current {
-  background-color: #691C32 !important;
-  border-color: #691C32 !important;
-  color: white !important;
-  border-radius: 0.5rem;
-  font-weight: 600;
-}
-
-::ng-deep .ngx-pagination .pagination-previous,
-::ng-deep .ngx-pagination .pagination-next {
-  border-radius: 0.5rem;
-  font-weight: 500;
-}
-
-::ng-deep .ngx-pagination .pagination-previous a,
-::ng-deep .ngx-pagination .pagination-next a,
-::ng-deep .ngx-pagination li a {
-  color: #691C32;
-  transition: all 0.2s;
-}
-
-::ng-deep .ngx-pagination li:hover a {
-  background-color: #691C32;
-  color: white;
-  border-radius: 0.5rem;
-}
-
-/* Animaciones */
+/* Animaciones suaves */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -37,55 +10,96 @@
   }
 }
 
-table tbody tr {
-  animation: fadeIn 0.3s ease-in-out;
+/* Aplicar animación a las filas */
+tbody tr {
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
-/* Efecto hover en filas */
-table tbody tr:hover {
-  box-shadow: 0 4px 6px -1px rgba(105, 28, 50, 0.1), 0 2px 4px -1px rgba(105, 28, 50, 0.06);
-  transform: scale(1.001);
-  transition: all 0.2s ease-in-out;
-}
+/* Retraso escalonado para las filas */
+tbody tr:nth-child(1) { animation-delay: 0.05s; }
+tbody tr:nth-child(2) { animation-delay: 0.1s; }
+tbody tr:nth-child(3) { animation-delay: 0.15s; }
+tbody tr:nth-child(4) { animation-delay: 0.2s; }
+tbody tr:nth-child(5) { animation-delay: 0.25s; }
+tbody tr:nth-child(6) { animation-delay: 0.3s; }
+tbody tr:nth-child(7) { animation-delay: 0.35s; }
+tbody tr:nth-child(8) { animation-delay: 0.4s; }
 
-/* Scroll suave para la tabla */
+/* Scrollbar personalizado */
 .overflow-x-auto {
   scrollbar-width: thin;
-  scrollbar-color: #691C32 #f3f4f6;
+  scrollbar-color: #d1d5db #f9fafb;
 }
 
 .overflow-x-auto::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
 }
 
 .overflow-x-auto::-webkit-scrollbar-track {
-  background: #f3f4f6;
+  background: #f9fafb;
   border-radius: 10px;
 }
 
 .overflow-x-auto::-webkit-scrollbar-thumb {
-  background: #691C32;
+  background: #d1d5db;
   border-radius: 10px;
 }
 
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
-  background: #8B2543;
+  background: #9ca3af;
 }
 
-/* Mejora de accesibilidad */
-button:focus-visible {
+/* Mejora de accesibilidad para focus */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
   outline: 2px solid #691C32;
   outline-offset: 2px;
 }
 
-/* Responsive improvements */
+/* Transición suave para todos los elementos interactivos */
+button, a, input, select {
+  transition: all 0.2s ease;
+}
+
+/* Sombra sutil en hover para las cards */
+.hover\:shadow-lg:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Animación pulse personalizada */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Estilos responsive */
 @media (max-width: 768px) {
   table {
     font-size: 0.875rem;
   }
   
   th, td {
-    padding: 0.5rem !important;
+    padding: 0.75rem 1rem !important;
   }
 }
 
+/* Eliminar outline por defecto en selects */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}

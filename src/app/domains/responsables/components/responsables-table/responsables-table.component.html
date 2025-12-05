@@ -1,372 +1,400 @@
-<!-- Filtros -->
-<div class="mx-4 mb-4">
-  <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">Filtros de Búsqueda</h3>
-      <button 
-        (click)="mostrarFiltros = !mostrarFiltros"
-        class="px-4 py-2 text-sm font-medium text-[#691C32] bg-[#691C32]/10 rounded-lg hover:bg-[#691C32]/20 transition-colors">
-        {{ mostrarFiltros ? 'Ocultar' : 'Mostrar' }} Filtros
-      </button>
-    </div>
-
-    @if (mostrarFiltros) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-      <!-- Filtro por Prioridad (Semáforo) -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">🚦 Prioridad</label>
-        <select 
-          [(ngModel)]="filtroPrioridad"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
-          @for (opcion of opcionesPrioridad; track opcion.value) {
-            <option [value]="opcion.value">{{ opcion.label }}</option>
-          }
-        </select>
+<!-- Dashboard de Semáforo -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#691C32] to-[#8B2543] flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
       </div>
-
-      <!-- Filtro por Estatus -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Estatus</label>
-        <select 
-          [(ngModel)]="filtros.estatus"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
-          @for (opcion of opcionesEstatus; track opcion.value) {
-            <option [value]="opcion.value">{{ opcion.label }}</option>
-          }
-        </select>
-      </div>
-
-      <!-- Filtro por Oficio -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Oficio</label>
-        <input 
-          type="text"
-          [(ngModel)]="filtros.oficio"
-          placeholder="Buscar por oficio..."
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
-      </div>
-
-      <!-- Filtro por Expediente -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Expediente</label>
-        <input 
-          type="text"
-          [(ngModel)]="filtros.expediente"
-          placeholder="Buscar por expediente..."
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
-      </div>
-
-      <!-- Filtro por Remitente -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Remitente</label>
-        <input 
-          type="text"
-          [(ngModel)]="filtros.remitente_area"
-          placeholder="Buscar por remitente..."
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
+        <h2 class="text-lg font-semibold text-gray-900">Estado de Expedientes</h2>
+        <p class="text-sm text-gray-500">Prioridad por tiempo de atención</p>
       </div>
     </div>
+    <button 
+      (click)="filtroPrioridad = ''; aplicarFiltros()"
+      class="text-sm text-[#691C32] hover:text-[#8B2543] font-medium transition-colors"
+      [class.invisible]="!filtroPrioridad">
+      Ver todos
+    </button>
+  </div>
 
-    <div class="flex gap-3 mt-4">
-      <button 
-        (click)="aplicarFiltros()"
-        class="px-6 py-2 bg-[#691C32] text-white rounded-lg hover:bg-[#8B2543] transition-colors font-medium">
-        Aplicar Filtros
-      </button>
-      <button 
-        (click)="limpiarFiltros()"
-        class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium">
-        Limpiar
-      </button>
+  <!-- Cards de Semáforo -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <!-- Vencido -->
+    <div 
+      (click)="filtroPrioridad = 'VENCIDO'; aplicarFiltros()"
+      class="group relative cursor-pointer rounded-xl p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+      [class.ring-2]="filtroPrioridad === 'VENCIDO'"
+      [class.ring-gray-800]="filtroPrioridad === 'VENCIDO'"
+      style="background: linear-gradient(135deg, #1f2937 0%, #374151 100%);">
+      <div class="flex flex-col">
+        <span class="text-gray-300 text-xs font-medium uppercase tracking-wider mb-1">Vencido</span>
+        <span class="text-white text-3xl font-bold">{{ estadisticasSemaforo.vencido }}</span>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse"></span>
+          <span class="text-gray-400 text-xs">Sin tiempo</span>
+        </div>
+      </div>
+      <div class="absolute top-4 right-4 text-2xl opacity-50 group-hover:opacity-100 transition-opacity">⚫</div>
     </div>
-    }
+
+    <!-- Urgente -->
+    <div 
+      (click)="filtroPrioridad = 'URGENTE'; aplicarFiltros()"
+      class="group relative cursor-pointer rounded-xl p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+      [class.ring-2]="filtroPrioridad === 'URGENTE'"
+      [class.ring-red-500]="filtroPrioridad === 'URGENTE'"
+      style="background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);">
+      <div class="flex flex-col">
+        <span class="text-red-100 text-xs font-medium uppercase tracking-wider mb-1">Urgente</span>
+        <span class="text-white text-3xl font-bold">{{ estadisticasSemaforo.urgente }}</span>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-red-200 animate-pulse"></span>
+          <span class="text-red-100 text-xs">24 horas</span>
+        </div>
+      </div>
+      <div class="absolute top-4 right-4 text-2xl opacity-50 group-hover:opacity-100 transition-opacity">🔴</div>
+    </div>
+
+    <!-- Alta -->
+    <div 
+      (click)="filtroPrioridad = 'ALTA'; aplicarFiltros()"
+      class="group relative cursor-pointer rounded-xl p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+      [class.ring-2]="filtroPrioridad === 'ALTA'"
+      [class.ring-orange-500]="filtroPrioridad === 'ALTA'"
+      style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);">
+      <div class="flex flex-col">
+        <span class="text-orange-100 text-xs font-medium uppercase tracking-wider mb-1">Alta</span>
+        <span class="text-white text-3xl font-bold">{{ estadisticasSemaforo.alta }}</span>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-orange-200"></span>
+          <span class="text-orange-100 text-xs">72 horas</span>
+        </div>
+      </div>
+      <div class="absolute top-4 right-4 text-2xl opacity-50 group-hover:opacity-100 transition-opacity">🟠</div>
+    </div>
+
+    <!-- Media -->
+    <div 
+      (click)="filtroPrioridad = 'MEDIA'; aplicarFiltros()"
+      class="group relative cursor-pointer rounded-xl p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+      [class.ring-2]="filtroPrioridad === 'MEDIA'"
+      [class.ring-amber-500]="filtroPrioridad === 'MEDIA'"
+      style="background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);">
+      <div class="flex flex-col">
+        <span class="text-amber-900 text-xs font-medium uppercase tracking-wider mb-1">Media</span>
+        <span class="text-amber-900 text-3xl font-bold">{{ estadisticasSemaforo.media }}</span>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-700"></span>
+          <span class="text-amber-800 text-xs">120 horas</span>
+        </div>
+      </div>
+      <div class="absolute top-4 right-4 text-2xl opacity-50 group-hover:opacity-100 transition-opacity">🟡</div>
+    </div>
+
+    <!-- Baja -->
+    <div 
+      (click)="filtroPrioridad = 'BAJA'; aplicarFiltros()"
+      class="group relative cursor-pointer rounded-xl p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+      [class.ring-2]="filtroPrioridad === 'BAJA'"
+      [class.ring-emerald-500]="filtroPrioridad === 'BAJA'"
+      style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+      <div class="flex flex-col">
+        <span class="text-emerald-100 text-xs font-medium uppercase tracking-wider mb-1">Baja</span>
+        <span class="text-white text-3xl font-bold">{{ estadisticasSemaforo.baja }}</span>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-200"></span>
+          <span class="text-emerald-100 text-xs">288 horas</span>
+        </div>
+      </div>
+      <div class="absolute top-4 right-4 text-2xl opacity-50 group-hover:opacity-100 transition-opacity">🟢</div>
+    </div>
   </div>
 </div>
 
-<!-- Semáforo de Prioridades (Cards) -->
-@if (estadisticas.total > 0) {
-<div class="mx-4 mb-4">
-  <div class="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-      <span>🚦</span> Semáforo de Vencimiento
-    </h3>
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <!-- Vencido -->
-      <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-4 text-white cursor-pointer hover:scale-105 transition-transform"
-           (click)="filtroPrioridad = 'VENCIDO'; aplicarFiltros()">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-medium opacity-80">⚫ VENCIDO</p>
-            <p class="text-3xl font-bold">{{ estadisticasSemaforo.vencido }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Urgente -->
-      <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-lg p-4 text-white cursor-pointer hover:scale-105 transition-transform"
-           (click)="filtroPrioridad = 'URGENTE'; aplicarFiltros()">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-medium opacity-80">🔴 Urgente</p>
-            <p class="text-3xl font-bold">{{ estadisticasSemaforo.urgente }}</p>
-            <p class="text-xs opacity-70">24 HRS</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Alta -->
-      <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-4 text-white cursor-pointer hover:scale-105 transition-transform"
-           (click)="filtroPrioridad = 'ALTA'; aplicarFiltros()">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-medium opacity-80">🟠 Alta</p>
-            <p class="text-3xl font-bold">{{ estadisticasSemaforo.alta }}</p>
-            <p class="text-xs opacity-70">72 HRS</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Media -->
-      <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-4 text-white cursor-pointer hover:scale-105 transition-transform"
-           (click)="filtroPrioridad = 'MEDIA'; aplicarFiltros()">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-medium opacity-80">🟡 Media</p>
-            <p class="text-3xl font-bold">{{ estadisticasSemaforo.media }}</p>
-            <p class="text-xs opacity-70">120 HRS</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Baja -->
-      <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-4 text-white cursor-pointer hover:scale-105 transition-transform"
-           (click)="filtroPrioridad = 'BAJA'; aplicarFiltros()">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-medium opacity-80">🟢 Baja</p>
-            <p class="text-3xl font-bold">{{ estadisticasSemaforo.baja }}</p>
-            <p class="text-xs opacity-70">288 HRS</p>
-          </div>
-        </div>
+<!-- Sección de Filtros y Búsqueda -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+  <div class="flex flex-col md:flex-row md:items-center gap-4">
+    <!-- Búsqueda rápida -->
+    <div class="flex-1">
+      <div class="relative">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input 
+          type="text"
+          [(ngModel)]="filtros.oficio"
+          (keyup.enter)="aplicarFiltros()"
+          placeholder="Buscar por oficio, expediente o asunto..."
+          class="w-full pl-12 pr-4 py-3 bg-gray-50 border-0 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#691C32]/20 focus:bg-white transition-all">
       </div>
     </div>
-
-    <!-- Leyenda de reglas -->
-    <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-      <p class="text-sm text-blue-800 font-medium mb-2">📋 Reglas de Tiempo:</p>
-      <ul class="text-xs text-blue-700 space-y-1">
-        <li>• <strong>Sin fecha de atención:</strong> 72 horas máximo para proporcionar fecha estimada</li>
-        <li>• <strong>Urgente (24 HRS):</strong> Requiere atención inmediata</li>
-        <li>• <strong>Alta (72 HRS):</strong> Tiempo estándar para respuesta inicial</li>
-        <li>• <strong>Media (120 HRS):</strong> Prioridad media de atención</li>
-        <li>• <strong>Baja (288 HRS):</strong> Prioridad baja, mayor tiempo de respuesta</li>
-      </ul>
+    
+    <!-- Filtros -->
+    <div class="flex items-center gap-3">
+      <select 
+        [(ngModel)]="filtros.estatus"
+        (change)="aplicarFiltros()"
+        class="px-4 py-3 bg-gray-50 border-0 rounded-xl text-gray-700 text-sm focus:ring-2 focus:ring-[#691C32]/20 cursor-pointer">
+        @for (opcion of opcionesEstatus; track opcion.value) {
+          <option [value]="opcion.value">{{ opcion.label }}</option>
+        }
+      </select>
+      
+      <button 
+        (click)="limpiarFiltros()"
+        class="px-4 py-3 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors text-sm font-medium">
+        Limpiar
+      </button>
+      
+      <button 
+        (click)="aplicarFiltros()"
+        class="px-6 py-3 bg-gradient-to-r from-[#691C32] to-[#8B2543] text-white rounded-xl hover:shadow-lg hover:shadow-[#691C32]/25 transition-all text-sm font-medium">
+        Buscar
+      </button>
     </div>
+  </div>
+</div>
+
+<!-- Estado de Carga -->
+@if (cargando) {
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-16">
+  <div class="flex flex-col items-center justify-center">
+    <div class="relative">
+      <div class="w-16 h-16 border-4 border-gray-200 rounded-full"></div>
+      <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+    </div>
+    <p class="mt-6 text-gray-500 font-medium">Cargando expedientes...</p>
   </div>
 </div>
 }
 
 <!-- Tabla de Expedientes -->
-@if (cargando) {
-<div class="flex justify-center items-center py-12">
-  <div class="text-center">
-    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#691C32]"></div>
-    <p class="mt-4 text-gray-600">Cargando expedientes...</p>
+@if (!cargando && expedientes.length > 0 && mostrarTabla) {
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+  <!-- Header de la tabla -->
+  <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-gray-900 font-semibold">Expedientes</span>
+      <span class="px-3 py-1 bg-[#691C32]/10 text-[#691C32] text-sm font-medium rounded-full">
+        {{ expedientes.length }} registros
+      </span>
+      @if (filtroPrioridad) {
+        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full flex items-center gap-1">
+          Filtrado: {{ filtroPrioridad }}
+          <button (click)="filtroPrioridad = ''; aplicarFiltros()" class="ml-1 hover:text-gray-800">×</button>
+        </span>
+      }
+    </div>
   </div>
+
+  <!-- Tabla -->
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead>
+        <tr class="bg-gray-50/80">
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Prioridad</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Expediente</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Oficio</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Remitente</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Asunto</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Estatus</th>
+          <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tiempo</th>
+          <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
+        <tr class="hover:bg-gray-50/50 transition-colors group">
+          <!-- Prioridad -->
+          <td class="px-6 py-5">
+            @switch (calcularSemaforo(expediente).nivel) {
+              @case ('VENCIDO') {
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-900 text-white text-xs font-semibold rounded-lg">
+                  <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse"></span>
+                  Vencido
+                </div>
+              }
+              @case ('URGENTE') {
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-red-500 text-white text-xs font-semibold rounded-lg">
+                  <span class="w-2 h-2 rounded-full bg-red-200 animate-pulse"></span>
+                  Urgente
+                </div>
+              }
+              @case ('ALTA') {
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-orange-500 text-white text-xs font-semibold rounded-lg">
+                  <span class="w-2 h-2 rounded-full bg-orange-200"></span>
+                  Alta
+                </div>
+              }
+              @case ('MEDIA') {
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-400 text-amber-900 text-xs font-semibold rounded-lg">
+                  <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+                  Media
+                </div>
+              }
+              @case ('BAJA') {
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500 text-white text-xs font-semibold rounded-lg">
+                  <span class="w-2 h-2 rounded-full bg-emerald-200"></span>
+                  Baja
+                </div>
+              }
+            }
+          </td>
+          
+          <!-- Expediente -->
+          <td class="px-6 py-5">
+            <span class="text-sm font-semibold text-gray-900">{{ expediente.expediente || '-' }}</span>
+          </td>
+          
+          <!-- Oficio -->
+          <td class="px-6 py-5">
+            <span class="text-sm text-gray-600">{{ expediente.oficio || '-' }}</span>
+          </td>
+          
+          <!-- Remitente -->
+          <td class="px-6 py-5">
+            <span class="text-sm text-gray-600 max-w-[150px] truncate block" [title]="expediente.remitente_area || ''">
+              {{ expediente.remitente_area || '-' }}
+            </span>
+          </td>
+          
+          <!-- Asunto -->
+          <td class="px-6 py-5">
+            <span class="text-sm text-gray-600 max-w-[200px] truncate block" [title]="expediente.referencia_asunto || ''">
+              @if (expediente.referencia_asunto && expediente.referencia_asunto.length >= 40) {
+                {{ expediente.referencia_asunto | slice: 0 : 40 }}...
+              } @else {
+                {{ expediente.referencia_asunto || '-' }}
+              }
+            </span>
+          </td>
+          
+          <!-- Estatus -->
+          <td class="px-6 py-5">
+            @switch (expediente.estatus) {
+              @case ('ASIGNADO') {
+                <span class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-md">
+                  Asignado
+                </span>
+              }
+              @case ('PENDIENTE') {
+                <span class="inline-flex items-center px-2.5 py-1 bg-yellow-50 text-yellow-700 text-xs font-medium rounded-md">
+                  Pendiente
+                </span>
+              }
+              @case ('ATENCION_PARCIAL') {
+                <span class="inline-flex items-center px-2.5 py-1 bg-orange-50 text-orange-700 text-xs font-medium rounded-md">
+                  Parcial
+                </span>
+              }
+              @case ('ATENCION_TOTAL') {
+                <span class="inline-flex items-center px-2.5 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-md">
+                  Atendido
+                </span>
+              }
+              @case ('REVISION_LEGAL') {
+                <span class="inline-flex items-center px-2.5 py-1 bg-purple-50 text-purple-700 text-xs font-medium rounded-md">
+                  Revisión
+                </span>
+              }
+              @default {
+                <span class="inline-flex items-center px-2.5 py-1 bg-gray-50 text-gray-600 text-xs font-medium rounded-md">
+                  {{ expediente.estatus || '-' }}
+                </span>
+              }
+            }
+          </td>
+          
+          <!-- Tiempo restante -->
+          <td class="px-6 py-5">
+            @if (calcularSemaforo(expediente).nivel === 'VENCIDO') {
+              <div class="flex items-center gap-2 text-gray-900">
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium">Sin tiempo</span>
+              </div>
+            } @else {
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm text-gray-600">{{ formatearHorasRestantes(calcularSemaforo(expediente).horasRestantes) }}</span>
+              </div>
+            }
+          </td>
+          
+          <!-- Acciones -->
+          <td class="px-6 py-5 text-center">
+            <button 
+              (click)="verDetalleExpediente(expediente)"
+              class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gray-100 text-gray-600 hover:bg-[#691C32] hover:text-white transition-all group-hover:bg-[#691C32]/10 group-hover:text-[#691C32]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  @if (pagesExpedientes.length > 1) {
+  <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+    <p class="text-sm text-gray-500">
+      Mostrando <span class="font-medium text-gray-900">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
+      a <span class="font-medium text-gray-900">{{ Math.min(pageSelected * itemsPerPage, expedientes.length) }}</span>
+      de <span class="font-medium text-gray-900">{{ expedientes.length }}</span> expedientes
+    </p>
+    <div class="flex items-center gap-2">
+      <button 
+        (click)="pageSelected > 1 && (pageSelected = pageSelected - 1)"
+        [disabled]="pageSelected === 1"
+        class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        Anterior
+      </button>
+      <button 
+        (click)="pageSelected < pagesExpedientes.length && (pageSelected = pageSelected + 1)"
+        [disabled]="pageSelected >= pagesExpedientes.length"
+        class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        Siguiente
+      </button>
+    </div>
+  </div>
+  }
 </div>
 }
 
-@if (!cargando && expedientes.length > 0 && mostrarTabla) {
-<section class="py-1 bg-gray-50" id="sectionTable" #sectionTable>
-  <div class="w-full mx-auto px-4">
-    <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-xl bg-white border border-gray-200">
-      <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <div class="overflow-x-auto">
-          <table class="min-w-full border-collapse">
-            <thead class="bg-gradient-to-r from-[#691C32] to-[#8B2543]">
-              <tr>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  <div class="flex items-center gap-2">
-                    <mat-icon class="!w-4 !h-4">visibility</mat-icon>
-                    Ver
-                  </div>
-                </th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  🚦 Prioridad
-                </th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Expediente</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Oficio</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Remitente</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Asunto</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Estatus</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Fecha Captura</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Tiempo Restante
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
-              @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-              <tr class="hover:bg-gray-50 transition-colors duration-200"
-                  [class.bg-red-50]="calcularSemaforo(expediente).nivel === 'VENCIDO' || calcularSemaforo(expediente).nivel === 'URGENTE'"
-                  [class.bg-orange-50]="calcularSemaforo(expediente).nivel === 'ALTA'">
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="flex gap-2 justify-start">
-                    <button 
-                      class="p-2 rounded-lg bg-[#691C32]/10 text-[#691C32] hover:bg-[#691C32] hover:text-white transition-all duration-200 hover:shadow-md" 
-                      (click)="verDetalleExpediente(expediente)" 
-                      title="Ver detalle">
-                      <mat-icon class="!w-5 !h-5 !text-base">visibility</mat-icon>
-                    </button>
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <!-- Badge de prioridad con semáforo -->
-                  <div class="flex flex-col items-start gap-1">
-                    <span [ngClass]="['px-3', 'py-1.5', 'text-sm', 'font-bold', 'rounded-lg', 'border-2', calcularSemaforo(expediente).bgColor, calcularSemaforo(expediente).color, calcularSemaforo(expediente).borderColor]">
-                      {{ calcularSemaforo(expediente).emoji }} {{ calcularSemaforo(expediente).label }}
-                    </span>
-                    @if (calcularSemaforo(expediente).nivel !== 'VENCIDO') {
-                      <span class="text-xs font-medium" [ngClass]="calcularSemaforo(expediente).color">
-                        {{ formatearHorasRestantes(calcularSemaforo(expediente).horasRestantes) }}
-                      </span>
-                    }
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-[#691C32]">{{ expediente.expediente || '-' }}</div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">{{ expediente.oficio || '-' }}</div>
-                </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.remitente_area">
-                    {{ expediente.remitente_area || '-' }}
-                  </div>
-                </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.referencia_asunto">
-                    @if (expediente.referencia_asunto && expediente.referencia_asunto.length >= 30) {
-                      {{ expediente.referencia_asunto | slice: 0 : 30 }}...
-                    } @else {
-                      {{ expediente.referencia_asunto || '-' }}
-                    }
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  @if (expediente.estatus === 'ASIGNADO') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 border border-blue-200">
-                      🎯 Asignado
-                    </span>
-                  } @else if (expediente.estatus === 'PENDIENTE') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200">
-                      ⏳ Pendiente
-                    </span>
-                  } @else if (expediente.estatus === 'ATENCION_PARCIAL') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 border border-orange-200">
-                      📝 Atención Parcial
-                    </span>
-                  } @else if (expediente.estatus === 'ATENCION_TOTAL') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 border border-green-200">
-                      ✅ Atención Total
-                    </span>
-                  } @else if (expediente.estatus === 'REVISION_LEGAL') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 border border-purple-200">
-                      ⚖️ Revisión Legal
-                    </span>
-                  } @else {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                      {{ expediente.estatus || '-' }}
-                    </span>
-                  }
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">
-                    {{ formatearFechaHora(expediente.fecha_creacion?.toString()) }}
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  @if (calcularSemaforo(expediente).nivel === 'VENCIDO') {
-                    <div class="flex items-center gap-2">
-                      <span class="px-3 py-1.5 text-sm font-bold rounded-lg bg-gray-800 text-white animate-pulse">
-                        ⚠️ VENCIDO
-                      </span>
-                    </div>
-                  } @else {
-                    <div class="flex items-center gap-2">
-                      <span [ngClass]="['px-3', 'py-1.5', 'text-sm', 'font-semibold', 'rounded-lg', 'border', calcularSemaforo(expediente).bgColor, calcularSemaforo(expediente).color, calcularSemaforo(expediente).borderColor]">
-                        ⏱️ {{ formatearHorasRestantes(calcularSemaforo(expediente).horasRestantes) }}
-                      </span>
-                    </div>
-                  }
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Paginación -->
-        <div class="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4 px-4">
-          <div class="flex items-center gap-3 bg-gradient-to-r from-[#691C32]/10 to-[#8B2543]/10 px-6 py-3 rounded-lg border border-[#691C32]/20">
-            <mat-icon class="text-[#691C32]">description</mat-icon>
-            <p class="text-sm text-gray-700">
-              Mostrando
-              <span class="font-bold text-[#691C32]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
-              a
-              <span class="font-bold text-[#691C32]">{{
-                (pageSelected - 1) * itemsPerPage + itemsPerPage < expedientes.length 
-                  ? (pageSelected - 1) * itemsPerPage + itemsPerPage 
-                  : expedientes.length
-              }}</span>
-              de
-              <span class="font-bold text-[#691C32]">{{ expedientes.length }}</span>
-              expedientes
-            </p>
-          </div>
-
-          <div>
-            @if (pagesExpedientes.length > 0) {
-            <ul>
-              <li *ngFor="let item of expedientes | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }"></li>
-            </ul>
-            <div class="has-text-centered">
-              <pagination-controls 
-                (pageChange)="pageSelected = $event" 
-                [nextLabel]="labels.nextLabel"
-                [previousLabel]="labels.previousLabel">
-              </pagination-controls>
-            </div>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-}
-
+<!-- Estado vacío -->
 @if (!cargando && expedientes.length === 0 && mostrarTabla) {
-<div class="flex flex-col items-center justify-center py-16 px-4">
-  <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-12 max-w-md w-full shadow-lg border border-gray-200">
-    <div class="flex flex-col items-center text-center">
-      <div class="mb-6 p-4 bg-white rounded-full shadow-md">
-        <mat-icon class="w-16 h-16 text-gray-400">inbox</mat-icon>
-      </div>
-      <h3 class="text-xl font-bold text-gray-800 mb-2">
-        No hay expedientes asignados
-      </h3>
-      <p class="text-gray-600">
-        No tienes expedientes asignados en este momento o ninguno coincide con los filtros aplicados.
-      </p>
-      @if (filtroPrioridad) {
-        <button 
-          (click)="limpiarFiltros()"
-          class="mt-4 px-4 py-2 bg-[#691C32] text-white rounded-lg hover:bg-[#8B2543] transition-colors">
-          Ver todos los expedientes
-        </button>
-      }
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-16">
+  <div class="flex flex-col items-center justify-center text-center max-w-md mx-auto">
+    <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
+      <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
     </div>
+    <h3 class="text-lg font-semibold text-gray-900 mb-2">No hay expedientes</h3>
+    <p class="text-gray-500 mb-6">
+      @if (filtroPrioridad || filtros.estatus || filtros.oficio) {
+        No se encontraron expedientes con los filtros aplicados.
+      } @else {
+        No tienes expedientes asignados en este momento.
+      }
+    </p>
+    @if (filtroPrioridad || filtros.estatus || filtros.oficio) {
+      <button 
+        (click)="limpiarFiltros()"
+        class="px-6 py-3 bg-gradient-to-r from-[#691C32] to-[#8B2543] text-white rounded-xl hover:shadow-lg transition-all text-sm font-medium">
+        Limpiar filtros
+      </button>
+    }
   </div>
 </div>
 }
