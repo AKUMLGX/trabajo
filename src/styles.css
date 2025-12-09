@@ -36,3 +36,27 @@ app-stepper-tlapohualli .mat-stroked-button:hover {
   background: #DDC9A4 !important;
   color: #691C32 !important;
 }
+
+/* ===== MODAL EXPEDIENTE - QUITAR PADDING DEL DIALOG ===== */
+.expediente-modal-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+}
+
+.expediente-modal-panel .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.expediente-modal-panel .mdc-dialog__surface {
+  padding: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+/* Asegurar que el contenido ocupe todo el espacio */
+.expediente-modal-panel .mat-mdc-dialog-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+}

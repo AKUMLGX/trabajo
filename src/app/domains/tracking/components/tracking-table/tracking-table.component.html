@@ -189,8 +189,8 @@
                       <div class="flex items-center gap-2">
                         <span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-green-100 text-green-800 border border-green-300">
                           🟢 A tiempo
-                        </span>
-                      </div>
+                    </span>
+                  </div>
                     }
                   } @else {
                     <span class="text-sm text-gray-400">-</span>
@@ -436,18 +436,18 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
             <p class="text-sm text-gray-700">
-              Mostrando
+            Mostrando
               <span class="font-bold text-[#691C32]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
-              a
+            a
               <span class="font-bold text-[#691C32]">{{
-                tipoBusqueda === 'Tlapohualli' 
-                  ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlapohualli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlapohualli.length)
-                  : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
-              }}</span>
-              de
+              tipoBusqueda === 'Tlapohualli' 
+                ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlapohualli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlapohualli.length)
+                : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
+            }}</span>
+                de
               <span class="font-bold text-[#691C32]">{{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}</span>
               expedientes
-            </p>
+          </p>
           </div>
 
           <!-- Botón de descarga mejorado -->
@@ -459,7 +459,7 @@
             </svg>
             <span>Descargar Excel</span>
           </button>
-        </div>
+            </div>
       </div>
     </div>
     {{ scrollToTable() }}

@@ -416,8 +416,10 @@ export class ResponsablesTableComponent implements OnInit {
    */
   verDetalleExpediente(expediente: ExpedienteTlapohualli): void {
     const dialogRef = this.dialog.open(ExpedienteDetalleModalComponent, {
-      width: '90%',
-      maxWidth: '1200px',
+      width: '900px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      panelClass: 'expediente-modal-panel',
       data: { expediente }
     });
 

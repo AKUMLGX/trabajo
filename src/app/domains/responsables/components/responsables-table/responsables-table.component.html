@@ -158,6 +158,26 @@
   </div>
 </div>
 
+<!-- Barra de contexto -->
+<div class="info-bar">
+  <div class="info-pill">
+    <span class="label">Responsable</span>
+    <span class="value">{{ responsable || 'Sin responsable' }}</span>
+  </div>
+  <div class="metric">
+    <p class="metric-value">{{ estadisticas.total || 0 }}</p>
+    <p class="metric-label">Total</p>
+  </div>
+  <div class="metric">
+    <p class="metric-value text-red-600">{{ estadisticas.urgentes || 0 }}</p>
+    <p class="metric-label">Urgentes</p>
+  </div>
+  <div class="metric">
+    <p class="metric-value text-amber-600">{{ estadisticas.con_retraso || 0 }}</p>
+    <p class="metric-label">Con retraso</p>
+  </div>
+</div>
+
 <!-- Estado de Carga -->
 @if (cargando) {
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-16">
@@ -207,7 +227,8 @@
       </thead>
       <tbody class="divide-y divide-gray-100">
         @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-        <tr class="hover:bg-gray-50/50 transition-colors group">
+        <tr class="hover:bg-gray-50/50 transition-colors group"
+            [ngClass]="['row-priority', calcularSemaforo(expediente).nivel.toLowerCase()]">
           <!-- Prioridad -->
           <td class="px-6 py-5">
             @switch (calcularSemaforo(expediente).nivel) {

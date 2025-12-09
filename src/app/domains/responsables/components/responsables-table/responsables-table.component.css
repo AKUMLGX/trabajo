@@ -81,6 +81,61 @@ button, a, input, select {
   animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Barra de contexto */
+.info-bar {
+  @apply bg-white border border-gray-100 rounded-2xl shadow-sm mb-6 px-4 py-3;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  align-items: center;
+}
+
+.info-pill {
+  @apply bg-gradient-to-r from-[#691C32]/10 to-[#8B2543]/10 border border-[#691C32]/10 rounded-xl px-4 py-2;
+}
+
+.info-pill .label {
+  @apply text-xs uppercase tracking-wide text-gray-500 font-semibold;
+}
+
+.info-pill .value {
+  @apply text-sm font-bold text-[#691C32];
+}
+
+.metric {
+  @apply flex flex-col bg-gray-50 border border-gray-100 rounded-xl px-4 py-2;
+}
+
+.metric-value {
+  @apply text-lg font-extrabold text-gray-900 leading-tight;
+}
+
+.metric-label {
+  @apply text-xs text-gray-500 uppercase tracking-wide;
+}
+
+/* Borde de prioridad en filas */
+.row-priority {
+  position: relative;
+}
+
+.row-priority::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.row-priority.urgente::before { background: #ef4444; }
+.row-priority.alta::before { background: #f97316; }
+.row-priority.media::before { background: #f59e0b; }
+.row-priority.baja::before { background: #10b981; }
+.row-priority.vencido::before { background: #374151; }
+
 /* Estilos responsive */
 @media (max-width: 768px) {
   table {
