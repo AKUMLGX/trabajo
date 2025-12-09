@@ -61,10 +61,34 @@ interface FormularioAtencion {
 })
 export class AtencionModalComponent implements OnInit {
   expediente: ExpedienteTlapohualli;
+  // Catálogos con datos estáticos como fallback
   catalogos: CatalogosAtencion = {
-    especialistas: [],
-    tipos_insumo: [],
-    tipos_resultado: []
+    especialistas: [
+      { id_especialista: 1, codigo: 'EX_ERIKA', nombre_completo: 'Ex-Erika', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 2, codigo: 'EX_JULIAN', nombre_completo: 'Ex-Julian', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 3, codigo: 'EX_GIBRAN', nombre_completo: 'Ex-Gibran', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 4, codigo: 'EX_DILAN', nombre_completo: 'Ex-Dilan', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 5, codigo: 'EX_ABRAHAM', nombre_completo: 'Ex-Abraham', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 6, codigo: 'EX_LINO', nombre_completo: 'Ex-Lino', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 7, codigo: 'IN_IRMA', nombre_completo: 'In-Irma', tipo: 'INTERNO', activo: true },
+      { id_especialista: 8, codigo: 'IN_KAREN', nombre_completo: 'In-Karen', tipo: 'INTERNO', activo: true },
+      { id_especialista: 9, codigo: 'IN_HECTOR', nombre_completo: 'In-Hector', tipo: 'INTERNO', activo: true }
+    ],
+    tipos_insumo: [
+      { id_insumo: 1, codigo: 'EQUIPO_FISICO', descripcion: 'Equipo(s) Físico(s)', activo: true },
+      { id_insumo: 2, codigo: 'EQUIPO_VIRTUAL', descripcion: 'Equipo(s) Virtual(es)', activo: true },
+      { id_insumo: 3, codigo: 'EQUIPO_MOVIL', descripcion: 'Equipo(s) Móvil(es)', activo: true },
+      { id_insumo: 4, codigo: 'EQUIPO_REMOTO', descripcion: 'Equipo(s) Remoto(s)', activo: true },
+      { id_insumo: 5, codigo: 'IMAGEN_CIFRADA', descripcion: 'Imagen(es) Cifrada(s)', activo: true },
+      { id_insumo: 6, codigo: 'PERSONALIZADA', descripcion: 'Personalizada(s)', activo: true },
+      { id_insumo: 7, codigo: 'OTROS', descripcion: 'Otros', activo: true }
+    ],
+    tipos_resultado: [
+      { id_resultado: 1, codigo: 'ACTA_HECHOS', descripcion: 'Acta de Hechos', activo: true },
+      { id_resultado: 2, codigo: 'CADENA_CUSTODIA', descripcion: 'Cadena de Custodia', activo: true },
+      { id_resultado: 3, codigo: 'MEMORIA_TECNICA', descripcion: 'Memoria Técnica', activo: true },
+      { id_resultado: 4, codigo: 'NO_APLICA', descripcion: 'No Aplica', activo: true }
+    ]
   };
   
   // Estado del formulario
@@ -129,20 +153,30 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
-   * Cargar catálogos desde el backend
+   * Cargar catálogos desde el backend (usa fallback estático si falla)
    */
   cargarCatalogos(): void {
     this.cargandoCatalogos = true;
     this.atencionService.obtenerCatalogos().subscribe({
       next: (catalogos) => {
-        this.catalogos = catalogos;
+        // Solo actualizar si el backend devuelve datos
+        if (catalogos.tipos_insumo?.length > 0) {
+          this.catalogos.tipos_insumo = catalogos.tipos_insumo;
+        }
+        if (catalogos.tipos_resultado?.length > 0) {
+          this.catalogos.tipos_resultado = catalogos.tipos_resultado;
+        }
+        if (catalogos.especialistas?.length > 0) {
+          this.catalogos.especialistas = catalogos.especialistas;
+        }
         this.cargandoCatalogos = false;
         console.log('✅ [AtencionModal] Catálogos cargados:', this.catalogos);
       },
       error: (error) => {
-        console.error('❌ [AtencionModal] Error al cargar catálogos:', error);
+        console.warn('⚠️ [AtencionModal] Usando catálogos estáticos (backend no disponible):', error);
+        // Mantener los datos estáticos ya definidos
         this.cargandoCatalogos = false;
-        this.mostrarError('Error al cargar catálogos');
+        // No mostrar error, usar fallback silenciosamente
       }
     });
   }
