@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { ExpedienteTlapohualli } from '../../../capture/interfaces/expediente-tlapohualli.interface';
 import { 
   AtencionService, 
@@ -45,7 +46,18 @@ interface FormularioAtencion {
     MatSnackBarModule
   ],
   templateUrl: './atencion-modal.component.html',
-  styleUrl: './atencion-modal.component.css'
+  styleUrl: './atencion-modal.component.css',
+  animations: [
+    trigger('slideDown', [
+      transition(':enter', [
+        style({ opacity: 0, height: 0, transform: 'translateY(-10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, height: '*', transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, height: 0, transform: 'translateY(-10px)' }))
+      ])
+    ])
+  ]
 })
 export class AtencionModalComponent implements OnInit {
   expediente: ExpedienteTlapohualli;
@@ -330,6 +342,35 @@ export class AtencionModalComponent implements OnInit {
     if (!this.formulario.tipoResultado) return '';
     const resultado = this.catalogos.tipos_resultado.find(r => r.codigo === this.formulario.tipoResultado);
     return resultado?.descripcion || this.formulario.tipoResultado;
+  }
+
+  /**
+   * Obtener icono para cada tipo de insumo
+   */
+  getInsumoIcon(codigo: string): string {
+    const iconos: { [key: string]: string } = {
+      'EQUIPO_FISICO': 'computer',
+      'EQUIPO_VIRTUAL': 'cloud',
+      'EQUIPO_MOVIL': 'smartphone',
+      'EQUIPO_REMOTO': 'settings_remote',
+      'IMAGEN_CIFRADA': 'enhanced_encryption',
+      'PERSONALIZADA': 'tune',
+      'OTROS': 'more_horiz'
+    };
+    return iconos[codigo] || 'inventory_2';
+  }
+
+  /**
+   * Obtener icono para cada tipo de resultado
+   */
+  getResultadoIcon(codigo: string): string {
+    const iconos: { [key: string]: string } = {
+      'ACTA_HECHOS': 'description',
+      'CADENA_CUSTODIA': 'link',
+      'MEMORIA_TECNICA': 'article',
+      'NO_APLICA': 'block'
+    };
+    return iconos[codigo] || 'fact_check';
   }
 }
 

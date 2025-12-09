@@ -816,7 +816,557 @@
 .text-green-600 { color: #16a34a; }
 
 /* =====================================================
-   ADQUISICIÓN V2 - DISEÑO TIPO TABLA
+   ADQUISICIÓN WIZARD - FLUJO PROGRESIVO
+   ===================================================== */
+.adquisicion-wizard {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+/* Step Container */
+.wizard-step {
+  border-bottom: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.wizard-step:last-of-type {
+  border-bottom: none;
+}
+
+.wizard-step.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.wizard-step.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Step Header */
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: #fafafa;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.wizard-step.active .step-header {
+  background: white;
+}
+
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.step-num {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5e7eb;
+  color: #6b7280;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.wizard-step.active .step-num {
+  background: linear-gradient(135deg, #691C32, #8B2543);
+  color: white;
+}
+
+.step-num.completed {
+  background: #10b981 !important;
+  color: white !important;
+}
+
+.step-num mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.step-line {
+  width: 2px;
+  height: 20px;
+  background: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.step-line.active {
+  background: linear-gradient(180deg, #10b981, #059669);
+}
+
+.step-info {
+  flex: 1;
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 4px 0;
+}
+
+.step-title mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #691C32;
+}
+
+.step-desc {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.step-badge {
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #691C32, #8B2543);
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.step-badge.resultado {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.step-badge.especialista {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+/* Step Content */
+.step-content {
+  padding: 20px;
+  background: linear-gradient(180deg, #fafafa 0%, white 100%);
+  overflow: hidden;
+}
+
+/* Step Locked */
+.step-locked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.step-locked mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* ===== INSUMO GRID ===== */
+.insumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.insumo-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.insumo-card input {
+  display: none;
+}
+
+.insumo-card:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -8px rgba(0,0,0,0.1);
+}
+
+.insumo-card.selected {
+  border-color: #691C32;
+  background: linear-gradient(135deg, rgba(105, 28, 50, 0.04) 0%, rgba(105, 28, 50, 0.08) 100%);
+  box-shadow: 0 0 0 3px rgba(105, 28, 50, 0.1);
+}
+
+.insumo-card .card-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5e7eb;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.25s ease;
+}
+
+.insumo-card.selected .card-check {
+  opacity: 1;
+  transform: scale(1);
+  background: #10b981;
+  color: white;
+}
+
+.insumo-card .card-check mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.insumo-card .card-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.insumo-card.selected .card-icon {
+  color: #691C32;
+}
+
+.insumo-card .card-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  line-height: 1.3;
+}
+
+.insumo-card.selected .card-text {
+  color: #691C32;
+  font-weight: 600;
+}
+
+/* ===== RESULTADO GRID ===== */
+.resultado-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.resultado-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.resultado-card input {
+  display: none;
+}
+
+.resultado-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px -4px rgba(0,0,0,0.08);
+}
+
+.resultado-card.selected {
+  border-color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.04) 0%, rgba(5, 150, 105, 0.08) 100%);
+}
+
+.resultado-card .radio-indicator {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.resultado-card.selected .radio-indicator {
+  background: white;
+  border-color: #10b981;
+}
+
+.resultado-card .radio-dot {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.resultado-card.selected .radio-dot {
+  background: #10b981;
+}
+
+.resultado-card .card-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: #6b7280;
+}
+
+.resultado-card.selected .card-icon {
+  color: #10b981;
+}
+
+.resultado-card .card-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.resultado-card.selected .card-text {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* ===== ESPECIALISTAS ===== */
+.especialista-section {
+  margin-bottom: 20px;
+}
+
+.especialista-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header-esp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.section-badge.externo {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534;
+}
+
+.section-badge.interno {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+}
+
+.section-count {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.especialistas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.especialista-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.especialista-card input {
+  display: none;
+}
+
+.especialista-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px -4px rgba(0,0,0,0.08);
+}
+
+.especialista-card.selected {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(37, 99, 235, 0.08) 100%);
+}
+
+.esp-avatar {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.esp-avatar.externo {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.esp-avatar.interno {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.esp-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.esp-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.esp-type {
+  display: block;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.especialista-card .esp-check {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.25s ease;
+  color: #3b82f6;
+}
+
+.especialista-card.selected .esp-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.especialista-card .esp-check mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+/* ===== WIZARD SUMMARY ===== */
+.wizard-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-top: 1px solid #a7f3d0;
+}
+
+.wizard-summary .summary-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 12px;
+  color: white;
+}
+
+.wizard-summary .summary-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.wizard-summary .summary-text h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #065f46;
+  margin: 0 0 4px 0;
+}
+
+.wizard-summary .summary-text p {
+  font-size: 13px;
+  color: #047857;
+  margin: 0;
+}
+
+.wizard-summary .summary-text strong {
+  font-weight: 700;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .insumo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .resultado-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .especialistas-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .step-header {
+    flex-wrap: wrap;
+  }
+  
+  .step-badge {
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+  }
+}
+
+/* =====================================================
+   ADQUISICIÓN V2 - DISEÑO TIPO TABLA (DEPRECADO)
    ===================================================== */
 .adquisicion-form-v2 {
   background: white;

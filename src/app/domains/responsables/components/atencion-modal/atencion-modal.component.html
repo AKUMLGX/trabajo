@@ -104,123 +104,201 @@
           [(ngModel)]="formulario.abogadoAsignado">
       </div>
 
-      <!-- ADQUISICION_INFO - DISEÑO MEJORADO -->
-      <div class="dynamic-form adquisicion-form-v2" *ngIf="formulario.tipoAccion === 'ADQUISICION_INFO'">
+      <!-- ADQUISICION_INFO - FLUJO PROGRESIVO -->
+      <div class="dynamic-form adquisicion-wizard" *ngIf="formulario.tipoAccion === 'ADQUISICION_INFO'">
         
-        <!-- Header de la tabla -->
-        <div class="adq-table-header">
-          <div class="adq-col-header insumo">
-            <mat-icon>inventory_2</mat-icon>
-            <span>INSUMO</span>
-            <span class="badge">{{ formulario.tiposInsumo.length }}</span>
+        <!-- ========== PASO 1: INSUMO ========== -->
+        <div class="wizard-step active">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.tiposInsumo.length > 0">
+                <mat-icon *ngIf="formulario.tiposInsumo.length > 0">check</mat-icon>
+                <span *ngIf="formulario.tiposInsumo.length === 0">1</span>
+              </span>
+              <span class="step-line" [class.active]="formulario.tiposInsumo.length > 0"></span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>inventory_2</mat-icon>
+                Selecciona el Insumo
+              </h4>
+              <p class="step-desc">Elige uno o más tipos de insumo para este expediente</p>
+            </div>
+            <div class="step-badge" *ngIf="formulario.tiposInsumo.length > 0">
+              {{ formulario.tiposInsumo.length }} seleccionado(s)
+            </div>
           </div>
-          <div class="adq-col-header resultado">
-            <mat-icon>fact_check</mat-icon>
-            <span>RESULTADO</span>
-            <span class="badge" *ngIf="formulario.tipoResultado">1</span>
-          </div>
-          <div class="adq-col-header especialista">
-            <mat-icon>groups</mat-icon>
-            <span>ESPECIALISTA</span>
-            <span class="badge">{{ formulario.especialistasSeleccionados.length }}</span>
+          <div class="step-content">
+            <div class="insumo-grid">
+              <label 
+                *ngFor="let insumo of catalogos.tipos_insumo"
+                class="insumo-card"
+                [class.selected]="insumoSeleccionado(insumo.codigo)">
+                <input 
+                  type="checkbox" 
+                  [checked]="insumoSeleccionado(insumo.codigo)"
+                  (change)="toggleInsumo(insumo.codigo)">
+                <div class="card-check">
+                  <mat-icon>check</mat-icon>
+                </div>
+                <mat-icon class="card-icon">{{ getInsumoIcon(insumo.codigo) }}</mat-icon>
+                <span class="card-text">{{ insumo.descripcion }}</span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <!-- Contenido de 3 columnas -->
-        <div class="adq-table-body">
-          
-          <!-- Columna INSUMO -->
-          <div class="adq-column insumo-col">
-            <label 
-              *ngFor="let insumo of catalogos.tipos_insumo"
-              class="adq-item"
-              [class.selected]="insumoSeleccionado(insumo.codigo)">
-              <input 
-                type="checkbox" 
-                [checked]="insumoSeleccionado(insumo.codigo)"
-                (change)="toggleInsumo(insumo.codigo)">
-              <span class="item-checkbox">
-                <mat-icon>check</mat-icon>
+        <!-- ========== PASO 2: RESULTADO (aparece cuando hay insumo) ========== -->
+        <div class="wizard-step" [class.active]="formulario.tiposInsumo.length > 0" [class.disabled]="formulario.tiposInsumo.length === 0">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.tipoResultado">
+                <mat-icon *ngIf="formulario.tipoResultado">check</mat-icon>
+                <span *ngIf="!formulario.tipoResultado">2</span>
               </span>
-              <span class="item-text">{{ insumo.descripcion }}</span>
-            </label>
+              <span class="step-line" [class.active]="formulario.tipoResultado"></span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>fact_check</mat-icon>
+                Selecciona el Resultado
+              </h4>
+              <p class="step-desc">¿Qué tipo de documento se generará?</p>
+            </div>
+            <div class="step-badge resultado" *ngIf="formulario.tipoResultado">
+              {{ getDescripcionResultado() }}
+            </div>
           </div>
+          <div class="step-content" *ngIf="formulario.tiposInsumo.length > 0" @slideDown>
+            <div class="resultado-grid">
+              <label 
+                *ngFor="let resultado of catalogos.tipos_resultado"
+                class="resultado-card"
+                [class.selected]="formulario.tipoResultado === resultado.codigo">
+                <input 
+                  type="radio" 
+                  name="tipoResultado"
+                  [value]="resultado.codigo"
+                  [(ngModel)]="formulario.tipoResultado">
+                <div class="radio-indicator">
+                  <span class="radio-dot"></span>
+                </div>
+                <mat-icon class="card-icon">{{ getResultadoIcon(resultado.codigo) }}</mat-icon>
+                <span class="card-text">{{ resultado.descripcion }}</span>
+              </label>
+            </div>
+          </div>
+          <!-- Mensaje bloqueado -->
+          <div class="step-locked" *ngIf="formulario.tiposInsumo.length === 0">
+            <mat-icon>lock</mat-icon>
+            <span>Primero selecciona al menos un insumo</span>
+          </div>
+        </div>
 
-          <!-- Columna RESULTADO -->
-          <div class="adq-column resultado-col">
-            <label 
-              *ngFor="let resultado of catalogos.tipos_resultado"
-              class="adq-item radio-item"
-              [class.selected]="formulario.tipoResultado === resultado.codigo">
-              <input 
-                type="radio" 
-                name="tipoResultado"
-                [value]="resultado.codigo"
-                [(ngModel)]="formulario.tipoResultado">
-              <span class="item-radio">
-                <span class="radio-dot"></span>
+        <!-- ========== PASO 3: ESPECIALISTA (aparece cuando hay resultado) ========== -->
+        <div class="wizard-step" [class.active]="formulario.tipoResultado" [class.disabled]="!formulario.tipoResultado">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
+                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
+                <span *ngIf="formulario.especialistasSeleccionados.length === 0">3</span>
               </span>
-              <span class="item-text">{{ resultado.descripcion }}</span>
-            </label>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>groups</mat-icon>
+                Asigna Especialista(s)
+              </h4>
+              <p class="step-desc">Selecciona uno o más especialistas para atender</p>
+            </div>
+            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
+              {{ formulario.especialistasSeleccionados.length }} asignado(s)
+            </div>
           </div>
-
-          <!-- Columna ESPECIALISTA -->
-          <div class="adq-column especialista-col">
+          <div class="step-content" *ngIf="formulario.tipoResultado" @slideDown>
             <!-- Externos -->
             <div class="especialista-section">
-              <span class="section-badge externo">Externos</span>
-              <label 
-                *ngFor="let esp of especialistasExternos"
-                class="adq-item especialista-item"
-                [class.selected]="especialistaSeleccionado(esp.codigo)">
-                <input 
-                  type="checkbox" 
-                  [checked]="especialistaSeleccionado(esp.codigo)"
-                  (change)="toggleEspecialista(esp.codigo)">
-                <span class="esp-avatar externo">{{ esp.nombre_completo.split('-')[1]?.charAt(0) || 'E' }}</span>
-                <span class="item-text">{{ esp.nombre_completo }}</span>
-                <mat-icon class="esp-check">check_circle</mat-icon>
-              </label>
+              <div class="section-header-esp">
+                <span class="section-badge externo">
+                  <mat-icon>work_outline</mat-icon>
+                  Externos
+                </span>
+                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasExternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar externo">
+                    {{ esp.nombre_completo.split('-')[1]?.charAt(0) || 'E' }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Externo</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
             </div>
             
             <!-- Internos -->
             <div class="especialista-section">
-              <span class="section-badge interno">Internos</span>
-              <label 
-                *ngFor="let esp of especialistasInternos"
-                class="adq-item especialista-item"
-                [class.selected]="especialistaSeleccionado(esp.codigo)">
-                <input 
-                  type="checkbox" 
-                  [checked]="especialistaSeleccionado(esp.codigo)"
-                  (change)="toggleEspecialista(esp.codigo)">
-                <span class="esp-avatar interno">{{ esp.nombre_completo.split('-')[1]?.charAt(0) || 'I' }}</span>
-                <span class="item-text">{{ esp.nombre_completo }}</span>
-                <mat-icon class="esp-check">check_circle</mat-icon>
-              </label>
+              <div class="section-header-esp">
+                <span class="section-badge interno">
+                  <mat-icon>badge</mat-icon>
+                  Internos
+                </span>
+                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasInternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar interno">
+                    {{ esp.nombre_completo.split('-')[1]?.charAt(0) || 'I' }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Interno</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
             </div>
+          </div>
+          <!-- Mensaje bloqueado -->
+          <div class="step-locked" *ngIf="!formulario.tipoResultado">
+            <mat-icon>lock</mat-icon>
+            <span>Primero selecciona un resultado</span>
           </div>
         </div>
 
-        <!-- Resumen de selección -->
-        <div class="adq-summary" *ngIf="formulario.tiposInsumo.length > 0 || formulario.tipoResultado || formulario.especialistasSeleccionados.length > 0">
-          <div class="summary-title">
-            <mat-icon>summarize</mat-icon>
-            Resumen de Selección
+        <!-- ========== RESUMEN FINAL ========== -->
+        <div class="wizard-summary" *ngIf="formulario.tiposInsumo.length > 0 && formulario.tipoResultado && formulario.especialistasSeleccionados.length > 0">
+          <div class="summary-icon">
+            <mat-icon>verified</mat-icon>
           </div>
-          <div class="summary-content">
-            <div class="summary-item" *ngIf="formulario.tiposInsumo.length > 0">
-              <span class="summary-label">Insumos:</span>
-              <span class="summary-value">{{ formulario.tiposInsumo.length }} seleccionado(s)</span>
-            </div>
-            <div class="summary-item" *ngIf="formulario.tipoResultado">
-              <span class="summary-label">Resultado:</span>
-              <span class="summary-value">{{ getDescripcionResultado() }}</span>
-            </div>
-            <div class="summary-item" *ngIf="formulario.especialistasSeleccionados.length > 0">
-              <span class="summary-label">Especialistas:</span>
-              <span class="summary-value">{{ formulario.especialistasSeleccionados.length }} asignado(s)</span>
-            </div>
+          <div class="summary-text">
+            <h4>¡Selección completa!</h4>
+            <p>
+              <strong>{{ formulario.tiposInsumo.length }}</strong> insumo(s) • 
+              <strong>{{ getDescripcionResultado() }}</strong> • 
+              <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s)
+            </p>
           </div>
         </div>
       </div>
