@@ -1,2 +1,239 @@
-/* Estilos específicos para la página de responsables si es necesario */
+/* =============================================
+   MI BANDEJA DE EXPEDIENTES - ESTILOS DE PÁGINA
+   ============================================= */
 
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(165deg, #f8f7f4 0%, #f3f1ec 50%, #ebe8e1 100%);
+  position: relative;
+}
+
+/* Patrón de puntos sutiles */
+.page-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(105, 28, 50, 0.03) 1px, transparent 0);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== HERO HEADER ===== */
+.hero-header {
+  position: relative;
+  background: linear-gradient(135deg, #691C32 0%, #7D2340 50%, #8B2543 100%);
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Patrón de onda */
+.hero-pattern {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-pattern svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+}
+
+/* Círculos decorativos */
+.hero-circles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.circle-1 {
+  width: 400px;
+  height: 400px;
+  top: -200px;
+  right: -100px;
+}
+
+.circle-2 {
+  width: 300px;
+  height: 300px;
+  bottom: -150px;
+  left: -50px;
+}
+
+.circle-3 {
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+}
+
+/* Contenido del hero */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 32px 48px;
+}
+
+.hero-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* Grupo de título */
+.hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hero-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.hero-icon svg {
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.hero-text h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.hero-text p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 6px 0 0;
+}
+
+/* Widget de fecha */
+.date-widget {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 14px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.date-icon {
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-icon svg {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.date-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.date-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin-top: 2px;
+}
+
+/* ===== CONTENIDO PRINCIPAL ===== */
+.main-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+  margin-top: -24px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 24px 20px 40px;
+  }
+  
+  .hero-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .hero-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+  }
+  
+  .hero-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .hero-text h1 {
+    font-size: 22px;
+  }
+  
+  .hero-text p {
+    font-size: 13px;
+  }
+  
+  .date-widget {
+    width: 100%;
+  }
+  
+  .main-content {
+    padding: 0 16px 32px;
+    margin-top: -16px;
+  }
+}

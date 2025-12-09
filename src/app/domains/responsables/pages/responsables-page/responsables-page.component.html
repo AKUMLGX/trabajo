@@ -1,60 +1,61 @@
-<!-- Contenedor principal con fondo sutil -->
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
+<!-- =============================================
+     MI BANDEJA DE EXPEDIENTES - VISTA PRINCIPAL
+     ============================================= -->
+<div class="page-container">
   
-  <!-- Header Hero Section -->
-  <div class="relative overflow-hidden">
-    <!-- Fondo con patrón geométrico -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#691C32] via-[#7D2340] to-[#8B2543]">
-      <div class="absolute inset-0 opacity-10">
-        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs>
-            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="100" height="100" fill="url(#grid)"/>
-        </svg>
-      </div>
+  <!-- HEADER HERO -->
+  <header class="hero-header">
+    <!-- Patrón de fondo -->
+    <div class="hero-pattern">
+      <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="rgba(255,255,255,0.03)" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/>
+      </svg>
     </div>
     
-    <!-- Contenido del Header -->
-    <div class="relative px-6 py-8 md:px-12 md:py-10">
-      <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <!-- Título y descripción -->
-          <div class="flex items-center gap-5">
-            <div class="flex-shrink-0 w-16 h-16 bg-white/15 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg border border-white/20">
-              <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-              </svg>
-            </div>
-            <div>
-              <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">
-                Mi Bandeja de Expedientes
-              </h1>
-              <p class="text-white/70 text-sm md:text-base mt-1">
-                Gestiona y da seguimiento a los asuntos asignados
-              </p>
-            </div>
-          </div>
-          
-          <!-- Fecha y hora actual -->
-          <div class="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-            <svg class="w-5 h-5 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+    <!-- Círculos decorativos -->
+    <div class="hero-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+    
+    <!-- Contenido del header -->
+    <div class="hero-content">
+      <div class="hero-main">
+        <!-- Icono y título -->
+        <div class="hero-title-group">
+          <div class="hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              <path d="M9 12h6M9 16h6"/>
             </svg>
-            <span class="text-white font-medium text-sm">
-              {{ fechaActual }}
-            </span>
+          </div>
+          <div class="hero-text">
+            <h1>Mi Bandeja de Expedientes</h1>
+            <p>Gestiona y da seguimiento a los asuntos asignados</p>
+          </div>
+        </div>
+        
+        <!-- Widget de fecha -->
+        <div class="date-widget">
+          <div class="date-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+          </div>
+          <div class="date-info">
+            <span class="date-label">Hoy</span>
+            <span class="date-value">{{ fechaActual }}</span>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Contenido principal -->
-  <div class="max-w-7xl mx-auto px-4 md:px-6 -mt-6 relative z-10 pb-12">
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-content">
     <app-responsables-table></app-responsables-table>
-  </div>
+  </main>
   
 </div>
