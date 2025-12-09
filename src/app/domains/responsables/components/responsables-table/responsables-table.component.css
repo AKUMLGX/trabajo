@@ -788,7 +788,15 @@
   color: #9ca3af;
 }
 
-/* Action Button */
+/* Action Buttons Container */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Action Button Base */
 .action-btn {
   width: 36px;
   height: 36px;
@@ -796,22 +804,45 @@
   align-items: center;
   justify-content: center;
   background: #f3f4f6;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 10px;
   color: #6b7280;
   cursor: pointer;
-  transition: all 0.2s;
-}
-
-.action-btn:hover {
-  background: var(--wine);
-  color: white;
-  transform: scale(1.05);
+  transition: all 0.25s ease;
 }
 
 .action-btn svg {
   width: 18px;
   height: 18px;
+}
+
+/* View Button */
+.action-btn.view:hover {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(105, 28, 50, 0.25);
+}
+
+/* Atender Button - Destacado */
+.action-btn.atender {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-color: #059669;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.action-btn.atender:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  border-color: #047857;
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+}
+
+.action-btn.atender svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* ===== PAGINATION ===== */

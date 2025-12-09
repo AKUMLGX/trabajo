@@ -6,6 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ResponsablesService, FiltrosResponsable } from '../../services/responsables.service';
 import { ExpedienteTlapohualli } from '../../../capture/interfaces/expediente-tlapohualli.interface';
 import { ExpedienteDetalleModalComponent } from '../../../tracking/components/expediente-detalle-modal/expediente-detalle-modal.component';
+import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 
 /**
@@ -157,37 +158,49 @@ export class ResponsablesTableComponent implements OnInit {
   }
 
   /**
-   * Calcular el semáforo de prioridad basado en horas desde creación
-   * Reglas:
-   * - Urgente: 24 HRS
-   * - Alta: 72 HRS (tiempo para responder sin fecha de atención)
-   * - Media: 120 HRS
-   * - Baja: 288 HRS
+   * Calcular el semáforo de prioridad basado en 72 HORAS desde fecha_creacion
+   * 
+   * REGLA PRINCIPAL: 72 horas desde que se finaliza la captura
+   * 
+   * Distribución del semáforo:
+   * - 🔴 URGENTE: Menos de 24 horas restantes (entre 48-72 horas transcurridas)
+   * - 🟠 ALTA: Entre 24-48 horas restantes (entre 24-48 horas transcurridas)
+   * - 🟡 MEDIA: Entre 48-60 horas restantes (entre 12-24 horas transcurridas)
+   * - 🟢 BAJA: Más de 60 horas restantes (menos de 12 horas transcurridas)
+   * - ⚫ VENCIDO: Más de 72 horas transcurridas
    */
   calcularSemaforo(expediente: ExpedienteTlapohualli): SemaforoPrioridad {
     const ahora = new Date();
-    // Usar fecha_creacion si existe, sino fecha_asignacion, sino fecha actual
+    
+    // IMPORTANTE: Usar fecha_creacion como base (cuando se finalizó la captura)
+    // Si no existe, usar fecha_asignacion como fallback
     let fechaBase: Date;
     if (expediente.fecha_creacion) {
       fechaBase = new Date(expediente.fecha_creacion);
     } else if (expediente.fecha_asignacion) {
       fechaBase = new Date(expediente.fecha_asignacion);
     } else {
-      fechaBase = new Date(); // Fallback a fecha actual
+      fechaBase = new Date();
     }
     
-    // Calcular horas transcurridas desde la creación/asignación
+    // Calcular horas transcurridas desde la creación
     const horasTranscurridas = Math.floor((ahora.getTime() - fechaBase.getTime()) / (1000 * 60 * 60));
     
-    // Si es urgente según el plazo
+    // SEMÁFORO DE 72 HORAS
+    const LIMITE_TOTAL = 72; // 72 horas límite
+    const horasRestantes = LIMITE_TOTAL - horasTranscurridas;
+    
+    // Si es urgente por plazo del documento (caso especial)
     if (expediente.plazo_es_urgente) {
-      const horasRestantes = 24 - horasTranscurridas;
-      if (horasRestantes <= 0) {
+      const horasUrgente = Math.min(24, LIMITE_TOTAL);
+      const restantesUrgente = horasUrgente - horasTranscurridas;
+      
+      if (restantesUrgente <= 0) {
         return {
           nivel: 'VENCIDO',
-          label: 'VENCIDO',
-          horas: 24,
-          horasRestantes: horasRestantes,
+          label: 'VENCIDO (Urgente)',
+          horas: horasUrgente,
+          horasRestantes: restantesUrgente,
           color: 'text-gray-800',
           bgColor: 'bg-gray-800',
           borderColor: 'border-gray-800',
@@ -197,7 +210,35 @@ export class ResponsablesTableComponent implements OnInit {
       return {
         nivel: 'URGENTE',
         label: 'Urgente',
-        horas: 24,
+        horas: horasUrgente,
+        horasRestantes: restantesUrgente,
+        color: 'text-red-600',
+        bgColor: 'bg-red-100',
+        borderColor: 'border-red-300',
+        emoji: '🔴'
+      };
+    }
+    
+    // ⚫ VENCIDO: Más de 72 horas
+    if (horasRestantes <= 0) {
+      return {
+        nivel: 'VENCIDO',
+        label: 'VENCIDO',
+        horas: LIMITE_TOTAL,
+        horasRestantes: horasRestantes,
+        color: 'text-gray-800',
+        bgColor: 'bg-gray-800',
+        borderColor: 'border-gray-800',
+        emoji: '⚫'
+      };
+    }
+    
+    // 🔴 URGENTE: Menos de 24 horas restantes (48-72 horas transcurridas)
+    if (horasRestantes <= 24) {
+      return {
+        nivel: 'URGENTE',
+        label: 'Urgente',
+        horas: LIMITE_TOTAL,
         horasRestantes: horasRestantes,
         color: 'text-red-600',
         bgColor: 'bg-red-100',
@@ -206,65 +247,13 @@ export class ResponsablesTableComponent implements OnInit {
       };
     }
     
-    // Determinar nivel basado en horas transcurridas
-    // Si aún no tiene fecha de atención, tiene 72 horas para responder
-    const tieneFechaAtencion = expediente.fecha_atencion_inicial || expediente.fecha_estimada_atencion;
-    
-    // Definir umbrales en horas
-    const URGENTE_HORAS = 24;
-    const ALTA_HORAS = 72;
-    const MEDIA_HORAS = 120;
-    const BAJA_HORAS = 288;
-    
-    // Si no tiene fecha de atención y han pasado más de 72 horas
-    if (!tieneFechaAtencion && horasTranscurridas >= ALTA_HORAS) {
-      return {
-        nivel: 'VENCIDO',
-        label: 'VENCIDO (Sin fecha de atención)',
-        horas: ALTA_HORAS,
-        horasRestantes: ALTA_HORAS - horasTranscurridas,
-        color: 'text-gray-800',
-        bgColor: 'bg-gray-800',
-        borderColor: 'border-gray-800',
-        emoji: '⚫'
-      };
-    }
-    
-    // Si ha pasado el tiempo máximo (288 horas)
-    if (horasTranscurridas >= BAJA_HORAS) {
-      return {
-        nivel: 'VENCIDO',
-        label: 'VENCIDO',
-        horas: BAJA_HORAS,
-        horasRestantes: BAJA_HORAS - horasTranscurridas,
-        color: 'text-gray-800',
-        bgColor: 'bg-gray-800',
-        borderColor: 'border-gray-800',
-        emoji: '⚫'
-      };
-    }
-    
-    // Urgente: menos de 24 horas restantes
-    if (horasTranscurridas < URGENTE_HORAS) {
-      return {
-        nivel: 'URGENTE',
-        label: 'Urgente',
-        horas: URGENTE_HORAS,
-        horasRestantes: URGENTE_HORAS - horasTranscurridas,
-        color: 'text-red-600',
-        bgColor: 'bg-red-100',
-        borderColor: 'border-red-300',
-        emoji: '🔴'
-      };
-    }
-    
-    // Alta: entre 24 y 72 horas (tiempo para proporcionar fecha de atención)
-    if (horasTranscurridas < ALTA_HORAS) {
+    // 🟠 ALTA: Entre 24-48 horas restantes (24-48 horas transcurridas)
+    if (horasRestantes <= 48) {
       return {
         nivel: 'ALTA',
         label: 'Alta',
-        horas: ALTA_HORAS,
-        horasRestantes: ALTA_HORAS - horasTranscurridas,
+        horas: LIMITE_TOTAL,
+        horasRestantes: horasRestantes,
         color: 'text-orange-600',
         bgColor: 'bg-orange-100',
         borderColor: 'border-orange-300',
@@ -272,13 +261,13 @@ export class ResponsablesTableComponent implements OnInit {
       };
     }
     
-    // Media: entre 72 y 120 horas
-    if (horasTranscurridas < MEDIA_HORAS) {
+    // 🟡 MEDIA: Entre 48-60 horas restantes (12-24 horas transcurridas)
+    if (horasRestantes <= 60) {
       return {
         nivel: 'MEDIA',
         label: 'Media',
-        horas: MEDIA_HORAS,
-        horasRestantes: MEDIA_HORAS - horasTranscurridas,
+        horas: LIMITE_TOTAL,
+        horasRestantes: horasRestantes,
         color: 'text-yellow-600',
         bgColor: 'bg-yellow-100',
         borderColor: 'border-yellow-300',
@@ -286,12 +275,12 @@ export class ResponsablesTableComponent implements OnInit {
       };
     }
     
-    // Baja: entre 120 y 288 horas
+    // 🟢 BAJA: Más de 60 horas restantes (menos de 12 horas transcurridas)
     return {
       nivel: 'BAJA',
       label: 'Baja',
-      horas: BAJA_HORAS,
-      horasRestantes: BAJA_HORAS - horasTranscurridas,
+      horas: LIMITE_TOTAL,
+      horasRestantes: horasRestantes,
       color: 'text-green-600',
       bgColor: 'bg-green-100',
       borderColor: 'border-green-300',
@@ -426,6 +415,29 @@ export class ResponsablesTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       // Recargar expedientes después de cerrar el modal (por si se actualizó algo)
       this.cargarExpedientes();
+    });
+  }
+
+  /**
+   * Abrir modal de atención para procesar el expediente
+   */
+  abrirModalAtencion(expediente: ExpedienteTlapohualli): void {
+    console.log('📋 [ResponsablesTable] Abriendo modal de atención para:', expediente.expediente);
+    
+    const dialogRef = this.dialog.open(AtencionModalComponent, {
+      maxWidth: '95vw',
+      maxHeight: '95vh',
+      panelClass: 'atencion-modal-panel',
+      data: { expediente },
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('📋 [ResponsablesTable] Modal de atención cerrado:', result);
+      if (result?.success) {
+        // Recargar expedientes si se guardó una atención
+        this.cargarExpedientes();
+      }
     });
   }
 

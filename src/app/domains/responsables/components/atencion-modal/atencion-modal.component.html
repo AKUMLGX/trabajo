@@ -1,0 +1,241 @@
+<div class="atencion-modal">
+  <!-- HEADER -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>assignment_turned_in</mat-icon>
+      </div>
+      <div class="header-text">
+        <p class="header-eyebrow">Atender Expediente</p>
+        <h2 class="header-title">{{ expediente.expediente }}</h2>
+        <p class="header-subtitle">{{ expediente.oficio || 'Sin oficio' }}</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="cerrar()" [disabled]="guardando">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="modal-body" *ngIf="!cargandoCatalogos">
+    
+    <!-- Información del expediente -->
+    <div class="expediente-info">
+      <div class="info-item">
+        <span class="label">Responsable</span>
+        <span class="value">{{ expediente.responsable }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Asunto</span>
+        <span class="value truncate">{{ expediente.referencia_asunto || 'N/A' }}</span>
+      </div>
+    </div>
+
+    <!-- PASO 1: Selección de tipo de acción -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <span class="step-number">1</span>
+        Tipo de Acción
+      </h3>
+      <div class="action-cards">
+        <div 
+          *ngFor="let opcion of opcionesTipoAccion"
+          class="action-card"
+          [class.selected]="formulario.tipoAccion === opcion.value"
+          (click)="formulario.tipoAccion = opcion.value; onTipoAccionChange()">
+          <div class="card-icon" [ngClass]="opcion.color">
+            <mat-icon>{{ opcion.icon }}</mat-icon>
+          </div>
+          <div class="card-content">
+            <span class="card-label">{{ opcion.label }}</span>
+            <span class="card-description">{{ opcion.description }}</span>
+          </div>
+          <div class="card-check" *ngIf="formulario.tipoAccion === opcion.value">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2: Formulario dinámico según tipo de acción -->
+    <div class="form-section" *ngIf="formulario.tipoAccion">
+      <h3 class="section-title">
+        <span class="step-number">2</span>
+        Detalles de la Acción
+      </h3>
+
+      <!-- RECHAZADO -->
+      <div class="dynamic-form" *ngIf="formulario.tipoAccion === 'RECHAZADO'">
+        <label class="form-label">Medio de Rechazo <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option" [class.selected]="formulario.medioRechazo === 'OFICIO'">
+            <input type="radio" name="medioRechazo" value="OFICIO" [(ngModel)]="formulario.medioRechazo">
+            <mat-icon>description</mat-icon>
+            <span>Oficio</span>
+          </label>
+          <label class="radio-option" [class.selected]="formulario.medioRechazo === 'ATENTA_NOTA'">
+            <input type="radio" name="medioRechazo" value="ATENTA_NOTA" [(ngModel)]="formulario.medioRechazo">
+            <mat-icon>note_alt</mat-icon>
+            <span>Atenta Nota</span>
+          </label>
+          <label class="radio-option" [class.selected]="formulario.medioRechazo === 'CORREO'">
+            <input type="radio" name="medioRechazo" value="CORREO" [(ngModel)]="formulario.medioRechazo">
+            <mat-icon>email</mat-icon>
+            <span>Correo</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- PENDIENTE_INFO -->
+      <div class="dynamic-form" *ngIf="formulario.tipoAccion === 'PENDIENTE_INFO'">
+        <div class="info-message">
+          <mat-icon>info</mat-icon>
+          <p>El expediente quedará en estado "Pendiente por Información". Puede agregar notas explicativas en el campo de abajo.</p>
+        </div>
+      </div>
+
+      <!-- ATENCION_INMEDIATA -->
+      <div class="dynamic-form" *ngIf="formulario.tipoAccion === 'ATENCION_INMEDIATA'">
+        <label class="form-label">Abogado Asignado <span class="required">*</span></label>
+        <input 
+          type="text" 
+          class="form-input" 
+          placeholder="Nombre del abogado..."
+          [(ngModel)]="formulario.abogadoAsignado">
+      </div>
+
+      <!-- ADQUISICION_INFO -->
+      <div class="dynamic-form adquisicion-form" *ngIf="formulario.tipoAccion === 'ADQUISICION_INFO'">
+        
+        <!-- Insumos (Multi-select) -->
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon>inventory_2</mat-icon>
+            Insumo(s) <span class="required">*</span>
+            <span class="counter">({{ formulario.tiposInsumo.length }} seleccionados)</span>
+          </label>
+          <div class="checkbox-grid">
+            <label 
+              *ngFor="let insumo of catalogos.tipos_insumo"
+              class="checkbox-option"
+              [class.selected]="insumoSeleccionado(insumo.codigo)">
+              <input 
+                type="checkbox" 
+                [checked]="insumoSeleccionado(insumo.codigo)"
+                (change)="toggleInsumo(insumo.codigo)">
+              <span class="checkbox-label">{{ insumo.descripcion }}</span>
+              <mat-icon class="check-icon">check</mat-icon>
+            </label>
+          </div>
+        </div>
+
+        <!-- Resultado (Single-select) -->
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon>fact_check</mat-icon>
+            Resultado <span class="required">*</span>
+          </label>
+          <div class="radio-grid">
+            <label 
+              *ngFor="let resultado of catalogos.tipos_resultado"
+              class="radio-option-card"
+              [class.selected]="formulario.tipoResultado === resultado.codigo">
+              <input 
+                type="radio" 
+                name="tipoResultado"
+                [value]="resultado.codigo"
+                [(ngModel)]="formulario.tipoResultado">
+              <span class="radio-label">{{ resultado.descripcion }}</span>
+              <mat-icon class="check-icon">check_circle</mat-icon>
+            </label>
+          </div>
+        </div>
+
+        <!-- Especialistas (Multi-select) -->
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon>groups</mat-icon>
+            Especialista(s) <span class="required">*</span>
+            <span class="counter">({{ formulario.especialistasSeleccionados.length }} seleccionados)</span>
+          </label>
+          
+          <!-- Externos -->
+          <div class="especialistas-group" *ngIf="especialistasExternos.length > 0">
+            <span class="group-label">Externos</span>
+            <div class="especialistas-grid">
+              <label 
+                *ngFor="let esp of especialistasExternos"
+                class="especialista-chip"
+                [class.selected]="especialistaSeleccionado(esp.codigo)">
+                <input 
+                  type="checkbox" 
+                  [checked]="especialistaSeleccionado(esp.codigo)"
+                  (change)="toggleEspecialista(esp.codigo)">
+                <span class="chip-avatar">{{ esp.nombre_completo.charAt(0) }}</span>
+                <span class="chip-name">{{ esp.nombre_completo }}</span>
+                <mat-icon class="check-icon">check</mat-icon>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Internos -->
+          <div class="especialistas-group" *ngIf="especialistasInternos.length > 0">
+            <span class="group-label">Internos</span>
+            <div class="especialistas-grid">
+              <label 
+                *ngFor="let esp of especialistasInternos"
+                class="especialista-chip"
+                [class.selected]="especialistaSeleccionado(esp.codigo)">
+                <input 
+                  type="checkbox" 
+                  [checked]="especialistaSeleccionado(esp.codigo)"
+                  (change)="toggleEspecialista(esp.codigo)">
+                <span class="chip-avatar interno">{{ esp.nombre_completo.charAt(0) }}</span>
+                <span class="chip-name">{{ esp.nombre_completo }}</span>
+                <mat-icon class="check-icon">check</mat-icon>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3: Notas (siempre visible si hay tipo seleccionado) -->
+    <div class="form-section" *ngIf="formulario.tipoAccion">
+      <h3 class="section-title">
+        <span class="step-number">3</span>
+        Notas <span class="optional">(Opcional)</span>
+      </h3>
+      <textarea 
+        class="form-textarea" 
+        placeholder="Agregue observaciones o comentarios adicionales..."
+        rows="4"
+        [(ngModel)]="formulario.notas"></textarea>
+    </div>
+
+  </div>
+
+  <!-- LOADING -->
+  <div class="modal-body loading" *ngIf="cargandoCatalogos">
+    <div class="loader">
+      <div class="spinner"></div>
+      <p>Cargando catálogos...</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="modal-footer">
+    <button class="btn-secondary" (click)="cerrar()" [disabled]="guardando">
+      Cancelar
+    </button>
+    <button 
+      class="btn-primary" 
+      (click)="guardar()" 
+      [disabled]="!formularioValido() || guardando">
+      <mat-icon *ngIf="!guardando">save</mat-icon>
+      <div class="btn-spinner" *ngIf="guardando"></div>
+      {{ guardando ? 'Guardando...' : 'Guardar Atención' }}
+    </button>
+  </div>
+</div>
+
