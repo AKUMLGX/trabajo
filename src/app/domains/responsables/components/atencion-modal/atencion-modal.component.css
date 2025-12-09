@@ -2,7 +2,7 @@
    MODAL CONTAINER
    ===================================================== */
 .atencion-modal {
-  width: min(720px, 92vw);
+  width: min(900px, 95vw);
   max-height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
@@ -815,3 +815,339 @@
 .text-blue-600 { color: #2563eb; }
 .text-green-600 { color: #16a34a; }
 
+/* =====================================================
+   ADQUISICIÓN V2 - DISEÑO TIPO TABLA
+   ===================================================== */
+.adquisicion-form-v2 {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+/* Header de la tabla */
+.adq-table-header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: linear-gradient(135deg, #691C32 0%, #8B2543 100%);
+}
+
+.adq-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.adq-col-header:last-child {
+  border-right: none;
+}
+
+.adq-col-header mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.9;
+}
+
+.adq-col-header .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 11px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Body de la tabla */
+.adq-table-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  min-height: 280px;
+}
+
+.adq-column {
+  padding: 12px;
+  border-right: 1px solid #e5e7eb;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.adq-column:last-child {
+  border-right: none;
+}
+
+.adq-column:nth-child(1) {
+  background: linear-gradient(180deg, #fef7f8 0%, #fafafa 100%);
+}
+
+.adq-column:nth-child(2) {
+  background: linear-gradient(180deg, #f0fdf4 0%, #fafafa 100%);
+}
+
+.adq-column:nth-child(3) {
+  background: linear-gradient(180deg, #eff6ff 0%, #fafafa 100%);
+}
+
+/* Items de la tabla */
+.adq-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.adq-item input {
+  display: none;
+}
+
+.adq-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.adq-item.selected {
+  border-color: #691C32;
+  background: linear-gradient(135deg, rgba(105, 28, 50, 0.04) 0%, rgba(105, 28, 50, 0.08) 100%);
+}
+
+.item-checkbox {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.adq-item.selected .item-checkbox {
+  background: #691C32;
+  border-color: #691C32;
+  color: white;
+}
+
+.item-checkbox mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.adq-item.selected .item-checkbox mat-icon {
+  opacity: 1;
+}
+
+/* Radio item */
+.item-radio {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.adq-item.radio-item.selected .item-radio {
+  background: white;
+  border-color: #691C32;
+}
+
+.radio-dot {
+  width: 10px;
+  height: 10px;
+  background: transparent;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.adq-item.radio-item.selected .radio-dot {
+  background: #691C32;
+}
+
+.item-text {
+  flex: 1;
+  font-weight: 500;
+  color: #374151;
+  line-height: 1.3;
+}
+
+.adq-item.selected .item-text {
+  color: #691C32;
+  font-weight: 600;
+}
+
+/* Especialistas Section */
+.especialista-section {
+  margin-bottom: 12px;
+}
+
+.especialista-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.section-badge.externo {
+  background: linear-gradient(135deg, #dcfce7, #d1fae5);
+  color: #166534;
+}
+
+.section-badge.interno {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+}
+
+/* Especialista Item */
+.especialista-item {
+  padding: 8px 10px;
+}
+
+.esp-avatar {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.esp-avatar.externo {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.esp-avatar.interno {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.esp-check {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #691C32;
+  opacity: 0;
+  margin-left: auto;
+  transition: opacity 0.2s ease;
+}
+
+.especialista-item.selected .esp-check {
+  opacity: 1;
+}
+
+/* Summary Section */
+.adq-summary {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-top: 1px solid #fcd34d;
+}
+
+.summary-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 12px;
+}
+
+.summary-title mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.summary-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.summary-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #92400e;
+}
+
+.summary-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #78350f;
+  padding: 2px 8px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 4px;
+}
+
+/* Responsive para tabla 3 columnas */
+@media (max-width: 768px) {
+  .adq-table-header,
+  .adq-table-body {
+    grid-template-columns: 1fr;
+  }
+
+  .adq-col-header {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .adq-col-header:last-child {
+    border-bottom: none;
+  }
+
+  .adq-column {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px;
+  }
+
+  .adq-column:last-child {
+    border-bottom: none;
+  }
+}

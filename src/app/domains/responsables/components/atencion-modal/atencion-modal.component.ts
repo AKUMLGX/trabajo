@@ -322,5 +322,14 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.tipoResultado = '';
     this.formulario.especialistasSeleccionados = [];
   }
+
+  /**
+   * Obtener la descripción del resultado seleccionado
+   */
+  getDescripcionResultado(): string {
+    if (!this.formulario.tipoResultado) return '';
+    const resultado = this.catalogos.tipos_resultado.find(r => r.codigo === this.formulario.tipoResultado);
+    return resultado?.descripcion || this.formulario.tipoResultado;
+  }
 }
 
