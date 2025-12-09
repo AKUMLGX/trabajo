@@ -17,7 +17,15 @@ const TLAPOHUALLI_BASE = `${baseWithoutApi}tlapohualli/api/v1/`;
 /**
  * Tipos de acción de atención
  */
-export type TipoAccion = 'RECHAZADO' | 'PENDIENTE_INFO' | 'ATENCION_INMEDIATA' | 'ADQUISICION_INFO';
+export type TipoAccion = 
+  | 'RECHAZADO' 
+  | 'PENDIENTE_INFO' 
+  | 'ATENCION_INMEDIATA' 
+  | 'ADQUISICION_INFO'
+  | 'INVESTIGACION_FORENSE'
+  | 'ELABORACION_DICTAMENES'
+  | 'RECUPERACION_INFO'
+  | 'DESTRUCCION_DISPOSITIVOS';
 
 /**
  * Medios de rechazo
@@ -95,6 +103,11 @@ export interface CrearAtencionDTO {
   tipos_insumo?: string[];
   tipo_resultado?: TipoResultado;
   especialistas?: EspecialistaDTO[];
+  
+  // Para nuevos flujos (Investigación, Dictámenes, Recuperación, Destrucción)
+  opciones_seleccionadas?: string[];
+  resultado_seleccionado?: string;
+  fecha_entrega?: string;
   
   // Común
   notas?: string;

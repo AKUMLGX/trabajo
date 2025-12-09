@@ -30,6 +30,11 @@ interface FormularioAtencion {
   tiposInsumo: string[];
   tipoResultado: string;
   especialistasSeleccionados: string[];
+  // Nuevos flujos
+  opcionSeleccionada: string[];  // Para los nuevos flujos (multi-select)
+  resultadoSeleccionado: string; // Para el resultado del flujo
+  // Fecha de entrega
+  fechaEntrega: string;
   // Común
   notas: string;
 }
@@ -64,15 +69,15 @@ export class AtencionModalComponent implements OnInit {
   // Catálogos con datos estáticos como fallback
   catalogos: CatalogosAtencion = {
     especialistas: [
-      { id_especialista: 1, codigo: 'EX_ERIKA', nombre_completo: 'Ex-Erika', tipo: 'EXTERNO', activo: true },
-      { id_especialista: 2, codigo: 'EX_JULIAN', nombre_completo: 'Ex-Julian', tipo: 'EXTERNO', activo: true },
-      { id_especialista: 3, codigo: 'EX_GIBRAN', nombre_completo: 'Ex-Gibran', tipo: 'EXTERNO', activo: true },
-      { id_especialista: 4, codigo: 'EX_DILAN', nombre_completo: 'Ex-Dilan', tipo: 'EXTERNO', activo: true },
-      { id_especialista: 5, codigo: 'EX_ABRAHAM', nombre_completo: 'Ex-Abraham', tipo: 'EXTERNO', activo: true },
-      { id_especialista: 6, codigo: 'EX_LINO', nombre_completo: 'Ex-Lino', tipo: 'EXTERNO', activo: true },
-      { id_especialista: 7, codigo: 'IN_IRMA', nombre_completo: 'In-Irma', tipo: 'INTERNO', activo: true },
-      { id_especialista: 8, codigo: 'IN_KAREN', nombre_completo: 'In-Karen', tipo: 'INTERNO', activo: true },
-      { id_especialista: 9, codigo: 'IN_HECTOR', nombre_completo: 'In-Hector', tipo: 'INTERNO', activo: true }
+      { id_especialista: 1, codigo: 'EX_ERIKA', nombre_completo: 'Erika', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 2, codigo: 'EX_JULIAN', nombre_completo: 'Julian', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 3, codigo: 'EX_GIBRAN', nombre_completo: 'Gibran', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 4, codigo: 'EX_DILAN', nombre_completo: 'Dilan', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 5, codigo: 'EX_ABRAHAM', nombre_completo: 'Abraham', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 6, codigo: 'EX_LINO', nombre_completo: 'Lino', tipo: 'EXTERNO', activo: true },
+      { id_especialista: 7, codigo: 'IN_IRMA', nombre_completo: 'Irma', tipo: 'INTERNO', activo: true },
+      { id_especialista: 8, codigo: 'IN_KAREN', nombre_completo: 'Karen', tipo: 'INTERNO', activo: true },
+      { id_especialista: 9, codigo: 'IN_HECTOR', nombre_completo: 'Hector', tipo: 'INTERNO', activo: true }
     ],
     tipos_insumo: [
       { id_insumo: 1, codigo: 'EQUIPO_FISICO', descripcion: 'Equipo(s) Físico(s)', activo: true },
@@ -90,6 +95,54 @@ export class AtencionModalComponent implements OnInit {
       { id_resultado: 4, codigo: 'NO_APLICA', descripcion: 'No Aplica', activo: true }
     ]
   };
+
+  // ============= CATÁLOGOS PARA NUEVOS FLUJOS =============
+  
+  // Investigación Forense Digital
+  opcionesInvestigacionForense = [
+    { codigo: 'ADQ_INFO', descripcion: 'Adquisición de información', icon: 'content_copy' },
+    { codigo: 'FUENTES_INFO', descripcion: 'Fuentes de información', icon: 'source' }
+  ];
+  resultadosInvestigacionForense = [
+    { codigo: 'RIF', descripcion: 'Reporte de Investigación Forense (RIF)', icon: 'assessment' }
+  ];
+
+  // Elaboración de Dictámenes
+  opcionesElaboracionDictamenes = [
+    { codigo: 'INV_FORENSE', descripcion: 'Investigación forense digital', icon: 'search' },
+    { codigo: 'JUICIO_NULIDAD', descripcion: 'Juicio de Nulidad', icon: 'gavel' },
+    { codigo: 'PISTAS_AUDITORIA', descripcion: 'Pistas de Auditoría', icon: 'track_changes' },
+    { codigo: 'OTROS', descripcion: 'Otros', icon: 'more_horiz' }
+  ];
+  resultadosElaboracionDictamenes = [
+    { codigo: 'DAF', descripcion: 'Dictamen Análisis Forense (DAF)', icon: 'analytics' },
+    { codigo: 'DPA', descripcion: 'Dictamen Pistas de Auditoría (DPA)', icon: 'track_changes' },
+    { codigo: 'DJN', descripcion: 'Dictamen Juicio de Nulidad (DJN)', icon: 'gavel' },
+    { codigo: 'DFP', descripcion: 'Dictamen Forense/Pistas (DFP)', icon: 'policy' },
+    { codigo: 'RG', descripcion: 'Reporte General (RG)', icon: 'summarize' }
+  ];
+
+  // Recuperación de Información
+  opcionesRecuperacionInfo = [
+    { codigo: 'PUESTO_SERVIDOR', descripcion: 'Puesto de Servicio / Servidor', icon: 'dns' },
+    { codigo: 'DISCO_EXTERNO', descripcion: 'Disco Externo', icon: 'storage' },
+    { codigo: 'USB', descripcion: 'USB', icon: 'usb' },
+    { codigo: 'OTROS', descripcion: 'Otros', icon: 'more_horiz' }
+  ];
+  resultadosRecuperacionInfo = [
+    { codigo: 'RR', descripcion: 'Reporte de Resultados (RR)', icon: 'description' }
+  ];
+
+  // Destrucción de Dispositivos
+  opcionesDestruccionDispositivos = [
+    { codigo: 'DISCO_EXTERNO', descripcion: 'Disco Externo', icon: 'storage' },
+    { codigo: 'USB', descripcion: 'USB', icon: 'usb' },
+    { codigo: 'CD', descripcion: 'CD', icon: 'album' },
+    { codigo: 'OTROS', descripcion: 'Otros', icon: 'more_horiz' }
+  ];
+  resultadosDestruccionDispositivos = [
+    { codigo: 'RDD', descripcion: 'Reporte de Destrucción de Dispositivos (RDD)', icon: 'delete_sweep' }
+  ];
   
   // Estado del formulario
   formulario: FormularioAtencion = {
@@ -99,6 +152,9 @@ export class AtencionModalComponent implements OnInit {
     tiposInsumo: [],
     tipoResultado: '',
     especialistasSeleccionados: [],
+    opcionSeleccionada: [],
+    resultadoSeleccionado: '',
+    fechaEntrega: '',
     notas: ''
   };
   
@@ -135,6 +191,34 @@ export class AtencionModalComponent implements OnInit {
       icon: 'folder_special',
       description: 'Proceso completo con insumos, resultado y especialistas',
       color: 'text-green-600'
+    },
+    { 
+      value: 'INVESTIGACION_FORENSE' as TipoAccion, 
+      label: 'Investigación Forense Digital', 
+      icon: 'search',
+      description: 'Análisis forense con reporte de investigación',
+      color: 'text-purple-600'
+    },
+    { 
+      value: 'ELABORACION_DICTAMENES' as TipoAccion, 
+      label: 'Elaboración de Dictámenes', 
+      icon: 'gavel',
+      description: 'Generación de dictámenes especializados',
+      color: 'text-indigo-600'
+    },
+    { 
+      value: 'RECUPERACION_INFO' as TipoAccion, 
+      label: 'Recuperación de Información', 
+      icon: 'restore',
+      description: 'Recuperación de datos de dispositivos de almacenamiento',
+      color: 'text-teal-600'
+    },
+    { 
+      value: 'DESTRUCCION_DISPOSITIVOS' as TipoAccion, 
+      label: 'Destrucción de Dispositivos', 
+      icon: 'delete_forever',
+      description: 'Destrucción segura de dispositivos de almacenamiento',
+      color: 'text-rose-600'
     }
   ];
 
@@ -204,7 +288,16 @@ export class AtencionModalComponent implements OnInit {
       case 'ADQUISICION_INFO':
         return this.formulario.tiposInsumo.length > 0 && 
                !!this.formulario.tipoResultado &&
-               this.formulario.especialistasSeleccionados.length > 0;
+               this.formulario.especialistasSeleccionados.length > 0 &&
+               !!this.formulario.fechaEntrega;
+      case 'INVESTIGACION_FORENSE':
+      case 'ELABORACION_DICTAMENES':
+      case 'RECUPERACION_INFO':
+      case 'DESTRUCCION_DISPOSITIVOS':
+        return this.formulario.opcionSeleccionada.length > 0 && 
+               !!this.formulario.resultadoSeleccionado &&
+               this.formulario.especialistasSeleccionados.length > 0 &&
+               !!this.formulario.fechaEntrega;
       default:
         return false;
     }
@@ -367,6 +460,115 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.tiposInsumo = [];
     this.formulario.tipoResultado = '';
     this.formulario.especialistasSeleccionados = [];
+    this.formulario.opcionSeleccionada = [];
+    this.formulario.resultadoSeleccionado = '';
+    this.formulario.fechaEntrega = '';
+  }
+
+  /**
+   * Toggle opción seleccionada (para nuevos flujos)
+   */
+  toggleOpcion(codigo: string): void {
+    const index = this.formulario.opcionSeleccionada.indexOf(codigo);
+    if (index > -1) {
+      this.formulario.opcionSeleccionada.splice(index, 1);
+    } else {
+      this.formulario.opcionSeleccionada.push(codigo);
+    }
+  }
+
+  /**
+   * Verificar si una opción está seleccionada
+   */
+  opcionSeleccionada(codigo: string): boolean {
+    return this.formulario.opcionSeleccionada.includes(codigo);
+  }
+
+  /**
+   * Obtener opciones según el tipo de acción
+   */
+  getOpcionesActuales(): any[] {
+    switch (this.formulario.tipoAccion) {
+      case 'INVESTIGACION_FORENSE':
+        return this.opcionesInvestigacionForense;
+      case 'ELABORACION_DICTAMENES':
+        return this.opcionesElaboracionDictamenes;
+      case 'RECUPERACION_INFO':
+        return this.opcionesRecuperacionInfo;
+      case 'DESTRUCCION_DISPOSITIVOS':
+        return this.opcionesDestruccionDispositivos;
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Obtener resultados según el tipo de acción
+   */
+  getResultadosActuales(): any[] {
+    switch (this.formulario.tipoAccion) {
+      case 'INVESTIGACION_FORENSE':
+        return this.resultadosInvestigacionForense;
+      case 'ELABORACION_DICTAMENES':
+        return this.resultadosElaboracionDictamenes;
+      case 'RECUPERACION_INFO':
+        return this.resultadosRecuperacionInfo;
+      case 'DESTRUCCION_DISPOSITIVOS':
+        return this.resultadosDestruccionDispositivos;
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Verificar si es un flujo con wizard de opciones
+   */
+  esFlujoConOpciones(): boolean {
+    return ['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.formulario.tipoAccion);
+  }
+
+  /**
+   * Obtener el título del paso de opciones según el flujo
+   */
+  getTituloOpciones(): string {
+    switch (this.formulario.tipoAccion) {
+      case 'INVESTIGACION_FORENSE':
+        return 'Tipo de Investigación';
+      case 'ELABORACION_DICTAMENES':
+        return 'Tipo de Dictamen';
+      case 'RECUPERACION_INFO':
+        return 'Tipo de Dispositivo';
+      case 'DESTRUCCION_DISPOSITIVOS':
+        return 'Dispositivo a Destruir';
+      default:
+        return 'Opciones';
+    }
+  }
+
+  /**
+   * Obtener descripción del resultado seleccionado para nuevos flujos
+   */
+  getDescripcionResultadoNuevo(): string {
+    if (!this.formulario.resultadoSeleccionado) return '';
+    const resultados = this.getResultadosActuales();
+    const resultado = resultados.find(r => r.codigo === this.formulario.resultadoSeleccionado);
+    return resultado?.descripcion || this.formulario.resultadoSeleccionado;
+  }
+
+  /**
+   * Obtener fecha mínima (hoy)
+   */
+  getFechaMinima(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  /**
+   * Establecer fecha rápida (X días desde hoy)
+   */
+  setFechaRapida(dias: number): void {
+    const fecha = new Date();
+    fecha.setDate(fecha.getDate() + dias);
+    this.formulario.fechaEntrega = fecha.toISOString().split('T')[0];
   }
 
   /**

@@ -1701,3 +1701,174 @@
     border-bottom: none;
   }
 }
+
+/* =====================================================
+   FECHA PICKER - DISEÑO PROFESIONAL
+   ===================================================== */
+
+.fecha-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #bae6fd;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.fecha-picker-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.fecha-picker-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  flex-shrink: 0;
+}
+
+.fecha-picker-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+.fecha-picker-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fecha-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0369a1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fecha-input {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0c4a6e;
+  padding: 12px 16px;
+  border: 2px solid #7dd3fc;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 200px;
+}
+
+.fecha-input:hover {
+  border-color: #0ea5e9;
+}
+
+.fecha-input:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+/* Estilos para el date picker nativo */
+.fecha-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 4px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-radius: 4px;
+  opacity: 1;
+  filter: invert(1);
+}
+
+.fecha-quick-options {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.quick-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  background: white;
+  border: 2px solid #e0f2fe;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.quick-option:hover {
+  background: #f0f9ff;
+  border-color: #7dd3fc;
+  transform: translateY(-2px);
+}
+
+.quick-option mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #0ea5e9;
+}
+
+.quick-option span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0369a1;
+}
+
+/* Badge para fecha */
+.step-badge.fecha {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+}
+
+/* =====================================================
+   RESPONSIVE PARA FECHA PICKER
+   ===================================================== */
+
+@media (max-width: 640px) {
+  .fecha-picker-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .fecha-picker-wrapper {
+    width: 100%;
+    align-items: center;
+  }
+
+  .fecha-input {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .fecha-quick-options {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .quick-option {
+    flex: 1;
+    max-width: 100px;
+  }
+}

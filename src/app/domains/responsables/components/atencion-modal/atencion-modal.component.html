@@ -203,6 +203,7 @@
                 <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
                 <span *ngIf="formulario.especialistasSeleccionados.length === 0">3</span>
               </span>
+              <span class="step-line" [class.active]="formulario.especialistasSeleccionados.length > 0"></span>
             </div>
             <div class="step-info">
               <h4 class="step-title">
@@ -235,7 +236,7 @@
                     [checked]="especialistaSeleccionado(esp.codigo)"
                     (change)="toggleEspecialista(esp.codigo)">
                   <div class="esp-avatar externo">
-                    {{ esp.nombre_completo.split('-')[1]?.charAt(0) || 'E' }}
+                    {{ esp.nombre_completo.charAt(0) }}
                   </div>
                   <div class="esp-info">
                     <span class="esp-name">{{ esp.nombre_completo }}</span>
@@ -267,7 +268,7 @@
                     [checked]="especialistaSeleccionado(esp.codigo)"
                     (change)="toggleEspecialista(esp.codigo)">
                   <div class="esp-avatar interno">
-                    {{ esp.nombre_completo.split('-')[1]?.charAt(0) || 'I' }}
+                    {{ esp.nombre_completo.charAt(0) }}
                   </div>
                   <div class="esp-info">
                     <span class="esp-name">{{ esp.nombre_completo }}</span>
@@ -287,8 +288,63 @@
           </div>
         </div>
 
+        <!-- ========== PASO 4: FECHA DE ENTREGA ========== -->
+        <div class="wizard-step" [class.active]="formulario.especialistasSeleccionados.length > 0" [class.disabled]="formulario.especialistasSeleccionados.length === 0">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.fechaEntrega">
+                <mat-icon *ngIf="formulario.fechaEntrega">check</mat-icon>
+                <span *ngIf="!formulario.fechaEntrega">4</span>
+              </span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>event</mat-icon>
+                Fecha de Entrega
+              </h4>
+              <p class="step-desc">¿Cuándo debe completarse esta tarea?</p>
+            </div>
+            <div class="step-badge fecha" *ngIf="formulario.fechaEntrega">
+              {{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <div class="step-content" *ngIf="formulario.especialistasSeleccionados.length > 0">
+            <div class="fecha-picker-container">
+              <div class="fecha-picker-icon">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <div class="fecha-picker-wrapper">
+                <label class="fecha-label">Selecciona la fecha límite</label>
+                <input 
+                  type="date" 
+                  class="fecha-input"
+                  [(ngModel)]="formulario.fechaEntrega"
+                  [min]="getFechaMinima()">
+              </div>
+              <div class="fecha-quick-options">
+                <button type="button" class="quick-option" (click)="setFechaRapida(1)">
+                  <mat-icon>today</mat-icon>
+                  <span>Mañana</span>
+                </button>
+                <button type="button" class="quick-option" (click)="setFechaRapida(3)">
+                  <mat-icon>date_range</mat-icon>
+                  <span>3 días</span>
+                </button>
+                <button type="button" class="quick-option" (click)="setFechaRapida(7)">
+                  <mat-icon>event_note</mat-icon>
+                  <span>1 semana</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="step-locked" *ngIf="formulario.especialistasSeleccionados.length === 0">
+            <mat-icon>lock</mat-icon>
+            <span>Primero asigna al menos un especialista</span>
+          </div>
+        </div>
+
         <!-- ========== RESUMEN FINAL ========== -->
-        <div class="wizard-summary" *ngIf="formulario.tiposInsumo.length > 0 && formulario.tipoResultado && formulario.especialistasSeleccionados.length > 0">
+        <div class="wizard-summary" *ngIf="formulario.tiposInsumo.length > 0 && formulario.tipoResultado && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
           <div class="summary-icon">
             <mat-icon>verified</mat-icon>
           </div>
@@ -297,7 +353,262 @@
             <p>
               <strong>{{ formulario.tiposInsumo.length }}</strong> insumo(s) • 
               <strong>{{ getDescripcionResultado() }}</strong> • 
-              <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s)
+              <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s) • 
+              <strong>{{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== FLUJOS NUEVOS: INVESTIGACIÓN, DICTÁMENES, RECUPERACIÓN, DESTRUCCIÓN ========== -->
+      <div class="dynamic-form adquisicion-wizard" *ngIf="esFlujoConOpciones()">
+        
+        <!-- ========== PASO 1: OPCIONES DEL FLUJO ========== -->
+        <div class="wizard-step active">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.opcionSeleccionada.length > 0">
+                <mat-icon *ngIf="formulario.opcionSeleccionada.length > 0">check</mat-icon>
+                <span *ngIf="formulario.opcionSeleccionada.length === 0">1</span>
+              </span>
+              <span class="step-line" [class.active]="formulario.opcionSeleccionada.length > 0"></span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>category</mat-icon>
+                {{ getTituloOpciones() }}
+              </h4>
+              <p class="step-desc">Selecciona una o más opciones</p>
+            </div>
+            <div class="step-badge" *ngIf="formulario.opcionSeleccionada.length > 0">
+              {{ formulario.opcionSeleccionada.length }} seleccionado(s)
+            </div>
+          </div>
+          <div class="step-content">
+            <div class="insumo-grid">
+              <label 
+                *ngFor="let opcion of getOpcionesActuales()"
+                class="insumo-card"
+                [class.selected]="opcionSeleccionada(opcion.codigo)">
+                <input 
+                  type="checkbox" 
+                  [checked]="opcionSeleccionada(opcion.codigo)"
+                  (change)="toggleOpcion(opcion.codigo)">
+                <div class="card-check">
+                  <mat-icon>check</mat-icon>
+                </div>
+                <mat-icon class="card-icon">{{ opcion.icon }}</mat-icon>
+                <span class="card-text">{{ opcion.descripcion }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PASO 2: RESULTADO ========== -->
+        <div class="wizard-step" [class.active]="formulario.opcionSeleccionada.length > 0" [class.disabled]="formulario.opcionSeleccionada.length === 0">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.resultadoSeleccionado">
+                <mat-icon *ngIf="formulario.resultadoSeleccionado">check</mat-icon>
+                <span *ngIf="!formulario.resultadoSeleccionado">2</span>
+              </span>
+              <span class="step-line" [class.active]="formulario.resultadoSeleccionado"></span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>description</mat-icon>
+                Tipo de Documento
+              </h4>
+              <p class="step-desc">¿Qué documento se generará?</p>
+            </div>
+            <div class="step-badge resultado" *ngIf="formulario.resultadoSeleccionado">
+              {{ getDescripcionResultadoNuevo() }}
+            </div>
+          </div>
+          <div class="step-content" *ngIf="formulario.opcionSeleccionada.length > 0">
+            <div class="resultado-grid">
+              <label 
+                *ngFor="let resultado of getResultadosActuales()"
+                class="resultado-card"
+                [class.selected]="formulario.resultadoSeleccionado === resultado.codigo">
+                <input 
+                  type="radio" 
+                  name="resultadoNuevo"
+                  [value]="resultado.codigo"
+                  [(ngModel)]="formulario.resultadoSeleccionado">
+                <div class="radio-indicator">
+                  <span class="radio-dot"></span>
+                </div>
+                <mat-icon class="card-icon">{{ resultado.icon }}</mat-icon>
+                <span class="card-text">{{ resultado.descripcion }}</span>
+              </label>
+            </div>
+          </div>
+          <div class="step-locked" *ngIf="formulario.opcionSeleccionada.length === 0">
+            <mat-icon>lock</mat-icon>
+            <span>Primero selecciona una opción</span>
+          </div>
+        </div>
+
+        <!-- ========== PASO 3: ESPECIALISTAS ========== -->
+        <div class="wizard-step" [class.active]="formulario.resultadoSeleccionado" [class.disabled]="!formulario.resultadoSeleccionado">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
+                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
+                <span *ngIf="formulario.especialistasSeleccionados.length === 0">3</span>
+              </span>
+              <span class="step-line" [class.active]="formulario.especialistasSeleccionados.length > 0"></span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>groups</mat-icon>
+                Asigna Especialista(s)
+              </h4>
+              <p class="step-desc">Selecciona uno o más especialistas</p>
+            </div>
+            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
+              {{ formulario.especialistasSeleccionados.length }} asignado(s)
+            </div>
+          </div>
+          <div class="step-content" *ngIf="formulario.resultadoSeleccionado">
+            <!-- Externos -->
+            <div class="especialista-section">
+              <div class="section-header-esp">
+                <span class="section-badge externo">
+                  <mat-icon>work_outline</mat-icon>
+                  Externos
+                </span>
+                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasExternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar externo">
+                    {{ esp.nombre_completo.charAt(0) }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Externo</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Internos -->
+            <div class="especialista-section">
+              <div class="section-header-esp">
+                <span class="section-badge interno">
+                  <mat-icon>badge</mat-icon>
+                  Internos
+                </span>
+                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasInternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar interno">
+                    {{ esp.nombre_completo.charAt(0) }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Interno</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="step-locked" *ngIf="!formulario.resultadoSeleccionado">
+            <mat-icon>lock</mat-icon>
+            <span>Primero selecciona un resultado</span>
+          </div>
+        </div>
+
+        <!-- ========== PASO 4: FECHA DE ENTREGA ========== -->
+        <div class="wizard-step" [class.active]="formulario.especialistasSeleccionados.length > 0" [class.disabled]="formulario.especialistasSeleccionados.length === 0">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.fechaEntrega">
+                <mat-icon *ngIf="formulario.fechaEntrega">check</mat-icon>
+                <span *ngIf="!formulario.fechaEntrega">4</span>
+              </span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>event</mat-icon>
+                Fecha de Entrega
+              </h4>
+              <p class="step-desc">¿Cuándo debe completarse esta tarea?</p>
+            </div>
+            <div class="step-badge fecha" *ngIf="formulario.fechaEntrega">
+              {{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <div class="step-content" *ngIf="formulario.especialistasSeleccionados.length > 0">
+            <div class="fecha-picker-container">
+              <div class="fecha-picker-icon">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <div class="fecha-picker-wrapper">
+                <label class="fecha-label">Selecciona la fecha límite</label>
+                <input 
+                  type="date" 
+                  class="fecha-input"
+                  [(ngModel)]="formulario.fechaEntrega"
+                  [min]="getFechaMinima()">
+              </div>
+              <div class="fecha-quick-options">
+                <button type="button" class="quick-option" (click)="setFechaRapida(1)">
+                  <mat-icon>today</mat-icon>
+                  <span>Mañana</span>
+                </button>
+                <button type="button" class="quick-option" (click)="setFechaRapida(3)">
+                  <mat-icon>date_range</mat-icon>
+                  <span>3 días</span>
+                </button>
+                <button type="button" class="quick-option" (click)="setFechaRapida(7)">
+                  <mat-icon>event_note</mat-icon>
+                  <span>1 semana</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="step-locked" *ngIf="formulario.especialistasSeleccionados.length === 0">
+            <mat-icon>lock</mat-icon>
+            <span>Primero asigna al menos un especialista</span>
+          </div>
+        </div>
+
+        <!-- ========== RESUMEN FINAL ========== -->
+        <div class="wizard-summary" *ngIf="formulario.opcionSeleccionada.length > 0 && formulario.resultadoSeleccionado && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
+          <div class="summary-icon">
+            <mat-icon>verified</mat-icon>
+          </div>
+          <div class="summary-text">
+            <h4>¡Selección completa!</h4>
+            <p>
+              <strong>{{ formulario.opcionSeleccionada.length }}</strong> opción(es) • 
+              <strong>{{ getDescripcionResultadoNuevo() }}</strong> • 
+              <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s) • 
+              <strong>{{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}</strong>
             </p>
           </div>
         </div>
