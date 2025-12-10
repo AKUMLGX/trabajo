@@ -87,16 +87,24 @@ export interface EspecialistaDTO {
 }
 
 /**
+ * Tipos de prioridad
+ */
+export type Prioridad = 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA';
+
+/**
  * DTO para crear una atención
  */
 export interface CrearAtencionDTO {
   id_expediente: number;
   tipo_accion: TipoAccion;
   
-  // Para RECHAZADO
+  // Prioridad (común para todos)
+  prioridad: Prioridad;
+  
+  // Para RECHAZADO (ya no tiene medio_rechazo, solo notas)
   medio_rechazo?: MedioRechazo;
   
-  // Para ATENCION_INMEDIATA
+  // Para ATENCION_INMEDIATA (ahora usa especialistas)
   abogado_asignado?: string;
   
   // Para ADQUISICION_INFO

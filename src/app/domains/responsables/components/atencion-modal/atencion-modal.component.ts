@@ -12,6 +12,7 @@ import {
   CatalogosAtencion, 
   CrearAtencionDTO, 
   TipoAccion,
+  Prioridad,
   CatEspecialista,
   CatTipoInsumo,
   CatTipoResultado
@@ -22,9 +23,9 @@ import {
  */
 interface FormularioAtencion {
   tipoAccion: TipoAccion | '';
-  // Rechazado
+  // Rechazado (solo notas)
   medioRechazo: 'OFICIO' | 'ATENTA_NOTA' | 'CORREO' | '';
-  // Atención Inmediata
+  // Atención Inmediata (ahora usa especialistas)
   abogadoAsignado: string;
   // Adquisición de Información
   tiposInsumo: string[];
@@ -35,6 +36,8 @@ interface FormularioAtencion {
   resultadoSeleccionado: string; // Para el resultado del flujo
   // Fecha de entrega
   fechaEntrega: string;
+  // Prioridad (común para todos los flujos)
+  prioridad: 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA' | '';
   // Común
   notas: string;
 }
@@ -155,8 +158,17 @@ export class AtencionModalComponent implements OnInit {
     opcionSeleccionada: [],
     resultadoSeleccionado: '',
     fechaEntrega: '',
+    prioridad: '',
     notas: ''
   };
+
+  // Opciones de prioridad
+  opcionesPrioridad: { value: 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA', label: string, icon: string, color: string, description: string }[] = [
+    { value: 'URGENTE', label: 'Urgente', icon: 'priority_high', color: 'urgente', description: 'Requiere atención inmediata' },
+    { value: 'ALTA', label: 'Alta', icon: 'arrow_upward', color: 'alta', description: 'Prioridad elevada' },
+    { value: 'MEDIA', label: 'Media', icon: 'remove', color: 'media', description: 'Prioridad normal' },
+    { value: 'BAJA', label: 'Baja', icon: 'arrow_downward', color: 'baja', description: 'Sin urgencia' }
+  ];
   
   // Estados de UI
   cargandoCatalogos = true;
@@ -277,14 +289,15 @@ export class AtencionModalComponent implements OnInit {
    */
   formularioValido(): boolean {
     if (!this.formulario.tipoAccion) return false;
+    if (!this.formulario.prioridad) return false; // Prioridad siempre requerida
     
     switch (this.formulario.tipoAccion) {
       case 'RECHAZADO':
-        return !!this.formulario.medioRechazo;
+        return true; // Solo notas (opcional) + prioridad
       case 'PENDIENTE_INFO':
-        return true; // Solo notas (opcional)
+        return true; // Solo notas (opcional) + prioridad
       case 'ATENCION_INMEDIATA':
-        return !!this.formulario.abogadoAsignado.trim();
+        return this.formulario.especialistasSeleccionados.length > 0; // Especialistas + prioridad
       case 'ADQUISICION_INFO':
         return this.formulario.tiposInsumo.length > 0 && 
                !!this.formulario.tipoResultado &&
@@ -373,24 +386,51 @@ export class AtencionModalComponent implements OnInit {
       return;
     }
 
-    // Construir el DTO
+    // Construir el DTO con prioridad
     const dto: CrearAtencionDTO = {
       id_expediente: this.expediente.id_expediente,
       tipo_accion: this.formulario.tipoAccion as TipoAccion,
+      prioridad: this.formulario.prioridad as any,
       notas: this.formulario.notas || undefined
     };
 
     // Agregar campos según el tipo de acción
     switch (this.formulario.tipoAccion) {
       case 'RECHAZADO':
-        dto.medio_rechazo = this.formulario.medioRechazo as any;
+        // Solo notas (ya incluidas arriba)
+        break;
+      case 'PENDIENTE_INFO':
+        // Solo notas (ya incluidas arriba)
         break;
       case 'ATENCION_INMEDIATA':
-        dto.abogado_asignado = this.formulario.abogadoAsignado;
+        // Especialistas (abogados)
+        dto.especialistas = this.formulario.especialistasSeleccionados.map(codigo => {
+          const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
+          return {
+            codigo: codigo,
+            nombre: esp?.nombre_completo || codigo
+          };
+        });
         break;
       case 'ADQUISICION_INFO':
         dto.tipos_insumo = this.formulario.tiposInsumo;
         dto.tipo_resultado = this.formulario.tipoResultado as any;
+        dto.fecha_entrega = this.formulario.fechaEntrega;
+        dto.especialistas = this.formulario.especialistasSeleccionados.map(codigo => {
+          const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
+          return {
+            codigo: codigo,
+            nombre: esp?.nombre_completo || codigo
+          };
+        });
+        break;
+      case 'INVESTIGACION_FORENSE':
+      case 'ELABORACION_DICTAMENES':
+      case 'RECUPERACION_INFO':
+      case 'DESTRUCCION_DISPOSITIVOS':
+        dto.opciones_seleccionadas = this.formulario.opcionSeleccionada;
+        dto.resultado_seleccionado = this.formulario.resultadoSeleccionado;
+        dto.fecha_entrega = this.formulario.fechaEntrega;
         dto.especialistas = this.formulario.especialistasSeleccionados.map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
           return {
@@ -463,6 +503,7 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.opcionSeleccionada = [];
     this.formulario.resultadoSeleccionado = '';
     this.formulario.fechaEntrega = '';
+    this.formulario.prioridad = '';
   }
 
   /**

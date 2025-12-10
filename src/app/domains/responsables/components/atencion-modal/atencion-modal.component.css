@@ -1703,6 +1703,155 @@
 }
 
 /* =====================================================
+   PRIORIDAD CARDS - DISEÑO PROFESIONAL
+   ===================================================== */
+
+.prioridad-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.prioridad-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 12px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.prioridad-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.prioridad-card.selected {
+  border-width: 3px;
+}
+
+/* Colores por prioridad */
+.prioridad-card.prioridad-urgente {
+  border-color: #fecaca;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+.prioridad-card.prioridad-urgente:hover,
+.prioridad-card.prioridad-urgente.selected {
+  border-color: #ef4444;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);
+}
+.prioridad-card.prioridad-urgente .prioridad-icon {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.prioridad-card.prioridad-alta {
+  border-color: #fed7aa;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+.prioridad-card.prioridad-alta:hover,
+.prioridad-card.prioridad-alta.selected {
+  border-color: #f97316;
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.2);
+}
+.prioridad-card.prioridad-alta .prioridad-icon {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+.prioridad-card.prioridad-media {
+  border-color: #bfdbfe;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+.prioridad-card.prioridad-media:hover,
+.prioridad-card.prioridad-media.selected {
+  border-color: #3b82f6;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+}
+.prioridad-card.prioridad-media .prioridad-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.prioridad-card.prioridad-baja {
+  border-color: #bbf7d0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+.prioridad-card.prioridad-baja:hover,
+.prioridad-card.prioridad-baja.selected {
+  border-color: #22c55e;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.2);
+}
+.prioridad-card.prioridad-baja .prioridad-icon {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.prioridad-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.prioridad-icon mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.prioridad-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prioridad-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.prioridad-desc {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  line-height: 1.3;
+}
+
+.prioridad-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.prioridad-check mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+}
+
+/* Responsive para prioridad */
+@media (max-width: 640px) {
+  .prioridad-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .prioridad-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================
    FECHA PICKER - DISEÑO PROFESIONAL
    ===================================================== */
 
