@@ -1,44 +1,482 @@
-.sidenav-background {
+/* ========================================
+   SIDEBAR MEJORADO - Tlálcalli
+   ======================================== */
+
+:host {
+    --wine: #691C32;
+    --wine-light: #8B2A44;
+    --wine-dark: #4a1424;
+    --gold: #C9A227;
+    --gold-light: #E6C65A;
+}
+
+.sidenav-container {
     height: calc(100vh - 64px);
-    background-color: #691C32;
-    opacity: 0.9;
+    background: linear-gradient(180deg, 
+        var(--wine) 0%, 
+        var(--wine-light) 50%,
+        var(--wine) 100%);
     color: white;
-    border-top-right-radius: 35px;
-    border-bottom-right-radius: 35px;
+    border-top-right-radius: 28px;
+    border-bottom-right-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 
+        4px 0 20px rgba(105, 28, 50, 0.3),
+        inset -1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Patrón decorativo de fondo */
+.sidenav-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.sidenav-pattern::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 35px,
+        rgba(255, 255, 255, 0.008) 35px,
+        rgba(255, 255, 255, 0.008) 70px
+    );
+}
+
+/* ========================================
+   HEADER DEL SIDEBAR
+   ======================================== */
+
+.sidenav-header {
+    position: relative;
+    z-index: 1;
+    padding: 28px 16px 20px;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-container.collapsed {
+    margin-bottom: 0;
+}
+
+.logo-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
 }
 
-.sidenav-header {
-    padding-top: 24px;
-    text-align: center;
+.logo-wrapper.small {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    margin-top: 8px;
+}
 
-    > img {
-        /* border-radius: 100%; */
-        object-fit: cover;
-        margin-bottom: 10px;
-    }
+.logo-wrapper:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.25),
+        0 6px 16px rgba(0, 0, 0, 0.15);
+}
 
-    .header-text {
-        > h2 {
-            margin: 0;
-            font-size: 1rem;
-            line-height: 1.5 rem;
-        }
+.logo-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg, 
+        transparent 30%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 70%
+    );
+    transform: translateX(-100%);
+    animation: shimmer 3s infinite;
+}
 
-        > p {
-            margin: 0;
-            font-size: 0.8rem;
-        }
-    }
+@keyframes shimmer {
+    100% { transform: translateX(100%); }
+}
+
+.logo-wrapper img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
+.logo-wrapper.small img {
+    max-width: 75%;
+    max-height: 75%;
+}
+
+/* Texto del header */
+.header-text {
+    transition: all 0.3s ease;
+    opacity: 1;
+    max-height: 100px;
 }
 
 .hide-header-text {
     opacity: 0;
-    height: 0px;
+    max-height: 0;
+    overflow: hidden;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.text-small{
-  font-size: 10px;
-  opacity: 0.2;
-  margin-top: 4rem;
+.app-title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.title-icon {
+    font-size: 1.4rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.app-subtitle {
+    margin: 8px 0 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.85;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ========================================
+   DIVIDER
+   ======================================== */
+
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 20px;
+    margin: 8px 0 16px;
+    transition: all 0.3s ease;
+}
+
+.divider.collapsed {
+    padding: 0 10px;
+    margin: 16px 0;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.divider.collapsed .divider-line {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.divider-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(201, 162, 39, 0.5);
+}
+
+.divider.collapsed .divider-dot {
+    width: 4px;
+    height: 4px;
+}
+
+/* ========================================
+   MENÚ DE NAVEGACIÓN
+   ======================================== */
+
+.sidenav-menu {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.sidenav-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidenav-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidenav-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.sidenav-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Items del menú */
+.menu-item {
+    margin: 4px 0 !important;
+    border-radius: 14px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.4s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    transform: translateX(4px);
+}
+
+.menu-item.menu-item-active {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+}
+
+.menu-item.collapsed {
+    justify-content: center !important;
+    padding: 12px !important;
+}
+
+.menu-item-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.menu-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.menu-icon-wrapper.active {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    box-shadow: 0 4px 15px rgba(201, 162, 39, 0.4);
+}
+
+.menu-icon-wrapper mat-icon {
+    color: white;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.menu-icon-wrapper.active mat-icon {
+    color: var(--wine-dark);
+}
+
+.menu-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.active-indicator {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-light) 100%);
+    border-radius: 4px 0 0 4px;
+    box-shadow: -2px 0 10px rgba(201, 162, 39, 0.5);
+}
+
+/* ========================================
+   FOOTER DEL SIDEBAR
+   ======================================== */
+
+.sidenav-footer {
+    position: relative;
+    z-index: 1;
+    padding: 12px;
+    margin-top: auto;
+}
+
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    margin: 0 8px 12px;
+}
+
+.footer-divider.collapsed {
+    margin: 0 4px 12px;
+}
+
+.logout-btn {
+    border-radius: 14px !important;
+    transition: all 0.3s ease !important;
+    margin: 0 !important;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 100, 100, 0.15) !important;
+}
+
+.logout-btn.collapsed {
+    justify-content: center !important;
+    padding: 12px !important;
+}
+
+.logout-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.logout-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 100, 100, 0.15);
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover .logout-icon-wrapper {
+    background: rgba(255, 100, 100, 0.25);
+    transform: rotate(180deg);
+}
+
+.logout-icon-wrapper mat-icon {
+    color: #ff8888;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.logout-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Información de versión */
+.version-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.version-info.collapsed {
+    padding: 6px;
+    font-size: 9px;
+}
+
+.version-info:hover {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.env-badge {
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-height: 700px) {
+    .sidenav-header {
+        padding: 16px 12px 12px;
+    }
+    
+    .logo-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .app-title {
+        font-size: 1.3rem;
+    }
+    
+    .menu-item {
+        margin: 2px 0 !important;
+    }
+    
+    .menu-icon-wrapper {
+        width: 36px;
+        height: 36px;
+    }
 }

@@ -1,60 +1,103 @@
-<div class="sidenav-background">
-    <div class="sidenav-header flex flex-col justify-center items-center">
-        @if(collapsed) {
-            <div class="w-12 h-12 mt-8 flex justify-center items-center bg-white rounded-lg">
-                <img
-                    [width]="profilePicSize()"
-                    [height]="profilePicSize()"
-                    src="{{environment.base}}/assets/images/avatar.png"
-                />
-            </div>
-        } @else {
-            <div class="w-32 h-32 bg-white flex justify-center items-center rounded-lg">
-                <img
-                    [width]="profilePicSize()"
-                    [height]="profilePicSize()"
-                    src="{{environment.base}}/assets/images/logo-sat.png"
-                />
-            </div>
-        }
-        <div class="header-text mt-6" [class.hide-header-text]="collapsed">
-            <h1>Tlálcalli</h1>
-            <h1 class="mt-2">Tu espacio de administración</h1>
+<div class="sidenav-container">
+    <!-- Patrón decorativo de fondo -->
+    <div class="sidenav-pattern"></div>
+    
+    <!-- Header del Sidebar -->
+    <div class="sidenav-header">
+        <div class="logo-container" [class.collapsed]="collapsed">
+            @if(collapsed) {
+                <div class="logo-wrapper small">
+                    <div class="logo-glow"></div>
+                    <img
+                        [width]="profilePicSize()"
+                        [height]="profilePicSize()"
+                        src="{{environment.base}}/assets/images/avatar.png"
+                        alt="Logo"
+                    />
+                </div>
+            } @else {
+                <div class="logo-wrapper">
+                    <div class="logo-glow"></div>
+                    <img
+                        [width]="profilePicSize()"
+                        [height]="profilePicSize()"
+                        src="{{environment.base}}/assets/images/logo-sat.png"
+                        alt="Logo SAT"
+                    />
+                </div>
+            }
+        </div>
+        
+        <div class="header-text" [class.hide-header-text]="collapsed">
+            <h1 class="app-title">
+                <span class="title-icon">⚖️</span>
+                Tlálcalli
+            </h1>
+            <p class="app-subtitle">Sistema de Control de Expedientes</p>
         </div>
     </div>
-    <div class="mt-6">
+
+    <!-- Separador decorativo -->
+    <div class="divider" [class.collapsed]="collapsed">
+        <div class="divider-line"></div>
+        <div class="divider-dot"></div>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- Menú de navegación -->
+    <nav class="sidenav-menu">
         <mat-nav-list>
-            @for (item of menuItems(); track item.label) {
+            @for (item of menuItems(); track item.label; let i = $index) {
                 <a
                     mat-list-item
                     [routerLink]="item.route"
-                    routerLinkActive
+                    routerLinkActive="menu-item-active"
                     #rla="routerLinkActive"
-                    [activated]="rla.isActive"
-                    >
-                    <mat-icon matListItemIcon class="text-white">{{ item.icon }}</mat-icon>
-                    @if ( !collapsed ) {
-                        <span matListItemTitle class="text-white">{{ item.label }}</span>
+                    class="menu-item"
+                    [class.collapsed]="collapsed"
+                    [style.animation-delay]="i * 50 + 'ms'"
+                >
+                    <div class="menu-item-content">
+                        <div class="menu-icon-wrapper" [class.active]="rla.isActive">
+                            <mat-icon>{{ item.icon }}</mat-icon>
+                        </div>
+                        @if (!collapsed) {
+                            <span class="menu-label">{{ item.label }}</span>
+                        }
+                    </div>
+                    @if (rla.isActive && !collapsed) {
+                        <div class="active-indicator"></div>
                     }
                 </a>
             }
-            <a
+        </mat-nav-list>
+    </nav>
+
+    <!-- Sección inferior - Logout -->
+    <div class="sidenav-footer">
+        <div class="footer-divider" [class.collapsed]="collapsed"></div>
+        <a
             mat-list-item
             (click)="logout()"
-            routerLinkActive
-            #rla="routerLinkActive"
-            [activated]="rla.isActive"
-            >
-            <mat-icon matListItemIcon class="text-white">{{ "power_settings_new" }}</mat-icon>
-            @if ( !collapsed ) {
-                <span matListItemTitle class="text-white">{{ "Cerrar sesión" }}</span>
-            }
+            class="logout-btn"
+            [class.collapsed]="collapsed"
+        >
+            <div class="logout-content">
+                <div class="logout-icon-wrapper">
+                    <mat-icon>power_settings_new</mat-icon>
+                </div>
+                @if (!collapsed) {
+                    <span class="logout-label">Cerrar sesión</span>
+                }
+            </div>
         </a>
-        </mat-nav-list>
-    </div>
-    <div class="text-small" >
-      <span> {{commit_sha}}-{{envrionment}}</span>
+        
+        <!-- Versión -->
+        <div class="version-info" [class.collapsed]="collapsed">
+            <span>v{{commit_sha}}</span>
+            @if (!collapsed) {
+                <span class="env-badge">{{ envrionment }}</span>
+            }
+        </div>
     </div>
 </div>
-
-<!-- *ngFor="let item of menuItems()" -->

@@ -1,0 +1,102 @@
+/* ========================================
+   NAVBAR BRAND - Tlálcalli
+   ======================================== */
+
+:host {
+    display: block;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #C9A227 0%, #E6C65A 100%);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3);
+}
+
+.brand-icon svg {
+    width: 20px;
+    height: 20px;
+    color: #4a1424;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.brand-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.brand-tagline {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-brand {
+        padding: 4px 12px;
+        gap: 10px;
+    }
+    
+    .brand-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .brand-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .brand-name {
+        font-size: 1rem;
+    }
+    
+    .brand-tagline {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-text {
+        display: none;
+    }
+    
+    .navbar-brand {
+        padding: 8px;
+        border-radius: 12px;
+    }
+}
+
