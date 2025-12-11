@@ -10,17 +10,25 @@ import { AtencionModalComponent } from '../atencion-modal/atencion-modal.compone
 import { MatDialog } from '@angular/material/dialog';
 
 /**
- * Interfaz para el semáforo de prioridad/vencimiento
+ * Interfaz para el semáforo de prioridad basado en TIEMPO TRANSCURRIDO
+ * 
+ * REGLAS DEL SEMÁFORO (desde captura del asunto):
+ * - 🟢 EN TIEMPO (0-24h): Recién capturado, todo bien
+ * - 🟡 ATENCIÓN (24-48h): Ya lleva tiempo, prestar atención
+ * - 🔴 URGENTE (48-72h): ¡Hay que atenderlo ya!
+ * - ⚫ VENCIDO (+72h): Superó el límite de 72 horas
  */
 export interface SemaforoPrioridad {
-  nivel: 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA' | 'VENCIDO';
+  nivel: 'EN_TIEMPO' | 'ATENCION' | 'URGENTE' | 'VENCIDO';
   label: string;
-  horas: number;
+  horasTranscurridas: number;
   horasRestantes: number;
+  porcentaje: number; // % de avance hacia el límite
   color: string;
   bgColor: string;
   borderColor: string;
   emoji: string;
+  descripcion: string;
 }
 
 @Component({
@@ -64,13 +72,12 @@ export class ResponsablesTableComponent implements OnInit {
     por_estatus: {} as { [key: string]: number }
   };
   
-  // Estadísticas de semáforo
+  // Estadísticas de semáforo (nuevo sistema basado en tiempo transcurrido)
   estadisticasSemaforo = {
-    urgente: 0,
-    alta: 0,
-    media: 0,
-    baja: 0,
-    vencido: 0
+    en_tiempo: 0,  // 0-24h - Verde
+    atencion: 0,   // 24-48h - Amarillo
+    urgente: 0,    // 48-72h - Rojo
+    vencido: 0     // +72h - Negro
   };
   
   responsable = '';
@@ -85,14 +92,13 @@ export class ResponsablesTableComponent implements OnInit {
     { value: 'REVISION_LEGAL', label: 'Revisión Legal' }
   ];
 
-  // Opciones de prioridad (semáforo) para el filtro
+  // Opciones de prioridad (semáforo basado en tiempo transcurrido)
   opcionesPrioridad = [
     { value: '', label: 'Todas las prioridades' },
-    { value: 'URGENTE', label: '🔴 Urgente (24 HRS)' },
-    { value: 'ALTA', label: '🟠 Alta (72 HRS)' },
-    { value: 'MEDIA', label: '🟡 Media (120 HRS)' },
-    { value: 'BAJA', label: '🟢 Baja (288 HRS)' },
-    { value: 'VENCIDO', label: '⚫ Vencido' }
+    { value: 'EN_TIEMPO', label: '🟢 En Tiempo (0-24h)' },
+    { value: 'ATENCION', label: '🟡 Atención (24-48h)' },
+    { value: 'URGENTE', label: '🔴 Urgente (48-72h)' },
+    { value: 'VENCIDO', label: '⚫ Vencido (+72h)' }
   ];
 
   filtroPrioridad = '';
@@ -158,22 +164,20 @@ export class ResponsablesTableComponent implements OnInit {
   }
 
   /**
-   * Calcular el semáforo de prioridad basado en 72 HORAS desde fecha_creacion
+   * Calcular el semáforo de prioridad basado en TIEMPO TRANSCURRIDO desde captura
    * 
-   * REGLA PRINCIPAL: 72 horas desde que se finaliza la captura
+   * ===== REGLAS DEL SEMÁFORO (72 HORAS LÍMITE) =====
    * 
-   * Distribución del semáforo:
-   * - 🔴 URGENTE: Menos de 24 horas restantes (entre 48-72 horas transcurridas)
-   * - 🟠 ALTA: Entre 24-48 horas restantes (entre 24-48 horas transcurridas)
-   * - 🟡 MEDIA: Entre 48-60 horas restantes (entre 12-24 horas transcurridas)
-   * - 🟢 BAJA: Más de 60 horas restantes (menos de 12 horas transcurridas)
-   * - ⚫ VENCIDO: Más de 72 horas transcurridas
+   * 🟢 EN TIEMPO (0-24h transcurridas): Recién capturado, todo bien
+   * 🟡 ATENCIÓN (24-48h transcurridas): Ya lleva tiempo, prestar atención
+   * 🔴 URGENTE (48-72h transcurridas): ¡Hay que atenderlo ya!
+   * ⚫ VENCIDO (+72h transcurridas): Superó el límite
    */
   calcularSemaforo(expediente: ExpedienteTlapohualli): SemaforoPrioridad {
     const ahora = new Date();
+    const LIMITE_TOTAL = 72; // 72 horas es el límite máximo
     
-    // IMPORTANTE: Usar fecha_creacion como base (cuando se finalizó la captura)
-    // Si no existe, usar fecha_asignacion como fallback
+    // Fecha base: cuando se capturó/finalizó el asunto
     let fechaBase: Date;
     if (expediente.fecha_creacion) {
       fechaBase = new Date(expediente.fecha_creacion);
@@ -183,121 +187,87 @@ export class ResponsablesTableComponent implements OnInit {
       fechaBase = new Date();
     }
     
-    // Calcular horas transcurridas desde la creación
-    const horasTranscurridas = Math.floor((ahora.getTime() - fechaBase.getTime()) / (1000 * 60 * 60));
-    
-    // SEMÁFORO DE 72 HORAS
-    const LIMITE_TOTAL = 72; // 72 horas límite
+    // Calcular horas transcurridas desde la captura
+    const horasTranscurridas = Math.max(0, Math.floor((ahora.getTime() - fechaBase.getTime()) / (1000 * 60 * 60)));
     const horasRestantes = LIMITE_TOTAL - horasTranscurridas;
+    const porcentaje = Math.min(100, Math.round((horasTranscurridas / LIMITE_TOTAL) * 100));
     
-    // Si es urgente por plazo del documento (caso especial)
-    if (expediente.plazo_es_urgente) {
-      const horasUrgente = Math.min(24, LIMITE_TOTAL);
-      const restantesUrgente = horasUrgente - horasTranscurridas;
-      
-      if (restantesUrgente <= 0) {
-        return {
-          nivel: 'VENCIDO',
-          label: 'VENCIDO (Urgente)',
-          horas: horasUrgente,
-          horasRestantes: restantesUrgente,
-          color: 'text-gray-800',
-          bgColor: 'bg-gray-800',
-          borderColor: 'border-gray-800',
-          emoji: '⚫'
-        };
-      }
-      return {
-        nivel: 'URGENTE',
-        label: 'Urgente',
-        horas: horasUrgente,
-        horasRestantes: restantesUrgente,
-        color: 'text-red-600',
-        bgColor: 'bg-red-100',
-        borderColor: 'border-red-300',
-        emoji: '🔴'
-      };
-    }
-    
-    // ⚫ VENCIDO: Más de 72 horas
-    if (horasRestantes <= 0) {
+    // ⚫ VENCIDO: Más de 72 horas transcurridas
+    if (horasTranscurridas >= 72) {
+      const horasExcedidas = horasTranscurridas - 72;
       return {
         nivel: 'VENCIDO',
-        label: 'VENCIDO',
-        horas: LIMITE_TOTAL,
-        horasRestantes: horasRestantes,
-        color: 'text-gray-800',
-        bgColor: 'bg-gray-800',
-        borderColor: 'border-gray-800',
-        emoji: '⚫'
+        label: 'Vencido',
+        horasTranscurridas,
+        horasRestantes: 0,
+        porcentaje: 100,
+        color: 'text-gray-900',
+        bgColor: 'bg-gray-900',
+        borderColor: 'border-gray-900',
+        emoji: '⚫',
+        descripcion: horasExcedidas > 24 
+          ? `+${Math.floor(horasExcedidas / 24)}d excedido` 
+          : `+${horasExcedidas}h excedido`
       };
     }
     
-    // 🔴 URGENTE: Menos de 24 horas restantes (48-72 horas transcurridas)
-    if (horasRestantes <= 24) {
+    // 🔴 URGENTE: 48-72 horas transcurridas (¡ATENDER YA!)
+    if (horasTranscurridas >= 48) {
       return {
         nivel: 'URGENTE',
         label: 'Urgente',
-        horas: LIMITE_TOTAL,
-        horasRestantes: horasRestantes,
+        horasTranscurridas,
+        horasRestantes,
+        porcentaje,
         color: 'text-red-600',
-        bgColor: 'bg-red-100',
-        borderColor: 'border-red-300',
-        emoji: '🔴'
+        bgColor: 'bg-red-600',
+        borderColor: 'border-red-600',
+        emoji: '🔴',
+        descripcion: `${horasRestantes}h restantes`
       };
     }
     
-    // 🟠 ALTA: Entre 24-48 horas restantes (24-48 horas transcurridas)
-    if (horasRestantes <= 48) {
+    // 🟡 ATENCIÓN: 24-48 horas transcurridas
+    if (horasTranscurridas >= 24) {
       return {
-        nivel: 'ALTA',
-        label: 'Alta',
-        horas: LIMITE_TOTAL,
-        horasRestantes: horasRestantes,
-        color: 'text-orange-600',
-        bgColor: 'bg-orange-100',
-        borderColor: 'border-orange-300',
-        emoji: '🟠'
+        nivel: 'ATENCION',
+        label: 'Atención',
+        horasTranscurridas,
+        horasRestantes,
+        porcentaje,
+        color: 'text-amber-600',
+        bgColor: 'bg-amber-500',
+        borderColor: 'border-amber-500',
+        emoji: '🟡',
+        descripcion: `${horasRestantes}h restantes`
       };
     }
     
-    // 🟡 MEDIA: Entre 48-60 horas restantes (12-24 horas transcurridas)
-    if (horasRestantes <= 60) {
-      return {
-        nivel: 'MEDIA',
-        label: 'Media',
-        horas: LIMITE_TOTAL,
-        horasRestantes: horasRestantes,
-        color: 'text-yellow-600',
-        bgColor: 'bg-yellow-100',
-        borderColor: 'border-yellow-300',
-        emoji: '🟡'
-      };
-    }
-    
-    // 🟢 BAJA: Más de 60 horas restantes (menos de 12 horas transcurridas)
+    // 🟢 EN TIEMPO: 0-24 horas transcurridas
     return {
-      nivel: 'BAJA',
-      label: 'Baja',
-      horas: LIMITE_TOTAL,
-      horasRestantes: horasRestantes,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100',
-      borderColor: 'border-green-300',
-      emoji: '🟢'
+      nivel: 'EN_TIEMPO',
+      label: 'En Tiempo',
+      horasTranscurridas,
+      horasRestantes,
+      porcentaje,
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-500',
+      borderColor: 'border-emerald-500',
+      emoji: '🟢',
+      descripcion: `${horasRestantes}h restantes`
     };
   }
 
   /**
-   * Ordenar expedientes por prioridad (urgentes primero)
+   * Ordenar expedientes por prioridad (más urgentes primero)
+   * Los vencidos primero, luego urgentes, atención, y al final los que están en tiempo
    */
   ordenarPorPrioridad(expedientes: ExpedienteTlapohualli[]): ExpedienteTlapohualli[] {
     const ordenPrioridad: { [key: string]: number } = {
-      'VENCIDO': 0,
-      'URGENTE': 1,
-      'ALTA': 2,
-      'MEDIA': 3,
-      'BAJA': 4
+      'VENCIDO': 0,    // ⚫ Máxima prioridad (ya se pasó)
+      'URGENTE': 1,    // 🔴 Muy urgente
+      'ATENCION': 2,   // 🟡 Requiere atención
+      'EN_TIEMPO': 3   // 🟢 Todo bien
     };
     
     return expedientes.sort((a, b) => {
@@ -305,44 +275,40 @@ export class ResponsablesTableComponent implements OnInit {
       const semaforoB = this.calcularSemaforo(b);
       
       // Primero ordenar por nivel de prioridad
-      const ordenA = ordenPrioridad[semaforoA.nivel] ?? 5;
-      const ordenB = ordenPrioridad[semaforoB.nivel] ?? 5;
+      const ordenA = ordenPrioridad[semaforoA.nivel] ?? 4;
+      const ordenB = ordenPrioridad[semaforoB.nivel] ?? 4;
       
       if (ordenA !== ordenB) {
         return ordenA - ordenB;
       }
       
-      // Si tienen el mismo nivel, ordenar por horas restantes (menos horas primero)
-      return semaforoA.horasRestantes - semaforoB.horasRestantes;
+      // Si tienen el mismo nivel, ordenar por horas transcurridas (más tiempo = más urgente)
+      return semaforoB.horasTranscurridas - semaforoA.horasTranscurridas;
     });
   }
 
   /**
-   * Calcular estadísticas de semáforo
+   * Calcular estadísticas de semáforo (nuevo sistema de tiempo transcurrido)
    */
   calcularEstadisticasSemaforo(): void {
     this.estadisticasSemaforo = {
-      urgente: 0,
-      alta: 0,
-      media: 0,
-      baja: 0,
-      vencido: 0
+      en_tiempo: 0,  // 🟢 0-24h
+      atencion: 0,   // 🟡 24-48h
+      urgente: 0,    // 🔴 48-72h
+      vencido: 0     // ⚫ +72h
     };
     
     this.expedientes.forEach(exp => {
       const semaforo = this.calcularSemaforo(exp);
       switch (semaforo.nivel) {
+        case 'EN_TIEMPO':
+          this.estadisticasSemaforo.en_tiempo++;
+          break;
+        case 'ATENCION':
+          this.estadisticasSemaforo.atencion++;
+          break;
         case 'URGENTE':
           this.estadisticasSemaforo.urgente++;
-          break;
-        case 'ALTA':
-          this.estadisticasSemaforo.alta++;
-          break;
-        case 'MEDIA':
-          this.estadisticasSemaforo.media++;
-          break;
-        case 'BAJA':
-          this.estadisticasSemaforo.baja++;
           break;
         case 'VENCIDO':
           this.estadisticasSemaforo.vencido++;
@@ -352,21 +318,45 @@ export class ResponsablesTableComponent implements OnInit {
   }
 
   /**
-   * Formatear horas restantes a texto legible
+   * Formatear tiempo transcurrido/restante a texto legible
    */
-  formatearHorasRestantes(horas: number): string {
-    if (horas <= 0) {
-      return 'Vencido';
+  formatearTiempo(semaforo: SemaforoPrioridad): string {
+    if (semaforo.nivel === 'VENCIDO') {
+      const excedido = semaforo.horasTranscurridas - 72;
+      if (excedido >= 24) {
+        return `+${Math.floor(excedido / 24)}d vencido`;
+      }
+      return `+${excedido}h vencido`;
     }
+    
+    const horas = semaforo.horasRestantes;
     if (horas < 24) {
       return `${horas}h restantes`;
     }
     const dias = Math.floor(horas / 24);
-    const horasRestantes = horas % 24;
-    if (horasRestantes === 0) {
+    const horasRest = horas % 24;
+    if (horasRest === 0) {
       return `${dias}d restantes`;
     }
-    return `${dias}d ${horasRestantes}h restantes`;
+    return `${dias}d ${horasRest}h`;
+  }
+
+  /**
+   * Formatear horas transcurridas
+   */
+  formatearHorasTranscurridas(horas: number): string {
+    if (horas < 1) {
+      return 'Recién capturado';
+    }
+    if (horas < 24) {
+      return `${horas}h transcurridas`;
+    }
+    const dias = Math.floor(horas / 24);
+    const horasRest = horas % 24;
+    if (horasRest === 0) {
+      return `${dias}d transcurridos`;
+    }
+    return `${dias}d ${horasRest}h`;
   }
 
   /**

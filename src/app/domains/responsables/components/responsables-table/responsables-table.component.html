@@ -1,19 +1,21 @@
 <!-- =============================================
-     PANEL DE CONTROL - MI BANDEJA DE EXPEDIENTES
+     PANEL DE CONTROL - SEMÁFORO DE ATENCIÓN
+     Basado en tiempo transcurrido desde la captura
      ============================================= -->
 
-<!-- HERO SECTION: Cards de Prioridad -->
+<!-- HERO SECTION: Semáforo de Atención -->
 <section class="priority-dashboard">
   <div class="dashboard-header">
     <div class="header-content">
       <div class="header-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
         </svg>
       </div>
       <div>
-        <h2 class="dashboard-title">Panel de Control</h2>
-        <p class="dashboard-subtitle">Monitoreo de expedientes por prioridad</p>
+        <h2 class="dashboard-title">Semáforo de Atención</h2>
+        <p class="dashboard-subtitle">Tiempo transcurrido desde captura del asunto (límite: 72h)</p>
       </div>
     </div>
     <button 
@@ -27,130 +29,118 @@
     </button>
   </div>
 
-  <!-- CARDS DE PRIORIDAD - DISEÑO PREMIUM -->
-  <div class="priority-cards">
+  <!-- SEMÁFORO DE ATENCIÓN - 4 ESTADOS -->
+  <div class="semaforo-cards">
     
-    <!-- Card VENCIDO -->
+    <!-- 🟢 EN TIEMPO: 0-24h transcurridas -->
     <div 
-      class="priority-card vencido"
-      [class.active]="filtroPrioridad === 'VENCIDO'"
-      (click)="filtroPrioridad = 'VENCIDO'; aplicarFiltros()">
-      <div class="card-glow"></div>
+      class="semaforo-card en-tiempo"
+      [class.active]="filtroPrioridad === 'EN_TIEMPO'"
+      (click)="filtroPrioridad = 'EN_TIEMPO'; aplicarFiltros()">
+      <div class="card-bg-pattern"></div>
       <div class="card-content">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 6v6l4 2"/>
-            <path d="M4 4l16 16" stroke-width="2.5"/>
-          </svg>
+        <div class="semaforo-indicator">
+          <div class="semaforo-light active"></div>
         </div>
         <div class="card-info">
-          <span class="card-label">Vencidos</span>
-          <span class="card-count">{{ estadisticasSemaforo.vencido }}</span>
+          <span class="card-label">En Tiempo</span>
+          <span class="card-count">{{ estadisticasSemaforo.en_tiempo }}</span>
+          <span class="card-range">0-24h transcurridas</span>
         </div>
-        <div class="card-footer">
-          <span class="pulse-dot"></span>
-          <span>Sin tiempo</span>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 33%"></div>
         </div>
+        <span class="card-status">✓ Todo bien</span>
       </div>
-      <div class="card-ring"></div>
     </div>
 
-    <!-- Card URGENTE -->
+    <!-- 🟡 ATENCIÓN: 24-48h transcurridas -->
     <div 
-      class="priority-card urgente"
+      class="semaforo-card atencion"
+      [class.active]="filtroPrioridad === 'ATENCION'"
+      (click)="filtroPrioridad = 'ATENCION'; aplicarFiltros()">
+      <div class="card-bg-pattern"></div>
+      <div class="card-content">
+        <div class="semaforo-indicator">
+          <div class="semaforo-light active"></div>
+        </div>
+        <div class="card-info">
+          <span class="card-label">Atención</span>
+          <span class="card-count">{{ estadisticasSemaforo.atencion }}</span>
+          <span class="card-range">24-48h transcurridas</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 66%"></div>
+        </div>
+        <span class="card-status">⚠ Prestar atención</span>
+      </div>
+    </div>
+
+    <!-- 🔴 URGENTE: 48-72h transcurridas -->
+    <div 
+      class="semaforo-card urgente"
       [class.active]="filtroPrioridad === 'URGENTE'"
       (click)="filtroPrioridad = 'URGENTE'; aplicarFiltros()">
-      <div class="card-glow"></div>
+      <div class="card-bg-pattern"></div>
       <div class="card-content">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
+        <div class="semaforo-indicator pulse">
+          <div class="semaforo-light active"></div>
         </div>
         <div class="card-info">
           <span class="card-label">Urgente</span>
           <span class="card-count">{{ estadisticasSemaforo.urgente }}</span>
+          <span class="card-range">48-72h transcurridas</span>
         </div>
-        <div class="card-footer">
-          <span class="pulse-dot"></span>
-          <span>&lt; 24h restantes</span>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 90%"></div>
         </div>
+        <span class="card-status">🚨 ¡Atender ya!</span>
       </div>
-      <div class="card-ring"></div>
     </div>
 
-    <!-- Card ALTA -->
+    <!-- ⚫ VENCIDO: +72h transcurridas -->
     <div 
-      class="priority-card alta"
-      [class.active]="filtroPrioridad === 'ALTA'"
-      (click)="filtroPrioridad = 'ALTA'; aplicarFiltros()">
-      <div class="card-glow"></div>
+      class="semaforo-card vencido"
+      [class.active]="filtroPrioridad === 'VENCIDO'"
+      (click)="filtroPrioridad = 'VENCIDO'; aplicarFiltros()">
+      <div class="card-bg-pattern"></div>
       <div class="card-content">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-          </svg>
+        <div class="semaforo-indicator danger-pulse">
+          <div class="semaforo-light active"></div>
         </div>
         <div class="card-info">
-          <span class="card-label">Alta</span>
-          <span class="card-count">{{ estadisticasSemaforo.alta }}</span>
+          <span class="card-label">Vencido</span>
+          <span class="card-count">{{ estadisticasSemaforo.vencido }}</span>
+          <span class="card-range">+72h transcurridas</span>
         </div>
-        <div class="card-footer">
-          <span class="status-dot"></span>
-          <span>24-48h restantes</span>
+        <div class="progress-bar overflow">
+          <div class="progress-fill" style="width: 100%"></div>
         </div>
+        <span class="card-status">⛔ Límite excedido</span>
       </div>
-      <div class="card-ring"></div>
     </div>
+  </div>
 
-    <!-- Card MEDIA -->
-    <div 
-      class="priority-card media"
-      [class.active]="filtroPrioridad === 'MEDIA'"
-      (click)="filtroPrioridad = 'MEDIA'; aplicarFiltros()">
-      <div class="card-glow"></div>
-      <div class="card-content">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 6v6l4 2"/>
-          </svg>
-        </div>
-        <div class="card-info">
-          <span class="card-label">Media</span>
-          <span class="card-count">{{ estadisticasSemaforo.media }}</span>
-        </div>
-        <div class="card-footer">
-          <span class="status-dot"></span>
-          <span>48-60h restantes</span>
-        </div>
-      </div>
-      <div class="card-ring"></div>
+  <!-- Leyenda del semáforo -->
+  <div class="semaforo-legend">
+    <div class="legend-item">
+      <span class="legend-dot en-tiempo"></span>
+      <span>0-24h: En tiempo</span>
     </div>
-
-    <!-- Card BAJA -->
-    <div 
-      class="priority-card baja"
-      [class.active]="filtroPrioridad === 'BAJA'"
-      (click)="filtroPrioridad = 'BAJA'; aplicarFiltros()">
-      <div class="card-glow"></div>
-      <div class="card-content">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-        <div class="card-info">
-          <span class="card-label">Baja</span>
-          <span class="card-count">{{ estadisticasSemaforo.baja }}</span>
-        </div>
-        <div class="card-footer">
-          <span class="status-dot"></span>
-          <span>&gt; 60h restantes</span>
-        </div>
-      </div>
-      <div class="card-ring"></div>
+    <div class="legend-arrow">→</div>
+    <div class="legend-item">
+      <span class="legend-dot atencion"></span>
+      <span>24-48h: Atención</span>
+    </div>
+    <div class="legend-arrow">→</div>
+    <div class="legend-item">
+      <span class="legend-dot urgente"></span>
+      <span>48-72h: Urgente</span>
+    </div>
+    <div class="legend-arrow">→</div>
+    <div class="legend-item">
+      <span class="legend-dot vencido"></span>
+      <span>+72h: Vencido</span>
     </div>
   </div>
 </section>
@@ -273,14 +263,15 @@
       </thead>
       <tbody>
         @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-        <tr [class]="'priority-row ' + calcularSemaforo(expediente).nivel.toLowerCase()">
+        <tr [class]="'priority-row ' + calcularSemaforo(expediente).nivel.toLowerCase().replace('_', '-')">
+          <!-- Columna: Semáforo de Prioridad -->
           <td>
-            <div class="priority-badge" [class]="calcularSemaforo(expediente).nivel.toLowerCase()">
-              <span class="priority-indicator"></span>
-              {{ calcularSemaforo(expediente).nivel === 'VENCIDO' ? 'Vencido' : 
-                 calcularSemaforo(expediente).nivel === 'URGENTE' ? 'Urgente' :
-                 calcularSemaforo(expediente).nivel === 'ALTA' ? 'Alta' :
-                 calcularSemaforo(expediente).nivel === 'MEDIA' ? 'Media' : 'Baja' }}
+            <div class="semaforo-badge" [class]="calcularSemaforo(expediente).nivel.toLowerCase().replace('_', '-')">
+              <span class="semaforo-dot"></span>
+              <div class="semaforo-info">
+                <span class="semaforo-label">{{ calcularSemaforo(expediente).label }}</span>
+                <span class="semaforo-time">{{ calcularSemaforo(expediente).horasTranscurridas }}h</span>
+              </div>
             </div>
           </td>
           <td>
@@ -306,13 +297,13 @@
                  expediente.estatus === 'REVISION_LEGAL' ? 'Revisión' : expediente.estatus || '-' }}
             </span>
           </td>
+          <!-- Columna: Tiempo (horas restantes o vencido) -->
           <td>
-            <div class="time-display">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="time-icon">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 6v6l4 2"/>
-              </svg>
-              <span>{{ calcularSemaforo(expediente).nivel === 'VENCIDO' ? 'Sin tiempo' : formatearHorasRestantes(calcularSemaforo(expediente).horasRestantes) }}</span>
+            <div class="time-display" [class]="calcularSemaforo(expediente).nivel.toLowerCase().replace('_', '-')">
+              <div class="time-progress">
+                <div class="time-bar" [style.width.%]="calcularSemaforo(expediente).porcentaje"></div>
+              </div>
+              <span class="time-text">{{ formatearTiempo(calcularSemaforo(expediente)) }}</span>
             </div>
           </td>
           <td class="text-center">

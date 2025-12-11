@@ -91,190 +91,266 @@
   box-shadow: 0 4px 12px rgba(105, 28, 50, 0.1);
 }
 
-/* ===== PRIORITY CARDS - DISEÑO PREMIUM ===== */
-.priority-cards {
+/* ===== SEMÁFORO DE ATENCIÓN - NUEVO DISEÑO ===== */
+.semaforo-cards {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
 @media (max-width: 1024px) {
-  .priority-cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .priority-cards {
+  .semaforo-cards {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.priority-card {
-  position: relative;
-  border-radius: 16px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  min-height: 140px;
+@media (max-width: 480px) {
+  .semaforo-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
-.priority-card::before {
-  content: '';
+.semaforo-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  min-height: 180px;
+  border: 3px solid transparent;
+}
+
+.semaforo-card .card-bg-pattern {
   position: absolute;
   inset: 0;
-  border-radius: 16px;
-  padding: 2px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+  opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-.priority-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
-}
-
-.priority-card.active {
-  transform: translateY(-2px);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5), 0 20px 40px -10px rgba(0, 0, 0, 0.4);
-}
-
-/* Card Glow Effect */
-.card-glow {
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* Card Colors */
-.priority-card.vencido {
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-}
-
-.priority-card.urgente {
-  background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
-}
-
-.priority-card.alta {
-  background: linear-gradient(135deg, #c2410c 0%, #f97316 100%);
-}
-
-.priority-card.media {
-  background: linear-gradient(135deg, #b45309 0%, #fbbf24 100%);
-}
-
-.priority-card.baja {
-  background: linear-gradient(135deg, #047857 0%, #10b981 100%);
-}
-
-/* Card Content */
-.card-content {
+.semaforo-card .card-content {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 12px;
 }
 
-.card-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(4px);
-  border-radius: 12px;
+/* Semáforo Indicator (luz del semáforo) */
+.semaforo-indicator {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.card-icon svg {
-  width: 22px;
-  height: 22px;
-  color: white;
+.semaforo-light {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
 }
 
-.card-info {
-  flex: 1;
+.semaforo-indicator.pulse .semaforo-light {
+  animation: semaforo-pulse 1.5s ease-in-out infinite;
 }
 
-.card-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 4px;
+.semaforo-indicator.danger-pulse .semaforo-light {
+  animation: danger-pulse 0.8s ease-in-out infinite;
 }
 
-.card-count {
-  font-size: 36px;
+@keyframes semaforo-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
+  50% { opacity: 0.6; box-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+}
+
+@keyframes danger-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.1); }
+}
+
+/* Card Info */
+.semaforo-card .card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.semaforo-card .card-label {
+  font-size: 14px;
   font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.semaforo-card .card-count {
+  font-size: 48px;
+  font-weight: 900;
   color: white;
   line-height: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.priority-card.media .card-label,
-.priority-card.media .card-count {
+.semaforo-card .card-range {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 2px;
+}
+
+/* Progress Bar */
+.semaforo-card .progress-bar {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.semaforo-card .progress-bar .progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.semaforo-card .progress-bar.overflow .progress-fill {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.8) 5px,
+    rgba(255, 255, 255, 0.5) 5px,
+    rgba(255, 255, 255, 0.5) 10px
+  );
+  animation: overflow-stripe 0.5s linear infinite;
+}
+
+@keyframes overflow-stripe {
+  0% { background-position: 0 0; }
+  100% { background-position: 14px 0; }
+}
+
+.semaforo-card .card-status {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 4px;
+}
+
+/* Card Colors - Semáforo */
+.semaforo-card.en-tiempo {
+  background: linear-gradient(145deg, #059669 0%, #10b981 50%, #34d399 100%);
+  color: #10b981;
+}
+
+.semaforo-card.atencion {
+  background: linear-gradient(145deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);
+  color: #f59e0b;
+}
+
+.semaforo-card.atencion .card-label,
+.semaforo-card.atencion .card-count,
+.semaforo-card.atencion .card-status {
   color: #78350f;
 }
 
-.card-footer {
+.semaforo-card.atencion .card-range {
+  color: rgba(120, 53, 15, 0.7);
+}
+
+.semaforo-card.urgente {
+  background: linear-gradient(145deg, #b91c1c 0%, #dc2626 50%, #ef4444 100%);
+  color: #ef4444;
+}
+
+.semaforo-card.vencido {
+  background: linear-gradient(145deg, #18181b 0%, #27272a 50%, #3f3f46 100%);
+  color: #71717a;
+}
+
+/* Hover Effects */
+.semaforo-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.semaforo-card.en-tiempo:hover {
+  box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.4);
+}
+
+.semaforo-card.atencion:hover {
+  box-shadow: 0 25px 50px -12px rgba(245, 158, 11, 0.4);
+}
+
+.semaforo-card.urgente:hover {
+  box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.4);
+}
+
+.semaforo-card.vencido:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Active State */
+.semaforo-card.active {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== LEYENDA DEL SEMÁFORO ===== */
+.semaforo-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 16px 24px;
+  background: linear-gradient(to right, rgba(105, 28, 50, 0.03), rgba(105, 28, 50, 0.06), rgba(105, 28, 50, 0.03));
+  border-radius: 12px;
+}
+
+.legend-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 12px;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 500;
+  color: #525252;
 }
 
-.priority-card.media .card-footer {
-  color: #92400e;
-}
-
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  background: currentColor;
+.legend-dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 8px currentColor;
 }
 
-.status-dot {
-  width: 8px;
-  height: 8px;
-  background: currentColor;
-  border-radius: 50%;
+.legend-dot.en-tiempo { background: #10b981; color: #10b981; }
+.legend-dot.atencion { background: #f59e0b; color: #f59e0b; }
+.legend-dot.urgente { background: #ef4444; color: #ef4444; }
+.legend-dot.vencido { background: #3f3f46; color: #3f3f46; }
+
+.legend-arrow {
+  color: #a3a3a3;
+  font-size: 16px;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.2); }
-}
-
-/* Card Ring (selection indicator) */
-.card-ring {
-  position: absolute;
-  inset: -2px;
-  border-radius: 18px;
-  border: 3px solid transparent;
-  pointer-events: none;
-  transition: border-color 0.3s;
-}
-
-.priority-card.active .card-ring {
-  border-color: rgba(255, 255, 255, 0.6);
+@media (max-width: 768px) {
+  .semaforo-legend {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .legend-arrow {
+    display: none;
+  }
 }
 
 /* ===== SEARCH SECTION ===== */
@@ -694,7 +770,7 @@
   background: transparent;
 }
 
-/* Priority Row Indicators */
+/* Priority Row Indicators - Nuevo Semáforo */
 .priority-row {
   position: relative;
 }
@@ -705,43 +781,100 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 4px;
+  width: 5px;
+  border-radius: 0 3px 3px 0;
 }
 
-.priority-row.vencido::before { background: var(--vencido); }
-.priority-row.urgente::before { background: var(--urgente); }
-.priority-row.alta::before { background: var(--alta); }
-.priority-row.media::before { background: var(--media); }
-.priority-row.baja::before { background: var(--baja); }
+.priority-row.en-tiempo::before { background: linear-gradient(to bottom, #10b981, #059669); }
+.priority-row.atencion::before { background: linear-gradient(to bottom, #f59e0b, #d97706); }
+.priority-row.urgente::before { background: linear-gradient(to bottom, #ef4444, #b91c1c); }
+.priority-row.vencido::before { background: linear-gradient(to bottom, #3f3f46, #18181b); }
 
-/* Priority Badge */
-.priority-badge {
+/* Semáforo Badge - Nuevo diseño en tabla */
+.semaforo-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  min-width: 120px;
 }
 
-.priority-badge.vencido { background: var(--vencido); }
-.priority-badge.urgente { background: var(--urgente); }
-.priority-badge.alta { background: var(--alta); }
-.priority-badge.media { background: var(--media); color: #78350f; }
-.priority-badge.baja { background: var(--baja); }
+.semaforo-badge.en-tiempo { 
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
 
-.priority-indicator {
-  width: 6px;
-  height: 6px;
-  background: currentColor;
+.semaforo-badge.atencion { 
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.semaforo-badge.urgente { 
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(185, 28, 28, 0.1) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.semaforo-badge.vencido { 
+  background: linear-gradient(135deg, rgba(63, 63, 70, 0.2) 0%, rgba(24, 24, 27, 0.15) 100%);
+  border: 1px solid rgba(63, 63, 70, 0.4);
+}
+
+.semaforo-dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.priority-badge.vencido .priority-indicator,
-.priority-badge.urgente .priority-indicator {
-  animation: pulse 2s ease-in-out infinite;
+.semaforo-badge.en-tiempo .semaforo-dot { 
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.semaforo-badge.atencion .semaforo-dot { 
+  background: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+
+.semaforo-badge.urgente .semaforo-dot { 
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.semaforo-badge.vencido .semaforo-dot { 
+  background: #3f3f46;
+  box-shadow: 0 0 8px rgba(63, 63, 70, 0.4);
+  animation: danger-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes danger-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.semaforo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.semaforo-label {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.semaforo-badge.en-tiempo .semaforo-label { color: #059669; }
+.semaforo-badge.atencion .semaforo-label { color: #b45309; }
+.semaforo-badge.urgente .semaforo-label { color: #b91c1c; }
+.semaforo-badge.vencido .semaforo-label { color: #3f3f46; }
+
+.semaforo-time {
+  font-size: 11px;
+  font-weight: 500;
+  color: #737373;
 }
 
 /* Status Badge */
@@ -774,13 +907,51 @@
   text-overflow: ellipsis;
 }
 
-/* Time Display */
+/* Time Display - Barra de progreso visual */
 .time-display {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #6b7280;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 100px;
 }
+
+.time-progress {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.time-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.time-display.en-tiempo .time-bar { background: linear-gradient(90deg, #10b981, #34d399); }
+.time-display.atencion .time-bar { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.time-display.urgente .time-bar { background: linear-gradient(90deg, #ef4444, #f87171); }
+.time-display.vencido .time-bar { 
+  background: repeating-linear-gradient(
+    90deg,
+    #3f3f46,
+    #3f3f46 4px,
+    #52525b 4px,
+    #52525b 8px
+  );
+  width: 100% !important;
+}
+
+.time-text {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.time-display.en-tiempo .time-text { color: #059669; }
+.time-display.atencion .time-text { color: #b45309; }
+.time-display.urgente .time-text { color: #b91c1c; }
+.time-display.vencido .time-text { color: #3f3f46; }
 
 .time-icon {
   width: 16px;
