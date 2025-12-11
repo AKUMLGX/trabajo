@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ResponsablesService, FiltrosResponsable } from '../../services/responsables.service';
+import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
 import { ExpedienteTlapohualli } from '../../../capture/interfaces/expediente-tlapohualli.interface';
 import { ExpedienteDetalleModalComponent } from '../../../tracking/components/expediente-detalle-modal/expediente-detalle-modal.component';
 import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
@@ -122,8 +123,12 @@ export class ResponsablesTableComponent implements OnInit {
   
   @ViewChild('sectionTable') sectionTable!: ElementRef;
 
+  // Mapa para guardar las atenciones de cada expediente
+  atencionesMap: Map<number, AtencionConEspecialistas> = new Map();
+
   constructor(
     private responsablesService: ResponsablesService,
+    private atencionService: AtencionService,
     private dialog: MatDialog
   ) {}
 
@@ -418,6 +423,11 @@ export class ResponsablesTableComponent implements OnInit {
     this.vistaActual = vista;
     this.pageSelected = 1;
     this.cargarExpedientes();
+    
+    // Si cambia a "atendidos", cargar las atenciones de esos expedientes
+    if (vista === 'atendidos') {
+      setTimeout(() => this.cargarAtencionesExpedientes(), 500);
+    }
   }
 
   /**
@@ -436,18 +446,83 @@ export class ResponsablesTableComponent implements OnInit {
   }
 
   /**
-   * Contar expedientes por vista
+   * Contar expedientes por vista (usa TODOS los expedientes, no los filtrados)
    */
   get contadorPendientes(): number {
-    return this.expedientes.filter(exp => 
+    return this.todosLosExpedientes.filter(exp => 
       !exp.estatus || this.estatusPendientes.includes(exp.estatus?.toUpperCase() || '')
     ).length;
   }
 
   get contadorAtendidos(): number {
-    return this.expedientes.filter(exp => 
+    return this.todosLosExpedientes.filter(exp => 
       exp.estatus && this.estatusAtendidos.includes(exp.estatus.toUpperCase())
     ).length;
+  }
+
+  /**
+   * Obtener el label del tipo de acción para mostrar en la tabla
+   */
+  getLabelTipoAccion(tipoAccion: string): string {
+    const labels: { [key: string]: string } = {
+      'RECHAZADO': 'Rechazado',
+      'PENDIENTE_INFO': 'Pendiente Info',
+      'ATENCION_INMEDIATA': 'Atención Inmediata',
+      'ADQUISICION_INFO': 'Adquisición Info',
+      'INVESTIGACION_FORENSE': 'Investigación Forense',
+      'ELABORACION_DICTAMENES': 'Elaboración Dictámenes',
+      'RECUPERACION_INFO': 'Recuperación Info',
+      'DESTRUCCION_DISPOSITIVOS': 'Destrucción Dispositivos'
+    };
+    return labels[tipoAccion] || tipoAccion;
+  }
+
+  /**
+   * Obtener el color del tipo de acción
+   */
+  getColorTipoAccion(tipoAccion: string): string {
+    const colores: { [key: string]: string } = {
+      'RECHAZADO': 'rechazado',
+      'PENDIENTE_INFO': 'pendiente',
+      'ATENCION_INMEDIATA': 'inmediata',
+      'ADQUISICION_INFO': 'adquisicion',
+      'INVESTIGACION_FORENSE': 'forense',
+      'ELABORACION_DICTAMENES': 'dictamen',
+      'RECUPERACION_INFO': 'recuperacion',
+      'DESTRUCCION_DISPOSITIVOS': 'destruccion'
+    };
+    return colores[tipoAccion] || 'default';
+  }
+
+  /**
+   * Cargar las atenciones de los expedientes en vista "atendidos"
+   */
+  cargarAtencionesExpedientes(): void {
+    const expedientesAtendidos = this.expedientes.filter(exp => 
+      exp.estatus && this.estatusAtendidos.includes(exp.estatus.toUpperCase())
+    );
+    
+    expedientesAtendidos.forEach(exp => {
+      if (exp.id_expediente && !this.atencionesMap.has(exp.id_expediente)) {
+        this.atencionService.obtenerAtencionesExpediente(exp.id_expediente).subscribe({
+          next: (atenciones) => {
+            if (atenciones && atenciones.length > 0) {
+              // Guardar la última atención (la más reciente)
+              this.atencionesMap.set(exp.id_expediente!, atenciones[0]);
+            }
+          },
+          error: (err) => console.error('Error cargando atención:', err)
+        });
+      }
+    });
+  }
+
+  /**
+   * Obtener la atención de un expediente
+   */
+  getAtencionExpediente(idExpediente: number | undefined): AtencionConEspecialistas | undefined {
+    if (!idExpediente) return undefined;
+    return this.atencionesMap.get(idExpediente);
   }
 
   /**

@@ -284,18 +284,31 @@
     <table class="expedientes-table">
       <thead>
         <tr>
-          <th>Prioridad</th>
-          <th>Expediente</th>
-          <th>Oficio</th>
-          <th>Remitente</th>
-          <th>Asunto</th>
-          <th>Estatus</th>
-          <th>Tiempo</th>
-          <th class="text-center">Acciones</th>
+          @if (vistaActual === 'pendientes') {
+            <th>Prioridad</th>
+            <th>Expediente</th>
+            <th>Oficio</th>
+            <th>Remitente</th>
+            <th>Asunto</th>
+            <th>Estatus</th>
+            <th>Tiempo</th>
+            <th class="text-center">Acciones</th>
+          } @else {
+            <th>Expediente</th>
+            <th>Tipo Atención</th>
+            <th>Prioridad</th>
+            <th>Especialistas</th>
+            <th>F. Entrega</th>
+            <th>Notas</th>
+            <th class="text-center">Acciones</th>
+          }
         </tr>
       </thead>
       <tbody>
         @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
+        
+        <!-- VISTA: PENDIENTES -->
+        @if (vistaActual === 'pendientes') {
         <tr [class]="'priority-row ' + calcularSemaforo(expediente).nivel.toLowerCase().replace('_', '-')">
           <!-- Columna: Semáforo de Prioridad -->
           <td>
@@ -361,6 +374,108 @@
             </div>
           </td>
         </tr>
+        }
+
+        <!-- VISTA: ATENDIDOS -->
+        @if (vistaActual === 'atendidos') {
+        <tr class="atendido-row">
+          <!-- Expediente -->
+          <td>
+            <div class="expediente-atendido">
+              <span class="expediente-code">{{ expediente.expediente || '-' }}</span>
+              <span class="expediente-oficio">{{ expediente.oficio || '' }}</span>
+            </div>
+          </td>
+          
+          <!-- Tipo de Atención -->
+          <td>
+            @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+              <span class="tipo-atencion-badge" [class]="getColorTipoAccion(atencionData.atencion.tipo_accion)">
+                {{ getLabelTipoAccion(atencionData.atencion.tipo_accion) }}
+              </span>
+            } @else {
+              <span class="tipo-atencion-badge loading">Cargando...</span>
+            }
+          </td>
+          
+          <!-- Prioridad -->
+          <td>
+            @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+              <span class="prioridad-badge" [class]="atencionData.atencion.prioridad?.toLowerCase() || 'media'">
+                {{ atencionData.atencion.prioridad === 'URGENTE' ? '🔴 Urgente' :
+                   atencionData.atencion.prioridad === 'ALTA' ? '🟠 Alta' :
+                   atencionData.atencion.prioridad === 'MEDIA' ? '🟡 Media' :
+                   atencionData.atencion.prioridad === 'BAJA' ? '🟢 Baja' : '—' }}
+              </span>
+            } @else {
+              <span class="prioridad-badge media">—</span>
+            }
+          </td>
+          
+          <!-- Especialistas -->
+          <td>
+            @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+              @if (atencionData.especialistas && atencionData.especialistas.length > 0) {
+                <div class="especialistas-list">
+                  @for (esp of atencionData.especialistas; track esp.codigo_especialista) {
+                    <span class="especialista-chip" [class]="esp.codigo_especialista.startsWith('EX_') ? 'externo' : 'interno'">
+                      {{ esp.nombre_especialista }}
+                    </span>
+                  }
+                </div>
+              } @else {
+                <span class="no-data">Sin asignar</span>
+              }
+            } @else {
+              <span class="no-data">—</span>
+            }
+          </td>
+          
+          <!-- Fecha Entrega -->
+          <td>
+            @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+              @if (atencionData.atencion.fecha_entrega) {
+                <span class="fecha-entrega">{{ atencionData.atencion.fecha_entrega }}</span>
+              } @else {
+                <span class="no-data">No definida</span>
+              }
+            } @else {
+              <span class="no-data">—</span>
+            }
+          </td>
+          
+          <!-- Notas -->
+          <td>
+            @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+              @if (atencionData.atencion.notas) {
+                <span class="notas-preview" [title]="atencionData.atencion.notas">
+                  {{ atencionData.atencion.notas.length > 30 ? (atencionData.atencion.notas | slice:0:30) + '...' : atencionData.atencion.notas }}
+                </span>
+              } @else {
+                <span class="no-data">Sin notas</span>
+              }
+            } @else {
+              <span class="no-data">—</span>
+            }
+          </td>
+          
+          <!-- Acciones -->
+          <td class="text-center">
+            <div class="action-buttons">
+              <button 
+                (click)="verDetalleExpediente(expediente)"
+                class="action-btn view"
+                title="Ver detalle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+
         }
       </tbody>
     </table>

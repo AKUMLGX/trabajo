@@ -144,6 +144,9 @@ export interface AtencionExpediente {
   usuario_registro?: string;
   estado_atencion?: string;
   activo?: boolean;
+  prioridad?: string;
+  fecha_entrega?: string;
+  opcion_seleccionada?: string;
 }
 
 /**
