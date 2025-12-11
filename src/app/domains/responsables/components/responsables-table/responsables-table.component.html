@@ -240,7 +240,7 @@
 }
 
 <!-- TABLA DE EXPEDIENTES -->
-@if (!cargando && expedientes.length > 0 && mostrarTabla) {
+@if (!cargando && mostrarTabla) {
 <section class="expedientes-section">
   <div class="section-header">
     <div class="header-left">
@@ -252,6 +252,31 @@
           <button (click)="filtroPrioridad = ''; aplicarFiltros()">×</button>
         </span>
       }
+    </div>
+    
+    <!-- SWITCH PENDIENTES / ATENDIDOS -->
+    <div class="vista-switch">
+      <button 
+        class="switch-btn" 
+        [class.active]="vistaActual === 'pendientes'"
+        (click)="cambiarVista('pendientes')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="switch-icon">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+          <path d="M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+        <span>Por Atender</span>
+        <span class="switch-count pendiente">{{ contadorPendientes }}</span>
+      </button>
+      <button 
+        class="switch-btn" 
+        [class.active]="vistaActual === 'atendidos'"
+        (click)="cambiarVista('atendidos')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="switch-icon">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span>Atendidos</span>
+        <span class="switch-count atendido">{{ contadorAtendidos }}</span>
+      </button>
     </div>
   </div>
 
@@ -342,7 +367,7 @@
   </div>
 
   <!-- Paginación -->
-  @if (pagesExpedientes.length > 1) {
+  @if (pagesExpedientes.length > 1 && expedientes.length > 0) {
   <div class="pagination">
     <p class="pagination-info">
       Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong>
@@ -371,29 +396,37 @@
     </div>
   </div>
   }
-</section>
-}
 
-<!-- ESTADO VACÍO -->
-@if (!cargando && expedientes.length === 0 && mostrarTabla) {
-<section class="empty-state">
-  <div class="empty-icon">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-    </svg>
+  <!-- ESTADO VACÍO (cuando no hay expedientes en la vista actual) -->
+  @if (expedientes.length === 0) {
+  <div class="empty-state-inline">
+    <div class="empty-icon-small">
+      @if (vistaActual === 'pendientes') {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      } @else {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+          <path d="M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+      }
+    </div>
+    <div class="empty-text">
+      @if (vistaActual === 'pendientes') {
+        <h4>🎉 ¡Excelente! No hay expedientes pendientes</h4>
+        <p>Todos los expedientes han sido atendidos</p>
+      } @else {
+        <h4>No hay expedientes atendidos</h4>
+        <p>Aún no has procesado ningún expediente</p>
+      }
+      @if (filtroPrioridad || filtros.estatus || filtros.oficio) {
+        <button (click)="limpiarFiltros()" class="btn-clear-inline">
+          Limpiar filtros
+        </button>
+      }
+    </div>
   </div>
-  <h3>No hay expedientes</h3>
-  <p>
-    @if (filtroPrioridad || filtros.estatus || filtros.oficio) {
-      No se encontraron expedientes con los filtros aplicados.
-    } @else {
-      No tienes expedientes asignados en este momento.
-    }
-  </p>
-  @if (filtroPrioridad || filtros.estatus || filtros.oficio) {
-    <button (click)="limpiarFiltros()" class="btn-primary">
-      Limpiar filtros
-    </button>
   }
 </section>
 }

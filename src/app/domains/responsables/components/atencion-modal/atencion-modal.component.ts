@@ -15,7 +15,8 @@ import {
   Prioridad,
   CatEspecialista,
   CatTipoInsumo,
-  CatTipoResultado
+  CatTipoResultado,
+  MAX_ESPECIALISTAS
 } from '../../services/atencion.service';
 
 /**
@@ -289,19 +290,24 @@ export class AtencionModalComponent implements OnInit {
    */
   formularioValido(): boolean {
     if (!this.formulario.tipoAccion) return false;
-    if (!this.formulario.prioridad) return false; // Prioridad siempre requerida
+    
+    // Prioridad NO es requerida para RECHAZADO y PENDIENTE_INFO
+    const requierePrioridad = !['RECHAZADO', 'PENDIENTE_INFO'].includes(this.formulario.tipoAccion);
+    if (requierePrioridad && !this.formulario.prioridad) return false;
     
     switch (this.formulario.tipoAccion) {
       case 'RECHAZADO':
-        return true; // Solo notas (opcional) + prioridad
+        return true; // Solo notas (opcional)
       case 'PENDIENTE_INFO':
-        return true; // Solo notas (opcional) + prioridad
+        return true; // Solo notas (opcional)
       case 'ATENCION_INMEDIATA':
-        return this.formulario.especialistasSeleccionados.length > 0; // Especialistas + prioridad
+        return this.formulario.especialistasSeleccionados.length > 0 &&
+               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS;
       case 'ADQUISICION_INFO':
         return this.formulario.tiposInsumo.length > 0 && 
                !!this.formulario.tipoResultado &&
                this.formulario.especialistasSeleccionados.length > 0 &&
+               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
                !!this.formulario.fechaEntrega;
       case 'INVESTIGACION_FORENSE':
       case 'ELABORACION_DICTAMENES':
@@ -310,6 +316,7 @@ export class AtencionModalComponent implements OnInit {
         return this.formulario.opcionSeleccionada.length > 0 && 
                !!this.formulario.resultadoSeleccionado &&
                this.formulario.especialistasSeleccionados.length > 0 &&
+               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
                !!this.formulario.fechaEntrega;
       default:
         return false;
@@ -336,15 +343,28 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
-   * Toggle de especialista seleccionado
+   * Toggle de especialista seleccionado (máximo 3)
    */
   toggleEspecialista(codigo: string): void {
     const index = this.formulario.especialistasSeleccionados.indexOf(codigo);
     if (index > -1) {
+      // Deseleccionar
       this.formulario.especialistasSeleccionados.splice(index, 1);
     } else {
+      // Validar máximo 3 especialistas
+      if (this.formulario.especialistasSeleccionados.length >= MAX_ESPECIALISTAS) {
+        this.mostrarError(`Máximo ${MAX_ESPECIALISTAS} especialistas permitidos`);
+        return;
+      }
       this.formulario.especialistasSeleccionados.push(codigo);
     }
+  }
+
+  /**
+   * Verificar si se puede agregar más especialistas
+   */
+  puedeAgregarEspecialista(): boolean {
+    return this.formulario.especialistasSeleccionados.length < MAX_ESPECIALISTAS;
   }
 
   /**
@@ -386,11 +406,13 @@ export class AtencionModalComponent implements OnInit {
       return;
     }
 
-    // Construir el DTO con prioridad
+    // Construir el DTO (prioridad solo para flujos que lo requieren)
+    const requierePrioridad = !['RECHAZADO', 'PENDIENTE_INFO'].includes(this.formulario.tipoAccion);
+    
     const dto: CrearAtencionDTO = {
       id_expediente: this.expediente.id_expediente,
       tipo_accion: this.formulario.tipoAccion as TipoAccion,
-      prioridad: this.formulario.prioridad as any,
+      prioridad: requierePrioridad && this.formulario.prioridad ? this.formulario.prioridad as Prioridad : undefined,
       notas: this.formulario.notas || undefined
     };
 
@@ -403,20 +425,21 @@ export class AtencionModalComponent implements OnInit {
         // Solo notas (ya incluidas arriba)
         break;
       case 'ATENCION_INMEDIATA':
-        // Especialistas (abogados)
-        dto.especialistas = this.formulario.especialistasSeleccionados.map(codigo => {
+        // Especialistas (máximo 3)
+        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
           return {
             codigo: codigo,
             nombre: esp?.nombre_completo || codigo
           };
         });
+        dto.fecha_entrega = this.formulario.fechaEntrega || undefined;
         break;
       case 'ADQUISICION_INFO':
         dto.tipos_insumo = this.formulario.tiposInsumo;
-        dto.tipo_resultado = this.formulario.tipoResultado as any;
+        dto.tipo_resultado = this.formulario.tipoResultado;
         dto.fecha_entrega = this.formulario.fechaEntrega;
-        dto.especialistas = this.formulario.especialistasSeleccionados.map(codigo => {
+        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
           return {
             codigo: codigo,
@@ -428,10 +451,10 @@ export class AtencionModalComponent implements OnInit {
       case 'ELABORACION_DICTAMENES':
       case 'RECUPERACION_INFO':
       case 'DESTRUCCION_DISPOSITIVOS':
-        dto.opciones_seleccionadas = this.formulario.opcionSeleccionada;
-        dto.resultado_seleccionado = this.formulario.resultadoSeleccionado;
+        dto.opcion_seleccionada = this.formulario.opcionSeleccionada; // Nombre correcto para backend
+        dto.tipo_resultado = this.formulario.resultadoSeleccionado; // Usar tipo_resultado
         dto.fecha_entrega = this.formulario.fechaEntrega;
-        dto.especialistas = this.formulario.especialistasSeleccionados.map(codigo => {
+        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
           return {
             codigo: codigo,

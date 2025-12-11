@@ -92,34 +92,40 @@ export interface EspecialistaDTO {
 export type Prioridad = 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA';
 
 /**
- * DTO para crear una atención
+ * DTO para crear una atención (coincide con backend Rust)
  */
 export interface CrearAtencionDTO {
   id_expediente: number;
   tipo_accion: TipoAccion;
   
-  // Prioridad (común para todos)
-  prioridad: Prioridad;
+  // Prioridad (requerido excepto RECHAZADO y PENDIENTE_INFO)
+  prioridad?: Prioridad;
   
-  // Para RECHAZADO (ya no tiene medio_rechazo, solo notas)
+  // Fecha de entrega (formato: "YYYY-MM-DD")
+  fecha_entrega?: string;
+  
+  // Para RECHAZADO
   medio_rechazo?: MedioRechazo;
   
-  // Para ATENCION_INMEDIATA (ahora usa especialistas)
+  // Para ATENCION_INMEDIATA (legacy)
   abogado_asignado?: string;
   
   // Para ADQUISICION_INFO
   tipos_insumo?: string[];
-  tipo_resultado?: TipoResultado;
-  especialistas?: EspecialistaDTO[];
+  tipo_resultado?: string; // codigo del resultado
   
   // Para nuevos flujos (Investigación, Dictámenes, Recuperación, Destrucción)
-  opciones_seleccionadas?: string[];
-  resultado_seleccionado?: string;
-  fecha_entrega?: string;
+  opcion_seleccionada?: string[]; // JSON array de opciones
+  
+  // Especialistas (MÁXIMO 3)
+  especialistas?: EspecialistaDTO[];
   
   // Común
   notas?: string;
 }
+
+/** Máximo de especialistas permitidos */
+export const MAX_ESPECIALISTAS = 3;
 
 /**
  * Registro de atención guardado

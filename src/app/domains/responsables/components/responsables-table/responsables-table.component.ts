@@ -87,10 +87,21 @@ export class ResponsablesTableComponent implements OnInit {
     { value: '', label: 'Todos' },
     { value: 'ASIGNADO', label: 'Asignado' },
     { value: 'PENDIENTE', label: 'Pendiente' },
+    { value: 'EN_ATENCION', label: 'En Atención' },
+    { value: 'RECHAZADO', label: 'Rechazado' },
     { value: 'ATENCION_PARCIAL', label: 'Atención Parcial' },
     { value: 'ATENCION_TOTAL', label: 'Atención Total' },
     { value: 'REVISION_LEGAL', label: 'Revisión Legal' }
   ];
+
+  // ========= SWITCH PENDIENTES / ATENDIDOS =========
+  vistaActual: 'pendientes' | 'atendidos' = 'pendientes';
+  
+  // Estatus que significan "pendiente de atención"
+  estatusPendientes = ['ASIGNADO', 'PENDIENTE'];
+  
+  // Estatus que significan "ya atendido/en proceso"
+  estatusAtendidos = ['EN_ATENCION', 'RECHAZADO', 'ATENCION_PARCIAL', 'ATENCION_TOTAL', 'REVISION_LEGAL'];
 
   // Opciones de prioridad (semáforo basado en tiempo transcurrido)
   opcionesPrioridad = [
@@ -120,6 +131,9 @@ export class ResponsablesTableComponent implements OnInit {
     this.cargarExpedientes();
   }
 
+  // Variable para guardar todos los expedientes sin filtrar
+  private todosLosExpedientes: ExpedienteTlapohualli[] = [];
+
   /**
    * Cargar expedientes del responsable
    */
@@ -131,8 +145,14 @@ export class ResponsablesTableComponent implements OnInit {
       next: (response) => {
         let expedientes = response.data || [];
         
+        // Guardar todos para los contadores
+        this.todosLosExpedientes = expedientes;
+        
         // Ordenar por prioridad (semáforo) - los más urgentes primero
         expedientes = this.ordenarPorPrioridad(expedientes);
+        
+        // Aplicar filtro de vista (pendientes/atendidos)
+        expedientes = this.filtrarPorVista(expedientes);
         
         // Aplicar filtro de prioridad si está activo
         if (this.filtroPrioridad) {
@@ -152,11 +172,12 @@ export class ResponsablesTableComponent implements OnInit {
         this.paginarExpedientes();
         this.mostrarTabla = true;
         this.cargando = false;
-        console.log('✅ Expedientes cargados:', this.expedientes.length);
+        console.log('✅ Expedientes cargados:', this.expedientes.length, '(Vista:', this.vistaActual, ')');
       },
       error: (error: Error) => {
         console.error('❌ Error al cargar expedientes:', error);
         this.expedientes = [];
+        this.todosLosExpedientes = [];
         this.mostrarTabla = false;
         this.cargando = false;
       }
@@ -388,6 +409,45 @@ export class ResponsablesTableComponent implements OnInit {
     this.filtros = {};
     this.filtroPrioridad = '';
     this.aplicarFiltros();
+  }
+
+  /**
+   * Cambiar entre vista de pendientes y atendidos
+   */
+  cambiarVista(vista: 'pendientes' | 'atendidos'): void {
+    this.vistaActual = vista;
+    this.pageSelected = 1;
+    this.cargarExpedientes();
+  }
+
+  /**
+   * Filtrar expedientes según la vista actual (pendientes/atendidos)
+   */
+  filtrarPorVista(expedientes: ExpedienteTlapohualli[]): ExpedienteTlapohualli[] {
+    if (this.vistaActual === 'pendientes') {
+      return expedientes.filter(exp => 
+        !exp.estatus || this.estatusPendientes.includes(exp.estatus.toUpperCase())
+      );
+    } else {
+      return expedientes.filter(exp => 
+        exp.estatus && this.estatusAtendidos.includes(exp.estatus.toUpperCase())
+      );
+    }
+  }
+
+  /**
+   * Contar expedientes por vista
+   */
+  get contadorPendientes(): number {
+    return this.expedientes.filter(exp => 
+      !exp.estatus || this.estatusPendientes.includes(exp.estatus?.toUpperCase() || '')
+    ).length;
+  }
+
+  get contadorAtendidos(): number {
+    return this.expedientes.filter(exp => 
+      exp.estatus && this.estatusAtendidos.includes(exp.estatus.toUpperCase())
+    ).length;
   }
 
   /**
