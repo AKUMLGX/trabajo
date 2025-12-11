@@ -40,11 +40,13 @@ export class PermissionsService {
       reportes: true,
       revisionFinal: true
     },
-    // Akamba 3: atención y dictaminador
+    // Akamba 3: Centro de Control de Expedientes (supervisión de atención)
+    // NOTA: atencion y dictaminador están en false porque ahora usa
+    // el nuevo "Centro de Control de Expedientes" (/layout/responsables)
     'SIAT_AKAMBA_003_SUPERVISA_ATENCION': {
       captura: false,
-      atencion: true,
-      dictaminador: true,
+      atencion: false,
+      dictaminador: false,
       seguimiento: false,
       reportes: false,
       revisionFinal: false

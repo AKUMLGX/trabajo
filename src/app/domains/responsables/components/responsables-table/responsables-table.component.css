@@ -584,12 +584,24 @@
   line-height: 1;
 }
 
-.stat-item.urgentes .stat-number {
+/* Estadísticas por tipo de semáforo */
+.stat-item.criticos .stat-number.critical {
   color: #dc2626;
 }
 
-.stat-item.retraso .stat-number {
-  color: #ea580c;
+.stat-item.por-atender .stat-number.warning {
+  color: #d97706;
+}
+
+.stat-item.en-buen-tiempo .stat-number.success {
+  color: #059669;
+}
+
+.stat-sublabel {
+  font-size: 10px;
+  font-weight: 500;
+  color: #a3a3a3;
+  margin-top: 2px;
 }
 
 .stat-divider {

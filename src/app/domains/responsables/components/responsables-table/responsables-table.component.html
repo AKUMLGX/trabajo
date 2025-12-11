@@ -204,18 +204,26 @@
   <div class="stat-divider"></div>
   
   <div class="stat-item">
-    <span class="stat-number">{{ estadisticas.total || 0 }}</span>
-    <span class="stat-label">Total</span>
+    <span class="stat-number">{{ estadisticas.total || expedientes.length }}</span>
+    <span class="stat-label">Total Asignados</span>
   </div>
   
-  <div class="stat-item urgentes">
-    <span class="stat-number">{{ estadisticas.urgentes || 0 }}</span>
-    <span class="stat-label">Urgentes</span>
+  <div class="stat-item criticos">
+    <span class="stat-number critical">{{ estadisticasSemaforo.urgente + estadisticasSemaforo.vencido }}</span>
+    <span class="stat-label">Críticos</span>
+    <span class="stat-sublabel">48-72h / Vencidos</span>
   </div>
   
-  <div class="stat-item retraso">
-    <span class="stat-number">{{ estadisticas.con_retraso || 0 }}</span>
-    <span class="stat-label">Con retraso</span>
+  <div class="stat-item por-atender">
+    <span class="stat-number warning">{{ estadisticasSemaforo.atencion }}</span>
+    <span class="stat-label">Por Atender</span>
+    <span class="stat-sublabel">24-48h</span>
+  </div>
+  
+  <div class="stat-item en-buen-tiempo">
+    <span class="stat-number success">{{ estadisticasSemaforo.en_tiempo }}</span>
+    <span class="stat-label">En Tiempo</span>
+    <span class="stat-sublabel">0-24h</span>
   </div>
 </section>
 

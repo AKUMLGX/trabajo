@@ -93,11 +93,12 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
           });
         }
 
-        // Bandeja de Responsables - Disponible para todos los usuarios autenticados
+        // Centro de Control de Expedientes - Disponible para todos los usuarios autenticados
         // El backend filtra automáticamente por el responsable del JWT
+        // Incluye el semáforo de atención (72h desde captura)
         menuItems.push({
-          icon: 'person',
-          label: 'Mi Bandeja de Expedientes',
+          icon: 'pending_actions',
+          label: 'Centro de Control',
           route: '/layout/responsables',
         });
 
