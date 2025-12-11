@@ -163,13 +163,7 @@ export class AtencionModalComponent implements OnInit {
     notas: ''
   };
 
-  // Opciones de prioridad
-  opcionesPrioridad: { value: 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA', label: string, icon: string, color: string, description: string }[] = [
-    { value: 'URGENTE', label: 'Urgente', icon: 'priority_high', color: 'urgente', description: 'Requiere atención inmediata' },
-    { value: 'ALTA', label: 'Alta', icon: 'arrow_upward', color: 'alta', description: 'Prioridad elevada' },
-    { value: 'MEDIA', label: 'Media', icon: 'remove', color: 'media', description: 'Prioridad normal' },
-    { value: 'BAJA', label: 'Baja', icon: 'arrow_downward', color: 'baja', description: 'Sin urgencia' }
-  ];
+  // Nota: La prioridad ahora se asigna en la bandeja de captura, no en atención
   
   // Estados de UI
   cargandoCatalogos = true;
@@ -291,9 +285,7 @@ export class AtencionModalComponent implements OnInit {
   formularioValido(): boolean {
     if (!this.formulario.tipoAccion) return false;
     
-    // Prioridad NO es requerida para RECHAZADO y PENDIENTE_INFO
-    const requierePrioridad = !['RECHAZADO', 'PENDIENTE_INFO'].includes(this.formulario.tipoAccion);
-    if (requierePrioridad && !this.formulario.prioridad) return false;
+    // Nota: La prioridad ya no se valida aquí, se asigna en captura
     
     switch (this.formulario.tipoAccion) {
       case 'RECHAZADO':
@@ -406,13 +398,10 @@ export class AtencionModalComponent implements OnInit {
       return;
     }
 
-    // Construir el DTO (prioridad solo para flujos que lo requieren)
-    const requierePrioridad = !['RECHAZADO', 'PENDIENTE_INFO'].includes(this.formulario.tipoAccion);
-    
+    // Construir el DTO (prioridad ya no se envía, viene del expediente)
     const dto: CrearAtencionDTO = {
       id_expediente: this.expediente.id_expediente,
       tipo_accion: this.formulario.tipoAccion as TipoAccion,
-      prioridad: requierePrioridad && this.formulario.prioridad ? this.formulario.prioridad as Prioridad : undefined,
       notas: this.formulario.notas || undefined
     };
 

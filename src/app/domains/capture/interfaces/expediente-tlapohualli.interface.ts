@@ -39,6 +39,9 @@ export interface ExpedienteTlapohualli {
   oficios_comision?: string | null;
   tipo_respuesta?: string;
   
+  // Prioridad del expediente (asignada en captura)
+  prioridad?: string | null; // 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA'
+  
   // Documentos y respuestas
   tipo_documento?: string;
   documento_pdf_nombre?: string | null; // Nombre del PDF principal del expediente
@@ -82,6 +85,9 @@ export interface FormularioPaso2 {
   respuesta_total_parcial?: string; // Ej: "Total", "Parcial", "Sin Respuesta"
   referencia_respuesta?: string; // Ej: "102 06 00 00 00 2025-059"
   fecha_notificacion?: Date; // Fecha de notificación
+  
+  // Prioridad del expediente (se asigna en captura)
+  prioridad?: string; // 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA'
 }
 
 // Interface para el formulario paso 3 - Documentos y respuestas

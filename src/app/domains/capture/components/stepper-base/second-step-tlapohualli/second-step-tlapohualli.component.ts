@@ -100,6 +100,14 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     { value: 'REVISION_LEGAL', label: 'Revisión legal' }
   ];
 
+  // Opciones para prioridad del expediente
+  opcionesPrioridad: SelectOption[] = [
+    { value: 'URGENTE', label: '🔴 Urgente - Requiere atención inmediata' },
+    { value: 'ALTA', label: '🟠 Alta - Prioridad elevada' },
+    { value: 'MEDIA', label: '🔵 Media - Prioridad normal' },
+    { value: 'BAJA', label: '🟢 Baja - Sin urgencia' }
+  ];
+
 
 
   readonly camposDocumentosPendientes = [
@@ -123,7 +131,8 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
       sistema_aplicativo: ['', [Validators.required, Validators.maxLength(100)]],
       responsable: ['', [Validators.required, Validators.maxLength(100)]],
       fecha_asignacion: [hoy, Validators.required], // HOY por defecto
-      estatus: ['ASIGNADO', Validators.required] // ASIGNADO por defecto
+      estatus: ['ASIGNADO', Validators.required], // ASIGNADO por defecto
+      prioridad: ['MEDIA', Validators.required] // MEDIA por defecto
     });
   }
 
@@ -276,6 +285,14 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
 
   get estatusError(): string | null {
     const control = this.formulario.get('estatus');
+    if (control?.touched && control?.errors) {
+      if (control.errors['required']) return 'Obligatorio';
+    }
+    return null;
+  }
+
+  get prioridadError(): string | null {
+    const control = this.formulario.get('prioridad');
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Obligatorio';
     }

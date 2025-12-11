@@ -57,37 +57,10 @@
       </div>
     </div>
 
-    <!-- PASO 2: PRIORIDAD (para todos los tipos de acción) -->
-    <div class="form-section" *ngIf="formulario.tipoAccion">
-      <h3 class="section-title">
-        <span class="step-number">2</span>
-        Prioridad <span class="required">*</span>
-      </h3>
-      <div class="prioridad-cards">
-        <div 
-          *ngFor="let prioridad of opcionesPrioridad"
-          class="prioridad-card"
-          [class.selected]="formulario.prioridad === prioridad.value"
-          [ngClass]="'prioridad-' + prioridad.color"
-          (click)="formulario.prioridad = prioridad.value">
-          <div class="prioridad-icon">
-            <mat-icon>{{ prioridad.icon }}</mat-icon>
-          </div>
-          <div class="prioridad-content">
-            <span class="prioridad-label">{{ prioridad.label }}</span>
-            <span class="prioridad-desc">{{ prioridad.description }}</span>
-          </div>
-          <div class="prioridad-check" *ngIf="formulario.prioridad === prioridad.value">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PASO 3: Detalles específicos según tipo de acción -->
+    <!-- PASO 2: Detalles específicos según tipo de acción -->
     <div class="form-section" *ngIf="formulario.tipoAccion && formulario.tipoAccion !== 'RECHAZADO' && formulario.tipoAccion !== 'PENDIENTE_INFO'">
       <h3 class="section-title">
-        <span class="step-number">3</span>
+        <span class="step-number">2</span>
         Detalles de la Acción
       </h3>
 
@@ -694,7 +667,7 @@
     <!-- PASO NOTAS: (número varía según flujo) -->
     <div class="form-section" *ngIf="formulario.tipoAccion">
       <h3 class="section-title">
-        <span class="step-number">{{ (formulario.tipoAccion === 'RECHAZADO' || formulario.tipoAccion === 'PENDIENTE_INFO') ? '3' : '4' }}</span>
+        <span class="step-number">{{ (formulario.tipoAccion === 'RECHAZADO' || formulario.tipoAccion === 'PENDIENTE_INFO') ? '2' : '3' }}</span>
         Notas <span class="optional">(Opcional)</span>
       </h3>
       <textarea 

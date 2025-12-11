@@ -175,7 +175,10 @@ export class ExpedienteTlapohualliService {
       
       // Campos que sí se usan
       documento_pdf_nombre: paso3.documento_pdf ? paso3.documento_pdf.name : undefined,
-      campos_documentos_pospuestos: paso3.campos_pospuestos || []
+      campos_documentos_pospuestos: paso3.campos_pospuestos || [],
+      
+      // Prioridad del expediente (asignada en captura)
+      prioridad: paso2.prioridad || 'MEDIA'
     };
 
     const formData = new FormData();
