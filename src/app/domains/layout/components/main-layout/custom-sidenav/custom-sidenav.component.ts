@@ -102,6 +102,13 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
           route: '/layout/responsables',
         });
 
+        // Dashboard de Estadísticas - Vista ejecutiva para administradores
+        menuItems.push({
+          icon: 'insights',
+          label: 'Panel Estadístico',
+          route: '/layout/dashboard',
+        });
+
         // Si no hay bandejas disponibles, mostrar mensaje
         if (menuItems.length === 0) {
           menuItems.push({

@@ -98,10 +98,15 @@
 }
 
 .logo-wrapper.small {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     border-radius: 14px;
     margin-top: 8px;
+}
+
+.logo-wrapper.small img {
+    max-width: 85%;
+    max-height: 85%;
 }
 
 .logo-wrapper:hover {
@@ -139,10 +144,7 @@
     z-index: 1;
 }
 
-.logo-wrapper.small img {
-    max-width: 75%;
-    max-height: 75%;
-}
+/* Eliminado - definido arriba */
 
 /* Texto del header */
 .header-text {
@@ -290,7 +292,16 @@
 
 .menu-item.collapsed {
     justify-content: center !important;
-    padding: 12px !important;
+    padding: 8px 4px !important;
+}
+
+.menu-item.collapsed .menu-item-content {
+    justify-content: center;
+}
+
+.menu-item.collapsed .menu-icon-wrapper {
+    width: 44px;
+    height: 44px;
 }
 
 .menu-item-content {
@@ -381,7 +392,16 @@
 
 .logout-btn.collapsed {
     justify-content: center !important;
-    padding: 12px !important;
+    padding: 8px 4px !important;
+}
+
+.logout-btn.collapsed .logout-content {
+    justify-content: center;
+}
+
+.logout-btn.collapsed .logout-icon-wrapper {
+    width: 44px;
+    height: 44px;
 }
 
 .logout-content {

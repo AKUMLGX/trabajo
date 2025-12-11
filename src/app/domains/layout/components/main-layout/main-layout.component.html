@@ -1,18 +1,18 @@
 <app-load-animation></app-load-animation>
 <mat-toolbar class="mat-elevation-z3">
-  <div class="flex">
+  <div class="toolbar-left">
     <button
       mat-icon-button
-      class="text-white"
+      class="toolbar-btn"
       (click)="collapsed.set(!collapsed())"
+      matTooltip="Menú"
     >
       <mat-icon>menu</mat-icon>
     </button>
-    <!-- se comenta -->
-    <button mat-icon-button class="text-white" (click)="openModal(userInfoModal)">
-      <mat-icon>person</mat-icon >
+    <button mat-icon-button class="toolbar-btn user-btn" (click)="openModal(userInfoModal)" matTooltip="Mi Perfil">
+      <mat-icon>person</mat-icon>
     </button>
-    <button mat-icon-button class="text-white" [matTooltip]="'Revisión Final de Asuntos'" [routerLink]="'/layout/revision-final'" *ngIf="puedeVerRevisionFinal">
+    <button mat-icon-button class="toolbar-btn" [matTooltip]="'Revisión Final'" [routerLink]="'/layout/revision-final'" *ngIf="puedeVerRevisionFinal">
       <mat-icon>approval</mat-icon>
     </button>
   </div>

@@ -24,6 +24,7 @@ import { DictaminadorPageComponent } from './domains/assistance/pages/dictaminad
 import { DictaminadorDetalleComponent } from './domains/assistance/pages/dictaminador-detalle/dictaminador-detalle.component';
 import { RevisionFinalComponent } from './domains/assistance/pages/revision-final/revision-final.component';
 import { ResponsablesPageComponent } from './domains/responsables/pages/responsables-page/responsables-page.component';
+import { DashboardPageComponent } from './domains/dashboard/pages/dashboard-page/dashboard-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -132,6 +133,10 @@ export const routes: Routes = [
       {
         path: 'responsables',
         component: ResponsablesPageComponent
+      },
+      {
+        path: 'dashboard',
+        component: DashboardPageComponent
       }
     ]
   },
