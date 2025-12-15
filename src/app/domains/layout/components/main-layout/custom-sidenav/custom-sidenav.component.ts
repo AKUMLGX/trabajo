@@ -103,6 +103,13 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
           route: '/layout/responsables',
         });
 
+        // Bandeja de Atención/Cierre - Última parte del flujo
+        menuItems.push({
+          icon: 'check_circle',
+          label: 'Atención / Cierre',
+          route: '/layout/atencion-cierre',
+        });
+
         // Dashboard de Estadísticas - Vista ejecutiva para administradores
         menuItems.push({
           icon: 'insights',

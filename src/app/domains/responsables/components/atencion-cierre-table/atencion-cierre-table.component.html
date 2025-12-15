@@ -1,0 +1,315 @@
+<!-- =====================================================
+     BANDEJA DE ATENCIÓN / CIERRE
+     Última parte del flujo del Centro de Control
+     ===================================================== -->
+
+<div class="atencion-cierre-container">
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 12l2 2 4-4"/>
+          <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+          <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+          <path d="M12 3c0 1-1 3-3 3s-3-2-3-3 1-3 3-3 3 2 3 3"/>
+          <path d="M12 21c0-1 1-3 3-3s3 2 3 3-1 3-3 3-3-2-3-3"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1>ATENCIÓN / CIERRE</h1>
+        <p>Gestión final de expedientes y seguimiento de respuestas</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA PRINCIPAL -->
+  <div class="table-wrapper">
+    <div class="table-container">
+      <table class="atencion-cierre-table">
+        <!-- HEADER PRINCIPAL -->
+        <thead>
+          <!-- Fila 1: Header Principal -->
+          <tr class="header-row-1">
+            <th colspan="13" class="main-header">
+              <div class="header-label">ATENCIÓN / CIERRE</div>
+            </th>
+          </tr>
+
+          <!-- Fila 2: Indicadores de Tipo de Input -->
+          <tr class="header-row-2">
+            <th class="semaforo-indicator">
+              <span class="input-type-label semaforo">Semaforo</span>
+            </th>
+            <th class="ticket-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="ticket-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="ticket-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="respuesta-indicator">
+              <span class="input-type-label dropdown">Menú Desplegable</span>
+            </th>
+            <th class="respuesta-indicator">
+              <span class="input-type-label dropdown">Menú Desplegable</span>
+            </th>
+            <th class="respuesta-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="respuesta-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="notificacion-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="notificacion-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="dispositivo-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="dispositivo-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="observaciones-indicator">
+              <span class="input-type-label manual">Manual</span>
+            </th>
+            <th class="acciones-indicator">
+              <span class="input-type-label">-</span>
+            </th>
+          </tr>
+
+          <!-- Fila 3: Agrupaciones de Columnas -->
+          <tr class="header-row-3">
+            <th rowspan="2" class="semaforo-group">
+              <div class="group-label">DIAS DE ATRASO</div>
+            </th>
+            <th colspan="3" class="ticket-group">
+              <div class="group-label">TICKET MS-SAT</div>
+            </th>
+            <th colspan="4" class="respuesta-group">
+              <div class="group-label">RESPUESTA</div>
+            </th>
+            <th colspan="2" class="notificacion-group">
+              <div class="group-label">NOTIFICACIÓN</div>
+            </th>
+            <th colspan="2" class="dispositivo-group">
+              <div class="group-label">DISPOSITIVO</div>
+            </th>
+            <th rowspan="2" class="observaciones-group">
+              <div class="group-label">OBSERVACIONES</div>
+            </th>
+            <th rowspan="2" class="acciones-group">
+              <div class="group-label">ACCIONES</div>
+            </th>
+          </tr>
+
+          <!-- Fila 4: Nombres de Columnas Individuales -->
+          <tr class="header-row-4">
+            <!-- TICKET MS-SAT -->
+            <th class="column-header">NUMERO</th>
+            <th class="column-header">FECHA DE APERTURA</th>
+            <th class="column-header">FECHA DE RESOLUCIÓN</th>
+            <!-- RESPUESTA -->
+            <th class="column-header">ESTADO</th>
+            <th class="column-header">TIPO</th>
+            <th class="column-header">NUMERO</th>
+            <th class="column-header">FECHA</th>
+            <!-- NOTIFICACIÓN -->
+            <th class="column-header">FECHA</th>
+            <th class="column-header">MODELO</th>
+            <!-- DISPOSITIVO -->
+            <th class="column-header">SERIE</th>
+            <th class="column-header">OBSERVACIONES</th>
+          </tr>
+        </thead>
+
+        <!-- BODY -->
+        <tbody>
+          @for (item of items; track item.id) {
+          <tr [class]="getSemaforoClass(item.diasAtraso)">
+            <!-- SEMÁFORO -->
+            <td class="semaforo-cell">
+              <div class="semaforo-indicator-cell">
+                <div class="semaforo-dot" [ngClass]="getSemaforoClass(item.diasAtraso)"></div>
+                <span class="semaforo-text">{{ getSemaforoLabel(item.diasAtraso) }}</span>
+              </div>
+            </td>
+
+            <!-- TICKET MS-SAT -->
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="text" 
+                  [formControl]="editForm.get('ticketNumero')!"
+                  class="table-input"
+                  placeholder="Número de ticket">
+              } @else {
+                <span>{{ item.ticketNumero }}</span>
+              }
+            </td>
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="date" 
+                  [formControl]="editForm.get('ticketFechaApertura')!"
+                  class="table-input">
+              } @else {
+                <span>{{ formatearFecha(item.ticketFechaApertura) }}</span>
+              }
+            </td>
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="date" 
+                  [formControl]="editForm.get('ticketFechaResolucion')!"
+                  class="table-input">
+              } @else {
+                <span>{{ formatearFecha(item.ticketFechaResolucion) }}</span>
+              }
+            </td>
+
+            <!-- RESPUESTA -->
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <select [formControl]="editForm.get('respuestaEstado')!" class="table-select">
+                  @for (estado of estadosRespuesta; track estado) {
+                    <option [value]="estado">{{ estado }}</option>
+                  }
+                </select>
+              } @else {
+                <span class="badge-estado" [ngClass]="'estado-' + item.respuestaEstado.toLowerCase().replace(' ', '-')">
+                  {{ item.respuestaEstado }}
+                </span>
+              }
+            </td>
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <select [formControl]="editForm.get('respuestaTipo')!" class="table-select">
+                  @for (tipo of tiposRespuesta; track tipo) {
+                    <option [value]="tipo">{{ tipo }}</option>
+                  }
+                </select>
+              } @else {
+                <span>{{ item.respuestaTipo || '-' }}</span>
+              }
+            </td>
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="text" 
+                  [formControl]="editForm.get('respuestaNumero')!"
+                  class="table-input"
+                  placeholder="Número de respuesta">
+              } @else {
+                <span>{{ item.respuestaNumero || '-' }}</span>
+              }
+            </td>
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="date" 
+                  [formControl]="editForm.get('respuestaFecha')!"
+                  class="table-input">
+              } @else {
+                <span>{{ formatearFecha(item.respuestaFecha) }}</span>
+              }
+            </td>
+
+            <!-- NOTIFICACIÓN -->
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="date" 
+                  [formControl]="editForm.get('notificacionFecha')!"
+                  class="table-input">
+              } @else {
+                <span>{{ formatearFecha(item.notificacionFecha) }}</span>
+              }
+            </td>
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="text" 
+                  [formControl]="editForm.get('notificacionModelo')!"
+                  class="table-input"
+                  placeholder="Modelo">
+              } @else {
+                <span>{{ item.notificacionModelo || '-' }}</span>
+              }
+            </td>
+
+            <!-- DISPOSITIVO -->
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="text" 
+                  [formControl]="editForm.get('dispositivoSerie')!"
+                  class="table-input"
+                  placeholder="Serie">
+              } @else {
+                <span>{{ item.dispositivoSerie || '-' }}</span>
+              }
+            </td>
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <input 
+                  type="text" 
+                  [formControl]="editForm.get('dispositivoObservaciones')!"
+                  class="table-input"
+                  placeholder="Observaciones dispositivo">
+              } @else {
+                <span>{{ item.dispositivoObservaciones || '-' }}</span>
+              }
+            </td>
+
+            <!-- OBSERVACIONES -->
+            <td class="data-cell">
+              @if (editingItemId === item.id) {
+                <textarea 
+                  [formControl]="editForm.get('observaciones')!"
+                  class="table-textarea"
+                  rows="2"
+                  placeholder="Observaciones generales"></textarea>
+              } @else {
+                <span>{{ item.observaciones || '-' }}</span>
+              }
+            </td>
+
+            <!-- ACCIONES -->
+            <td class="actions-cell">
+              @if (editingItemId === item.id) {
+                <div class="action-buttons">
+                  <button 
+                    (click)="guardarItem()" 
+                    class="btn-save"
+                    matTooltip="Guardar">
+                    <mat-icon>check</mat-icon>
+                  </button>
+                  <button 
+                    (click)="cancelarEdicion()" 
+                    class="btn-cancel"
+                    matTooltip="Cancelar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              } @else {
+                <button 
+                  (click)="editarItem(item)" 
+                  class="btn-edit"
+                  matTooltip="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

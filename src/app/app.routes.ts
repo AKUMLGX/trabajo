@@ -25,6 +25,7 @@ import { DictaminadorDetalleComponent } from './domains/assistance/pages/dictami
 import { RevisionFinalComponent } from './domains/assistance/pages/revision-final/revision-final.component';
 import { ResponsablesPageComponent } from './domains/responsables/pages/responsables-page/responsables-page.component';
 import { DashboardPageComponent } from './domains/dashboard/pages/dashboard-page/dashboard-page.component';
+import { AtencionCierrePageComponent } from './domains/responsables/pages/atencion-cierre-page/atencion-cierre-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -133,6 +134,10 @@ export const routes: Routes = [
       {
         path: 'responsables',
         component: ResponsablesPageComponent
+      },
+      {
+        path: 'atencion-cierre',
+        component: AtencionCierrePageComponent
       },
       {
         path: 'dashboard',

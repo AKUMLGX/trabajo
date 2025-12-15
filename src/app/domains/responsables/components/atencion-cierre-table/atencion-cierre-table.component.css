@@ -1,0 +1,514 @@
+/* =====================================================
+   BANDEJA DE ATENCIÓN / CIERRE
+   Paleta Institucional SAT
+   ===================================================== */
+
+.atencion-cierre-container {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+  padding: 2rem;
+}
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.page-header {
+  background: linear-gradient(135deg, #34005b 0%, #3e0065 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(52, 0, 91, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d6ae67' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.3;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.header-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #d6ae67 0%, #dbb872 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(214, 174, 103, 0.3);
+}
+
+.header-icon svg {
+  width: 32px;
+  height: 32px;
+  color: #34005b;
+}
+
+.header-text h1 {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-text p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  margin: 0.5rem 0 0 0;
+}
+
+/* =====================================================
+   TABLA WRAPPER
+   ===================================================== */
+
+.table-wrapper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(52, 0, 91, 0.1);
+  overflow: hidden;
+  border: 1px solid rgba(52, 0, 91, 0.1);
+}
+
+.table-container {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 300px);
+}
+
+.table-container::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+}
+
+/* =====================================================
+   TABLA PRINCIPAL
+   ===================================================== */
+
+.atencion-cierre-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1400px;
+  font-size: 0.875rem;
+}
+
+/* =====================================================
+   HEADERS MULTI-NIVEL
+   ===================================================== */
+
+/* Fila 1: Header Principal */
+.header-row-1 th {
+  background: linear-gradient(135deg, #34005b 0%, #3e0065 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 1rem;
+  border: 2px solid rgba(214, 174, 103, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.main-header {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%) !important;
+}
+
+.semaforo-header-main {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+.ticket-header-main {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+}
+
+.respuesta-header-main {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+}
+
+.notificacion-header-main {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%) !important;
+}
+
+.dispositivo-header-main {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%) !important;
+}
+
+.observaciones-header-main {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%) !important;
+}
+
+.acciones-header-main {
+  background: linear-gradient(135deg, #34005b 0%, #3e0065 100%) !important;
+}
+
+/* Fila 2: Indicadores de Tipo */
+.header-row-2 th {
+  background: #f8f9fa;
+  color: #dc2626;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  position: sticky;
+  top: 60px;
+  z-index: 9;
+}
+
+.input-type-label {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.input-type-label.semaforo {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.input-type-label.manual {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.input-type-label.dropdown {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+/* Fila 3: Agrupaciones */
+.header-row-3 th {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+  color: #1e40af;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0.75rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  position: sticky;
+  top: 100px;
+  z-index: 8;
+}
+
+.semaforo-group {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%) !important;
+  color: #047857 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+.notificacion-group,
+.dispositivo-group,
+.observaciones-group {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(219, 39, 119, 0.15) 100%) !important;
+  color: #be185d !important;
+  border: 1px solid rgba(236, 72, 153, 0.3) !important;
+}
+
+.acciones-group {
+  background: linear-gradient(135deg, rgba(52, 0, 91, 0.15) 0%, rgba(62, 0, 101, 0.15) 100%) !important;
+  color: #34005b !important;
+  border: 1px solid rgba(52, 0, 91, 0.3) !important;
+}
+
+/* Fila 4: Columnas Individuales */
+.header-row-4 th {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+  color: #1e40af;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  position: sticky;
+  top: 150px;
+  z-index: 7;
+}
+
+.group-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* =====================================================
+   BODY - FILAS DE DATOS
+   ===================================================== */
+
+tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:hover {
+  background: rgba(52, 0, 91, 0.02);
+  box-shadow: 0 2px 8px rgba(52, 0, 91, 0.05);
+}
+
+/* Semáforo por fila */
+.semaforo-verde {
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.1) 0%, transparent 5%);
+}
+
+.semaforo-naranja {
+  background: linear-gradient(to right, rgba(251, 146, 60, 0.1) 0%, transparent 5%);
+}
+
+.semaforo-rojo {
+  background: linear-gradient(to right, rgba(239, 68, 68, 0.1) 0%, transparent 5%);
+}
+
+/* Celdas */
+.semaforo-cell {
+  background: white;
+  padding: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 2px solid rgba(52, 0, 91, 0.1);
+  font-weight: 600;
+}
+
+.semaforo-indicator-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.semaforo-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.semaforo-dot.semaforo-verde {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.semaforo-dot.semaforo-naranja {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+}
+
+.semaforo-dot.semaforo-rojo {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.semaforo-text {
+  font-size: 0.75rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+.data-cell {
+  padding: 0.75rem;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #e5e7eb;
+  background: white;
+  min-width: 120px;
+}
+
+.data-cell span {
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.actions-cell {
+  padding: 0.5rem;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #e5e7eb;
+  background: white;
+  width: 100px;
+}
+
+/* =====================================================
+   INPUTS Y CONTROLES
+   ===================================================== */
+
+.table-input,
+.table-select,
+.table-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid rgba(52, 0, 91, 0.2);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.table-input:focus,
+.table-select:focus,
+.table-textarea:focus {
+  outline: none;
+  border-color: #34005b;
+  box-shadow: 0 0 0 3px rgba(52, 0, 91, 0.1);
+}
+
+.table-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+/* =====================================================
+   BADGES Y ESTADOS
+   ===================================================== */
+
+.badge-estado {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.estado-pendiente {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+}
+
+.estado-en-proceso {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.estado-completado {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.estado-cancelado {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+/* =====================================================
+   BOTONES DE ACCIÓN
+   ===================================================== */
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.btn-edit,
+.btn-save,
+.btn-cancel {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit {
+  background: linear-gradient(135deg, #34005b 0%, #3e0065 100%);
+  color: white;
+}
+
+.btn-edit:hover {
+  background: linear-gradient(135deg, #d6ae67 0%, #dbb872 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.3);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.btn-save:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.btn-cancel {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-edit mat-icon,
+.btn-save mat-icon,
+.btn-cancel mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1600px) {
+  .atencion-cierre-table {
+    font-size: 0.8rem;
+  }
+
+  .data-cell {
+    min-width: 100px;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .atencion-cierre-container {
+    padding: 1rem;
+  }
+
+  .page-header {
+    padding: 1.5rem;
+  }
+
+  .header-text h1 {
+    font-size: 1.5rem;
+  }
+}
+
