@@ -1,23 +1,37 @@
+/* =====================================================
+   BANDEJA DE CAPTURA - Landing Premium
+   Paleta Institucional SAT
+   ===================================================== */
+
 /* Patrón de fondo con puntos */
 .bg-dot-pattern {
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-image: radial-gradient(circle, rgba(52, 0, 91, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
 }
 
-/* Estilos para el botón (mantener compatibilidad) */
+/* Estilos para el botón */
 .button {
     display: inline-block;
-    border-radius: 8px;
-    background-color: #691C32;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
     border: none;
     color: #FFFFFF;
     text-align: center;
-    font-size: 24px;
-    padding: 16px;
-    width: 260px;
-    transition: all 0.5s;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 18px 32px;
+    min-width: 280px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     margin: 5px;
+    box-shadow: 0 15px 40px -10px rgba(52, 0, 91, 0.5);
+}
+
+.button:hover {
+    background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+    color: #34005b;
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px -10px rgba(214, 174, 103, 0.5);
 }
 
 .button span {
@@ -43,4 +57,15 @@
 .button:hover span:after {
     opacity: 1;
     right: 0;
+}
+
+/* Animaciones */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(214, 174, 103, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(214, 174, 103, 0.5); }
 }

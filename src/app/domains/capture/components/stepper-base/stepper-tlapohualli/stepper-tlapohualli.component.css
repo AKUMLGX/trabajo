@@ -1,4 +1,7 @@
-/* ESTILOS MODERNOS PARA EL FORMULARIO DE 4 PASOS */
+/* ============================================
+   STEPPER PREMIUM - Tlálcalli
+   Paleta Institucional SAT
+   ============================================ */
 
 /* Mostrar el stepper de Material Design con estilos personalizados */
 .custom-mat-stepper {
@@ -6,13 +9,73 @@
   background: transparent !important;
 }
 
-/* Ocultar el header del stepper de Material Design */
+/* ESTILOS PREMIUM PARA EL STEPPER HEADER */
+::ng-deep .custom-mat-stepper .mat-horizontal-stepper-header-container {
+  padding: 20px 24px !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
+  border-radius: 20px 20px 0 0 !important;
+  margin: -1px -1px 0 -1px !important;
+  gap: 8px !important;
+}
+
 ::ng-deep .custom-mat-stepper .mat-stepper-horizontal-line {
-  display: none !important;
+  border-color: rgba(214, 174, 103, 0.4) !important;
+  border-top-width: 2px !important;
+  min-width: 20px !important;
+  flex: 1 !important;
 }
 
 ::ng-deep .custom-mat-stepper .mat-step-header {
-  display: none !important;
+  padding: 12px 20px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+::ng-deep .custom-mat-stepper .mat-step-header:hover {
+  background: rgba(214, 174, 103, 0.15) !important;
+  border-color: rgba(214, 174, 103, 0.3) !important;
+}
+
+::ng-deep .custom-mat-stepper .mat-step-header[aria-selected="true"] {
+  background: linear-gradient(145deg, rgba(214, 174, 103, 0.25) 0%, rgba(214, 174, 103, 0.15) 100%) !important;
+  border-color: rgba(214, 174, 103, 0.5) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Iconos de los steps */
+::ng-deep .custom-mat-stepper .mat-step-icon {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  font-weight: 700 !important;
+}
+
+::ng-deep .custom-mat-stepper .mat-step-icon-selected {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
+  border-color: #d6ae67 !important;
+  color: #34005b !important;
+  box-shadow: 0 4px 15px rgba(214, 174, 103, 0.5) !important;
+}
+
+::ng-deep .custom-mat-stepper .mat-step-icon-state-done {
+  background: linear-gradient(145deg, #10b981 0%, #059669 100%) !important;
+  border-color: #10b981 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Labels de los steps */
+::ng-deep .custom-mat-stepper .mat-step-label {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+}
+
+::ng-deep .custom-mat-stepper .mat-step-label-selected {
+  color: white !important;
+  font-weight: 700 !important;
 }
 
 /* Contenido del stepper */
@@ -45,12 +108,39 @@
   overflow-x: hidden;
 }
 
+/* Botón flotante arriba del formulario */
+.step-actions-floating {
+  position: sticky;
+  top: 20px;
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(214, 174, 103, 0.1), rgba(214, 174, 103, 0.05));
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.1);
+}
+
+.floating-btn {
+  padding: 0.75rem 2rem !important;
+  font-size: 1rem !important;
+  min-width: 150px !important;
+  height: 48px !important;
+  box-shadow: 0 4px 16px rgba(52, 0, 91, 0.3) !important;
+}
+
+.floating-btn:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 24px rgba(52, 0, 91, 0.4) !important;
+}
+
 /* Estilos para las acciones de los pasos con nueva paleta */
 .step-actions {
   margin-top: 0.5rem;
   padding: 0.75rem 1rem;
-  border-top: 1px solid #DDC9A4/30;
-  background: linear-gradient(135deg, #DDC9A4/5, white);
+  border-top: 1px solid rgba(214, 174, 103, 0.3);
+  background: linear-gradient(135deg, rgba(214, 174, 103, 0.05), white);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,20 +148,20 @@
   position: sticky;
   bottom: 0;
   border-radius: 0 0 16px 16px;
-  box-shadow: 0 -2px 10px rgba(221, 201, 164, 0.1);
+  box-shadow: 0 -2px 15px rgba(52, 0, 91, 0.05);
   min-height: 60px;
 }
 
 /* Botones modernos */
 .modern-btn {
   padding: 0.5rem 1rem !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   font-weight: 600 !important;
   font-size: 0.8rem !important;
   text-transform: none !important;
   letter-spacing: 0.025em !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 8px rgba(52, 0, 91, 0.15) !important;
   border: none !important;
   min-width: 100px !important;
   height: 36px !important;
@@ -81,8 +171,8 @@
 }
 
 .modern-btn:hover {
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(52, 0, 91, 0.2) !important;
 }
 
 .modern-btn:active {
@@ -95,22 +185,22 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* ESTILOS FORZADOS PARA TODOS LOS BOTONES */
+/* ESTILOS FORZADOS PARA TODOS LOS BOTONES - PALETA INSTITUCIONAL */
 ::ng-deep .modern-btn-primary,
 ::ng-deep .modern-btn-secondary,
 ::ng-deep .modern-btn-success {
-  background: #691C32 !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(105, 28, 50, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(52, 0, 91, 0.35) !important;
 }
 
 ::ng-deep .modern-btn-primary:hover:not(:disabled),
 ::ng-deep .modern-btn-secondary:hover:not(:disabled),
 ::ng-deep .modern-btn-success:hover:not(:disabled) {
-  background: #DDC9A4 !important;
-  color: #691C32 !important;
-  box-shadow: 0 6px 20px rgba(221, 201, 164, 0.4) !important;
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
+  color: #34005b !important;
+  box-shadow: 0 8px 30px rgba(214, 174, 103, 0.5) !important;
 }
 
 /* ESTILOS ADICIONALES PARA MATERIAL BUTTONS */
@@ -118,7 +208,7 @@
 ::ng-deep .mat-raised-button.modern-btn-primary,
 ::ng-deep .mat-stroked-button.modern-btn-secondary,
 ::ng-deep .mat-raised-button.modern-btn-success {
-  background: #691C32 !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
   border: none !important;
 }
@@ -127,8 +217,8 @@
 ::ng-deep .mat-raised-button.modern-btn-primary:hover,
 ::ng-deep .mat-stroked-button.modern-btn-secondary:hover,
 ::ng-deep .mat-raised-button.modern-btn-success:hover {
-  background: #DDC9A4 !important;
-  color: #691C32 !important;
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
+  color: #34005b !important;
 }
 
 /* Scroll personalizado con nueva paleta */
@@ -137,18 +227,17 @@
 }
 
 .step-content::-webkit-scrollbar-track {
-  background: #DDC9A4/20;
+  background: rgba(214, 174, 103, 0.1);
   border-radius: 4px;
 }
 
 .step-content::-webkit-scrollbar-thumb {
-  background: #691C32;
+  background: linear-gradient(180deg, #34005b 0%, #3e0065 100%);
   border-radius: 4px;
-  border: 1px solid #DDC9A4/30;
 }
 
 .step-content::-webkit-scrollbar-thumb:hover {
-  background: #DDC9A4;
+  background: linear-gradient(180deg, #d6ae67 0%, #dbb872 100%);
 }
 
 /* Estilos para los pasos del stepper */
@@ -160,7 +249,7 @@
 .documents-section {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 2px solid #DDC9A4/20;
+  border-top: 2px solid rgba(214, 174, 103, 0.2);
 }
 
 /* Animaciones suaves */
@@ -225,51 +314,47 @@
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* ESTILOS DIRECTOS PARA INPUTS - FORZADOS CON NG-DEEP */
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start,
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end,
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-gap {
-  border-color: #691C32 !important;
+  border-color: #34005b !important;
   border-width: 2px !important;
-  background-color: rgba(105, 28, 50, 0.08) !important;
+  background-color: rgba(52, 0, 91, 0.05) !important;
 }
 
 ::ng-deep .mat-form-field:not(.mat-form-field-disabled) .mat-form-field-outline:hover .mat-form-field-outline-start,
 ::ng-deep .mat-form-field:not(.mat-form-field-disabled) .mat-form-field-outline:hover .mat-form-field-outline-end,
 ::ng-deep .mat-form-field:not(.mat-form-field-disabled) .mat-form-field-outline:hover .mat-form-field-outline-gap {
-  border-color: #691C32 !important;
-  background-color: rgba(105, 28, 50, 0.12) !important;
+  border-color: #3e0065 !important;
+  background-color: rgba(52, 0, 91, 0.08) !important;
 }
 
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-outline-start,
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-outline-end,
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-outline-gap {
-  border-color: #691C32 !important;
-  background-color: rgba(105, 28, 50, 0.15) !important;
+  border-color: #34005b !important;
+  background-color: rgba(52, 0, 91, 0.1) !important;
 }
 
 ::ng-deep .mat-form-field-label {
-  color: #663442 !important;
+  color: #3e0065 !important;
   font-weight: 500 !important;
 }
 
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
-  color: #691C32 !important;
+  color: #34005b !important;
 }
 
 ::ng-deep .mat-input-element {
-  color: #2D2A26 !important;
+  color: #1a1a1a !important;
   font-size: 0.95rem !important;
   padding: 1rem 1.25rem !important;
-  background-color: rgba(105, 28, 50, 0.05) !important;
+  background-color: rgba(52, 0, 91, 0.03) !important;
 }
 
 ::ng-deep .mat-form-field-infix {
@@ -283,29 +368,29 @@
 /* ESTILOS PARA SELECTORES */
 ::ng-deep .mat-select-trigger {
   padding: 1rem 1.25rem !important;
-  background-color: rgba(105, 28, 50, 0.05) !important;
+  background-color: rgba(52, 0, 91, 0.03) !important;
 }
 
 ::ng-deep .mat-select-arrow {
-  color: #691C32 !important;
+  color: #34005b !important;
 }
 
 /* ESTILOS PARA DATE PICKER */
 ::ng-deep .mat-datepicker-toggle {
-  color: #691C32 !important;
+  color: #34005b !important;
 }
 
 /* ESTILOS GLOBALES AGRESIVOS PARA INPUTS */
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  color: #691C32 !important;
+  color: #34005b !important;
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
-  color: #691C32 !important;
+  color: #34005b !important;
 }
 
 ::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-  color: #691C32 !important;
+  color: #34005b !important;
 }
 
 /* FORZAR ESTILOS EN TODOS LOS BOTONES DEL STEPPER */
@@ -313,7 +398,7 @@
 ::ng-deep .step-actions .mat-button,
 ::ng-deep .step-actions .mat-raised-button,
 ::ng-deep .step-actions .mat-stroked-button {
-  background: #691C32 !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
   border: none !important;
 }
@@ -322,47 +407,47 @@
 ::ng-deep .step-actions .mat-button:hover,
 ::ng-deep .step-actions .mat-raised-button:hover,
 ::ng-deep .step-actions .mat-stroked-button:hover {
-  background: #DDC9A4 !important;
-  color: #691C32 !important;
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
+  color: #34005b !important;
 }
 
 /* ESTILOS ULTRA ESPECÍFICOS PARA BOTONES ANTERIOR Y SIGUIENTE */
 ::ng-deep .mat-stroked-button.modern-btn-secondary {
-  background: #691C32 !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
-  border: 2px solid #691C32 !important;
+  border: 2px solid #34005b !important;
 }
 
 ::ng-deep .mat-stroked-button.modern-btn-secondary:hover {
-  background: #DDC9A4 !important;
-  color: #691C32 !important;
-  border-color: #DDC9A4 !important;
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
+  color: #34005b !important;
+  border-color: #d6ae67 !important;
 }
 
 ::ng-deep .mat-raised-button.modern-btn-primary {
-  background: #691C32 !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
   border: none !important;
 }
 
 ::ng-deep .mat-raised-button.modern-btn-primary:hover {
-  background: #DDC9A4 !important;
-  color: #691C32 !important;
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
+  color: #34005b !important;
 }
 
 /* FORZAR ESTILOS EN TODOS LOS BOTONES MATERIAL */
 ::ng-deep .mat-button,
 ::ng-deep .mat-raised-button,
 ::ng-deep .mat-stroked-button {
-  background: #691C32 !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
 }
 
 ::ng-deep .mat-button:hover,
 ::ng-deep .mat-raised-button:hover,
 ::ng-deep .mat-stroked-button:hover {
-  background: #DDC9A4 !important;
-  color: #691C32 !important;
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
+  color: #34005b !important;
 }
 
 /* Mejorar el contenedor principal para evitar cortes */

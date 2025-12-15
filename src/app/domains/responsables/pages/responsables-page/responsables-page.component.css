@@ -1,29 +1,29 @@
 /* =============================================
-   MI BANDEJA DE EXPEDIENTES - ESTILOS DE PÁGINA
+   CENTRO DE CONTROL - Paleta Institucional SAT
    ============================================= */
 
 /* ===== CONTENEDOR PRINCIPAL ===== */
 .page-container {
   min-height: 100vh;
-  background: linear-gradient(165deg, #f8f7f4 0%, #f3f1ec 50%, #ebe8e1 100%);
+  background: linear-gradient(165deg, #f8f9fc 0%, #f0f2f8 50%, #e8edf5 100%);
   position: relative;
 }
 
-/* Patrón de puntos sutiles */
+/* Patrón de puntos sutiles con color institucional */
 .page-container::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(105, 28, 50, 0.03) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(52, 0, 91, 0.03) 1px, transparent 0);
   background-size: 32px 32px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* ===== HERO HEADER ===== */
+/* ===== HERO HEADER CON PALETA INSTITUCIONAL ===== */
 .hero-header {
   position: relative;
-  background: linear-gradient(135deg, #691C32 0%, #7D2340 50%, #8B2543 100%);
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 40%, #5c1a7a 100%);
   padding: 0;
   overflow: hidden;
 }
@@ -45,7 +45,7 @@
   height: auto;
 }
 
-/* Círculos decorativos */
+/* Círculos decorativos con dorado */
 .hero-circles {
   position: absolute;
   inset: 0;
@@ -56,8 +56,8 @@
 .circle {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(214, 174, 103, 0.05);
+  border: 1px solid rgba(214, 174, 103, 0.1);
 }
 
 .circle-1 {
@@ -88,7 +88,19 @@
   z-index: 2;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 32px 32px 48px;
+  padding: 36px 36px 52px;
+}
+
+/* Línea dorada superior */
+.hero-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #d6ae67, #dbb872, #d6ae67, transparent);
+  z-index: 10;
 }
 
 .hero-main {
@@ -103,69 +115,72 @@
 .hero-title-group {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 
 .hero-icon {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .hero-icon svg {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   color: white;
 }
 
 .hero-text h1 {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
   color: white;
   margin: 0;
   letter-spacing: -0.5px;
+  text-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
 }
 
 .hero-text p {
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.75);
-  margin: 6px 0 0;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 8px 0 0;
+  font-weight: 500;
 }
 
-/* Widget de fecha */
+/* Widget de fecha con estilo dorado */
 .date-widget {
   display: flex;
   align-items: center;
-  gap: 14px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  padding: 14px 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  gap: 16px;
+  background: rgba(214, 174, 103, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(214, 174, 103, 0.3);
+  border-radius: 16px;
+  padding: 16px 24px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
 }
 
 .date-icon {
-  width: 42px;
-  height: 42px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 15px rgba(214, 174, 103, 0.4);
 }
 
 .date-icon svg {
-  width: 20px;
-  height: 20px;
-  color: white;
+  width: 24px;
+  height: 24px;
+  color: #34005b;
 }
 
 .date-info {
@@ -175,17 +190,17 @@
 
 .date-label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
+  color: rgba(214, 174, 103, 0.9);
 }
 
 .date-value {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: white;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 /* ===== CONTENIDO PRINCIPAL ===== */
@@ -194,14 +209,14 @@
   z-index: 1;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 24px 48px;
-  margin-top: -24px;
+  padding: 0 28px 52px;
+  margin-top: -28px;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .hero-content {
-    padding: 24px 20px 40px;
+    padding: 28px 24px 44px;
   }
   
   .hero-main {
@@ -210,22 +225,22 @@
   }
   
   .hero-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
   }
   
   .hero-icon svg {
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
   }
   
   .hero-text h1 {
-    font-size: 22px;
+    font-size: 26px;
   }
   
   .hero-text p {
-    font-size: 13px;
+    font-size: 14px;
   }
   
   .date-widget {
@@ -233,7 +248,7 @@
   }
   
   .main-content {
-    padding: 0 16px 32px;
-    margin-top: -16px;
+    padding: 0 20px 36px;
+    margin-top: -20px;
   }
 }

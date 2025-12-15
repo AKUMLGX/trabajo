@@ -1,35 +1,141 @@
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
+// Custom Theming for Angular Material - Tlálcalli
+// Paleta institucional SAT
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+// Include the common styles for Angular Material
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$acamba-primary: mat.define-palette(mat.$indigo-palette);
-$acamba-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+// ============================================
+// PALETA INSTITUCIONAL TLÁLCALLI
+// ============================================
+// Morado base: #34005b
+// Morado secundario: #3e0065
+// Dorado base: #d6ae67
+// Dorado secundario: #dbb872
+
+// Custom purple palette based on #34005b
+$tlalcalli-purple: (
+  50: #f3e5f5,
+  100: #e1bee7,
+  200: #ce93d8,
+  300: #8e4a9d,
+  400: #5c1a7a,
+  500: #34005b,  // Morado base
+  600: #3e0065,  // Morado secundario
+  700: #2a004d,
+  800: #20003a,
+  900: #15002a,
+  A100: #b388ff,
+  A200: #7c4dff,
+  A400: #5c1a7a,
+  A700: #34005b,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+// Custom gold/amber palette based on #d6ae67
+$tlalcalli-gold: (
+  50: #fdf8f0,
+  100: #f9ecd6,
+  200: #f3dbb4,
+  300: #e8c88f,
+  400: #dbb872,  // Dorado secundario
+  500: #d6ae67,  // Dorado base
+  600: #c9a050,
+  700: #b8904a,
+  800: #a07d40,
+  900: #7d6232,
+  A100: #fff3e0,
+  A200: #ffe0b2,
+  A400: #d6ae67,
+  A700: #c9a050,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: rgba(0, 0, 0, 0.87),
+    600: rgba(0, 0, 0, 0.87),
+    700: rgba(0, 0, 0, 0.87),
+    800: white,
+    900: white,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: rgba(0, 0, 0, 0.87),
+    A400: rgba(0, 0, 0, 0.87),
+    A700: rgba(0, 0, 0, 0.87),
+  )
+);
+
+// Define the palettes
+$tlalcalli-primary: mat.define-palette($tlalcalli-purple, 500, 400, 700);
+$tlalcalli-accent: mat.define-palette($tlalcalli-gold, 500, 400, 700);
 
 // The warn palette is optional (defaults to red).
-$acamba-warn: mat.define-palette(mat.$red-palette);
+$tlalcalli-warn: mat.define-palette(mat.$red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$acamba-theme: mat.define-light-theme((
+// Create the theme object
+$tlalcalli-theme: mat.define-light-theme((
   color: (
-    primary: $acamba-primary,
-    accent: $acamba-accent,
-    warn: $acamba-warn,
+    primary: $tlalcalli-primary,
+    accent: $tlalcalli-accent,
+    warn: $tlalcalli-warn,
   )
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($acamba-theme);
+// Include theme styles for core and each component
+@include mat.all-component-themes($tlalcalli-theme);
+
+// ============================================
+// CSS VARIABLES GLOBALES
+// ============================================
+:root {
+  // Morados institucionales
+  --purple-base: #34005b;
+  --purple-secondary: #3e0065;
+  --purple-light: #5c1a7a;
+  --purple-dark: #20003a;
+  --purple-glow: rgba(52, 0, 91, 0.5);
+  
+  // Dorados institucionales
+  --gold-base: #d6ae67;
+  --gold-secondary: #dbb872;
+  --gold-light: #e8c88f;
+  --gold-dark: #c9a050;
+  --gold-glow: rgba(214, 174, 103, 0.5);
+  
+  // Colores semánticos
+  --success: #10B981;
+  --success-light: #34D399;
+  --warning: #F59E0B;
+  --warning-light: #FBBF24;
+  --danger: #EF4444;
+  --danger-light: #F87171;
+  
+  // Neutros
+  --gray-dark: #1F2937;
+  --gray: #6B7280;
+  --gray-light: #F3F4F6;
+  --white: #ffffff;
+  
+  // Gradientes
+  --gradient-purple: linear-gradient(135deg, var(--purple-base) 0%, var(--purple-secondary) 100%);
+  --gradient-gold: linear-gradient(135deg, var(--gold-base) 0%, var(--gold-secondary) 100%);
+  --gradient-header: linear-gradient(135deg, var(--purple-base) 0%, var(--purple-secondary) 50%, var(--purple-light) 100%);
+}
 

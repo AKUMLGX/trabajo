@@ -1,5 +1,6 @@
 /* ========================================
-   NAVBAR BRAND - Tlálcalli
+   NAVBAR BRAND PREMIUM - Tlálcalli
+   Paleta Institucional SAT
    ======================================== */
 
 :host {
@@ -9,83 +10,104 @@
 .navbar-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 6px 16px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    gap: 16px;
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    border: 1px solid rgba(214, 174, 103, 0.25);
+    backdrop-filter: blur(15px);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(214, 174, 103, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 0 0 20px rgba(214, 174, 103, 0.15);
 }
 
 .brand-icon {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #C9A227 0%, #E6C65A 100%);
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3);
+    background: linear-gradient(145deg, #ffffff 0%, #f8f5f0 100%);
+    border-radius: 12px;
+    box-shadow: 
+        0 6px 20px rgba(52, 0, 91, 0.2),
+        0 0 0 2px rgba(214, 174, 103, 0.3);
+    overflow: hidden;
+    padding: 6px;
 }
 
-.brand-icon svg {
-    width: 20px;
-    height: 20px;
-    color: #4a1424;
+.brand-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .brand-text {
     display: flex;
-    flex-direction: column;
-    line-height: 1.2;
+    align-items: center;
+    gap: 12px;
+    line-height: 1;
 }
 
 .brand-name {
-    font-size: 1.1rem;
+    font-size: 1.35rem;
     font-weight: 800;
     color: white;
-    letter-spacing: 0.5px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.brand-tagline {
-    font-size: 0.65rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.7);
+.brand-separator {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: rgba(214, 174, 103, 0.8);
+    text-shadow: 0 0 10px rgba(214, 174, 103, 0.5);
+}
+
+.brand-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .navbar-brand {
-        padding: 4px 12px;
-        gap: 10px;
+        padding: 6px 14px;
+        gap: 12px;
     }
     
     .brand-icon {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .brand-icon svg {
-        width: 18px;
-        height: 18px;
+        width: 38px;
+        height: 38px;
     }
     
     .brand-name {
-        font-size: 1rem;
+        font-size: 1.15rem;
     }
     
-    .brand-tagline {
+    .brand-subtitle {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .brand-subtitle,
+    .brand-separator {
         display: none;
+    }
+    
+    .navbar-brand {
+        padding: 6px 12px;
+        gap: 10px;
     }
 }
 
@@ -96,7 +118,11 @@
     
     .navbar-brand {
         padding: 8px;
-        border-radius: 12px;
+        border-radius: 14px;
+    }
+    
+    .brand-icon {
+        width: 36px;
+        height: 36px;
     }
 }
-

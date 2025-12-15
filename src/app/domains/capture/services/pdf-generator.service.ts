@@ -54,13 +54,13 @@ export class PdfGeneratorService {
       color: #2D2A26;
     }
     
-    /* HEADER PREMIUM */
+    /* HEADER PREMIUM - PALETA INSTITUCIONAL SAT */
     .header { 
-      background: linear-gradient(135deg, #691C32 0%, #9F2241 50%, #663442 100%);
-      padding: 30px;
-      border-radius: 15px 15px 0 0;
+      background: linear-gradient(145deg, #34005b 0%, #3e0065 50%, #5c1a7a 100%);
+      padding: 35px;
+      border-radius: 18px 18px 0 0;
       color: white;
-      box-shadow: 0 8px 32px rgba(105, 28, 50, 0.3);
+      box-shadow: 0 10px 40px rgba(52, 0, 91, 0.35);
       margin: -30px -30px 30px -30px;
       position: relative;
       overflow: hidden;
@@ -72,8 +72,17 @@ export class PdfGeneratorService {
       right: -10%;
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, rgba(221,201,164,0.2) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(214, 174, 103, 0.2) 0%, transparent 70%);
       border-radius: 50%;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #d6ae67, #dbb872, #f0d78c, #dbb872, #d6ae67);
     }
     .header-content { 
       position: relative; 
@@ -84,48 +93,53 @@ export class PdfGeneratorService {
     }
     .header-left { flex: 1; }
     .logo-container {
-      background: white;
-      border-radius: 12px;
-      padding: 15px;
+      background: linear-gradient(145deg, #ffffff, #f8f5f0);
+      border-radius: 14px;
+      padding: 18px;
       display: inline-block;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      border: 2px solid rgba(214, 174, 103, 0.3);
     }
     .logo { 
-      font-size: 28px; 
+      font-size: 26px; 
       font-weight: 900; 
-      background: linear-gradient(135deg, #691C32 0%, #9F2241 100%);
+      background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     .titulo { 
-      font-size: 32px; 
+      font-size: 34px; 
       font-weight: 900; 
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      margin-bottom: 5px;
-      letter-spacing: -0.5px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+      margin-bottom: 3px;
+      letter-spacing: 0.5px;
     }
     .subtitulo { 
-      font-size: 18px; 
-      opacity: 0.9;
-      font-weight: 500;
+      font-size: 20px; 
+      color: rgba(214, 174, 103, 0.95);
+      font-weight: 600;
+      letter-spacing: 1px;
     }
     .header-right {
       text-align: right;
-      background: rgba(255,255,255,0.15);
-      padding: 20px;
-      border-radius: 10px;
+      background: linear-gradient(145deg, rgba(214, 174, 103, 0.2), rgba(214, 174, 103, 0.1));
+      padding: 22px;
+      border-radius: 14px;
       backdrop-filter: blur(10px);
+      border: 1px solid rgba(214, 174, 103, 0.3);
     }
     .expediente-numero {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 900;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      color: #d6ae67;
     }
     .fecha-generacion {
       font-size: 12px;
-      opacity: 0.8;
+      opacity: 0.85;
+      color: rgba(255,255,255,0.9);
     }
     
     /* SECCIONES MEJORADAS */
@@ -138,17 +152,17 @@ export class PdfGeneratorService {
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
     .seccion-titulo { 
-      background: linear-gradient(135deg, #691C32 0%, #9F2241 100%);
+      background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
       color: white; 
-      padding: 15px 20px; 
+      padding: 16px 22px; 
       font-size: 18px; 
       font-weight: 800; 
-      border-radius: 10px;
-      margin: -25px -25px 20px -25px;
+      border-radius: 12px;
+      margin: -25px -25px 22px -25px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 12px rgba(105, 28, 50, 0.2);
+      gap: 12px;
+      box-shadow: 0 6px 18px rgba(52, 0, 91, 0.25);
     }
     .seccion-icon {
       font-size: 24px;
@@ -161,12 +175,12 @@ export class PdfGeneratorService {
       gap: 18px; 
     }
     .campo { 
-      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-      padding: 16px; 
-      border-radius: 10px; 
-      border-left: 4px solid #DDC9A4;
+      background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+      padding: 18px; 
+      border-radius: 12px; 
+      border-left: 4px solid #d6ae67;
       transition: all 0.3s ease;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(52, 0, 91, 0.05);
     }
     .campo:hover {
       transform: translateY(-2px);
@@ -222,19 +236,20 @@ export class PdfGeneratorService {
     /* FOOTER PREMIUM */
     .footer { 
       margin-top: 50px; 
-      padding: 30px;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 0 0 15px 15px;
+      padding: 35px;
+      background: linear-gradient(145deg, #f8f7f4 0%, #ebe8e1 100%);
+      border-radius: 0 0 18px 18px;
       text-align: center; 
-      color: #666; 
+      color: #555; 
       font-size: 12px;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 -6px 20px rgba(52, 0, 91, 0.06);
+      border-top: 3px solid #d6ae67;
     }
     .footer-logo {
       font-weight: 900;
-      font-size: 16px;
-      color: #691C32;
-      margin-bottom: 10px;
+      font-size: 18px;
+      color: #34005b;
+      margin-bottom: 12px;
     }
     .footer-info {
       margin: 8px 0;
@@ -287,10 +302,10 @@ export class PdfGeneratorService {
     <div class="header-content">
       <div class="header-left">
         <div class="logo-container">
-          <div class="logo">🏛️ GOBIERNO DE MÉXICO</div>
+          <div class="logo">🏛️ TLÁLCALLI</div>
         </div>
-        <div class="titulo">SISTEMA TLAPOHUALLI</div>
-        <div class="subtitulo">Sistema de Gestión y Control de Expedientes</div>
+        <div class="titulo">TLÁLCALLI</div>
+        <div class="subtitulo">CONTROL DE EXPEDIENTES</div>
       </div>
       <div class="header-right">
         <div class="expediente-numero">${paso1.expediente}</div>
@@ -395,22 +410,7 @@ export class PdfGeneratorService {
     </div>
   </div>
 
-  <!-- FOOTER PREMIUM -->
-  <div class="footer">
-    <div class="footer-logo">SISTEMA TLAPOHUALLI</div>
-    <div class="footer-info">
-      <strong>Servicio de Administración Tributaria (SAT)</strong><br>
-      Sistema de Gestión y Control de Expedientes
-    </div>
-    <div class="footer-info">
-      📧 soporte@tlapohualli.sat.gob.mx | 📞 +52 (55) 5000-0000
-    </div>
-    <div class="footer-sello">
-      Este documento fue generado electrónicamente por el Sistema Tlapohualli<br>
-      y tiene plena validez para efectos administrativos y de auditoría<br>
-      ${expedienteId ? `ID de Sistema: ${expedienteId} | ` : ''}Expediente: ${paso1.expediente} | Fecha: ${fechaGeneracion}
-    </div>
-  </div>
+  <!-- FOOTER REMOVIDO -->
 </body>
 </html>
     `;

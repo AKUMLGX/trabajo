@@ -143,6 +143,7 @@ export class ExpedienteTlapohualliService {
       remitente_area: paso1.remitente_area,
       fecha_documento: paso1.fecha_documento,
       fecha_recibido: paso1.fecha_recibido,
+      fecha_requerimiento: paso1.fecha_requerimiento || paso1.fecha_documento, // Nuevo campo, fallback a fecha_documento si no existe
       referencia_asunto: paso1.referencia_asunto,
       plazo_vencimiento_prioridad: paso1.plazo_vencimiento_prioridad,
       
@@ -177,8 +178,8 @@ export class ExpedienteTlapohualliService {
       documento_pdf_nombre: paso3.documento_pdf ? paso3.documento_pdf.name : undefined,
       campos_documentos_pospuestos: paso3.campos_pospuestos || [],
       
-      // Prioridad del expediente (asignada en captura)
-      prioridad: paso2.prioridad || 'MEDIA'
+      // Prioridad del expediente (asignada en captura - movida al Step 1)
+      prioridad: paso1.prioridad || 'MEDIA'
     };
 
     const formData = new FormData();

@@ -2,12 +2,19 @@
    PANEL DE CONTROL - ESTILOS PROFESIONALES
    ============================================= */
 
-/* ===== VARIABLES ===== */
+/* ===== VARIABLES - PALETA INSTITUCIONAL SAT ===== */
 :host {
-  --wine: #691C32;
-  --wine-light: #8B2543;
-  --wine-dark: #4a1323;
+  /* Morados institucionales */
+  --wine: #34005b;
+  --wine-light: #3e0065;
+  --wine-dark: #20003a;
   
+  /* Dorados institucionales */
+  --gold: #d6ae67;
+  --gold-light: #dbb872;
+  --gold-dark: #c9a050;
+  
+  /* Semáforo */
   --vencido: #1f2937;
   --urgente: #dc2626;
   --alta: #ea580c;

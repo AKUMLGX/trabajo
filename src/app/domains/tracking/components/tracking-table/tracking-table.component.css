@@ -1,29 +1,36 @@
+/* =====================================================
+   TRACKING TABLE - Paleta Institucional SAT
+   ===================================================== */
 
+/* Paginación con colores institucionales */
 ::ng-deep .ngx-pagination .current {
-  background-color: #691C32 !important;
-  border-color: #691C32 !important;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
+  border-color: #34005b !important;
   color: white !important;
-  border-radius: 0.5rem;
-  font-weight: 600;
+  border-radius: 10px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.3);
 }
 
 ::ng-deep .ngx-pagination .pagination-previous,
 ::ng-deep .ngx-pagination .pagination-next {
-  border-radius: 0.5rem;
-  font-weight: 500;
+  border-radius: 10px;
+  font-weight: 600;
 }
 
 ::ng-deep .ngx-pagination .pagination-previous a,
 ::ng-deep .ngx-pagination .pagination-next a,
 ::ng-deep .ngx-pagination li a {
-  color: #691C32;
-  transition: all 0.2s;
+  color: #34005b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
 }
 
 ::ng-deep .ngx-pagination li:hover a {
-  background-color: #691C32;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
   color: white;
-  border-radius: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.25);
 }
 
 .options {
@@ -44,28 +51,54 @@
 }
 
 .button-read-more {
-  text-decoration: underline #691C32;
-  color: #3b5998;
-  transition: color 0.2s;
+  text-decoration: underline #34005b;
+  color: #34005b;
+  font-weight: 600;
+  transition: all 0.25s ease;
 }
 
 .button-read-more:hover {
-  color: #691C32;
+  color: #d6ae67;
 }
 
  .button-read-less {
-  @apply bg-wine text-white
-   active:bg-pink-600
-     text-xs px-4 py-2 rounded
-    shadow hover:shadow-md outline-none
-   focus:outline-none mr-1 ease-linear
-   transition-all duration-150
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.25);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.button-read-less:hover {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+  color: #34005b;
+  box-shadow: 0 6px 20px rgba(214, 174, 103, 0.4);
  }
 
 .download {
-  @apply bg-verde-Akamba text-white active:bg-pink-600
-         font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
-         focus:outline-none mr-1 ease-linear transition-all duration-150
+  background: linear-gradient(145deg, #059669 0%, #10b981 100%);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.download:hover {
+  background: linear-gradient(145deg, #047857 0%, #059669 100%);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35);
+  transform: translateY(-2px);
  }
 
 /* Animaciones y efectos visuales modernos */
@@ -84,17 +117,18 @@ table tbody tr {
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Efecto hover en filas */
+/* Efecto hover en filas con color institucional */
 table tbody tr:hover {
-  box-shadow: 0 4px 6px -1px rgba(105, 28, 50, 0.1), 0 2px 4px -1px rgba(105, 28, 50, 0.06);
-  transform: scale(1.001);
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 15px -2px rgba(52, 0, 91, 0.12), 0 2px 6px -1px rgba(52, 0, 91, 0.08);
+  transform: scale(1.002);
+  transition: all 0.25s ease-in-out;
+  background: linear-gradient(to right, rgba(52, 0, 91, 0.02), transparent);
 }
 
-/* Scroll suave para la tabla */
+/* Scroll suave para la tabla con colores institucionales */
 .overflow-x-auto {
   scrollbar-width: thin;
-  scrollbar-color: #691C32 #f3f4f6;
+  scrollbar-color: #34005b #f3f4f6;
 }
 
 .overflow-x-auto::-webkit-scrollbar {
@@ -102,17 +136,17 @@ table tbody tr:hover {
 }
 
 .overflow-x-auto::-webkit-scrollbar-track {
-  background: #f3f4f6;
+  background: linear-gradient(to right, #f3f4f6, #e5e7eb);
   border-radius: 10px;
 }
 
 .overflow-x-auto::-webkit-scrollbar-thumb {
-  background: #691C32;
+  background: linear-gradient(to right, #34005b, #3e0065);
   border-radius: 10px;
 }
 
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
-  background: #8B2543;
+  background: linear-gradient(to right, #3e0065, #5c1a7a);
 }
 
 /* Efecto para los badges */
@@ -129,12 +163,12 @@ table tbody tr:hover {
   animation: pulse-badge 2s ease-in-out infinite;
 }
 
-/* Mejora visual del estado de carga */
+/* Mejora visual del estado de carga con colores institucionales */
 .loading-shimmer {
   background: linear-gradient(
     90deg,
     #f0f0f0 25%,
-    #e0e0e0 50%,
+    rgba(214, 174, 103, 0.1) 50%,
     #f0f0f0 75%
   );
   background-size: 200% 100%;
@@ -155,20 +189,21 @@ table tbody tr:hover {
   position: relative;
 }
 
-/* Mejora de accesibilidad */
+/* Mejora de accesibilidad con color institucional */
 button:focus-visible {
-  outline: 2px solid #691C32;
+  outline: 2px solid #d6ae67;
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(214, 174, 103, 0.2);
 }
 
 /* Efecto de card elevation */
 .shadow-card {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px 0 rgba(52, 0, 91, 0.08), 0 1px 3px 0 rgba(52, 0, 91, 0.06);
   transition: box-shadow 0.3s ease-in-out;
 }
 
 .shadow-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 12px 30px -5px rgba(52, 0, 91, 0.12), 0 6px 12px -3px rgba(52, 0, 91, 0.08);
 }
 
 /* Responsive improvements */

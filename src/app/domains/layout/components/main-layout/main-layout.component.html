@@ -12,9 +12,10 @@
     <button mat-icon-button class="toolbar-btn user-btn" (click)="openModal(userInfoModal)" matTooltip="Mi Perfil">
       <mat-icon>person</mat-icon>
     </button>
-    <button mat-icon-button class="toolbar-btn" [matTooltip]="'Revisión Final'" [routerLink]="'/layout/revision-final'" *ngIf="puedeVerRevisionFinal">
+    <!-- Botón de Revisión Final oculto -->
+    <!-- <button mat-icon-button class="toolbar-btn" [matTooltip]="'Revisión Final'" [routerLink]="'/layout/revision-final'" *ngIf="puedeVerRevisionFinal">
       <mat-icon>approval</mat-icon>
-    </button>
+    </button> -->
   </div>
   <app-navbar-content-info></app-navbar-content-info>
   <app-navbar-content></app-navbar-content>

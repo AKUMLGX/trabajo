@@ -6,17 +6,25 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export class ExpedienteValidators {
   
   /**
-   * Validar formato de expediente: Exp.001-2025, Exp.002-2025, etc.
-   * Patrón: Exp. seguido de 3 dígitos, guión y año de 4 dígitos
+   * Validar formato de expediente: EXP-0001-2025, EXP-0002-2025, etc.
+   * Patrón: EXP seguido de guión, 4 dígitos, guión y año de 4 dígitos
+   * También acepta formato antiguo Exp.001-YYYY para compatibilidad
    */
   static expedienteFormat(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
       
-      const pattern = /^Exp\.\d{3}-\d{4}$/i;
-      return pattern.test(control.value) ? null : { 
+      const añoActual = new Date().getFullYear();
+      // Formato nuevo: EXP-0001-2025
+      const patternNuevo = new RegExp(`^EXP-\\d{4}-${añoActual}$`, 'i');
+      // Formato antiguo: Exp.001-2025 (compatibilidad)
+      const patternAntiguo = /^Exp\.\d{3}-\d{4}$/i;
+      
+      const esValido = patternNuevo.test(control.value) || patternAntiguo.test(control.value);
+      
+      return esValido ? null : { 
         expedienteFormat: { 
-          message: 'Formato: Exp.XXX-YYYY (Ejemplo: Exp.001-2025)' 
+          message: `Formato: EXP-XXXX-YYYY (Ejemplo: EXP-0001-${añoActual})` 
         } 
       };
     };

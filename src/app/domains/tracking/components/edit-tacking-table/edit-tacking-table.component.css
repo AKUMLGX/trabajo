@@ -1,54 +1,170 @@
+/* =====================================================
+   EDIT TRACKING TABLE - Paleta Institucional SAT
+   ===================================================== */
+
 .wrapping-individual-container {
   @apply w-full lg:w-6/12 px-4 relative mb-3;
 }
 
 .label-field {
   @apply block uppercase text-xs font-bold mb-2;
+  color: #34005b;
 }
 
 .input-field {
-  @apply border-0 px-3 py-3 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
+  @apply border-0 px-3 py-3 bg-white rounded-xl text-sm shadow-md focus:outline-none w-full ease-linear transition-all duration-150;
+  color: #34005b;
+  border: 2px solid rgba(52, 0, 91, 0.15);
+}
+
+.input-field:focus {
+  border-color: #d6ae67;
+  box-shadow: 0 0 0 4px rgba(214, 174, 103, 0.2), 0 4px 12px rgba(52, 0, 91, 0.1);
 }
 
 .disabled-input-field {
-  @apply border-0 px-3 py-3 text-gray-400 bg-gray-100/30 rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150;
+  @apply border-0 px-3 py-3 text-gray-400 bg-gray-100/30 rounded-xl text-sm shadow focus:outline-none w-full ease-linear transition-all duration-150;
+  border: 2px solid rgba(52, 0, 91, 0.08);
 }
 
 .next-button {
-  @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(52, 0, 91, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  margin-right: 0.25rem;
+}
+
+.next-button:hover {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+  color: #34005b;
+  box-shadow: 0 8px 25px rgba(214, 174, 103, 0.4);
+  transform: translateY(-2px);
 }
 
 .next-button-disabled {
-  @apply bg-[#2F722F]/40 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow outline-none mr-1
+  background: rgba(52, 0, 91, 0.4);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: none;
+  border: none;
+  cursor: not-allowed;
+  margin-right: 0.25rem;
 }
 
 .instructions-text {
-  @apply sm:text-xs md:text-base mt-2 ml-2 text-justify
+  @apply sm:text-xs md:text-base mt-2 ml-2 text-justify;
+  color: #374151;
 }
 
 .base-next-button {
-  @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(52, 0, 91, 0.35);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  margin-right: 0.25rem;
+}
+
+.base-next-button:hover {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+  color: #34005b;
+  box-shadow: 0 10px 30px rgba(214, 174, 103, 0.5);
+  transform: translateY(-3px);
 }
 
 .base-next-button-disabled {
-  @apply bg-wine/40 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow outline-none mr-1
+  background: rgba(52, 0, 91, 0.4);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 14px;
+  box-shadow: none;
+  border: none;
+  cursor: not-allowed;
+  margin-right: 0.25rem;
 }
 
 .table-head-item {
-  @apply px-6 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider
+  @apply px-6 py-4 border-b-2 text-left leading-4 tracking-wider;
+  border-color: rgba(52, 0, 91, 0.15);
+  background: linear-gradient(145deg, #faf9f7 0%, #f5f4f1 100%);
+  color: #34005b;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.8px;
 }
 
 .table-data-cell-item {
-  @apply px-6 py-4 border-b border-gray-500
+  @apply px-6 py-4 border-b;
+  border-color: rgba(52, 0, 91, 0.08);
 }
 
 .table-data-cell-content {
-  @apply text-sm leading-5 text-wine
+  @apply text-sm leading-5;
+  color: #34005b;
+  font-weight: 500;
 }
+
   .modal-right-button {
-    @apply bg-[#2F722F] text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+  background: linear-gradient(145deg, #059669 0%, #10b981 100%);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  margin-right: 0.25rem;
+}
+
+.modal-right-button:hover {
+  background: linear-gradient(145deg, #047857 0%, #059669 100%);
+  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+  transform: translateY(-2px);
   }
 
   .modal-left-button {
-    @apply bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(52, 0, 91, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  margin-right: 0.25rem;
+}
+
+.modal-left-button:hover {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+  color: #34005b;
+  box-shadow: 0 8px 25px rgba(214, 174, 103, 0.4);
+  transform: translateY(-2px);
   }

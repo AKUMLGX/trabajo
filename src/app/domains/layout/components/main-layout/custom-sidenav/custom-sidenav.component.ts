@@ -85,13 +85,14 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (permissions.reportes) {
-          menuItems.push({
-            icon: 'folder',
-            label: 'Bandeja de reportes',
-            route: '/layout/reports',
-          });
-        }
+        // Bandeja de reportes oculta
+        // if (permissions.reportes) {
+        //   menuItems.push({
+        //     icon: 'folder',
+        //     label: 'Bandeja de reportes',
+        //     route: '/layout/reports',
+        //   });
+        // }
 
         // Centro de Control de Expedientes - Disponible para todos los usuarios autenticados
         // El backend filtra automáticamente por el responsable del JWT

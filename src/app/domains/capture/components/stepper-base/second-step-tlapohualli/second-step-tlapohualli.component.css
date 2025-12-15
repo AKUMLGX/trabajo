@@ -37,7 +37,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(105, 28, 50, 0.1), rgba(105, 28, 50, 0.05));
+  background: linear-gradient(135deg, rgba(52, 0, 91, 0.1), rgba(52, 0, 91, 0.05));
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 16px;
@@ -50,7 +50,7 @@
     0 4px 6px -2px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
-  border-color: rgba(105, 28, 50, 0.2);
+  border-color: rgba(52, 0, 91, 0.2);
 }
 
 .mat-mdc-text-field-wrapper:hover::before {
@@ -63,21 +63,21 @@
 }
 
 .mat-mdc-form-field.mat-focused .mat-mdc-form-field-focus-overlay {
-  background: linear-gradient(135deg, rgba(105, 28, 50, 0.08), rgba(105, 28, 50, 0.03));
+  background: linear-gradient(135deg, rgba(52, 0, 91, 0.08), rgba(52, 0, 91, 0.03));
 }
 
 .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
   background: linear-gradient(145deg, #ffffff, #fefefe);
-  border: 2px solid #691C32;
+  border: 2px solid #34005b;
   box-shadow: 
-    0 0 0 4px rgba(105, 28, 50, 0.1),
+    0 0 0 4px rgba(52, 0, 91, 0.1),
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   transform: translateY(-3px);
 }
 
 .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
-  color: #691C32;
+  color: #34005b;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(105, 28, 50, 0.1);
 }
@@ -161,7 +161,7 @@
 }
 
 .mat-mdc-button.mat-primary {
-  background-color: #691C32;
+  background-color: #34005b;
   color: white;
 }
 
@@ -170,7 +170,7 @@
 }
 
 .mat-mdc-raised-button.mat-primary {
-  background-color: #691C32;
+  background-color: #34005b;
   color: white;
 }
 
@@ -232,7 +232,7 @@
 }
 
 .text-\[\#691C32\] {
-  color: #691C32;
+  color: #34005b;
 }
 
 /* Estilos para el grid */
@@ -357,7 +357,7 @@ textarea {
 
 /* Estilos para los campos de fecha */
 .mat-datepicker-toggle {
-  color: #691C32;
+  color: #34005b;
 }
 
 /* Estilos para los campos deshabilitados */

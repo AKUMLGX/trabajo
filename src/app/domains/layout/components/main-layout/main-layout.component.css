@@ -1,23 +1,28 @@
 /* ========================================
-   HEADER/TOOLBAR MEJORADO
+   HEADER/TOOLBAR PREMIUM - Tlálcalli
+   Paleta Institucional SAT
    ======================================== */
 
 mat-toolbar {
     position: relative;
     z-index: 5;
-    background: linear-gradient(135deg, #691C32 0%, #7a2139 50%, #691C32 100%);
+    background: linear-gradient(135deg, 
+        #34005b 0%, 
+        #3e0065 40%, 
+        #5c1a7a 80%,
+        #34005b 100%);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px !important;
-    min-height: 64px;
+    padding: 0 20px !important;
+    min-height: 68px;
     box-shadow: 
-        0 4px 20px rgba(105, 28, 50, 0.3),
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        0 6px 30px rgba(52, 0, 91, 0.35),
+        0 3px 10px rgba(0, 0, 0, 0.15),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
-/* Patrón sutil en el header */
+/* Patrón sutil en el header con efecto azteca */
 mat-toolbar::before {
     content: '';
     position: absolute;
@@ -26,16 +31,33 @@ mat-toolbar::before {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 10% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        radial-gradient(circle at 10% 50%, rgba(214, 174, 103, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 90% 50%, rgba(214, 174, 103, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
     pointer-events: none;
+}
+
+/* Brillo superior */
+mat-toolbar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(214, 174, 103, 0.4), 
+        rgba(214, 174, 103, 0.6), 
+        rgba(214, 174, 103, 0.4), 
+        transparent);
 }
 
 /* Contenedor izquierdo del toolbar */
 .toolbar-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     position: relative;
     z-index: 1;
 }
@@ -45,23 +67,26 @@ mat-toolbar::before {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
-    border-radius: 12px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
     padding: 0 !important;
     color: white !important;
+    backdrop-filter: blur(10px);
 }
 
 .toolbar-btn:hover {
-    background: rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    background: rgba(214, 174, 103, 0.2) !important;
+    border-color: rgba(214, 174, 103, 0.4) !important;
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.25),
+        0 0 20px rgba(214, 174, 103, 0.2);
 }
 
 .toolbar-btn:active {
@@ -69,37 +94,43 @@ mat-toolbar::before {
 }
 
 .toolbar-btn mat-icon {
-    font-size: 22px !important;
-    width: 22px !important;
-    height: 22px !important;
-    line-height: 22px !important;
+    font-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+    line-height: 24px !important;
     margin: 0 !important;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .toolbar-btn:hover mat-icon {
     transform: scale(1.1);
+    color: #d6ae67;
 }
 
 /* Efecto especial para el botón de menú */
 .toolbar-btn:first-child:hover mat-icon {
-    animation: menuWiggle 0.4s ease;
+    animation: menuWiggle 0.5s ease;
 }
 
 @keyframes menuWiggle {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-10deg); }
-    75% { transform: rotate(10deg); }
+    0%, 100% { transform: rotate(0deg) scale(1.1); }
+    25% { transform: rotate(-12deg) scale(1.1); }
+    75% { transform: rotate(12deg) scale(1.1); }
 }
 
 /* Efecto especial para el botón de usuario */
 .toolbar-btn.user-btn:hover {
-    background: linear-gradient(135deg, rgba(201, 162, 39, 0.25) 0%, rgba(201, 162, 39, 0.15) 100%) !important;
-    border-color: rgba(201, 162, 39, 0.4) !important;
+    background: linear-gradient(145deg, 
+        rgba(214, 174, 103, 0.3) 0%, 
+        rgba(214, 174, 103, 0.15) 100%) !important;
+    border-color: rgba(214, 174, 103, 0.5) !important;
+    box-shadow: 
+        0 8px 25px rgba(214, 174, 103, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
 }
 
 .toolbar-btn.user-btn:hover mat-icon {
-    color: #E6C65A !important;
+    color: #dbb872 !important;
 }
 
 .content {
@@ -107,8 +138,8 @@ mat-toolbar::before {
 }
 
 mat-sidenav-container {
-    height: calc(100vh - 64px);
-    background-color: white;
+    height: calc(100vh - 68px);
+    background: linear-gradient(180deg, #f8f9fc 0%, #f0f2f7 50%, #e8edf5 100%);
 }
 
 mat-sidenav {
@@ -121,13 +152,13 @@ mat-sidenav-content {
 
 /* Animaciones para el modal de usuario */
 .animate-modal {
-    animation: modalFadeIn 0.3s ease-out;
+    animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes modalFadeIn {
     from {
         opacity: 0;
-        transform: scale(0.95) translateY(-10px);
+        transform: scale(0.92) translateY(-15px);
     }
     to {
         opacity: 1;
@@ -137,23 +168,23 @@ mat-sidenav-content {
 
 /* Estilos para efectos de hover en elementos del modal */
 .hover-item {
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 .hover-item:hover {
-    transform: translateX(5px);
-    background-color: rgba(255, 255, 255, 0.8);
+    transform: translateX(6px);
+    background-color: rgba(255, 255, 255, 0.85);
 }
 
 /* Estilo para el avatar del usuario */
 .user-avatar {
     position: relative;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.35s ease;
 }
 
 .user-avatar:hover {
-    transform: rotate(5deg) scale(1.05);
+    transform: rotate(5deg) scale(1.08);
 }
 
 .user-avatar::after {
@@ -163,9 +194,12 @@ mat-sidenav-content {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(45deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(45deg, 
+        rgba(255,255,255,0) 0%, 
+        rgba(214, 174, 103, 0.6) 50%, 
+        rgba(255,255,255,0) 100%);
     transform: rotate(25deg);
-    animation: shimmer 2s infinite;
+    animation: shimmer 2.5s infinite;
     pointer-events: none;
 }
 
@@ -176,24 +210,24 @@ mat-sidenav-content {
 
 /* Estilo para los botones con efecto elevación */
 .btn-elevated {
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 3px 8px rgba(52, 0, 91, 0.15);
 }
 
 .btn-elevated:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(52, 0, 91, 0.25);
 }
 
 /* Estilos para la sección de información */
 .info-section {
-    transition: all 0.2s ease;
-    border-left: 3px solid transparent;
+    transition: all 0.25s ease;
+    border-left: 4px solid transparent;
 }
 
 .info-section:hover {
-    border-left-color: #691C32;
-    background-color: rgba(255, 255, 255, 0.9);
+    border-left-color: #d6ae67;
+    background-color: rgba(255, 255, 255, 0.92);
 }
 
 /* ========================================== */
@@ -201,44 +235,61 @@ mat-sidenav-content {
 /* ========================================== */
 
 .user-modal-container {
-    max-width: 500px;
+    max-width: 520px;
     width: 100%;
-    /* Rellenar con el gradiente SAT para eliminar esquinas blancas */
-    background: linear-gradient(135deg, #691C32 0%, #8B2A44 35%, #A0335B 70%, #B8446F 100%) !important;
-    border-radius: 20px !important;
+    background: linear-gradient(145deg, 
+        #34005b 0%, 
+        #3e0065 35%, 
+        #5c1a7a 70%, 
+        #8e4a9d 100%) !important;
+    border-radius: 24px !important;
     overflow: hidden !important;
     position: relative;
     box-shadow: 
-        0 25px 50px -12px rgba(105, 28, 50, 0.25),
-        0 10px 25px -10px rgba(0, 0, 0, 0.1);
+        0 30px 70px -15px rgba(52, 0, 91, 0.4),
+        0 15px 35px -10px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(214, 174, 103, 0.2);
     animation: modalSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    /* Forzar que NO haya espacios blancos */
     border: none !important;
     outline: none !important;
-    /* Padding para que el contenido no toque los bordes */
     padding: 0 !important;
 }
 
-/* Botón de cerrar SÚPER MEJORADO - ¡Adiós tachesito feo! */
+/* Patrón decorativo en el modal */
+.user-modal-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(214, 174, 103, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Botón de cerrar PREMIUM */
 .modal-close-button {
     position: absolute !important;
-    top: 12px !important;
-    right: 12px !important;
+    top: 16px !important;
+    right: 16px !important;
     z-index: 1000 !important;
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
     background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(15px) !important;
-    border: 2px solid rgba(105, 28, 50, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 2px solid rgba(214, 174, 103, 0.3) !important;
     border-radius: 50% !important;
-    color: #691C32 !important;
+    color: #34005b !important;
     box-shadow: 
-        0 8px 25px rgba(105, 28, 50, 0.15),
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        inset 0 1px 3px rgba(255, 255, 255, 0.5) !important;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        0 10px 30px rgba(52, 0, 91, 0.2),
+        0 5px 15px rgba(0, 0, 0, 0.15),
+        inset 0 2px 4px rgba(255, 255, 255, 0.6) !important;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -248,38 +299,37 @@ mat-sidenav-content {
 
 .modal-close-button:hover {
     background: rgba(255, 255, 255, 1) !important;
-    border-color: rgba(105, 28, 50, 0.3) !important;
+    border-color: rgba(214, 174, 103, 0.6) !important;
     transform: scale(1.15) rotate(90deg) !important;
     box-shadow: 
-        0 12px 35px rgba(105, 28, 50, 0.25),
-        0 6px 20px rgba(0, 0, 0, 0.15),
-        inset 0 2px 6px rgba(255, 255, 255, 0.7) !important;
+        0 15px 40px rgba(52, 0, 91, 0.3),
+        0 8px 25px rgba(0, 0, 0, 0.2),
+        0 0 30px rgba(214, 174, 103, 0.3),
+        inset 0 3px 8px rgba(255, 255, 255, 0.8) !important;
 }
 
 .modal-close-button:active {
-    transform: scale(1.05) rotate(90deg) !important;
+    transform: scale(1.08) rotate(90deg) !important;
 }
 
 .modal-close-button mat-icon {
-    font-size: 22px !important;
-    width: 22px !important;
-    height: 22px !important;
-    line-height: 22px !important;
-    color: #691C32 !important;
+    font-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+    line-height: 24px !important;
+    color: #34005b !important;
     font-weight: bold !important;
 }
 
-/* Efecto adicional para el hover del ícono */
 .modal-close-button:hover mat-icon {
-    color: #8B2A44 !important;
-    text-shadow: 0 1px 3px rgba(105, 28, 50, 0.3) !important;
+    color: #3e0065 !important;
 }
 
 /* Animación de entrada del modal */
 @keyframes modalSlideIn {
     from {
         opacity: 0;
-        transform: translateY(30px) scale(0.95);
+        transform: translateY(40px) scale(0.92);
     }
     to {
         opacity: 1;
@@ -289,22 +339,45 @@ mat-sidenav-content {
 
 /* Media queries para responsive */
 @media (max-width: 768px) {
+    mat-toolbar {
+        min-height: 60px;
+        padding: 0 12px !important;
+    }
+    
+    .toolbar-btn {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        border-radius: 12px !important;
+    }
+    
+    .toolbar-btn mat-icon {
+        font-size: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    mat-sidenav-container {
+        height: calc(100vh - 60px);
+    }
+    
     .user-modal-container {
         max-width: 95vw;
         margin: 10px;
-        border-radius: 16px;
+        border-radius: 20px;
     }
     
     .modal-close-button {
         top: 12px !important;
         right: 12px !important;
-        width: 36px !important;
-        height: 36px !important;
+        width: 40px !important;
+        height: 40px !important;
     }
     
     .modal-close-button mat-icon {
-        font-size: 18px !important;
-        width: 18px !important;
-        height: 18px !important;
+        font-size: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
     }
 }

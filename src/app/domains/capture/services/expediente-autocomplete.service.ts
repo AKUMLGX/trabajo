@@ -28,7 +28,7 @@ export class ExpedienteAutocompleteService {
 
   /**
    * Obtiene el siguiente número de expediente sugerido
-   * Formato: Exp.001-YYYY, Exp.002-YYYY, Exp.003-YYYY...
+   * Formato: EXP-0001-YYYY, EXP-0002-YYYY, EXP-0003-YYYY...
    * Si se proporciona un oficio, verifica si ya existe y retorna su expediente
    */
   obtenerSiguienteExpediente(oficio?: string): Observable<string> {
@@ -83,7 +83,7 @@ export class ExpedienteAutocompleteService {
 
   /**
    * Obtiene expedientes recientes para autocompletar
-   * @param termino - Término de búsqueda (ej: "Exp.00")
+   * @param termino - Término de búsqueda (ej: "EXP-00")
    */
   buscarExpedientes(termino: string): Observable<string[]> {
     // TODO: Conectar con el backend cuando esté listo
@@ -117,18 +117,26 @@ export class ExpedienteAutocompleteService {
   }
 
   /**
-   * Formatea un número a formato de expediente: Exp.001
+   * Formatea un número a formato de expediente: EXP-0001-YYYY
    */
   private formatearExpediente(numero: number): string {
-    return `Exp.${numero.toString().padStart(3, '0')}`;
+    const añoActual = new Date().getFullYear();
+    return `EXP-${numero.toString().padStart(4, '0')}-${añoActual}`;
   }
 
   /**
-   * Extrae el número de un expediente: "Exp.001" -> 1
+   * Extrae el número de un expediente: "EXP-0001-2025" -> 1
+   * También maneja el formato antiguo "Exp.001" para compatibilidad
    */
   private extraerNumero(expediente: string): number | null {
-    const match = expediente.match(/Exp\.(\d+)/i);
-    return match ? parseInt(match[1], 10) : null;
+    // Formato nuevo: EXP-0001-2025
+    const matchNuevo = expediente.match(/EXP-(\d+)-/i);
+    if (matchNuevo) {
+      return parseInt(matchNuevo[1], 10);
+    }
+    // Formato antiguo: Exp.001 (compatibilidad)
+    const matchAntiguo = expediente.match(/Exp\.(\d+)/i);
+    return matchAntiguo ? parseInt(matchAntiguo[1], 10) : null;
   }
 
   /**
@@ -149,24 +157,32 @@ export class ExpedienteAutocompleteService {
 
   /**
    * Valida que el expediente tenga el formato correcto
+   * Formato nuevo: EXP-0001-YYYY
+   * También acepta formato antiguo para compatibilidad: Exp.001
    */
   validarFormato(expediente: string): boolean {
-    return /^Exp\.\d{3}$/i.test(expediente);
+    const añoActual = new Date().getFullYear();
+    // Formato nuevo: EXP-0001-2025
+    const formatoNuevo = new RegExp(`^EXP-\\d{4}-${añoActual}$`, 'i');
+    // Formato antiguo: Exp.001 (compatibilidad)
+    const formatoAntiguo = /^Exp\.\d{3}$/i;
+    return formatoNuevo.test(expediente) || formatoAntiguo.test(expediente);
   }
 
   /**
    * Auto-formatea mientras el usuario escribe
-   * Ej: Usuario escribe "123" -> retorna "Exp.123"
+   * Ej: Usuario escribe "123" -> retorna "EXP-0123-2025"
    */
   autoFormatear(valor: string): string {
     // Remover cualquier texto que no sea número
     const soloNumeros = valor.replace(/[^\d]/g, '');
     
     if (soloNumeros.length === 0) return '';
-    if (soloNumeros.length > 3) return valor; // No modificar si ya tiene más de 3 dígitos
+    if (soloNumeros.length > 4) return valor; // No modificar si ya tiene más de 4 dígitos
     
-    // Formatear automáticamente
-    return `Exp.${soloNumeros.padStart(3, '0')}`;
+    const añoActual = new Date().getFullYear();
+    // Formatear automáticamente al nuevo formato
+    return `EXP-${soloNumeros.padStart(4, '0')}-${añoActual}`;
   }
 }
 

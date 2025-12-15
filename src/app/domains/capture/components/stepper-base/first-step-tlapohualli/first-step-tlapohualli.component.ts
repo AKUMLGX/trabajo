@@ -270,6 +270,10 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
         ExpedienteValidators.noFutureDate(),
         ExpedienteValidators.fechaRecibidoValida()
       ]],
+      fecha_requerimiento: [this.formHelper.getFechaActual(), [
+        Validators.required,
+        ExpedienteValidators.noFutureDate()
+      ]],
       referencia_asunto: ['', [
         Validators.required,
         Validators.maxLength(1000)
@@ -288,11 +292,24 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       // Unidad de tiempo: dias, horas, ambos
       plazo_unidad: ['dias'],
       // Checkbox urgente
-      es_urgente: [false]
+      es_urgente: [false],
+      // Nivel de Prioridad (movido del Step 2)
+      prioridad: ['MEDIA', Validators.required]
     });
   }
 
+  // Opciones para prioridad del expediente
+  opcionesPrioridad: SelectOption[] = [
+    { value: 'URGENTE', label: '🔴 Urgente - Requiere atención inmediata' },
+    { value: 'ALTA', label: '🟠 Alta - Prioridad elevada' },
+    { value: 'MEDIA', label: '🔵 Media - Prioridad normal' },
+    { value: 'BAJA', label: '🟢 Baja - Sin urgencia' }
+  ];
+
   ngOnInit() {
+    // Deshabilitar fecha_documento (campo automático)
+    this.formulario.get('fecha_documento')?.disable();
+    
     // Revalidar fecha_recibido cuando cambia fecha_documento
     this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
       this.formulario.get('fecha_recibido')?.updateValueAndValidity();
@@ -505,6 +522,10 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
           expediente: siguiente
         });
         this.formulario.get('expediente')?.disable();
+        
+        // Asegurar que fecha_documento también esté deshabilitada
+        this.formulario.get('fecha_documento')?.disable();
+        
         this.logger.debug('Expediente auto-cargado y bloqueado:', siguiente);
         
         // Si el oficio ya tenía expediente, mostrar mensaje informativo
@@ -532,6 +553,8 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
           expediente: expedienteExistente
         });
         this.formulario.get('expediente')?.disable();
+        // Asegurar que fecha_documento también esté deshabilitada
+        this.formulario.get('fecha_documento')?.disable();
       },
       error: (err) => {
         // Si no existe, no hacer nada (se generará uno nuevo al guardar)
@@ -1114,6 +1137,15 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     return null;
   }
   
+  get fechaRequerimientoError(): string | null {
+    const control = this.formulario.get('fecha_requerimiento');
+    if (control?.touched && control?.errors) {
+      if (control.errors['required']) return 'Obligatorio';
+      if (control.errors['futureDate']) return control.errors['futureDate'].message;
+    }
+    return null;
+  }
+  
   get referenciaError(): string | null {
     const control = this.formulario.get('referencia_asunto');
     if (control?.touched && control?.errors) {
@@ -1137,6 +1169,14 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       if (control.errors['required']) return 'Obligatorio';
       if (control.errors['min']) return 'Mínimo 1';
       if (control.errors['max']) return 'Máximo 999';
+    }
+    return null;
+  }
+
+  get prioridadError(): string | null {
+    const control = this.formulario.get('prioridad');
+    if (control && control.invalid && control.touched) {
+      if (control.hasError('required')) return 'Debe seleccionar un nivel de prioridad';
     }
     return null;
   }

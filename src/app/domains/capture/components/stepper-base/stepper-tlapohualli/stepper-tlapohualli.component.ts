@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +33,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   templateUrl: './stepper-tlapohualli.component.html',
   styleUrls: ['./stepper-tlapohualli.component.css', './stepper-tlapohualli-global.css']
 })
-export class StepperTlapohualliComponent implements OnInit {
+export class StepperTlapohualliComponent implements OnInit, AfterViewInit {
   @ViewChild(MatStepper) stepper!: MatStepper;
   @ViewChild(FirstStepTlapohualliComponent) paso1Component!: FirstStepTlapohualliComponent;
   @ViewChild(SecondStepTlapohualliComponent) paso2Component!: SecondStepTlapohualliComponent;
@@ -57,6 +57,32 @@ export class StepperTlapohualliComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    // Prevenir acceso a pasos sin completar
+    if (this.stepper) {
+      this.stepper.selectionChange.subscribe((event) => {
+        // Si intenta ir al paso 2 (índice 1) sin completar el paso 1
+        if (event.selectedIndex === 1 && (!this.paso1Valido || !this.datosPaso1)) {
+          this.mostrarMensaje('Debe completar todos los campos del paso 1 antes de continuar', 'warning');
+          // Forzar volver al paso 1
+          setTimeout(() => {
+            this.stepper.selectedIndex = 0;
+            this.pasoActual = 0;
+          }, 100);
+        }
+        // Si intenta ir al paso 3 (índice 2) sin haber guardado
+        else if (event.selectedIndex === 2 && !this.expedienteGuardado) {
+          this.mostrarMensaje('Debe completar y guardar el paso 2 antes de ver el resumen', 'warning');
+          // Forzar volver al paso 2
+          setTimeout(() => {
+            this.stepper.selectedIndex = 1;
+            this.pasoActual = 1;
+          }, 100);
+        }
+      });
+    }
+  }
 
   // Paso 1
   onPaso1ValidezCambiada(valido: boolean) {

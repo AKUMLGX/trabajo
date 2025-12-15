@@ -1,447 +1,414 @@
-<div class="h-full  border-2 rounded-lg  relative bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto ">
-  <div class="flex h-auto w-auto justify-center pb-8 pt-8 ">
+<!-- =====================================================
+     PANEL ESTADÍSTICO - Diseño Premium Institucional
+     ===================================================== -->
+<div class="estadisticos-container">
+  <!-- Header del panel -->
+  <div class="panel-header">
     @if (!mostrarChart) {
-    <p class="text-3xl"> Estadísticos</p>
+    <div class="header-content">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1>Panel Estadístico</h1>
+        <p>Consulta y análisis de datos del sistema</p>
+      </div>
+    </div>
     }
     @if (mostrarChart) {
-    <div class="w-[20%] pl-[340px] ">
-      <p class="text-3xl"> Estadísticos</p>
+    <div class="header-with-back">
+      <div class="header-content">
+        <div class="header-icon small">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+        </div>
+        <h1>Resultados Estadísticos</h1>
     </div>
-    <div class="flex justify-end w-[50%] ">
-      <button (click)="goBack()"><img src="{{environment.base}}/assets/images/goBack.svg" alt=""></button>
+      <button class="back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        <span>Volver</span>
+      </button>
     </div>
     }
   </div>
-  @if (!mostrarChart) {
-  <form class="flex justify-center  h-auto w-auto" [formGroup]="repotByDay">
 
-    <div class="wrapping-individual-container">
-      <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-        Fecha Inicial:
+  <!-- Formulario de consulta -->
+  @if (!mostrarChart) {
+  <div class="query-section">
+    <div class="query-card">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+        </div>
+        <h3>Selecciona el rango de fechas</h3>
+      </div>
+      
+      <form class="date-form" [formGroup]="repotByDay">
+        <div class="date-field">
+          <label>
+            <span class="label-icon">📅</span>
+            Fecha Inicial
+          </label>
+          <input type="date" formControlName="fecha_inicial" class="date-input" lang="es-MX">
+        </div>
+        
+        <div class="date-field">
+          <label>
+            <span class="label-icon">📅</span>
+            Fecha Final
       </label>
-      <input type="date" placeholder="dd-MM-yyyy" class="input-field placeholder-blueGray-300"
-        formControlName="fecha_inicial" value="" lang="es-MX">
+          <input type="date" formControlName="fecha_final" class="date-input" lang="es-MX">
+        </div>
+      </form>
+      
+      <div class="action-area">
+        <button 
+          class="consultar-btn" 
+          (click)="tableApertura()" 
+          (click)="tableSecondPices()" 
+          (click)="estadisticosReport()" 
+          (click)="estaditicasPorDia()" 
+          [disabled]="!repotByDay.valid"
+          [class.disabled]="!repotByDay.valid">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <span>Consultar Estadísticas</span>
+        </button>
+      </div>
     </div>
-    <div class="wrapping-individual-container">
-      <label class="label-field flex text-blueGray-600" htmlfor="grid-password">
-        Fecha Final:
-      </label>
-      <input type="date" placeholder="dd-MM-yyyy" class="input-field placeholder-blueGray-300"
-        formControlName="fecha_final" value="" lang="es-MX">
+    
+    <!-- Decoración -->
+    <div class="decoration-area">
+      <div class="deco-card card-1">
+        <div class="deco-icon">📊</div>
+        <span>Gráficas</span>
+      </div>
+      <div class="deco-card card-2">
+        <div class="deco-icon">📈</div>
+        <span>Tendencias</span>
+      </div>
+      <div class="deco-card card-3">
+        <div class="deco-icon">📋</div>
+        <span>Reportes</span>
+      </div>
     </div>
-  </form>
-  <div class="flex justify-center h-auto w-auto pt-1 pb-16 ">
-    <button (click)="tableApertura()" (click)="tableSecondPices()" (click)="estadisticosReport()" (click)="estaditicasPorDia()" [disabled]="!repotByDay.valid"
-      [ngClass]=" !repotByDay.valid ? 'next-button-disabled' : 'modal-right-button ml-1'">
-      Consultar
-    </button>
   </div>
   }
+
+  <!-- Resultados -->
   @if (mostrarChart) {
-  <mat-dialog-content>
-    <div class="flex justify-around w-11/12">
-        <select class="select" (change)="onSelectedOption($event)">
+  <mat-dialog-content class="results-section">
+    <!-- Selectores -->
+    <div class="selectors-row">
+      <div class="selector-wrapper">
+        <label>Tipo de Reporte</label>
+        <select class="custom-select" (change)="onSelectedOption($event)">
           <option disabled selected value="">Selecciona una opción</option>
-          <option value="requerimiento_">Requerimiento</option>
-          <option value="respuesta">Respuesta Interna</option>
-          <option value="respuestaFGR">Respuesta a FGR</option>
+          <option value="requerimiento_">📄 Requerimiento</option>
+          <option value="respuesta">📝 Respuesta Interna</option>
+          <option value="respuestaFGR">🏛️ Respuesta a FGR</option>
         </select>
+      </div>
+      
         @if (selecionarOpcion === 'requerimiento_') {
-      <select class="select" (change)="onSelectedOptionSe($event)">
+      <div class="selector-wrapper">
+        <label>Filtrar por</label>
+        <select class="custom-select" (change)="onSelectedOptionSe($event)">
         <option disabled selected value="">Selecciona una opción</option>
-        <option value="Requerimiento">TODOS</option>
-        <option value="aperturas">APERTURAS</option>
-        <option value="segundas_Piezas">SEGUNDAS PIEZAS</option>
+          <option value="Requerimiento">📊 TODOS</option>
+          <option value="aperturas">📂 APERTURAS</option>
+          <option value="segundas_Piezas">📑 SEGUNDAS PIEZAS</option>
       </select>
+      </div>
     }
       </div>
 
+    <!-- Contenido de resultados -->
     @if (selecionarOpcion2 === "Requerimiento") {
-    <div class="flex justify-center ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="flex justify-center pb-9">
-          <p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+    <div class="results-content">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>📊 Porcentaje de Atención</h3>
+          <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
         </div>
-        <div class="flex justify-center pb-8">
-          <p class="text-base uppercase text-black">Totalidad de requerimientos: <span>{{documento_respuesta_requerimiento}}</span> </p>
+        <div class="total-badge">
+          <span class="total-label">Total de Requerimientos</span>
+          <span class="total-value">{{documento_respuesta_requerimiento}}</span>
         </div>
+        <div class="chart-container">
         <apx-chart [series]="series_requerimiento" [chart]="chart" [responsive]="responsive" [labels]="labels"
           [colors]="colors" [dataLabels]="dataLabels">
         </apx-chart>
       </div>
     </div>
-    <div class="flex h-auto w-auto justify-center pb-8 pt-8 ">
-      <p class="text-3xl">Tabla de estatus de conteo por día.</p>
+
+      <!-- Tabla de datos -->
+      <div class="table-card">
+        <div class="table-header">
+          <h3>📋 Conteo por Día</h3>
     </div>
-    <div class="flex justify-center mt-4 ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="overflow-x-auto">
-          <table class="min-w-full border-collapse bg-white">
+        <div class="table-wrapper">
+          <table class="data-table">
             <thead>
               <tr>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Dia
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Número de conteo
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                 Total
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Parcial
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  En tramite
-                </th>
-
+                <th>Día</th>
+                <th>Número de Conteo</th>
+                <th>Total</th>
+                <th>Parcial</th>
+                <th>En Trámite</th>
               </tr>
             </thead>
-            @for (item of pages[pageSelected-1]; track $index) {
             <tbody>
+              @for (item of pages[pageSelected-1]; track $index) {
               <tr>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.fecha_recepcion}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.total_requerimientos}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.total_estatus}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.parcial_estatus}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.en_tramite_estatus}}</p>
-                </th>
+                <td>{{item.fecha_recepcion}}</td>
+                <td>{{item.total_requerimientos}}</td>
+                <td class="success">{{item.total_estatus}}</td>
+                <td class="warning">{{item.parcial_estatus}}</td>
+                <td class="info">{{item.en_tramite_estatus}}</td>
               </tr>
+              }
             </tbody>
-            }
-            <div class="w-auto">
-              <div class="flex w-[240%] justify-end">
-                <p>Total de conteo de dias: <span>{{totalDeConteo}}</span></p>
-              </div>
-            </div>
           </table>
         </div>
-        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
-          <div>
+        
+        <div class="table-footer">
+          <div class="total-count">
+            Total de días: <strong>{{totalDeConteo}}</strong>
+          </div>
             @if (pages.length > 0) {
+          <div class="pagination-wrapper">
             <ul>
-              <li *ngFor="
-                          let document of documents
-                            | paginate
-                              : {
-                                  itemsPerPage: itemsPerPage,
-                                  currentPage: pageSelected
-                                }
-                        "></li>
+              <li *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }"></li>
             </ul>
-            <div class="has-text-centered">
               <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
                 [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
             </div>
             }
-          </div>
-        </div>
-        <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
-          <p class="text-sm leading-5 text-wine">
-            Mostrando
-            <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + 1
-              }}</span>
-            a
-            <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage +
-                itemsPerPage : documents.length }}</span>
-                de
-                <span class="font-medium">{{ documents.length }}</span>
-                resultados
+          <p class="results-info">
+            Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
+            <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length }}</strong>
+            de <strong>{{ documents.length }}</strong> resultados
           </p>
         </div>
       </div>
+
+      <div class="download-section">
+        <button class="download-btn" (click)="getDownloadExcelRequerimientos()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7,10 12,15 17,10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar Requerimientos
+        </button>
     </div>
-    <div class="flex justify-end pb-8 pr-20 ">
-      <button class="download" (click)="getDownloadExcelRequerimientos()"> Descargar requerimiento </button>
     </div>
     }
     @else if (selecionarOpcion === "respuesta") {
-    <div class="flex justify-center absolute top-1/2 -translate-y-1/2 w-full ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="flex justify-center pb-9">
-          <p class="text-base uppercase "> Atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+    <div class="results-content centered">
+      <div class="info-card">
+        <div class="info-icon">📝</div>
+        <h3>Respuestas Internas</h3>
+        <p class="date-range">{{fecha_Incial}} - {{fecha_Final}}</p>
+        <div class="total-display">
+          <span class="total-number">{{documento_respuesta_Interna}}</span>
+          <span class="total-text">Total de respuestas</span>
         </div>
-        <div class="flex justify-center pb-8">
-          <p class="text-base uppercase text-black">
-            Total de respuestas internas: <span>{{documento_respuesta_Interna}}</span>
-          </p>
-        </div>
-        <!-- <apx-chart
-            [series]="series_respuesta_interna"
-            [chart]="chart"
-            [responsive]="responsive"
-            [labels]="labels"
-            [colors]="colors"
-            [dataLabels]="dataLabels"
-            >
-            </apx-chart > -->
-        <div class="flex justify-center">
-          <button class="download" (click)="getDownloadExcelRespuestaInterna()"> Descargar respuesta interna </button>
-        </div>
+        <button class="download-btn" (click)="getDownloadExcelRespuestaInterna()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7,10 12,15 17,10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar Respuesta Interna
+        </button>
       </div>
     </div>
     }
-    @else if ( selecionarOpcion === "respuestaFGR") {
-    <div class="flex justify-center ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="flex justify-center pb-9">
-          <p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+    @else if (selecionarOpcion === "respuestaFGR") {
+    <div class="results-content">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>🏛️ Respuestas a FGR</h3>
+          <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
         </div>
-        <div class="flex justify-center pb-8">
-          <p class="text-base uppercase text-black">Totalidad de respuestas de FGR: <span>{{documento_respuesta_FGR}} </span> </p>
+        <div class="total-badge">
+          <span class="total-label">Total de Respuestas FGR</span>
+          <span class="total-value">{{documento_respuesta_FGR}}</span>
         </div>
+        <div class="chart-container">
         <apx-chart [series]="series_respuesta_FGR" [chart]="chart" [responsive]="responsive" [labels]="labels"
           [colors]="colors" [dataLabels]="dataLabels">
         </apx-chart>
-        <div class="flex justify-end">
-          <button class="download" (click)="getDownloadExcelRespuestaFGR()"> Descargar respuesta de FGR</button>
+        </div>
+        <div class="download-section inline">
+          <button class="download-btn" (click)="getDownloadExcelRespuestaFGR()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7,10 12,15 17,10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Descargar FGR
+          </button>
         </div>
       </div>
     </div>
     }
      @else if (selecionarOpcion2 === "segundas_Piezas") {
-    <div class="flex justify-center ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="flex justify-center pb-9">
-          <p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+    <div class="results-content">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>📑 Segundas Piezas</h3>
+          <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
         </div>
-        <div class="flex justify-center pb-8">
-          <p class="text-base uppercase text-black">Totalidad de Segunda Pieza:
-            <span>{{documento_segunda_pieza}}</span>
-          </p>
+        <div class="total-badge">
+          <span class="total-label">Total Segunda Pieza</span>
+          <span class="total-value">{{documento_segunda_pieza}}</span>
         </div>
+        <div class="chart-container">
         <apx-chart [series]="series_segundapieza" [chart]="chart" [responsive]="responsive" [labels]="labels"
           [colors]="colors" [dataLabels]="dataLabels">
         </apx-chart>
       </div>
     </div>
-           <div class="flex h-auto w-auto justify-center pb-8 pt-8 ">
-      <p class="text-3xl">Tabla de estatus de conteo por día.</p>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>📋 Conteo por Día - Segunda Pieza</h3>
     </div>
-     <div class="flex justify-center mt-4 ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="overflow-x-auto">
-          <table class="min-w-full border-collapse bg-white">
+        <div class="table-wrapper">
+          <table class="data-table">
             <thead>
               <tr>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Dia
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Número de conteo
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                 Total
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Parcial
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  En tramite
-                </th>
-
+                <th>Día</th>
+                <th>Número de Conteo</th>
+                <th>Total</th>
+                <th>Parcial</th>
+                <th>En Trámite</th>
               </tr>
             </thead>
-            @for (item of pagesSegundaPieza[pageSelected-1]; track $index) {
             <tbody>
+              @for (item of pagesSegundaPieza[pageSelected-1]; track $index) {
               <tr>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.fecha_recepcion}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.total_requerimientos}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.total_estatus}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.parcial_estatus}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.en_tramite_estatus}}</p>
-                </th>
+                <td>{{item.fecha_recepcion}}</td>
+                <td>{{item.total_requerimientos}}</td>
+                <td class="success">{{item.total_estatus}}</td>
+                <td class="warning">{{item.parcial_estatus}}</td>
+                <td class="info">{{item.en_tramite_estatus}}</td>
               </tr>
+              }
             </tbody>
-            }
-            <div class="w-auto">
-              <div class="flex w-[240%] justify-end">
-                <p>Total de conteo de dias: <span>{{totalDeConteoSegundaPieza}}</span></p>
-              </div>
-            </div>
           </table>
         </div>
-        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
-          <div>
+        <div class="table-footer">
+          <div class="total-count">Total: <strong>{{totalDeConteoSegundaPieza}}</strong></div>
             @if (pagesSegundaPieza.length > 0) {
+          <div class="pagination-wrapper">
             <ul>
-              <li *ngFor="
-                          let document of documentsSegundaPieza
-                            | paginate
-                              : {
-                                  itemsPerPage: itemsPerPage,
-                                  currentPage: pageSelected
-                                }
-                        "></li>
+              <li *ngFor="let document of documentsSegundaPieza | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }"></li>
             </ul>
-            <div class="has-text-centered">
-              <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
-                [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
-            </div>
-            }
+            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel" [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
           </div>
-        </div>
-        <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
-          <p class="text-sm leading-5 text-wine">
-            Mostrando
-            <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + 1
-              }}</span>
-            a
-            <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsSegundaPieza.length ? (pageSelected - 1) * itemsPerPage +
-                itemsPerPage : documentsSegundaPieza.length }}</span>
-                de
-                <span class="font-medium">{{ documentsSegundaPieza.length }}</span>
-                resultados
+          }
+          <p class="results-info">
+            Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
+            <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsSegundaPieza.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documentsSegundaPieza.length }}</strong>
+            de <strong>{{ documentsSegundaPieza.length }}</strong>
           </p>
         </div>
       </div>
+      <div class="download-section">
+        <button class="download-btn" (click)="getDownloadExcelSegundaPieza()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar Segunda Pieza
+        </button>
     </div>
-    <div class="flex justify-end pb-8 pr-20 ">
-      <button class="download" (click)="getDownloadExcelSegundaPieza()"> Descargar Segunda Pieza</button>
     </div>
-
     }
     @else if (selecionarOpcion2 === "aperturas") {
-    <div class="flex justify-center ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="flex justify-center pb-9">
-          <p class="text-base uppercase "> Porcentaje de atención del {{fecha_Incial}} a {{fecha_Final}} </p>
+    <div class="results-content">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>📂 Aperturas</h3>
+          <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
         </div>
-        <div class="flex justify-center pb-8">
-          <p class="text-base uppercase text-black">Totalidad de aperturas:
-            <span>{{documento_apertura}}</span>
-          </p>
+        <div class="total-badge">
+          <span class="total-label">Total de Aperturas</span>
+          <span class="total-value">{{documento_apertura}}</span>
         </div>
+        <div class="chart-container">
         <apx-chart [series]="series_aperturas" [chart]="chart" [responsive]="responsive" [labels]="labels"
           [colors]="colors" [dataLabels]="dataLabels">
         </apx-chart>
       </div>
     </div>
-       <div class="flex h-auto w-auto justify-center pb-8 pt-8 ">
-      <p class="text-3xl">Tabla de estatus de conteo por día.</p>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>📋 Conteo por Día - Aperturas</h3>
     </div>
-     <div class="flex justify-center mt-4 ">
-      <div
-        class="  h-[65%] w-auto  bg-white shadow-md border-solid border-2 border-rojo-Akamba rounded-lg p-4 content-center">
-        <div class="overflow-x-auto">
-          <table class="min-w-full border-collapse bg-white">
+        <div class="table-wrapper">
+          <table class="data-table">
             <thead>
               <tr>
-                <th class="px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Dia
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Número de conteo
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                 Total
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  Parcial
-                </th>
-                <th class=" px-2 py-3 border-b-2 border-gray-300 text-center leading-4 tracking-wider">
-                  En tramite
-                </th>
-
+                <th>Día</th>
+                <th>Número de Conteo</th>
+                <th>Total</th>
+                <th>Parcial</th>
+                <th>En Trámite</th>
               </tr>
             </thead>
+            <tbody>
             @for (item of pagesAperturas[pageSelected-1]; track $index) {
-              <tbody>
               <tr>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.fecha_recepcion}}</p>
-
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.total_requerimientos}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.total_estatus}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.parcial_estatus}}</p>
-                </th>
-                <th class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                  <p>{{item.en_tramite_estatus}}</p>
-                </th>
+                <td>{{item.fecha_recepcion}}</td>
+                <td>{{item.total_requerimientos}}</td>
+                <td class="success">{{item.total_estatus}}</td>
+                <td class="warning">{{item.parcial_estatus}}</td>
+                <td class="info">{{item.en_tramite_estatus}}</td>
               </tr>
+              }
             </tbody>
-            }
-            <div class="w-auto">
-              <div class="flex w-[240%] justify-end">
-                <p>Total de conteo de dias: <span>{{totalDeConteoAperturas}}</span></p>
-              </div>
-            </div>
           </table>
         </div>
-        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
-          <div>
+        <div class="table-footer">
+          <div class="total-count">Total: <strong>{{totalDeConteoAperturas}}</strong></div>
             @if (pagesAperturas.length > 0) {
+          <div class="pagination-wrapper">
             <ul>
-              <li *ngFor="
-                          let document of documentsApertura
-                            | paginate
-                              : {
-                                  itemsPerPage: itemsPerPage,
-                                  currentPage: pageSelected
-                                }
-                        "></li>
+              <li *ngFor="let document of documentsApertura | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }"></li>
             </ul>
-            <div class="has-text-centered">
-              <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
-                [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
-            </div>
-            }
+            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel" [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
           </div>
-        </div>
-        <div class="m:flex-1 sm:flex sm:items-center sm:justify-center mt-4">
-          <p class="text-sm leading-5 text-wine">
-            Mostrando
-            <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + 1
-              }}</span>
-            a
-            <span class="font-medium">{{
-              (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsApertura.length ? (pageSelected - 1) * itemsPerPage +
-                itemsPerPage : documentsApertura.length }}</span>
-                de
-                <span class="font-medium">{{ documentsApertura.length }}</span>
-                resultados
+          }
+          <p class="results-info">
+            Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
+            <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsApertura.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documentsApertura.length }}</strong>
+            de <strong>{{ documentsApertura.length }}</strong>
           </p>
         </div>
       </div>
+      <div class="download-section">
+        <button class="download-btn" (click)="getDownloadExcelApertura()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar Aperturas
+        </button>
     </div>
-    <div class="flex justify-end pb-8 pr-20 ">
-      <button class="download" (click)="getDownloadExcelApertura()"> Descargar aperturas</button>
     </div>
     }
   </mat-dialog-content>
