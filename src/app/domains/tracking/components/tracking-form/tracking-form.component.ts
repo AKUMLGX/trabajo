@@ -37,7 +37,7 @@ import { SharedDataFormService } from '../../../shared/services/shared-data-form
 
 })
 export class TrackingFormComponent implements OnInit, AfterViewInit {
-  // Formulario adaptado para campos de Tlapohualli
+  // Formulario adaptado para campos de Tlapohualli - Solo campos principales de captura
   public consultForm: FormGroup = this.fb.group({
     oficio: new FormControl(''),
     expediente: new FormControl(''),
@@ -45,8 +45,9 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     remitente_area: new FormControl(''),
     numero_entrada_central: new FormControl(''),
     responsable: new FormControl(''),
-    estatus: new FormControl(''),
-    woos: new FormControl(''),
+    prioridad: new FormControl(''),
+    fecha_creacion_desde: new FormControl(''),
+    fecha_creacion_hasta: new FormControl(''),
     tipoBusqueda: new FormControl('Nuevos'),
   });
 
@@ -66,8 +67,8 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: Record<string, boolean> = {};
   campoValor: Record<string, any> = {};
-  // Campos adaptados para Tlapohualli
-  campos: string[] = ["oficio", "expediente", "remitente_area", "responsable", "woos"]
+  // Campos adaptados para Tlapohualli - Solo campos principales de captura
+  campos: string[] = ["oficio", "expediente", "remitente_area", "responsable", "prioridad"]
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
@@ -75,7 +76,7 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     private shareData: SharedDataFormService,
     private route: ActivatedRoute
   ) {
-    // Campos adaptados para Tlapohualli
+    // Campos adaptados para Tlapohualli - Solo campos principales de captura
     this.campoValor = {
       oficio: '',
       expediente: '',
@@ -83,8 +84,9 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
       remitente_area: '',
       numero_entrada_central: '',
       responsable: '',
-      estatus: '',
-      woos: '',
+      prioridad: '',
+      fecha_creacion_desde: '',
+      fecha_creacion_hasta: '',
     };
 
     const date = new Date();
@@ -131,16 +133,17 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Datos adaptados para Tlapohualli
-  formData= {
+  // Datos adaptados para Tlapohualli - Solo campos principales de captura
+  formData = {
     oficio: "",
     expediente: "",
     tipo_medio_recepcion: "",
     remitente_area: "",
     numero_entrada_central: "",
     responsable: "",
-    estatus: "",
-    woos: ""
+    prioridad: "",
+    fecha_creacion_desde: "",
+    fecha_creacion_hasta: ""
   }
 
   sendDatos():void{

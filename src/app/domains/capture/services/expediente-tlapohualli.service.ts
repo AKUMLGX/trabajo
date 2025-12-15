@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
@@ -79,15 +79,17 @@ export class ExpedienteTlapohualliService {
     const url = `${TLAPOHUALLI_BASE}expedientes/consulta`;
     const params: any = {};
     
-    // Agregar solo los filtros que tienen valor
+    // Agregar solo los filtros que tienen valor - Campos principales de captura
     if (filtros.oficio) params.oficio = filtros.oficio;
     if (filtros.expediente) params.expediente = filtros.expediente;
     if (filtros.tipo_medio_recepcion) params.tipo_medio_recepcion = filtros.tipo_medio_recepcion;
     if (filtros.remitente_area) params.remitente_area = filtros.remitente_area;
     if (filtros.numero_entrada_central) params.numero_entrada_central = filtros.numero_entrada_central;
     if (filtros.responsable) params.responsable = filtros.responsable;
-    if (filtros.estatus) params.estatus = filtros.estatus;
-    if (filtros.woos) params.woos = filtros.woos;
+    if (filtros.prioridad) params.prioridad = filtros.prioridad;
+    // Fecha de registro (fecha_creacion)
+    if (filtros.fecha_creacion_desde) params.fecha_creacion_desde = filtros.fecha_creacion_desde;
+    if (filtros.fecha_creacion_hasta) params.fecha_creacion_hasta = filtros.fecha_creacion_hasta;
     
     return this.http.get<ExpedienteTlapohualli[]>(url, { params, withCredentials: true }).pipe(
       map(expedientes => {
@@ -355,6 +357,37 @@ export class ExpedienteTlapohualliService {
         });
         
         // Re-lanzar el error para que el componente lo maneje
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Descargar expedientes en formato Excel con los filtros aplicados
+   */
+  descargarExcelExpedientes(filtros: any): Observable<Blob> {
+    const url = `${TLAPOHUALLI_BASE}expedientes/descargar-excel`;
+    let params = new HttpParams();
+    
+    // Agregar solo los filtros que tienen valor
+    if (filtros.oficio) params = params.set('oficio', filtros.oficio);
+    if (filtros.expediente) params = params.set('expediente', filtros.expediente);
+    if (filtros.tipo_medio_recepcion) params = params.set('tipo_medio_recepcion', filtros.tipo_medio_recepcion);
+    if (filtros.remitente_area) params = params.set('remitente_area', filtros.remitente_area);
+    if (filtros.numero_entrada_central) params = params.set('numero_entrada_central', filtros.numero_entrada_central);
+    if (filtros.responsable) params = params.set('responsable', filtros.responsable);
+    if (filtros.prioridad) params = params.set('prioridad', filtros.prioridad);
+    if (filtros.fecha_creacion_desde) params = params.set('fecha_creacion_desde', filtros.fecha_creacion_desde);
+    if (filtros.fecha_creacion_hasta) params = params.set('fecha_creacion_hasta', filtros.fecha_creacion_hasta);
+    
+    return this.http.get(url, { 
+      params, 
+      responseType: 'blob',
+      withCredentials: true 
+    }).pipe(
+      map(blob => blob),
+      catchError(error => {
+        this.logger.error('Error al descargar Excel:', error);
         throw error;
       })
     );

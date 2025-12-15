@@ -19,164 +19,123 @@
     </div>
   </div>
 
-  <!-- RESUMEN SUPERIOR -->
-  <div class="summary-bar">
-    <div class="summary-item">
-      <div class="label">Responsable</div>
-      <div class="value">{{ expediente.responsable || 'Sin asignar' }}</div>
-    </div>
-    <div class="summary-item">
-      <div class="label">Plazo</div>
-      <div class="value">{{ expediente.plazo_valor || '-' }} {{ formatearPlazoUnidad(expediente.plazo_unidad) }}</div>
-    </div>
-    <div class="summary-item">
-      <div class="label">Vencimiento</div>
-      <div class="value">{{ formatearFecha(expediente.fecha_vencimiento) }}</div>
-    </div>
-    <div class="summary-item">
-      <div class="label">Días Restantes</div>
-      <div class="value" [ngClass]="getClaseDiasRetraso(expediente.dias_retraso)">
-        {{ getTextoDiasRetraso(expediente.dias_retraso) }}
-      </div>
-    </div>
-  </div>
-
-  <!-- PDF VIEWER (cuando está activo) -->
-  <div *ngIf="mostrarPdf" class="pdf-viewer-section">
-    <div class="pdf-toolbar">
-      <h3>Visualizador de PDF</h3>
-      <button class="btn-primary" (click)="cerrarPdf()">
-        <mat-icon>close</mat-icon>
-        Cerrar PDF
-      </button>
-    </div>
-    <div class="pdf-container">
-      <pdf-viewer 
-        [src]="pdfUrl" 
-        [render-text]="true" 
-        [show-all]="true"
-        style="width: 100%; height: 100%;">
-      </pdf-viewer>
-    </div>
-  </div>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <div class="modal-body" [class.hidden]="mostrarPdf">
+  <!-- CONTENIDO PRINCIPAL - Solo campos de captura -->
+  <div class="modal-body">
     
-    <!-- Información Básica -->
-    <div class="info-section">
+    <!-- SECCIÓN: REQUERIMIENTO -->
+    <div class="info-section requerimiento-section">
       <div class="section-header">
         <mat-icon>description</mat-icon>
-        <h3>Información Básica</h3>
+        <h3>REQUERIMIENTO</h3>
       </div>
       <div class="section-content">
         <div class="fields-grid">
           <div class="field">
-            <span class="field-label">Expediente</span>
-            <span class="field-value mono">{{ expediente.expediente || 'N/A' }}</span>
+            <span class="field-label">Tipo</span>
+            <span class="field-value">{{ formatearTipoMedioRecepcion(expediente.tipo_medio_recepcion) || 'N/A' }}</span>
           </div>
           <div class="field">
-            <span class="field-label">Oficio</span>
+            <span class="field-label">Número</span>
             <span class="field-value mono">{{ expediente.oficio || 'N/A' }}</span>
           </div>
           <div class="field">
-            <span class="field-label">Tipo de Recepción</span>
-            <span class="field-value">{{ formatearTipoMedioRecepcion(expediente.tipo_medio_recepcion) }}</span>
+            <span class="field-label">Fecha</span>
+            <span class="field-value">{{ formatearFecha(expediente.fecha_requerimiento) }}</span>
           </div>
           <div class="field">
-            <span class="field-label">Entrada Central</span>
-            <span class="field-value">{{ expediente.numero_entrada_central || 'N/A' }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Remitente</span>
+            <span class="field-label">Remitente(Área)</span>
             <span class="field-value">{{ expediente.remitente_area || 'N/A' }}</span>
           </div>
-          <div class="field">
+          <div class="field full-width">
             <span class="field-label">Asunto</span>
-            <span class="field-value">{{ expediente.referencia_asunto || 'N/A' }}</span>
+            <span class="field-value" style="white-space: pre-wrap;">{{ expediente.referencia_asunto || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Nivel de Prioridad</span>
+            <span class="field-value highlight">{{ expediente.prioridad || 'N/A' }}</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Fechas y Plazos -->
-    <div class="info-section">
+    <!-- SECCIÓN: EXPEDIENTE -->
+    <div class="info-section expediente-section">
       <div class="section-header">
-        <mat-icon>event</mat-icon>
-        <h3>Fechas y Plazos</h3>
+        <mat-icon>folder</mat-icon>
+        <h3>Expediente</h3>
       </div>
       <div class="section-content">
         <div class="fields-grid">
           <div class="field">
-            <span class="field-label">Fecha Documento</span>
+            <span class="field-label">Número de Expediente</span>
+            <span class="field-value mono highlight">{{ expediente.expediente || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Fecha del Documento</span>
             <span class="field-value">{{ formatearFecha(expediente.fecha_documento) }}</span>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: ENTRADA -->
+    <div class="info-section entrada-section">
+      <div class="section-header">
+        <mat-icon>input</mat-icon>
+        <h3>Entrada</h3>
+      </div>
+      <div class="section-content">
+        <div class="fields-grid">
           <div class="field">
-            <span class="field-label">Fecha Recibido</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_recibido) }}</span>
+            <span class="field-label">Número</span>
+            <span class="field-value">{{ expediente.numero_entrada_central || 'N/A' }}</span>
           </div>
           <div class="field">
-            <span class="field-label">Plazo de Atención</span>
+            <span class="field-label">Fecha de Acuse</span>
+            <span class="field-value">{{ formatearFecha(expediente.fecha_recibido) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: PLAZO DE ATENCIÓN -->
+    <div class="info-section plazo-section">
+      <div class="section-header">
+        <mat-icon>schedule</mat-icon>
+        <h3>Plazo de Atención</h3>
+      </div>
+      <div class="section-content">
+        <div class="fields-grid">
+          <div class="field">
+            <span class="field-label">¿Se cuenta con un plazo de atención?</span>
+            <span class="field-value">{{ expediente.plazo_valor ? 'Sí' : 'No' }}</span>
+          </div>
+          <div class="field" *ngIf="expediente.plazo_valor">
+            <span class="field-label">Plazo</span>
             <span class="field-value">
               {{ expediente.plazo_valor || 'N/A' }} {{ formatearPlazoUnidad(expediente.plazo_unidad) }}
+            </span>
+          </div>
+          <div class="field">
+            <span class="field-label">Marcar como URGENTE</span>
+            <span class="field-value">
               <span *ngIf="expediente.plazo_es_urgente" class="urgente-badge">URGENTE</span>
+              <span *ngIf="!expediente.plazo_es_urgente">No</span>
             </span>
           </div>
           <div class="field">
             <span class="field-label">Fecha Vencimiento</span>
             <span class="field-value highlight">{{ formatearFecha(expediente.fecha_vencimiento) }}</span>
           </div>
-          <div class="field">
-            <span class="field-label">Fecha Notificación</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_notificacion) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Estado del Plazo</span>
-            <span class="field-value" [ngClass]="getClaseDiasRetraso(expediente.dias_retraso)">
-              {{ getTextoDiasRetraso(expediente.dias_retraso) }}
-            </span>
-          </div>
         </div>
       </div>
     </div>
 
-    <!-- Regla de Atención (condicional) -->
-    <div class="info-section" *ngIf="expediente.tiene_fecha_atencion_inicial !== undefined || expediente.fecha_estimada_atencion || expediente.fecha_atencion_realizada">
-      <div class="section-header">
-        <mat-icon>schedule</mat-icon>
-        <h3>Regla de Atención</h3>
-      </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Tiene Fecha Inicial</span>
-            <span class="field-value">{{ expediente.tiene_fecha_atencion_inicial ? 'Sí' : 'No' }}</span>
-          </div>
-          <div class="field" *ngIf="expediente.fecha_atencion_inicial">
-            <span class="field-label">Fecha Atención Inicial</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_atencion_inicial) }}</span>
-          </div>
-          <div class="field" *ngIf="expediente.fecha_estimada_atencion">
-            <span class="field-label">Fecha Estimada (72 hrs)</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_estimada_atencion) }}</span>
-          </div>
-          <div class="field" *ngIf="expediente.fecha_atencion_realizada">
-            <span class="field-label">Fecha Atención Realizada</span>
-            <span class="field-value success">{{ formatearFecha(expediente.fecha_atencion_realizada) }}</span>
-          </div>
-          <div class="field" *ngIf="expediente.fecha_vencimiento_35_dias">
-            <span class="field-label">Vencimiento 35 Días</span>
-            <span class="field-value warning">{{ formatearFecha(expediente.fecha_vencimiento_35_dias) }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Asignación y Seguimiento -->
-    <div class="info-section">
+    <!-- SECCIÓN: ASIGNACIÓN -->
+    <div class="info-section asignacion-section">
       <div class="section-header">
         <mat-icon>assignment_ind</mat-icon>
-        <h3>Asignación y Seguimiento</h3>
+        <h3>Asignación</h3>
       </div>
       <div class="section-content">
         <div class="fields-grid">
@@ -185,106 +144,40 @@
             <span class="field-value highlight">{{ expediente.responsable || 'N/A' }}</span>
           </div>
           <div class="field">
-            <span class="field-label">Fecha Asignación</span>
+            <span class="field-label">Fecha de Asignación</span>
             <span class="field-value">{{ formatearFecha(expediente.fecha_asignacion) }}</span>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: SISTEMA Y SEGUIMIENTO -->
+    <div class="info-section sistema-section">
+      <div class="section-header">
+        <mat-icon>computer</mat-icon>
+        <h3>Sistema y Seguimiento</h3>
+      </div>
+      <div class="section-content">
+        <div class="fields-grid">
+          <div class="field">
+            <span class="field-label">Sistema / Aplicativo</span>
+            <span class="field-value">{{ expediente.sistema_aplicativo || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: ESTADO -->
+    <div class="info-section estado-section">
+      <div class="section-header">
+        <mat-icon>check_circle</mat-icon>
+        <h3>Estado</h3>
+      </div>
+      <div class="section-content">
+        <div class="fields-grid">
           <div class="field">
             <span class="field-label">Estatus</span>
             <span class="field-value highlight">{{ formatearEstatus(expediente.estatus) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Ubicación</span>
-            <span class="field-value">{{ formatearUbicacion(expediente.ubicacion) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Sistema Aplicativo</span>
-            <span class="field-value">{{ expediente.sistema_aplicativo || 'N/A' }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">WOOS</span>
-            <span class="field-value mono">{{ expediente.woos || 'N/A' }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Tipo de Respuesta</span>
-            <span class="field-value">{{ formatearTipoRespuesta(expediente.tipo_respuesta) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Oficios Comisión</span>
-            <span class="field-value">{{ expediente.oficios_comision || 'N/A' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Documentos -->
-    <div class="info-section">
-      <div class="section-header">
-        <mat-icon>folder_open</mat-icon>
-        <h3>Documentos</h3>
-      </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Tipo de Documento</span>
-            <span class="field-value">{{ formatearTipoDocumento(expediente.tipo_documento) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Expediente Físico/Digital</span>
-            <span class="field-value">{{ formatearExpedienteFisicoDigital(expediente.expediente_fisico_digital) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Anexos</span>
-            <span class="field-value">{{ expediente.anexos || 'N/A' }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Acuse</span>
-            <span class="field-value mono">{{ expediente.acuse_fisico_digital || 'N/A' }}</span>
-          </div>
-          <div class="field full-width" *ngIf="expediente.documento_pdf_nombre">
-            <span class="field-label">Documento PDF</span>
-            <span class="field-value mono">{{ expediente.documento_pdf_nombre }}</span>
-            <div *ngIf="tienePdf()" style="margin-top: 12px; display: flex; gap: 8px;">
-              <button class="btn-primary" (click)="verPdf()" style="font-size: 12px; padding: 8px 16px;">
-                <mat-icon style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px;">visibility</mat-icon>
-                Ver
-              </button>
-              <button class="btn-primary" (click)="descargarPdf()" style="font-size: 12px; padding: 8px 16px; background: #198754;">
-                <mat-icon style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px;">download</mat-icon>
-                Descargar
-              </button>
-            </div>
-          </div>
-          <div class="field full-width" *ngIf="expediente.comentarios_omega">
-            <span class="field-label">Comentarios</span>
-            <span class="field-value" style="white-space: pre-wrap;">{{ expediente.comentarios_omega }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Control -->
-    <div class="info-section">
-      <div class="section-header">
-        <mat-icon>settings</mat-icon>
-        <h3>Control</h3>
-      </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Fecha Creación</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_creacion) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Fecha Actualización</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_actualizacion) }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Usuario Creación</span>
-            <span class="field-value">{{ expediente.usuario_creacion || 'N/A' }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Usuario Actualización</span>
-            <span class="field-value">{{ expediente.usuario_actualizacion || 'N/A' }}</span>
           </div>
         </div>
       </div>
@@ -299,3 +192,4 @@
     </button>
   </div>
 </div>
+

@@ -13,6 +13,7 @@ export interface ExpedienteTlapohualli {
   // Fechas y plazos (vienen como strings del backend: "YYYY-MM-DD")
   fecha_documento?: string | Date; // Formato "YYYY-MM-DD" del backend
   fecha_recibido?: string | Date; // Formato "YYYY-MM-DD" del backend
+  fecha_requerimiento?: string | Date | null; // Fecha del requerimiento (nuevo campo)
   plazo_valor?: number; // Valor del plazo
   plazo_unidad?: string; // 'dias', 'horas', 'ambos'
   plazo_es_urgente?: boolean;

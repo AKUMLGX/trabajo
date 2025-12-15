@@ -276,32 +276,6 @@ export class TrackingTableComponent implements OnInit {
   /**
    * Ver PDF directamente desde la tabla
    */
-  verPdfExpediente(expediente: ExpedienteTlapohualli): void {
-    if (!expediente.oficio || !expediente.documento_pdf_nombre) {
-      console.error('❌ No se puede ver el PDF: falta oficio o nombre del archivo');
-      console.error('   Oficio:', expediente.oficio);
-      console.error('   documento_pdf_nombre:', expediente.documento_pdf_nombre);
-      return;
-    }
-
-    console.log('📄 [TrackingTable] Ver PDF del expediente:', {
-      oficio: expediente.oficio,
-      documento_pdf_nombre: expediente.documento_pdf_nombre
-    });
-    
-    // Limpiar espacios y caracteres especiales del nombre del archivo
-    const nombreArchivo = expediente.documento_pdf_nombre.replace(/\s+/g, '_');
-    
-    // Primero mostrar el visualizador y ocultar la tabla
-    this.visualizarPdf = true;
-    this.mostrarTabla = false;
-    this.editar = false;
-    
-    // El componente app-pdf-viewer se suscribe automáticamente a pdfUpdated
-    // Solo necesitamos solicitar el PDF
-    console.log('📄 [TrackingTable] Solicitando PDF al servidor...');
-    this.fileService.updatePdfFile(expediente.oficio, nombreArchivo);
-  }
 
   /**
    * Formatear fecha que viene como string del backend (YYYY-MM-DD) a DD/MM/YYYY
@@ -401,15 +375,41 @@ export class TrackingTableComponent implements OnInit {
 
 
 
-  getDownloadExcel():void{
+  getDownloadExcel(): void {
+    // Si hay expedientes Tlapohualli, descargar esos
+    if (this.tipoBusqueda === 'Tlapohualli' && this.expedientesTlapohualli.length > 0) {
+      // Obtener los filtros actuales del formulario
+      const filtros = this.sharedDataService.formData();
+      
+      // Llamar al servicio para descargar Excel
+      this.expedienteService.descargarExcelExpedientes(filtros).subscribe({
+        next: (blob) => {
+          // Crear un enlace temporal para descargar el archivo
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `expedientes_tlapohualli_${new Date().toISOString().split('T')[0]}.xlsx`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          console.error('Error al descargar Excel:', error);
+          alert('Error al descargar el archivo Excel. Por favor, intente nuevamente.');
+        }
+      });
+    } else {
+      // Para asuntos Akamba, usar el método original
       this.asuntoService.downloadExcelTable(
-      this.folio_interno,
-      this.carpeta_investigacion,
-      this.oficio,
-      this.autoridad_remitente,
-      this.persona_relacionada,
-      this.volante_jefatura,
-     this.turno_jefatura
-      )
+        this.folio_interno,
+        this.carpeta_investigacion,
+        this.oficio,
+        this.autoridad_remitente,
+        this.persona_relacionada,
+        this.volante_jefatura,
+        this.turno_jefatura
+      );
+    }
   }
 }

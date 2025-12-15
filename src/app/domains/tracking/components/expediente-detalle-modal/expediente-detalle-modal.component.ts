@@ -65,6 +65,7 @@ export class ExpedienteDetalleModalComponent implements OnInit {
 
   /**
    * Formatear fecha que viene como string del backend (YYYY-MM-DD) a DD/MM/YYYY
+   * También maneja NaiveDate de Rust que viene como string
    */
   formatearFecha(fecha: string | Date | null | undefined): string {
     if (!fecha) return 'N/A';
@@ -76,7 +77,9 @@ export class ExpedienteDetalleModalComponent implements OnInit {
     
     // Si es string (formato YYYY-MM-DD del backend)
     if (typeof fecha === 'string') {
-      const partes = fecha.split('-');
+      // Manejar formato con hora si viene (YYYY-MM-DD HH:MM:SS)
+      const fechaSinHora = fecha.split(' ')[0];
+      const partes = fechaSinHora.split('-');
       if (partes.length === 3) {
         return `${partes[2]}/${partes[1]}/${partes[0]}`;
       }

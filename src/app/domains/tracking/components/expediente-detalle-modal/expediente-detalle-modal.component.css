@@ -225,6 +225,42 @@
   letter-spacing: 0.5px;
 }
 
+/* Estilos específicos para cada sección según la bandeja de captura */
+.requerimiento-section {
+  border-left: 4px solid #34005b;
+  background: linear-gradient(to right, rgba(52, 0, 91, 0.03) 0%, white 5%);
+}
+
+.expediente-section {
+  border-left: 4px solid #34005b;
+  background: linear-gradient(to right, rgba(52, 0, 91, 0.03) 0%, white 5%);
+}
+
+.entrada-section {
+  border-left: 4px solid #10b981;
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.03) 0%, white 5%);
+}
+
+.plazo-section {
+  border-left: 4px solid #ef4444;
+  background: linear-gradient(to right, rgba(239, 68, 68, 0.03) 0%, white 5%);
+}
+
+.asignacion-section {
+  border-left: 4px solid #3b82f6;
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.03) 0%, white 5%);
+}
+
+.sistema-section {
+  border-left: 4px solid #8b5cf6;
+  background: linear-gradient(to right, rgba(139, 92, 246, 0.03) 0%, white 5%);
+}
+
+.estado-section {
+  border-left: 4px solid #10b981;
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.03) 0%, white 5%);
+}
+
 .section-content {
   padding: 22px;
 }

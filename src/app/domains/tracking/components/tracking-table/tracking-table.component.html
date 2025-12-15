@@ -1,25 +1,25 @@
 @if ((documents.length > 0 || expedientesTlapohualli.length > 0) && !fileIsOpen && mostrarTabla ) {
 <!-- Header de Resultados Mejorado -->
 <div class="mx-4 mb-4">
-  <div class="bg-white rounded-lg shadow-md px-6 py-4 border-l-4" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'border-[#691C32]' : 'border-[#235B4E]'">
+  <div class="bg-white rounded-lg shadow-md px-6 py-4 border-l-4" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'border-[#34005b]' : 'border-[#235B4E]'">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="p-2 rounded-lg" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'bg-[#691C32]/10' : 'bg-[#235B4E]/10'">
-          <svg class="w-6 h-6" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#691C32]' : 'text-[#235B4E]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="p-2 rounded-lg" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'bg-[#34005b]/10' : 'bg-[#235B4E]/10'">
+          <svg class="w-6 h-6" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#34005b]' : 'text-[#235B4E]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
           </svg>
         </div>
         <div>
           <h2 class="text-xl font-semibold text-gray-800">Resultados de Búsqueda</h2>
           <p class="text-sm text-gray-600">
-            <span class="font-medium" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#691C32]' : 'text-[#235B4E]'">
+            <span class="font-medium" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
               {{ tipoBusqueda === 'Tlapohualli' ? 'Sistema Tlálcalli' : 'Sistema Tlálcalli' }}
             </span>
           </p>
         </div>
       </div>
       <div class="text-right">
-        <div class="text-2xl font-bold" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#691C32]' : 'text-[#235B4E]'">
+        <div class="text-2xl font-bold" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
           {{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}
         </div>
         <div class="text-xs text-gray-500 uppercase tracking-wide">Expedientes</div>
@@ -32,11 +32,12 @@
   <div class="w-full mx-auto px-4">
     <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-xl bg-white border border-gray-200">
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <div class="overflow-x-auto">
+        <div class="table-container">
+          <div class="overflow-x-auto">
           <!-- TABLA PARA EXPEDIENTES TLAPOHUALLI -->
           @if (tipoBusqueda === 'Tlapohualli' && expedientesTlapohualli.length > 0) {
           <table class="min-w-full border-collapse">
-            <thead class="bg-gradient-to-r from-[#691C32] to-[#8B2543]">
+            <thead class="bg-gradient-to-r from-[#34005b] to-[#3e0065]">
               <tr>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                   <div class="flex items-center gap-2">
@@ -71,24 +72,15 @@
                   <div class="flex gap-2 justify-start">
                     <!-- Botón Ver Detalle -->
                     <button 
-                      class="p-2 rounded-lg bg-[#691C32]/10 text-[#691C32] hover:bg-[#691C32] hover:text-white transition-all duration-200 hover:shadow-md" 
+                      class="p-2 rounded-lg bg-[#34005b]/10 text-[#34005b] hover:bg-[#34005b] hover:text-white transition-all duration-200 hover:shadow-md" 
                       (click)="verDetalleExpediente(expediente)" 
                       title="Ver detalle">
                       <mat-icon class="!w-5 !h-5 !text-base">visibility</mat-icon>
                     </button>
-                    <!-- Botón Ver PDF (si existe) -->
-                    @if (expediente.documento_pdf_nombre && expediente.documento_pdf_nombre !== null && expediente.documento_pdf_nombre !== '' && expediente.documento_pdf_nombre.trim() !== '' && expediente.oficio) {
-                    <button 
-                      class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 hover:shadow-md" 
-                      (click)="verPdfExpediente(expediente)" 
-                      title="Ver PDF">
-                      <mat-icon class="!w-5 !h-5 !text-base">picture_as_pdf</mat-icon>
-                    </button>
-                    }
                   </div>
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-[#691C32]">{{ expediente.expediente || '-' }}</div>
+                  <div class="text-sm font-semibold text-[#34005b]">{{ expediente.expediente || '-' }}</div>
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-700">{{ expediente.oficio || '-' }}</div>
@@ -431,21 +423,21 @@
         <!-- Información de paginación mejorada -->
         <div class="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4 px-4">
           <!-- Información de registros -->
-          <div class="flex items-center gap-3 bg-gradient-to-r from-[#691C32]/10 to-[#8B2543]/10 px-6 py-3 rounded-lg border border-[#691C32]/20">
-            <svg class="w-5 h-5 text-[#691C32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex items-center gap-3 bg-gradient-to-r from-[#34005b]/10 to-[#3e0065]/10 px-6 py-3 rounded-lg border border-[#34005b]/20">
+            <svg class="w-5 h-5 text-[#34005b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
             <p class="text-sm text-gray-700">
             Mostrando
-              <span class="font-bold text-[#691C32]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
+              <span class="font-bold text-[#34005b]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
             a
-              <span class="font-bold text-[#691C32]">{{
+              <span class="font-bold text-[#34005b]">{{
               tipoBusqueda === 'Tlapohualli' 
                 ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlapohualli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlapohualli.length)
                 : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
             }}</span>
                 de
-              <span class="font-bold text-[#691C32]">{{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}</span>
+              <span class="font-bold text-[#34005b]">{{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}</span>
               expedientes
           </p>
           </div>
@@ -453,7 +445,7 @@
           <!-- Botón de descarga mejorado -->
           <button 
             (click)="getDownloadExcel()" 
-            class="flex items-center gap-2 bg-gradient-to-r from-[#235B4E] to-[#2d7360] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:from-[#2d7360] hover:to-[#235B4E]">
+            class="flex items-center gap-2 bg-gradient-to-r from-[#34005b] to-[#3e0065] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>

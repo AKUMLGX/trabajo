@@ -15,7 +15,7 @@
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
                 <input [(ngModel)]="formData.expediente" type="text" placeholder="Exp.001-2025"
-                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  class="modern-input"
                   formControlName="expediente" value="" [(ngModel)]="campoValor['expediente']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
                 <mat-list *ngIf="showCoincidencias['expediente'] && coincidencias.length > 0"
@@ -39,7 +39,7 @@
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
                 <input [(ngModel)]="formData.tipo_medio_recepcion" type="text" placeholder="ATENTA_NOTA, OFICIO, etc."
-                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  class="modern-input"
                   formControlName="tipo_medio_recepcion" value="" [(ngModel)]="campoValor['tipoMedioRecepcion']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
 
@@ -63,7 +63,7 @@
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
                 <input [(ngModel)]="formData.oficio" type="text" placeholder="Oficio"
-                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  class="modern-input"
                   formControlName="oficio" value="" [(ngModel)]="campoValor['oficio']" (ngModelChange)="getValueInput()"
                   #InputFormulario />
                 <mat-list *ngIf="showCoincidencias['oficio'] && coincidencias.length > 0"
@@ -87,7 +87,7 @@
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
                 <input [(ngModel)]="formData.remitente_area" type="text" placeholder="Remitente área"
-                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  class="modern-input"
                   formControlName="remitente_area" value="" [(ngModel)]="campoValor['remitenteArea']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
                 <mat-list *ngIf="showCoincidencias['remitenteArea'] && coincidencias.length > 0"
@@ -111,7 +111,7 @@
                       class="icon-display">help_outline</mat-icon></span>
                 </label>
                 <input [(ngModel)]="formData.numero_entrada_central" type="text" placeholder="Número entrada central"
-                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  class="modern-input"
                   formControlName="numero_entrada_central" value="" [(ngModel)]="campoValor['numeroEntradaCentral']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
                 <mat-list *ngIf="showCoincidencias['numeroEntradaCentral'] && coincidencias.length > 0"
@@ -135,7 +135,7 @@
                   <span title="Persona responsable del expediente"><mat-icon class="icon-display">help_outline</mat-icon></span>
                 </label>
                 <input [(ngModel)]="formData.responsable" type="text" placeholder="Responsable"
-                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
+                  class="modern-input"
                   formControlName="responsable" value="" [(ngModel)]="campoValor['responsable']"
                   (ngModelChange)="getValueInput()" #InputFormulario />
                 <mat-list *ngIf="showCoincidencias['responsable']  && coincidencias.length > 0"
@@ -150,21 +150,19 @@
               </div>
             </div>
 
-            <!-- ESTATUS (Tlapohualli) -->
+            <!-- PRIORIDAD -->
             <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'estatus')"
-                (mouseleave)="DetectInput(false, 'estatus')">
+              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'prioridad')"
+                (mouseleave)="DetectInput(false, 'prioridad')">
                 <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Estatus
-                  <span
-                    title="Estado actual del expediente"><mat-icon
-                      class="icon-display">help_outline</mat-icon></span>
+                  Prioridad
+                  <span title="Nivel de prioridad del expediente"><mat-icon class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input  [(ngModel)]="formData.estatus"  type="text" placeholder="Estatus" class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine
-                   bg-white rounded text-sm shadow focus:outline-none focus:ring
-                    ring-wine w-full ease-linear transition-all duration-150" formControlName="estatus" value=""
-                  [(ngModel)]="campoValor['estatus']" (ngModelChange)="getValueInput()" #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['estatus']  && coincidencias.length > 0"
+                <input [(ngModel)]="formData.prioridad" type="text" placeholder="URGENTE, ALTA, MEDIA, BAJA"
+                  class="modern-input"
+                  formControlName="prioridad" value="" [(ngModel)]="campoValor['prioridad']"
+                  (ngModelChange)="getValueInput()" #InputFormulario />
+                <mat-list *ngIf="showCoincidencias['prioridad'] && coincidencias.length > 0"
                   class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
                   [@fadeInOut]>
                   <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
@@ -175,35 +173,33 @@
                 </mat-list>
               </div>
             </div>
-            <!-- WOOS (Tlapohualli) -->
+
+            <!-- FECHA DE REGISTRO (Rango) -->
             <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'woos')"
-                (mouseleave)="DetectInput(false, 'woos')">
+              <div class="relative w-full mb-3">
                 <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  WOOS
-                  <span title="Número WOOS del expediente"><mat-icon class="icon-display">help_outline</mat-icon></span>
+                  Fecha de Registro
+                  <span title="Rango de fechas de registro del expediente"><mat-icon class="icon-display">help_outline</mat-icon></span>
                 </label>
-                <input [(ngModel)]="formData.woos" type="text" placeholder="WOOS"
-                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  formControlName="woos" value="" [(ngModel)]="campoValor['woos']"
-                  (ngModelChange)="getValueInput()" #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['woos'] && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
+                <div class="flex gap-2">
+                  <input [(ngModel)]="formData.fecha_creacion_desde" type="date" placeholder="Desde"
+                    class="modern-input-date"
+                    formControlName="fecha_creacion_desde" />
+                  <input [(ngModel)]="formData.fecha_creacion_hasta" type="date" placeholder="Hasta"
+                    class="modern-input-date"
+                    formControlName="fecha_creacion_hasta" />
+                </div>
               </div>
             </div>
           </div>
           <br />
           <div class="flex flex-row  justify-between">
             <button
-              class="h-9 mt-2 mb-4 md:mb-0 bg-wine text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+              class="modern-search-btn"
               type="submit">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
               Buscar
             </button>
             <mat-dialog-content>

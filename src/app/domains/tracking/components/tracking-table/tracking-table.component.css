@@ -125,28 +125,71 @@ table tbody tr:hover {
   background: linear-gradient(to right, rgba(52, 0, 91, 0.02), transparent);
 }
 
-/* Scroll suave para la tabla con colores institucionales */
-.overflow-x-auto {
+/* Scroll suave para la tabla con colores institucionales - MEJORADO */
+.table-container {
+  position: relative;
+  width: 100%;
+}
+
+.table-container .overflow-x-auto {
+  /* Scroll horizontal siempre visible y accesible */
   scrollbar-width: thin;
   scrollbar-color: #34005b #f3f4f6;
+  -webkit-overflow-scrolling: touch;
+  /* Asegurar que el scroll sea visible sin necesidad de bajar */
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: auto;
+  /* Hacer el scrollbar más visible */
+  padding-bottom: 10px;
 }
 
-.overflow-x-auto::-webkit-scrollbar {
-  height: 8px;
+.table-container .overflow-x-auto::-webkit-scrollbar {
+  height: 14px;
+  width: 14px;
 }
 
-.overflow-x-auto::-webkit-scrollbar-track {
+.table-container .overflow-x-auto::-webkit-scrollbar-track {
   background: linear-gradient(to right, #f3f4f6, #e5e7eb);
   border-radius: 10px;
+  border: 1px solid rgba(52, 0, 91, 0.1);
 }
 
-.overflow-x-auto::-webkit-scrollbar-thumb {
-  background: linear-gradient(to right, #34005b, #3e0065);
+.table-container .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
   border-radius: 10px;
+  border: 2px solid #f3f4f6;
+  box-shadow: 0 2px 8px rgba(52, 0, 91, 0.2);
 }
 
-.overflow-x-auto::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to right, #3e0065, #5c1a7a);
+.table-container .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+  box-shadow: 0 4px 12px rgba(214, 174, 103, 0.3);
+}
+
+/* Asegurar que la tabla tenga ancho mínimo para forzar scroll horizontal */
+.table-container table {
+  min-width: 100%;
+  width: max-content;
+}
+
+/* Indicador visual de que hay más contenido a la derecha */
+.table-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(52, 0, 91, 0.15), transparent);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.table-container:hover::before {
+  opacity: 1;
 }
 
 /* Efecto para los badges */

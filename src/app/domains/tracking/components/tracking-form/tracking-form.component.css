@@ -122,3 +122,137 @@
 .download-btn:active {
   transform: translateY(0);
 }
+
+/* =====================================================
+   INPUTS MODERNOS - Paleta Institucional
+   ===================================================== */
+
+.modern-input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+  background: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%);
+  border: 2px solid rgba(52, 0, 91, 0.15);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(52, 0, 91, 0.08);
+  outline: none;
+}
+
+.modern-input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.modern-input:hover {
+  border-color: rgba(52, 0, 91, 0.3);
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.12);
+  background: #ffffff;
+}
+
+.modern-input:focus {
+  border-color: #d6ae67;
+  box-shadow: 0 0 0 4px rgba(214, 174, 103, 0.2), 0 6px 20px rgba(52, 0, 91, 0.15);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.modern-input-date {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+  background: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%);
+  border: 2px solid rgba(52, 0, 91, 0.15);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(52, 0, 91, 0.08);
+  outline: none;
+  cursor: pointer;
+}
+
+.modern-input-date:hover {
+  border-color: rgba(52, 0, 91, 0.3);
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.12);
+  background: #ffffff;
+}
+
+.modern-input-date:focus {
+  border-color: #d6ae67;
+  box-shadow: 0 0 0 4px rgba(214, 174, 103, 0.2), 0 6px 20px rgba(52, 0, 91, 0.15);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.modern-search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: white;
+  background: linear-gradient(145deg, #34005b 0%, #3e0065 100%);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(52, 0, 91, 0.25);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  outline: none;
+  height: 42px;
+}
+
+.modern-search-btn svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+}
+
+.modern-search-btn:hover {
+  background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
+  color: #34005b;
+  box-shadow: 0 5px 18px rgba(214, 174, 103, 0.35);
+  transform: translateY(-1px);
+}
+
+.modern-search-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(214, 174, 103, 0.3);
+}
+
+/* Mejora de labels */
+label {
+  color: #34005b;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-display {
+  font-size: 18px;
+  color: #d6ae67;
+  cursor: help;
+  transition: all 0.2s ease;
+}
+
+.icon-display:hover {
+  color: #34005b;
+  transform: scale(1.1);
+}
+
+/* Mejora del contenedor del formulario */
+section {
+  background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Mejora de las tarjetas de campos */
+.w-full.lg\:w-6\/12 {
+  margin-bottom: 1.5rem;
+}
