@@ -144,7 +144,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="text" 
-                  [formControl]="editForm.get('ticketNumero')!"
+                  [formControl]="ticketNumeroControl"
                   class="table-input"
                   placeholder="Número de ticket">
               } @else {
@@ -155,7 +155,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="date" 
-                  [formControl]="editForm.get('ticketFechaApertura')!"
+                  [formControl]="ticketFechaAperturaControl"
                   class="table-input">
               } @else {
                 <span>{{ formatearFecha(item.ticketFechaApertura) }}</span>
@@ -165,7 +165,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="date" 
-                  [formControl]="editForm.get('ticketFechaResolucion')!"
+                  [formControl]="ticketFechaResolucionControl"
                   class="table-input">
               } @else {
                 <span>{{ formatearFecha(item.ticketFechaResolucion) }}</span>
@@ -175,7 +175,7 @@
             <!-- RESPUESTA -->
             <td class="data-cell">
               @if (editingItemId === item.id) {
-                <select [formControl]="editForm.get('respuestaEstado')!" class="table-select">
+                <select [formControl]="respuestaEstadoControl" class="table-select">
                   @for (estado of estadosRespuesta; track estado) {
                     <option [value]="estado">{{ estado }}</option>
                   }
@@ -188,7 +188,7 @@
             </td>
             <td class="data-cell">
               @if (editingItemId === item.id) {
-                <select [formControl]="editForm.get('respuestaTipo')!" class="table-select">
+                <select [formControl]="respuestaTipoControl" class="table-select">
                   @for (tipo of tiposRespuesta; track tipo) {
                     <option [value]="tipo">{{ tipo }}</option>
                   }
@@ -201,7 +201,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="text" 
-                  [formControl]="editForm.get('respuestaNumero')!"
+                  [formControl]="respuestaNumeroControl"
                   class="table-input"
                   placeholder="Número de respuesta">
               } @else {
@@ -212,7 +212,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="date" 
-                  [formControl]="editForm.get('respuestaFecha')!"
+                  [formControl]="respuestaFechaControl"
                   class="table-input">
               } @else {
                 <span>{{ formatearFecha(item.respuestaFecha) }}</span>
@@ -224,7 +224,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="date" 
-                  [formControl]="editForm.get('notificacionFecha')!"
+                  [formControl]="notificacionFechaControl"
                   class="table-input">
               } @else {
                 <span>{{ formatearFecha(item.notificacionFecha) }}</span>
@@ -234,7 +234,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="text" 
-                  [formControl]="editForm.get('notificacionModelo')!"
+                  [formControl]="notificacionModeloControl"
                   class="table-input"
                   placeholder="Modelo">
               } @else {
@@ -247,7 +247,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="text" 
-                  [formControl]="editForm.get('dispositivoSerie')!"
+                  [formControl]="dispositivoSerieControl"
                   class="table-input"
                   placeholder="Serie">
               } @else {
@@ -258,7 +258,7 @@
               @if (editingItemId === item.id) {
                 <input 
                   type="text" 
-                  [formControl]="editForm.get('dispositivoObservaciones')!"
+                  [formControl]="dispositivoObservacionesControl"
                   class="table-input"
                   placeholder="Observaciones dispositivo">
               } @else {
@@ -270,7 +270,7 @@
             <td class="data-cell">
               @if (editingItemId === item.id) {
                 <textarea 
-                  [formControl]="editForm.get('observaciones')!"
+                  [formControl]="observacionesControl"
                   class="table-textarea"
                   rows="2"
                   placeholder="Observaciones generales"></textarea>

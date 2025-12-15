@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 export interface AtencionCierreItem {
   id: number;
@@ -208,6 +208,55 @@ export class AtencionCierreTableComponent implements OnInit {
       month: '2-digit',
       day: '2-digit'
     });
+  }
+
+  // Getters para FormControls con tipo correcto
+  get ticketNumeroControl(): FormControl {
+    return this.editForm.get('ticketNumero') as FormControl;
+  }
+
+  get ticketFechaAperturaControl(): FormControl {
+    return this.editForm.get('ticketFechaApertura') as FormControl;
+  }
+
+  get ticketFechaResolucionControl(): FormControl {
+    return this.editForm.get('ticketFechaResolucion') as FormControl;
+  }
+
+  get respuestaEstadoControl(): FormControl {
+    return this.editForm.get('respuestaEstado') as FormControl;
+  }
+
+  get respuestaTipoControl(): FormControl {
+    return this.editForm.get('respuestaTipo') as FormControl;
+  }
+
+  get respuestaNumeroControl(): FormControl {
+    return this.editForm.get('respuestaNumero') as FormControl;
+  }
+
+  get respuestaFechaControl(): FormControl {
+    return this.editForm.get('respuestaFecha') as FormControl;
+  }
+
+  get notificacionFechaControl(): FormControl {
+    return this.editForm.get('notificacionFecha') as FormControl;
+  }
+
+  get notificacionModeloControl(): FormControl {
+    return this.editForm.get('notificacionModelo') as FormControl;
+  }
+
+  get dispositivoSerieControl(): FormControl {
+    return this.editForm.get('dispositivoSerie') as FormControl;
+  }
+
+  get dispositivoObservacionesControl(): FormControl {
+    return this.editForm.get('dispositivoObservaciones') as FormControl;
+  }
+
+  get observacionesControl(): FormControl {
+    return this.editForm.get('observaciones') as FormControl;
   }
 }
 
