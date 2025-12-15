@@ -1,156 +1,40 @@
 <!-- =====================================================
      BANDEJA DE ATENCIÓN / CIERRE
-     Diseño Premium - Paleta Institucional SAT
+     Diseño por Secciones - Paleta Institucional SAT
      ===================================================== -->
 
 <div class="atencion-cierre-wrapper">
-  <!-- HEADER PREMIUM -->
-  <div class="premium-header">
-    <div class="header-background-pattern"></div>
-    <div class="header-content-wrapper">
-      <div class="header-icon-container">
-        <div class="icon-glow"></div>
-        <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
-      <div class="header-text-container">
-        <h1 class="main-title">ATENCIÓN / CIERRE</h1>
-        <p class="subtitle">Gestión final de expedientes y seguimiento de respuestas</p>
-      </div>
-      <div class="header-stats">
-        <div class="stat-item">
-          <span class="stat-value">{{ items.length }}</span>
-          <span class="stat-label">Expedientes</span>
-        </div>
+      <div class="header-text">
+        <h1>ATENCIÓN / CIERRE</h1>
+        <p>Gestión final de expedientes y seguimiento de respuestas</p>
       </div>
     </div>
   </div>
 
-  <!-- TABLA PREMIUM -->
-  <div class="table-premium-wrapper">
-    <div class="table-scroll-container">
-      <table class="premium-table">
-        <!-- HEADER COMPLEJO MULTI-NIVEL -->
+  <!-- SECCIÓN: SEMÁFORO -->
+  <div class="section-container">
+    <div class="section-header semaforo-header">
+      <div class="section-icon">🚦</div>
+      <div class="section-title">DÍAS DE ATRASO</div>
+    </div>
+    <div class="section-content">
+      <table class="section-table">
         <thead>
-          <!-- Fila 1: Título Principal -->
-          <tr class="header-level-1">
-            <th colspan="13" class="main-title-header">
-              <div class="title-content">
-                <span class="title-text">ATENCIÓN / CIERRE</span>
-                <div class="title-decoration"></div>
-              </div>
-            </th>
-          </tr>
-
-          <!-- Fila 2: Indicadores de Tipo -->
-          <tr class="header-level-2">
-            <th class="semaforo-type-indicator">
-              <span class="type-badge semaforo-badge">Semáforo</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="dropdown-type-indicator">
-              <span class="type-badge dropdown-badge">Menú Desplegable</span>
-            </th>
-            <th class="dropdown-type-indicator">
-              <span class="type-badge dropdown-badge">Menú Desplegable</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-            <th class="manual-type-indicator">
-              <span class="type-badge manual-badge">Manual</span>
-            </th>
-          </tr>
-
-          <!-- Fila 3: Agrupaciones -->
-          <tr class="header-level-3">
-            <th rowspan="2" class="semaforo-group-header">
-              <div class="group-header-content">
-                <div class="group-icon">🚦</div>
-                <div class="group-label">DÍAS DE ATRASO</div>
-              </div>
-            </th>
-            <th colspan="3" class="ticket-group-header">
-              <div class="group-header-content">
-                <div class="group-icon">🎫</div>
-                <div class="group-label">TICKET MS-SAT</div>
-              </div>
-            </th>
-            <th colspan="4" class="respuesta-group-header">
-              <div class="group-header-content">
-                <div class="group-icon">📋</div>
-                <div class="group-label">RESPUESTA</div>
-              </div>
-            </th>
-            <th colspan="2" class="notificacion-group-header">
-              <div class="group-header-content">
-                <div class="group-icon">🔔</div>
-                <div class="group-label">NOTIFICACIÓN</div>
-              </div>
-            </th>
-            <th colspan="2" class="dispositivo-group-header">
-              <div class="group-header-content">
-                <div class="group-icon">💻</div>
-                <div class="group-label">DISPOSITIVO</div>
-              </div>
-            </th>
-            <th rowspan="2" class="observaciones-group-header">
-              <div class="group-header-content">
-                <div class="group-icon">📝</div>
-                <div class="group-label">OBSERVACIONES</div>
-              </div>
-            </th>
-          </tr>
-
-          <!-- Fila 4: Columnas Individuales -->
-          <tr class="header-level-4">
-            <!-- TICKET MS-SAT -->
-            <th class="column-header">NUMERO</th>
-            <th class="column-header">FECHA DE APERTURA</th>
-            <th class="column-header">FECHA DE RESOLUCIÓN</th>
-            <!-- RESPUESTA -->
-            <th class="column-header">ESTADO</th>
-            <th class="column-header">TIPO</th>
-            <th class="column-header">NUMERO</th>
-            <th class="column-header">FECHA</th>
-            <!-- NOTIFICACIÓN -->
-            <th class="column-header">FECHA</th>
-            <th class="column-header">MODELO</th>
-            <!-- DISPOSITIVO -->
-            <th class="column-header">SERIE</th>
-            <th class="column-header">OBSERVACIONES</th>
+          <tr>
+            <th class="col-semaforo">SEMÁFORO</th>
           </tr>
         </thead>
-
-        <!-- BODY -->
         <tbody>
           @for (item of items; track item.id) {
-          <tr [class]="'data-row ' + getSemaforoClass(item.diasAtraso)">
-            <!-- SEMÁFORO -->
+          <tr [class]="'semaforo-row ' + getSemaforoClass(item.diasAtraso)">
             <td class="semaforo-cell">
               <div class="semaforo-display">
                 <div class="semaforo-indicator" [ngClass]="getSemaforoClass(item.diasAtraso)">
@@ -162,8 +46,32 @@
                 </div>
               </div>
             </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            <!-- TICKET MS-SAT -->
+  <!-- SECCIÓN: TICKET MS-SAT -->
+  <div class="section-container">
+    <div class="section-header ticket-header">
+      <div class="section-icon">🎫</div>
+      <div class="section-title">TICKET MS-SAT</div>
+    </div>
+    <div class="section-content">
+      <table class="section-table">
+        <thead>
+          <tr>
+            <th class="col-header">NUMERO</th>
+            <th class="col-header">FECHA DE APERTURA</th>
+            <th class="col-header">FECHA DE RESOLUCIÓN</th>
+            <th class="col-header-actions">ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items; track item.id) {
+          <tr>
             <td class="data-cell">
               @if (editingItemId === item.id) {
                 <input type="text" [formControl]="ticketNumeroControl" class="premium-input" placeholder="Número">
@@ -185,8 +93,46 @@
                 <span class="cell-value">{{ formatearFecha(item.ticketFechaResolucion) }}</span>
               }
             </td>
+            <td class="actions-cell">
+              @if (editingItemId === item.id) {
+                <button (click)="guardarItem()" class="btn-icon save-btn" matTooltip="Guardar">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button (click)="cancelarEdicion()" class="btn-icon cancel-btn" matTooltip="Cancelar">
+                  <mat-icon>close</mat-icon>
+                </button>
+              } @else {
+                <button (click)="editarItem(item)" class="btn-icon edit-btn" matTooltip="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            <!-- RESPUESTA -->
+  <!-- SECCIÓN: RESPUESTA (Próxima sección) -->
+  <div class="section-container">
+    <div class="section-header respuesta-header">
+      <div class="section-icon">📋</div>
+      <div class="section-title">RESPUESTA</div>
+    </div>
+    <div class="section-content">
+      <table class="section-table">
+        <thead>
+          <tr>
+            <th class="col-header">ESTADO</th>
+            <th class="col-header">TIPO</th>
+            <th class="col-header">NUMERO</th>
+            <th class="col-header">FECHA</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items; track item.id) {
+          <tr>
             <td class="data-cell">
               @if (editingItemId === item.id) {
                 <select [formControl]="respuestaEstadoControl" class="premium-select">
@@ -225,8 +171,30 @@
                 <span class="cell-value">{{ formatearFecha(item.respuestaFecha) }}</span>
               }
             </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            <!-- NOTIFICACIÓN -->
+  <!-- SECCIÓN: NOTIFICACIÓN -->
+  <div class="section-container">
+    <div class="section-header notificacion-header">
+      <div class="section-icon">🔔</div>
+      <div class="section-title">NOTIFICACIÓN</div>
+    </div>
+    <div class="section-content">
+      <table class="section-table">
+        <thead>
+          <tr>
+            <th class="col-header">FECHA</th>
+            <th class="col-header">MODELO</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items; track item.id) {
+          <tr>
             <td class="data-cell">
               @if (editingItemId === item.id) {
                 <input type="date" [formControl]="notificacionFechaControl" class="premium-input">
@@ -241,8 +209,30 @@
                 <span class="cell-value">{{ item.notificacionModelo || '-' }}</span>
               }
             </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            <!-- DISPOSITIVO -->
+  <!-- SECCIÓN: DISPOSITIVO -->
+  <div class="section-container">
+    <div class="section-header dispositivo-header">
+      <div class="section-icon">💻</div>
+      <div class="section-title">DISPOSITIVO</div>
+    </div>
+    <div class="section-content">
+      <table class="section-table">
+        <thead>
+          <tr>
+            <th class="col-header">SERIE</th>
+            <th class="col-header">OBSERVACIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items; track item.id) {
+          <tr>
             <td class="data-cell">
               @if (editingItemId === item.id) {
                 <input type="text" [formControl]="dispositivoSerieControl" class="premium-input" placeholder="Serie">
@@ -257,31 +247,34 @@
                 <span class="cell-value">{{ item.dispositivoObservaciones || '-' }}</span>
               }
             </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            <!-- OBSERVACIONES -->
+  <!-- SECCIÓN: OBSERVACIONES -->
+  <div class="section-container">
+    <div class="section-header observaciones-header">
+      <div class="section-icon">📝</div>
+      <div class="section-title">OBSERVACIONES</div>
+    </div>
+    <div class="section-content">
+      <table class="section-table">
+        <thead>
+          <tr>
+            <th class="col-header">OBSERVACIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items; track item.id) {
+          <tr>
             <td class="data-cell observaciones-cell">
               @if (editingItemId === item.id) {
-                <textarea [formControl]="observacionesControl" class="premium-textarea" rows="2" placeholder="Observaciones"></textarea>
+                <textarea [formControl]="observacionesControl" class="premium-textarea" rows="3" placeholder="Observaciones generales"></textarea>
               } @else {
                 <span class="cell-value">{{ item.observaciones || '-' }}</span>
-              }
-            </td>
-
-            <!-- ACCIONES -->
-            <td class="actions-cell">
-              @if (editingItemId === item.id) {
-                <div class="action-buttons-group">
-                  <button (click)="guardarItem()" class="action-btn save-btn" matTooltip="Guardar cambios">
-                    <mat-icon>check</mat-icon>
-                  </button>
-                  <button (click)="cancelarEdicion()" class="action-btn cancel-btn" matTooltip="Cancelar">
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-              } @else {
-                <button (click)="editarItem(item)" class="action-btn edit-btn" matTooltip="Editar registro">
-                  <mat-icon>edit</mat-icon>
-                </button>
               }
             </td>
           </tr>
@@ -289,5 +282,26 @@
         </tbody>
       </table>
     </div>
+  </div>
+
+  <!-- BOTONES DE ACCIÓN GLOBALES -->
+  <div class="actions-container">
+    @if (editingItemId !== null) {
+      <div class="action-buttons-group">
+        <button (click)="guardarItem()" class="action-btn save-btn">
+          <mat-icon>check</mat-icon>
+          <span>Guardar</span>
+        </button>
+        <button (click)="cancelarEdicion()" class="action-btn cancel-btn">
+          <mat-icon>close</mat-icon>
+          <span>Cancelar</span>
+        </button>
+      </div>
+    } @else {
+      <div class="edit-hint">
+        <mat-icon>info</mat-icon>
+        <span>Haz clic en el botón de editar en cualquier fila para modificar los datos</span>
+      </div>
+    }
   </div>
 </div>
