@@ -130,19 +130,23 @@
 }
 
 .logo-wrapper.small {
-    width: 64px;
-    height: 64px;
+    width: auto;
+    height: auto;
     border-radius: 0;
-    margin-top: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
     box-shadow: none;
     background: transparent !important;
-    padding: 0;
+    padding: 8px;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .logo-wrapper.small img {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     object-fit: contain;
     object-position: center;
     display: block;
@@ -316,7 +320,7 @@
 }
 
 .sidenav-container:has(.menu-item.collapsed) .sidenav-menu {
-    padding: 0 8px;
+    padding: 0 12px;
 }
 
 .sidenav-menu::-webkit-scrollbar {
@@ -375,13 +379,14 @@
 
 .menu-item.collapsed {
     justify-content: center !important;
-    padding: 10px 8px !important;
+    padding: 12px 12px !important;
     margin: 8px 0 !important;
 }
 
 .menu-item.collapsed .menu-item-content {
     justify-content: center;
     width: 100%;
+    padding: 0;
 }
 
 .menu-item.collapsed .menu-icon-wrapper {
@@ -391,7 +396,10 @@
     background: transparent !important;
     border: none !important;
     border-radius: 0;
-    padding: 0;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu-item-content {
@@ -443,12 +451,15 @@
 }
 
 .menu-item.collapsed .menu-icon-wrapper mat-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
     color: rgba(255, 255, 255, 0.95);
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
     transition: all 0.3s ease;
+    display: block;
+    line-height: 1;
+    overflow: visible;
 }
 
 .menu-item.collapsed:hover .menu-icon-wrapper mat-icon {
@@ -492,7 +503,7 @@
 .sidenav-footer {
     position: relative;
     z-index: 1;
-    padding: 14px;
+    padding: 14px 12px;
     margin-top: auto;
 }
 
@@ -523,12 +534,13 @@
 
 .logout-btn.collapsed {
     justify-content: center !important;
-    padding: 10px 8px !important;
+    padding: 12px 12px !important;
 }
 
 .logout-btn.collapsed .logout-content {
     justify-content: center;
     width: 100%;
+    padding: 0;
 }
 
 .logout-btn.collapsed .logout-icon-wrapper {
@@ -538,7 +550,10 @@
     background: transparent !important;
     border: none !important;
     border-radius: 0;
-    padding: 0;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .logout-content {
@@ -576,12 +591,15 @@
 }
 
 .logout-btn.collapsed .logout-icon-wrapper mat-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
     color: #ff9999;
     filter: drop-shadow(0 2px 6px rgba(255, 153, 153, 0.4));
     transition: all 0.3s ease;
+    display: block;
+    line-height: 1;
+    overflow: visible;
 }
 
 .logout-btn.collapsed:hover .logout-icon-wrapper mat-icon {
