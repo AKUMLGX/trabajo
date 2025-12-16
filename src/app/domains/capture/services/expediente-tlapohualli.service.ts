@@ -147,6 +147,7 @@ export class ExpedienteTlapohualliService {
       fecha_recibido: paso1.fecha_recibido,
       fecha_requerimiento: paso1.fecha_requerimiento || paso1.fecha_documento, // Nuevo campo, fallback a fecha_documento si no existe
       referencia_asunto: paso1.referencia_asunto,
+      fecha_vencimiento: paso1.fecha_vencimiento || null, // Nuevo campo: Fecha de vencimiento del requerimiento
       plazo_vencimiento_prioridad: paso1.plazo_vencimiento_prioridad,
       
       // Paso 2: Seguimiento

@@ -278,6 +278,9 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.maxLength(1000)
       ]],
+      fecha_vencimiento: [null, [
+        ExpedienteValidators.noFutureDate()
+      ]],
       // PLAZO DE ATENCIÓN: Valores separados para días y horas
       plazo_dias: ['', [
         Validators.min(0),
@@ -1141,6 +1144,14 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     const control = this.formulario.get('fecha_requerimiento');
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Obligatorio';
+      if (control.errors['futureDate']) return control.errors['futureDate'].message;
+    }
+    return null;
+  }
+
+  get fechaVencimientoError(): string | null {
+    const control = this.formulario.get('fecha_vencimiento');
+    if (control?.touched && control?.errors) {
       if (control.errors['futureDate']) return control.errors['futureDate'].message;
     }
     return null;
