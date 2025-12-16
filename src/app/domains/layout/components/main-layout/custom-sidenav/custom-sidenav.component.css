@@ -538,7 +538,7 @@
 
 .logout-btn.collapsed {
     justify-content: center !important;
-    padding: 12px 12px !important;
+    padding: 16px 12px !important;
 }
 
 .logout-btn.collapsed .logout-content {
@@ -548,18 +548,16 @@
 }
 
 .logout-btn.collapsed .logout-icon-wrapper {
-    width: auto;
-    height: auto;
+    width: 56px;
+    height: 56px;
     margin: 0 auto;
     background: transparent !important;
     border: none !important;
     border-radius: 0;
-    padding: 6px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 48px;
-    min-height: 48px;
 }
 
 .logout-content {
@@ -597,21 +595,22 @@
 }
 
 .logout-btn.collapsed .logout-icon-wrapper mat-icon {
-    font-size: 36px;
-    width: 36px;
-    height: 36px;
-    color: #ff9999;
-    filter: drop-shadow(0 3px 8px rgba(255, 153, 153, 0.6)) drop-shadow(0 0 4px rgba(255, 153, 153, 0.4));
+    font-size: 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    color: #ff9999 !important;
+    filter: drop-shadow(0 4px 12px rgba(255, 153, 153, 0.8)) drop-shadow(0 0 8px rgba(255, 153, 153, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
     transition: all 0.3s ease;
-    display: block;
+    display: block !important;
     line-height: 1;
     overflow: visible;
+    opacity: 1 !important;
 }
 
 .logout-btn.collapsed:hover .logout-icon-wrapper mat-icon {
-    color: #ff6666;
-    filter: drop-shadow(0 0 12px rgba(255, 102, 102, 1)) drop-shadow(0 0 20px rgba(255, 102, 102, 0.6)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
-    transform: scale(1.15) rotate(180deg);
+    color: #ff6666 !important;
+    filter: drop-shadow(0 0 16px rgba(255, 102, 102, 1)) drop-shadow(0 0 24px rgba(255, 102, 102, 0.8)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    transform: scale(1.2) rotate(180deg);
 }
 
 .logout-label {
