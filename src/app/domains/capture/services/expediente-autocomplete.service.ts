@@ -117,24 +117,33 @@ export class ExpedienteAutocompleteService {
   }
 
   /**
-   * Formatea un número a formato de expediente: EXP-0001-YYYY
+   * Formatea un número a formato de expediente: EXP-001-MM-YY
+   * Donde MM es el mes actual (2 dígitos) y YY es el año actual (2 dígitos)
    */
   private formatearExpediente(numero: number): string {
-    const añoActual = new Date().getFullYear();
-    return `EXP-${numero.toString().padStart(4, '0')}-${añoActual}`;
+    const ahora = new Date();
+    const mes = (ahora.getMonth() + 1).toString().padStart(2, '0'); // Mes: 01-12
+    const año = ahora.getFullYear() % 100; // Año a 2 dígitos: 25, 26, etc.
+    const añoStr = año.toString().padStart(2, '0');
+    return `EXP-${numero.toString().padStart(3, '0')}-${mes}-${añoStr}`;
   }
 
   /**
-   * Extrae el número de un expediente: "EXP-0001-2025" -> 1
-   * También maneja el formato antiguo "Exp.001" para compatibilidad
+   * Extrae el número de un expediente: "EXP-001-12-25" -> 1
+   * También maneja formatos antiguos para compatibilidad
    */
   private extraerNumero(expediente: string): number | null {
-    // Formato nuevo: EXP-0001-2025
-    const matchNuevo = expediente.match(/EXP-(\d+)-/i);
+    // Formato nuevo: EXP-001-MM-YY
+    const matchNuevo = expediente.match(/EXP-(\d+)-(\d{2})-(\d{2})/i);
     if (matchNuevo) {
       return parseInt(matchNuevo[1], 10);
     }
-    // Formato antiguo: Exp.001 (compatibilidad)
+    // Formato intermedio: EXP-0001-YYYY
+    const matchIntermedio = expediente.match(/EXP-(\d+)-(\d{4})/i);
+    if (matchIntermedio) {
+      return parseInt(matchIntermedio[1], 10);
+    }
+    // Formato antiguo: Exp.001-YYYY o Exp.001 (compatibilidad)
     const matchAntiguo = expediente.match(/Exp\.(\d+)/i);
     return matchAntiguo ? parseInt(matchAntiguo[1], 10) : null;
   }
@@ -157,32 +166,41 @@ export class ExpedienteAutocompleteService {
 
   /**
    * Valida que el expediente tenga el formato correcto
-   * Formato nuevo: EXP-0001-YYYY
-   * También acepta formato antiguo para compatibilidad: Exp.001
+   * Formato nuevo: EXP-001-MM-YY (donde MM es mes y YY es año a 2 dígitos)
+   * También acepta formatos antiguos para compatibilidad
    */
   validarFormato(expediente: string): boolean {
-    const añoActual = new Date().getFullYear();
-    // Formato nuevo: EXP-0001-2025
-    const formatoNuevo = new RegExp(`^EXP-\\d{4}-${añoActual}$`, 'i');
-    // Formato antiguo: Exp.001 (compatibilidad)
-    const formatoAntiguo = /^Exp\.\d{3}$/i;
-    return formatoNuevo.test(expediente) || formatoAntiguo.test(expediente);
+    const ahora = new Date();
+    const mesActual = (ahora.getMonth() + 1).toString().padStart(2, '0');
+    const añoActual = (ahora.getFullYear() % 100).toString().padStart(2, '0');
+    
+    // Formato nuevo: EXP-001-MM-YY
+    const formatoNuevo = new RegExp(`^EXP-\\d{3}-${mesActual}-${añoActual}$`, 'i');
+    // Formato intermedio: EXP-0001-YYYY (compatibilidad)
+    const añoCompleto = ahora.getFullYear();
+    const formatoIntermedio = new RegExp(`^EXP-\\d{4}-${añoCompleto}$`, 'i');
+    // Formato antiguo: Exp.001-YYYY o Exp.001 (compatibilidad)
+    const formatoAntiguo = /^Exp\.\d{3}(-\d{4})?$/i;
+    
+    return formatoNuevo.test(expediente) || formatoIntermedio.test(expediente) || formatoAntiguo.test(expediente);
   }
 
   /**
    * Auto-formatea mientras el usuario escribe
-   * Ej: Usuario escribe "123" -> retorna "EXP-0123-2025"
+   * Ej: Usuario escribe "123" -> retorna "EXP-123-12-25"
    */
   autoFormatear(valor: string): string {
     // Remover cualquier texto que no sea número
     const soloNumeros = valor.replace(/[^\d]/g, '');
     
     if (soloNumeros.length === 0) return '';
-    if (soloNumeros.length > 4) return valor; // No modificar si ya tiene más de 4 dígitos
+    if (soloNumeros.length > 3) return valor; // No modificar si ya tiene más de 3 dígitos
     
-    const añoActual = new Date().getFullYear();
-    // Formatear automáticamente al nuevo formato
-    return `EXP-${soloNumeros.padStart(4, '0')}-${añoActual}`;
+    const ahora = new Date();
+    const mes = (ahora.getMonth() + 1).toString().padStart(2, '0');
+    const año = (ahora.getFullYear() % 100).toString().padStart(2, '0');
+    // Formatear automáticamente al nuevo formato: EXP-001-MM-YY
+    return `EXP-${soloNumeros.padStart(3, '0')}-${mes}-${año}`;
   }
 }
 

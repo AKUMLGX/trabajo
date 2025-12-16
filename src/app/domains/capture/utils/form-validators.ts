@@ -6,25 +6,31 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export class ExpedienteValidators {
   
   /**
-   * Validar formato de expediente: EXP-0001-2025, EXP-0002-2025, etc.
-   * Patrón: EXP seguido de guión, 4 dígitos, guión y año de 4 dígitos
-   * También acepta formato antiguo Exp.001-YYYY para compatibilidad
+   * Validar formato de expediente: EXP-001-MM-YY
+   * Patrón: EXP seguido de guión, 3 dígitos, guión, mes (2 dígitos), guión y año (2 dígitos)
+   * También acepta formatos antiguos para compatibilidad
    */
   static expedienteFormat(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
       
-      const añoActual = new Date().getFullYear();
-      // Formato nuevo: EXP-0001-2025
-      const patternNuevo = new RegExp(`^EXP-\\d{4}-${añoActual}$`, 'i');
-      // Formato antiguo: Exp.001-2025 (compatibilidad)
-      const patternAntiguo = /^Exp\.\d{3}-\d{4}$/i;
+      const ahora = new Date();
+      const mesActual = (ahora.getMonth() + 1).toString().padStart(2, '0');
+      const añoActual = (ahora.getFullYear() % 100).toString().padStart(2, '0');
+      const añoCompleto = ahora.getFullYear();
       
-      const esValido = patternNuevo.test(control.value) || patternAntiguo.test(control.value);
+      // Formato nuevo: EXP-001-MM-YY
+      const patternNuevo = new RegExp(`^EXP-\\d{3}-${mesActual}-${añoActual}$`, 'i');
+      // Formato intermedio: EXP-0001-YYYY (compatibilidad)
+      const patternIntermedio = new RegExp(`^EXP-\\d{4}-${añoCompleto}$`, 'i');
+      // Formato antiguo: Exp.001-YYYY o Exp.001 (compatibilidad)
+      const patternAntiguo = /^Exp\.\d{3}(-\d{4})?$/i;
+      
+      const esValido = patternNuevo.test(control.value) || patternIntermedio.test(control.value) || patternAntiguo.test(control.value);
       
       return esValido ? null : { 
         expedienteFormat: { 
-          message: `Formato: EXP-XXXX-YYYY (Ejemplo: EXP-0001-${añoActual})` 
+          message: `Formato: EXP-XXX-MM-YY (Ejemplo: EXP-001-${mesActual}-${añoActual})` 
         } 
       };
     };
