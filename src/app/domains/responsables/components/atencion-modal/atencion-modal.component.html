@@ -31,6 +31,32 @@
       </div>
     </div>
 
+    <!-- CATÁLOGO: Sistema y Aplicativo -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <mat-icon>computer</mat-icon>
+        Sistema y Aplicativo
+      </h3>
+      <div class="sistema-select-container">
+        <input 
+          type="text"
+          class="sistema-input"
+          [(ngModel)]="formulario.sistema_aplicativo"
+          [list]="'sistemas-list'"
+          placeholder="Selecciona o escribe un sistema"
+          autocomplete="off">
+        <datalist id="sistemas-list">
+          <option *ngFor="let sistema of sistemasAplicativos" [value]="sistema">
+            {{ sistema }}
+          </option>
+        </datalist>
+        <p class="sistema-hint">
+          <mat-icon>info</mat-icon>
+          Selecciona un sistema del catálogo o escribe uno nuevo
+        </p>
+      </div>
+    </div>
+
     <!-- PASO 1: Selección de tipo de acción -->
     <div class="form-section">
       <h3 class="section-title">

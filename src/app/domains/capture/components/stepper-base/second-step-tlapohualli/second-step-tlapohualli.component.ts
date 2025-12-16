@@ -36,60 +36,10 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
   // Opciones para el dropdown de responsables
   opcionesResponsables: SelectOption[] = [
     { value: 'Irma Guerrero', label: 'Irma Guerrero' },
-    { value: 'Karen Vazquez', label: 'Karen Vazquez' },
     { value: 'Héctor Sanchez', label: 'Héctor Sanchez' },
     { value: 'Carlos Hernández', label: 'Carlos Hernández' }
   ];
 
-  sistemasAplicativos: string[] = [
-    'SUN',
-    'VISOR TRIBUTARIO',
-    'SIPRED',
-    'CRP',
-    'SIINCO',
-    'SICRE',
-    'DYP',
-    'SIATCO',
-    'MAT DYC (Trámites)',
-    'MAT DYC (Pistas)',
-    'CFDI',
-    'CORREOS ELECTRONICOS',
-    'EFU',
-    'SIREFE',
-    'CITASAT',
-    'Sistema de Turnos del SAT (Muchkin)',
-    'MAT RFC',
-    'CUWEB/ CORUS/ CIEC (contraseña)',
-    'RESPONSIVAS SIMPLES Y CERTIFICADAS (No para Aplicativos, esas las entrega directo el área solicitante OIC, AGE)',
-    'Fiscalización Electrónica Básica',
-    'MAT NyV',
-    'MAT DYP',
-    'AGS Everest',
-    'SAC',
-    '.PST y conversaciones de Skype',
-    'FUERPS Certificadas',
-    'MODELO DE VIGILANCIA PROFUNDA (MVP)',
-    'SISE',
-    'CSF',
-    'MAT Cobranza',
-    'Responsivas Extranet/VPN',
-    'Extranet/VPN',
-    'BUZÓN TRIBUTARIO',
-    'FUERPS',
-    'Júpiter',
-    'LAGS',
-    'CIF',
-    'ROLES HISTÓRICOS',
-    'CERTISAT',
-    'Opinión de Cumplimiento'
-  ];
-
-
-  get sistemasConHistorial(): string[] {
-    const historial = this.formHelper.obtenerHistorial('sistema_aplicativo');
-    const todos = [...historial, ...this.sistemasAplicativos];
-    return Array.from(new Set(todos));
-  }
   
   // Opciones para los selects
   opcionesEstatus: SelectOption[] = [
@@ -122,10 +72,10 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     
     this.formulario = this.fb.group({
       // Campos de entrada
-      sistema_aplicativo: ['', [Validators.required, Validators.maxLength(100)]],
       responsable: ['', [Validators.required, Validators.maxLength(100)]]
       // prioridad movido al Step 1
       // fecha_asignacion y estatus eliminados
+      // sistema_aplicativo movido al modal de atención en Centro de Control
     });
   }
 
@@ -259,14 +209,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  get sistemaAplicativoError(): string | null {
-    const control = this.formulario.get('sistema_aplicativo');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-      if (control.errors['maxlength']) return 'Máximo 100 caracteres';
-    }
-    return null;
-  }
 
 
   // get prioridadError movido al Step 1

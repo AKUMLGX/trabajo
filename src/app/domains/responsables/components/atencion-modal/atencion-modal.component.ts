@@ -39,6 +39,8 @@ interface FormularioAtencion {
   fechaEntrega: string;
   // Prioridad (común para todos los flujos)
   prioridad: 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA' | '';
+  // Sistema y Aplicativo (movido desde bandeja de captura)
+  sistema_aplicativo: string;
   // Común
   notas: string;
 }
@@ -148,6 +150,50 @@ export class AtencionModalComponent implements OnInit {
     { codigo: 'RDD', descripcion: 'Reporte de Destrucción de Dispositivos (RDD)', icon: 'delete_sweep' }
   ];
   
+  // Catálogo de Sistemas y Aplicativos
+  sistemasAplicativos: string[] = [
+    'SUN',
+    'VISOR TRIBUTARIO',
+    'SIPRED',
+    'CRP',
+    'SIINCO',
+    'SICRE',
+    'DYP',
+    'SIATCO',
+    'MAT DYC (Trámites)',
+    'MAT DYC (Pistas)',
+    'CFDI',
+    'CORREOS ELECTRONICOS',
+    'EFU',
+    'SIREFE',
+    'CITASAT',
+    'Sistema de Turnos del SAT (Muchkin)',
+    'MAT RFC',
+    'CUWEB/ CORUS/ CIEC (contraseña)',
+    'RESPONSIVAS SIMPLES Y CERTIFICADAS (No para Aplicativos, esas las entrega directo el área solicitante OIC, AGE)',
+    'Fiscalización Electrónica Básica',
+    'MAT NyV',
+    'MAT DYP',
+    'AGS Everest',
+    'SAC',
+    '.PST y conversaciones de Skype',
+    'FUERPS Certificadas',
+    'MODELO DE VIGILANCIA PROFUNDA (MVP)',
+    'SISE',
+    'CSF',
+    'MAT Cobranza',
+    'Responsivas Extranet/VPN',
+    'Extranet/VPN',
+    'BUZÓN TRIBUTARIO',
+    'FUERPS',
+    'Júpiter',
+    'LAGS',
+    'CIF',
+    'ROLES HISTÓRICOS',
+    'CERTISAT',
+    'Opinión de Cumplimiento'
+  ];
+
   // Estado del formulario
   formulario: FormularioAtencion = {
     tipoAccion: '',
@@ -160,6 +206,7 @@ export class AtencionModalComponent implements OnInit {
     resultadoSeleccionado: '',
     fechaEntrega: '',
     prioridad: '',
+    sistema_aplicativo: '', // Nuevo campo: Sistema y Aplicativo
     notas: ''
   };
 
@@ -402,6 +449,7 @@ export class AtencionModalComponent implements OnInit {
     const dto: CrearAtencionDTO = {
       id_expediente: this.expediente.id_expediente,
       tipo_accion: this.formulario.tipoAccion as TipoAccion,
+      sistema_aplicativo: this.formulario.sistema_aplicativo || undefined,
       notas: this.formulario.notas || undefined
     };
 
@@ -506,7 +554,7 @@ export class AtencionModalComponent implements OnInit {
    * Resetear campos al cambiar tipo de acción
    */
   onTipoAccionChange(): void {
-    // Resetear campos específicos
+    // Resetear campos específicos (pero mantener sistema_aplicativo)
     this.formulario.medioRechazo = '';
     this.formulario.abogadoAsignado = '';
     this.formulario.tiposInsumo = [];
@@ -516,6 +564,7 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.resultadoSeleccionado = '';
     this.formulario.fechaEntrega = '';
     this.formulario.prioridad = '';
+    // sistema_aplicativo se mantiene al cambiar tipo de acción
   }
 
   /**

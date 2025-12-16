@@ -177,6 +177,51 @@
   margin: 0 0 16px 0;
 }
 
+/* Sistema y Aplicativo */
+.sistema-select-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sistema-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  transition: all 0.2s ease;
+  color: #1f2937;
+}
+
+.sistema-input:focus {
+  outline: none;
+  border-color: #34005b;
+  box-shadow: 0 0 0 3px rgba(52, 0, 91, 0.1);
+}
+
+.sistema-input::placeholder {
+  color: #9ca3af;
+}
+
+.sistema-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.sistema-hint mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #d6ae67;
+}
+
 .step-number {
   width: 28px;
   height: 28px;

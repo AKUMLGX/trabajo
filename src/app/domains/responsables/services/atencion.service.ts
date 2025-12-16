@@ -120,6 +120,9 @@ export interface CrearAtencionDTO {
   // Especialistas (MÁXIMO 3)
   especialistas?: EspecialistaDTO[];
   
+  // Sistema y Aplicativo (movido desde bandeja de captura)
+  sistema_aplicativo?: string;
+  
   // Común
   notas?: string;
 }

@@ -153,7 +153,7 @@ export class ExpedienteTlapohualliService {
       // Paso 2: Seguimiento
       responsable: paso2.responsable,
       fecha_asignacion: null, // Campo eliminado - usar null o fecha actual por defecto
-      sistema_aplicativo: paso2.sistema_aplicativo || null,
+      sistema_aplicativo: null, // Campo movido al modal de atención en Centro de Control
       estatus: null, // Campo eliminado - usar null o valor por defecto
       // ubicacion debe ser: 'CARPETA_GENERAL' o 'CARPETA_INDIVIDUAL'
       // Mapear valores del formulario (CARPETA_GENERAL_I, II, etc.) a valores válidos de BD
