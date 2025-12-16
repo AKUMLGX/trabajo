@@ -55,14 +55,6 @@
                             [errorMessage]="responsableError"
                             formControlName="responsable">
                         </app-custom-select>
-
-                        <app-custom-form-field
-                            label="Fecha de Asignación"
-                            [required]="true"
-                            type="date"
-                            [errorMessage]="fechaAsignacionError"
-                            formControlName="fecha_asignacion">
-                        </app-custom-form-field>
                     </div>
                 </div>
 
@@ -100,30 +92,6 @@
 
             <!-- COLUMNA DERECHA -->
             <div class="space-y-5">
-                
-                <!-- Card 4: Estado del Expediente -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-                        <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-base font-semibold text-gray-800">Estado</h3>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <app-custom-select
-                            label="Estatus"
-                            [required]="true"
-                            [options]="opcionesEstatus"
-                            placeholder="Seleccionar estatus"
-                            [errorMessage]="estatusError"
-                            formControlName="estatus">
-                        </app-custom-select>
-                    </div>
-                </div>
-
             </div>
         </div>
 

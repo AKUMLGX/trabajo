@@ -10,7 +10,7 @@
       <div class="header-actions">
         <div class="status-badge">
           <mat-icon>radio_button_checked</mat-icon>
-          {{ formatearEstatus(expediente.estatus) }}
+          Expediente
         </div>
         <button class="close-btn" (click)="cerrar()">
           <mat-icon>close</mat-icon>
@@ -98,39 +98,6 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: PLAZO DE ATENCIÓN -->
-    <div class="info-section plazo-section">
-      <div class="section-header">
-        <mat-icon>schedule</mat-icon>
-        <h3>Plazo de Atención</h3>
-      </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">¿Se cuenta con un plazo de atención?</span>
-            <span class="field-value">{{ expediente.plazo_valor ? 'Sí' : 'No' }}</span>
-          </div>
-          <div class="field" *ngIf="expediente.plazo_valor">
-            <span class="field-label">Plazo</span>
-            <span class="field-value">
-              {{ expediente.plazo_valor || 'N/A' }} {{ formatearPlazoUnidad(expediente.plazo_unidad) }}
-            </span>
-          </div>
-          <div class="field">
-            <span class="field-label">Marcar como URGENTE</span>
-            <span class="field-value">
-              <span *ngIf="expediente.plazo_es_urgente" class="urgente-badge">URGENTE</span>
-              <span *ngIf="!expediente.plazo_es_urgente">No</span>
-            </span>
-          </div>
-          <div class="field">
-            <span class="field-label">Fecha Vencimiento</span>
-            <span class="field-value highlight">{{ formatearFecha(expediente.fecha_vencimiento) }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- SECCIÓN: ASIGNACIÓN -->
     <div class="info-section asignacion-section">
       <div class="section-header">
@@ -142,10 +109,6 @@
           <div class="field">
             <span class="field-label">Responsable</span>
             <span class="field-value highlight">{{ expediente.responsable || 'N/A' }}</span>
-          </div>
-          <div class="field">
-            <span class="field-label">Fecha de Asignación</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_asignacion) }}</span>
           </div>
         </div>
       </div>
@@ -177,7 +140,6 @@
         <div class="fields-grid">
           <div class="field">
             <span class="field-label">Estatus</span>
-            <span class="field-value highlight">{{ formatearEstatus(expediente.estatus) }}</span>
           </div>
         </div>
       </div>

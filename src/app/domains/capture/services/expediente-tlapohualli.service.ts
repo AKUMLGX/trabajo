@@ -152,9 +152,9 @@ export class ExpedienteTlapohualliService {
       
       // Paso 2: Seguimiento
       responsable: paso2.responsable,
-      fecha_asignacion: paso2.fecha_asignacion,
+      fecha_asignacion: null, // Campo eliminado - usar null o fecha actual por defecto
       sistema_aplicativo: paso2.sistema_aplicativo || null,
-      estatus: paso2.estatus,
+      estatus: null, // Campo eliminado - usar null o valor por defecto
       // ubicacion debe ser: 'CARPETA_GENERAL' o 'CARPETA_INDIVIDUAL'
       // Mapear valores del formulario (CARPETA_GENERAL_I, II, etc.) a valores válidos de BD
       ubicacion: this.mapearUbicacion(paso2.ubicacion),

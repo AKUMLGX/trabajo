@@ -281,21 +281,6 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       fecha_vencimiento: [null, [
         ExpedienteValidators.noFutureDate()
       ]],
-      // PLAZO DE ATENCIÓN: Valores separados para días y horas
-      plazo_dias: ['', [
-        Validators.min(0),
-        Validators.max(999)
-      ]],
-      plazo_horas: ['', [
-        Validators.min(0),
-        Validators.max(999)
-      ]],
-      // ¿Se cuenta con un plazo de atención?
-      tiene_plazo_atencion: ['', Validators.required],
-      // Unidad de tiempo: dias, horas, ambos
-      plazo_unidad: ['dias'],
-      // Checkbox urgente
-      es_urgente: [false],
       // Nivel de Prioridad (movido del Step 2)
       prioridad: ['MEDIA', Validators.required]
     });
@@ -318,37 +303,6 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       this.formulario.get('fecha_recibido')?.updateValueAndValidity();
     });
 
-    // Validación dinámica de plazo según unidad seleccionada
-    this.formulario.get('plazo_unidad')?.valueChanges.subscribe((unidad) => {
-      this.actualizarValidadoresPlazo(unidad);
-    });
-
-    // Manejar cambios en "tiene_plazo_atencion"
-    this.formulario.get('tiene_plazo_atencion')?.valueChanges.subscribe((tienePlazo) => {
-      const plazoUnidadControl = this.formulario.get('plazo_unidad');
-      const plazoDiasControl = this.formulario.get('plazo_dias');
-      const plazoHorasControl = this.formulario.get('plazo_horas');
-      
-      if (tienePlazo === 'si') {
-        // Si tiene plazo, hacer obligatorios los campos de plazo
-        plazoUnidadControl?.setValidators([Validators.required]);
-        plazoUnidadControl?.updateValueAndValidity({ emitEvent: false });
-        // Actualizar validadores según la unidad seleccionada
-        const unidad = plazoUnidadControl?.value || 'dias';
-        this.actualizarValidadoresPlazo(unidad);
-      } else if (tienePlazo === 'no') {
-        // Si no tiene plazo, limpiar y deshabilitar campos
-        plazoUnidadControl?.clearValidators();
-        plazoUnidadControl?.setValue('dias', { emitEvent: false });
-        plazoDiasControl?.clearValidators();
-        plazoDiasControl?.setValue('', { emitEvent: false });
-        plazoHorasControl?.clearValidators();
-        plazoHorasControl?.setValue('', { emitEvent: false });
-        plazoUnidadControl?.updateValueAndValidity({ emitEvent: false });
-        plazoDiasControl?.updateValueAndValidity({ emitEvent: false });
-        plazoHorasControl?.updateValueAndValidity({ emitEvent: false });
-      }
-    });
 
     // Limpiar error de duplicado cuando el usuario modifica el oficio
     // Y verificar si el oficio ya tiene un expediente asignado
@@ -483,34 +437,6 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Actualizar validadores de plazo según la unidad seleccionada
-  actualizarValidadoresPlazo(unidad: string) {
-    const plazo_dias = this.formulario.get('plazo_dias');
-    const plazo_horas = this.formulario.get('plazo_horas');
-
-    // Limpiar validadores previos
-    plazo_dias?.clearValidators();
-    plazo_horas?.clearValidators();
-
-    if (unidad === 'dias') {
-      // Solo días es obligatorio
-      plazo_dias?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
-      plazo_horas?.setValidators([Validators.min(0), Validators.max(999)]);
-      this.formulario.patchValue({ plazo_horas: '' }, { emitEvent: false });
-    } else if (unidad === 'horas') {
-      // Solo horas es obligatorio
-      plazo_horas?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
-      plazo_dias?.setValidators([Validators.min(0), Validators.max(999)]);
-      this.formulario.patchValue({ plazo_dias: '' }, { emitEvent: false });
-    } else if (unidad === 'ambos') {
-      // Ambos son obligatorios
-      plazo_dias?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
-      plazo_horas?.setValidators([Validators.required, Validators.min(1), Validators.max(999)]);
-    }
-
-    plazo_dias?.updateValueAndValidity();
-    plazo_horas?.updateValueAndValidity();
-  }
 
   // Cargar y APLICAR AUTOMÁTICAMENTE el siguiente expediente
   // Si hay un oficio, verifica si ya tiene expediente asignado
@@ -705,11 +631,7 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
       fecha_documento: formatearFechaParaInput(expediente.fecha_documento) || this.formulario.get('fecha_documento')?.value || '',
       fecha_recibido: formatearFechaParaInput(expediente.fecha_recibido) || this.formulario.get('fecha_recibido')?.value || '',
       
-      // Mantener los valores de plazo y urgente del formulario actual
-      plazo_dias: this.formulario.get('plazo_dias')?.value || '',
-      plazo_horas: this.formulario.get('plazo_horas')?.value || '',
-      plazo_unidad: this.formulario.get('plazo_unidad')?.value || 'dias',
-      es_urgente: this.formulario.get('es_urgente')?.value || false
+      // Campos de plazo eliminados
     };
 
     // Aplicar los datos pre-cargados al formulario
@@ -898,53 +820,11 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
 
   // Construir objeto de plazo con toda la información
   private construirPlazo() {
-    const tienePlazo = this.formulario.get('tiene_plazo_atencion')?.value;
-    
-    // Si no tiene plazo específico, usar 20 días por defecto (constraint BD: plazo_valor >= 1)
-    if (tienePlazo === 'no') {
-      return {
-        valor: 20, // Valor por defecto: 20 días hábiles
-        unidad: 'dias',
-        es_urgente: false
-      };
-    }
-    
-    const unidad = this.formulario.get('plazo_unidad')?.value || 'dias';
-    const dias = parseInt(this.formulario.get('plazo_dias')?.value || '0');
-    const horas = parseInt(this.formulario.get('plazo_horas')?.value || '0');
-    const es_urgente = this.formulario.get('es_urgente')?.value || false;
-
-    let textoCompleto = '';
-    let valorTotal = 0;
-
-    if (unidad === 'dias') {
-      textoCompleto = `${dias} día${dias !== 1 ? 's' : ''}`;
-      valorTotal = dias;
-    } else if (unidad === 'horas') {
-      textoCompleto = `${horas} hora${horas !== 1 ? 's' : ''}`;
-      valorTotal = horas;
-    } else if (unidad === 'ambos') {
-      textoCompleto = `${dias} día${dias !== 1 ? 's' : ''} y ${horas} hora${horas !== 1 ? 's' : ''}`;
-      // Convertir todo a horas para cálculos: días*24 + horas
-      valorTotal = (dias * 24) + horas;
-    }
-
-    // Asegurar que el valor sea al menos 1 (constraint BD: plazo_valor >= 1 AND plazo_valor <= 999)
-    if (valorTotal < 1) {
-      valorTotal = 20; // Valor por defecto si no se especificó
-    }
-
-    if (es_urgente) {
-      textoCompleto += ' (URGENTE)';
-    }
-
+    // Ya no hay campos de plazo, usar valores por defecto
     return {
-      valor: valorTotal,
-      dias: dias,
-      horas: horas,
-      unidad: unidad,
-      texto_completo: textoCompleto,
-      es_urgente: es_urgente
+      valor: 0, // Valor por defecto: 0 (sin plazo)
+      unidad: 'dias',
+      es_urgente: false
     };
   }
 
@@ -1166,23 +1046,6 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  get tienePlazoAtencionError(): string | null {
-    const control = this.formulario.get('tiene_plazo_atencion');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Debe seleccionar una opción';
-    }
-    return null;
-  }
-
-  get plazoValorError(): string | null {
-    const control = this.formulario.get('plazo_valor');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-      if (control.errors['min']) return 'Mínimo 1';
-      if (control.errors['max']) return 'Máximo 999';
-    }
-    return null;
-  }
 
   get prioridadError(): string | null {
     const control = this.formulario.get('prioridad');

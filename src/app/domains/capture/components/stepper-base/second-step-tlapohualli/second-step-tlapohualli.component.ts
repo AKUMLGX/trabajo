@@ -123,10 +123,9 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     this.formulario = this.fb.group({
       // Campos de entrada
       sistema_aplicativo: ['', [Validators.required, Validators.maxLength(100)]],
-      responsable: ['', [Validators.required, Validators.maxLength(100)]],
-      fecha_asignacion: [hoy, Validators.required], // HOY por defecto
-      estatus: ['ASIGNADO', Validators.required] // ASIGNADO por defecto
+      responsable: ['', [Validators.required, Validators.maxLength(100)]]
       // prioridad movido al Step 1
+      // fecha_asignacion y estatus eliminados
     });
   }
 
@@ -269,21 +268,6 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  get fechaAsignacionError(): string | null {
-    const control = this.formulario.get('fecha_asignacion');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-    }
-    return null;
-  }
-
-  get estatusError(): string | null {
-    const control = this.formulario.get('estatus');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-    }
-    return null;
-  }
 
   // get prioridadError movido al Step 1
 
