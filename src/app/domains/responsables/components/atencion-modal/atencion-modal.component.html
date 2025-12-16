@@ -84,14 +84,140 @@
     </div>
 
     <!-- PASO 2: Detalles específicos según tipo de acción -->
-    <div class="form-section" *ngIf="formulario.tipoAccion && formulario.tipoAccion !== 'RECHAZADO' && formulario.tipoAccion !== 'PENDIENTE_INFO'">
+    
+    <!-- RECHAZADO: Lista de Especialistas -->
+    <div class="form-section" *ngIf="formulario.tipoAccion === 'RECHAZADO'">
       <h3 class="section-title">
         <span class="step-number">2</span>
-        Detalles de la Acción
+        Asignar Especialistas
+      </h3>
+      <div class="dynamic-form">
+        <div class="wizard-step active">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
+                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
+                <span *ngIf="formulario.especialistasSeleccionados.length === 0">1</span>
+              </span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>groups</mat-icon>
+                Selecciona Especialista(s)
+              </h4>
+              <p class="step-desc">Selecciona uno o más especialistas para el rechazo</p>
+            </div>
+            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
+              {{ formulario.especialistasSeleccionados.length }} asignado(s)
+            </div>
+          </div>
+          <div class="step-content">
+            <!-- Externos -->
+            <div class="especialista-section">
+              <div class="section-header-esp">
+                <span class="section-badge externo">
+                  <mat-icon>work_outline</mat-icon>
+                  Externos
+                </span>
+                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasExternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar externo">
+                    {{ esp.nombre_completo.charAt(0) }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Externo</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Internos -->
+            <div class="especialista-section">
+              <div class="section-header-esp">
+                <span class="section-badge interno">
+                  <mat-icon>badge</mat-icon>
+                  Internos
+                </span>
+                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasInternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar interno">
+                    {{ esp.nombre_completo.charAt(0) }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Interno</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PENDIENTE_INFO: No requiere campos adicionales -->
+    <!-- (Solo muestra el campo de Sistema y Aplicativo que ya está arriba) -->
+
+    <!-- ASIGNADO: Selección de Flujo -->
+    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO'">
+      <h3 class="section-title">
+        <span class="step-number">2</span>
+        Seleccionar Flujo de Trabajo
+      </h3>
+      <div class="action-cards">
+        <div 
+          *ngFor="let flujo of opcionesFlujosAsignado"
+          class="action-card"
+          [class.selected]="flujoAsignadoSeleccionado === flujo.value"
+          (click)="seleccionarFlujoAsignado(flujo.value)">
+          <div class="card-icon" [ngClass]="flujo.color">
+            <mat-icon>{{ flujo.icon }}</mat-icon>
+          </div>
+          <div class="card-content">
+            <span class="card-label">{{ flujo.label }}</span>
+            <span class="card-description">{{ flujo.description }}</span>
+          </div>
+          <div class="card-check" *ngIf="flujoAsignadoSeleccionado === flujo.value">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalles de flujos cuando se selecciona "Asignado" -->
+    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO' && flujoAsignadoSeleccionado">
+      <h3 class="section-title">
+        <span class="step-number">3</span>
+        Detalles del Flujo
       </h3>
 
-      <!-- ATENCION_INMEDIATA - Selección de Especialistas -->
-      <div class="dynamic-form" *ngIf="formulario.tipoAccion === 'ATENCION_INMEDIATA'">
+      <!-- ADQUISICION_INFO - FLUJO PROGRESIVO -->
+      <div class="dynamic-form adquisicion-wizard" *ngIf="flujoAsignadoSeleccionado === 'ADQUISICION_INFO'">
         <div class="wizard-step active">
           <div class="step-header">
             <div class="step-indicator">
@@ -503,7 +629,7 @@
           <div class="step-content" *ngIf="formulario.opcionSeleccionada.length > 0">
             <div class="resultado-grid">
               <label 
-                *ngFor="let resultado of getResultadosActuales()"
+                *ngFor="let resultado of getResultadosActualesAsignado()"
                 class="resultado-card"
                 [class.selected]="formulario.resultadoSeleccionado === resultado.codigo">
                 <input 

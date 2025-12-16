@@ -20,7 +20,8 @@ const TLAPOHUALLI_BASE = `${baseWithoutApi}tlapohualli/api/v1/`;
 export type TipoAccion = 
   | 'RECHAZADO' 
   | 'PENDIENTE_INFO' 
-  | 'ATENCION_INMEDIATA' 
+  | 'ASIGNADO'
+  | 'ATENCION_INMEDIATA' // Legacy, mantener para compatibilidad
   | 'ADQUISICION_INFO'
   | 'INVESTIGACION_FORENSE'
   | 'ELABORACION_DICTAMENES'

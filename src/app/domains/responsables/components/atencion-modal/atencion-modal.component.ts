@@ -216,13 +216,13 @@ export class AtencionModalComponent implements OnInit {
   cargandoCatalogos = true;
   guardando = false;
   
-  // Opciones de tipo de acción
+  // Opciones de tipo de acción (Paso 1: 3 opciones principales)
   opcionesTipoAccion = [
     { 
       value: 'RECHAZADO' as TipoAccion, 
       label: 'Rechazado', 
       icon: 'cancel',
-      description: 'Rechazar el expediente mediante oficio, atenta nota o correo',
+      description: 'Rechazar el expediente y asignar especialistas',
       color: 'text-red-600'
     },
     { 
@@ -233,12 +233,16 @@ export class AtencionModalComponent implements OnInit {
       color: 'text-amber-600'
     },
     { 
-      value: 'ATENCION_INMEDIATA' as TipoAccion, 
-      label: 'Atención Inmediata', 
-      icon: 'flash_on',
-      description: 'Asignar a un abogado para atención prioritaria',
+      value: 'ASIGNADO' as TipoAccion, 
+      label: 'Asignado', 
+      icon: 'assignment',
+      description: 'Asignar a un flujo de trabajo especializado',
       color: 'text-blue-600'
-    },
+    }
+  ];
+
+  // Opciones de flujos para "Asignado" (Paso 2 cuando se selecciona "Asignado")
+  opcionesFlujosAsignado = [
     { 
       value: 'ADQUISICION_INFO' as TipoAccion, 
       label: 'Adquisición de Información', 
@@ -275,6 +279,9 @@ export class AtencionModalComponent implements OnInit {
       color: 'text-rose-600'
     }
   ];
+
+  // Flujo seleccionado cuando se elige "Asignado"
+  flujoAsignadoSeleccionado: TipoAccion | '' = '';
 
   constructor(
     public dialogRef: MatDialogRef<AtencionModalComponent>,
@@ -336,12 +343,42 @@ export class AtencionModalComponent implements OnInit {
     
     switch (this.formulario.tipoAccion) {
       case 'RECHAZADO':
-        return true; // Solo notas (opcional)
-      case 'PENDIENTE_INFO':
-        return true; // Solo notas (opcional)
-      case 'ATENCION_INMEDIATA':
+        // Rechazado requiere especialistas (sin notas)
         return this.formulario.especialistasSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS;
+      case 'PENDIENTE_INFO':
+        // Pendiente por información no requiere nada más
+        return true;
+      case 'ASIGNADO':
+        // Asignado requiere que se haya seleccionado un flujo
+        if (!this.flujoAsignadoSeleccionado) return false;
+        // Validar según el flujo seleccionado
+        return this.validarFlujoAsignado(this.flujoAsignadoSeleccionado);
+      case 'ADQUISICION_INFO':
+        return this.formulario.tiposInsumo.length > 0 && 
+               !!this.formulario.tipoResultado &&
+               this.formulario.especialistasSeleccionados.length > 0 &&
+               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
+               !!this.formulario.fechaEntrega;
+      case 'INVESTIGACION_FORENSE':
+      case 'ELABORACION_DICTAMENES':
+      case 'RECUPERACION_INFO':
+      case 'DESTRUCCION_DISPOSITIVOS':
+        return this.formulario.opcionSeleccionada.length > 0 && 
+               !!this.formulario.resultadoSeleccionado &&
+               this.formulario.especialistasSeleccionados.length > 0 &&
+               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
+               !!this.formulario.fechaEntrega;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Validar flujo cuando se selecciona "Asignado"
+   */
+  validarFlujoAsignado(flujo: TipoAccion): boolean {
+    switch (flujo) {
       case 'ADQUISICION_INFO':
         return this.formulario.tiposInsumo.length > 0 && 
                !!this.formulario.tipoResultado &&
@@ -445,24 +482,23 @@ export class AtencionModalComponent implements OnInit {
       return;
     }
 
+    // Determinar el tipo de acción final (si es ASIGNADO, usar el flujo seleccionado)
+    const tipoAccionFinal = this.formulario.tipoAccion === 'ASIGNADO' 
+      ? this.flujoAsignadoSeleccionado as TipoAccion
+      : this.formulario.tipoAccion as TipoAccion;
+
     // Construir el DTO (prioridad ya no se envía, viene del expediente)
     const dto: CrearAtencionDTO = {
       id_expediente: this.expediente.id_expediente,
-      tipo_accion: this.formulario.tipoAccion as TipoAccion,
+      tipo_accion: tipoAccionFinal,
       sistema_aplicativo: this.formulario.sistema_aplicativo || undefined,
-      notas: this.formulario.notas || undefined
+      notas: undefined // Notas solo para flujos que las requieren
     };
 
     // Agregar campos según el tipo de acción
     switch (this.formulario.tipoAccion) {
       case 'RECHAZADO':
-        // Solo notas (ya incluidas arriba)
-        break;
-      case 'PENDIENTE_INFO':
-        // Solo notas (ya incluidas arriba)
-        break;
-      case 'ATENCION_INMEDIATA':
-        // Especialistas (máximo 3)
+        // Rechazado: especialistas (sin notas)
         dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
           return {
@@ -470,8 +506,39 @@ export class AtencionModalComponent implements OnInit {
             nombre: esp?.nombre_completo || codigo
           };
         });
-        dto.fecha_entrega = this.formulario.fechaEntrega || undefined;
         break;
+      case 'PENDIENTE_INFO':
+        // Pendiente por información: no requiere campos adicionales
+        break;
+      case 'ASIGNADO':
+        // Asignado: usar el flujo seleccionado
+        if (this.flujoAsignadoSeleccionado === 'ADQUISICION_INFO') {
+          dto.tipos_insumo = this.formulario.tiposInsumo;
+          dto.tipo_resultado = this.formulario.tipoResultado;
+          dto.fecha_entrega = this.formulario.fechaEntrega;
+          dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
+            const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
+            return {
+              codigo: codigo,
+              nombre: esp?.nombre_completo || codigo
+            };
+          });
+          dto.notas = this.formulario.notas || undefined;
+        } else if (['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.flujoAsignadoSeleccionado)) {
+          dto.opcion_seleccionada = this.formulario.opcionSeleccionada;
+          dto.tipo_resultado = this.formulario.resultadoSeleccionado;
+          dto.fecha_entrega = this.formulario.fechaEntrega;
+          dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
+            const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
+            return {
+              codigo: codigo,
+              nombre: esp?.nombre_completo || codigo
+            };
+          });
+          dto.notas = this.formulario.notas || undefined;
+        }
+        break;
+      // Mantener compatibilidad con flujos directos (legacy)
       case 'ADQUISICION_INFO':
         dto.tipos_insumo = this.formulario.tiposInsumo;
         dto.tipo_resultado = this.formulario.tipoResultado;
@@ -483,13 +550,14 @@ export class AtencionModalComponent implements OnInit {
             nombre: esp?.nombre_completo || codigo
           };
         });
+        dto.notas = this.formulario.notas || undefined;
         break;
       case 'INVESTIGACION_FORENSE':
       case 'ELABORACION_DICTAMENES':
       case 'RECUPERACION_INFO':
       case 'DESTRUCCION_DISPOSITIVOS':
-        dto.opcion_seleccionada = this.formulario.opcionSeleccionada; // Nombre correcto para backend
-        dto.tipo_resultado = this.formulario.resultadoSeleccionado; // Usar tipo_resultado
+        dto.opcion_seleccionada = this.formulario.opcionSeleccionada;
+        dto.tipo_resultado = this.formulario.resultadoSeleccionado;
         dto.fecha_entrega = this.formulario.fechaEntrega;
         dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
@@ -498,6 +566,7 @@ export class AtencionModalComponent implements OnInit {
             nombre: esp?.nombre_completo || codigo
           };
         });
+        dto.notas = this.formulario.notas || undefined;
         break;
     }
 
@@ -564,7 +633,24 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.resultadoSeleccionado = '';
     this.formulario.fechaEntrega = '';
     this.formulario.prioridad = '';
+    this.formulario.notas = '';
+    this.flujoAsignadoSeleccionado = ''; // Resetear flujo cuando cambia el tipo de acción principal
     // sistema_aplicativo se mantiene al cambiar tipo de acción
+  }
+
+  /**
+   * Seleccionar flujo cuando se elige "Asignado"
+   */
+  seleccionarFlujoAsignado(flujo: TipoAccion): void {
+    this.flujoAsignadoSeleccionado = flujo;
+    // Resetear campos del formulario al cambiar de flujo
+    this.formulario.tiposInsumo = [];
+    this.formulario.tipoResultado = '';
+    this.formulario.especialistasSeleccionados = [];
+    this.formulario.opcionSeleccionada = [];
+    this.formulario.resultadoSeleccionado = '';
+    this.formulario.fechaEntrega = '';
+    this.formulario.notas = '';
   }
 
   /**
@@ -605,10 +691,48 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
+   * Obtener opciones según el flujo asignado
+   */
+  getOpcionesActualesAsignado(): any[] {
+    if (!this.flujoAsignadoSeleccionado) return [];
+    switch (this.flujoAsignadoSeleccionado) {
+      case 'INVESTIGACION_FORENSE':
+        return this.opcionesInvestigacionForense;
+      case 'ELABORACION_DICTAMENES':
+        return this.opcionesElaboracionDictamenes;
+      case 'RECUPERACION_INFO':
+        return this.opcionesRecuperacionInfo;
+      case 'DESTRUCCION_DISPOSITIVOS':
+        return this.opcionesDestruccionDispositivos;
+      default:
+        return [];
+    }
+  }
+
+  /**
    * Obtener resultados según el tipo de acción
    */
   getResultadosActuales(): any[] {
     switch (this.formulario.tipoAccion) {
+      case 'INVESTIGACION_FORENSE':
+        return this.resultadosInvestigacionForense;
+      case 'ELABORACION_DICTAMENES':
+        return this.resultadosElaboracionDictamenes;
+      case 'RECUPERACION_INFO':
+        return this.resultadosRecuperacionInfo;
+      case 'DESTRUCCION_DISPOSITIVOS':
+        return this.resultadosDestruccionDispositivos;
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Obtener resultados según el flujo asignado
+   */
+  getResultadosActualesAsignado(): any[] {
+    if (!this.flujoAsignadoSeleccionado) return [];
+    switch (this.flujoAsignadoSeleccionado) {
       case 'INVESTIGACION_FORENSE':
         return this.resultadosInvestigacionForense;
       case 'ELABORACION_DICTAMENES':
