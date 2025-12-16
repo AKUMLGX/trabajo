@@ -747,17 +747,28 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
-   * Verificar si es un flujo con wizard de opciones
+   * Verificar si es un flujo con wizard de opciones (legacy - mantener para compatibilidad)
    */
   esFlujoConOpciones(): boolean {
-    return ['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.formulario.tipoAccion);
+    // Este método ya no se usa en la nueva estructura, pero se mantiene para compatibilidad
+    // La nueva estructura usa esFlujoConOpcionesAsignado()
+    return false;
+  }
+
+  /**
+   * Verificar si el flujo asignado es uno con wizard de opciones
+   */
+  esFlujoConOpcionesAsignado(): boolean {
+    if (!this.flujoAsignadoSeleccionado) return false;
+    return ['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.flujoAsignadoSeleccionado as TipoAccion);
   }
 
   /**
    * Obtener el título del paso de opciones según el flujo
    */
   getTituloOpciones(): string {
-    switch (this.formulario.tipoAccion) {
+    const flujo = this.formulario.tipoAccion === 'ASIGNADO' ? this.flujoAsignadoSeleccionado : this.formulario.tipoAccion;
+    switch (flujo) {
       case 'INVESTIGACION_FORENSE':
         return 'Tipo de Investigación';
       case 'ELABORACION_DICTAMENES':
