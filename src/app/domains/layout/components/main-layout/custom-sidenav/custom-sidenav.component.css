@@ -145,12 +145,12 @@
 }
 
 .logo-wrapper.small img {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
     object-position: center;
     display: block;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 20px rgba(214, 174, 103, 0.4));
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 24px rgba(214, 174, 103, 0.6)) drop-shadow(0 0 40px rgba(214, 174, 103, 0.3));
 }
 
 .logo-wrapper:hover {
@@ -396,10 +396,12 @@
     background: transparent !important;
     border: none !important;
     border-radius: 0;
-    padding: 4px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
 }
 
 .menu-item-content {
@@ -437,7 +439,8 @@
 
 .menu-item.collapsed .menu-icon-wrapper.active mat-icon {
     color: var(--gold-base) !important;
-    filter: drop-shadow(0 0 8px rgba(214, 174, 103, 0.8)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 0 12px rgba(214, 174, 103, 1)) drop-shadow(0 0 20px rgba(214, 174, 103, 0.6)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
+    transform: scale(1.05);
 }
 
 .menu-icon-wrapper mat-icon {
@@ -451,11 +454,11 @@
 }
 
 .menu-item.collapsed .menu-icon-wrapper mat-icon {
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
     color: rgba(255, 255, 255, 0.95);
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
     transition: all 0.3s ease;
     display: block;
     line-height: 1;
@@ -464,8 +467,8 @@
 
 .menu-item.collapsed:hover .menu-icon-wrapper mat-icon {
     color: var(--gold-base);
-    filter: drop-shadow(0 0 12px rgba(214, 174, 103, 0.8)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
-    transform: scale(1.1);
+    filter: drop-shadow(0 0 12px rgba(214, 174, 103, 1)) drop-shadow(0 0 20px rgba(214, 174, 103, 0.6)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
+    transform: scale(1.15);
 }
 
 .menu-icon-wrapper.active mat-icon {
@@ -550,10 +553,12 @@
     background: transparent !important;
     border: none !important;
     border-radius: 0;
-    padding: 4px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
 }
 
 .logout-content {
@@ -591,11 +596,11 @@
 }
 
 .logout-btn.collapsed .logout-icon-wrapper mat-icon {
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
     color: #ff9999;
-    filter: drop-shadow(0 2px 6px rgba(255, 153, 153, 0.4));
+    filter: drop-shadow(0 3px 8px rgba(255, 153, 153, 0.6)) drop-shadow(0 0 4px rgba(255, 153, 153, 0.4));
     transition: all 0.3s ease;
     display: block;
     line-height: 1;
@@ -604,8 +609,8 @@
 
 .logout-btn.collapsed:hover .logout-icon-wrapper mat-icon {
     color: #ff6666;
-    filter: drop-shadow(0 0 12px rgba(255, 102, 102, 0.8)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
-    transform: scale(1.1) rotate(180deg);
+    filter: drop-shadow(0 0 12px rgba(255, 102, 102, 1)) drop-shadow(0 0 20px rgba(255, 102, 102, 0.6)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
+    transform: scale(1.15) rotate(180deg);
 }
 
 .logout-label {
