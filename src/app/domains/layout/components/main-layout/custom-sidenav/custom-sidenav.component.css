@@ -130,14 +130,14 @@
 }
 
 .logo-wrapper.small {
-    width: auto;
-    height: auto;
+    width: 72px;
+    height: 72px;
     border-radius: 0;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    margin-top: 16px;
+    margin-bottom: 16px;
     box-shadow: none;
     background: transparent !important;
-    padding: 8px;
+    padding: 0;
     border: none;
     display: flex;
     align-items: center;
@@ -145,12 +145,13 @@
 }
 
 .logo-wrapper.small img {
-    width: 64px;
-    height: 64px;
+    width: 72px !important;
+    height: 72px !important;
     object-fit: contain;
     object-position: center;
-    display: block;
-    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 24px rgba(214, 174, 103, 0.6)) drop-shadow(0 0 40px rgba(214, 174, 103, 0.3));
+    display: block !important;
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 24px rgba(214, 174, 103, 0.8)) drop-shadow(0 0 40px rgba(214, 174, 103, 0.4));
+    opacity: 1 !important;
 }
 
 .logo-wrapper:hover {
@@ -379,8 +380,8 @@
 
 .menu-item.collapsed {
     justify-content: center !important;
-    padding: 12px 12px !important;
-    margin: 8px 0 !important;
+    padding: 16px 12px !important;
+    margin: 6px 0 !important;
 }
 
 .menu-item.collapsed .menu-item-content {
@@ -390,18 +391,16 @@
 }
 
 .menu-item.collapsed .menu-icon-wrapper {
-    width: auto;
-    height: auto;
+    width: 56px;
+    height: 56px;
     margin: 0 auto;
     background: transparent !important;
     border: none !important;
     border-radius: 0;
-    padding: 6px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 48px;
-    min-height: 48px;
 }
 
 .menu-item-content {
@@ -439,8 +438,8 @@
 
 .menu-item.collapsed .menu-icon-wrapper.active mat-icon {
     color: var(--gold-base) !important;
-    filter: drop-shadow(0 0 12px rgba(214, 174, 103, 1)) drop-shadow(0 0 20px rgba(214, 174, 103, 0.6)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
-    transform: scale(1.05);
+    filter: drop-shadow(0 0 16px rgba(214, 174, 103, 1)) drop-shadow(0 0 24px rgba(214, 174, 103, 0.8)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    transform: scale(1.1);
 }
 
 .menu-icon-wrapper mat-icon {
@@ -454,21 +453,23 @@
 }
 
 .menu-item.collapsed .menu-icon-wrapper mat-icon {
-    font-size: 36px;
-    width: 36px;
-    height: 36px;
-    color: rgba(255, 255, 255, 0.95);
-    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
+    font-size: 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    color: #ffffff !important;
+    font-weight: 400;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
     transition: all 0.3s ease;
-    display: block;
+    display: block !important;
     line-height: 1;
     overflow: visible;
+    opacity: 1 !important;
 }
 
 .menu-item.collapsed:hover .menu-icon-wrapper mat-icon {
-    color: var(--gold-base);
-    filter: drop-shadow(0 0 12px rgba(214, 174, 103, 1)) drop-shadow(0 0 20px rgba(214, 174, 103, 0.6)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
-    transform: scale(1.15);
+    color: var(--gold-base) !important;
+    filter: drop-shadow(0 0 16px rgba(214, 174, 103, 1)) drop-shadow(0 0 24px rgba(214, 174, 103, 0.8)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    transform: scale(1.2);
 }
 
 .menu-icon-wrapper.active mat-icon {
