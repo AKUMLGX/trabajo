@@ -402,13 +402,13 @@ export class TrackingTableComponent implements OnInit {
     } else {
       // Para asuntos Akamba, usar el método original
       this.asuntoService.downloadExcelTable(
-        this.folio_interno,
-        this.carpeta_investigacion,
-        this.oficio,
-        this.autoridad_remitente,
-        this.persona_relacionada,
-        this.volante_jefatura,
-        this.turno_jefatura
+      this.folio_interno,
+      this.carpeta_investigacion,
+      this.oficio,
+      this.autoridad_remitente,
+      this.persona_relacionada,
+      this.volante_jefatura,
+     this.turno_jefatura
       );
     }
   }
