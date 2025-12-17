@@ -227,9 +227,9 @@ export class AtencionModalComponent implements OnInit {
     },
     { 
       value: 'PENDIENTE_INFO' as TipoAccion, 
-      label: 'Pendiente por Información', 
+      label: 'Pendiente por Falta de Información', 
       icon: 'pending',
-      description: 'Solicitar información adicional antes de proceder',
+      description: 'Solicitar información adicional y asignar especialistas',
       color: 'text-amber-600'
     },
     { 
@@ -347,8 +347,9 @@ export class AtencionModalComponent implements OnInit {
         return this.formulario.especialistasSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS;
       case 'PENDIENTE_INFO':
-        // Pendiente por información no requiere nada más
-        return true;
+        // Pendiente por falta de información requiere especialistas
+        return this.formulario.especialistasSeleccionados.length > 0 &&
+               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS;
       case 'ASIGNADO':
         // Asignado requiere que se haya seleccionado un flujo
         if (!this.flujoAsignadoSeleccionado) return false;
@@ -508,7 +509,14 @@ export class AtencionModalComponent implements OnInit {
         });
         break;
       case 'PENDIENTE_INFO':
-        // Pendiente por información: no requiere campos adicionales
+        // Pendiente por falta de información: especialistas
+        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
+          const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
+          return {
+            codigo: codigo,
+            nombre: esp?.nombre_completo || codigo
+          };
+        });
         break;
       case 'ASIGNADO':
         // Asignado: usar el flujo seleccionado
