@@ -275,6 +275,25 @@ export class AtencionService {
   }
 
   /**
+   * Obtener todas las atenciones de todos los responsables
+   */
+  obtenerTodasAtenciones(): Observable<AtencionConEspecialistas[]> {
+    const url = `${this.BASE_URL}/todas`;
+    console.log('📋 [AtencionService] Obteniendo todas las atenciones de todos los responsables');
+
+    return this.http.get<AtencionesResponse>(url, { withCredentials: true }).pipe(
+      map(response => {
+        console.log('✅ [AtencionService] Todas las atenciones recibidas:', response);
+        return response.data;
+      }),
+      catchError(error => {
+        console.error('❌ [AtencionService] Error al obtener todas las atenciones:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
    * Obtener una atención específica
    */
   obtenerAtencion(idAtencion: number): Observable<AtencionConEspecialistas | null> {

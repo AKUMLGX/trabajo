@@ -9,10 +9,21 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
+import { ExpedienteTlapohualliService } from '../../../capture/services/expediente-tlapohualli.service';
+import { forkJoin, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface AtencionCierreItem {
   id: number;
+  idAtencion: number;
+  idExpediente: number;
+  expediente: string; // Número de expediente
   diasAtraso: number;
+  // Información del responsable
+  usuarioRegistro?: string;
+  tipoAccion?: string;
+  especialistas?: string[]; // Nombres de especialistas
   // TICKET MS-SAT
   ticketNumero: string;
   ticketFechaApertura: Date;
@@ -52,57 +63,9 @@ export interface AtencionCierreItem {
   styleUrl: './atencion-cierre-table.component.css'
 })
 export class AtencionCierreTableComponent implements OnInit {
-  // Datos de ejemplo - en producción vendrán del servicio
-  items: AtencionCierreItem[] = [
-    {
-      id: 1,
-      diasAtraso: 0,
-      ticketNumero: 'TKT-001',
-      ticketFechaApertura: new Date('2025-01-15'),
-      ticketFechaResolucion: null,
-      respuestaEstado: 'Pendiente',
-      respuestaTipo: 'Oficio',
-      respuestaNumero: '',
-      respuestaFecha: null,
-      notificacionFecha: null,
-      notificacionModelo: '',
-      dispositivoSerie: '',
-      dispositivoObservaciones: '',
-      observaciones: ''
-    },
-    {
-      id: 2,
-      diasAtraso: 3,
-      ticketNumero: 'TKT-002',
-      ticketFechaApertura: new Date('2025-01-12'),
-      ticketFechaResolucion: null,
-      respuestaEstado: 'En Proceso',
-      respuestaTipo: 'Email',
-      respuestaNumero: 'RES-001',
-      respuestaFecha: new Date('2025-01-14'),
-      notificacionFecha: new Date('2025-01-14'),
-      notificacionModelo: 'Modelo A',
-      dispositivoSerie: 'SER-001',
-      dispositivoObservaciones: 'Funcionando correctamente',
-      observaciones: 'Requiere seguimiento'
-    },
-    {
-      id: 3,
-      diasAtraso: 7,
-      ticketNumero: 'TKT-003',
-      ticketFechaApertura: new Date('2025-01-08'),
-      ticketFechaResolucion: new Date('2025-01-15'),
-      respuestaEstado: 'Completado',
-      respuestaTipo: 'Oficio',
-      respuestaNumero: 'RES-002',
-      respuestaFecha: new Date('2025-01-15'),
-      notificacionFecha: new Date('2025-01-15'),
-      notificacionModelo: 'Modelo B',
-      dispositivoSerie: 'SER-002',
-      dispositivoObservaciones: '',
-      observaciones: 'Proceso completado exitosamente'
-    }
-  ];
+  // Datos cargados del backend
+  items: AtencionCierreItem[] = [];
+  cargando: boolean = true;
 
   // Formulario para edición
   editForm: FormGroup;
@@ -112,7 +75,11 @@ export class AtencionCierreTableComponent implements OnInit {
   estadosRespuesta = ['Pendiente', 'En Proceso', 'Completado', 'Cancelado'];
   tiposRespuesta = ['Oficio', 'Email', 'Telefónica', 'Presencial'];
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private atencionService: AtencionService,
+    private expedienteService: ExpedienteTlapohualliService
+  ) {
     this.editForm = this.fb.group({
       ticketNumero: [''],
       ticketFechaApertura: [''],
@@ -130,9 +97,77 @@ export class AtencionCierreTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Calcular días de atraso para cada item
-    this.items.forEach(item => {
-      item.diasAtraso = this.calcularDiasAtraso(item.ticketFechaApertura);
+    this.cargarDatos();
+  }
+
+  /**
+   * Cargar todas las atenciones de todos los responsables
+   */
+  cargarDatos(): void {
+    this.cargando = true;
+    console.log('📋 [AtencionCierre] Cargando todas las atenciones...');
+
+    this.atencionService.obtenerTodasAtenciones().subscribe({
+      next: (atenciones: AtencionConEspecialistas[]) => {
+        console.log('✅ [AtencionCierre] Atenciones recibidas:', atenciones);
+        
+        // Mapear atenciones a items de la tabla (simplificado - obtener expedientes después si es necesario)
+        this.items = atenciones.map((atencion, index) => {
+          const item: AtencionCierreItem = {
+            id: index + 1,
+            idAtencion: atencion.atencion.id_atencion,
+            idExpediente: atencion.atencion.id_expediente,
+            expediente: `EXP-${atencion.atencion.id_expediente}`, // Se actualizará si se obtiene el expediente
+            diasAtraso: 0,
+            usuarioRegistro: atencion.atencion.usuario_registro || undefined,
+            tipoAccion: atencion.atencion.tipo_accion,
+            especialistas: atencion.especialistas.map(esp => esp.nombre_especialista),
+            // TICKET MS-SAT - Inicializar con valores vacíos (se llenarán con los 4 formularios)
+            ticketNumero: '',
+            ticketFechaApertura: atencion.atencion.fecha_registro 
+              ? new Date(atencion.atencion.fecha_registro) 
+              : new Date(),
+            ticketFechaResolucion: null,
+            // RESPUESTA
+            respuestaEstado: 'Pendiente',
+            respuestaTipo: '',
+            respuestaNumero: '',
+            respuestaFecha: null,
+            // NOTIFICACION
+            notificacionFecha: null,
+            notificacionModelo: '',
+            // DISPOSITIVO
+            dispositivoSerie: '',
+            dispositivoObservaciones: '',
+            // OBSERVACIONES
+            observaciones: ''
+          };
+          
+          // Calcular días de atraso
+          item.diasAtraso = this.calcularDiasAtraso(item.ticketFechaApertura);
+          
+          // Intentar obtener el número de expediente (opcional, no bloquea)
+          this.expedienteService.obtenerExpedientePorId(atencion.atencion.id_expediente).pipe(
+            catchError(() => of(null))
+          ).subscribe(expediente => {
+            if (expediente?.expediente) {
+              const itemIndex = this.items.findIndex(i => i.idAtencion === item.idAtencion);
+              if (itemIndex !== -1) {
+                this.items[itemIndex].expediente = expediente.expediente;
+              }
+            }
+          });
+          
+          return item;
+        });
+        
+        this.cargando = false;
+        console.log('✅ [AtencionCierre] Items cargados:', this.items.length);
+      },
+      error: (error) => {
+        console.error('❌ [AtencionCierre] Error al cargar atenciones:', error);
+        this.cargando = false;
+      }
     });
   }
 
