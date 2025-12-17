@@ -819,17 +819,96 @@
       </div>
     </div>
 
-    <!-- PASO NOTAS: Solo para flujos que lo requieren (no para Rechazado ni Pendiente por Información) -->
-    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO' && flujoAsignadoSeleccionado && (flujoAsignadoSeleccionado !== 'RECHAZADO' && flujoAsignadoSeleccionado !== 'PENDIENTE_INFO')">
+    <!-- SOLICITUD DE INFORMACIÓN: Detalles del flujo -->
+    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO' && flujoAsignadoSeleccionado === 'SOLICITUD_INFORMACION'">
       <h3 class="section-title">
-        <span class="step-number">4</span>
-        Notas <span class="optional">(Opcional)</span>
+        <span class="step-number">3</span>
+        Detalles de Solicitud de Información
       </h3>
-      <textarea 
-        class="form-textarea" 
-        placeholder="Agregue observaciones o comentarios adicionales..."
-        rows="3"
-        [(ngModel)]="formulario.notas"></textarea>
+      
+      <!-- Selección de tipo: Correlación u Otra área -->
+      <div class="dynamic-form">
+        <div class="wizard-step active">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="tipoSolicitudSeleccionado">
+                <mat-icon *ngIf="tipoSolicitudSeleccionado">check</mat-icon>
+                <span *ngIf="!tipoSolicitudSeleccionado">1</span>
+              </span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>category</mat-icon>
+                Tipo de Solicitud
+              </h4>
+              <p class="step-desc">Selecciona el tipo de solicitud de información</p>
+            </div>
+          </div>
+          <div class="step-content">
+            <div class="action-cards" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+              <div 
+                *ngFor="let opcion of opcionesSolicitudInfo"
+                class="action-card"
+                [class.selected]="tipoSolicitudSeleccionado === opcion.value"
+                (click)="seleccionarTipoSolicitud(opcion.value as 'CORRELACION' | 'OTRA_AREA')">
+                <div class="card-icon" [ngClass]="opcion.value === 'CORRELACION' ? 'text-blue-600' : 'text-gray-600'">
+                  <mat-icon>{{ opcion.icon }}</mat-icon>
+                </div>
+                <div class="card-content">
+                  <span class="card-label">{{ opcion.label }}</span>
+                </div>
+                <div class="card-check" *ngIf="tipoSolicitudSeleccionado === opcion.value">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Opciones de Correlación (solo si se selecciona Correlación) -->
+        <div class="wizard-step" [class.active]="tipoSolicitudSeleccionado === 'CORRELACION'" [class.disabled]="tipoSolicitudSeleccionado !== 'CORRELACION'">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="opcionesCorrelacionSeleccionadas.length > 0">
+                <mat-icon *ngIf="opcionesCorrelacionSeleccionadas.length > 0">check</mat-icon>
+                <span *ngIf="opcionesCorrelacionSeleccionadas.length === 0">2</span>
+              </span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>list</mat-icon>
+                Opciones de Correlación
+              </h4>
+              <p class="step-desc">Selecciona una o más opciones de correlación</p>
+            </div>
+            <div class="step-badge" *ngIf="opcionesCorrelacionSeleccionadas.length > 0">
+              {{ opcionesCorrelacionSeleccionadas.length }} seleccionado(s)
+            </div>
+          </div>
+          <div class="step-content" *ngIf="tipoSolicitudSeleccionado === 'CORRELACION'">
+            <div class="insumo-grid">
+              <label 
+                *ngFor="let opcion of opcionesCorrelacion"
+                class="insumo-card"
+                [class.selected]="opcionCorrelacionSeleccionada(opcion.codigo)">
+                <input 
+                  type="checkbox" 
+                  [checked]="opcionCorrelacionSeleccionada(opcion.codigo)"
+                  (change)="toggleOpcionCorrelacion(opcion.codigo)">
+                <div class="card-check">
+                  <mat-icon>check</mat-icon>
+                </div>
+                <mat-icon class="card-icon">{{ opcion.icon }}</mat-icon>
+                <span class="card-text">{{ opcion.descripcion }}</span>
+              </label>
+            </div>
+          </div>
+          <div class="step-locked" *ngIf="tipoSolicitudSeleccionado !== 'CORRELACION'">
+            <mat-icon>lock</mat-icon>
+            <span>Primero selecciona "Correlación"</span>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>

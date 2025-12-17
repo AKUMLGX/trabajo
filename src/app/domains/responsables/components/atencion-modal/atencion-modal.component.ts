@@ -251,6 +251,13 @@ export class AtencionModalComponent implements OnInit {
       color: 'text-green-600'
     },
     { 
+      value: 'SOLICITUD_INFORMACION' as TipoAccion, 
+      label: 'Solicitud de Información', 
+      icon: 'info',
+      description: 'Solicitar información mediante correlación u otra área',
+      color: 'text-blue-600'
+    },
+    { 
       value: 'INVESTIGACION_FORENSE' as TipoAccion, 
       label: 'Investigación Forense Digital', 
       icon: 'search',
@@ -279,6 +286,25 @@ export class AtencionModalComponent implements OnInit {
       color: 'text-rose-600'
     }
   ];
+
+  // Opciones para Solicitud de Información
+  opcionesSolicitudInfo = [
+    { value: 'CORRELACION', label: 'Correlación', icon: 'link' },
+    { value: 'OTRA_AREA', label: 'Otra área', icon: 'domain' }
+  ];
+
+  // Opciones de Correlación
+  opcionesCorrelacion = [
+    { codigo: 'LAGS', descripcion: 'Lags', icon: 'schedule' },
+    { codigo: 'PISTAS', descripcion: 'Pistas', icon: 'track_changes' },
+    { codigo: 'BITACORAS', descripcion: 'Bitácoras', icon: 'history' },
+    { codigo: 'RELACIONES', descripcion: 'Relaciones', icon: 'share' },
+    { codigo: 'APLICATIVO', descripcion: 'APLICATIVO', icon: 'apps' }
+  ];
+
+  // Estado para Solicitud de Información
+  tipoSolicitudSeleccionado: 'CORRELACION' | 'OTRA_AREA' | '' = '';
+  opcionesCorrelacionSeleccionadas: string[] = [];
 
   // Flujo seleccionado cuando se elige "Asignado"
   flujoAsignadoSeleccionado: TipoAccion | '' = '';
@@ -531,7 +557,18 @@ export class AtencionModalComponent implements OnInit {
               nombre: esp?.nombre_completo || codigo
             };
           });
-          dto.notas = this.formulario.notas || undefined;
+        } else if (this.flujoAsignadoSeleccionado === 'SOLICITUD_INFORMACION') {
+          // Solicitud de Información: enviar tipo y opciones de correlación si aplica
+          dto.opcion_seleccionada = this.tipoSolicitudSeleccionado === 'CORRELACION' 
+            ? this.opcionesCorrelacionSeleccionadas 
+            : ['OTRA_AREA'];
+          dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
+            const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
+            return {
+              codigo: codigo,
+              nombre: esp?.nombre_completo || codigo
+            };
+          });
         } else if (['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.flujoAsignadoSeleccionado)) {
           dto.opcion_seleccionada = this.formulario.opcionSeleccionada;
           dto.tipo_resultado = this.formulario.resultadoSeleccionado;
@@ -543,7 +580,6 @@ export class AtencionModalComponent implements OnInit {
               nombre: esp?.nombre_completo || codigo
             };
           });
-          dto.notas = this.formulario.notas || undefined;
         }
         break;
       // Mantener compatibilidad con flujos directos (legacy)
@@ -558,7 +594,6 @@ export class AtencionModalComponent implements OnInit {
             nombre: esp?.nombre_completo || codigo
           };
         });
-        dto.notas = this.formulario.notas || undefined;
         break;
       case 'INVESTIGACION_FORENSE':
       case 'ELABORACION_DICTAMENES':
@@ -574,7 +609,6 @@ export class AtencionModalComponent implements OnInit {
             nombre: esp?.nombre_completo || codigo
           };
         });
-        dto.notas = this.formulario.notas || undefined;
         break;
     }
 
