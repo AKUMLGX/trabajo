@@ -908,6 +908,97 @@
             <span>Primero selecciona "Correlación"</span>
           </div>
         </div>
+
+        <!-- Paso 3: Especialistas (requerido para Solicitud de Información) -->
+        <div class="wizard-step" [class.active]="(tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length > 0) || (tipoSolicitudSeleccionado === 'OTRA_AREA')" [class.disabled]="!tipoSolicitudSeleccionado || (tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length === 0)">
+          <div class="step-header">
+            <div class="step-indicator">
+              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
+                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
+                <span *ngIf="formulario.especialistasSeleccionados.length === 0">3</span>
+              </span>
+            </div>
+            <div class="step-info">
+              <h4 class="step-title">
+                <mat-icon>groups</mat-icon>
+                Asigna Especialista(s)
+              </h4>
+              <p class="step-desc">Selecciona uno o más especialistas para la solicitud</p>
+            </div>
+            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
+              {{ formulario.especialistasSeleccionados.length }} asignado(s)
+            </div>
+          </div>
+          <div class="step-content" *ngIf="(tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length > 0) || (tipoSolicitudSeleccionado === 'OTRA_AREA')">
+            <!-- Externos -->
+            <div class="especialista-section">
+              <div class="section-header-esp">
+                <span class="section-badge externo">
+                  <mat-icon>work_outline</mat-icon>
+                  Externos
+                </span>
+                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasExternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar externo">
+                    {{ esp.nombre_completo.charAt(0) }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Externo</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Internos -->
+            <div class="especialista-section">
+              <div class="section-header-esp">
+                <span class="section-badge interno">
+                  <mat-icon>badge</mat-icon>
+                  Internos
+                </span>
+                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
+              </div>
+              <div class="especialistas-list">
+                <label 
+                  *ngFor="let esp of especialistasInternos"
+                  class="especialista-card"
+                  [class.selected]="especialistaSeleccionado(esp.codigo)">
+                  <input 
+                    type="checkbox" 
+                    [checked]="especialistaSeleccionado(esp.codigo)"
+                    (change)="toggleEspecialista(esp.codigo)">
+                  <div class="esp-avatar interno">
+                    {{ esp.nombre_completo.charAt(0) }}
+                  </div>
+                  <div class="esp-info">
+                    <span class="esp-name">{{ esp.nombre_completo }}</span>
+                    <span class="esp-type">Especialista Interno</span>
+                  </div>
+                  <div class="esp-check">
+                    <mat-icon>check_circle</mat-icon>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="step-locked" *ngIf="!tipoSolicitudSeleccionado || (tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length === 0)">
+            <mat-icon>lock</mat-icon>
+            <span>Primero completa los pasos anteriores</span>
+          </div>
+        </div>
       </div>
     </div>
 
