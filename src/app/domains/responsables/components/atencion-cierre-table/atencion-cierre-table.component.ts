@@ -110,14 +110,26 @@ export class AtencionCierreTableComponent implements OnInit {
    */
   cargarDatos(): void {
     this.cargando = true;
+    this.items = []; // Limpiar items anteriores
     console.log('📋 [AtencionCierre] Cargando todas las atenciones...');
 
     this.atencionService.obtenerTodasAtenciones().subscribe({
       next: (atenciones: AtencionConEspecialistas[]) => {
-        console.log('✅ [AtencionCierre] Atenciones recibidas:', atenciones);
+        console.log('✅ [AtencionCierre] Atenciones recibidas:', atenciones.length);
+        
+        if (atenciones.length === 0) {
+          this.items = [];
+          this.cargando = false;
+          console.log('ℹ️ [AtencionCierre] No hay atenciones registradas');
+          return;
+        }
         
         // Mapear atenciones a items de la tabla y cargar datos de cierre
         const itemsPromises = atenciones.map((atencion, index) => {
+          const fechaRegistro = atencion.atencion.fecha_registro 
+            ? new Date(atencion.atencion.fecha_registro) 
+            : new Date();
+          
           const item: AtencionCierreItem = {
             id: index + 1,
             idAtencion: atencion.atencion.id_atencion,
@@ -129,9 +141,7 @@ export class AtencionCierreTableComponent implements OnInit {
             especialistas: atencion.especialistas.map(esp => esp.nombre_especialista),
             // TICKET MS-SAT - Inicializar con valores vacíos (se llenarán con los 4 formularios)
             ticketNumero: '',
-            ticketFechaApertura: atencion.atencion.fecha_registro 
-              ? new Date(atencion.atencion.fecha_registro) 
-              : new Date(),
+            ticketFechaApertura: fechaRegistro,
             ticketFechaResolucion: null,
             // RESPUESTA
             respuestaEstado: 'Pendiente',
@@ -151,28 +161,28 @@ export class AtencionCierreTableComponent implements OnInit {
           // Calcular días de atraso
           item.diasAtraso = this.calcularDiasAtraso(item.ticketFechaApertura);
           
-          // Obtener datos de cierre si existen
+          // Obtener datos de cierre si existen (sin bloquear si no hay)
           return this.cierreService.obtenerCierrePorAtencion(atencion.atencion.id_atencion).pipe(
             map(cierreResponse => {
               if (cierreResponse.success && cierreResponse.data) {
                 const cierre = cierreResponse.data;
                 // Actualizar item con datos de cierre
                 item.ticketNumero = cierre.ticket_numero || '';
-                item.ticketFechaApertura = cierre.ticket_fecha_apertura 
-                  ? new Date(cierre.ticket_fecha_apertura) 
-                  : item.ticketFechaApertura;
-                item.ticketFechaResolucion = cierre.ticket_fecha_resolucion 
-                  ? new Date(cierre.ticket_fecha_resolucion) 
-                  : null;
+                if (cierre.ticket_fecha_apertura) {
+                  item.ticketFechaApertura = new Date(cierre.ticket_fecha_apertura);
+                }
+                if (cierre.ticket_fecha_resolucion) {
+                  item.ticketFechaResolucion = new Date(cierre.ticket_fecha_resolucion);
+                }
                 item.respuestaEstado = cierre.respuesta_estado || 'Pendiente';
                 item.respuestaTipo = cierre.respuesta_tipo || '';
                 item.respuestaNumero = cierre.respuesta_numero || '';
-                item.respuestaFecha = cierre.respuesta_fecha 
-                  ? new Date(cierre.respuesta_fecha) 
-                  : null;
-                item.notificacionFecha = cierre.notificacion_fecha 
-                  ? new Date(cierre.notificacion_fecha) 
-                  : null;
+                if (cierre.respuesta_fecha) {
+                  item.respuestaFecha = new Date(cierre.respuesta_fecha);
+                }
+                if (cierre.notificacion_fecha) {
+                  item.notificacionFecha = new Date(cierre.notificacion_fecha);
+                }
                 item.notificacionModelo = cierre.notificacion_modelo || '';
                 item.dispositivoSerie = cierre.dispositivo_serie || '';
                 item.dispositivoObservaciones = cierre.dispositivo_observaciones || '';
@@ -183,17 +193,21 @@ export class AtencionCierreTableComponent implements OnInit {
               }
               return item;
             }),
-            catchError(() => of(item))
+            catchError((error) => {
+              console.log('ℹ️ [AtencionCierre] No hay cierre para atención', atencion.atencion.id_atencion);
+              return of(item);
+            })
           );
         });
         
         // Esperar a que todas las promesas se resuelvan
         forkJoin(itemsPromises).subscribe({
           next: (items) => {
+            console.log('✅ [AtencionCierre] Items procesados:', items.length);
             this.items = items;
             
             // Intentar obtener números de expediente (opcional, no bloquea)
-            items.forEach((item, index) => {
+            items.forEach((item) => {
               this.expedienteService.obtenerExpedientePorId(item.idExpediente).pipe(
                 catchError(() => of(null))
               ).subscribe(expediente => {
@@ -207,17 +221,19 @@ export class AtencionCierreTableComponent implements OnInit {
             });
             
             this.cargando = false;
-            console.log('✅ [AtencionCierre] Items cargados:', this.items.length);
+            console.log('✅ [AtencionCierre] Items cargados exitosamente:', this.items.length);
           },
           error: (error) => {
             console.error('❌ [AtencionCierre] Error al cargar items:', error);
             this.cargando = false;
+            this.items = [];
           }
         });
       },
       error: (error) => {
         console.error('❌ [AtencionCierre] Error al cargar atenciones:', error);
         this.cargando = false;
+        this.items = [];
       }
     });
   }

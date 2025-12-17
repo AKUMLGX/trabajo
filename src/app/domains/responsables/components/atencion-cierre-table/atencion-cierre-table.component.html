@@ -19,6 +19,28 @@
     </div>
   </div>
 
+  <!-- LOADING STATE -->
+  @if (cargando) {
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Cargando información de atenciones...</p>
+    </div>
+  }
+
+  <!-- NO DATA STATE -->
+  @if (!cargando && items.length === 0) {
+    <div class="no-data-container">
+      <div class="no-data-icon">
+        <mat-icon>inbox</mat-icon>
+      </div>
+      <h2>No hay atenciones registradas</h2>
+      <p>No se encontraron atenciones en el sistema. Las atenciones aparecerán aquí una vez que se registren en el Centro de Control.</p>
+    </div>
+  }
+
+  <!-- DATA TABLE -->
+  @if (!cargando && items.length > 0) {
+
   <!-- SECCIÓN: SEMÁFORO -->
   <div class="section-container">
     <div class="section-header semaforo-header">
