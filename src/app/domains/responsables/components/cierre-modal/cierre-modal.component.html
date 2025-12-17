@@ -1,0 +1,250 @@
+<div class="cierre-modal">
+  <!-- HEADER -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>assignment_turned_in</mat-icon>
+      </div>
+      <div class="header-text">
+        <p class="header-eyebrow">Formularios de Cierre</p>
+        <h2 class="header-title">Completar Información de Cierre</h2>
+        <p class="header-subtitle">Expediente: {{ data.expediente }}</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="cerrar()" [disabled]="guardando" matTooltip="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- BODY -->
+  <div class="modal-body" [class.loading]="cargando">
+    @if (cargando) {
+      <div class="loader">
+        <div class="spinner"></div>
+        <p>Cargando información...</p>
+      </div>
+    } @else {
+      <form [formGroup]="formulario" class="cierre-form">
+        
+        <!-- FORMULARIO 1: TICKET MS-SAT -->
+        <div class="form-section ticket-section">
+          <div class="section-header-form">
+            <div class="section-icon-wrapper">
+              <mat-icon class="section-icon">confirmation_number</mat-icon>
+            </div>
+            <div class="section-title-wrapper">
+              <h3 class="section-title">TICKET MS-SAT</h3>
+              <p class="section-subtitle">Información del ticket de seguimiento</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">tag</mat-icon>
+                Número de Ticket
+              </label>
+              <input 
+                type="text" 
+                formControlName="ticketNumero"
+                class="premium-input"
+                placeholder="Ej: TKT-001-2025">
+            </div>
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">event</mat-icon>
+                Fecha de Apertura
+              </label>
+              <input 
+                type="date" 
+                formControlName="ticketFechaApertura"
+                class="premium-input">
+            </div>
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">check_circle</mat-icon>
+                Fecha de Resolución
+              </label>
+              <input 
+                type="date" 
+                formControlName="ticketFechaResolucion"
+                class="premium-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- FORMULARIO 2: RESPUESTA -->
+        <div class="form-section respuesta-section">
+          <div class="section-header-form">
+            <div class="section-icon-wrapper">
+              <mat-icon class="section-icon">description</mat-icon>
+            </div>
+            <div class="section-title-wrapper">
+              <h3 class="section-title">RESPUESTA</h3>
+              <p class="section-subtitle">Detalles de la respuesta generada</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">flag</mat-icon>
+                Estado
+              </label>
+              <select formControlName="respuestaEstado" class="premium-select">
+                @for (estado of estadosRespuesta; track estado) {
+                  <option [value]="estado">{{ estado }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">category</mat-icon>
+                Tipo
+              </label>
+              <select formControlName="respuestaTipo" class="premium-select">
+                <option value="">Seleccione...</option>
+                @for (tipo of tiposRespuesta; track tipo) {
+                  <option [value]="tipo">{{ tipo }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">tag</mat-icon>
+                Número
+              </label>
+              <input 
+                type="text" 
+                formControlName="respuestaNumero"
+                class="premium-input"
+                placeholder="Ej: RES-001-2025">
+            </div>
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">event</mat-icon>
+                Fecha
+              </label>
+              <input 
+                type="date" 
+                formControlName="respuestaFecha"
+                class="premium-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- FORMULARIO 3: NOTIFICACIÓN -->
+        <div class="form-section notificacion-section">
+          <div class="section-header-form">
+            <div class="section-icon-wrapper">
+              <mat-icon class="section-icon">notifications</mat-icon>
+            </div>
+            <div class="section-title-wrapper">
+              <h3 class="section-title">NOTIFICACIÓN</h3>
+              <p class="section-subtitle">Información de notificación al remitente</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">event</mat-icon>
+                Fecha de Notificación
+              </label>
+              <input 
+                type="date" 
+                formControlName="notificacionFecha"
+                class="premium-input">
+            </div>
+            <div class="form-field">
+              <label class="field-label">
+                <mat-icon class="label-icon">style</mat-icon>
+                Modelo
+              </label>
+              <input 
+                type="text" 
+                formControlName="notificacionModelo"
+                class="premium-input"
+                placeholder="Ej: Modelo A, Modelo B">
+            </div>
+          </div>
+        </div>
+
+        <!-- FORMULARIO 4: DISPOSITIVO -->
+        <div class="form-section dispositivo-section">
+          <div class="section-header-form">
+            <div class="section-icon-wrapper">
+              <mat-icon class="section-icon">devices</mat-icon>
+            </div>
+            <div class="section-title-wrapper">
+              <h3 class="section-title">DISPOSITIVO</h3>
+              <p class="section-subtitle">Información del dispositivo involucrado</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label class="field-label">
+                <mat-icon class="label-icon">memory</mat-icon>
+                Serie del Dispositivo
+              </label>
+              <input 
+                type="text" 
+                formControlName="dispositivoSerie"
+                class="premium-input"
+                placeholder="Ej: SER-001-2025">
+            </div>
+            <div class="form-field full-width">
+              <label class="field-label">
+                <mat-icon class="label-icon">notes</mat-icon>
+                Observaciones del Dispositivo
+              </label>
+              <textarea 
+                formControlName="dispositivoObservaciones"
+                class="premium-textarea"
+                rows="3"
+                placeholder="Ingrese observaciones sobre el dispositivo..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- OBSERVACIONES GENERALES -->
+        <div class="form-section observaciones-section">
+          <div class="section-header-form">
+            <div class="section-icon-wrapper">
+              <mat-icon class="section-icon">comment</mat-icon>
+            </div>
+            <div class="section-title-wrapper">
+              <h3 class="section-title">OBSERVACIONES</h3>
+              <p class="section-subtitle">Comentarios adicionales</p>
+            </div>
+          </div>
+          <div class="form-field full-width">
+            <textarea 
+              formControlName="observaciones"
+              class="premium-textarea"
+              rows="4"
+              placeholder="Ingrese observaciones generales..."></textarea>
+          </div>
+        </div>
+
+      </form>
+    }
+  </div>
+
+  <!-- FOOTER -->
+  <div class="modal-footer">
+    <button 
+      class="btn-secondary" 
+      (click)="cerrar()" 
+      [disabled]="guardando">
+      <mat-icon>close</mat-icon>
+      Cancelar
+    </button>
+    <button 
+      class="btn-primary" 
+      (click)="guardar()" 
+      [disabled]="formulario.invalid || guardando">
+      <mat-icon *ngIf="!guardando">save</mat-icon>
+      <div class="btn-spinner" *ngIf="guardando"></div>
+      {{ guardando ? 'Guardando...' : 'Guardar Cierre' }}
+    </button>
+  </div>
+</div>
+

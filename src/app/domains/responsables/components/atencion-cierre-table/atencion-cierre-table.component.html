@@ -30,6 +30,7 @@
         <thead>
           <tr>
             <th class="col-semaforo">SEMÁFORO</th>
+            <th class="col-header-actions">ACCIONES</th>
           </tr>
         </thead>
         <tbody>
@@ -94,18 +95,12 @@
               }
             </td>
             <td class="actions-cell">
-              @if (editingItemId === item.id) {
-                <button (click)="guardarItem()" class="btn-icon save-btn" matTooltip="Guardar">
-                  <mat-icon>check</mat-icon>
-                </button>
-                <button (click)="cancelarEdicion()" class="btn-icon cancel-btn" matTooltip="Cancelar">
-                  <mat-icon>close</mat-icon>
-                </button>
-              } @else {
-                <button (click)="editarItem(item)" class="btn-icon edit-btn" matTooltip="Editar">
-                  <mat-icon>edit</mat-icon>
-                </button>
-              }
+              <button 
+                (click)="abrirModalCierre(item)" 
+                class="btn-icon cierre-btn" 
+                matTooltip="Completar Formularios de Cierre">
+                <mat-icon>assignment_turned_in</mat-icon>
+              </button>
             </td>
           </tr>
           }

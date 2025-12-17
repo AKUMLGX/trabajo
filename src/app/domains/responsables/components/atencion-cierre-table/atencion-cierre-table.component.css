@@ -500,6 +500,50 @@
 }
 
 /* =====================================================
+   BOTONES DE ACCIÓN
+   ===================================================== */
+.actions-cell {
+  text-align: center;
+  padding: 12px;
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #666;
+}
+
+.btn-icon:hover {
+  transform: scale(1.1);
+}
+
+.cierre-btn {
+  background: linear-gradient(135deg, #34005b 0%, #3e0065 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(52, 0, 91, 0.2);
+}
+
+.cierre-btn:hover {
+  background: linear-gradient(135deg, #3e0065 0%, #d6ae67 100%);
+  box-shadow: 0 6px 20px rgba(52, 0, 91, 0.4);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.cierre-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* =====================================================
    RESPONSIVE
    ===================================================== */
 
