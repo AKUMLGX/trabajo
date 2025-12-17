@@ -677,6 +677,9 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.prioridad = '';
     this.formulario.notas = '';
     this.flujoAsignadoSeleccionado = ''; // Resetear flujo cuando cambia el tipo de acción principal
+    // Resetear campos de Solicitud de Información
+    this.tipoSolicitudSeleccionado = '';
+    this.opcionesCorrelacionSeleccionadas = [];
     // sistema_aplicativo se mantiene al cambiar tipo de acción
   }
 
@@ -693,6 +696,38 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.resultadoSeleccionado = '';
     this.formulario.fechaEntrega = '';
     this.formulario.notas = '';
+    // Resetear campos de Solicitud de Información
+    this.tipoSolicitudSeleccionado = '';
+    this.opcionesCorrelacionSeleccionadas = [];
+  }
+
+  /**
+   * Seleccionar tipo de solicitud (Correlación u Otra área)
+   */
+  seleccionarTipoSolicitud(tipo: 'CORRELACION' | 'OTRA_AREA'): void {
+    this.tipoSolicitudSeleccionado = tipo;
+    if (tipo !== 'CORRELACION') {
+      this.opcionesCorrelacionSeleccionadas = [];
+    }
+  }
+
+  /**
+   * Toggle opción de correlación
+   */
+  toggleOpcionCorrelacion(codigo: string): void {
+    const index = this.opcionesCorrelacionSeleccionadas.indexOf(codigo);
+    if (index > -1) {
+      this.opcionesCorrelacionSeleccionadas.splice(index, 1);
+    } else {
+      this.opcionesCorrelacionSeleccionadas.push(codigo);
+    }
+  }
+
+  /**
+   * Verificar si una opción de correlación está seleccionada
+   */
+  opcionCorrelacionSeleccionada(codigo: string): boolean {
+    return this.opcionesCorrelacionSeleccionadas.includes(codigo);
   }
 
   /**
