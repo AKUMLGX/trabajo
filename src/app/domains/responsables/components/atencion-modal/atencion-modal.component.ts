@@ -194,6 +194,65 @@ export class AtencionModalComponent implements OnInit {
     'Opinión de Cumplimiento'
   ];
 
+  // Estado del dropdown de sistemas
+  sistemaDropdownAbierto: boolean = false;
+  sistemaBusqueda: string = '';
+  sistemasFiltrados: string[] = [];
+
+  /**
+   * Filtra los sistemas según la búsqueda
+   */
+  filtrarSistemas(): void {
+    if (!this.sistemaBusqueda || this.sistemaBusqueda.trim() === '') {
+      this.sistemasFiltrados = this.sistemasAplicativos;
+    } else {
+      const busqueda = this.sistemaBusqueda.toLowerCase().trim();
+      this.sistemasFiltrados = this.sistemasAplicativos.filter(sistema =>
+        sistema.toLowerCase().includes(busqueda)
+      );
+    }
+  }
+
+  /**
+   * Selecciona un sistema del catálogo
+   */
+  seleccionarSistema(sistema: string): void {
+    this.formulario.sistema_aplicativo = sistema;
+    this.sistemaBusqueda = sistema;
+    this.sistemaDropdownAbierto = false;
+    this.filtrarSistemas(); // Actualizar filtros
+  }
+
+  /**
+   * Maneja el input del sistema
+   */
+  onSistemaInputChange(): void {
+    // Actualizar el formulario con lo que el usuario escribe
+    this.formulario.sistema_aplicativo = this.sistemaBusqueda;
+    this.filtrarSistemas();
+    this.sistemaDropdownAbierto = true;
+  }
+
+  /**
+   * Abre/cierra el dropdown
+   */
+  toggleSistemaDropdown(): void {
+    this.sistemaDropdownAbierto = !this.sistemaDropdownAbierto;
+    if (this.sistemaDropdownAbierto) {
+      this.filtrarSistemas();
+    }
+  }
+
+  /**
+   * Cierra el dropdown cuando se hace clic fuera o se pierde el foco
+   */
+  cerrarSistemaDropdown(): void {
+    // Pequeño delay para permitir que el click en un item se procese primero
+    setTimeout(() => {
+      this.sistemaDropdownAbierto = false;
+    }, 150);
+  }
+
   // Estado del formulario
   formulario: FormularioAtencion = {
     tipoAccion: '',
@@ -320,6 +379,12 @@ export class AtencionModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Inicializar sistemas filtrados
+    this.sistemasFiltrados = this.sistemasAplicativos;
+    // Sincronizar búsqueda con el valor del formulario si existe
+    if (this.formulario.sistema_aplicativo) {
+      this.sistemaBusqueda = this.formulario.sistema_aplicativo;
+    }
     this.cargarCatalogos();
   }
 
@@ -707,8 +772,14 @@ export class AtencionModalComponent implements OnInit {
   /**
    * Seleccionar tipo de solicitud (Correlación u Otra área)
    */
-  seleccionarTipoSolicitud(tipo: 'CORRELACION' | 'OTRA_AREA'): void {
-    this.tipoSolicitudSeleccionado = tipo;
+  seleccionarTipoSolicitud(tipo: string): void {
+    if (tipo === 'CORRELACION' || tipo === 'OTRA_AREA') {
+      this.tipoSolicitudSeleccionado = tipo;
+    } else {
+      this.tipoSolicitudSeleccionado = '';
+    }
+
+    // Si no es correlación, limpiar opciones de correlación
     if (tipo !== 'CORRELACION') {
       this.opcionesCorrelacionSeleccionadas = [];
     }

@@ -256,18 +256,48 @@
         Sistema y Aplicativo
       </h3>
       <div class="sistema-select-container">
-        <input 
-          type="text"
-          class="sistema-input"
-          [(ngModel)]="formulario.sistema_aplicativo"
-          list="sistemas-list"
-          placeholder="Selecciona o escribe un sistema"
-          autocomplete="off">
-        <datalist id="sistemas-list">
-          <option *ngFor="let sistema of sistemasAplicativos" [value]="sistema">
-            {{ sistema }}
-          </option>
-        </datalist>
+        <div class="sistema-input-wrapper">
+          <input 
+            type="text"
+            class="sistema-input"
+            [(ngModel)]="sistemaBusqueda"
+            (ngModelChange)="onSistemaInputChange()"
+            (focus)="sistemaDropdownAbierto = true; filtrarSistemas()"
+            (blur)="cerrarSistemaDropdown()"
+            placeholder="Busca o escribe un sistema"
+            autocomplete="off">
+          <button 
+            type="button"
+            class="sistema-dropdown-btn"
+            (click)="toggleSistemaDropdown()"
+            [class.active]="sistemaDropdownAbierto">
+            <mat-icon>{{ sistemaDropdownAbierto ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+        </div>
+        
+        <!-- Dropdown mejorado -->
+        <div class="sistema-dropdown" *ngIf="sistemaDropdownAbierto" [@slideDown]>
+          <div class="dropdown-header">
+            <mat-icon>search</mat-icon>
+            <span>{{ sistemasFiltrados.length }} sistema(s) encontrado(s)</span>
+          </div>
+          <div class="dropdown-list">
+            <div 
+              *ngFor="let sistema of sistemasFiltrados"
+              class="dropdown-item"
+              (click)="seleccionarSistema(sistema)"
+              [class.selected]="formulario.sistema_aplicativo === sistema">
+              <mat-icon class="item-icon">apps</mat-icon>
+              <span class="item-text">{{ sistema }}</span>
+              <mat-icon class="item-check" *ngIf="formulario.sistema_aplicativo === sistema">check_circle</mat-icon>
+            </div>
+            <div class="dropdown-empty" *ngIf="sistemasFiltrados.length === 0">
+              <mat-icon>info</mat-icon>
+              <p>No se encontraron sistemas. Puedes escribir uno nuevo.</p>
+            </div>
+          </div>
+        </div>
+        
         <p class="sistema-hint">
           <mat-icon>info</mat-icon>
           Selecciona un sistema del catálogo o escribe uno nuevo
@@ -850,7 +880,7 @@
                 *ngFor="let opcion of opcionesSolicitudInfo"
                 class="action-card"
                 [class.selected]="tipoSolicitudSeleccionado === opcion.value"
-                (click)="seleccionarTipoSolicitud(opcion.value as 'CORRELACION' | 'OTRA_AREA')">
+                (click)="seleccionarTipoSolicitud(opcion.value)">
                 <div class="card-icon" [ngClass]="opcion.value === 'CORRELACION' ? 'text-blue-600' : 'text-gray-600'">
                   <mat-icon>{{ opcion.icon }}</mat-icon>
                 </div>
