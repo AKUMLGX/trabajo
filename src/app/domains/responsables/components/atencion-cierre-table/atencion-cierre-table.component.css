@@ -1,18 +1,9 @@
-/* =====================================================
-   BANDEJA ATENCIÓN / CIERRE - POR SECCIONES
-   Paleta Institucional SAT
-   ===================================================== */
-
 .atencion-cierre-wrapper {
   width: 100%;
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 50%, #f8f9fa 100%);
   padding: 1.5rem;
 }
-
-/* =====================================================
-   HEADER
-   ===================================================== */
 
 .page-header {
   background: linear-gradient(135deg, #34005b 0%, #3e0065 100%);
@@ -75,222 +66,6 @@
 }
 
 /* =====================================================
-   SECCIONES
-   ===================================================== */
-
-.section-container {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(52, 0, 91, 0.08);
-  margin-bottom: 2rem;
-  overflow: hidden;
-  border: 1px solid rgba(52, 0, 91, 0.1);
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: white;
-  position: relative;
-}
-
-.section-icon {
-  font-size: 1.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.section-title {
-  flex: 1;
-}
-
-/* Colores por sección - Paleta Institucional */
-.semaforo-header {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.ticket-header {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-}
-
-.respuesta-header {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-}
-
-.notificacion-header {
-  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-}
-
-.dispositivo-header {
-  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-}
-
-.observaciones-header {
-  background: linear-gradient(135deg, #34005b 0%, #3e0065 100%);
-}
-
-.section-content {
-  padding: 1.5rem;
-}
-
-/* =====================================================
-   TABLAS POR SECCIÓN
-   ===================================================== */
-
-.section-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.section-table thead {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
-}
-
-.col-header {
-  padding: 1rem;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #1e40af;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
-}
-
-.col-semaforo {
-  padding: 1rem;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #047857;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
-}
-
-.col-header-actions {
-  padding: 1rem;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #34005b;
-  border: 1px solid rgba(52, 0, 91, 0.3);
-  background: linear-gradient(135deg, rgba(52, 0, 91, 0.2) 0%, rgba(62, 0, 101, 0.2) 100%);
-  width: 120px;
-}
-
-.data-cell {
-  padding: 1rem;
-  text-align: center;
-  vertical-align: middle;
-  border: 1px solid #e5e7eb;
-  background: white;
-}
-
-.cell-value {
-  color: #374151;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.observaciones-cell {
-  min-width: 300px;
-  text-align: left;
-}
-
-/* =====================================================
-   SEMÁFORO
-   ===================================================== */
-
-.semaforo-row {
-  transition: all 0.2s ease;
-}
-
-.semaforo-row.semaforo-verde {
-  background: linear-gradient(to right, rgba(16, 185, 129, 0.08) 0%, transparent 10%);
-}
-
-.semaforo-row.semaforo-naranja {
-  background: linear-gradient(to right, rgba(251, 146, 60, 0.08) 0%, transparent 10%);
-}
-
-.semaforo-row.semaforo-rojo {
-  background: linear-gradient(to right, rgba(239, 68, 68, 0.08) 0%, transparent 10%);
-}
-
-.semaforo-cell {
-  padding: 1.5rem;
-}
-
-.semaforo-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.semaforo-indicator {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.semaforo-indicator.semaforo-verde {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.semaforo-indicator.semaforo-naranja {
-  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
-}
-
-.semaforo-indicator.semaforo-rojo {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-.semaforo-dot {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.semaforo-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.semaforo-label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #374151;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.semaforo-days {
-  font-size: 0.875rem;
-  color: #6b7280;
-  font-weight: 600;
-}
-
-/* =====================================================
    INPUTS Y CONTROLES
    ===================================================== */
 
@@ -319,119 +94,6 @@
   resize: vertical;
   min-height: 80px;
   font-family: inherit;
-}
-
-/* =====================================================
-   STATUS BADGES
-   ===================================================== */
-
-.status-badge {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-pendiente {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: white;
-  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
-}
-
-.status-en-proceso {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-}
-
-.status-completado {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-}
-
-.status-cancelado {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-}
-
-/* =====================================================
-   ACCIONES
-   ===================================================== */
-
-.actions-container {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(52, 0, 91, 0.08);
-  border: 1px solid rgba(52, 0, 91, 0.1);
-  margin-top: 2rem;
-}
-
-.action-buttons-group {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.action-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.save-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-}
-
-.save-btn:hover {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-}
-
-.cancel-btn {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-}
-
-.cancel-btn:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-}
-
-.action-btn mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-.edit-hint {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  justify-content: center;
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-.edit-hint mat-icon {
-  color: #34005b;
 }
 
 /* =====================================================
@@ -497,6 +159,235 @@
   font-size: 18px;
   width: 18px;
   height: 18px;
+}
+
+/* =====================================================
+   NUEVA VISTA TIPO CENTRO DE CONTROL
+   ===================================================== */
+
+.semaforo-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.semaforo-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 14px;
+  background: white;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+}
+
+.semaforo-card .semaforo-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+}
+
+.semaforo-card.verde .semaforo-dot {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.semaforo-card.naranja .semaforo-dot {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.semaforo-card.rojo .semaforo-dot {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
+
+.semaforo-card.total .semaforo-dot {
+  background: linear-gradient(135deg, #34005b, #3e0065);
+}
+
+.semaforo-card .semaforo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.semaforo-card .label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.semaforo-card .value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.tabla-atencion-cierre {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.tabla-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(to right, #fefefe, #f5f5f4);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-title h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.badge-count {
+  margin-left: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(52, 0, 91, 0.07);
+  color: #34005b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid rgba(52, 0, 91, 0.18);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.expedientes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expedientes-table th {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.expedientes-table td {
+  padding: 14px 18px;
+  font-size: 0.9rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  background: white;
+}
+
+.expedientes-table tbody tr:hover td {
+  background: linear-gradient(to right, rgba(148, 163, 184, 0.08), transparent);
+}
+
+.semaforo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.semaforo-badge.semaforo-verde {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #047857;
+}
+
+.semaforo-badge.semaforo-naranja {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #92400e;
+}
+
+.semaforo-badge.semaforo-rojo {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #b91c1c;
+}
+
+.semaforo-dot-mini {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.expediente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.expediente-code {
+  font-weight: 700;
+  color: #111827;
+}
+
+.expediente-id {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.tipo-atencion-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(52, 0, 91, 0.06);
+  color: #34005b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.especialistas-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip-especialista {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.texto-mutedo {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.usuario-registro {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.dias-atraso {
+  font-weight: 600;
+  color: #111827;
+}
+
+.text-center {
+  text-align: center;
 }
 
 /* =====================================================

@@ -1,6 +1,6 @@
 <!-- =====================================================
      BANDEJA DE ATENCIÓN / CIERRE
-     Diseño por Secciones - Paleta Institucional SAT
+     Vista tipo Centro de Control
      ===================================================== -->
 
 <div class="atencion-cierre-wrapper">
@@ -14,7 +14,7 @@
       </div>
       <div class="header-text">
         <h1>ATENCIÓN / CIERRE</h1>
-        <p>Gestión final de expedientes y seguimiento de respuestas</p>
+        <p>Gestión final de expedientes atendidos</p>
       </div>
     </div>
   </div>
@@ -34,46 +34,130 @@
         <mat-icon>inbox</mat-icon>
       </div>
       <h2>No hay atenciones registradas</h2>
-      <p>No se encontraron atenciones en el sistema. Las atenciones aparecerán aquí una vez que se registren en el Centro de Control.</p>
+      <p>Los expedientes aparecerán aquí una vez que se registren atenciones en el Centro de Control.</p>
     </div>
   }
 
-  <!-- DATA TABLE -->
+  <!-- CONTENIDO PRINCIPAL -->
   @if (!cargando && items.length > 0) {
 
-  <!-- SECCIÓN: SEMÁFORO -->
-  <div class="section-container">
-    <div class="section-header semaforo-header">
-      <div class="section-icon">🚦</div>
-      <div class="section-title">DÍAS DE ATRASO</div>
+  <!-- RESUMEN DE SEMÁFORO (similar al Centro de Control) -->
+  <section class="semaforo-resumen">
+    <div class="semaforo-card verde">
+      <div class="semaforo-dot"></div>
+      <div class="semaforo-info">
+        <span class="label">En tiempo</span>
+        <span class="value">{{ totalVerde }}</span>
+      </div>
     </div>
-    <div class="section-content">
-      <table class="section-table">
+    <div class="semaforo-card naranja">
+      <div class="semaforo-dot"></div>
+      <div class="semaforo-info">
+        <span class="label">Hasta 5 días hábiles</span>
+        <span class="value">{{ totalNaranja }}</span>
+      </div>
+    </div>
+    <div class="semaforo-card rojo">
+      <div class="semaforo-dot"></div>
+      <div class="semaforo-info">
+        <span class="label">Después de 6 días hábiles</span>
+        <span class="value">{{ totalRojo }}</span>
+      </div>
+    </div>
+    <div class="semaforo-card total">
+      <div class="semaforo-dot"></div>
+      <div class="semaforo-info">
+        <span class="label">Total de atenciones</span>
+        <span class="value">{{ items.length }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLA PRINCIPAL (similar a Centro de Control) -->
+  <section class="tabla-atencion-cierre">
+    <div class="tabla-header">
+      <div class="tabla-title">
+        <h3>Expedientes con Atención Registrada</h3>
+        <span class="badge-count">{{ items.length }} registros</span>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="expedientes-table">
         <thead>
           <tr>
-            <th class="col-semaforo">SEMÁFORO</th>
-            <th class="col-header-actions">ACCIONES</th>
+            <th>Prioridad</th>
+            <th>Expediente</th>
+            <th>Tipo de Atención</th>
+            <th>Especialistas</th>
+            <th>Usuario Registro</th>
+            <th>Fecha Apertura</th>
+            <th>Días de atraso</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
           @for (item of items; track item.id) {
-          <tr [class]="'semaforo-row ' + getSemaforoClass(item.diasAtraso)">
-            <td class="semaforo-cell">
-              <div class="semaforo-display">
-                <div class="semaforo-indicator" [ngClass]="getSemaforoClass(item.diasAtraso)">
-                  <div class="semaforo-dot"></div>
-                </div>
-                <div class="semaforo-info">
-                  <span class="semaforo-label">{{ getSemaforoLabel(item.diasAtraso) }}</span>
-                  <span class="semaforo-days">{{ item.diasAtraso }} días</span>
-                </div>
+          <tr class="priority-row">
+            <!-- Semáforo -->
+            <td>
+              <div class="semaforo-badge" [class]="getSemaforoClass(item.diasAtraso)">
+                <span class="semaforo-dot-mini"></span>
+                <span class="semaforo-label">
+                  {{ getSemaforoLabel(item.diasAtraso) }}
+                </span>
               </div>
             </td>
-            <td class="actions-cell">
+
+            <!-- Expediente -->
+            <td>
+              <div class="expediente-info">
+                <span class="expediente-code">{{ item.expediente || '-' }}</span>
+                <span class="expediente-id">ID {{ item.idExpediente }}</span>
+              </div>
+            </td>
+
+            <!-- Tipo de atención -->
+            <td>
+              <span class="tipo-atencion-badge">
+                {{ item.tipoAccion }}
+              </span>
+            </td>
+
+            <!-- Especialistas -->
+            <td>
+              @if (item.especialistas?.length) {
+                <div class="especialistas-list">
+                  @for (esp of item.especialistas; track esp) {
+                    <span class="chip-especialista">{{ esp }}</span>
+                  }
+                </div>
+              } @else {
+                <span class="texto-mutedo">Sin especialistas</span>
+              }
+            </td>
+
+            <!-- Usuario registro -->
+            <td>
+              <span class="usuario-registro">{{ item.usuarioRegistro || '—' }}</span>
+            </td>
+
+            <!-- Fecha apertura (ticket o registro) -->
+            <td>
+              <span>{{ formatearFecha(item.ticketFechaApertura) }}</span>
+            </td>
+
+            <!-- Días atraso -->
+            <td>
+              <span class="dias-atraso">{{ item.diasAtraso }} días</span>
+            </td>
+
+            <!-- Acciones -->
+            <td class="text-center">
               <button 
                 (click)="abrirModalCierre(item)" 
                 class="btn-icon cierre-btn" 
-                matTooltip="Completar Formularios de Cierre">
+                matTooltip="Abrir formularios de cierre">
                 <mat-icon>assignment_turned_in</mat-icon>
               </button>
             </td>
@@ -82,252 +166,6 @@
         </tbody>
       </table>
     </div>
-  </div>
-
-  <!-- SECCIÓN: TICKET MS-SAT -->
-  <div class="section-container">
-    <div class="section-header ticket-header">
-      <div class="section-icon">🎫</div>
-      <div class="section-title">TICKET MS-SAT</div>
-    </div>
-    <div class="section-content">
-      <table class="section-table">
-        <thead>
-          <tr>
-            <th class="col-header">NUMERO</th>
-            <th class="col-header">FECHA DE APERTURA</th>
-            <th class="col-header">FECHA DE RESOLUCIÓN</th>
-            <th class="col-header-actions">ACCIONES</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of items; track item.id) {
-          <tr>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="text" [formControl]="ticketNumeroControl" class="premium-input" placeholder="Número">
-              } @else {
-                <span class="cell-value">{{ item.ticketNumero }}</span>
-              }
-            </td>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="date" [formControl]="ticketFechaAperturaControl" class="premium-input">
-              } @else {
-                <span class="cell-value">{{ formatearFecha(item.ticketFechaApertura) }}</span>
-              }
-            </td>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="date" [formControl]="ticketFechaResolucionControl" class="premium-input">
-              } @else {
-                <span class="cell-value">{{ formatearFecha(item.ticketFechaResolucion) }}</span>
-              }
-            </td>
-            <td class="actions-cell">
-              <button 
-                (click)="abrirModalCierre(item)" 
-                class="btn-icon cierre-btn" 
-                matTooltip="Completar Formularios de Cierre">
-                <mat-icon>assignment_turned_in</mat-icon>
-              </button>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- SECCIÓN: RESPUESTA (Próxima sección) -->
-  <div class="section-container">
-    <div class="section-header respuesta-header">
-      <div class="section-icon">📋</div>
-      <div class="section-title">RESPUESTA</div>
-    </div>
-    <div class="section-content">
-      <table class="section-table">
-        <thead>
-          <tr>
-            <th class="col-header">ESTADO</th>
-            <th class="col-header">TIPO</th>
-            <th class="col-header">NUMERO</th>
-            <th class="col-header">FECHA</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of items; track item.id) {
-          <tr>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <select [formControl]="respuestaEstadoControl" class="premium-select">
-                  @for (estado of estadosRespuesta; track estado) {
-                    <option [value]="estado">{{ estado }}</option>
-                  }
-                </select>
-              } @else {
-                <span class="status-badge" [ngClass]="'status-' + item.respuestaEstado.toLowerCase().replace(' ', '-')">
-                  {{ item.respuestaEstado }}
-                </span>
-              }
-            </td>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <select [formControl]="respuestaTipoControl" class="premium-select">
-                  @for (tipo of tiposRespuesta; track tipo) {
-                    <option [value]="tipo">{{ tipo }}</option>
-                  }
-                </select>
-              } @else {
-                <span class="cell-value">{{ item.respuestaTipo || '-' }}</span>
-              }
-            </td>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="text" [formControl]="respuestaNumeroControl" class="premium-input" placeholder="Número">
-              } @else {
-                <span class="cell-value">{{ item.respuestaNumero || '-' }}</span>
-              }
-            </td>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="date" [formControl]="respuestaFechaControl" class="premium-input">
-              } @else {
-                <span class="cell-value">{{ formatearFecha(item.respuestaFecha) }}</span>
-              }
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- SECCIÓN: NOTIFICACIÓN -->
-  <div class="section-container">
-    <div class="section-header notificacion-header">
-      <div class="section-icon">🔔</div>
-      <div class="section-title">NOTIFICACIÓN</div>
-    </div>
-    <div class="section-content">
-      <table class="section-table">
-        <thead>
-          <tr>
-            <th class="col-header">FECHA</th>
-            <th class="col-header">MODELO</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of items; track item.id) {
-          <tr>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="date" [formControl]="notificacionFechaControl" class="premium-input">
-              } @else {
-                <span class="cell-value">{{ formatearFecha(item.notificacionFecha) }}</span>
-              }
-            </td>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="text" [formControl]="notificacionModeloControl" class="premium-input" placeholder="Modelo">
-              } @else {
-                <span class="cell-value">{{ item.notificacionModelo || '-' }}</span>
-              }
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- SECCIÓN: DISPOSITIVO -->
-  <div class="section-container">
-    <div class="section-header dispositivo-header">
-      <div class="section-icon">💻</div>
-      <div class="section-title">DISPOSITIVO</div>
-    </div>
-    <div class="section-content">
-      <table class="section-table">
-        <thead>
-          <tr>
-            <th class="col-header">SERIE</th>
-            <th class="col-header">OBSERVACIONES</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of items; track item.id) {
-          <tr>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="text" [formControl]="dispositivoSerieControl" class="premium-input" placeholder="Serie">
-              } @else {
-                <span class="cell-value">{{ item.dispositivoSerie || '-' }}</span>
-              }
-            </td>
-            <td class="data-cell">
-              @if (editingItemId === item.id) {
-                <input type="text" [formControl]="dispositivoObservacionesControl" class="premium-input" placeholder="Obs.">
-              } @else {
-                <span class="cell-value">{{ item.dispositivoObservaciones || '-' }}</span>
-              }
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- SECCIÓN: OBSERVACIONES -->
-  <div class="section-container">
-    <div class="section-header observaciones-header">
-      <div class="section-icon">📝</div>
-      <div class="section-title">OBSERVACIONES</div>
-    </div>
-    <div class="section-content">
-      <table class="section-table">
-        <thead>
-          <tr>
-            <th class="col-header">OBSERVACIONES</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of items; track item.id) {
-          <tr>
-            <td class="data-cell observaciones-cell">
-              @if (editingItemId === item.id) {
-                <textarea [formControl]="observacionesControl" class="premium-textarea" rows="3" placeholder="Observaciones generales"></textarea>
-              } @else {
-                <span class="cell-value">{{ item.observaciones || '-' }}</span>
-              }
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- BOTONES DE ACCIÓN GLOBALES -->
-  <div class="actions-container">
-    @if (editingItemId !== null) {
-      <div class="action-buttons-group">
-        <button (click)="guardarItem()" class="action-btn save-btn">
-          <mat-icon>check</mat-icon>
-          <span>Guardar</span>
-        </button>
-        <button (click)="cancelarEdicion()" class="action-btn cancel-btn">
-          <mat-icon>close</mat-icon>
-          <span>Cancelar</span>
-        </button>
-      </div>
-    } @else {
-      <div class="edit-hint">
-        <mat-icon>info</mat-icon>
-        <span>Haz clic en el botón de editar en cualquier fila para modificar los datos</span>
-      </div>
-    }
-  </div>
+  </section>
   }
 </div>

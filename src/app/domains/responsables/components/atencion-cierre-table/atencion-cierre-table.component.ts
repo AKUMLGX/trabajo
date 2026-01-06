@@ -105,6 +105,19 @@ export class AtencionCierreTableComponent implements OnInit {
     this.cargarDatos();
   }
 
+  // === Contadores de semáforo para la vista resumen ===
+  get totalVerde(): number {
+    return this.items.filter(i => this.getSemaforoClass(i.diasAtraso) === 'semaforo-verde').length;
+  }
+
+  get totalNaranja(): number {
+    return this.items.filter(i => this.getSemaforoClass(i.diasAtraso) === 'semaforo-naranja').length;
+  }
+
+  get totalRojo(): number {
+    return this.items.filter(i => this.getSemaforoClass(i.diasAtraso) === 'semaforo-rojo').length;
+  }
+
   /**
    * Cargar todas las atenciones de todos los responsables
    */
