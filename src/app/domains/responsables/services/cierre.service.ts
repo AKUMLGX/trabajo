@@ -25,9 +25,8 @@ export interface CrearCierreDTO {
   respuesta_numero?: string | null;
   respuesta_fecha?: string | null;
   notificacion_fecha?: string | null;
-  notificacion_modelo?: string | null;
   dispositivo_serie?: string | null;
-  dispositivo_observaciones?: string | null;
+  dispositivo_modelo?: string | null;
   observaciones?: string | null;
 }
 
@@ -43,9 +42,8 @@ export interface CierreExpediente {
   respuesta_numero?: string | null;
   respuesta_fecha?: string | null;
   notificacion_fecha?: string | null;
-  notificacion_modelo?: string | null;
   dispositivo_serie?: string | null;
-  dispositivo_observaciones?: string | null;
+  dispositivo_modelo?: string | null;
   observaciones?: string | null;
   fecha_creacion?: string | null;
   fecha_actualizacion?: string | null;

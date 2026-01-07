@@ -153,7 +153,13 @@
             </td>
 
             <!-- Acciones -->
-            <td class="text-center">
+            <td class="text-center acciones-cell">
+              <button 
+                (click)="abrirModalDetalles(item)" 
+                class="btn-icon detalle-btn" 
+                matTooltip="Ver detalles completos de la atención">
+                <mat-icon>visibility</mat-icon>
+              </button>
               <button 
                 (click)="abrirModalCierre(item)" 
                 class="btn-icon cierre-btn" 

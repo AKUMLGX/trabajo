@@ -14,6 +14,7 @@ import { AtencionService, AtencionConEspecialistas } from '../../services/atenci
 import { ExpedienteTlapohualliService } from '../../../capture/services/expediente-tlapohualli.service';
 import { CierreService } from '../../services/cierre.service';
 import { CierreModalComponent } from '../cierre-modal/cierre-modal.component';
+import { DetalleAtencionModalComponent } from '../detalle-atencion-modal/detalle-atencion-modal.component';
 import { forkJoin, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -36,12 +37,11 @@ export interface AtencionCierreItem {
   respuestaTipo: string;
   respuestaNumero: string;
   respuestaFecha: Date | null;
-  // NOTIFICACION
+  // NOTIFICACION (solo fecha)
   notificacionFecha: Date | null;
-  notificacionModelo: string;
-  // DISPOSITIVO
+  // DISPOSITIVO (serie y modelo)
   dispositivoSerie: string;
-  dispositivoObservaciones: string;
+  dispositivoModelo: string;
   // OBSERVACIONES
   observaciones: string;
 }
@@ -94,9 +94,8 @@ export class AtencionCierreTableComponent implements OnInit {
       respuestaNumero: [''],
       respuestaFecha: [''],
       notificacionFecha: [''],
-      notificacionModelo: [''],
+      dispositivoModelo: [''],
       dispositivoSerie: [''],
-      dispositivoObservaciones: [''],
       observaciones: ['']
     });
   }
@@ -163,10 +162,9 @@ export class AtencionCierreTableComponent implements OnInit {
             respuestaFecha: null,
             // NOTIFICACION
             notificacionFecha: null,
-            notificacionModelo: '',
+            dispositivoModelo: '',
             // DISPOSITIVO
             dispositivoSerie: '',
-            dispositivoObservaciones: '',
             // OBSERVACIONES
             observaciones: ''
           };
@@ -196,9 +194,8 @@ export class AtencionCierreTableComponent implements OnInit {
                 if (cierre.notificacion_fecha) {
                   item.notificacionFecha = new Date(cierre.notificacion_fecha);
                 }
-                item.notificacionModelo = cierre.notificacion_modelo || '';
                 item.dispositivoSerie = cierre.dispositivo_serie || '';
-                item.dispositivoObservaciones = cierre.dispositivo_observaciones || '';
+                item.dispositivoModelo = cierre.dispositivo_modelo || '';
                 item.observaciones = cierre.observaciones || '';
                 
                 // Recalcular días de atraso con fecha actualizada
@@ -289,9 +286,8 @@ export class AtencionCierreTableComponent implements OnInit {
       respuestaNumero: item.respuestaNumero,
       respuestaFecha: item.respuestaFecha,
       notificacionFecha: item.notificacionFecha,
-      notificacionModelo: item.notificacionModelo,
+      dispositivoModelo: item.dispositivoModelo,
       dispositivoSerie: item.dispositivoSerie,
-      dispositivoObservaciones: item.dispositivoObservaciones,
       observaciones: item.observaciones
     });
   }
@@ -358,17 +354,14 @@ export class AtencionCierreTableComponent implements OnInit {
     return this.editForm.get('notificacionFecha') as FormControl;
   }
 
-  get notificacionModeloControl(): FormControl {
-    return this.editForm.get('notificacionModelo') as FormControl;
+  get dispositivoModeloControl(): FormControl {
+    return this.editForm.get('dispositivoModelo') as FormControl;
   }
 
   get dispositivoSerieControl(): FormControl {
     return this.editForm.get('dispositivoSerie') as FormControl;
   }
 
-  get dispositivoObservacionesControl(): FormControl {
-    return this.editForm.get('dispositivoObservaciones') as FormControl;
-  }
 
   get observacionesControl(): FormControl {
     return this.editForm.get('observaciones') as FormControl;
@@ -424,6 +417,24 @@ export class AtencionCierreTableComponent implements OnInit {
             this.cargarDatos();
           }
         });
+      }
+    });
+  }
+
+  /**
+   * Abrir modal para ver detalles completos de la atención
+   */
+  abrirModalDetalles(item: AtencionCierreItem): void {
+    console.log('👁️ [AtencionCierre] Abriendo modal de detalles para:', item.expediente);
+    
+    this.dialog.open(DetalleAtencionModalComponent, {
+      maxWidth: '95vw',
+      maxHeight: '95vh',
+      panelClass: 'detalle-modal-panel',
+      data: {
+        idAtencion: item.idAtencion,
+        idExpediente: item.idExpediente,
+        expediente: item.expediente
       }
     });
   }

@@ -416,6 +416,31 @@
   transform: scale(1.1);
 }
 
+.acciones-cell {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.detalle-btn {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+}
+
+.detalle-btn:hover {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.detalle-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
 .cierre-btn {
   background: linear-gradient(135deg, #34005b 0%, #3e0065 100%);
   color: white;

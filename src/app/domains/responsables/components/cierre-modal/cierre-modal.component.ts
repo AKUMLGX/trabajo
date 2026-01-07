@@ -44,9 +44,9 @@ export class CierreModalComponent implements OnInit {
   guardando: boolean = false;
   cargando: boolean = false;
 
-  // Opciones para dropdowns
-  estadosRespuesta = ['Pendiente', 'En Proceso', 'Completado', 'Cancelado'];
-  tiposRespuesta = ['Oficio', 'Email', 'Telefónica', 'Presencial'];
+  // Opciones para dropdowns (actualizados según requerimientos)
+  estadosRespuesta = ['Pendiente', 'Proceso', 'Atendido'];
+  tiposRespuesta = ['Oficio', 'Atenta Nota', 'Correo Electrónico', 'Petición Interna', 'Total', 'Parcial'];
 
   constructor(
     private fb: FormBuilder,
@@ -67,13 +67,12 @@ export class CierreModalComponent implements OnInit {
       respuestaNumero: [''],
       respuestaFecha: [''],
       
-      // NOTIFICACION
+      // NOTIFICACION (solo fecha)
       notificacionFecha: [''],
-      notificacionModelo: [''],
       
-      // DISPOSITIVO
+      // DISPOSITIVO (serie y modelo)
       dispositivoSerie: [''],
-      dispositivoObservaciones: [''],
+      dispositivoModelo: [''],
       
       // OBSERVACIONES
       observaciones: ['']
@@ -99,9 +98,8 @@ export class CierreModalComponent implements OnInit {
         respuestaNumero: cierre.respuesta_numero || '',
         respuestaFecha: cierre.respuesta_fecha || '',
         notificacionFecha: cierre.notificacion_fecha || '',
-        notificacionModelo: cierre.notificacion_modelo || '',
         dispositivoSerie: cierre.dispositivo_serie || '',
-        dispositivoObservaciones: cierre.dispositivo_observaciones || '',
+        dispositivoModelo: cierre.dispositivo_modelo || '',
         observaciones: cierre.observaciones || ''
       });
     } else {
@@ -120,9 +118,8 @@ export class CierreModalComponent implements OnInit {
               respuestaNumero: cierre.respuesta_numero || '',
               respuestaFecha: cierre.respuesta_fecha || '',
               notificacionFecha: cierre.notificacion_fecha || '',
-              notificacionModelo: cierre.notificacion_modelo || '',
               dispositivoSerie: cierre.dispositivo_serie || '',
-              dispositivoObservaciones: cierre.dispositivo_observaciones || '',
+              dispositivoModelo: cierre.dispositivo_modelo || '',
               observaciones: cierre.observaciones || ''
             });
           }
@@ -159,9 +156,8 @@ export class CierreModalComponent implements OnInit {
       respuesta_numero: formValue.respuestaNumero || null,
       respuesta_fecha: formValue.respuestaFecha || null,
       notificacion_fecha: formValue.notificacionFecha || null,
-      notificacion_modelo: formValue.notificacionModelo || null,
       dispositivo_serie: formValue.dispositivoSerie || null,
-      dispositivo_observaciones: formValue.dispositivoObservaciones || null,
+      dispositivo_modelo: formValue.dispositivoModelo || null,
       observaciones: formValue.observaciones || null
     };
 

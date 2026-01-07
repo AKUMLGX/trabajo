@@ -143,7 +143,7 @@
             </div>
           </div>
           <div class="form-grid">
-            <div class="form-field">
+            <div class="form-field full-width">
               <label class="field-label">
                 <mat-icon class="label-icon">event</mat-icon>
                 Fecha de Notificación
@@ -152,17 +152,6 @@
                 type="date" 
                 formControlName="notificacionFecha"
                 class="premium-input">
-            </div>
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">style</mat-icon>
-                Modelo
-              </label>
-              <input 
-                type="text" 
-                formControlName="notificacionModelo"
-                class="premium-input"
-                placeholder="Ej: Modelo A, Modelo B">
             </div>
           </div>
         </div>
@@ -179,7 +168,7 @@
             </div>
           </div>
           <div class="form-grid">
-            <div class="form-field full-width">
+            <div class="form-field">
               <label class="field-label">
                 <mat-icon class="label-icon">memory</mat-icon>
                 Serie del Dispositivo
@@ -190,16 +179,16 @@
                 class="premium-input"
                 placeholder="Ej: SER-001-2025">
             </div>
-            <div class="form-field full-width">
+            <div class="form-field">
               <label class="field-label">
-                <mat-icon class="label-icon">notes</mat-icon>
-                Observaciones del Dispositivo
+                <mat-icon class="label-icon">style</mat-icon>
+                Modelo del Dispositivo
               </label>
-              <textarea 
-                formControlName="dispositivoObservaciones"
-                class="premium-textarea"
-                rows="3"
-                placeholder="Ingrese observaciones sobre el dispositivo..."></textarea>
+              <input 
+                type="text" 
+                formControlName="dispositivoModelo"
+                class="premium-input"
+                placeholder="Ej: Modelo A, Modelo B">
             </div>
           </div>
         </div>
