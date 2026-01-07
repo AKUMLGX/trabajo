@@ -4,8 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FirstStepTlapohualliComponent } from '../first-step-tlapohualli/first-step-tlapohualli.component';
 import { SecondStepTlapohualliComponent } from '../second-step-tlapohualli/second-step-tlapohualli.component';
+import { PreConfirmacionModalComponent, CampoResumen, SeccionResumen } from '../pre-confirmacion-modal/pre-confirmacion-modal.component';
 import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
 import { PdfGeneratorService } from '../../../services/pdf-generator.service';
 import { LoggerService } from '../../../services/logger.service';
@@ -16,6 +18,7 @@ import {
   ExpedienteTlapohualli
 } from '../../../interfaces/expediente-tlapohualli.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-stepper-tlapohualli',
@@ -27,6 +30,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
+    MatDialogModule,
+    MatTooltipModule,
     FirstStepTlapohualliComponent,
     SecondStepTlapohualliComponent
   ],
@@ -53,7 +58,8 @@ export class StepperTlapohualliComponent implements OnInit, AfterViewInit {
     private expedienteService: ExpedienteTlapohualliService,
     private pdfService: PdfGeneratorService,
     private snackBar: MatSnackBar,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {}
@@ -116,7 +122,173 @@ export class StepperTlapohualliComponent implements OnInit, AfterViewInit {
       campos_pospuestos: campos_pospuestos || []
     };
 
-    this.finalizarExpediente();
+    // Mostrar modal de confirmación antes de guardar
+    this.mostrarModalConfirmacion();
+  }
+
+  // Modal de pre-confirmación con resumen de datos organizados en secciones
+  private mostrarModalConfirmacion() {
+    const secciones: SeccionResumen[] = this.construirSeccionesResumen();
+    
+    const dialogRef = this.dialog.open(PreConfirmacionModalComponent, {
+      width: '650px',
+      maxWidth: '95vw',
+      disableClose: true,
+      panelClass: 'pre-confirmacion-dialog',
+      data: {
+        titulo: '¿Confirmar registro?',
+        subtitulo: 'Verifique que todos los datos sean correctos',
+        expediente: this.datosPaso1?.expediente,
+        secciones: secciones,
+        botonConfirmar: 'Guardar expediente',
+        botonCancelar: 'Revisar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.finalizarExpediente();
+      } else {
+        this.mostrarMensaje('Puede revisar y modificar los datos antes de guardar', 'info', 3000);
+      }
+    });
+  }
+
+  // Construir secciones organizadas para el modal
+  private construirSeccionesResumen(): SeccionResumen[] {
+    const secciones: SeccionResumen[] = [];
+    
+    // Sección 1: Información del Requerimiento
+    if (this.datosPaso1) {
+      const camposRequerimiento: CampoResumen[] = [];
+
+      camposRequerimiento.push({
+        etiqueta: 'Tipo',
+        valor: this.formatearTipoMedio(this.datosPaso1.tipo_medio_recepcion),
+        icono: 'description'
+      });
+
+      if (this.datosPaso1.oficio) {
+        camposRequerimiento.push({
+          etiqueta: 'Número/Oficio',
+          valor: this.datosPaso1.oficio,
+          icono: 'tag',
+          tipo: 'destacado'
+        });
+      }
+
+      if (this.datosPaso1.remitente_area) {
+        camposRequerimiento.push({
+          etiqueta: 'Remitente',
+          valor: this.datosPaso1.remitente_area,
+          icono: 'business'
+        });
+      }
+
+      if (this.datosPaso1.referencia_asunto) {
+        const asunto = this.datosPaso1.referencia_asunto;
+        camposRequerimiento.push({
+          etiqueta: 'Asunto',
+          valor: asunto.length > 80 ? asunto.substring(0, 80) + '...' : asunto,
+          icono: 'subject'
+        });
+      }
+
+      secciones.push({
+        titulo: 'Información del Requerimiento',
+        icono: 'assignment',
+        campos: camposRequerimiento
+      });
+
+      // Sección 2: Fechas y Prioridad
+      const camposFechas: CampoResumen[] = [];
+
+      if (this.datosPaso1.fecha_recibido) {
+        camposFechas.push({
+          etiqueta: 'Fecha de Acuse',
+          valor: this.formatearFecha(this.datosPaso1.fecha_recibido),
+          icono: 'event',
+          tipo: 'fecha'
+        });
+      }
+
+      if (this.datosPaso1.fecha_vencimiento) {
+        camposFechas.push({
+          etiqueta: 'Fecha Vencimiento',
+          valor: this.formatearFecha(this.datosPaso1.fecha_vencimiento),
+          icono: 'event_busy',
+          tipo: 'fecha'
+        });
+      }
+
+      if (this.datosPaso1.prioridad) {
+        camposFechas.push({
+          etiqueta: 'Prioridad',
+          valor: this.datosPaso1.prioridad,
+          icono: 'priority_high',
+          tipo: 'prioridad',
+          prioridadColor: this.obtenerColorPrioridad(this.datosPaso1.prioridad)
+        });
+      }
+
+      if (camposFechas.length > 0) {
+        secciones.push({
+          titulo: 'Fechas y Prioridad',
+          icono: 'schedule',
+          campos: camposFechas
+        });
+      }
+    }
+
+    // Sección 3: Asignación
+    if (this.datosPaso2) {
+      const camposAsignacion: CampoResumen[] = [];
+
+      if (this.datosPaso2.responsable_fecha_asignacion) {
+        camposAsignacion.push({
+          etiqueta: 'Responsable',
+          valor: this.datosPaso2.responsable_fecha_asignacion,
+          icono: 'person',
+          tipo: 'responsable'
+        });
+      }
+
+      if (camposAsignacion.length > 0) {
+        secciones.push({
+          titulo: 'Asignación',
+          icono: 'person_pin',
+          campos: camposAsignacion
+        });
+      }
+    }
+
+    return secciones;
+  }
+
+  private formatearTipoMedio(tipo: string): string {
+    const tipos: { [key: string]: string } = {
+      'ATENTA_NOTA': 'Atenta nota',
+      'OFICIO': 'Oficio',
+      'REQUERIMIENTO_VERBAL': 'Petición interna',
+      'CORREO_ELECTRONICO': 'Correo electrónico'
+    };
+    return tipos[tipo] || tipo;
+  }
+
+  private formatearFecha(fecha: Date | string | undefined): string {
+    if (!fecha) return 'N/A';
+    const d = typeof fecha === 'string' ? new Date(fecha) : fecha;
+    return d.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  private obtenerColorPrioridad(prioridad: string): string {
+    const colores: { [key: string]: string } = {
+      'URGENTE': 'red',
+      'ALTA': 'orange',
+      'MEDIA': 'yellow',
+      'BAJA': 'green'
+    };
+    return colores[prioridad] || 'yellow';
   }
 
   onPaso2Siguiente() {
@@ -273,21 +445,69 @@ export class StepperTlapohualliComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Reiniciar completamente el formulario - todo en blanco
+   * Limpia todos los datos y vuelve al paso 1
+   */
   reiniciarFormulario() {
     this.isTransitioning = true;
     setTimeout(() => {
+      // Limpiar todos los datos
       this.datosPaso1 = null;
       this.datosPaso2 = null;
       this.documentoPasoFinal = null;
       this.pasoActual = 0;
       this.expedienteGuardado = false;
       this.expedienteId = null;
+      this.paso1Valido = false;
       this.isTransitioning = false;
-      this.mostrarMensaje('Formulario reiniciado', 'info');
+      
+      // Reiniciar componentes hijos si existen
+      if (this.paso1Component) {
+        this.paso1Component.reiniciarFormulario?.();
+      }
+      if (this.paso2Component) {
+        this.paso2Component.reiniciarFormulario?.();
+      }
+      
+      this.mostrarMensaje('Formulario reiniciado completamente', 'info');
     }, 300);
   }
 
-  crearNuevoExpediente() {
-    this.reiniciarFormulario();
+  /**
+   * Crear nuevo registro con datos precargados
+   * Mantiene algunos datos del formulario anterior (remitente, tipo, etc.)
+   * pero genera un nuevo número de expediente
+   */
+  crearNuevoRegistro() {
+    this.isTransitioning = true;
+    
+    // Guardar datos que queremos precargar
+    const datosPrecargar = {
+      tipo_medio_recepcion: this.datosPaso1?.tipo_medio_recepcion,
+      remitente_general: (this.datosPaso1 as any)?.remitente_general,
+      remitente_central: (this.datosPaso1 as any)?.remitente_central,
+      prioridad: this.datosPaso1?.prioridad,
+      responsable: this.datosPaso2?.responsable_fecha_asignacion
+    };
+
+    setTimeout(() => {
+      // Limpiar estado pero mantener referencia a datos precargados
+      this.datosPaso1 = null;
+      this.datosPaso2 = null;
+      this.documentoPasoFinal = null;
+      this.pasoActual = 0;
+      this.expedienteGuardado = false;
+      this.expedienteId = null;
+      this.paso1Valido = false;
+      this.isTransitioning = false;
+      
+      // Precargar datos en el paso 1
+      if (this.paso1Component && datosPrecargar) {
+        this.paso1Component.precargarDatos?.(datosPrecargar);
+      }
+      
+      this.mostrarMensaje('Nuevo registro - algunos datos fueron precargados', 'success');
+    }, 300);
   }
 }

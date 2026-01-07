@@ -820,10 +820,11 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
 
   // Construir objeto de plazo con toda la información
   private construirPlazo() {
-    // Ya no hay campos de plazo, usar valores por defecto
+    // Ya no se usa plazo de atención por petición de negocio
+    // Enviar valores por defecto válidos (1 día) que se guardarán como NULL en BD
     return {
-      valor: 0, // Valor por defecto: 0 (sin plazo)
-      unidad: 'dias',
+      valor: 1, // Valor mínimo válido (la BD lo convertirá a NULL si es necesario)
+      unidad: 'dias', // Valor por defecto
       es_urgente: false
     };
   }
@@ -1058,5 +1059,95 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   // Verificar si el formulario puede continuar
   get puedeAvanzar(): boolean {
     return this.formulario.valid;
+  }
+
+  /**
+   * Reiniciar el formulario completamente - limpia todos los campos
+   * Se llama desde el stepper cuando el usuario quiere empezar en blanco
+   */
+  reiniciarFormulario(): void {
+    this.logger.debug('Reiniciando formulario del paso 1 completamente');
+    
+    // Reset del formulario a valores iniciales
+    this.formulario.reset({
+      tipo_medio_recepcion: '',
+      oficio: '',
+      expediente: '',
+      numero_entrada_central: '',
+      remitente_general: '',
+      remitente_central: '',
+      remitente_identificador: '',
+      fecha_documento: this.formHelper.getFechaActual(),
+      fecha_recibido: this.formHelper.getFechaActual(),
+      fecha_requerimiento: this.formHelper.getFechaActual(),
+      referencia_asunto: '',
+      fecha_vencimiento: null,
+      prioridad: 'MEDIA'
+    });
+
+    // Limpiar estados
+    this.errorOficioDuplicado = false;
+    this.idOficioDuplicado = null;
+    this.caracteresProblematicos = [];
+    this.tieneCaracteresProblematicos = false;
+
+    // Deshabilitar fecha_documento (es automático)
+    this.formulario.get('fecha_documento')?.disable();
+
+    // Recargar siguiente expediente
+    this.cargarYAplicarSiguienteExpediente();
+
+    // Limpiar borrador
+    this.formHelper.limpiarBorrador(1);
+
+    // Recalcular progreso
+    this.calcularProgreso();
+    
+    this.logger.debug('Formulario reiniciado completamente');
+  }
+
+  /**
+   * Precargar datos parciales - mantiene algunos valores del formulario anterior
+   * Se llama desde el stepper para "nuevo similar"
+   */
+  precargarDatos(datos: any): void {
+    this.logger.debug('Precargando datos parciales en paso 1:', datos);
+
+    // Primero reiniciar para limpiar
+    this.reiniciarFormulario();
+
+    // Luego aplicar los datos que queremos conservar
+    setTimeout(() => {
+      const valoresPrecargar: any = {};
+
+      // Tipo de medio de recepción (si se proporcionó)
+      if (datos.tipo_medio_recepcion) {
+        valoresPrecargar.tipo_medio_recepcion = datos.tipo_medio_recepcion;
+      }
+
+      // Remitente general (si se proporcionó)
+      if (datos.remitente_general) {
+        valoresPrecargar.remitente_general = datos.remitente_general;
+      }
+
+      // Remitente central (si se proporcionó)
+      if (datos.remitente_central) {
+        valoresPrecargar.remitente_central = datos.remitente_central;
+      }
+
+      // Prioridad (si se proporcionó)
+      if (datos.prioridad) {
+        valoresPrecargar.prioridad = datos.prioridad;
+      }
+
+      // Aplicar valores precargados
+      if (Object.keys(valoresPrecargar).length > 0) {
+        this.formulario.patchValue(valoresPrecargar, { emitEvent: true });
+        this.logger.debug('Datos precargados aplicados:', Object.keys(valoresPrecargar));
+      }
+
+      // Recalcular progreso
+      this.calcularProgreso();
+    }, 100);
   }
 }

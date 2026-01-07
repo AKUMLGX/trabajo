@@ -79,37 +79,91 @@
                         </p>
 
                         <div class="bg-white rounded-lg p-4 mb-4 text-left">
-                            <h4 class="font-semibold text-gray-800 mb-2">Resumen del Expediente:</h4>
-                            <ul class="text-sm text-gray-600 space-y-1">
-                                <li><strong>Expediente:</strong> {{ datosPaso1?.expediente }}</li>
-                                <li><strong>Oficio:</strong> {{ datosPaso1?.oficio || 'N/A' }}</li>
-                                <li><strong>Remitente:</strong> {{ datosPaso1?.remitente_area || 'N/A' }}</li>
-                                <li><strong>Estatus:</strong> {{ datosPaso2?.estatus || 'N/A' }}</li>
-                                <li><strong>Documento PDF:</strong> {{ documentoPasoFinal?.documento_pdf_nombre || documentoPasoFinal?.documento_pdf?.name || 'N/A' }}</li>
-                                <li><strong>ID:</strong> {{ expedienteId || 'N/A' }}</li>
-                            </ul>
+                            <h4 class="font-semibold text-gray-800 mb-3">Resumen del Expediente:</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-[#34005b] rounded-full"></span>
+                                    <strong>Expediente:</strong> {{ datosPaso1?.expediente }}
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-[#34005b] rounded-full"></span>
+                                    <strong>Oficio:</strong> {{ datosPaso1?.oficio || 'N/A' }}
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-[#34005b] rounded-full"></span>
+                                    <strong>Remitente:</strong> {{ datosPaso1?.remitente_area || 'N/A' }}
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full" [ngClass]="{
+                                        'bg-red-500': datosPaso1?.prioridad === 'URGENTE',
+                                        'bg-orange-500': datosPaso1?.prioridad === 'ALTA',
+                                        'bg-yellow-500': datosPaso1?.prioridad === 'MEDIA',
+                                        'bg-green-500': datosPaso1?.prioridad === 'BAJA' || !datosPaso1?.prioridad
+                                    }"></span>
+                                    <strong>Prioridad:</strong> 
+                                    <span [ngClass]="{
+                                        'text-red-600 font-semibold': datosPaso1?.prioridad === 'URGENTE',
+                                        'text-orange-600 font-semibold': datosPaso1?.prioridad === 'ALTA',
+                                        'text-yellow-600': datosPaso1?.prioridad === 'MEDIA',
+                                        'text-green-600': datosPaso1?.prioridad === 'BAJA' || !datosPaso1?.prioridad
+                                    }">{{ datosPaso1?.prioridad || 'Normal' }}</span>
+                                </div>
+                                <div class="flex items-center gap-2 md:col-span-2">
+                                    <span class="w-2 h-2 bg-[#34005b] rounded-full"></span>
+                                    <strong>Asunto:</strong> {{ (datosPaso1?.referencia_asunto | slice:0:80) || 'N/A' }}{{ (datosPaso1?.referencia_asunto?.length || 0) > 80 ? '...' : '' }}
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="flex justify-center gap-4 flex-wrap">
+                        <!-- Acciones principales -->
+                        <div class="flex flex-col gap-4 mt-4">
+                            <!-- Botón PDF -->
                             <button mat-raised-button
                                     (click)="regenerarPDF()"
-                                    class="bg-gradient-to-r from-[#34005b] to-[#3e0065] hover:from-[#3e0065] hover:to-[#34005b] text-white">
-                                <mat-icon>picture_as_pdf</mat-icon>
-                                Descargar PDF nuevamente
+                                    class="bg-gradient-to-r from-[#34005b] to-[#3e0065] hover:from-[#3e0065] hover:to-[#34005b] text-white w-full md:w-auto mx-auto py-3">
+                                <mat-icon class="mr-2">picture_as_pdf</mat-icon>
+                                Descargar Acuse PDF
                             </button>
 
-                            <button mat-raised-button
-                                    color="primary"
-                                    (click)="crearNuevoExpediente()">
-                                <mat-icon>add</mat-icon>
-                                Crear nuevo expediente
-                            </button>
-                            <button mat-stroked-button
-                                    color="primary"
-                                    (click)="reiniciarFormulario()">
-                                <mat-icon>refresh</mat-icon>
-                                Reiniciar
-                            </button>
+                            <!-- Separator -->
+                            <div class="flex items-center gap-4 my-2">
+                                <div class="flex-1 h-px bg-gray-300"></div>
+                                <span class="text-xs text-gray-500 uppercase tracking-wider font-medium">Nueva captura</span>
+                                <div class="flex-1 h-px bg-gray-300"></div>
+                            </div>
+
+                            <!-- Botones de nueva captura -->
+                            <div class="flex justify-center gap-4 flex-wrap">
+                                <!-- Nuevo con datos precargados -->
+                                <button mat-raised-button
+                                        color="primary"
+                                        (click)="crearNuevoRegistro()"
+                                        class="!bg-green-600 hover:!bg-green-700 min-w-[220px] py-3"
+                                        matTooltip="Inicia una nueva captura manteniendo remitente y prioridad del registro anterior">
+                                    <div class="flex flex-col items-center gap-1">
+                                        <div class="flex items-center gap-2">
+                                            <mat-icon>content_copy</mat-icon>
+                                            <span class="font-bold text-base">Reutilizar datos</span>
+                                        </div>
+                                        <span class="text-sm font-medium opacity-95">Conserva remitente y prioridad</span>
+                                    </div>
+                                </button>
+
+                                <!-- Reiniciar completamente -->
+                                <button mat-stroked-button
+                                        color="warn"
+                                        (click)="reiniciarFormulario()"
+                                        class="min-w-[220px] py-3 border-2"
+                                        matTooltip="Limpia completamente el formulario para empezar desde cero">
+                                    <div class="flex flex-col items-center gap-1">
+                                        <div class="flex items-center gap-2">
+                                            <mat-icon>restart_alt</mat-icon>
+                                            <span class="font-bold text-base">Empezar desde cero</span>
+                                        </div>
+                                        <span class="text-sm font-medium opacity-95">Formulario completamente vacío</span>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
                     </div>
 

@@ -314,101 +314,70 @@ export class PdfGeneratorService {
     </div>
   </div>
 
-  <!-- INFORMACIÓN GENERAL -->
+  <!-- INFORMACIÓN DEL EXPEDIENTE -->
   <div class="seccion">
-    <div class="seccion-titulo"><span class="seccion-icon">📋</span> INFORMACIÓN GENERAL</div>
+    <div class="seccion-titulo"><span class="seccion-icon">📋</span> INFORMACIÓN DEL EXPEDIENTE</div>
     <div class="campo-grupo">
       <div class="campo destacado">
         <div class="campo-label">Expediente</div>
         <div class="campo-valor">${paso1.expediente || 'N/A'}</div>
       </div>
       <div class="campo destacado">
-        <div class="campo-label">Oficio</div>
+        <div class="campo-label">Oficio / Número</div>
         <div class="campo-valor">${paso1.oficio || 'N/A'}</div>
       </div>
       <div class="campo">
-        <div class="campo-label">No. Entrada Central</div>
-        <div class="campo-valor">${paso1.numero_entrada_central || 'N/A'}</div>
+        <div class="campo-label">Tipo de Requerimiento</div>
+        <div class="campo-valor">${this.formatearTipoMedio(paso1.tipo_medio_recepcion)}</div>
       </div>
-      <div class="campo">
-        <div class="campo-label">Fecha de Generación</div>
-        <div class="campo-valor">${fechaGeneracion}</div>
+      <div class="campo ${paso1.prioridad === 'URGENTE' ? 'urgente' : paso1.prioridad === 'ALTA' ? 'destacado' : ''}">
+        <div class="campo-label">Prioridad</div>
+        <div class="campo-valor">${paso1.prioridad || 'MEDIA'}</div>
       </div>
-      ${expedienteId ? `
-      <div class="campo">
-        <div class="campo-label">ID en Sistema</div>
-        <div class="campo-valor">${expedienteId}</div>
-      </div>
-      ` : ''}
     </div>
   </div>
 
-  <!-- IDENTIFICACIÓN -->
+  <!-- REMITENTE Y FECHAS -->
   <div class="seccion">
-    <div class="seccion-titulo"><span class="seccion-icon">🏢</span> IDENTIFICACIÓN DEL DOCUMENTO</div>
+    <div class="seccion-titulo"><span class="seccion-icon">🏢</span> REMITENTE Y FECHAS</div>
     <div class="campo-grupo">
-      <div class="campo">
-        <div class="campo-label">Remitente / Área</div>
+      <div class="campo destacado">
+        <div class="campo-label">Remitente (Área)</div>
         <div class="campo-valor">${paso1.remitente_area || 'N/A'}</div>
       </div>
       <div class="campo">
-        <div class="campo-label">Fecha del Documento</div>
-        <div class="campo-valor">${this.formatearFecha(paso1.fecha_documento)}</div>
+        <div class="campo-label">Fecha del Requerimiento</div>
+        <div class="campo-valor">${this.formatearFecha(paso1.fecha_requerimiento)}</div>
       </div>
       <div class="campo">
-        <div class="campo-label">Fecha de Recibido</div>
+        <div class="campo-label">Fecha de Acuse</div>
         <div class="campo-valor">${this.formatearFecha(paso1.fecha_recibido)}</div>
       </div>
+      ${paso1.fecha_vencimiento ? `
+      <div class="campo">
+        <div class="campo-label">Fecha de Vencimiento</div>
+        <div class="campo-valor">${this.formatearFecha(paso1.fecha_vencimiento)}</div>
+      </div>
+      ` : ''}
       <div class="campo campo-completo">
-        <div class="campo-label">Referencia / Asunto</div>
+        <div class="campo-label">Asunto</div>
         <div class="campo-valor">${paso1.referencia_asunto || 'N/A'}</div>
       </div>
     </div>
   </div>
 
-  <!-- SEGUIMIENTO -->
+  <!-- ASIGNACIÓN (Solo si hay responsable) -->
+  ${paso2.responsable_fecha_asignacion || paso2.responsable ? `
   <div class="seccion">
-    <div class="seccion-titulo"><span class="seccion-icon">👤</span> SEGUIMIENTO Y CONTROL</div>
+    <div class="seccion-titulo"><span class="seccion-icon">👤</span> ASIGNACIÓN</div>
     <div class="campo-grupo">
       <div class="campo destacado">
-        <div class="campo-label">Responsable</div>
-        <div class="campo-valor">${paso2.responsable || 'N/A'}</div>
-      </div>
-      <div class="campo">
-        <div class="campo-label">Fecha de Asignación</div>
-        <div class="campo-valor">${this.formatearFecha(paso2.fecha_asignacion)}</div>
-      </div>
-      <div class="campo">
-        <div class="campo-label">Sistema / Aplicativo</div>
-        <div class="campo-valor">${paso2.sistema_aplicativo || 'No especificado'}</div>
-      </div>
-      <div class="campo">
-        <div class="campo-label">Estatus</div>
-        <div class="campo-valor">${this.formatearEstatus(paso2.estatus)}</div>
-      </div>
-      <div class="campo">
-        <div class="campo-label">Ubicación</div>
-        <div class="campo-valor">${this.formatearUbicacion(paso2.ubicacion)}</div>
+        <div class="campo-label">Responsable Asignado</div>
+        <div class="campo-valor">${paso2.responsable_fecha_asignacion || paso2.responsable || 'N/A'}</div>
       </div>
     </div>
   </div>
-
-  <!-- DOCUMENTACIÓN -->
-  <div class="seccion">
-    <div class="seccion-titulo"><span class="seccion-icon">📄</span> DOCUMENTACIÓN Y CIERRE</div>
-    <div class="campo-grupo">
-      <div class="campo campo-completo">
-        <div class="campo-label">Documento PDF principal</div>
-        <div class="campo-valor">${paso3.documento_pdf_nombre || 'No adjuntado'}</div>
-      </div>
-      ${(paso3.campos_documentos_pospuestos && paso3.campos_documentos_pospuestos.length) ? `
-      <div class="campo campo-completo">
-        <div class="campo-label">Campos documentales pendientes</div>
-        <div class="campo-valor">${paso3.campos_documentos_pospuestos.join(', ')}</div>
-      </div>
-      ` : ''}
-    </div>
-  </div>
+  ` : ''}
 
   <!-- FOOTER REMOVIDO -->
 </body>
@@ -424,6 +393,16 @@ export class PdfGeneratorService {
     } catch {
       return fecha;
     }
+  }
+
+  private formatearTipoMedio(tipo: string): string {
+    const tipos: Record<string, string> = {
+      'ATENTA_NOTA': 'Atenta nota',
+      'OFICIO': 'Oficio',
+      'REQUERIMIENTO_VERBAL': 'Petición interna',
+      'CORREO_ELECTRONICO': 'Correo electrónico'
+    };
+    return tipos[tipo] || tipo || 'N/A';
   }
 
   private obtenerTextoUnidad(unidad: string): string {

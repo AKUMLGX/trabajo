@@ -213,4 +213,24 @@ export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
 
   // get prioridadError movido al Step 1
 
+  /**
+   * Reiniciar el formulario completamente - limpia todos los campos
+   * Se llama desde el stepper cuando el usuario quiere empezar en blanco
+   */
+  reiniciarFormulario(): void {
+    this.logger.debug('Reiniciando formulario del paso 2 completamente');
+    
+    // Reset del formulario a valores iniciales
+    this.formulario.reset({
+      responsable: ''
+    });
+
+    // Limpiar borrador
+    this.formHelper.limpiarBorrador(2);
+
+    // Recalcular progreso
+    this.calcularProgreso();
+    
+    this.logger.debug('Formulario paso 2 reiniciado completamente');
+  }
 }

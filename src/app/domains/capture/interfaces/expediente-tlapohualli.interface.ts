@@ -69,6 +69,8 @@ export interface FormularioPaso1 {
   fecha_documento?: Date; // Formato DD/MM/YYYY
   mes_documento?: number; // Número del mes (1-12)
   fecha_recibido?: Date; // Fecha de recepción
+  fecha_vencimiento?: Date; // Fecha de vencimiento del requerimiento
+  prioridad?: string; // 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA'
 }
 
 // Interface para el formulario paso 2 - Plazos y seguimiento
