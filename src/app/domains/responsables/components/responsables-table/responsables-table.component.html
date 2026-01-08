@@ -285,13 +285,11 @@
       <thead>
         <tr>
           @if (vistaActual === 'pendientes') {
-            <th>Prioridad</th>
             <th>Expediente</th>
             <th>Oficio</th>
             <th>Remitente</th>
-            <th>Asunto</th>
-            <th>Estatus</th>
-            <th>Tiempo</th>
+            <th>Número de Entrada</th>
+            <th>Fecha Doc.</th>
             <th class="text-center">Acciones</th>
           } @else {
             <th>Expediente</th>
@@ -309,49 +307,28 @@
         
         <!-- VISTA: PENDIENTES -->
         @if (vistaActual === 'pendientes') {
-        <tr [class]="'priority-row ' + calcularSemaforo(expediente).nivel.toLowerCase().replace('_', '-')">
-          <!-- Columna: Semáforo de Prioridad -->
-          <td>
-            <div class="semaforo-badge" [class]="calcularSemaforo(expediente).nivel.toLowerCase().replace('_', '-')">
-              <span class="semaforo-dot"></span>
-              <div class="semaforo-info">
-                <span class="semaforo-label">{{ calcularSemaforo(expediente).label }}</span>
-                <span class="semaforo-time">{{ calcularSemaforo(expediente).horasTranscurridas }}h</span>
-              </div>
-            </div>
-          </td>
+        <tr class="priority-row">
+          <!-- Expediente -->
           <td>
             <span class="expediente-code">{{ expediente.expediente || '-' }}</span>
           </td>
+          <!-- Oficio -->
           <td>{{ expediente.oficio || '-' }}</td>
+          <!-- Remitente -->
           <td>
             <span class="truncate-text" [title]="expediente.remitente_area || ''">
               {{ expediente.remitente_area || '-' }}
             </span>
           </td>
+          <!-- Número de Entrada -->
           <td>
-            <span class="truncate-text" [title]="expediente.referencia_asunto || ''">
-              {{ expediente.referencia_asunto ? (expediente.referencia_asunto.length > 40 ? (expediente.referencia_asunto | slice:0:40) + '...' : expediente.referencia_asunto) : '-' }}
-            </span>
+            {{ expediente.numero_entrada_central || '-' }}
           </td>
+          <!-- Fecha Doc. -->
           <td>
-            <span class="status-badge" [class]="expediente.estatus?.toLowerCase()">
-              {{ expediente.estatus === 'ASIGNADO' ? 'Asignado' :
-                 expediente.estatus === 'PENDIENTE' ? 'Pendiente' :
-                 expediente.estatus === 'ATENCION_PARCIAL' ? 'Parcial' :
-                 expediente.estatus === 'ATENCION_TOTAL' ? 'Atendido' :
-                 expediente.estatus === 'REVISION_LEGAL' ? 'Revisión' : expediente.estatus || '-' }}
-            </span>
+            {{ formatearFecha(expediente.fecha_requerimiento) }}
           </td>
-          <!-- Columna: Tiempo (horas restantes o vencido) -->
-          <td>
-            <div class="time-display" [class]="calcularSemaforo(expediente).nivel.toLowerCase().replace('_', '-')">
-              <div class="time-progress">
-                <div class="time-bar" [style.width.%]="calcularSemaforo(expediente).porcentaje"></div>
-              </div>
-              <span class="time-text">{{ formatearTiempo(calcularSemaforo(expediente)) }}</span>
-            </div>
-          </td>
+          <!-- Acciones -->
           <td class="text-center">
             <div class="action-buttons">
               <button 
