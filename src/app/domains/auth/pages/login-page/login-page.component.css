@@ -1,0 +1,260 @@
+/* ============================================
+   LOGIN PAGE - TLÁLCALLI
+   Diseño institucional SAT
+   ============================================ */
+
+/* Contenedor principal */
+.login-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4a0080 0%, #2d004d 50%, #1a0033 100%);
+  overflow: hidden;
+}
+
+/* Fondo con patrón SVG */
+.background-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/images/tlalcalli-background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.15;
+}
+
+/* Contenido centrado */
+.login-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Card principal */
+.login-card {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 80px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(74, 0, 128, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* Header blanco con logos */
+.card-header {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-logos {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Cuerpo del card */
+.card-body {
+  background: linear-gradient(180deg, #3d0066 0%, #2a0047 100%);
+  padding: 3rem 2.5rem;
+  text-align: center;
+}
+
+/* Contenedor del logo */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo-box {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 16px;
+  padding: 0.75rem;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.25),
+    0 0 30px rgba(214, 174, 103, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(214, 174, 103, 0.25);
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Título de la aplicación */
+.app-title {
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.5px;
+  text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+}
+
+.app-subtitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 2rem 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Línea decorativa */
+.decorative-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.decorative-line .line {
+  height: 2px;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, rgba(214, 174, 103, 0.6));
+}
+
+.decorative-line .line.left {
+  background: linear-gradient(90deg, transparent, rgba(214, 174, 103, 0.6));
+}
+
+.decorative-line .line.right {
+  background: linear-gradient(90deg, rgba(214, 174, 103, 0.6), transparent);
+}
+
+.decorative-line .dot {
+  width: 10px;
+  height: 10px;
+  background: #d6ae67;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(214, 174, 103, 0.6);
+}
+
+/* Botón de login */
+.login-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #2a0047;
+  background: linear-gradient(145deg, #d6ae67 0%, #c9a45d 50%, #dbb872 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 8px 25px rgba(214, 174, 103, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 35px rgba(214, 174, 103, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.login-button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 4px 15px rgba(214, 174, 103, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.button-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* Footer del card */
+.card-footer {
+  background: rgba(42, 0, 71, 0.6);
+  padding: 1rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-footer p {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* Copyright */
+.copyright {
+  margin-top: 1.5rem;
+}
+
+.copyright p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 480px) {
+  .login-content {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .logo-box {
+    width: 80px;
+    height: 80px;
+  }
+
+  .app-title {
+    font-size: 2.25rem;
+  }
+
+  .app-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+  }
+
+  .login-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
