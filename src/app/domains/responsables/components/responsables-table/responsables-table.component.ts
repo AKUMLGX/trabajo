@@ -569,10 +569,10 @@ export class ResponsablesTableComponent implements OnInit {
   /**
    * Formatear fecha
    */
-  formatearFecha(fecha: string | Date | null | undefined): string {
+  formatearFecha(fecha: string | null | undefined): string {
     if (!fecha) return '-';
     try {
-      const date = typeof fecha === 'string' ? new Date(fecha) : fecha;
+      const date = new Date(fecha);
       return date.toLocaleDateString('es-MX', {
         year: 'numeric',
         month: '2-digit',

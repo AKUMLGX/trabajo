@@ -35,6 +35,8 @@
         <div class="table-container">
           <div class="overflow-x-auto">
           <!-- TABLA PARA EXPEDIENTES TLAPOHUALLI -->
+          <!-- Columnas simplificadas: Ver, Expediente, Oficio, Remitente, N° Entrada, Fecha Doc. -->
+          <!-- Los demás campos se ven en el modal de detalle -->
           @if (tipoBusqueda === 'Tlapohualli' && expedientesTlapohualli.length > 0) {
           <table class="min-w-full border-collapse">
             <thead class="bg-gradient-to-r from-[#34005b] to-[#3e0065]">
@@ -47,22 +49,9 @@
                 </th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Expediente</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Oficio</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Tipo Medio</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Remitente</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">N° Entrada</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Fecha Doc.</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Fecha Recib.</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Asunto</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Responsable</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Estatus</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">WOOS</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Vencimiento</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  <div class="flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Retraso
-                  </div>
-                </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
@@ -74,7 +63,7 @@
                     <button 
                       class="p-2 rounded-lg bg-[#34005b]/10 text-[#34005b] hover:bg-[#34005b] hover:text-white transition-all duration-200 hover:shadow-md" 
                       (click)="verDetalleExpediente(expediente)" 
-                      title="Ver detalle">
+                      title="Ver detalle completo">
                       <mat-icon class="!w-5 !h-5 !text-base">visibility</mat-icon>
                     </button>
                   </div>
@@ -84,11 +73,6 @@
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-700">{{ expediente.oficio || '-' }}</div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                    {{ expediente.tipo_medio_recepcion || '-' }}
-                  </span>
                 </td>
                 <td class="px-4 py-4">
                   <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.remitente_area">
@@ -102,91 +86,6 @@
                   <div class="text-sm text-gray-700">
                     {{ expediente.fecha_documento ? (formatearFecha(expediente.fecha_documento)) : '-' }}
                   </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">
-                    {{ expediente.fecha_recibido ? (formatearFecha(expediente.fecha_recibido)) : '-' }}
-                  </div>
-                </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.referencia_asunto">
-                    @if (expediente.referencia_asunto && expediente.referencia_asunto.length >= 30) {
-                      {{ expediente.referencia_asunto | slice: 0 : 30 }}...
-                    } @else {
-                      {{ expediente.referencia_asunto || '-' }}
-                    }
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-800">{{ expediente.responsable || '-' }}</div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <!-- Badges de Estatus con colores -->
-                  @if (expediente.estatus === 'ASIGNADO') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 border border-blue-200">
-                      🎯 Asignado
-                    </span>
-                  } @else if (expediente.estatus === 'PENDIENTE') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200">
-                      ⏳ Pendiente
-                    </span>
-                  } @else if (expediente.estatus === 'ATENCION_PARCIAL') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 border border-orange-200">
-                      📝 Atención Parcial
-                    </span>
-                  } @else if (expediente.estatus === 'ATENCION_TOTAL') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 border border-green-200">
-                      ✅ Atención Total
-                    </span>
-                  } @else if (expediente.estatus === 'REVISION_LEGAL') {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 border border-purple-200">
-                      ⚖️ Revisión Legal
-                    </span>
-                  } @else {
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                      {{ expediente.estatus || '-' }}
-                    </span>
-                  }
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">{{ expediente.woos || '-' }}</div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">
-                    {{ expediente.fecha_vencimiento ? (formatearFecha(expediente.fecha_vencimiento)) : '-' }}
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <!-- Indicador visual de días de retraso -->
-                  @if (expediente.dias_retraso !== null && expediente.dias_retraso !== undefined) {
-                    @if (expediente.dias_retraso > 10) {
-                      <div class="flex items-center gap-2">
-                        <span class="px-3 py-1.5 text-sm font-bold rounded-lg bg-red-100 text-red-800 border-2 border-red-300">
-                          🔴 {{ expediente.dias_retraso }} días
-                        </span>
-                      </div>
-                    } @else if (expediente.dias_retraso > 5) {
-                      <div class="flex items-center gap-2">
-                        <span class="px-3 py-1.5 text-sm font-semibold rounded-lg bg-orange-100 text-orange-800 border border-orange-300">
-                          🟠 {{ expediente.dias_retraso }} días
-                        </span>
-                      </div>
-                    } @else if (expediente.dias_retraso > 0) {
-                      <div class="flex items-center gap-2">
-                        <span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-yellow-100 text-yellow-800 border border-yellow-300">
-                          🟡 {{ expediente.dias_retraso }} días
-                        </span>
-                      </div>
-                    } @else {
-                      <div class="flex items-center gap-2">
-                        <span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-green-100 text-green-800 border border-green-300">
-                          🟢 A tiempo
-                    </span>
-                  </div>
-                    }
-                  } @else {
-                    <span class="text-sm text-gray-400">-</span>
-                  }
                 </td>
               </tr>
               }
