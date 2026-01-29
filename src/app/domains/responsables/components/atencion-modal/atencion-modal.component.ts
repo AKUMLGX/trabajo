@@ -29,12 +29,12 @@ interface FormularioAtencion {
   // Atención Inmediata (ahora usa especialistas)
   abogadoAsignado: string;
   // Adquisición de Información
-  tiposInsumo: string[];
-  tipoResultado: string;
+  tipoInsumo: string; // Solo 1 insumo (cambiado de array a string)
+  tiposResultado: string[]; // Múltiples resultados (cambiado de string a array)
   especialistasSeleccionados: string[];
   // Nuevos flujos
-  opcionSeleccionada: string[];  // Para los nuevos flujos (multi-select)
-  resultadoSeleccionado: string; // Para el resultado del flujo
+  opcionSeleccionada: string;  // Para los nuevos flujos (single-select - solo 1 opción)
+  resultadosSeleccionados: string[]; // Para los resultados del flujo (multi-select - múltiples resultados)
   // Fecha de entrega
   fechaEntrega: string;
   // Prioridad (común para todos los flujos)
@@ -258,11 +258,11 @@ export class AtencionModalComponent implements OnInit {
     tipoAccion: '',
     medioRechazo: '',
     abogadoAsignado: '',
-    tiposInsumo: [],
-    tipoResultado: '',
+    tipoInsumo: '', // Solo 1 insumo
+    tiposResultado: [], // Múltiples resultados para ADQUISICION_INFO
     especialistasSeleccionados: [],
-    opcionSeleccionada: [],
-    resultadoSeleccionado: '',
+    opcionSeleccionada: '', // Solo 1 opción (otros flujos)
+    resultadosSeleccionados: [], // Múltiples resultados (otros flujos)
     fechaEntrega: '',
     prioridad: '',
     sistema_aplicativo: '', // Nuevo campo: Sistema y Aplicativo
@@ -447,8 +447,8 @@ export class AtencionModalComponent implements OnInit {
         // Validar según el flujo seleccionado
         return this.validarFlujoAsignado(this.flujoAsignadoSeleccionado);
       case 'ADQUISICION_INFO':
-        return this.formulario.tiposInsumo.length > 0 && 
-               !!this.formulario.tipoResultado &&
+        return !!this.formulario.tipoInsumo && 
+               this.formulario.tiposResultado.length > 0 &&
                this.formulario.especialistasSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
                !!this.formulario.fechaEntrega;
@@ -456,8 +456,8 @@ export class AtencionModalComponent implements OnInit {
       case 'ELABORACION_DICTAMENES':
       case 'RECUPERACION_INFO':
       case 'DESTRUCCION_DISPOSITIVOS':
-        return this.formulario.opcionSeleccionada.length > 0 && 
-               !!this.formulario.resultadoSeleccionado &&
+        return !!this.formulario.opcionSeleccionada && 
+               this.formulario.resultadosSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
                !!this.formulario.fechaEntrega;
@@ -472,8 +472,8 @@ export class AtencionModalComponent implements OnInit {
   validarFlujoAsignado(flujo: TipoAccion): boolean {
     switch (flujo) {
       case 'ADQUISICION_INFO':
-        return this.formulario.tiposInsumo.length > 0 && 
-               !!this.formulario.tipoResultado &&
+        return !!this.formulario.tipoInsumo && 
+               this.formulario.tiposResultado.length > 0 &&
                this.formulario.especialistasSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
                !!this.formulario.fechaEntrega;
@@ -481,8 +481,8 @@ export class AtencionModalComponent implements OnInit {
       case 'ELABORACION_DICTAMENES':
       case 'RECUPERACION_INFO':
       case 'DESTRUCCION_DISPOSITIVOS':
-        return this.formulario.opcionSeleccionada.length > 0 && 
-               !!this.formulario.resultadoSeleccionado &&
+        return !!this.formulario.opcionSeleccionada && 
+               this.formulario.resultadosSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length > 0 &&
                this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
                !!this.formulario.fechaEntrega;
@@ -492,22 +492,38 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
-   * Toggle de insumo seleccionado
+   * Seleccionar un insumo (único - ADQUISICION_INFO)
    */
-  toggleInsumo(codigo: string): void {
-    const index = this.formulario.tiposInsumo.indexOf(codigo);
-    if (index > -1) {
-      this.formulario.tiposInsumo.splice(index, 1);
-    } else {
-      this.formulario.tiposInsumo.push(codigo);
-    }
+  seleccionarInsumo(codigo: string): void {
+    this.formulario.tipoInsumo = codigo;
+    // Limpiar resultados al cambiar de insumo
+    this.formulario.tiposResultado = [];
   }
 
   /**
    * Verificar si un insumo está seleccionado
    */
   insumoSeleccionado(codigo: string): boolean {
-    return this.formulario.tiposInsumo.includes(codigo);
+    return this.formulario.tipoInsumo === codigo;
+  }
+
+  /**
+   * Toggle de resultado para ADQUISICION_INFO (múltiples)
+   */
+  toggleResultadoAdquisicion(codigo: string): void {
+    const index = this.formulario.tiposResultado.indexOf(codigo);
+    if (index > -1) {
+      this.formulario.tiposResultado.splice(index, 1);
+    } else {
+      this.formulario.tiposResultado.push(codigo);
+    }
+  }
+
+  /**
+   * Verificar si un resultado está seleccionado (ADQUISICION_INFO)
+   */
+  resultadoAdquisicionSeleccionado(codigo: string): boolean {
+    return this.formulario.tiposResultado.includes(codigo);
   }
 
   /**
@@ -612,8 +628,8 @@ export class AtencionModalComponent implements OnInit {
       case 'ASIGNADO':
         // Asignado: usar el flujo seleccionado
         if (this.flujoAsignadoSeleccionado === 'ADQUISICION_INFO') {
-          dto.tipos_insumo = this.formulario.tiposInsumo;
-          dto.tipo_resultado = this.formulario.tipoResultado;
+          dto.tipos_insumo = this.formulario.tipoInsumo ? [this.formulario.tipoInsumo] : []; // Solo 1 insumo
+          dto.tipo_resultado = this.formulario.tiposResultado.join(','); // Múltiples resultados
           dto.fecha_entrega = this.formulario.fechaEntrega;
           dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
             const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
@@ -638,8 +654,8 @@ export class AtencionModalComponent implements OnInit {
             });
           }
         } else if (['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.flujoAsignadoSeleccionado)) {
-          dto.opcion_seleccionada = this.formulario.opcionSeleccionada;
-          dto.tipo_resultado = this.formulario.resultadoSeleccionado;
+          dto.opcion_seleccionada = this.formulario.opcionSeleccionada ? [this.formulario.opcionSeleccionada] : [];
+          dto.tipo_resultado = this.formulario.resultadosSeleccionados.join(','); // Múltiples resultados separados por coma
           dto.fecha_entrega = this.formulario.fechaEntrega;
           dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
             const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
@@ -652,8 +668,8 @@ export class AtencionModalComponent implements OnInit {
         break;
       // Mantener compatibilidad con flujos directos (legacy)
       case 'ADQUISICION_INFO':
-        dto.tipos_insumo = this.formulario.tiposInsumo;
-        dto.tipo_resultado = this.formulario.tipoResultado;
+        dto.tipos_insumo = this.formulario.tipoInsumo ? [this.formulario.tipoInsumo] : []; // Solo 1 insumo
+        dto.tipo_resultado = this.formulario.tiposResultado.join(','); // Múltiples resultados
         dto.fecha_entrega = this.formulario.fechaEntrega;
         dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
@@ -667,8 +683,8 @@ export class AtencionModalComponent implements OnInit {
       case 'ELABORACION_DICTAMENES':
       case 'RECUPERACION_INFO':
       case 'DESTRUCCION_DISPOSITIVOS':
-        dto.opcion_seleccionada = this.formulario.opcionSeleccionada;
-        dto.tipo_resultado = this.formulario.resultadoSeleccionado;
+        dto.opcion_seleccionada = this.formulario.opcionSeleccionada ? [this.formulario.opcionSeleccionada] : [];
+        dto.tipo_resultado = this.formulario.resultadosSeleccionados.join(','); // Múltiples resultados
         dto.fecha_entrega = this.formulario.fechaEntrega;
         dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
           const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
@@ -736,11 +752,11 @@ export class AtencionModalComponent implements OnInit {
     // Resetear campos específicos (pero mantener sistema_aplicativo)
     this.formulario.medioRechazo = '';
     this.formulario.abogadoAsignado = '';
-    this.formulario.tiposInsumo = [];
-    this.formulario.tipoResultado = '';
+    this.formulario.tipoInsumo = ''; // Solo 1 insumo
+    this.formulario.tiposResultado = []; // Múltiples resultados ADQUISICION_INFO
     this.formulario.especialistasSeleccionados = [];
-    this.formulario.opcionSeleccionada = [];
-    this.formulario.resultadoSeleccionado = '';
+    this.formulario.opcionSeleccionada = ''; // Solo 1 opción (otros flujos)
+    this.formulario.resultadosSeleccionados = []; // Múltiples resultados (otros flujos)
     this.formulario.fechaEntrega = '';
     this.formulario.prioridad = '';
     this.formulario.notas = '';
@@ -757,11 +773,11 @@ export class AtencionModalComponent implements OnInit {
   seleccionarFlujoAsignado(flujo: TipoAccion): void {
     this.flujoAsignadoSeleccionado = flujo;
     // Resetear campos del formulario al cambiar de flujo
-    this.formulario.tiposInsumo = [];
-    this.formulario.tipoResultado = '';
+    this.formulario.tipoInsumo = ''; // Solo 1 insumo
+    this.formulario.tiposResultado = []; // Múltiples resultados ADQUISICION_INFO
     this.formulario.especialistasSeleccionados = [];
-    this.formulario.opcionSeleccionada = [];
-    this.formulario.resultadoSeleccionado = '';
+    this.formulario.opcionSeleccionada = ''; // Solo 1 opción (otros flujos)
+    this.formulario.resultadosSeleccionados = []; // Múltiples resultados (otros flujos)
     this.formulario.fechaEntrega = '';
     this.formulario.notas = '';
     // Resetear campos de Solicitud de Información
@@ -805,22 +821,38 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
-   * Toggle opción seleccionada (para nuevos flujos)
+   * Seleccionar opción única (para nuevos flujos - solo permite 1)
    */
-  toggleOpcion(codigo: string): void {
-    const index = this.formulario.opcionSeleccionada.indexOf(codigo);
-    if (index > -1) {
-      this.formulario.opcionSeleccionada.splice(index, 1);
-    } else {
-      this.formulario.opcionSeleccionada.push(codigo);
-    }
+  seleccionarOpcion(codigo: string): void {
+    this.formulario.opcionSeleccionada = codigo;
+    // Limpiar resultados al cambiar de opción
+    this.formulario.resultadosSeleccionados = [];
   }
 
   /**
    * Verificar si una opción está seleccionada
    */
   opcionSeleccionada(codigo: string): boolean {
-    return this.formulario.opcionSeleccionada.includes(codigo);
+    return this.formulario.opcionSeleccionada === codigo;
+  }
+
+  /**
+   * Toggle resultado seleccionado (permite múltiples)
+   */
+  toggleResultado(codigo: string): void {
+    const index = this.formulario.resultadosSeleccionados.indexOf(codigo);
+    if (index > -1) {
+      this.formulario.resultadosSeleccionados.splice(index, 1);
+    } else {
+      this.formulario.resultadosSeleccionados.push(codigo);
+    }
+  }
+
+  /**
+   * Verificar si un resultado está seleccionado
+   */
+  resultadoSeleccionado(codigo: string): boolean {
+    return this.formulario.resultadosSeleccionados.includes(codigo);
   }
 
   /**
@@ -934,13 +966,16 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
-   * Obtener descripción del resultado seleccionado para nuevos flujos
+   * Obtener descripción de los resultados seleccionados para nuevos flujos
    */
   getDescripcionResultadoNuevo(): string {
-    if (!this.formulario.resultadoSeleccionado) return '';
-    const resultados = this.getResultadosActuales();
-    const resultado = resultados.find(r => r.codigo === this.formulario.resultadoSeleccionado);
-    return resultado?.descripcion || this.formulario.resultadoSeleccionado;
+    if (this.formulario.resultadosSeleccionados.length === 0) return '';
+    const todosResultados = this.getResultadosActualesAsignado();
+    const descripciones = this.formulario.resultadosSeleccionados.map(codigo => {
+      const resultado = todosResultados.find(r => r.codigo === codigo);
+      return resultado?.descripcion || codigo;
+    });
+    return descripciones.join(', ');
   }
 
   /**
@@ -960,12 +995,15 @@ export class AtencionModalComponent implements OnInit {
   }
 
   /**
-   * Obtener la descripción del resultado seleccionado
+   * Obtener la descripción de los resultados seleccionados (ADQUISICION_INFO)
    */
   getDescripcionResultado(): string {
-    if (!this.formulario.tipoResultado) return '';
-    const resultado = this.catalogos.tipos_resultado.find(r => r.codigo === this.formulario.tipoResultado);
-    return resultado?.descripcion || this.formulario.tipoResultado;
+    if (this.formulario.tiposResultado.length === 0) return '';
+    const descripciones = this.formulario.tiposResultado.map(codigo => {
+      const resultado = this.catalogos.tipos_resultado.find(r => r.codigo === codigo);
+      return resultado?.descripcion || codigo;
+    });
+    return descripciones.join(', ');
   }
 
   /**

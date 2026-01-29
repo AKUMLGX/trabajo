@@ -341,39 +341,41 @@
       <!-- ADQUISICION_INFO - FLUJO PROGRESIVO -->
       <div class="dynamic-form adquisicion-wizard" *ngIf="flujoAsignadoSeleccionado === 'ADQUISICION_INFO'">
         
-        <!-- ========== PASO 1: INSUMO ========== -->
+        <!-- ========== PASO 1: INSUMO (solo 1) ========== -->
         <div class="wizard-step active">
           <div class="step-header">
             <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.tiposInsumo.length > 0">
-                <mat-icon *ngIf="formulario.tiposInsumo.length > 0">check</mat-icon>
-                <span *ngIf="formulario.tiposInsumo.length === 0">1</span>
+              <span class="step-num" [class.completed]="formulario.tipoInsumo">
+                <mat-icon *ngIf="formulario.tipoInsumo">check</mat-icon>
+                <span *ngIf="!formulario.tipoInsumo">1</span>
               </span>
-              <span class="step-line" [class.active]="formulario.tiposInsumo.length > 0"></span>
+              <span class="step-line" [class.active]="formulario.tipoInsumo"></span>
             </div>
             <div class="step-info">
               <h4 class="step-title">
                 <mat-icon>inventory_2</mat-icon>
                 Selecciona el Insumo
               </h4>
-              <p class="step-desc">Elige uno o más tipos de insumo para este expediente</p>
+              <p class="step-desc">Elige un tipo de insumo para este expediente</p>
             </div>
-            <div class="step-badge" *ngIf="formulario.tiposInsumo.length > 0">
-              {{ formulario.tiposInsumo.length }} seleccionado(s)
+            <div class="step-badge" *ngIf="formulario.tipoInsumo">
+              1 seleccionado
             </div>
           </div>
           <div class="step-content">
-            <div class="insumo-grid">
+            <div class="resultado-grid">
               <label 
                 *ngFor="let insumo of catalogos.tipos_insumo"
-                class="insumo-card"
+                class="resultado-card"
                 [class.selected]="insumoSeleccionado(insumo.codigo)">
                 <input 
-                  type="checkbox" 
+                  type="radio" 
+                  name="tipoInsumo"
+                  [value]="insumo.codigo"
                   [checked]="insumoSeleccionado(insumo.codigo)"
-                  (change)="toggleInsumo(insumo.codigo)">
-                <div class="card-check">
-                  <mat-icon>check</mat-icon>
+                  (change)="seleccionarInsumo(insumo.codigo)">
+                <div class="radio-indicator">
+                  <span class="radio-dot"></span>
                 </div>
                 <mat-icon class="card-icon">{{ getInsumoIcon(insumo.codigo) }}</mat-icon>
                 <span class="card-text">{{ insumo.descripcion }}</span>
@@ -382,40 +384,39 @@
           </div>
         </div>
 
-        <!-- ========== PASO 2: RESULTADO (aparece cuando hay insumo) ========== -->
-        <div class="wizard-step" [class.active]="formulario.tiposInsumo.length > 0" [class.disabled]="formulario.tiposInsumo.length === 0">
+        <!-- ========== PASO 2: RESULTADO (múltiples - aparece cuando hay insumo) ========== -->
+        <div class="wizard-step" [class.active]="formulario.tipoInsumo" [class.disabled]="!formulario.tipoInsumo">
           <div class="step-header">
             <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.tipoResultado">
-                <mat-icon *ngIf="formulario.tipoResultado">check</mat-icon>
-                <span *ngIf="!formulario.tipoResultado">2</span>
+              <span class="step-num" [class.completed]="formulario.tiposResultado.length > 0">
+                <mat-icon *ngIf="formulario.tiposResultado.length > 0">check</mat-icon>
+                <span *ngIf="formulario.tiposResultado.length === 0">2</span>
               </span>
-              <span class="step-line" [class.active]="formulario.tipoResultado"></span>
+              <span class="step-line" [class.active]="formulario.tiposResultado.length > 0"></span>
             </div>
             <div class="step-info">
               <h4 class="step-title">
                 <mat-icon>fact_check</mat-icon>
                 Selecciona el Resultado
               </h4>
-              <p class="step-desc">¿Qué tipo de documento se generará?</p>
+              <p class="step-desc">Selecciona uno o más documentos a generar</p>
             </div>
-            <div class="step-badge resultado" *ngIf="formulario.tipoResultado">
-              {{ getDescripcionResultado() }}
+            <div class="step-badge resultado" *ngIf="formulario.tiposResultado.length > 0">
+              {{ formulario.tiposResultado.length }} seleccionado(s)
             </div>
           </div>
-          <div class="step-content" *ngIf="formulario.tiposInsumo.length > 0" @slideDown>
-            <div class="resultado-grid">
+          <div class="step-content" *ngIf="formulario.tipoInsumo" @slideDown>
+            <div class="insumo-grid">
               <label 
                 *ngFor="let resultado of catalogos.tipos_resultado"
-                class="resultado-card"
-                [class.selected]="formulario.tipoResultado === resultado.codigo">
+                class="insumo-card"
+                [class.selected]="resultadoAdquisicionSeleccionado(resultado.codigo)">
                 <input 
-                  type="radio" 
-                  name="tipoResultado"
-                  [value]="resultado.codigo"
-                  [(ngModel)]="formulario.tipoResultado">
-                <div class="radio-indicator">
-                  <span class="radio-dot"></span>
+                  type="checkbox" 
+                  [checked]="resultadoAdquisicionSeleccionado(resultado.codigo)"
+                  (change)="toggleResultadoAdquisicion(resultado.codigo)">
+                <div class="card-check">
+                  <mat-icon>check</mat-icon>
                 </div>
                 <mat-icon class="card-icon">{{ getResultadoIcon(resultado.codigo) }}</mat-icon>
                 <span class="card-text">{{ resultado.descripcion }}</span>
@@ -423,14 +424,14 @@
             </div>
           </div>
           <!-- Mensaje bloqueado -->
-          <div class="step-locked" *ngIf="formulario.tiposInsumo.length === 0">
+          <div class="step-locked" *ngIf="!formulario.tipoInsumo">
             <mat-icon>lock</mat-icon>
-            <span>Primero selecciona al menos un insumo</span>
+            <span>Primero selecciona un insumo</span>
           </div>
         </div>
 
         <!-- ========== PASO 3: ESPECIALISTA (aparece cuando hay resultado) ========== -->
-        <div class="wizard-step" [class.active]="formulario.tipoResultado" [class.disabled]="!formulario.tipoResultado">
+        <div class="wizard-step" [class.active]="formulario.tiposResultado.length > 0" [class.disabled]="formulario.tiposResultado.length === 0">
           <div class="step-header">
             <div class="step-indicator">
               <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
@@ -450,7 +451,7 @@
               {{ formulario.especialistasSeleccionados.length }} asignado(s)
             </div>
           </div>
-          <div class="step-content" *ngIf="formulario.tipoResultado" @slideDown>
+          <div class="step-content" *ngIf="formulario.tiposResultado.length > 0" @slideDown>
             <!-- Externos -->
             <div class="especialista-section">
               <div class="section-header-esp">
@@ -516,9 +517,9 @@
             </div>
           </div>
           <!-- Mensaje bloqueado -->
-          <div class="step-locked" *ngIf="!formulario.tipoResultado">
+          <div class="step-locked" *ngIf="formulario.tiposResultado.length === 0">
             <mat-icon>lock</mat-icon>
-            <span>Primero selecciona un resultado</span>
+            <span>Primero selecciona al menos un resultado</span>
           </div>
         </div>
 
@@ -578,15 +579,15 @@
         </div>
 
         <!-- ========== RESUMEN FINAL ========== -->
-        <div class="wizard-summary" *ngIf="formulario.tiposInsumo.length > 0 && formulario.tipoResultado && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
+        <div class="wizard-summary" *ngIf="formulario.tipoInsumo && formulario.tiposResultado.length > 0 && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
           <div class="summary-icon">
             <mat-icon>verified</mat-icon>
           </div>
           <div class="summary-text">
             <h4>¡Selección completa!</h4>
             <p>
-              <strong>{{ formulario.tiposInsumo.length }}</strong> insumo(s) • 
-              <strong>{{ getDescripcionResultado() }}</strong> • 
+              <strong>1</strong> insumo • 
+              <strong>{{ formulario.tiposResultado.length }}</strong> resultado(s) • 
               <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s) • 
               <strong>{{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}</strong>
             </p>
@@ -597,39 +598,41 @@
       <!-- ========== FLUJOS NUEVOS: INVESTIGACIÓN, DICTÁMENES, RECUPERACIÓN, DESTRUCCIÓN ========== -->
       <div class="dynamic-form adquisicion-wizard" *ngIf="flujoAsignadoSeleccionado && esFlujoConOpcionesAsignado()">
         
-        <!-- ========== PASO 1: OPCIONES DEL FLUJO ========== -->
+        <!-- ========== PASO 1: OPCIONES DEL FLUJO (solo 1) ========== -->
         <div class="wizard-step active">
           <div class="step-header">
             <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.opcionSeleccionada.length > 0">
-                <mat-icon *ngIf="formulario.opcionSeleccionada.length > 0">check</mat-icon>
-                <span *ngIf="formulario.opcionSeleccionada.length === 0">1</span>
+              <span class="step-num" [class.completed]="formulario.opcionSeleccionada">
+                <mat-icon *ngIf="formulario.opcionSeleccionada">check</mat-icon>
+                <span *ngIf="!formulario.opcionSeleccionada">1</span>
               </span>
-              <span class="step-line" [class.active]="formulario.opcionSeleccionada.length > 0"></span>
+              <span class="step-line" [class.active]="formulario.opcionSeleccionada"></span>
             </div>
             <div class="step-info">
               <h4 class="step-title">
                 <mat-icon>category</mat-icon>
                 {{ getTituloOpciones() }}
               </h4>
-              <p class="step-desc">Selecciona una o más opciones</p>
+              <p class="step-desc">Selecciona una opción</p>
             </div>
-            <div class="step-badge" *ngIf="formulario.opcionSeleccionada.length > 0">
-              {{ formulario.opcionSeleccionada.length }} seleccionado(s)
+            <div class="step-badge" *ngIf="formulario.opcionSeleccionada">
+              1 seleccionado
             </div>
           </div>
           <div class="step-content">
-            <div class="insumo-grid">
+            <div class="resultado-grid">
               <label 
                 *ngFor="let opcion of getOpcionesActualesAsignado()"
-                class="insumo-card"
+                class="resultado-card"
                 [class.selected]="opcionSeleccionada(opcion.codigo)">
                 <input 
-                  type="checkbox" 
+                  type="radio" 
+                  name="opcionFlujo"
+                  [value]="opcion.codigo"
                   [checked]="opcionSeleccionada(opcion.codigo)"
-                  (change)="toggleOpcion(opcion.codigo)">
-                <div class="card-check">
-                  <mat-icon>check</mat-icon>
+                  (change)="seleccionarOpcion(opcion.codigo)">
+                <div class="radio-indicator">
+                  <span class="radio-dot"></span>
                 </div>
                 <mat-icon class="card-icon">{{ opcion.icon }}</mat-icon>
                 <span class="card-text">{{ opcion.descripcion }}</span>
@@ -638,54 +641,53 @@
           </div>
         </div>
 
-        <!-- ========== PASO 2: RESULTADO ========== -->
-        <div class="wizard-step" [class.active]="formulario.opcionSeleccionada.length > 0" [class.disabled]="formulario.opcionSeleccionada.length === 0">
+        <!-- ========== PASO 2: RESULTADO (múltiples) ========== -->
+        <div class="wizard-step" [class.active]="formulario.opcionSeleccionada" [class.disabled]="!formulario.opcionSeleccionada">
           <div class="step-header">
             <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.resultadoSeleccionado">
-                <mat-icon *ngIf="formulario.resultadoSeleccionado">check</mat-icon>
-                <span *ngIf="!formulario.resultadoSeleccionado">2</span>
+              <span class="step-num" [class.completed]="formulario.resultadosSeleccionados.length > 0">
+                <mat-icon *ngIf="formulario.resultadosSeleccionados.length > 0">check</mat-icon>
+                <span *ngIf="formulario.resultadosSeleccionados.length === 0">2</span>
               </span>
-              <span class="step-line" [class.active]="formulario.resultadoSeleccionado"></span>
+              <span class="step-line" [class.active]="formulario.resultadosSeleccionados.length > 0"></span>
             </div>
             <div class="step-info">
               <h4 class="step-title">
                 <mat-icon>description</mat-icon>
                 Tipo de Documento
               </h4>
-              <p class="step-desc">¿Qué documento se generará?</p>
+              <p class="step-desc">Selecciona uno o más documentos a generar</p>
             </div>
-            <div class="step-badge resultado" *ngIf="formulario.resultadoSeleccionado">
-              {{ getDescripcionResultadoNuevo() }}
+            <div class="step-badge resultado" *ngIf="formulario.resultadosSeleccionados.length > 0">
+              {{ formulario.resultadosSeleccionados.length }} seleccionado(s)
             </div>
           </div>
-          <div class="step-content" *ngIf="formulario.opcionSeleccionada.length > 0">
-            <div class="resultado-grid">
+          <div class="step-content" *ngIf="formulario.opcionSeleccionada">
+            <div class="insumo-grid">
               <label 
                 *ngFor="let resultado of getResultadosActualesAsignado()"
-                class="resultado-card"
-                [class.selected]="formulario.resultadoSeleccionado === resultado.codigo">
+                class="insumo-card"
+                [class.selected]="resultadoSeleccionado(resultado.codigo)">
                 <input 
-                  type="radio" 
-                  name="resultadoNuevo"
-                  [value]="resultado.codigo"
-                  [(ngModel)]="formulario.resultadoSeleccionado">
-                <div class="radio-indicator">
-                  <span class="radio-dot"></span>
+                  type="checkbox" 
+                  [checked]="resultadoSeleccionado(resultado.codigo)"
+                  (change)="toggleResultado(resultado.codigo)">
+                <div class="card-check">
+                  <mat-icon>check</mat-icon>
                 </div>
                 <mat-icon class="card-icon">{{ resultado.icon }}</mat-icon>
                 <span class="card-text">{{ resultado.descripcion }}</span>
               </label>
             </div>
           </div>
-          <div class="step-locked" *ngIf="formulario.opcionSeleccionada.length === 0">
+          <div class="step-locked" *ngIf="!formulario.opcionSeleccionada">
             <mat-icon>lock</mat-icon>
             <span>Primero selecciona una opción</span>
           </div>
         </div>
 
         <!-- ========== PASO 3: ESPECIALISTAS ========== -->
-        <div class="wizard-step" [class.active]="formulario.resultadoSeleccionado" [class.disabled]="!formulario.resultadoSeleccionado">
+        <div class="wizard-step" [class.active]="formulario.resultadosSeleccionados.length > 0" [class.disabled]="formulario.resultadosSeleccionados.length === 0">
           <div class="step-header">
             <div class="step-indicator">
               <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
@@ -705,7 +707,7 @@
               {{ formulario.especialistasSeleccionados.length }} asignado(s)
             </div>
           </div>
-          <div class="step-content" *ngIf="formulario.resultadoSeleccionado">
+          <div class="step-content" *ngIf="formulario.resultadosSeleccionados.length > 0">
             <!-- Externos -->
             <div class="especialista-section">
               <div class="section-header-esp">
@@ -770,9 +772,9 @@
               </div>
             </div>
           </div>
-          <div class="step-locked" *ngIf="!formulario.resultadoSeleccionado">
+          <div class="step-locked" *ngIf="formulario.resultadosSeleccionados.length === 0">
             <mat-icon>lock</mat-icon>
-            <span>Primero selecciona un resultado</span>
+            <span>Primero selecciona al menos un resultado</span>
           </div>
         </div>
 
@@ -832,15 +834,15 @@
         </div>
 
         <!-- ========== RESUMEN FINAL ========== -->
-        <div class="wizard-summary" *ngIf="formulario.opcionSeleccionada.length > 0 && formulario.resultadoSeleccionado && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
+        <div class="wizard-summary" *ngIf="formulario.opcionSeleccionada && formulario.resultadosSeleccionados.length > 0 && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
           <div class="summary-icon">
             <mat-icon>verified</mat-icon>
           </div>
           <div class="summary-text">
             <h4>¡Selección completa!</h4>
             <p>
-              <strong>{{ formulario.opcionSeleccionada.length }}</strong> opción(es) • 
-              <strong>{{ getDescripcionResultadoNuevo() }}</strong> • 
+              <strong>1</strong> opción • 
+              <strong>{{ formulario.resultadosSeleccionados.length }}</strong> resultado(s) • 
               <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s) • 
               <strong>{{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}</strong>
             </p>

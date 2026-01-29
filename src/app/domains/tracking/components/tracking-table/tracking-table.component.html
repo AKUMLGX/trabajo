@@ -35,7 +35,7 @@
         <div class="table-container">
           <div class="overflow-x-auto">
           <!-- TABLA PARA EXPEDIENTES TLAPOHUALLI -->
-          <!-- Columnas simplificadas: Ver, Expediente, Oficio, Remitente, N° Entrada, Fecha Doc. -->
+          <!-- Columnas simplificadas: Ver, Expediente, N° Entrada, Oficio, Remitente, Fecha Doc. -->
           <!-- Los demás campos se ven en el modal de detalle -->
           @if (tipoBusqueda === 'Tlapohualli' && expedientesTlapohualli.length > 0) {
           <table class="min-w-full border-collapse">
@@ -48,9 +48,9 @@
                   </div>
                 </th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Expediente</th>
+                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">N° Entrada</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Oficio</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Remitente</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">N° Entrada</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Fecha Doc.</th>
               </tr>
             </thead>
@@ -72,15 +72,15 @@
                   <div class="text-sm font-semibold text-[#34005b]">{{ expediente.expediente || '-' }}</div>
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-700">{{ expediente.numero_entrada_central || '-' }}</div>
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-700">{{ expediente.oficio || '-' }}</div>
                 </td>
                 <td class="px-4 py-4">
                   <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.remitente_area">
                     {{ expediente.remitente_area || '-' }}
                   </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">{{ expediente.numero_entrada_central || '-' }}</div>
                 </td>
                 <td class="px-4 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-700">

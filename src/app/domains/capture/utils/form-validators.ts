@@ -6,9 +6,15 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export class ExpedienteValidators {
   
   /**
-   * Validar formato de expediente: EXP-001-MM-YY
-   * Patrón: EXP seguido de guión, 3 dígitos, guión, mes (2 dígitos), guión y año (2 dígitos)
-   * También acepta formatos antiguos para compatibilidad
+   * Validar formato de expediente actual: EXP-AAMM-0001
+   * - EXP: prefijo fijo
+   * - AAMM: año (2 dígitos) + mes (2 dígitos) del registro
+   * - 0001: consecutivo de 4 dígitos
+   *
+   * También acepta formatos antiguos para compatibilidad:
+   * - EXP-001-MM-YY
+   * - EXP-0001-YYYY
+   * - Exp.001-YYYY / Exp.001
    */
   static expedienteFormat(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -18,19 +24,26 @@ export class ExpedienteValidators {
       const mesActual = (ahora.getMonth() + 1).toString().padStart(2, '0');
       const añoActual = (ahora.getFullYear() % 100).toString().padStart(2, '0');
       const añoCompleto = ahora.getFullYear();
+      const aaMmActual = `${añoActual}${mesActual}`;
       
-      // Formato nuevo: EXP-001-MM-YY
-      const patternNuevo = new RegExp(`^EXP-\\d{3}-${mesActual}-${añoActual}$`, 'i');
+      // Formato vigente: EXP-AAMM-0001 (ej: EXP-2601-0001)
+      const patternVigente = new RegExp(`^EXP-${aaMmActual}-\\d{4}$`, 'i');
+      // Formato anterior: EXP-001-MM-YY (compatibilidad)
+      const patternNuevoAnterior = new RegExp(`^EXP-\\d{3}-${mesActual}-${añoActual}$`, 'i');
       // Formato intermedio: EXP-0001-YYYY (compatibilidad)
       const patternIntermedio = new RegExp(`^EXP-\\d{4}-${añoCompleto}$`, 'i');
       // Formato antiguo: Exp.001-YYYY o Exp.001 (compatibilidad)
       const patternAntiguo = /^Exp\.\d{3}(-\d{4})?$/i;
       
-      const esValido = patternNuevo.test(control.value) || patternIntermedio.test(control.value) || patternAntiguo.test(control.value);
+      const esValido =
+        patternVigente.test(control.value) ||
+        patternNuevoAnterior.test(control.value) ||
+        patternIntermedio.test(control.value) ||
+        patternAntiguo.test(control.value);
       
       return esValido ? null : { 
         expedienteFormat: { 
-          message: `Formato: EXP-XXX-MM-YY (Ejemplo: EXP-001-${mesActual}-${añoActual})` 
+          message: `Formato: EXP-AAMM-#### (Ejemplo: EXP-${aaMmActual}-0001)` 
         } 
       };
     };
