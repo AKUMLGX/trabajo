@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { ExpedienteTlapohualli } from '../../../capture/interfaces/expediente-tlapohualli.interface';
+import { ExpedienteTlalcalli } from '../../../capture/interfaces/expediente-tlalcalli.interface';
 import { 
   AtencionService, 
   CatalogosAtencion, 
@@ -71,7 +71,7 @@ interface FormularioAtencion {
   ]
 })
 export class AtencionModalComponent implements OnInit {
-  expediente: ExpedienteTlapohualli;
+  expediente: ExpedienteTlalcalli;
   // Catálogos con datos estáticos como fallback
   catalogos: CatalogosAtencion = {
     especialistas: [
@@ -370,7 +370,7 @@ export class AtencionModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AtencionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { expediente: ExpedienteTlapohualli },
+    @Inject(MAT_DIALOG_DATA) public data: { expediente: ExpedienteTlalcalli },
     private atencionService: AtencionService,
     private snackBar: MatSnackBar
   ) {

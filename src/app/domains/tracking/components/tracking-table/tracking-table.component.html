@@ -1,26 +1,26 @@
-@if ((documents.length > 0 || expedientesTlapohualli.length > 0) && !fileIsOpen && mostrarTabla ) {
+@if ((documents.length > 0 || expedientesTlalcalli.length > 0) && !fileIsOpen && mostrarTabla ) {
 <!-- Header de Resultados Mejorado -->
 <div class="mx-4 mb-4">
-  <div class="bg-white rounded-lg shadow-md px-6 py-4 border-l-4" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'border-[#34005b]' : 'border-[#235B4E]'">
+  <div class="bg-white rounded-lg shadow-md px-6 py-4 border-l-4" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'border-[#34005b]' : 'border-[#235B4E]'">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="p-2 rounded-lg" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'bg-[#34005b]/10' : 'bg-[#235B4E]/10'">
-          <svg class="w-6 h-6" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#34005b]' : 'text-[#235B4E]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="p-2 rounded-lg" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'bg-[#34005b]/10' : 'bg-[#235B4E]/10'">
+          <svg class="w-6 h-6" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
           </svg>
         </div>
         <div>
           <h2 class="text-xl font-semibold text-gray-800">Resultados de Búsqueda</h2>
           <p class="text-sm text-gray-600">
-            <span class="font-medium" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
-              {{ tipoBusqueda === 'Tlapohualli' ? 'Sistema Tlálcalli' : 'Sistema Tlálcalli' }}
+            <span class="font-medium" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
+              {{ tipoBusqueda === 'Tlalcalli' ? 'Sistema Tlálcalli' : 'Sistema Tlálcalli' }}
             </span>
           </p>
         </div>
       </div>
       <div class="text-right">
-        <div class="text-2xl font-bold" [ngClass]="tipoBusqueda === 'Tlapohualli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
-          {{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}
+        <div class="text-2xl font-bold" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
+          {{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}
         </div>
         <div class="text-xs text-gray-500 uppercase tracking-wide">Expedientes</div>
       </div>
@@ -34,10 +34,10 @@
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         <div class="table-container">
           <div class="overflow-x-auto">
-          <!-- TABLA PARA EXPEDIENTES TLAPOHUALLI -->
+          <!-- TABLA PARA EXPEDIENTES TLALCALLI -->
           <!-- Columnas simplificadas: Ver, Expediente, N° Entrada, Oficio, Remitente, Fecha Doc. -->
           <!-- Los demás campos se ven en el modal de detalle -->
-          @if (tipoBusqueda === 'Tlapohualli' && expedientesTlapohualli.length > 0) {
+          @if (tipoBusqueda === 'Tlalcalli' && expedientesTlalcalli.length > 0) {
           <table class="min-w-full border-collapse">
             <thead class="bg-gradient-to-r from-[#34005b] to-[#3e0065]">
               <tr>
@@ -94,7 +94,7 @@
           }
           
           <!-- TABLA PARA ASUNTOS AKAMBA (original) -->
-          @if (tipoBusqueda !== 'Tlapohualli' && documents.length > 0) {
+          @if (tipoBusqueda !== 'Tlalcalli' && documents.length > 0) {
           <table class="min-w-full border-collapse bg-white">
             <thead>
               <tr>
@@ -291,11 +291,11 @@
         </div>
         <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
           <div>
-            @if ((tipoBusqueda === 'Tlapohualli' && pagesExpedientes.length > 0) || (tipoBusqueda !== 'Tlapohualli' && pages.length > 0)) {
+            @if ((tipoBusqueda === 'Tlalcalli' && pagesExpedientes.length > 0) || (tipoBusqueda !== 'Tlalcalli' && pages.length > 0)) {
             <ul>
-              @if (tipoBusqueda === 'Tlapohualli') {
+              @if (tipoBusqueda === 'Tlalcalli') {
               <li *ngFor="
-                      let item of expedientesTlapohualli
+                      let item of expedientesTlalcalli
                         | paginate
                           : {
                               itemsPerPage: itemsPerPage,
@@ -332,12 +332,12 @@
               <span class="font-bold text-[#34005b]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
             a
               <span class="font-bold text-[#34005b]">{{
-              tipoBusqueda === 'Tlapohualli' 
-                ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlapohualli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlapohualli.length)
+              tipoBusqueda === 'Tlalcalli' 
+                ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlalcalli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlalcalli.length)
                 : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
             }}</span>
                 de
-              <span class="font-bold text-[#34005b]">{{ tipoBusqueda === 'Tlapohualli' ? expedientesTlapohualli.length : documents.length }}</span>
+              <span class="font-bold text-[#34005b]">{{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}</span>
               expedientes
           </p>
           </div>

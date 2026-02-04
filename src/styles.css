@@ -45,17 +45,17 @@ body {
 }
 
 /* FORZAR TODOS LOS BOTONES MATERIAL EN EL STEPPER */
-app-stepper-tlapohualli .mat-button,
-app-stepper-tlapohualli .mat-raised-button,
-app-stepper-tlapohualli .mat-stroked-button {
+app-stepper-tlalcalli .mat-button,
+app-stepper-tlalcalli .mat-raised-button,
+app-stepper-tlalcalli .mat-stroked-button {
   background: #34005b !important;
   color: white !important;
   border-radius: 10px !important;
 }
 
-app-stepper-tlapohualli .mat-button:hover,
-app-stepper-tlapohualli .mat-raised-button:hover,
-app-stepper-tlapohualli .mat-stroked-button:hover {
+app-stepper-tlalcalli .mat-button:hover,
+app-stepper-tlalcalli .mat-raised-button:hover,
+app-stepper-tlalcalli .mat-stroked-button:hover {
   background: #d6ae67 !important;
   color: #34005b !important;
 }

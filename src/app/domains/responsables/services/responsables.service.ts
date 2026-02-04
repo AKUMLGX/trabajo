@@ -3,20 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { ExpedienteTlapohualli } from '../../capture/interfaces/expediente-tlapohualli.interface';
+import { ExpedienteTlalcalli } from '../../capture/interfaces/expediente-tlalcalli.interface';
 
-// Construir la URL base para Tlapohualli
+// Construir la URL base para Tlalcalli
 let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
 baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
 const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const TLAPOHUALLI_BASE = `${baseWithoutApi}tlapohualli/api/v1/`;
+const TLALCALLI_BASE = `${baseWithoutApi}tlalcalli/api/v1/`;
 
 /**
  * Interfaz para la respuesta de mis expedientes
  */
 export interface MisExpedientesResponse {
   success: boolean;
-  data: ExpedienteTlapohualli[];
+  data: ExpedienteTlalcalli[];
   total: number;
   estadisticas: {
     total: number;
@@ -73,7 +73,7 @@ export interface FiltrosResponsable {
   providedIn: 'root'
 })
 export class ResponsablesService {
-  private readonly BASE_URL = `${TLAPOHUALLI_BASE}expedientes/responsable`;
+  private readonly BASE_URL = `${TLALCALLI_BASE}expedientes/responsable`;
 
   constructor(private http: HttpClient) {}
 

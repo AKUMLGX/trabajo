@@ -5,23 +5,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { FirstStepTlapohualliComponent } from '../first-step-tlapohualli/first-step-tlapohualli.component';
-import { SecondStepTlapohualliComponent } from '../second-step-tlapohualli/second-step-tlapohualli.component';
+import { FirstStepTlalcalliComponent } from '../first-step-tlalcalli/first-step-tlalcalli.component';
+import { SecondStepTlalcalliComponent } from '../second-step-tlalcalli/second-step-tlalcalli.component';
 import { PreConfirmacionModalComponent, CampoResumen, SeccionResumen } from '../pre-confirmacion-modal/pre-confirmacion-modal.component';
-import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
+import { ExpedienteTlalcalliService } from '../../../services/expediente-tlalcalli.service';
 import { PdfGeneratorService } from '../../../services/pdf-generator.service';
 import { LoggerService } from '../../../services/logger.service';
 import {
   FormularioPaso1,
   FormularioPaso2,
   FormularioPaso3,
-  ExpedienteTlapohualli
-} from '../../../interfaces/expediente-tlapohualli.interface';
+  ExpedienteTlalcalli
+} from '../../../interfaces/expediente-tlalcalli.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-stepper-tlapohualli',
+  selector: 'app-stepper-tlalcalli',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,16 +32,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSnackBarModule,
     MatDialogModule,
     MatTooltipModule,
-    FirstStepTlapohualliComponent,
-    SecondStepTlapohualliComponent
+    FirstStepTlalcalliComponent,
+    SecondStepTlalcalliComponent
   ],
-  templateUrl: './stepper-tlapohualli.component.html',
-  styleUrls: ['./stepper-tlapohualli.component.css', './stepper-tlapohualli-global.css']
+  templateUrl: './stepper-tlalcalli.component.html',
+  styleUrls: ['./stepper-tlalcalli.component.css', './stepper-tlalcalli-global.css']
 })
-export class StepperTlapohualliComponent implements OnInit, AfterViewInit {
+export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   @ViewChild(MatStepper) stepper!: MatStepper;
-  @ViewChild(FirstStepTlapohualliComponent) paso1Component!: FirstStepTlapohualliComponent;
-  @ViewChild(SecondStepTlapohualliComponent) paso2Component!: SecondStepTlapohualliComponent;
+  @ViewChild(FirstStepTlalcalliComponent) paso1Component!: FirstStepTlalcalliComponent;
+  @ViewChild(SecondStepTlalcalliComponent) paso2Component!: SecondStepTlalcalliComponent;
 
   datosPaso1: FormularioPaso1 | null = null;
   datosPaso2: FormularioPaso2 | null = null;
@@ -55,7 +55,7 @@ export class StepperTlapohualliComponent implements OnInit, AfterViewInit {
   paso1Valido = false;
 
   constructor(
-    private expedienteService: ExpedienteTlapohualliService,
+    private expedienteService: ExpedienteTlalcalliService,
     private pdfService: PdfGeneratorService,
     private snackBar: MatSnackBar,
     private logger: LoggerService,
@@ -378,7 +378,7 @@ export class StepperTlapohualliComponent implements OnInit, AfterViewInit {
   }
 
   // Utilidades
-  mostrarResumenExpediente(expediente: ExpedienteTlapohualli | undefined) {
+  mostrarResumenExpediente(expediente: ExpedienteTlalcalli | undefined) {
     if (!expediente) return;
 
     const resumen = `

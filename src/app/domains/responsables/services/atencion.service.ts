@@ -4,11 +4,11 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
-// Construir la URL base para Tlapohualli
+// Construir la URL base para Tlalcalli
 let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
 baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
 const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const TLAPOHUALLI_BASE = `${baseWithoutApi}tlapohualli/api/v1/`;
+const TLALCALLI_BASE = `${baseWithoutApi}tlalcalli/api/v1/`;
 
 // =====================================================
 // INTERFACES
@@ -208,7 +208,7 @@ export interface AtencionesResponse {
   providedIn: 'root'
 })
 export class AtencionService {
-  private readonly BASE_URL = `${TLAPOHUALLI_BASE}atencion`;
+  private readonly BASE_URL = `${TLALCALLI_BASE}atencion`;
 
   constructor(private http: HttpClient) {
     console.log('🔧 [AtencionService] URL base:', this.BASE_URL);

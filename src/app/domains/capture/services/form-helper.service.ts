@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class FormHelperService {
-  private readonly STORAGE_KEY_PREFIX = 'tlapohualli_form_';
+  private readonly STORAGE_KEY_PREFIX = 'tlalcalli_form_';
 
   /**
    * Obtener fecha actual en formato YYYY-MM-DD

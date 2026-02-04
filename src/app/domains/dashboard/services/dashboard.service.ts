@@ -4,11 +4,11 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
-// Construir la URL base para Tlapohualli
+// Construir la URL base para Tlalcalli
 let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
 baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
 const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const DASHBOARD_API = `${baseWithoutApi}tlapohualli/api/v1/dashboard`;
+const DASHBOARD_API = `${baseWithoutApi}tlalcalli/api/v1/dashboard`;
 
 // =====================================================
 // INTERFACES

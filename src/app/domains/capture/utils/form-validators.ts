@@ -1,7 +1,7 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 /**
- * Validadores personalizados para el formulario de expedientes Tlapohualli
+ * Validadores personalizados para el formulario de expedientes Tlalcalli
  */
 export class ExpedienteValidators {
   

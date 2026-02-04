@@ -7,7 +7,7 @@ import { CustomSelectComponent, SelectOption } from '../custom-select/custom-sel
 import { KeyboardNavigationDirective } from '../../../directives/keyboard-navigation.directive';
 import { ExpedienteValidators } from '../../../utils/form-validators';
 import { ExpedienteAutocompleteService } from '../../../services/expediente-autocomplete.service';
-import { ExpedienteTlapohualliService } from '../../../services/expediente-tlapohualli.service';
+import { ExpedienteTlalcalliService } from '../../../services/expediente-tlalcalli.service';
 import { LoggerService } from '../../../services/logger.service';
 import { FormHelperService } from '../../../services/form-helper.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ import { ConfirmacionModalComponent, ConfirmacionModalData } from '../confirmaci
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
-  selector: 'app-first-step-tlapohualli',
+  selector: 'app-first-step-tlalcalli',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,10 +26,10 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
     KeyboardNavigationDirective,
     CustomSelectComponent
   ],
-  templateUrl: './first-step-tlapohualli.component.html',
-  styleUrl: './first-step-tlapohualli.component.css'
+  templateUrl: './first-step-tlalcalli.component.html',
+  styleUrl: './first-step-tlalcalli.component.css'
 })
-export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
+export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   @Output() formularioCompletado = new EventEmitter<any>();
   @Output() siguientePaso = new EventEmitter<void>();
   @Output() validezCambiada = new EventEmitter<boolean>();
@@ -229,7 +229,7 @@ export class FirstStepTlapohualliComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private autocompleteService: ExpedienteAutocompleteService,
-    private expedienteService: ExpedienteTlapohualliService,
+    private expedienteService: ExpedienteTlalcalliService,
     private dialog: MatDialog,
     private logger: LoggerService,
     private formHelper: FormHelperService

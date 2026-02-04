@@ -1,5 +1,5 @@
-// Interface para el expediente de Tlapohualli (coincide con el backend)
-export interface ExpedienteTlapohualli {
+// Interface para el expediente de Tlalcalli (coincide con el backend)
+export interface ExpedienteTlalcalli {
   id_expediente?: number;
   
   // Información básica del expediente

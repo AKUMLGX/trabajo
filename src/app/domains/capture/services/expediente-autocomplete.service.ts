@@ -5,16 +5,16 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
 
-// Construir la URL base correcta para Tlapohualli
+// Construir la URL base correcta para Tlalcalli
 // environment.baseUrl es: http://localhost:8090/akamba/api/v1/
-// Necesitamos: http://localhost:8090/akamba/tlapohualli/api/v1/
-// Por lo tanto, eliminamos /api/v1/ del final y agregamos /tlapohualli/api/v1/
+// Necesitamos: http://localhost:8090/akamba/tlalcalli/api/v1/
+// Por lo tanto, eliminamos /api/v1/ del final y agregamos /tlalcalli/api/v1/
 let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
 // Eliminar /api/v1 del final si existe (con o sin trailing slash)
 baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
 // Asegurar que termine con / para la concatenación
 const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const TLAPOHUALLI_BASE = `${baseWithoutApi}tlapohualli/api/v1/`;
+const TLALCALLI_BASE = `${baseWithoutApi}tlalcalli/api/v1/`;
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +50,7 @@ export class ExpedienteAutocompleteService {
    * Obtiene el expediente asociado a un oficio (si existe)
    */
   obtenerExpedientePorOficio(oficio: string): Observable<string> {
-    const url = `${TLAPOHUALLI_BASE}expedientes/por-oficio/${encodeURIComponent(oficio)}`;
+    const url = `${TLALCALLI_BASE}expedientes/por-oficio/${encodeURIComponent(oficio)}`;
     return this.http.get<{success: boolean, expediente: string}>(url, { withCredentials: true })
       .pipe(
         map(response => {
@@ -68,7 +68,7 @@ export class ExpedienteAutocompleteService {
    * Obtiene el siguiente número de expediente nuevo (sin verificar oficio)
    */
   private obtenerSiguienteExpedienteNuevo(): Observable<string> {
-    return this.http.get<{success: boolean, siguiente: string}>(`${TLAPOHUALLI_BASE}expedientes/siguiente`, { withCredentials: true })
+    return this.http.get<{success: boolean, siguiente: string}>(`${TLALCALLI_BASE}expedientes/siguiente`, { withCredentials: true })
       .pipe(
         map(response => response.siguiente),
         catchError(error => {

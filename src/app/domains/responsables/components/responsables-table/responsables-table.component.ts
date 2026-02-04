@@ -5,7 +5,7 @@ import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ResponsablesService, FiltrosResponsable } from '../../services/responsables.service';
 import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
-import { ExpedienteTlapohualli } from '../../../capture/interfaces/expediente-tlapohualli.interface';
+import { ExpedienteTlalcalli } from '../../../capture/interfaces/expediente-tlalcalli.interface';
 import { ExpedienteDetalleModalComponent } from '../../../tracking/components/expediente-detalle-modal/expediente-detalle-modal.component';
 import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -50,8 +50,8 @@ export class ResponsablesTableComponent implements OnInit {
   Math = Math;
   
   // Datos
-  expedientes: ExpedienteTlapohualli[] = [];
-  pagesExpedientes: ExpedienteTlapohualli[][] = [];
+  expedientes: ExpedienteTlalcalli[] = [];
+  pagesExpedientes: ExpedienteTlalcalli[][] = [];
   
   // Paginación
   pageSelected = 1;
@@ -137,7 +137,7 @@ export class ResponsablesTableComponent implements OnInit {
   }
 
   // Variable para guardar todos los expedientes sin filtrar
-  private todosLosExpedientes: ExpedienteTlapohualli[] = [];
+  private todosLosExpedientes: ExpedienteTlalcalli[] = [];
 
   /**
    * Cargar expedientes del responsable
@@ -199,7 +199,7 @@ export class ResponsablesTableComponent implements OnInit {
    * 🔴 URGENTE (48-72h transcurridas): ¡Hay que atenderlo ya!
    * ⚫ VENCIDO (+72h transcurridas): Superó el límite
    */
-  calcularSemaforo(expediente: ExpedienteTlapohualli): SemaforoPrioridad {
+  calcularSemaforo(expediente: ExpedienteTlalcalli): SemaforoPrioridad {
     const ahora = new Date();
     const LIMITE_TOTAL = 72; // 72 horas es el límite máximo
     
@@ -288,7 +288,7 @@ export class ResponsablesTableComponent implements OnInit {
    * Ordenar expedientes por prioridad (más urgentes primero)
    * Los vencidos primero, luego urgentes, atención, y al final los que están en tiempo
    */
-  ordenarPorPrioridad(expedientes: ExpedienteTlapohualli[]): ExpedienteTlapohualli[] {
+  ordenarPorPrioridad(expedientes: ExpedienteTlalcalli[]): ExpedienteTlalcalli[] {
     const ordenPrioridad: { [key: string]: number } = {
       'VENCIDO': 0,    // ⚫ Máxima prioridad (ya se pasó)
       'URGENTE': 1,    // 🔴 Muy urgente
@@ -433,7 +433,7 @@ export class ResponsablesTableComponent implements OnInit {
   /**
    * Filtrar expedientes según la vista actual (pendientes/atendidos)
    */
-  filtrarPorVista(expedientes: ExpedienteTlapohualli[]): ExpedienteTlapohualli[] {
+  filtrarPorVista(expedientes: ExpedienteTlalcalli[]): ExpedienteTlalcalli[] {
     if (this.vistaActual === 'pendientes') {
       return expedientes.filter(exp => 
         !exp.estatus || this.estatusPendientes.includes(exp.estatus.toUpperCase())
@@ -528,7 +528,7 @@ export class ResponsablesTableComponent implements OnInit {
   /**
    * Ver detalle de expediente
    */
-  verDetalleExpediente(expediente: ExpedienteTlapohualli): void {
+  verDetalleExpediente(expediente: ExpedienteTlalcalli): void {
     const dialogRef = this.dialog.open(ExpedienteDetalleModalComponent, {
       width: '900px',
       maxWidth: '95vw',
@@ -546,7 +546,7 @@ export class ResponsablesTableComponent implements OnInit {
   /**
    * Abrir modal de atención para procesar el expediente
    */
-  abrirModalAtencion(expediente: ExpedienteTlapohualli): void {
+  abrirModalAtencion(expediente: ExpedienteTlalcalli): void {
     console.log('📋 [ResponsablesTable] Abriendo modal de atención para:', expediente.expediente);
     
     const dialogRef = this.dialog.open(AtencionModalComponent, {

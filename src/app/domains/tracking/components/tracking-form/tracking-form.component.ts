@@ -9,7 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { dynamicHeight } from '../../../shared/animacion/dynamicHeight.trigger';
 import { AsuntoService } from '../../../services/asunto.service';
-import { ExpedienteTlapohualliService } from '../../../../domains/capture/services/expediente-tlapohualli.service';
+import { ExpedienteTlalcalliService } from '../../../../domains/capture/services/expediente-tlalcalli.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -37,7 +37,7 @@ import { SharedDataFormService } from '../../../shared/services/shared-data-form
 
 })
 export class TrackingFormComponent implements OnInit, AfterViewInit {
-  // Formulario adaptado para campos de Tlapohualli - Solo campos principales de captura
+  // Formulario adaptado para campos de Tlalcalli - Solo campos principales de captura
   public consultForm: FormGroup = this.fb.group({
     oficio: new FormControl(''),
     expediente: new FormControl(''),
@@ -67,16 +67,16 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
   @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: Record<string, boolean> = {};
   campoValor: Record<string, any> = {};
-  // Campos adaptados para Tlapohualli - Solo campos principales de captura
+  // Campos adaptados para Tlalcalli - Solo campos principales de captura
   campos: string[] = ["oficio", "expediente", "remitente_area", "responsable", "prioridad"]
   constructor(
     private fb: FormBuilder,
     private asuntoService: AsuntoService,
-    private expedienteService: ExpedienteTlapohualliService,
+    private expedienteService: ExpedienteTlalcalliService,
     private shareData: SharedDataFormService,
     private route: ActivatedRoute
   ) {
-    // Campos adaptados para Tlapohualli - Solo campos principales de captura
+    // Campos adaptados para Tlalcalli - Solo campos principales de captura
     this.campoValor = {
       oficio: '',
       expediente: '',
@@ -120,7 +120,7 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
   onSave(): void {
     console.log('🔍 [TrackingForm] onSave ejecutado');
     console.log('🔍 [TrackingForm] Formulario actual:', this.consultForm.value);
-    // Usar el servicio de expedientes Tlapohualli en lugar de AsuntoService
+    // Usar el servicio de expedientes Tlalcalli en lugar de AsuntoService
     this.expedienteService.consultarExpedientes(this.consultForm.value).subscribe({
       next: (expedientes) => {
         console.log('✅ Expedientes encontrados:', expedientes);
@@ -133,7 +133,7 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Datos adaptados para Tlapohualli - Solo campos principales de captura
+  // Datos adaptados para Tlalcalli - Solo campos principales de captura
   formData = {
     oficio: "",
     expediente: "",
@@ -170,7 +170,7 @@ export class TrackingFormComponent implements OnInit, AfterViewInit {
     } else if (this.nombre_campo_input === "numeroEntradaCentral") {
       this.nombre_campo_input = "numero_entrada_central";
     }
-    // Usar el servicio de expedientes Tlapohualli para autocompletado
+    // Usar el servicio de expedientes Tlalcalli para autocompletado
     this.expedienteService.autocompletadoCampo(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
       this.coincidencias = coincidencias.slice(0, 5);
     });

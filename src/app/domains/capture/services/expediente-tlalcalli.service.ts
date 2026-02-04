@@ -4,18 +4,18 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { LoggerService } from './logger.service';
-import { ExpedienteTlapohualli } from '../interfaces/expediente-tlapohualli.interface';
+import { ExpedienteTlalcalli } from '../interfaces/expediente-tlalcalli.interface';
 
-// Construir la URL base correcta para Tlapohualli
+// Construir la URL base correcta para Tlalcalli
 // environment.baseUrl es: http://localhost:8090/akamba/api/v1/
-// Necesitamos: http://localhost:8090/akamba/tlapohualli/api/v1/
-// Por lo tanto, eliminamos /api/v1/ del final y agregamos /tlapohualli/api/v1/
+// Necesitamos: http://localhost:8090/akamba/tlalcalli/api/v1/
+// Por lo tanto, eliminamos /api/v1/ del final y agregamos /tlalcalli/api/v1/
 let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
 // Eliminar /api/v1 del final si existe (con o sin trailing slash)
 baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
 // Asegurar que termine con / para la concatenación
 const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const TLAPOHUALLI_BASE = `${baseWithoutApi}tlapohualli/api/v1/`;
+const TLALCALLI_BASE = `${baseWithoutApi}tlalcalli/api/v1/`;
 
 /**
  * Interfaz del formulario completo que se envía al backend
@@ -51,22 +51,22 @@ export interface FormularioExpedienteCompleto {
 }
 
 /**
- * Servicio para gestionar expedientes de Tlapohualli
+ * Servicio para gestionar expedientes de Tlalcalli
  */
 @Injectable({
   providedIn: 'root'
 })
-export class ExpedienteTlapohualliService {
-  private readonly BASE_URL = `${TLAPOHUALLI_BASE}expedientes`;
+export class ExpedienteTlalcalliService {
+  private readonly BASE_URL = `${TLALCALLI_BASE}expedientes`;
   
   // EventEmitter para notificar cuando se consultan expedientes (para la tabla)
-  public expedientesConsultados = new EventEmitter<ExpedienteTlapohualli[]>();
+  public expedientesConsultados = new EventEmitter<ExpedienteTlalcalli[]>();
 
   constructor(
     private http: HttpClient,
     private logger: LoggerService
   ) {
-    this.logger.debug('ExpedienteTlapohualliService inicializado - BASE_URL:', this.BASE_URL);
+    this.logger.debug('ExpedienteTlalcalliService inicializado - BASE_URL:', this.BASE_URL);
   }
 
   /**
@@ -75,8 +75,8 @@ export class ExpedienteTlapohualliService {
   /**
    * Consultar expedientes con filtros múltiples (para bandeja de seguimiento)
    */
-  consultarExpedientes(filtros: any): Observable<ExpedienteTlapohualli[]> {
-    const url = `${TLAPOHUALLI_BASE}expedientes/consulta`;
+  consultarExpedientes(filtros: any): Observable<ExpedienteTlalcalli[]> {
+    const url = `${TLALCALLI_BASE}expedientes/consulta`;
     const params: any = {};
     
     // Agregar solo los filtros que tienen valor - Campos principales de captura
@@ -91,7 +91,7 @@ export class ExpedienteTlapohualliService {
     if (filtros.fecha_creacion_desde) params.fecha_creacion_desde = filtros.fecha_creacion_desde;
     if (filtros.fecha_creacion_hasta) params.fecha_creacion_hasta = filtros.fecha_creacion_hasta;
     
-    return this.http.get<ExpedienteTlapohualli[]>(url, { params, withCredentials: true }).pipe(
+    return this.http.get<ExpedienteTlalcalli[]>(url, { params, withCredentials: true }).pipe(
       map(expedientes => {
         console.log('📥 [ExpedienteService] Expedientes recibidos del backend:', expedientes);
         // Debug: Verificar documento_pdf_nombre en cada expediente
@@ -118,7 +118,7 @@ export class ExpedienteTlapohualliService {
    * Autocompletado para un campo específico (para bandeja de seguimiento)
    */
   autocompletadoCampo(valor: string, campo: string): Observable<string[]> {
-    const url = `${TLAPOHUALLI_BASE}expedientes/autocompletado`;
+    const url = `${TLALCALLI_BASE}expedientes/autocompletado`;
     const params: any = { [campo]: valor };
     
     return this.http.get<string[]>(url, { params, withCredentials: true }).pipe(
@@ -367,7 +367,7 @@ export class ExpedienteTlapohualliService {
    * Descargar expedientes en formato Excel con los filtros aplicados
    */
   descargarExcelExpedientes(filtros: any): Observable<Blob> {
-    const url = `${TLAPOHUALLI_BASE}expedientes/descargar-excel`;
+    const url = `${TLALCALLI_BASE}expedientes/descargar-excel`;
     let params = new HttpParams();
     
     // Agregar solo los filtros que tienen valor
