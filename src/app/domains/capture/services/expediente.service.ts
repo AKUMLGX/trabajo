@@ -48,7 +48,7 @@ export interface Expediente {
   providedIn: 'root'
 })
 export class ExpedienteService {
-  private readonly API_URL = '/tlapohualli/api/v1/api/expedientes';
+  private readonly API_URL = '/tlapohualli/api/v1/expedientes';
 
   constructor(private http: HttpClient) {}
 
