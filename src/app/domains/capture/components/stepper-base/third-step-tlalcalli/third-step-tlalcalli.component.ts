@@ -3,16 +3,16 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-third-step-tlapohualli',
+  selector: 'app-third-step-tlalcalli',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule
   ],
-  templateUrl: './third-step-tlapohualli.component.html',
-  styleUrl: './third-step-tlapohualli.component.css'
+  templateUrl: './third-step-tlalcalli.component.html',
+  styleUrl: './third-step-tlalcalli.component.css'
 })
-export class ThirdStepTlapohualliComponent {
+export class ThirdStepTlalcalliComponent {
   @Input() datosPaso1: any = {};
   @Input() datosPaso2: any = {};
   @Output() formularioCompletado = new EventEmitter<any>();

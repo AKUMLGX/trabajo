@@ -8,7 +8,7 @@ import { FormHelperService } from '../../../services/form-helper.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
-  selector: 'app-second-step-tlapohualli',
+  selector: 'app-second-step-tlalcalli',
   standalone: true,
   imports: [
     CommonModule,
@@ -16,10 +16,10 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
     CustomFormFieldComponent,
     CustomSelectComponent
   ],
-  templateUrl: './second-step-tlapohualli.component.html',
-  styleUrl: './second-step-tlapohualli.component.css'
+  templateUrl: './second-step-tlalcalli.component.html',
+  styleUrl: './second-step-tlalcalli.component.css'
 })
-export class SecondStepTlapohualliComponent implements OnInit, OnDestroy {
+export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   @Input() datosPaso1: any = {};
   @Output() formularioCompletado = new EventEmitter<any>();
   @Output() siguientePaso = new EventEmitter<void>();

@@ -1,14 +1,14 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { Observable, of, timer } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { ExpedienteTlapohualliService } from '../services/expediente-tlapohualli.service';
+import { ExpedienteTlalcalliService } from '../services/expediente-tlalcalli.service';
 
 /**
  * Validador asíncrono para verificar si un oficio ya existe en la BD
- * @param expedienteService Servicio de expedientes Tlapohualli
+ * @param expedienteService Servicio de expedientes Tlalcalli
  * @returns AsyncValidatorFn
  */
-export function oficioExistenteValidator(expedienteService: ExpedienteTlapohualliService): AsyncValidatorFn {
+export function oficioExistenteValidator(expedienteService: ExpedienteTlalcalliService): AsyncValidatorFn {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
     // Si el campo está vacío, no validar
     if (!control.value || control.value.trim() === '') {
@@ -51,14 +51,14 @@ export function oficioExistenteValidator(expedienteService: ExpedienteTlapohuall
 
 /**
  * Validador asíncrono para verificar si un expediente ya existe en la BD
- * @param expedienteService Servicio de expedientes Tlapohualli
+ * @param expedienteService Servicio de expedientes Tlalcalli
  * @returns AsyncValidatorFn
  * 
  * NOTA: Este validador NO es necesario actualmente porque el campo
  * "expediente" está bloqueado y se genera automáticamente.
  * Se mantiene para uso futuro si se requiere.
  */
-export function expedienteExistenteValidator(expedienteService: ExpedienteTlapohualliService): AsyncValidatorFn {
+export function expedienteExistenteValidator(expedienteService: ExpedienteTlalcalliService): AsyncValidatorFn {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
     // Si el campo está vacío, no validar
     if (!control.value || control.value.trim() === '') {

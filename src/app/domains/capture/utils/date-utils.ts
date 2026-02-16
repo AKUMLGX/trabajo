@@ -1,5 +1,5 @@
 /**
- * Utilidades para manejo de fechas en el sistema Tlapohualli
+ * Utilidades para manejo de fechas en el sistema Tlalcalli
  */
 export class DateUtils {
   

@@ -11,7 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
-import { ExpedienteTlapohualliService } from '../../../capture/services/expediente-tlapohualli.service';
+import { ExpedienteTlalcalliService } from '../../../capture/services/expediente-tlalcalli.service';
 import { CierreService } from '../../services/cierre.service';
 import { CierreModalComponent } from '../cierre-modal/cierre-modal.component';
 import { DetalleAtencionModalComponent } from '../detalle-atencion-modal/detalle-atencion-modal.component';
@@ -81,7 +81,7 @@ export class AtencionCierreTableComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private atencionService: AtencionService,
-    private expedienteService: ExpedienteTlapohualliService,
+    private expedienteService: ExpedienteTlalcalliService,
     private cierreService: CierreService,
     private dialog: MatDialog
   ) {

@@ -1,0 +1,14 @@
+{
+  "/tlalcalli/api/v1/*": {
+    "target": "http://backend:8080/akamba",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/akamba/api/v1/*": {
+    "target": "http://backend:8080",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

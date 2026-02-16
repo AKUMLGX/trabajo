@@ -1,0 +1,69 @@
+# =============================================================================
+# .dockerignore para Frontend Tlalcalli (Angular)
+# Excluir archivos innecesarios del contexto de build
+# =============================================================================
+
+# Dependencias de Node (se instalan dentro del contenedor)
+node_modules/
+node_modules
+
+# Compilaciones previas
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Cache de Angular
+.angular/
+
+# Git
+.git/
+.gitignore
+
+# IDE y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentación
+*.md
+README*
+PROPUESTAS*
+OPCIONES*
+
+# Logs
+*.log
+logs/
+frontend.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Tests
+coverage/
+e2e/
+*.spec.ts
+
+# CI/CD
+.gitlab-ci.yml
+.github/
+
+# Otros Dockerfiles
+*.dockerfile
+docker-compose.yaml
+docker-compose.yml
+
+# Archivos de configuración no necesarios
+.editorconfig
+tsconfig.spec.json
+karma.conf.js
+
+# Workspaces
+*.code-workspace
+
+# Archivos misceláneos
+erve
+tatus

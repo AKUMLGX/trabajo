@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ExpedienteTlapohualli } from '../../../../domains/capture/interfaces/expediente-tlapohualli.interface';
+import { ExpedienteTlalcalli } from '../../../../domains/capture/interfaces/expediente-tlalcalli.interface';
 import { FileService } from '../../../../domains/services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
@@ -21,14 +21,14 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
   styleUrl: './expediente-detalle-modal.component.css'
 })
 export class ExpedienteDetalleModalComponent implements OnInit {
-  expediente: ExpedienteTlapohualli;
+  expediente: ExpedienteTlalcalli;
   pdfUrl: string = '';
   mostrarPdf: boolean = false;
   nombrePdfPrincipal: string | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<ExpedienteDetalleModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { expediente: ExpedienteTlapohualli },
+    @Inject(MAT_DIALOG_DATA) public data: { expediente: ExpedienteTlalcalli },
     private fileService: FileService
   ) {
     this.expediente = data.expediente;

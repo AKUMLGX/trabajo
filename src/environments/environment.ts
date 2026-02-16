@@ -46,7 +46,7 @@ export const environment={
   updateDocumentoEscaneado: "asunto/nuevo/updatearchivo",
   generateAcuse: "asunto/get_estadistico_por_folio",
   generateEstadistico: "asunto/get_estadistico_por_dia",
-  //#region Bandeja de Expedientes (Tlapohualli)
+  //#region Bandeja de Expedientes (Tlalcalli)
   cardsInfo:'expedientes/buscar',
   cardsInfoPorAsignar:'expedientes/buscar',
   asuntosPorDictaminar: 'expedientes/buscar',

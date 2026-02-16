@@ -37,11 +37,11 @@
                     </button>
                 </div>
                 <div class="step-content">
-                    <app-first-step-tlapohualli
+                    <app-first-step-tlalcalli
                         (formularioCompletado)="onPaso1Completado($event)"
                         (siguientePaso)="onPaso1Siguiente()"
                         (validezCambiada)="onPaso1ValidezCambiada($event)">
-                    </app-first-step-tlapohualli>
+                    </app-first-step-tlalcalli>
                 </div>
             </mat-step>
 
@@ -59,12 +59,12 @@
                     </button>
                 </div>
                 <div class="step-content">
-                    <app-second-step-tlapohualli
+                    <app-second-step-tlalcalli
                         [datosPaso1]="datosPaso1"
                         (formularioCompletado)="onPaso2Completado($event)"
                         (siguientePaso)="onPaso2Siguiente()"
                         (pasoAnterior)="onPaso2Anterior()">
-                    </app-second-step-tlapohualli>
+                    </app-second-step-tlalcalli>
                 </div>
             </mat-step>
 

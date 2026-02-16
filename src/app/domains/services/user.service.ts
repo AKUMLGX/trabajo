@@ -392,7 +392,7 @@ export class UserService {
         clearTimeout(timeoutId);
         console.warn('⚠️ [UserService] Error al cargar información de administración (endpoint no disponible):', error.status);
         
-        // Continuar sin bloquear la app - el endpoint de Tlapohualli aún no está implementado
+        // Continuar sin bloquear la app - el endpoint de Tlalcalli aún no está implementado
         console.warn('⚠️ [UserService] Continuando con administración por defecto...');
         
         this.establecerAdministracionPorDefecto(usuarioActual);

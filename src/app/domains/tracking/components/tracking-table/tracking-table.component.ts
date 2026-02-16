@@ -1,7 +1,7 @@
 import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, effect, ElementRef, inject, ViewChild, OnInit } from '@angular/core';
 import { AsuntoService } from '../../../services/asunto.service';
-import { ExpedienteTlapohualliService } from '../../../../domains/capture/services/expediente-tlapohualli.service';
-import { ExpedienteTlapohualli } from '../../../../domains/capture/interfaces/expediente-tlapohualli.interface';
+import { ExpedienteTlalcalliService } from '../../../../domains/capture/services/expediente-tlalcalli.service';
+import { ExpedienteTlalcalli } from '../../../../domains/capture/interfaces/expediente-tlalcalli.interface';
 import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatIcon } from '@angular/material/icon';
@@ -94,13 +94,13 @@ export class TrackingTableComponent implements OnInit {
   volante_jefatura= ""
   turno_jefatura= ""
 
-  // Expedientes Tlapohualli
-  public expedientesTlapohualli: ExpedienteTlapohualli[] = [];
-  public pagesExpedientes: ExpedienteTlapohualli[][] = [];
+  // Expedientes Tlalcalli
+  public expedientesTlalcalli: ExpedienteTlalcalli[] = [];
+  public pagesExpedientes: ExpedienteTlalcalli[][] = [];
   
   constructor(
     private asuntoService: AsuntoService,
-    private expedienteService: ExpedienteTlapohualliService,
+    private expedienteService: ExpedienteTlalcalliService,
     private fileService: FileService,
     private dialog: MatDialog
   ) {
@@ -150,9 +150,9 @@ export class TrackingTableComponent implements OnInit {
       if (page.length !== 0) this.pages.push(page);
     });
     
-    // Suscripción a resultados de TLAPOHUALLI (ExpedienteTlapohualliService)
+    // Suscripción a resultados de TLALCALLI (ExpedienteTlalcalliService)
     this.expedienteService.expedientesConsultados.subscribe((expedientes) => {
-      console.log('📋 [TrackingTable] Expedientes Tlapohualli recibidos:', expedientes);
+      console.log('📋 [TrackingTable] Expedientes Tlalcalli recibidos:', expedientes);
       console.log('📋 [TrackingTable] Cantidad de expedientes:', expedientes.length);
       
       // Debug: Verificar documento_pdf_nombre en cada expediente
@@ -171,22 +171,22 @@ export class TrackingTableComponent implements OnInit {
       this.visualizarPdf = false;
       this.visualizarMsg = false;
       this.editar = false;
-      this.tipoBusqueda = 'Tlapohualli';
+      this.tipoBusqueda = 'Tlalcalli';
       this.newTableIsRendered = false;
       this.pdfIsRendered = false;
       this.formUpdateIsRendered = false;
       
       // Asignar expedientes recibidos
-      this.expedientesTlapohualli = expedientes || [];
-      console.log('📋 [TrackingTable] expedientesTlapohualli asignados:', this.expedientesTlapohualli.length);
+      this.expedientesTlalcalli = expedientes || [];
+      console.log('📋 [TrackingTable] expedientesTlalcalli asignados:', this.expedientesTlalcalli.length);
       
       // Limpiar y crear páginas
       let index = 0;
-      let page: ExpedienteTlapohualli[] = [];
+      let page: ExpedienteTlalcalli[] = [];
       this.pagesExpedientes = [];
       this.pageSelected = 1;
       
-      this.expedientesTlapohualli.forEach((expediente) => {
+      this.expedientesTlalcalli.forEach((expediente) => {
         // Debug: Verificar documento_pdf_nombre antes de agregar a la página
         const tienePdf = expediente.documento_pdf_nombre && 
                          expediente.documento_pdf_nombre !== null && 
@@ -260,7 +260,7 @@ export class TrackingTableComponent implements OnInit {
     // console.log("INDEX",this.index);
   }
 
-  verDetalleExpediente(expediente: ExpedienteTlapohualli): void {
+  verDetalleExpediente(expediente: ExpedienteTlalcalli): void {
     console.log('👁️ Ver detalle de expediente:', expediente);
     
     // Abrir modal con el detalle del expediente
@@ -376,8 +376,8 @@ export class TrackingTableComponent implements OnInit {
 
 
   getDownloadExcel(): void {
-    // Si hay expedientes Tlapohualli, descargar esos
-    if (this.tipoBusqueda === 'Tlapohualli' && this.expedientesTlapohualli.length > 0) {
+    // Si hay expedientes Tlalcalli, descargar esos
+    if (this.tipoBusqueda === 'Tlalcalli' && this.expedientesTlalcalli.length > 0) {
       // Obtener los filtros actuales del formulario
       const filtros = this.sharedDataService.formData();
       
@@ -388,7 +388,7 @@ export class TrackingTableComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = url;
-          link.download = `expedientes_tlapohualli_${new Date().toISOString().split('T')[0]}.xlsx`;
+          link.download = `expedientes_tlalcalli_${new Date().toISOString().split('T')[0]}.xlsx`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);

@@ -24,10 +24,10 @@ export const errorInterceptor: HttpInterceptorFn = (
       const isFileCheckRequest = request.headers.has('X-Skip-Error-Handler') || 
                                 request.url.includes('listar_archivos');
       
-      // No mostrar modal para endpoints de Tlapohualli que aún no están implementados
-      const isTlapohualliEndpoint = request.url.includes('expedientes/buscar') || 
-                                     request.url.includes('tlapohualli/api/v1');
-      const isTlapohualli404 = isTlapohualliEndpoint && err.status === 404;
+      // No mostrar modal para endpoints de Tlalcalli que aún no están implementados
+      const isTlalcalliEndpoint = request.url.includes('expedientes/buscar') || 
+                                     request.url.includes('tlalcalli/api/v1');
+      const isTlalcalli404 = isTlalcalliEndpoint && err.status === 404;
       
       // No mostrar modal para errores 409 (conflictos) - el componente los manejará
       const is409Conflict = err.status === 409;
@@ -39,7 +39,7 @@ export const errorInterceptor: HttpInterceptorFn = (
       if (err.status !== 401) {
         // Solo mostrar modal si no es una petición especial
         const shouldShowModal = !isFileCheckRequest && 
-                                !isTlapohualli404 && 
+                                !isTlalcalli404 && 
                                 !is409Conflict &&
                                 !isExpedienteRequest &&
                                 !(isFileCheckRequest && err.status === 404);
@@ -54,8 +54,8 @@ export const errorInterceptor: HttpInterceptorFn = (
               errorDescription: errorMsg,
             },
           });
-        } else if (isTlapohualli404) {
-          console.warn('⚠️ [HTTP Interceptor] Endpoint Tlapohualli no disponible:', request.url);
+        } else if (isTlalcalli404) {
+          console.warn('⚠️ [HTTP Interceptor] Endpoint Tlalcalli no disponible:', request.url);
         } else if (is409Conflict) {
           console.warn('⚠️ [HTTP Interceptor] Conflicto 409 - Será manejado por el componente');
         }

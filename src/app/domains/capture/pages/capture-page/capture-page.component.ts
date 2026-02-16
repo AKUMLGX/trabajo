@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { InitTemplateComponent } from '../../../shared/constants/init-template/init-template.component';
-// StepperBaseComponent eliminado - componente viejo refactorizado a Tlapohualli
-import { StepperTlapohualliComponent } from '../../components/stepper-base/stepper-tlapohualli/stepper-tlapohualli.component';
+// StepperBaseComponent eliminado - componente viejo refactorizado a Tlalcalli
+import { StepperTlalcalliComponent } from '../../components/stepper-base/stepper-tlalcalli/stepper-tlalcalli.component';
 import { CaptureLandingPageComponent } from '../../components/capture-landing-page/capture-landing-page.component';
 
 @Component({
@@ -9,7 +9,7 @@ import { CaptureLandingPageComponent } from '../../components/capture-landing-pa
   standalone: true,
   imports: [
     InitTemplateComponent,
-    StepperTlapohualliComponent,
+    StepperTlalcalliComponent,
     CaptureLandingPageComponent,
   ],
   templateUrl: './capture-page.component.html',

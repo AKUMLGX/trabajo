@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
-import { ExpedienteTlapohualliService } from '../../../capture/services/expediente-tlapohualli.service';
+import { ExpedienteTlalcalliService } from '../../../capture/services/expediente-tlalcalli.service';
 
 export interface DetalleAtencionData {
   idAtencion: number;
@@ -589,7 +589,7 @@ export class DetalleAtencionModalComponent implements OnInit {
     public dialogRef: MatDialogRef<DetalleAtencionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DetalleAtencionData,
     private atencionService: AtencionService,
-    private expedienteService: ExpedienteTlapohualliService
+    private expedienteService: ExpedienteTlalcalliService
   ) {}
 
   ngOnInit(): void {
