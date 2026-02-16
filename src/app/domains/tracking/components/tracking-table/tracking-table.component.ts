@@ -13,10 +13,8 @@ import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-ta
 import { PdfViewerComponent } from '../../../components/pdf-viewer/pdf-viewer.component';
 import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.component';
 import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ExpedienteDetalleModalComponent } from '../expediente-detalle-modal/expediente-detalle-modal.component';
-
-
 
 @Component({
   selector: 'app-tracking-table',
@@ -26,10 +24,10 @@ import { ExpedienteDetalleModalComponent } from '../expediente-detalle-modal/exp
     MatIcon,
     NgxPaginationModule,
     CommonModule,
+    MatDialogModule,
     EditTackingTableComponent,
     PdfViewerComponent,
     MsgReaderComponent,
-
   ],
 
   templateUrl: './tracking-table.component.html',
