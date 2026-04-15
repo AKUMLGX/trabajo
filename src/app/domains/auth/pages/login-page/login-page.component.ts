@@ -16,7 +16,7 @@ export class LoginPageComponent {
   public environment = environment;
   
   // ⚠️ MODO DESARROLLO: Cambiar a true solo para pruebas locales
-  private modoDesarrollo = false;
+  private modoDesarrollo = true;
 
   constructor(
     private oauth2Service: Oauth2Service,
@@ -41,12 +41,12 @@ export class LoginPageComponent {
     
     // Estructura SessionInfo que espera el UserService
     const sessionInfo = {
-      rfc: 'DEVL900101XXX',
-      nombre: 'Usuario Desarrollo',
-      roles: 'SIAT_AKAMBA_001_CAPTURA,SIAT_AKAMBA_002_SUPERVISA,SIAT_AKAMBA_003_ADMIN',
-      // Token fake pero funcional para desarrollo
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZXYtdXNlci0wMDEiLCJuYW1lIjoiVXN1YXJpbyBEZXNhcnJvbGxvIiwicmZjIjoiREVWTDkwMDEwMVhYWCIsInJvbGVzIjoiU0lBVF9BS0FNQkFfMDAxX0NBUFRVUkEsU0lBVF9BS0FNQkFfMDAyX1NVUEVSVKLSU0EsU0lBVF9BS0FNQkFfMDAzX0FETUlOIiwiaWF0IjoxNzA0MDY3MjAwLCJleHAiOjE3MzU2ODk2MDB9.fake-signature-for-dev',
-      exp: expiracion
+      // rfc: 'DEVL900101XXX',
+      // nombre: 'Usuario Desarrollo',
+      // roles: 'SIAT_AKAMBA_001_CAPTURA,SIAT_AKAMBA_002_SUPERVISA,SIAT_AKAMBA_003_ADMIN',
+      // // Token fake pero funcional para desarrollo
+      // // token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZXYtdXNlci0wMDEiLCJuYW1lIjoiVXN1YXJpbyBEZXNhcnJvbGxvIiwicmZjIjoiREVWTDkwMDEwMVhYWCIsInJvbGVzIjoiU0lBVF9BS0FNQkFfMDAxX0NBUFRVUkEsU0lBVF9BS0FNQkFfMDAyX1NVUEVSVKLSU0EsU0lBVF9BS0FNQkFfMDAzX0FETUlOIiwiaWF0IjoxNzA0MDY3MjAwLCJleHAiOjE3MzU2ODk2MDB9.fake-signature-for-dev',
+      // exp: expiracion
     };
 
     // Guardar en localStorage con la misma estructura que usa el OAuth

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
-
+import { ApiService } from './api.service';
 // URL base del backend: environment.baseUrl = http://localhost:8090/tlalcalli/api/v1/
 const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
 
@@ -15,7 +15,8 @@ export class ExpedienteAutocompleteService {
   
   constructor(
     private http: HttpClient,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private apiservice : ApiService
   ) {}
 
   /**
@@ -77,17 +78,44 @@ export class ExpedienteAutocompleteService {
    * Obtiene expedientes recientes para autocompletar
    * @param termino - Término de búsqueda (ej: "EXP-00")
    */
-  buscarExpedientes(termino: string): Observable<string[]> {
-    // TODO: Conectar con el backend cuando esté listo
-    // return this.http.get<string[]>(`/api/expedientes/buscar?q=${termino}`);
+  // !FUNCIÓN DE CARLOS 
+  // buscarExpedientes(termino: string): Observable<string[]> {
+  //   // TODO: Conectar con el backend cuando esté listo
+  //   // return this.http.get<string[]>(`/api/expedientes/buscar?q=${termino}`);
     
-    // Por ahora retornamos valores mock
-    const expedientesMock = this.getExpedientesRecientesLocal();
-    const filtrados = expedientesMock.filter(exp => 
-      exp.toLowerCase().includes(termino.toLowerCase())
-    );
-    return of(filtrados.slice(0, 5)); // Máximo 5 resultados
-  }
+  //   // Por ahora retornamos valores mock
+  //   const expedientesMock = this.getExpedientesRecientesLocal();
+  //   const filtrados = expedientesMock.filter(exp => 
+  //     exp.toLowerCase().includes(termino.toLowerCase())
+  //   );
+  //   return of(filtrados.slice(0, 5)); // Máximo 5 resultados
+  // }
+
+  buscarExpedientes(): void {
+      try {
+        // const validRfcCorto = this.validateRfcCorto(rfc_corto);
+
+        // if (validRfcCorto) {
+          this.apiservice
+            .getData<any>(`/expedientes/responsable/mis-expedientes`)
+            .subscribe({
+              next: (data: any) => {
+                console.log("DATA: ", data)
+              },
+              error: (err) => {
+                console.error('Error al obtener usuario:', err);
+              },
+            });
+        // }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Error desconocido';
+        // this.openDialogRFCErroneo('Usuario no encontrado', errorMessage);
+      }
+    }
+
+
+
 
   /**
    * Guarda el último número de expediente usado (LocalStorage temporal)
