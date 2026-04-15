@@ -1,11 +1,5 @@
 {
   "/tlalcalli/api/v1/*": {
-    "target": "http://localhost:8090/akamba",
-    "secure": false,
-    "logLevel": "debug",
-    "changeOrigin": true
-  },
-  "/akamba/api/v1/*": {
     "target": "http://localhost:8090",
     "secure": false,
     "logLevel": "debug",

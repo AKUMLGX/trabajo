@@ -6,16 +6,8 @@ import { environment } from '../../../../environments/environment';
 import { LoggerService } from './logger.service';
 import { ExpedienteTlalcalli } from '../interfaces/expediente-tlalcalli.interface';
 
-// Construir la URL base correcta para Tlalcalli
-// environment.baseUrl es: http://localhost:8090/akamba/api/v1/
-// Necesitamos: http://localhost:8090/akamba/tlalcalli/api/v1/
-// Por lo tanto, eliminamos /api/v1/ del final y agregamos /tlalcalli/api/v1/
-let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
-// Eliminar /api/v1 del final si existe (con o sin trailing slash)
-baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
-// Asegurar que termine con / para la concatenación
-const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const TLALCALLI_BASE = `${baseWithoutApi}tlalcalli/api/v1/`;
+// URL base del backend: environment.baseUrl = http://localhost:8090/tlalcalli/api/v1/
+const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
 
 /**
  * Interfaz del formulario completo que se envía al backend

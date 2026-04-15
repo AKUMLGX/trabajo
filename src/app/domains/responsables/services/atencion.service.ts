@@ -4,11 +4,8 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
-// Construir la URL base para Tlalcalli
-let baseUrl = environment.baseUrl.endsWith('/') ? environment.baseUrl.slice(0, -1) : environment.baseUrl;
-baseUrl = baseUrl.replace(/\/api\/v1\/?$/, '');
-const baseWithoutApi = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const TLALCALLI_BASE = `${baseWithoutApi}tlalcalli/api/v1/`;
+// URL base del backend: environment.baseUrl = http://localhost:8090/tlalcalli/api/v1/
+const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
 
 // =====================================================
 // INTERFACES

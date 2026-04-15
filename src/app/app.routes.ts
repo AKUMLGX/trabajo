@@ -28,9 +28,14 @@ import { DashboardPageComponent } from './domains/dashboard/pages/dashboard-page
 import { AtencionCierrePageComponent } from './domains/responsables/pages/atencion-cierre-page/atencion-cierre-page.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', component: LoginPageComponent, pathMatch: 'full' },
   {
     path: 'login',
+    component: LoginPageComponent,
+  },
+  {
+    // Ruta de callback OAuth: el IdP redirige aquí con ?code=...
+    path: 'home',
     component: LoginPageComponent,
   },
   {
