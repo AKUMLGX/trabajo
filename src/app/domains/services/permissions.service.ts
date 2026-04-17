@@ -60,6 +60,31 @@ export class PermissionsService {
       seguimiento: false,
       reportes: false,
       revisionFinal: false
+    },
+    // Tlalcalli: mismos permisos que Akamba (el backend/IdP envía SIAT_TLALCALLI_* sin prefijo cn=)
+    'SIAT_TLALCALLI_001_CAPTURA_ASUNTO': {
+      captura: true,
+      atencion: false,
+      dictaminador: false,
+      seguimiento: true,
+      reportes: false,
+      revisionFinal: false
+    },
+    'SIAT_TLALCALLI_002_SUPERVISA_ASUNTO': {
+      captura: true,
+      atencion: false,
+      dictaminador: false,
+      seguimiento: true,
+      reportes: true,
+      revisionFinal: true
+    },
+    'SIAT_TLALCALLI_003_ADMINISTRA_ASUNTO': {
+      captura: true,
+      atencion: false,
+      dictaminador: false,
+      seguimiento: true,
+      reportes: true,
+      revisionFinal: true
     }
   };
 
@@ -128,7 +153,8 @@ export class PermissionsService {
 
     // Aplicar permisos de cada rol del usuario
     userRoles.forEach(role => {
-      const rolePerms = this.rolePermissions[role];
+      const key = role.replace(/^cn=/i, '').trim();
+      const rolePerms = this.rolePermissions[key] ?? this.rolePermissions[role.trim()];
       if (rolePerms) {
         // Unión de permisos (OR lógico)
         userPermissions.captura = userPermissions.captura || rolePerms.captura;
