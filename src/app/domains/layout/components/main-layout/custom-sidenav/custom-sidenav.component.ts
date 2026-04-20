@@ -52,14 +52,18 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
       this.permissionsService.getUserPermissions().subscribe(permissions => {
         const menuItems: MenuItem[] = [];
 
-        // Solo agregar bandejas a las que el usuario tiene acceso
-        if (permissions.captura) {
-          menuItems.push({
-            icon: 'dvr',
-            label: 'Bandeja de captura',
-            route: '/layout/capture',
-          });
-        }
+        // Captura y seguimiento: visibles para todos los usuarios autenticados (el layout ya exige login).
+        // Antes dependían del mapa de roles y usuarios solo de Centro de Control no las veían.
+        menuItems.push({
+          icon: 'dvr',
+          label: 'Bandeja de captura',
+          route: '/layout/capture',
+        });
+        menuItems.push({
+          icon: 'analytics',
+          label: 'Bandeja de seguimiento',
+          route: '/layout/tracking',
+        });
 
         if (permissions.atencion) {
           menuItems.push({
@@ -74,14 +78,6 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
             icon: 'gavel',
             label: 'Bandeja de dictaminador',
             route: '/layout/dictaminador',
-          });
-        }
-
-        if (permissions.seguimiento) {
-          menuItems.push({
-            icon: 'analytics',
-            label: 'Bandeja de seguimiento',
-            route: '/layout/tracking',
           });
         }
 

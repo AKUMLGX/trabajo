@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { PermissionsService } from '../services/permissions.service';
+import { UserService } from '../services/user.service';
 import { map, take } from 'rxjs/operators';
 
 /**
@@ -10,7 +11,17 @@ import { map, take } from 'rxjs/operators';
 export const bandejaGuard = (bandeja: string): CanActivateFn => {
   return (route, state) => {
     const permissionsService = inject(PermissionsService);
+    const userService = inject(UserService);
     const router = inject(Router);
+
+    // Captura y seguimiento: cualquier usuario autenticado (misma lógica operativa que Centro de Control).
+    // El backend sigue filtrando datos según el JWT.
+    if (
+      (bandeja === 'captura' || bandeja === 'seguimiento') &&
+      userService.isAuthenticated()
+    ) {
+      return true;
+    }
 
     return permissionsService.getUserPermissions().pipe(
       take(1),
