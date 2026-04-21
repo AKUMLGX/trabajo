@@ -65,30 +65,7 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
           route: '/layout/tracking',
         });
 
-        if (permissions.atencion) {
-          menuItems.push({
-            icon: 'dashboard',
-            label: 'Bandeja de atención',
-            route: '/layout/assistance',
-          });
-        }
-
-        if (permissions.dictaminador) {
-          menuItems.push({
-            icon: 'gavel',
-            label: 'Bandeja de dictaminador',
-            route: '/layout/dictaminador',
-          });
-        }
-
-        // Bandeja de reportes oculta
-        // if (permissions.reportes) {
-        //   menuItems.push({
-        //     icon: 'folder',
-        //     label: 'Bandeja de reportes',
-        //     route: '/layout/reports',
-        //   });
-        // }
+        // No mostrar en menú: atención clásica, dictaminador, reportes, revisión final (requerimiento de negocio).
 
         // Centro de Control de Expedientes - Disponible para todos los usuarios autenticados
         // El backend filtra automáticamente por el responsable del JWT

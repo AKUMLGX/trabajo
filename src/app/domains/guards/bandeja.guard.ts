@@ -4,22 +4,37 @@ import { PermissionsService } from '../services/permissions.service';
 import { UserService } from '../services/user.service';
 import { map, take } from 'rxjs/operators';
 
+function esSesionDemoLocal(userService: UserService): boolean {
+  const token = userService.getToken();
+  return (
+    token === 'MOCK_ACCESS_TOKEN' ||
+    (!!token && token.includes('MOCK_ACCESS_TOKEN'))
+  );
+}
+
 /**
  * Guard que protege el acceso a las bandejas basado en permisos de roles
  * @param bandeja - Nombre de la bandeja a verificar (captura, atencion, dictaminador, seguimiento, reportes, revisionFinal)
  */
+
 export const bandejaGuard = (bandeja: string): CanActivateFn => {
   return (route, state) => {
     const permissionsService = inject(PermissionsService);
     const userService = inject(UserService);
     const router = inject(Router);
 
-    // Captura y seguimiento: cualquier usuario autenticado (misma lógica operativa que Centro de Control).
-    // El backend sigue filtrando datos según el JWT.
-    if (
-      (bandeja === 'captura' || bandeja === 'seguimiento') &&
-      userService.isAuthenticated()
-    ) {
+    if (!userService.isAuthenticated()) {
+      void router.navigate(['/login']);
+      return false;
+    }
+
+    // Demo sin OAuth: una sola sesión local → todas las bandejas permitidas.
+    if (esSesionDemoLocal(userService)) {
+      return true;
+    }
+
+    // OAuth real: captura y seguimiento para cualquier sesión (Centro de Control, etc.)
+    if (bandeja === 'captura' || bandeja === 'seguimiento') {
       return true;
     }
 
