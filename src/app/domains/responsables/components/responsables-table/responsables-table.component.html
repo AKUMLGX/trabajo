@@ -196,8 +196,8 @@
       </svg>
     </div>
     <div class="stat-content">
-      <span class="stat-label">Responsable</span>
-      <span class="stat-value">{{ responsable || 'Sin asignar' }}</span>
+      <span class="stat-label">Vista / responsable</span>
+      <span class="stat-value" [attr.title]="responsable">{{ responsable || 'Sin asignar' }}</span>
     </div>
   </div>
   
@@ -254,6 +254,19 @@
       }
     </div>
     
+    <!-- Opción: todas las capturas (backend sin filtro por responsable) -->
+    <div class="incluir-todos-toggle">
+      <mat-slide-toggle
+        [checked]="incluirTodosCapturas"
+        (change)="onToggleIncluirTodos($event.checked)"
+        color="primary">
+        <span class="toggle-label">Todas las capturas</span>
+      </mat-slide-toggle>
+      <span class="toggle-hint" title="Desactivado: según env (equipo de captura o solo tu responsable mapeado). Activado: todas las capturas del sistema.">
+        Sin filtro por responsable
+      </span>
+    </div>
+
     <!-- SWITCH PENDIENTES / ATENDIDOS -->
     <div class="vista-switch">
       <button 

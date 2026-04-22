@@ -2,7 +2,7 @@
      BANDEJA DE CAPTURA - Landing Premium
      Paleta Institucional SAT
      ===================================================== -->
-<div class="h-full w-full flex flex-col justify-center items-center relative overflow-hidden">
+<div class="min-h-full w-full flex flex-col justify-start items-center relative overflow-y-auto overflow-x-hidden py-6 sm:py-8 md:py-10">
     <!-- Fondo con gradiente institucional -->
     <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200"></div>
     
@@ -19,39 +19,39 @@
     <!-- Contenido principal -->
     <div class="relative z-10 flex flex-col items-center max-w-4xl mx-auto px-6">
         <!-- Icono principal con gradiente institucional -->
-        <div class="mb-10">
-            <div class="w-36 h-36 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-500 relative overflow-hidden group"
+        <div class="mb-6 sm:mb-8 md:mb-10 shrink-0">
+            <div class="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-500 relative overflow-hidden group"
                  style="background: linear-gradient(145deg, #34005b 0%, #3e0065 50%, #5c1a7a 100%); box-shadow: 0 25px 60px -15px rgba(52, 0, 91, 0.4);">
                 <!-- Efecto shimmer -->
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 <!-- Icono -->
-                <svg class="w-20 h-20 text-white relative z-10 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white relative z-10 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
             </div>
         </div>
 
         <!-- Título principal -->
-        <h1 class="text-5xl md:text-6xl font-extrabold text-gray-800 mb-6 text-center leading-tight tracking-tight">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-800 mb-4 sm:mb-6 text-center leading-tight tracking-tight">
             Bandeja de Captura
         </h1>
         
         <!-- Subtítulo con color institucional -->
-        <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center" style="color: #34005b;">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 md:mb-10 text-center" style="color: #34005b;">
             Sistema de Registro
         </h2>
 
         <!-- Card de información -->
-        <div class="backdrop-blur-xl bg-white/80 rounded-3xl p-10 shadow-2xl border border-white/40 mb-10 max-w-3xl"
+        <div class="backdrop-blur-xl bg-white/80 rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl border border-white/40 mb-6 sm:mb-8 md:mb-10 max-w-3xl w-full"
              style="box-shadow: 0 25px 60px -20px rgba(52, 0, 91, 0.15);">
-            <p class="text-gray-700 text-lg leading-relaxed text-center mb-10">
+            <p class="text-gray-700 text-base sm:text-lg leading-relaxed text-center mb-6 sm:mb-8 md:mb-10">
                 Bienvenido a la Bandeja de Captura. 
                 Esta plataforma está diseñada para facilitar el registro 
                 y gestión de información de manera segura y eficiente.
             </p>
             
             <!-- Grid de características -->
-            <div class="grid md:grid-cols-3 gap-8 text-center">
+            <div class="grid sm:grid-cols-3 gap-6 sm:gap-8 text-center">
                 <!-- Captura -->
                 <div class="flex flex-col items-center group">
                     <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
@@ -92,7 +92,7 @@
 
         <!-- Botón de inicio premium -->
         <button 
-            class="text-white font-bold py-5 px-10 rounded-2xl shadow-2xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 text-xl group relative overflow-hidden"
+            class="text-white font-bold py-4 px-8 sm:py-5 sm:px-10 rounded-2xl shadow-2xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 sm:gap-4 text-lg sm:text-xl group relative overflow-hidden mb-8 sm:mb-10 shrink-0"
             style="background: linear-gradient(145deg, #34005b 0%, #3e0065 100%); box-shadow: 0 15px 40px -10px rgba(52, 0, 91, 0.5);"
             (click)="startStepperHandler()">
             <!-- Efecto hover dorado -->
