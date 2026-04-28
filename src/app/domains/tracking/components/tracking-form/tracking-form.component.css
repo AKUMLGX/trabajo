@@ -1,8 +1,4 @@
-/* =====================================================
-   TRACKING FORM - Paleta Institucional SAT
-   ===================================================== */
-
-.mat-list {
+/* .mat-list {
   position: absolute;
   left: 47%;
   background-color: transparent;
@@ -123,9 +119,6 @@
   transform: translateY(0);
 }
 
-/* =====================================================
-   INPUTS MODERNOS - Paleta Institucional
-   ===================================================== */
 
 .modern-input {
   width: 100%;
@@ -224,7 +217,6 @@
   box-shadow: 0 2px 8px rgba(214, 174, 103, 0.3);
 }
 
-/* Mejora de labels */
 label {
   color: #34005b;
   font-weight: 700;
@@ -247,12 +239,10 @@ label {
   transform: scale(1.1);
 }
 
-/* Mejora del contenedor del formulario */
 section {
   background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
-/* Mejora de las tarjetas de campos */
 .w-full.lg\:w-6\/12 {
   margin-bottom: 1.5rem;
-}
+} */

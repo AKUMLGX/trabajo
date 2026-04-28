@@ -1,15 +1,8 @@
-/* ============================================
-   STEPPER PREMIUM - Tlálcalli
-   Paleta Institucional SAT
-   ============================================ */
-
-/* Mostrar el stepper de Material Design con estilos personalizados */
-.custom-mat-stepper {
+/* .custom-mat-stepper {
   display: block !important;
   background: transparent !important;
 }
 
-/* ESTILOS PREMIUM PARA EL STEPPER HEADER */
 ::ng-deep .custom-mat-stepper .mat-horizontal-stepper-header-container {
   padding: 20px 24px !important;
   background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
@@ -44,7 +37,6 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Iconos de los steps */
 ::ng-deep .custom-mat-stepper .mat-step-icon {
   background: rgba(255, 255, 255, 0.15) !important;
   border: 2px solid rgba(255, 255, 255, 0.3) !important;
@@ -66,7 +58,6 @@
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
 }
 
-/* Labels de los steps */
 ::ng-deep .custom-mat-stepper .mat-step-label {
   color: rgba(255, 255, 255, 0.8) !important;
   font-weight: 600 !important;
@@ -78,7 +69,6 @@
   font-weight: 700 !important;
 }
 
-/* Contenido del stepper */
 .stepper-content {
   margin-top: 0;
   padding: 0;
@@ -91,7 +81,6 @@
   overflow: visible;
 }
 
-/* Mejoras para el contenido de cada paso */
 .step-content {
   background: transparent;
   border-radius: 0;
@@ -108,7 +97,6 @@
   overflow-x: hidden;
 }
 
-/* Botón flotante arriba del formulario */
 .step-actions-floating {
   position: sticky;
   top: 20px;
@@ -135,7 +123,6 @@
   box-shadow: 0 6px 24px rgba(52, 0, 91, 0.4) !important;
 }
 
-/* Estilos para las acciones de los pasos con nueva paleta */
 .step-actions {
   margin-top: 0.5rem;
   padding: 0.75rem 1rem;
@@ -152,7 +139,6 @@
   min-height: 60px;
 }
 
-/* Botones modernos */
 .modern-btn {
   padding: 0.5rem 1rem !important;
   border-radius: 10px !important;
@@ -185,7 +171,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* ESTILOS FORZADOS PARA TODOS LOS BOTONES - PALETA INSTITUCIONAL */
 ::ng-deep .modern-btn-primary,
 ::ng-deep .modern-btn-secondary,
 ::ng-deep .modern-btn-success {
@@ -203,7 +188,6 @@
   box-shadow: 0 8px 30px rgba(214, 174, 103, 0.5) !important;
 }
 
-/* ESTILOS ADICIONALES PARA MATERIAL BUTTONS */
 ::ng-deep .mat-button.modern-btn-primary,
 ::ng-deep .mat-raised-button.modern-btn-primary,
 ::ng-deep .mat-stroked-button.modern-btn-secondary,
@@ -221,7 +205,6 @@
   color: #34005b !important;
 }
 
-/* Scroll personalizado con nueva paleta */
 .step-content::-webkit-scrollbar {
   width: 8px;
 }
@@ -240,19 +223,16 @@
   background: linear-gradient(180deg, #d6ae67 0%, #dbb872 100%);
 }
 
-/* Estilos para los pasos del stepper */
 ::ng-deep .custom-mat-stepper .mat-step-content {
   padding: 0 !important;
 }
 
-/* Sección de documentos */
 .documents-section {
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 2px solid rgba(214, 174, 103, 0.2);
 }
 
-/* Animaciones suaves */
 .step-content {
   animation: fadeInUp 0.4s ease-out;
 }
@@ -268,7 +248,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .step-actions {
     flex-direction: column;
@@ -285,7 +264,6 @@
   }
 }
 
-/* Estilos para el resumen final */
 .step-content .bg-green-50 {
   background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
   border: 1px solid #bbf7d0 !important;
@@ -296,19 +274,16 @@
   border: 1px solid #fde68a !important;
 }
 
-/* Mejoras en los iconos */
 .mat-icon {
   font-size: 1.125rem !important;
   width: 1.125rem !important;
   height: 1.125rem !important;
 }
 
-/* Efectos de hover en botones */
 .modern-btn:not(:disabled):hover {
   cursor: pointer;
 }
 
-/* Estilos para el estado de carga */
 .animate-spin {
   animation: spin 1s linear infinite;
 }
@@ -318,7 +293,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* ESTILOS DIRECTOS PARA INPUTS - FORZADOS CON NG-DEEP */
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start,
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end,
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-gap {
@@ -365,7 +339,6 @@
   background-color: transparent !important;
 }
 
-/* ESTILOS PARA SELECTORES */
 ::ng-deep .mat-select-trigger {
   padding: 1rem 1.25rem !important;
   background-color: rgba(52, 0, 91, 0.03) !important;
@@ -375,12 +348,10 @@
   color: #34005b !important;
 }
 
-/* ESTILOS PARA DATE PICKER */
 ::ng-deep .mat-datepicker-toggle {
   color: #34005b !important;
 }
 
-/* ESTILOS GLOBALES AGRESIVOS PARA INPUTS */
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   color: #34005b !important;
 }
@@ -393,7 +364,6 @@
   color: #34005b !important;
 }
 
-/* FORZAR ESTILOS EN TODOS LOS BOTONES DEL STEPPER */
 ::ng-deep .step-actions button,
 ::ng-deep .step-actions .mat-button,
 ::ng-deep .step-actions .mat-raised-button,
@@ -411,7 +381,6 @@
   color: #34005b !important;
 }
 
-/* ESTILOS ULTRA ESPECÍFICOS PARA BOTONES ANTERIOR Y SIGUIENTE */
 ::ng-deep .mat-stroked-button.modern-btn-secondary {
   background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
@@ -435,7 +404,6 @@
   color: #34005b !important;
 }
 
-/* FORZAR ESTILOS EN TODOS LOS BOTONES MATERIAL */
 ::ng-deep .mat-button,
 ::ng-deep .mat-raised-button,
 ::ng-deep .mat-stroked-button {
@@ -450,21 +418,18 @@
   color: #34005b !important;
 }
 
-/* Mejorar el contenedor principal para evitar cortes */
 :host {
   display: block;
   height: 100vh;
   overflow: hidden;
 }
 
-/* Ajustar el contenedor del stepper */
 .stepper-container {
   height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
 }
 
-/* Ajustar para diferentes resoluciones */
 @media (min-height: 768px) {
   .step-content {
     max-height: 55vh;
@@ -489,4 +454,4 @@
     min-width: 80px !important;
     height: 32px !important;
   }
-}
+} */

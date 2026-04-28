@@ -1,11 +1,10 @@
-<section class="py-1 bg-blueGray-50">
+<!-- <section class="py-1 bg-blueGray-50">
   <div class="w-full lg:w-12/12 mx-auto mt-2">
     <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div class="rounded-t bg-white mb-0 px-6 py-6"></div>
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         <form [formGroup]="consultForm" (ngSubmit)="onSave()" (ngSubmit)="sendDatos()">
           <div class="flex flex-wrap">
-            <!-- EXPEDIENTE (Tlalcalli) -->
             <div class="w-full lg:w-6/12 px-4" (mouseenter)="DetectInput(true, 'expediente')"
               (mouseleave)="DetectInput(false, 'expediente')">
               <div class="relative w-full mb-3">
@@ -29,7 +28,6 @@
                 </mat-list>
               </div>
             </div>
-            <!-- TIPO DE MEDIO DE RECEPCIÓN (Tlalcalli) -->
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'tipoMedioRecepcion')"
                 (mouseleave)="DetectInput(false, 'tipoMedioRecepcion')">
@@ -77,7 +75,6 @@
                 </mat-list>
               </div>
             </div>
-            <!-- REMITENTE ÁREA (Tlalcalli) -->
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'remitenteArea')"
                 (mouseleave)="DetectInput(false, 'remitenteArea')">
@@ -101,7 +98,6 @@
                 </mat-list>
               </div>
             </div>
-            <!-- NÚMERO ENTRADA CENTRAL (Tlalcalli) -->
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3"  (mouseenter)="DetectInput(true, 'numeroEntradaCentral')"
                 (mouseleave)="DetectInput(false, 'numeroEntradaCentral')">
@@ -126,7 +122,6 @@
               </div>
             </div>
 
-            <!-- RESPONSABLE (Tlalcalli) -->
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'responsable')"
                 (mouseleave)="DetectInput(false, 'responsable')">
@@ -150,7 +145,6 @@
               </div>
             </div>
 
-            <!-- PRIORIDAD -->
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'prioridad')"
                 (mouseleave)="DetectInput(false, 'prioridad')">
@@ -174,7 +168,6 @@
               </div>
             </div>
 
-            <!-- FECHA DE REGISTRO (Rango) -->
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3">
                 <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
@@ -202,7 +195,6 @@
               </svg>
               Buscar
             </button>
-            <!-- Ocultado: Formulario de descarga de acuse -->
             <mat-dialog-content *ngIf="false">
               <div class="  mt-2">
                 <select class="bg-gray-50 border-[#691C32] text-center
@@ -300,13 +292,7 @@
                     <div>
                       <mat-form-field>
                         <mat-label>Folio Inicial:</mat-label>
-                        <!-- @if (downloadByFolioScan.controls["input_one"].invalid &&(downloadByFolioScan.controls["input_one"].dirty|| downloadByFolioScan.controls["input_one"].touched)){
-                              @if (downloadByFolioScan.get("input_one")?.errors?.["required"]) {
-                                <div class="bg-rojo-Akamba ml-1">
-                                    <span>*</span>
-                                </div>
-                              }
-                            } -->
+
                         <input formControlName="input_one" type="number" matInput placeholder="Folio Inicial">
                       </mat-form-field>
                     </div>
@@ -347,6 +333,270 @@
               }
             </mat-dialog-content>
           </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+
+
+
+
+
+
+<section class="bg-tlalcalli-light-cream px-4 py-4">
+  <div class="mx-auto w-full">
+    <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
+
+      <div class="border-b border-tlalcalli-light-base px-6 py-5">
+        <h2 class="text-xl font-extrabold text-tlalcalli-primary">
+          Búsqueda de expedientes
+        </h2>
+        <p class="mt-1 text-sm text-tlalcalli-gray">
+          Consulta expedientes por filtros principales.
+        </p>
+      </div>
+
+      <div class="px-4 py-6 lg:px-10">
+        <form [formGroup]="consultForm" (ngSubmit)="onSave(); sendDatos()">
+
+          <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+
+            <div class="relative">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Expediente
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Número de expediente">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <input
+                [(ngModel)]="formData.expediente"
+                type="text"
+                placeholder="Exp.001-2025"
+                formControlName="expediente"
+                [(ngModel)]="campoValor['expediente']"
+                (ngModelChange)="getValueInput()"
+                (mouseenter)="DetectInput(true, 'expediente')"
+                (mouseleave)="DetectInput(false, 'expediente')"
+                #InputFormulario
+                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+
+              @if (showCoincidencias['expediente'] && coincidencias.length > 0) {
+                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
+                  @for (coincidencia of coincidencias; track coincidencia) {
+                    <mat-list-item
+                      (click)="selectCoincidencia(coincidencia)"
+                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-bold hover:text-tlalcalli-primary">
+                      {{ coincidencia }}
+                    </mat-list-item>
+                  }
+                </mat-list>
+              }
+            </div>
+
+            <div class="relative">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Tipo de medio de recepción
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Medio por el cual se recibió">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <input
+                [(ngModel)]="formData.tipo_medio_recepcion"
+                type="text"
+                placeholder="ATENTA_NOTA, OFICIO, etc."
+                formControlName="tipo_medio_recepcion"
+                [(ngModel)]="campoValor['tipoMedioRecepcion']"
+                (ngModelChange)="getValueInput()"
+                (mouseenter)="DetectInput(true, 'tipoMedioRecepcion')"
+                (mouseleave)="DetectInput(false, 'tipoMedioRecepcion')"
+                #InputFormulario
+                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+
+              @if (showCoincidencias['tipoMedioRecepcion'] && coincidencias.length > 0) {
+                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
+                  @for (coincidencia of coincidencias; track coincidencia) {
+                    <mat-list-item
+                      (click)="selectCoincidencia(coincidencia)"
+                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-bold hover:text-tlalcalli-primary">
+                      {{ coincidencia }}
+                    </mat-list-item>
+                  }
+                </mat-list>
+              }
+            </div>
+
+            <div class="relative">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Oficio
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Número de oficio asignado">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <input
+                [(ngModel)]="formData.oficio"
+                type="text"
+                placeholder="Oficio"
+                formControlName="oficio"
+                [(ngModel)]="campoValor['oficio']"
+                (ngModelChange)="getValueInput()"
+                (mouseenter)="DetectInput(true, 'oficio')"
+                (mouseleave)="DetectInput(false, 'oficio')"
+                #InputFormulario
+                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+
+              @if (showCoincidencias['oficio'] && coincidencias.length > 0) {
+                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
+                  @for (coincidencia of coincidencias; track coincidencia) {
+                    <mat-list-item
+                      (click)="selectCoincidencia(coincidencia)"
+                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-bold hover:text-tlalcalli-primary">
+                      {{ coincidencia }}
+                    </mat-list-item>
+                  }
+                </mat-list>
+              }
+            </div>
+
+            <div class="relative">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Remitente Área
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Área que remite el requerimiento">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <input
+                [(ngModel)]="formData.remitente_area"
+                type="text"
+                placeholder="Remitente área"
+                formControlName="remitente_area"
+                [(ngModel)]="campoValor['remitenteArea']"
+                (ngModelChange)="getValueInput()"
+                (mouseenter)="DetectInput(true, 'remitenteArea')"
+                (mouseleave)="DetectInput(false, 'remitenteArea')"
+                #InputFormulario
+                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+
+              @if (showCoincidencias['remitenteArea'] && coincidencias.length > 0) {
+                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
+                  @for (coincidencia of coincidencias; track coincidencia) {
+                    <mat-list-item
+                      (click)="selectCoincidencia(coincidencia)"
+                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-bold hover:text-tlalcalli-primary">
+                      {{ coincidencia }}
+                    </mat-list-item>
+                  }
+                </mat-list>
+              }
+            </div>
+
+            <div class="relative">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Número entrada central
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <input
+                [(ngModel)]="formData.numero_entrada_central"
+                type="text"
+                placeholder="Número entrada central"
+                formControlName="numero_entrada_central"
+                [(ngModel)]="campoValor['numeroEntradaCentral']"
+                (ngModelChange)="getValueInput()"
+                (mouseenter)="DetectInput(true, 'numeroEntradaCentral')"
+                (mouseleave)="DetectInput(false, 'numeroEntradaCentral')"
+                #InputFormulario
+                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+            </div>
+
+            <div class="relative">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Responsable
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <input
+                [(ngModel)]="formData.responsable"
+                type="text"
+                placeholder="Responsable"
+                formControlName="responsable"
+                [(ngModel)]="campoValor['responsable']"
+                (ngModelChange)="getValueInput()"
+                (mouseenter)="DetectInput(true, 'responsable')"
+                (mouseleave)="DetectInput(false, 'responsable')"
+                #InputFormulario
+                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+            </div>
+
+            <div class="relative">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Prioridad
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <input
+                [(ngModel)]="formData.prioridad"
+                type="text"
+                placeholder="URGENTE, ALTA, MEDIA, BAJA"
+                formControlName="prioridad"
+                [(ngModel)]="campoValor['prioridad']"
+                (ngModelChange)="getValueInput()"
+                (mouseenter)="DetectInput(true, 'prioridad')"
+                (mouseleave)="DetectInput(false, 'prioridad')"
+                #InputFormulario
+                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+            </div>
+
+            <div>
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+                Fecha de registro
+                <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
+                  help_outline
+                </mat-icon>
+              </label>
+
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <input
+                  [(ngModel)]="formData.fecha_creacion_desde"
+                  type="date"
+                  formControlName="fecha_creacion_desde"
+                  class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+
+                <input
+                  [(ngModel)]="formData.fecha_creacion_hasta"
+                  type="date"
+                  formControlName="fecha_creacion_hasta"
+                  class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-medium text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mt-8 flex justify-end">
+            <button
+              type="submit"
+              class="inline-flex h-[42px] items-center justify-center rounded-xl bg-tlalcalli-primary px-6 text-sm font-bold text-white shadow-sm transition hover:bg-tlalcalli-deep">
+              <svg class="mr-2 h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              Buscar
+            </button>
+          </div>
+
         </form>
       </div>
     </div>

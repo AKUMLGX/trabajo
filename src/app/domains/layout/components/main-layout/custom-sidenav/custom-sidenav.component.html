@@ -1,8 +1,6 @@
-<div class="sidenav-container">
-    <!-- Patrón decorativo de fondo -->
+<!-- <div class="sidenav-container">
     <div class="sidenav-pattern"></div>
     
-    <!-- Header del Sidebar -->
     <div class="sidenav-header">
         <div class="logo-container" [class.collapsed]="collapsed">
             @if(collapsed) {
@@ -36,14 +34,12 @@
         </div>
     </div>
 
-    <!-- Separador decorativo -->
     <div class="divider" [class.collapsed]="collapsed">
         <div class="divider-line"></div>
         <div class="divider-dot"></div>
         <div class="divider-line"></div>
     </div>
 
-    <!-- Menú de navegación -->
     <nav class="sidenav-menu">
         <mat-nav-list>
             @for (item of menuItems(); track item.label; let i = $index) {
@@ -72,7 +68,6 @@
         </mat-nav-list>
     </nav>
 
-    <!-- Sección inferior - Logout -->
     <div class="sidenav-footer">
         <div class="footer-divider" [class.collapsed]="collapsed"></div>
         <a
@@ -91,7 +86,6 @@
             </div>
         </a>
         
-        <!-- Versión -->
         <div class="version-info" [class.collapsed]="collapsed">
             <span>v{{commit_sha}}</span>
             @if (!collapsed) {
@@ -99,4 +93,138 @@
             }
         </div>
     </div>
+</div> -->
+
+
+
+
+<div
+  class="relative flex h-[calc(100vh-64px)] flex-col overflow-hidden rounded-r-[30px] bg-tlalcalli-primary text-white"
+  [ngClass]="collapsed ? 'w-full items-center px-2' : 'w-full px-4'">
+
+  <div class="pointer-events-none absolute inset-0 bg-tlalcalli-purple-muted/35"></div>
+
+  <div class="relative z-[1] flex justify-center pt-8" [ngClass]="collapsed ? 'pb-5' : 'pb-4'">
+    <div
+      class="flex items-center justify-center overflow-hidden border-2 border-tlalcalli-gold bg-white"
+      [ngClass]="collapsed ? 'h-12 w-12 rounded-xl p-1' : 'h-[96px] w-[96px] rounded-2xl p-2'">
+      <img
+        src="{{environment.base}}/assets/images/tlalcalli-logo.svg"
+        alt="Tlálcalli Logo"
+        class="h-full w-full object-contain" />
+    </div>
+  </div>
+
+  @if (!collapsed) {
+    <div class="relative z-[1] text-center">
+      <h1 class="text-2xl font-extrabold tracking-wide text-white">
+        Tlálcalli
+      </h1>
+
+      <p class="mt-3 text-[10px] font-extrabold uppercase tracking-[1.8px] text-white/70">
+        Sistema de Control de Expedientes
+      </p>
+    </div>
+
+    <div class="relative z-[1] my-7 flex items-center justify-center gap-3 px-3">
+      <div class="h-px flex-1 bg-tlalcalli-gold/45"></div>
+      <div class="h-2 w-2 rounded-full bg-tlalcalli-gold"></div>
+      <div class="h-px flex-1 bg-tlalcalli-gold/45"></div>
+    </div>
+  }
+
+  <nav class="relative z-[1] w-full flex-1 overflow-y-auto overflow-x-hidden">
+    <mat-nav-list class="!p-0">
+      @for (item of menuItems(); track item.label) {
+        <a
+  mat-list-item
+  [routerLink]="item.route"
+  routerLinkActive="menu-item-active"
+  #rla="routerLinkActive"
+  class="!mb-2 !h-auto !rounded-xl !p-0 transition-all duration-200"
+  [ngClass]="[
+    collapsed ? '!mx-auto !w-12' : '!w-full',
+    rla.isActive
+      ? '!bg-tlalcalli-gold !text-tlalcalli-primary'
+      : '!bg-white/5 !text-white hover:!bg-white/10'
+  ]">
+
+  <div
+    class="flex w-full items-center"
+    [ngClass]="collapsed ? 'justify-center p-0' : 'gap-3 px-3 py-2'">
+
+    <div
+      class="flex shrink-0 items-center justify-center rounded-lg"
+      [ngClass]="[
+        collapsed ? 'h-12 w-12' : 'h-9 w-9',
+        rla.isActive
+          ? 'bg-tlalcalli-primary/15 text-tlalcalli-primary'
+          : 'bg-white/10 text-white'
+      ]">
+
+      <mat-icon
+        class="!m-0 !leading-none"
+        [ngClass]="collapsed ? '!h-6 !w-6 !text-[24px]' : '!h-5 !w-5 !text-[20px]'">
+        {{ item.icon }}
+      </mat-icon>
+    </div>
+
+    @if (!collapsed) {
+      <span
+        class="truncate text-xs font-extrabold"
+        [ngClass]="rla.isActive ? 'text-tlalcalli-primary' : 'text-white'">
+        {{ item.label }}
+      </span>
+
+      @if (rla.isActive) {
+        <span class="ml-auto h-7 w-1.5 rounded-full bg-tlalcalli-gold"></span>
+      }
+    }
+  </div>
+</a>
+      }
+    </mat-nav-list>
+  </nav>
+
+  <div class="relative z-[1] mt-auto w-full pb-4">
+    <div class="mb-4 h-px bg-tlalcalli-gold/25"></div>
+
+    <a
+      mat-list-item
+      (click)="logout()"
+      class="!h-auto !rounded-xl !p-0 text-white transition hover:!bg-red-500/10"
+      [ngClass]="collapsed ? '!mx-auto !w-12' : '!w-full !bg-black/20'">
+
+      <div
+        class="flex w-full items-center"
+        [ngClass]="collapsed ? 'justify-center p-0' : 'gap-3 px-3 py-2'">
+
+        <div
+          class="flex shrink-0 items-center justify-center rounded-lg bg-red-500/20 text-red-200"
+          [ngClass]="collapsed ? 'h-12 w-12' : 'h-9 w-9'">
+
+          <mat-icon
+            class="!m-0 !leading-none"
+            [ngClass]="collapsed ? '!h-6 !w-6 !text-[24px]' : '!h-5 !w-5 !text-[20px]'">
+            power_settings_new
+          </mat-icon>
+        </div>
+
+        @if (!collapsed) {
+          <span class="truncate text-xs font-extrabold text-white/90">
+            Cerrar sesión
+          </span>
+        }
+      </div>
+    </a>
+
+    @if (!collapsed) {
+      <div class="mt-4 flex items-center justify-center gap-2 rounded-xl bg-black/20 px-3 py-2 text-[9px] text-white/35">
+        <span>v{{ commit_sha }}</span>
+        <span class="rounded-full bg-tlalcalli-gold/25 px-2 py-0.5 font-bold uppercase text-tlalcalli-gold">
+          {{ envrionment }}
+        </span>
+      </div>
+    }
+  </div>
 </div>

@@ -19,6 +19,7 @@ import {
 } from '../../../interfaces/expediente-tlalcalli.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ThirdStepTlalcalliComponent } from '../third-step-tlalcalli/third-step-tlalcalli.component';
 
 @Component({
   selector: 'app-stepper-tlalcalli',
@@ -33,7 +34,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDialogModule,
     MatTooltipModule,
     FirstStepTlalcalliComponent,
-    SecondStepTlalcalliComponent
+    SecondStepTlalcalliComponent,
+    ThirdStepTlalcalliComponent
   ],
   templateUrl: './stepper-tlalcalli.component.html',
   styleUrls: ['./stepper-tlalcalli.component.css', './stepper-tlalcalli-global.css']
@@ -42,6 +44,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   @ViewChild(MatStepper) stepper!: MatStepper;
   @ViewChild(FirstStepTlalcalliComponent) paso1Component!: FirstStepTlalcalliComponent;
   @ViewChild(SecondStepTlalcalliComponent) paso2Component!: SecondStepTlalcalliComponent;
+  @ViewChild(ThirdStepTlalcalliComponent) paso3Component!: ThirdStepTlalcalliComponent;
 
   datosPaso1: FormularioPaso1 | null = null;
   datosPaso2: FormularioPaso2 | null = null;
@@ -109,22 +112,46 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
 
   // Paso 2 (seguimiento + documento)
   onPaso2Completado(datos: any) {
-    if (!datos) {
-      this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
-      return;
-    }
-
-    const { documento_pdf, campos_pospuestos, ...seguimiento } = datos;
-    this.datosPaso2 = seguimiento as FormularioPaso2;
-    this.documentoPasoFinal = {
-      documento_pdf: documento_pdf as File,
-      documento_pdf_nombre: documento_pdf ? documento_pdf.name : undefined,
-      campos_pospuestos: campos_pospuestos || []
-    };
-
-    // Mostrar modal de confirmación antes de guardar
-    this.mostrarModalConfirmacion();
+  if (!datos) {
+    this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
+    return;
   }
+
+  this.datosPaso2 = datos as FormularioPaso2;
+  this.transicionarPaso(2);
+  this.mostrarMensaje('Paso 2 completado correctamente', 'success');
+}
+  // onPaso2Completado(datos: any) {
+  //   if (!datos) {
+  //     this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
+  //     return;
+  //   }
+
+  //   const { documento_pdf, campos_pospuestos, ...seguimiento } = datos;
+  //   this.datosPaso2 = seguimiento as FormularioPaso2;
+  //   this.documentoPasoFinal = {
+  //     documento_pdf: documento_pdf as File,
+  //     documento_pdf_nombre: documento_pdf ? documento_pdf.name : undefined,
+  //     campos_pospuestos: campos_pospuestos || []
+  //   };
+
+  //   this.mostrarModalConfirmacion();
+  // }
+  onPaso3Siguiente() {
+  if (this.paso3Component) {
+    this.paso3Component.onSubmit();
+  }
+}
+
+onPaso3Completado(datos: any) {
+  this.documentoPasoFinal = {
+    documento_pdf: datos.documento_pdf || null,
+    documento_pdf_nombre: datos.documento_pdf ? datos.documento_pdf.name : undefined,
+    campos_pospuestos: datos.campos_pospuestos || []
+  };
+
+  this.mostrarModalConfirmacion();
+}
 
   // Modal de pre-confirmación con resumen de datos organizados en secciones
   private mostrarModalConfirmacion() {
@@ -422,7 +449,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     };
   }
 
-  private transicionarPaso(nuevoPaso: number) {
+  transicionarPaso(nuevoPaso: number) {
     this.isTransitioning = true;
     setTimeout(() => {
       this.pasoActual = nuevoPaso;

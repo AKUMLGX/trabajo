@@ -1,35 +1,41 @@
-/* =============================================
-   PANEL DE CONTROL - ESTILOS PROFESIONALES
-   ============================================= */
+/* .control-header {
+  background: linear-gradient(135deg, #4c0d6e 0%, #5b1585 40%, #6d1fa3 100%);
+  border-radius: 24px 24px 0 0;
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
 
-/* ===== VARIABLES - PALETA INSTITUCIONAL SAT ===== */
+.control-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.08), transparent 40%),
+              radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05), transparent 40%);
+}
+
 :host {
-  /* Morados institucionales */
-  --wine: #34005b;
-  --wine-light: #3e0065;
-  --wine-dark: #20003a;
-  
-  /* Dorados institucionales */
+  --wine: #4c0a72;
+  --wine-light: #5b1585;
+  --wine-dark: #34005b;
+
   --gold: #d6ae67;
   --gold-light: #dbb872;
   --gold-dark: #c9a050;
-  
-  /* Semáforo */
-  --vencido: #1f2937;
-  --urgente: #dc2626;
+
+  --vencido: #3f3f46;
+  --urgente: #ef4444;
   --alta: #ea580c;
-  --media: #d97706;
-  --baja: #059669;
+  --media: #f59e0b;
+  --baja: #10b981;
 }
 
-/* ===== DASHBOARD SECTION ===== */
 .priority-dashboard {
-  background: white;
-  border-radius: 24px;
-  padding: 28px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 24px rgba(105, 28, 50, 0.06);
-  border: 1px solid rgba(105, 28, 50, 0.05);
+  background: #f3f1f6;
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: none;
+  border: none;
 }
 
 .dashboard-header {
@@ -46,14 +52,14 @@
 }
 
 .header-icon {
-  width: 54px;
-  height: 54px;
-  background: linear-gradient(135deg, var(--wine) 0%, var(--wine-light) 100%);
-  border-radius: 16px;
+  width: 42px;
+  height: 42px;
+  background: #4c0a72;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 20px rgba(105, 28, 50, 0.35);
+  box-shadow: none;
 }
 
 .header-icon svg {
@@ -98,7 +104,6 @@
   box-shadow: 0 4px 12px rgba(105, 28, 50, 0.1);
 }
 
-/* ===== SEMÁFORO DE ATENCIÓN - NUEVO DISEÑO ===== */
 .semaforo-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -119,12 +124,12 @@
 
 .semaforo-card {
   position: relative;
-  border-radius: 20px;
-  padding: 24px;
+  border-radius: 16px;
+  padding: 20px;
   cursor: pointer;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  min-height: 180px;
+  min-height: 150px;
   border: 3px solid transparent;
 }
 
@@ -144,7 +149,6 @@
   gap: 12px;
 }
 
-/* Semáforo Indicator (luz del semáforo) */
 .semaforo-indicator {
   width: 48px;
   height: 48px;
@@ -182,7 +186,6 @@
   50% { opacity: 0.4; transform: scale(1.1); }
 }
 
-/* Card Info */
 .semaforo-card .card-info {
   display: flex;
   flex-direction: column;
@@ -198,11 +201,11 @@
 }
 
 .semaforo-card .card-count {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 900;
   color: white;
   line-height: 1;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: none;
 }
 
 .semaforo-card .card-range {
@@ -212,9 +215,8 @@
   margin-top: 2px;
 }
 
-/* Progress Bar */
 .semaforo-card .progress-bar {
-  height: 6px;
+  height: 4px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
   overflow: hidden;
@@ -251,7 +253,6 @@
   margin-top: 4px;
 }
 
-/* Card Colors - Semáforo */
 .semaforo-card.en-tiempo {
   background: linear-gradient(145deg, #059669 0%, #10b981 50%, #34d399 100%);
   color: #10b981;
@@ -282,7 +283,6 @@
   color: #71717a;
 }
 
-/* Hover Effects */
 .semaforo-card:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
@@ -304,14 +304,12 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* Active State */
 .semaforo-card.active {
   transform: translateY(-4px);
   border-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 20px 40px -10px rgba(0, 0, 0, 0.4);
 }
 
-/* ===== LEYENDA DEL SEMÁFORO ===== */
 .semaforo-legend {
   display: flex;
   align-items: center;
@@ -360,14 +358,13 @@
   }
 }
 
-/* ===== SEARCH SECTION ===== */
 .search-section {
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
+  background: #f3f1f6;
+  border-radius: 24px;
+  padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 24px rgba(105, 28, 50, 0.06);
-  border: 1px solid rgba(105, 28, 50, 0.05);
+  box-shadow: none;
+  border: none;
 }
 
 .search-container {
@@ -400,10 +397,10 @@
 
 .search-input {
   width: 100%;
-  padding: 16px 20px 16px 52px;
-  background: linear-gradient(to bottom, #fafafa, #f5f5f4);
-  border: 2px solid #e5e5e5;
-  border-radius: 14px;
+  padding: 14px 20px 14px 52px;
+  background: white;
+  border: 1.5px solid #6b21a8;
+  border-radius: 12px;
   font-size: 14px;
   color: #111827;
   transition: all 0.25s ease;
@@ -483,16 +480,16 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 16px 28px;
-  background: linear-gradient(135deg, var(--wine) 0%, var(--wine-light) 100%);
+  padding: 14px 26px;
+  background: #4c0a72;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   font-size: 14px;
   font-weight: 700;
   color: white;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 16px rgba(105, 28, 50, 0.3);
+  box-shadow: none;
 }
 
 .btn-primary:hover {
@@ -509,16 +506,15 @@
   height: 18px;
 }
 
-/* ===== STATS BAR ===== */
 .stats-bar {
   display: flex;
   align-items: center;
-  background: white;
-  border-radius: 18px;
+  background: #f3f1f6;
+  border-radius: 24px;
   padding: 20px 28px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 24px rgba(105, 28, 50, 0.06);
-  border: 1px solid rgba(105, 28, 50, 0.05);
+  box-shadow: none;
+  border: none;
   gap: 28px;
 }
 
@@ -591,7 +587,6 @@
   line-height: 1;
 }
 
-/* Estadísticas por tipo de semáforo */
 .stat-item.criticos .stat-number.critical {
   color: #dc2626;
 }
@@ -617,7 +612,6 @@
   background: linear-gradient(to bottom, transparent, #e5e5e5, transparent);
 }
 
-/* ===== LOADING STATE ===== */
 .loading-state {
   background: white;
   border-radius: 20px;
@@ -666,13 +660,12 @@
   color: #6b7280;
 }
 
-/* ===== EXPEDIENTES SECTION ===== */
 .expedientes-section {
-  background: white;
-  border-radius: 20px;
+  background: #f3f1f6;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 4px 24px rgba(105, 28, 50, 0.06);
-  border: 1px solid rgba(105, 28, 50, 0.05);
+  box-shadow: none;
+  border: none;
 }
 
 .section-header {
@@ -686,7 +679,6 @@
   gap: 16px;
 }
 
-/* ===== SWITCH PENDIENTES/ATENDIDOS ===== */
 .vista-switch {
   display: flex;
   background: #f1f5f9;
@@ -808,7 +800,6 @@
   color: var(--wine);
 }
 
-/* ===== TABLE ===== */
 .table-wrapper {
   overflow-x: auto;
 }
@@ -861,7 +852,6 @@
   background: transparent;
 }
 
-/* Priority Row Indicators - Nuevo Semáforo */
 .priority-row {
   position: relative;
 }
@@ -881,7 +871,6 @@
 .priority-row.urgente::before { background: linear-gradient(to bottom, #ef4444, #b91c1c); }
 .priority-row.vencido::before { background: linear-gradient(to bottom, #3f3f46, #18181b); }
 
-/* Semáforo Badge - Nuevo diseño en tabla */
 .semaforo-badge {
   display: inline-flex;
   align-items: center;
@@ -968,7 +957,6 @@
   color: #737373;
 }
 
-/* Status Badge */
 .status-badge {
   display: inline-flex;
   padding: 5px 10px;
@@ -983,7 +971,6 @@
 .status-badge.atencion_total { background: #dcfce7; color: #15803d; }
 .status-badge.revision_legal { background: #ede9fe; color: #6d28d9; }
 
-/* Code & Text */
 .expediente-code {
   font-weight: 600;
   color: #111827;
@@ -998,7 +985,6 @@
   text-overflow: ellipsis;
 }
 
-/* Time Display - Barra de progreso visual */
 .time-display {
   display: flex;
   flex-direction: column;
@@ -1050,7 +1036,6 @@
   color: #9ca3af;
 }
 
-/* Action Buttons Container */
 .action-buttons {
   display: flex;
   align-items: center;
@@ -1058,7 +1043,6 @@
   gap: 8px;
 }
 
-/* Action Button Base */
 .action-btn {
   width: 36px;
   height: 36px;
@@ -1078,7 +1062,6 @@
   height: 18px;
 }
 
-/* View Button */
 .action-btn.view:hover {
   background: var(--wine);
   border-color: var(--wine);
@@ -1087,7 +1070,6 @@
   box-shadow: 0 4px 12px rgba(105, 28, 50, 0.25);
 }
 
-/* Atender Button - Destacado */
 .action-btn.atender {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
@@ -1107,7 +1089,6 @@
   height: 20px;
 }
 
-/* ===== PAGINATION ===== */
 .pagination {
   display: flex;
   align-items: center;
@@ -1160,7 +1141,6 @@
   height: 16px;
 }
 
-/* ===== EMPTY STATE ===== */
 .empty-state {
   background: white;
   border-radius: 20px;
@@ -1202,7 +1182,6 @@
   margin-right: auto;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .stats-bar {
     flex-wrap: wrap;
@@ -1234,7 +1213,6 @@
   }
 }
 
-/* ===== SCROLLBAR ===== */
 .table-wrapper::-webkit-scrollbar {
   height: 6px;
 }
@@ -1252,7 +1230,6 @@
   background: #9ca3af;
 }
 
-/* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1268,7 +1245,6 @@
 .expedientes-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
 .expedientes-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
 
-/* ===== ESTADO VACÍO INLINE ===== */
 .empty-state-inline {
   display: flex;
   flex-direction: column;
@@ -1328,12 +1304,8 @@
   color: var(--wine);
 }
 
-/* Legacy class support */
 .info-bar { display: none; }
 
-/* ========================================
-   VISTA ATENDIDOS - Estilos
-   ======================================== */
 
 .atendido-row {
   background: white;
@@ -1361,7 +1333,6 @@
   color: #6b7280;
 }
 
-/* Tipo de Atención Badges */
 .tipo-atencion-badge {
   display: inline-flex;
   align-items: center;
@@ -1433,7 +1404,6 @@
   border: 1px solid #e5e7eb;
 }
 
-/* Prioridad Badges */
 .prioridad-badge {
   display: inline-flex;
   align-items: center;
@@ -1463,7 +1433,6 @@
   color: #15803d;
 }
 
-/* Especialistas */
 .especialistas-list {
   display: flex;
   flex-wrap: wrap;
@@ -1491,7 +1460,6 @@
   border: 1px solid #86efac;
 }
 
-/* Fecha Entrega */
 .fecha-entrega {
   font-size: 12px;
   font-weight: 600;
@@ -1501,7 +1469,6 @@
   border-radius: 4px;
 }
 
-/* Notas Preview */
 .notas-preview {
   font-size: 11px;
   color: #6b7280;
@@ -1509,7 +1476,6 @@
   cursor: help;
 }
 
-/* No Data */
 .no-data {
   font-size: 11px;
   color: #9ca3af;
@@ -1519,4 +1485,4 @@
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
-}
+} */

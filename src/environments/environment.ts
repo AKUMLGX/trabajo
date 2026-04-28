@@ -21,16 +21,32 @@
   // };
   
   
-  
+  interface WindowEnv {
+  environment: string;
+  hash: string;
+  baseUrl: string;
+  layoutUrl: string;
+  loginUrl: string;
+  logoutUrl: string;
+}
+
+const env = (window as unknown as Window & { env: WindowEnv }).env;
   
   export const environment={
-    environment:(window as {[key:string]:any})["env"]["environment"],
-    hash: (window as {[key:string]:any})["env"]["hash"],
+    environment: env.environment,
+    hash: env.hash,
+
+    baseUrl: env.baseUrl,
+    layoutUrl: env.layoutUrl,
+    loginUrl: env.loginUrl,
+    logoutUrl: env.logoutUrl,
+    // environment:(window as {[key:string]:any})["env"]["environment"],
+    // hash: (window as {[key:string]:any})["env"]["hash"],
   
-    baseUrl:(window as {[key:string]:any})["env"]["baseUrl"],
-    layoutUrl:(window as {[key:string]:any})["env"]["layoutUrl"],
-    loginUrl:(window as {[key:string]:any})["env"]["loginUrl"],
-    logoutUrl:(window as {[key:string]:any})["env"]["logoutUrl"],
+    // baseUrl:(window as {[key:string]:any})["env"]["baseUrl"],
+    // layoutUrl:(window as {[key:string]:any})["env"]["layoutUrl"],
+    // loginUrl:(window as {[key:string]:any})["env"]["loginUrl"],
+    // logoutUrl:(window as {[key:string]:any})["env"]["logoutUrl"],
   
     oauthParametersEndpoint: 'login/get_oauth_parameters',
     tokenValidationEndpoint: 'login/token_validation',

@@ -1,26 +1,29 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private urlBase = environment.baseUrl;
-  constructor(protected http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly urlBase = environment.baseUrl;
 
-  getData<T>(endpoint: string): Observable<HttpResponse<any>> {
+  getData<T>(endpoint: string): Observable<T> {
     const url = `${this.urlBase}/${endpoint}`;
-    return this.http.get<any>(url);
+    return this.http.get<T>(url);
   }
 
-  postData<T>(endpoint: string, body: {}): Observable<HttpResponse<any>> {
+  postData<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}`;
-    return this.http.post<any>(url, body, {
+    return this.http.post<T>(url, body, {
       observe: 'response',
     });
   }
 
-  postDataForBase64(endpoint: string, body: {}): Observable<HttpResponse<string>> {
+  postDataForBase64(
+    endpoint: string,
+    body: object
+  ): Observable<HttpResponse<string>> {
     const url = `${this.urlBase}/${endpoint}`;
     return this.http.post(url, body, {
       responseType: 'text',
@@ -28,35 +31,33 @@ export class ApiService {
     });
   }
 
-  get baseUrl(): string {
-    return this.urlBase;
-  }
-
   putData<T>(
     endpoint: string,
-    body: {},
-    id: number
-  ): Observable<HttpResponse<any>> {
+    body: object,
+    id: number | string
+  ): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}/${id}`;
-    return this.http.patch<any>(url, body, {
+    return this.http.put<T>(url, body, {
       observe: 'response',
     });
   }
 
-  patchData<T>(endpoint: string): Observable<HttpResponse<any>> {
+  patchData<T>(
+    endpoint: string,
+    body: object = {}
+  ): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}`;
-    return this.http.patch<any>(url, {
+    return this.http.patch<T>(url, body, {
       observe: 'response',
     });
   }
 
   deleteData<T>(
     endpoint: string,
-    body: {},
-    id: number
-  ): Observable<HttpResponse<any>> {
+    id: number | string
+  ): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}/${id}`;
-    return this.http.patch<any>(url, body, {
+    return this.http.delete<T>(url, {
       observe: 'response',
     });
   }
@@ -68,15 +69,14 @@ export class ApiService {
     });
   }
 
-  postBlobData<T>(endpoint: string, body: {}): Observable<Blob> {
+  postBlobData(endpoint: string, body: object): Observable<Blob> {
     const url = `${this.urlBase}/${endpoint}`;
     return this.http.post(url, body, {
       responseType: 'blob',
     });
   }
 
-//   downloadCSV(): Observable<Blob> {
-//     const url = ${this.urlBase}/ws/export/csv;
-//     return this.http.get(url, { responseType: 'blob' });
-//   }
+  get baseUrl(): string {
+    return this.urlBase;
+  }
 }

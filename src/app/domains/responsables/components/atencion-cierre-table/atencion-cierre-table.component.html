@@ -1,177 +1,185 @@
-<!-- =====================================================
-     BANDEJA DE ATENCIÓN / CIERRE
-     Vista tipo Centro de Control
-     ===================================================== -->
+<div class="min-h-screen bg-tlalcalli-light-cream px-4 py-4">
 
-<div class="atencion-cierre-wrapper">
-  <!-- HEADER -->
-  <div class="page-header">
-    <div class="header-content">
-      <div class="header-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-      </div>
-      <div class="header-text">
-        <h1>ATENCIÓN / CIERRE</h1>
-        <p>Gestión final de expedientes atendidos</p>
+  <div class="bg-tlalcalli-primary px-8 py-8">
+    <div class="flex items-center gap-4">
+      <div class="h-[54px] w-[54px] rounded-xl bg-tlalcalli-lavender"></div>
+
+      <div>
+        <h1 class="m-0 text-[28px] font-extrabold leading-none text-white">
+          Atención / Cierre
+        </h1>
+        <p class="mt-2 text-sm font-medium text-white">
+          Gestión final de expedientes atendidos
+        </p>
       </div>
     </div>
   </div>
 
-  <!-- LOADING STATE -->
   @if (cargando) {
-    <div class="loading-container">
-      <div class="loading-spinner"></div>
-      <p>Cargando información de atenciones...</p>
+    <div class="mt-5 flex min-h-[320px] flex-col items-center justify-center rounded-xl bg-white px-8 py-16 text-center">
+      <div class="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-tlalcalli-light-base border-t-tlalcalli-primary"></div>
+      <p class="text-base font-bold text-tlalcalli-primary">
+        Cargando información de atenciones...
+      </p>
     </div>
   }
 
-  <!-- NO DATA STATE -->
   @if (!cargando && items.length === 0) {
-    <div class="no-data-container">
-      <div class="no-data-icon">
-        <mat-icon>inbox</mat-icon>
-      </div>
-      <h2>No hay atenciones registradas</h2>
-      <p>Los expedientes aparecerán aquí una vez que se registren atenciones en el Centro de Control.</p>
+    <div class="mt-5 flex min-h-[360px] flex-col items-center justify-center rounded-xl bg-white px-8 py-16 text-center">
+      <div class="mb-8 h-[70px] w-[70px] rounded-full bg-tlalcalli-light-lavender"></div>
+
+      <h2 class="m-0 text-lg font-extrabold text-tlalcalli-primary">
+        No hay atenciones registradas
+      </h2>
+
+      <p class="mt-4 max-w-[430px] text-sm leading-5 text-tlalcalli-gray">
+        Los expedientes aparecerán una vez que se registren atenciones
+        en el Centro de Control
+      </p>
     </div>
   }
 
-  <!-- CONTENIDO PRINCIPAL -->
   @if (!cargando && items.length > 0) {
 
-  <!-- RESUMEN DE SEMÁFORO (similar al Centro de Control) -->
-  <section class="semaforo-resumen">
-    <div class="semaforo-card verde">
-      <div class="semaforo-dot"></div>
-      <div class="semaforo-info">
-        <span class="label">En tiempo</span>
-        <span class="value">{{ totalVerde }}</span>
+    <section class="my-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
+        <span class="h-4 w-4 rounded-full bg-tlalcalli-success"></span>
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">En tiempo</span>
+          <span class="block text-xl font-black text-black">{{ totalVerde }}</span>
+        </div>
       </div>
-    </div>
-    <div class="semaforo-card naranja">
-      <div class="semaforo-dot"></div>
-      <div class="semaforo-info">
-        <span class="label">Hasta 5 días hábiles</span>
-        <span class="value">{{ totalNaranja }}</span>
+
+      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
+        <span class="h-4 w-4 rounded-full bg-tlalcalli-warning"></span>
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">Hasta 5 días hábiles</span>
+          <span class="block text-xl font-black text-black">{{ totalNaranja }}</span>
+        </div>
       </div>
-    </div>
-    <div class="semaforo-card rojo">
-      <div class="semaforo-dot"></div>
-      <div class="semaforo-info">
-        <span class="label">Después de 6 días hábiles</span>
-        <span class="value">{{ totalRojo }}</span>
+
+      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
+        <span class="h-4 w-4 rounded-full bg-tlalcalli-error"></span>
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">Después de 6 días hábiles</span>
+          <span class="block text-xl font-black text-black">{{ totalRojo }}</span>
+        </div>
       </div>
-    </div>
-    <div class="semaforo-card total">
-      <div class="semaforo-dot"></div>
-      <div class="semaforo-info">
-        <span class="label">Total de atenciones</span>
-        <span class="value">{{ items.length }}</span>
+
+      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
+        <span class="h-4 w-4 rounded-full bg-tlalcalli-primary"></span>
+        <div>
+          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">Total de atenciones</span>
+          <span class="block text-xl font-black text-black">{{ items.length }}</span>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- TABLA PRINCIPAL (similar a Centro de Control) -->
-  <section class="tabla-atencion-cierre">
-    <div class="tabla-header">
-      <div class="tabla-title">
-        <h3>Expedientes con Atención Registrada</h3>
-        <span class="badge-count">{{ items.length }} registros</span>
+    <section class="overflow-hidden rounded-xl bg-white">
+      <div class="flex items-center justify-between border-b border-tlalcalli-light-base bg-tlalcalli-light-base px-5 py-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <h3 class="m-0 text-base font-extrabold text-black">
+            Expedientes con Atención Registrada
+          </h3>
+
+          <span class="rounded-full bg-tlalcalli-lavender px-3 py-1 text-xs font-extrabold text-white">
+            {{ items.length }} registros
+          </span>
+        </div>
       </div>
-    </div>
 
-    <div class="table-wrapper">
-      <table class="expedientes-table">
-        <thead>
-          <tr>
-            <th>Prioridad</th>
-            <th>Expediente</th>
-            <th>Tipo de Atención</th>
-            <th>Especialistas</th>
-            <th>Usuario Registro</th>
-            <th>Fecha Apertura</th>
-            <th>Días de atraso</th>
-            <th class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of items; track item.id) {
-          <tr class="priority-row">
-            <!-- Semáforo -->
-            <td>
-              <div class="semaforo-badge" [class]="getSemaforoClass(item.diasAtraso)">
-                <span class="semaforo-dot-mini"></span>
-                <span class="semaforo-label">
-                  {{ getSemaforoLabel(item.diasAtraso) }}
-                </span>
-              </div>
-            </td>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[1100px] border-collapse">
+          <thead>
+            <tr class="bg-tlalcalli-light-lavender">
+              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
+              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
+              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Tipo de Atención</th>
+              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Especialistas</th>
+              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Usuario Registro</th>
+              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Fecha Apertura</th>
+              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Días de atraso</th>
+              <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Acciones</th>
+            </tr>
+          </thead>
 
-            <!-- Expediente -->
-            <td>
-              <div class="expediente-info">
-                <span class="expediente-code">{{ item.expediente || '-' }}</span>
-                <span class="expediente-id">ID {{ item.idExpediente }}</span>
-              </div>
-            </td>
+          <tbody>
+            @for (item of items; track item.id) {
+              <tr class="border-b border-tlalcalli-light-base bg-white hover:bg-tlalcalli-light-lavender/60">
+                <td class="px-4 py-5">
+                  <div
+                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold"
+                    [ngClass]="{
+                      'border-tlalcalli-success bg-tlalcalli-success/10 text-tlalcalli-success-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-verde',
+                      'border-tlalcalli-warning bg-tlalcalli-warning/10 text-tlalcalli-warning-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-naranja',
+                      'border-tlalcalli-error bg-tlalcalli-error/10 text-tlalcalli-error-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-rojo'
+                    }">
+                    <span class="h-2.5 w-2.5 rounded-full bg-current"></span>
+                    <span>{{ getSemaforoLabel(item.diasAtraso) }}</span>
+                  </div>
+                </td>
 
-            <!-- Tipo de atención -->
-            <td>
-              <span class="tipo-atencion-badge">
-                {{ item.tipoAccion }}
-              </span>
-            </td>
+                <td class="px-4 py-5">
+                  <div class="flex flex-col">
+                    <span class="text-sm font-extrabold text-black">{{ item.expediente || '-' }}</span>
+                    <span class="text-xs text-tlalcalli-gray">ID {{ item.idExpediente }}</span>
+                  </div>
+                </td>
 
-            <!-- Especialistas -->
-            <td>
-              @if (item.especialistas?.length) {
-                <div class="especialistas-list">
-                  @for (esp of item.especialistas; track esp) {
-                    <span class="chip-especialista">{{ esp }}</span>
+                <td class="px-4 py-5">
+                  <span class="rounded-full bg-tlalcalli-primary/10 px-3 py-1.5 text-xs font-bold uppercase text-tlalcalli-primary">
+                    {{ item.tipoAccion }}
+                  </span>
+                </td>
+
+                <td class="px-4 py-5">
+                  @if (item.especialistas?.length) {
+                    <div class="flex flex-wrap gap-1.5">
+                      @for (esp of item.especialistas; track esp) {
+                        <span class="rounded-full bg-tlalcalli-light-lavender px-2.5 py-1 text-xs font-semibold text-tlalcalli-primary">
+                          {{ esp }}
+                        </span>
+                      }
+                    </div>
+                  } @else {
+                    <span class="text-xs text-tlalcalli-gray">Sin especialistas</span>
                   }
-                </div>
-              } @else {
-                <span class="texto-mutedo">Sin especialistas</span>
-              }
-            </td>
+                </td>
 
-            <!-- Usuario registro -->
-            <td>
-              <span class="usuario-registro">{{ item.usuarioRegistro || '—' }}</span>
-            </td>
+                <td class="px-4 py-5">
+                  <span class="text-sm text-tlalcalli-gray">{{ item.usuarioRegistro || '—' }}</span>
+                </td>
 
-            <!-- Fecha apertura (ticket o registro) -->
-            <td>
-              <span>{{ formatearFecha(item.ticketFechaApertura) }}</span>
-            </td>
+                <td class="px-4 py-5">
+                  <span class="text-sm text-tlalcalli-gray">{{ formatearFecha(item.ticketFechaApertura) }}</span>
+                </td>
 
-            <!-- Días atraso -->
-            <td>
-              <span class="dias-atraso">{{ item.diasAtraso }} días</span>
-            </td>
+                <td class="px-4 py-5">
+                  <span class="text-sm font-bold text-black">{{ item.diasAtraso }} días</span>
+                </td>
 
-            <!-- Acciones -->
-            <td class="text-center acciones-cell">
-              <button 
-                (click)="abrirModalDetalles(item)" 
-                class="btn-icon detalle-btn" 
-                matTooltip="Ver detalles completos de la atención">
-                <mat-icon>visibility</mat-icon>
-              </button>
-              <button 
-                (click)="abrirModalCierre(item)" 
-                class="btn-icon cierre-btn" 
-                matTooltip="Abrir formularios de cierre">
-                <mat-icon>assignment_turned_in</mat-icon>
-              </button>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </section>
+                <td class="px-4 py-5 text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <button
+                      (click)="abrirModalDetalles(item)"
+                      class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-teal-muted text-white transition hover:opacity-90"
+                      matTooltip="Ver detalles completos de la atención">
+                      <mat-icon class="!h-5 !w-5 !text-xl">visibility</mat-icon>
+                    </button>
+
+                    <button
+                      (click)="abrirModalCierre(item)"
+                      class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-primary text-white transition hover:opacity-90"
+                      matTooltip="Abrir formularios de cierre">
+                      <mat-icon class="!h-5 !w-5 !text-xl">assignment_turned_in</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
   }
 </div>

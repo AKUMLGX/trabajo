@@ -1,55 +1,69 @@
-<app-load-animation></app-load-animation>
-<mat-toolbar class="mat-elevation-z3">
-  <div class="toolbar-left">
-    <button
-      mat-icon-button
-      class="toolbar-btn"
-      (click)="collapsed.set(!collapsed())"
-      matTooltip="Menú"
-    >
-      <mat-icon>menu</mat-icon>
-    </button>
-    <button mat-icon-button class="toolbar-btn user-btn" (click)="openModal(userInfoModal)" matTooltip="Mi Perfil">
-      <mat-icon>person</mat-icon>
-    </button>
-    <!-- Botón de Revisión Final oculto -->
-    <!-- <button mat-icon-button class="toolbar-btn" [matTooltip]="'Revisión Final'" [routerLink]="'/layout/revision-final'" *ngIf="puedeVerRevisionFinal">
-      <mat-icon>approval</mat-icon>
-    </button> -->
+ <app-load-animation></app-load-animation>
+
+<mat-toolbar
+  class="relative z-[5] flex min-h-[68px] items-center justify-between bg-tlalcalli-primary px-5 shadow-md max-md:min-h-[60px] max-md:px-3">
+
+  <div class="relative z-[1] flex items-center gap-2.5">
+    <button mat-icon-button
+    class="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-tlalcalli-light-base 
+    bg-white/5 text-white 
+      backdrop-blur-sm
+      transition-colors duration-150
+    hover:bg-white/10"
+    (click)="collapsed.set(!collapsed())"
+    matTooltip="Menú">
+
+  <mat-icon class="!text-[22px]">menu</mat-icon>
+</button>
+
+    <button mat-icon-button
+      class="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-tlalcalli-light-base
+    bg-white/5 text-white 
+      backdrop-blur-sm
+      transition-colors duration-150
+    hover:bg-white/10"
+      (click)="openModal(userInfoModal)"
+      matTooltip="Mi Perfil">
+
+  <mat-icon class="!text-[22px]">person</mat-icon>
+</button>
   </div>
+
   <app-navbar-content-info></app-navbar-content-info>
   <app-navbar-content></app-navbar-content>
 </mat-toolbar>
-<mat-sidenav-container>
+
+<mat-sidenav-container class="h-[calc(100vh-68px)] bg-tlalcalli-light-cream max-md:h-[calc(100vh-60px)]">
   <mat-sidenav
     opened
     mode="side"
-    class="mat-sidenav"
-    [style.width]="sidenavWidth()"
-  >
+    class="!border-r-0"
+    [style.width]="sidenavWidth()">
     <app-custom-sidenav [collapsed]="collapsed()" />
   </mat-sidenav>
-  <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
+
+  <mat-sidenav-content
+    class="overflow-x-hidden p-6"
+    [style.margin-left]="sidenavWidth()">
     <router-outlet />
   </mat-sidenav-content>
 </mat-sidenav-container>
 
 <ng-template #userInfoModal>
-  <div class="user-modal-container">
-    <!-- Botón cerrar elegante -->
-    <button mat-icon-button 
-            class="modal-close-button" 
-            (click)="closeModal()" 
-            mat-dialog-close>
-        <mat-icon>close</mat-icon>
-      </button>
-    
-    <!-- Componente de perfil de usuario con toda la información -->
-    <app-user-profile 
-      [compact]="false" 
+  <div class="relative w-full max-w-[520px] overflow-hidden rounded-3xl bg-tlalcalli-primary p-0 shadow-2xl max-md:mx-2.5 max-md:max-w-[95vw] max-md:rounded-2xl">
+    <button
+      mat-icon-button
+      class="!absolute !right-4 !top-4 !z-[1000] !flex !h-12 !min-h-12 !w-12 !min-w-12 !items-center !justify-center !rounded-full !border-2 !border-tlalcalli-gold/40 !bg-white !p-0 !text-tlalcalli-primary !shadow-lg transition hover:!scale-110 hover:!border-tlalcalli-gold max-md:!right-3 max-md:!top-3 max-md:!h-10 max-md:!min-h-10 max-md:!w-10 max-md:!min-w-10"
+      (click)="closeModal()"
+      mat-dialog-close>
+      <mat-icon class="!m-0 !h-6 !w-6 !text-2xl !font-bold !leading-6 !text-tlalcalli-primary max-md:!h-5 max-md:!w-5 max-md:!text-xl">
+        close
+      </mat-icon>
+    </button>
+
+    <app-user-profile
+      [compact]="false"
       [showAdvancedInfo]="true">
     </app-user-profile>
   </div>
 </ng-template>
-
-

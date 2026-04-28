@@ -11,6 +11,46 @@ module.exports = {
         'outfit': ['Outfit', 'sans-serif']
       },
       colors: {
+
+
+        //Paleta de colores TLALCALLI Actualizado
+        'tlalcalli-dark-900': '#241C39',
+        'tlalcalli-dark-gold': '#A88445',
+        'tlalcalli-dark-muted': '#715E80',
+
+        /* Base */
+        'tlalcalli-primary': '#3E0065',
+        'tlalcalli-gold': '#D6AE67',
+        'tlalcalli-lavender': '#977DAB',
+        'tlalcalli-wine': '#861F38',
+        'tlalcalli-deep': '#230142',
+        'tlalcalli-gray': '#7F7D7B',
+
+        /* Light */
+        'tlalcalli-light-base': '#E6E3DC',
+        'tlalcalli-light-cream': '#F5F0ED',
+        'tlalcalli-light-lavender': '#F9F5FB',
+        'tlalcalli-light-muted': '#C2BBB6',
+        'tlalcalli-light-2': '#D9D9D9',
+
+        /* Secondary */
+        'tlalcalli-success': '#00B37A',
+        'tlalcalli-warning': '#FFA400',
+        'tlalcalli-error': '#F41B1D',
+        'tlalcalli-dark': '#27262C',
+
+        /* Muted secondary */
+        'tlalcalli-success-muted': '#006847',
+        'tlalcalli-warning-muted': '#8F5D02',
+        'tlalcalli-error-muted': '#970304',
+        'tlalcalli-purple-muted': '#5D337C',
+        'tlalcalli-violet-muted': '#8540B9',
+        'tlalcalli-orange-muted': '#B96E40',
+        'tlalcalli-olive-muted': '#868644',
+        'tlalcalli-teal-muted': '#4EB99C',
+
+
+
         // Paleta institucional Tlálcalli
         'purple': {
           'base': '#34005b',

@@ -1,10 +1,4 @@
-/* =====================================================
-   ESTILOS GLOBALES - STEPPER TLÁLCALLI
-   Paleta Institucional SAT
-   ===================================================== */
-
-/* INPUTS CON COLORES INSTITUCIONALES */
-.mat-form-field-appearance-outline .mat-form-field-outline-start,
+/* .mat-form-field-appearance-outline .mat-form-field-outline-start,
 .mat-form-field-appearance-outline .mat-form-field-outline-end,
 .mat-form-field-appearance-outline .mat-form-field-outline-gap {
   border-color: #34005b !important;
@@ -50,7 +44,6 @@
   background-color: transparent !important;
 }
 
-/* SELECTORES */
 .mat-select-trigger {
   padding: 1rem 1.25rem !important;
   background-color: rgba(52, 0, 91, 0.03) !important;
@@ -60,12 +53,10 @@
   color: #34005b !important;
 }
 
-/* DATE PICKER */
 .mat-datepicker-toggle {
   color: #34005b !important;
 }
 
-/* BOTONES CON GRADIENTE INSTITUCIONAL */
 .modern-btn-primary,
 .modern-btn-secondary,
 .modern-btn-success {
@@ -86,7 +77,6 @@
   transform: translateY(-2px);
 }
 
-/* MATERIAL BUTTONS */
 .mat-button.modern-btn-primary,
 .mat-raised-button.modern-btn-primary,
 .mat-stroked-button.modern-btn-secondary,
@@ -104,7 +94,6 @@
   color: #34005b !important;
 }
 
-/* TODOS LOS BOTONES DEL STEPPER */
 .step-actions button,
 .step-actions .mat-button,
 .step-actions .mat-raised-button,
@@ -122,7 +111,6 @@
   color: #34005b !important;
 }
 
-/* MAT-STROKED-BUTTON (ANTERIOR) */
 .mat-stroked-button.modern-btn-secondary {
   background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
@@ -135,7 +123,6 @@
   border-color: #d6ae67 !important;
 }
 
-/* MAT-RAISED-BUTTON (SIGUIENTE) */
 .mat-raised-button.modern-btn-primary {
   background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
@@ -147,7 +134,6 @@
   color: #34005b !important;
 }
 
-/* MAT-RAISED-BUTTON (GUARDAR) */
 .mat-raised-button.modern-btn-success {
   background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   color: white !important;
@@ -157,4 +143,4 @@
 .mat-raised-button.modern-btn-success:hover {
   background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%) !important;
   color: #34005b !important;
-}
+} */

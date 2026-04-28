@@ -5,14 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterModule } from '@angular/router';
 import { LogoutService } from '../../../../services/logout.service';
 import { environment } from '../../../../../../environments/environment';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, NgClass } from '@angular/common';
 import { PermissionsService } from '../../../../services/permissions.service';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-custom-sidenav',
   standalone: true,
-  imports: [MatListModule, MatIconModule, RouterLink, RouterModule],
+  imports: [MatListModule, MatIconModule, RouterLink, RouterModule, NgClass, CommonModule],
   templateUrl: './custom-sidenav.component.html',
   styleUrl: './custom-sidenav.component.css',
 })
@@ -56,12 +56,12 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
         // Antes dependían del mapa de roles y usuarios solo de Centro de Control no las veían.
         menuItems.push({
           icon: 'dvr',
-          label: 'Bandeja de captura',
+          label: 'Captura',
           route: '/layout/capture',
         });
         menuItems.push({
           icon: 'analytics',
-          label: 'Bandeja de seguimiento',
+          label: 'Seguimiento',
           route: '/layout/tracking',
         });
 
@@ -72,14 +72,14 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
         // Incluye el semáforo de atención (72h desde captura)
         menuItems.push({
           icon: 'pending_actions',
-          label: 'Centro de Control',
+          label: 'Centro de control',
           route: '/layout/responsables',
         });
 
         // Bandeja de Atención/Cierre - Última parte del flujo
         menuItems.push({
           icon: 'check_circle',
-          label: 'Atención / Cierre',
+          label: 'Atención / cierre',
           route: '/layout/atencion-cierre',
         });
 

@@ -1,12 +1,10 @@
-/* Estilos para el campo de oficio con fuente monospace */
-:host ::ng-deep .has-problematic-chars .custom-input,
+/* :host ::ng-deep .has-problematic-chars .custom-input,
 :host ::ng-deep app-custom-form-field[formcontrolname="oficio"] .custom-input {
   font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
   font-size: 16px;
   letter-spacing: 0.05em;
 }
 
-/* Resaltar cuando hay caracteres problemáticos */
 :host ::ng-deep .has-problematic-chars .input-container {
   border: 2px solid #fbbf24 !important;
   border-radius: 12px;
@@ -18,4 +16,4 @@
   box-shadow: 
     0 0 0 4px rgba(245, 158, 11, 0.1),
     0 4px 12px rgba(245, 158, 11, 0.15) !important;
-}
+} */

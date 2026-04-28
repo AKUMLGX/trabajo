@@ -1,8 +1,8 @@
 export const environment = {
-  baseUrl: 'https://balam.sat.gob.mx/tlalcalli/api/v1/',
+  baseUrl: 'http://127.0.0.1:8090/tlalcalli/api/v1', 
   oauthParametersEndpoint: 'login/get_oauth_parameters',
   layoutUrl:"http://localhost:4200/akamba/layout/capture",
-  tokenValidationEndpoint: 'login/token_validation',
+  tokenValidationEndpoint: 'login/get_token',
   refreshTokenEndpoint: 'login/refresh_token',
   asuntoEndpoint: 'asunto/',
   asuntoHistoricoEndpoint: 'asunto/historico/',

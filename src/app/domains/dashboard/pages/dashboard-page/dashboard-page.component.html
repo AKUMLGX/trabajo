@@ -1,8 +1,6 @@
-<div class="dashboard-container">
-  <!-- Patrón de fondo -->
+<!-- <div class="dashboard-container">
   <div class="dashboard-pattern"></div>
 
-  <!-- Header del Dashboard -->
   <header class="dashboard-header">
     <div class="header-content">
       <div class="header-left">
@@ -26,7 +24,6 @@
     </div>
   </header>
 
-  <!-- Estado de carga -->
   @if (cargando && !dashboard) {
   <div class="loading-state">
     <mat-spinner diameter="50"></mat-spinner>
@@ -34,11 +31,9 @@
   </div>
   }
 
-  <!-- Contenido principal -->
   @if (dashboard) {
   <main class="dashboard-content">
     
-    <!-- Fila 1: KPIs principales -->
     <section class="kpi-section">
       <div class="kpi-card total">
         <div class="kpi-icon">
@@ -119,9 +114,7 @@
       </div>
     </section>
 
-    <!-- Fila 2: Gráficos principales -->
     <section class="charts-row">
-      <!-- Distribución por Estatus -->
       <div class="chart-card">
         <div class="chart-header">
           <h3>
@@ -147,7 +140,6 @@
         </div>
       </div>
 
-      <!-- Semáforo de Prioridades -->
       <div class="chart-card">
         <div class="chart-header">
           <h3>
@@ -191,9 +183,7 @@
       </div>
     </section>
 
-    <!-- Fila 3: Tendencia y Responsables -->
     <section class="charts-row">
-      <!-- Tendencia Semanal -->
       <div class="chart-card wide">
         <div class="chart-header">
           <h3>
@@ -227,7 +217,6 @@
         </div>
       </div>
 
-      <!-- Carga por Responsable -->
       <div class="chart-card">
         <div class="chart-header">
           <h3>
@@ -262,9 +251,7 @@
       </div>
     </section>
 
-    <!-- Fila 4: Tipos de Acción y Expedientes Críticos -->
     <section class="charts-row">
-      <!-- Tipos de Acción -->
       @if (dashboard.por_tipo_accion.length > 0) {
       <div class="chart-card">
         <div class="chart-header">
@@ -291,7 +278,6 @@
       </div>
       }
 
-      <!-- Expedientes Críticos -->
       <div class="chart-card" [class.wide]="dashboard.por_tipo_accion.length === 0">
         <div class="chart-header critical">
           <h3>
@@ -341,7 +327,6 @@
   </main>
   }
 
-  <!-- Error -->
   @if (error && !cargando) {
   <div class="error-state">
     <mat-icon>error_outline</mat-icon>
@@ -351,4 +336,270 @@
   }
 </div>
 
+ -->
 
+
+
+
+
+
+
+
+
+
+<div class="min-h-[calc(100vh-68px)] bg-tlalcalli-light-cream px-5 pb-8 pt-4">
+
+  <header class="rounded-t-none bg-tlalcalli-primary px-7 pb-16 pt-9">
+    <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex items-center gap-4">
+        <div class="h-[54px] w-[54px] rounded-xl bg-tlalcalli-lavender"></div>
+
+        <div>
+          <h1 class="m-0 text-[28px] font-extrabold leading-none text-white">
+            Panel de estadísticas
+          </h1>
+          <p class="mt-2 text-sm font-medium text-white">
+            Vista ejecutiva del estado de expedientes
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex h-[48px] items-center gap-3 rounded-xl bg-tlalcalli-lavender px-4 text-white">
+          <div class="h-7 w-7 bg-tlalcalli-light-base"></div>
+          <span class="text-sm font-bold">
+            Actualizado: {{ ultimaActualizacion | date:'HH:mm:ss' }}
+          </span>
+        </div>
+
+        <button
+          class="flex h-[54px] w-[54px] items-center justify-center rounded-xl bg-tlalcalli-lavender text-white disabled:opacity-50"
+          (click)="refrescar()"
+          [disabled]="cargando"
+          matTooltip="Actualizar datos">
+          <mat-icon [ngClass]="{ 'animate-spin': cargando }">refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  @if (cargando && !dashboard) {
+    <div class="flex min-h-[420px] flex-col items-center justify-center text-tlalcalli-primary">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p class="mt-5 text-base font-bold">Cargando estadísticas...</p>
+    </div>
+  }
+
+  @if (dashboard) {
+    <main class="-mt-10">
+
+      <section class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">        
+          <div class="rounded-xl bg-white p-5">
+          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-teal-muted"></div>
+          <span class="block text-4xl font-black leading-none text-black">{{ dashboard.generales.total_expedientes }}</span>
+          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Total expedientes</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-teal-muted px-3 py-1 text-[11px] font-extrabold text-white">Sistema</span>
+        </div>
+
+        <div class="rounded-xl bg-white p-5">
+          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-purple-muted"></div>
+          <span class="block text-4xl font-black leading-none text-black">
+            {{ dashboard.generales.asignados + dashboard.generales.pendientes }}
+          </span>
+          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Por atender</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-purple-muted px-3 py-1 text-[11px] font-extrabold text-white">
+            {{ ((dashboard.generales.asignados + dashboard.generales.pendientes) / dashboard.generales.total_expedientes * 100).toFixed(0) }}%
+          </span>
+        </div>
+
+        <div class="rounded-xl bg-white p-5">
+          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-orange-muted"></div>
+          <span class="block text-4xl font-black leading-none text-black">
+            {{ dashboard.generales.en_atencion + dashboard.generales.atendidos_total }}
+          </span>
+          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Atendidos</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-orange-muted px-3 py-1 text-[11px] font-extrabold text-white">
+            {{ ((dashboard.generales.en_atencion + dashboard.generales.atendidos_total) / dashboard.generales.total_expedientes * 100).toFixed(0) }}%
+          </span>
+        </div>
+
+        <div class="rounded-xl bg-white p-5">
+          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-error"></div>
+          <span class="block text-4xl font-black leading-none text-black">
+            {{ dashboard.semaforo.urgente + dashboard.semaforo.vencido }}
+          </span>
+          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Críticos</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-error px-3 py-1 text-[11px] font-extrabold text-white">Urgente</span>
+        </div>
+
+        <div class="rounded-xl bg-white p-5">
+          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-gold"></div>
+          <span class="block text-4xl font-black leading-none text-black">{{ dashboard.generales.responsables_activos }}</span>
+          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Responsables</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-gold px-3 py-1 text-[11px] font-extrabold text-white">Activos</span>
+        </div>
+
+        <div class="rounded-xl bg-white p-5">
+          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-wine"></div>
+          <span class="block text-4xl font-black leading-none text-black">{{ formatearHoras(dashboard.generales.promedio_horas_atencion) }}</span>
+          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Tiempo promedio</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-wine px-3 py-1 text-[11px] font-extrabold text-white">En sistema</span>
+        </div>
+      </section>
+
+      <section class="mb-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
+
+        <div class="overflow-hidden rounded-xl bg-white">
+          <div class="flex items-center gap-3 bg-tlalcalli-light-base px-5 py-4">
+            <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span>
+            <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+              Distribución por estatus
+            </h3>
+          </div>
+
+          <div class="flex min-h-[300px] items-center justify-center p-6">
+            @if (chartEstatusOptions) {
+              <apx-chart
+                #chartEstatus
+                [series]="chartEstatusOptions.series!"
+                [chart]="chartEstatusOptions.chart!"
+                [labels]="chartEstatusOptions.labels!"
+                [colors]="chartEstatusOptions.colors!"
+                [plotOptions]="chartEstatusOptions.plotOptions!"
+                [dataLabels]="chartEstatusOptions.dataLabels!"
+                [legend]="chartEstatusOptions.legend!"
+                [stroke]="chartEstatusOptions.stroke!"
+                [responsive]="chartEstatusOptions.responsive!">
+              </apx-chart>
+            }
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl bg-white">
+          <div class="flex items-center justify-between gap-3 bg-tlalcalli-light-base px-5 py-4">
+            <div class="flex items-center gap-3">
+              <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span>
+              <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+                Semáforo de prioridades
+              </h3>
+            </div>
+            <span class="text-[11px] font-bold text-tlalcalli-gray">
+              Basado en tiempo transcurrido
+            </span>
+          </div>
+
+          <div class="flex min-h-[300px] items-center justify-center p-6">
+            @if (chartSemaforoOptions) {
+              <apx-chart
+                #chartSemaforo
+                [series]="chartSemaforoOptions.series!"
+                [chart]="chartSemaforoOptions.chart!"
+                [plotOptions]="chartSemaforoOptions.plotOptions!"
+                [colors]="chartSemaforoOptions.colors!"
+                [labels]="chartSemaforoOptions.labels!"
+                [legend]="chartSemaforoOptions.legend!"
+                [responsive]="chartSemaforoOptions.responsive!">
+              </apx-chart>
+            }
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-5 px-6 pb-6">
+            <div class="flex items-center gap-2 text-xs font-bold text-tlalcalli-gray">
+              <span class="h-3 w-3 rounded-full bg-tlalcalli-success"></span>
+              En tiempo
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-tlalcalli-gray">
+              <span class="h-3 w-3 rounded-full bg-tlalcalli-warning"></span>
+              Atención
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-tlalcalli-gray">
+              <span class="h-3 w-3 rounded-full bg-tlalcalli-error"></span>
+              Urgente
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
+        <div class="overflow-hidden rounded-xl bg-white">
+          <div class="flex items-center justify-between bg-tlalcalli-light-base px-5 py-4">
+            <div class="flex items-center gap-3">
+              <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span>
+              <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+                Tendencia semanal
+              </h3>
+            </div>
+            <span class="text-[11px] font-bold text-tlalcalli-gray">Últimas 4 semanas</span>
+          </div>
+
+          <div class="flex min-h-[300px] items-center justify-center p-6">
+            @if (chartTendenciaOptions && dashboard.tendencia_semanal.length > 0) {
+              <apx-chart
+                #chartTendencia
+                [series]="chartTendenciaOptions.series!"
+                [chart]="chartTendenciaOptions.chart!"
+                [xaxis]="chartTendenciaOptions.xaxis!"
+                [yaxis]="chartTendenciaOptions.yaxis!"
+                [colors]="chartTendenciaOptions.colors!"
+                [stroke]="chartTendenciaOptions.stroke!"
+                [fill]="chartTendenciaOptions.fill!"
+                [dataLabels]="chartTendenciaOptions.dataLabels!"
+                [legend]="chartTendenciaOptions.legend!"
+                [grid]="chartTendenciaOptions.grid!"
+                [tooltip]="chartTendenciaOptions.tooltip!">
+              </apx-chart>
+            } @else {
+              <p class="text-sm font-bold text-tlalcalli-gray">Sin datos de tendencia disponibles</p>
+            }
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl bg-white">
+          <div class="flex items-center justify-between bg-tlalcalli-light-base px-5 py-4">
+            <div class="flex items-center gap-3">
+              <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span>
+              <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+                Carga por responsable
+              </h3>
+            </div>
+            <span class="text-[11px] font-bold text-tlalcalli-gray">Top 6</span>
+          </div>
+
+          <div class="flex min-h-[300px] items-center justify-center p-6">
+            @if (chartResponsablesOptions && dashboard.por_responsable.length > 0) {
+              <apx-chart
+                #chartResponsables
+                [series]="chartResponsablesOptions.series!"
+                [chart]="chartResponsablesOptions.chart!"
+                [xaxis]="chartResponsablesOptions.xaxis!"
+                [yaxis]="chartResponsablesOptions.yaxis!"
+                [plotOptions]="chartResponsablesOptions.plotOptions!"
+                [colors]="chartResponsablesOptions.colors!"
+                [stroke]="chartResponsablesOptions.stroke!"
+                [dataLabels]="chartResponsablesOptions.dataLabels!"
+                [legend]="chartResponsablesOptions.legend!"
+                [grid]="chartResponsablesOptions.grid!"
+                [tooltip]="chartResponsablesOptions.tooltip!">
+              </apx-chart>
+            } @else {
+              <p class="text-sm font-bold text-tlalcalli-gray">Sin datos de responsables</p>
+            }
+          </div>
+        </div>
+      </section>
+
+    </main>
+  }
+
+  @if (error && !cargando) {
+    <div class="flex min-h-[420px] flex-col items-center justify-center text-tlalcalli-primary">
+      <mat-icon class="!h-[72px] !w-[72px] !text-[72px]">error_outline</mat-icon>
+      <p class="mt-5 text-base font-bold">{{ error }}</p>
+      <button
+        (click)="refrescar()"
+        class="mt-5 rounded-xl border border-tlalcalli-primary px-7 py-3 text-sm font-bold text-tlalcalli-primary">
+        Reintentar
+      </button>
+    </div>
+  }
+</div>

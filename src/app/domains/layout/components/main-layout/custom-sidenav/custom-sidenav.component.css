@@ -1,16 +1,8 @@
-/* ========================================
-   SIDEBAR PREMIUM - Tlálcalli
-   Paleta Institucional SAT
-   ======================================== */
-
-:host {
-    /* Morados institucionales */
+/* :host {
     --purple-base: #34005b;
     --purple-secondary: #3e0065;
     --purple-light: #5c1a7a;
     --purple-dark: #20003a;
-    
-    /* Dorados institucionales */
     --gold-base: #d6ae67;
     --gold-secondary: #dbb872;
     --gold-light: #e8c88f;
@@ -36,7 +28,6 @@
         inset -1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Patrón decorativo de fondo - Estilo azteca sutil */
 .sidenav-pattern {
     position: absolute;
     top: 0;
@@ -81,9 +72,6 @@
         rgba(52, 0, 91, 0.3) 100%);
 }
 
-/* ========================================
-   HEADER DEL SIDEBAR
-   ======================================== */
 
 .sidenav-header {
     position: relative;
@@ -194,7 +182,6 @@
     display: block;
 }
 
-/* Texto del header */
 .header-text {
     transition: all 0.4s ease;
     opacity: 1;
@@ -241,9 +228,6 @@
     color: rgba(255, 255, 255, 0.85);
 }
 
-/* ========================================
-   DIVIDER DORADO
-   ======================================== */
 
 .divider {
     display: flex;
@@ -306,9 +290,6 @@
     height: 6px;
 }
 
-/* ========================================
-   MENÚ DE NAVEGACIÓN
-   ======================================== */
 
 .sidenav-menu {
     flex: 1;
@@ -341,7 +322,6 @@
     background: rgba(214, 174, 103, 0.6);
 }
 
-/* Items del menú */
 .menu-item {
     margin: 6px 0 !important;
     border-radius: 16px !important;
@@ -500,9 +480,6 @@
         -2px 0 8px rgba(214, 174, 103, 0.4);
 }
 
-/* ========================================
-   FOOTER DEL SIDEBAR
-   ======================================== */
 
 .sidenav-footer {
     position: relative;
@@ -619,7 +596,6 @@
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Información de versión */
 .version-info {
     display: flex;
     align-items: center;
@@ -656,9 +632,6 @@
     border: 1px solid rgba(214, 174, 103, 0.3);
 }
 
-/* ========================================
-   RESPONSIVE
-   ======================================== */
 
 @media (max-height: 700px) {
     .sidenav-header {
@@ -682,4 +655,4 @@
         width: 40px;
         height: 40px;
     }
-}
+} */

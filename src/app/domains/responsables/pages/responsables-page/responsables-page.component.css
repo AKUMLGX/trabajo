@@ -1,15 +1,9 @@
-/* =============================================
-   CENTRO DE CONTROL - Paleta Institucional SAT
-   ============================================= */
-
-/* ===== CONTENEDOR PRINCIPAL ===== */
-.page-container {
+/* .page-container {
   min-height: 100vh;
   background: linear-gradient(165deg, #f8f9fc 0%, #f0f2f8 50%, #e8edf5 100%);
   position: relative;
 }
 
-/* Patrón de puntos sutiles con color institucional */
 .page-container::before {
   content: '';
   position: fixed;
@@ -20,7 +14,6 @@
   z-index: 0;
 }
 
-/* ===== HERO HEADER CON PALETA INSTITUCIONAL ===== */
 .hero-header {
   position: relative;
   background: linear-gradient(145deg, #34005b 0%, #3e0065 40%, #5c1a7a 100%);
@@ -28,7 +21,6 @@
   overflow: hidden;
 }
 
-/* Patrón de onda */
 .hero-pattern {
   position: absolute;
   bottom: 0;
@@ -45,7 +37,6 @@
   height: auto;
 }
 
-/* Círculos decorativos con dorado */
 .hero-circles {
   position: absolute;
   inset: 0;
@@ -82,7 +73,6 @@
   transform: translate(-50%, -50%);
 }
 
-/* Contenido del hero */
 .hero-content {
   position: relative;
   z-index: 2;
@@ -91,7 +81,6 @@
   padding: 36px 36px 52px;
 }
 
-/* Línea dorada superior */
 .hero-header::before {
   content: '';
   position: absolute;
@@ -111,7 +100,6 @@
   flex-wrap: wrap;
 }
 
-/* Grupo de título */
 .hero-title-group {
   display: flex;
   align-items: center;
@@ -153,7 +141,6 @@
   font-weight: 500;
 }
 
-/* Widget de fecha con estilo dorado */
 .date-widget {
   display: flex;
   align-items: center;
@@ -203,7 +190,6 @@
   margin-top: 4px;
 }
 
-/* ===== CONTENIDO PRINCIPAL ===== */
 .main-content {
   position: relative;
   z-index: 1;
@@ -213,7 +199,6 @@
   margin-top: -28px;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .hero-content {
     padding: 28px 24px 44px;
@@ -251,4 +236,4 @@
     padding: 0 20px 36px;
     margin-top: -20px;
   }
-}
+} */

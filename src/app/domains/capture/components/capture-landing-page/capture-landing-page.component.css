@@ -1,15 +1,8 @@
-/* =====================================================
-   BANDEJA DE CAPTURA - Landing Premium
-   Paleta Institucional SAT
-   ===================================================== */
-
-/* Patrón de fondo con puntos */
-.bg-dot-pattern {
+/* .bg-dot-pattern {
     background-image: radial-gradient(circle, rgba(52, 0, 91, 0.15) 1px, transparent 1px);
     background-size: 24px 24px;
 }
 
-/* Estilos para el botón */
 .button {
     display: inline-block;
     border-radius: 16px;
@@ -59,7 +52,6 @@
     right: 0;
 }
 
-/* Animaciones */
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
@@ -68,4 +60,4 @@
 @keyframes pulse-glow {
     0%, 100% { box-shadow: 0 0 20px rgba(214, 174, 103, 0.3); }
     50% { box-shadow: 0 0 40px rgba(214, 174, 103, 0.5); }
-}
+} */

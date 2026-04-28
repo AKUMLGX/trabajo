@@ -1,6 +1,4 @@
-/* Estilos específicos para el tercer paso de Tlalcalli */
-
-.mat-form-field {
+/* .mat-form-field {
   width: 100%;
 }
 
@@ -8,7 +6,6 @@
   font-size: 14px;
 }
 
-/* DISEÑO COMPLETAMENTE PERSONALIZADO - Sin Material Design */
 .mat-mdc-form-field {
   display: block !important;
   margin-bottom: 24px !important;
@@ -82,7 +79,6 @@
   text-shadow: 0 1px 2px rgba(105, 28, 50, 0.1);
 }
 
-/* ELIMINAR COMPLETAMENTE TODAS LAS LÍNEAS DIVISORAS */
 .mat-mdc-form-field .mat-mdc-form-field-outline,
 .mat-mdc-form-field .mat-mdc-form-field-outline-start,
 .mat-mdc-form-field .mat-mdc-form-field-outline-end,
@@ -111,7 +107,6 @@
   background: none !important;
 }
 
-/* Eliminar también las líneas internas del input */
 .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline,
 .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline-start,
 .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-outline-end,
@@ -126,7 +121,6 @@
   background: none !important;
 }
 
-/* Estilos para inputs con error */
 .mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper {
   border: 2px solid #ef4444;
   box-shadow: 
@@ -140,20 +134,17 @@
   font-weight: 700;
 }
 
-/* Mejorar la apariencia de los labels */
 .mat-mdc-form-field-label {
   color: #374151;
   font-weight: 500;
 }
 
-/* Estilos para los hints */
 .mat-mdc-form-field-hint {
   color: #6b7280;
   font-size: 12px;
   font-style: italic;
 }
 
-/* Estilos para los errores */
 .mat-mdc-form-field-error {
   color: #ef4444;
   font-size: 12px;
@@ -188,19 +179,16 @@
   color: #666;
 }
 
-/* Estilos para los hints */
 .mat-mdc-form-field-hint {
   color: #666;
   font-size: 12px;
 }
 
-/* Estilos para los errores */
 .mat-mdc-form-field-error {
   color: #d32f2f;
   font-size: 12px;
 }
 
-/* Estilos para las secciones */
 .bg-white\/50 {
   background-color: rgba(255, 255, 255, 0.5);
 }
@@ -225,7 +213,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* Estilos para los títulos de sección */
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -243,7 +230,6 @@
   color: #1e40af;
 }
 
-/* Estilos para el grid */
 .grid {
   display: grid;
   gap: 1rem;
@@ -259,7 +245,6 @@
   }
 }
 
-/* Estilos para los botones */
 .flex {
   display: flex;
 }
@@ -300,7 +285,6 @@
   margin-top: 1.5rem;
 }
 
-/* Estilos para los chips */
 .mat-mdc-chip-set {
   display: flex;
   flex-wrap: wrap;
@@ -333,7 +317,6 @@
   opacity: 1;
 }
 
-/* Estilos para el checkbox */
 .mat-mdc-checkbox {
   margin-right: 8px;
 }
@@ -342,13 +325,11 @@
   font-size: 14px;
 }
 
-/* Estilos para el textarea */
 textarea {
   resize: vertical;
   min-height: 100px;
 }
 
-/* Estilos para el resumen */
 .bg-blue-50 {
   background-color: #eff6ff;
 }
@@ -374,7 +355,6 @@ textarea {
   max-height: 10rem;
 }
 
-/* Estilos para el contenedor principal */
 .bg-\[\#D9BCA3\]\/30 {
   background-color: rgba(217, 188, 163, 0.3);
 }
@@ -395,7 +375,6 @@ textarea {
   padding: 1.5rem;
 }
 
-/* Estilos para el título principal */
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -409,33 +388,27 @@ textarea {
   margin-bottom: 0.5rem;
 }
 
-/* Estilos para el texto descriptivo */
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
 
-/* Espaciado entre elementos */
 .space-y-6 > * + * {
   margin-top: 1.5rem;
 }
 
-/* Estilos para los iconos de emoji en los títulos de sección */
 .text-lg::before {
   margin-right: 0.5rem;
 }
 
-/* Estilos para los selects */
 .mat-mdc-select {
   min-width: 200px;
 }
 
-/* Estilos para los campos de entrada */
 input, textarea, select {
   font-family: inherit;
 }
 
-/* Estilos para el estado del checkbox */
 .mat-mdc-checkbox-checked .mat-mdc-checkbox-background {
   background-color: #691C32;
 }
@@ -444,7 +417,6 @@ input, textarea, select {
   background-color: #691C32;
 }
 
-/* Estilos para los campos deshabilitados */
 .mat-mdc-form-field-disabled .mat-mdc-form-field-outline {
   color: #ccc;
 }
@@ -453,16 +425,14 @@ input, textarea, select {
   color: #999;
 }
 
-/* Estilos para el input de anexos */
 .flex-1 .mat-mdc-form-field {
   margin-bottom: 0;
 }
 
-/* Estilos para los botones de acción */
 button[mat-raised-button] {
   min-width: 120px;
 }
 
 button[mat-stroked-button] {
   min-width: 100px;
-}
+} */
