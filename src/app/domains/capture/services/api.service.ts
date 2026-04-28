@@ -8,10 +8,20 @@ export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly urlBase = environment.baseUrl;
 
-  getData<T>(endpoint: string): Observable<T> {
-    const url = `${this.urlBase}/${endpoint}`;
-    return this.http.get<T>(url);
-  }
+private buildUrl(endpoint: string): string {
+  return `${this.urlBase.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
+}
+
+  // getData<T>(endpoint: string): Observable<T> {
+  //   const url = `${this.urlBase}/${endpoint}`;
+  //   return this.http.get<T>(url);
+  // }
+
+getData<T>(endpoint: string): Observable<HttpResponse<T>> {
+  return this.http.get<T>(this.buildUrl(endpoint), {
+    observe: 'response',
+  });
+}
 
   postData<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}`;

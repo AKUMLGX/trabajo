@@ -16,7 +16,8 @@ import { ConfirmacionModalComponent, ConfirmacionModalData } from '../confirmaci
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { inject } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
-import { RemitenteGeneralResponse, TipoMedioRecepcionResponse, RemitenteCentralResponse } from '../../../../interfaces/first-step-catalogos.interface';
+import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGeneralResponse } from '../../../../interfaces/first-step-catalogos.interface';
+import { HttpResponse } from '@angular/common/http';
 @Component({
   selector: 'app-first-step-tlalcalli',
   standalone: true,
@@ -221,73 +222,147 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   //   ]
   // };
 
-  private cargarCatalogos(): void {
-  this.cargarTiposMedioRecepcion();
-  this.cargarRemitentesGenerales();
-  this.cargarRemitentesCentrales();
+private cargarCatalogos(): void {
+  this.cargarGenerales();
+  this.cargarCentrales();
+  this.cargarGeneralesConCentrales();
 }
 
-private cargarTiposMedioRecepcion(): void {
-  this.apiService
-    .getData<TipoMedioRecepcionResponse[]>('catalogos/tipos-medio-recepcion')
-    .subscribe({
-      next: (response: TipoMedioRecepcionResponse[]) => {
-        this.tipoMedioRecepcionOptions = response.map((item: TipoMedioRecepcionResponse) => ({
-          value: item.clave,
-          label: item.descripcion,
-        }));
-      },
-      error: (error: unknown) => {
-        this.logger.error('Error al cargar tipos de medio de recepción:', error);
-      },
-    });
+private cargarGenerales(): void {
+  this.apiService.getData<CatalogoGeneralResponse[]>('catalogo/generales').subscribe({
+    next: (response: HttpResponse<CatalogoGeneralResponse[]>) => {
+      console.log('STATUS generales:', response.status);
+      console.log('Generales:', response.body);
+
+      const data = response.body ?? [];
+
+      this.remitentesGenerales = data.map((item) => ({
+        value: item.clave,
+        label: `${item.clave} - ${item.nombre}`,
+      }));
+    },
+    error: (error: unknown) => {
+      this.logger.error('Error al cargar generales:', error);
+    },
+  });
 }
 
-private cargarRemitentesGenerales(): void {
-  this.apiService
-    .getData<RemitenteGeneralResponse[]>('catalogos/remitentes-generales')
-    .subscribe({
-      next: (response: RemitenteGeneralResponse[]) => {
-        this.remitentesGenerales = response.map((item: RemitenteGeneralResponse) => ({
-          value: item.clave,
-          label: `${item.clave} - ${item.descripcion}`,
-        }));
-      },
-      error: (error: unknown) => {
-        this.logger.error('Error al cargar remitentes generales:', error);
-      },
-    });
+private cargarCentrales(): void {
+  this.apiService.getData<CatalogoCentralResponse[]>('catalogos/catalogo_central').subscribe({
+    next: (response: HttpResponse<CatalogoCentralResponse[]>) => {
+      console.log('STATUS centrales:', response.status);
+      console.log('Centrales:', response.body);
+
+      const data = response.body ?? [];
+
+      this.centralesPorGeneral = data.reduce(
+        (acc: Record<string, SelectOption[]>, item: CatalogoCentralResponse) => {
+          if (!acc[item.general_clave]) {
+            acc[item.general_clave] = [];
+          }
+
+          acc[item.general_clave].push({
+            value: item.clave,
+            label: `${item.clave} - ${item.nombre}`,
+          });
+
+          return acc;
+        },
+        {} as Record<string, SelectOption[]>
+      );
+    },
+    error: (error: unknown) => {
+      this.logger.error('Error al cargar centrales:', error);
+    },
+  });
 }
 
-private cargarRemitentesCentrales(): void {
-  this.apiService
-    .getData<RemitenteCentralResponse[]>('catalogos/remitentes-centrales')
-    .subscribe({
-      next: (response: RemitenteCentralResponse[]) => {
-        this.centralesPorGeneral = response.reduce(
-          (
-            acc: Record<string, SelectOption[]>,
-            item: RemitenteCentralResponse
-          ) => {
-            if (!acc[item.claveGeneral]) {
-              acc[item.claveGeneral] = [];
-            }
-
-            acc[item.claveGeneral].push({
-              value: item.clave,
-              label: `${item.clave} - ${item.descripcion}`,
-            });
-
-            return acc;
-          },
-          {} as Record<string, SelectOption[]>
-        );
-      },
-      error: (error: unknown) => {
-        this.logger.error('Error al cargar remitentes centrales:', error);
-      },
-    });
+private cargarGeneralesConCentrales(): void {
+  this.apiService.getData<CatalogoGeneralesCentralResponse>('catalogo/generales_x_central').subscribe({
+    next: (response: HttpResponse<CatalogoGeneralesCentralResponse>) => {
+      console.log('STATUS generales_x_central:', response.status);
+      console.log('Generales x Central:', response.body);
+    },
+    error: (error: unknown) => {
+      this.logger.error('Error al cargar generales x central:', error);
+    },
+  });
 }
+
+
+// private cargarTiposMedioRecepcion(): void {
+//   this.apiService
+//     .getData<TipoMedioRecepcionResponse[]>('catalogos/tipos-medio-recepcion')
+//     .subscribe({
+//       next: (response: HttpResponse<TipoMedioRecepcionResponse[]>) => {
+//         console.log('STATUS tipos:', response.status);
+
+//         const data = response.body ?? [];
+
+//         this.tipoMedioRecepcionOptions = data.map((item) => ({
+//           value: item.clave,
+//           label: item.descripcion,
+//         }));
+//       },
+//       error: (error: unknown) => {
+//         this.logger.error('Error al cargar tipos de medio de recepción:', error);
+//       },
+//     });
+// }
+
+// private cargarRemitentesGenerales(): void {
+//   this.apiService
+//     .getData<RemitenteGeneralResponse[]>('catalogos/remitentes-generales')
+//     .subscribe({
+//       next: (response: HttpResponse<RemitenteGeneralResponse[]>) => {
+//         console.log('STATUS generales:', response.status);
+
+//         const data = response.body ?? [];
+
+//         this.remitentesGenerales = data.map((item) => ({
+//           value: item.clave,
+//           label: `${item.clave} - ${item.descripcion}`,
+//         }));
+//       },
+//       error: (error: unknown) => {
+//         this.logger.error('Error al cargar remitentes generales:', error);
+//       },
+//     });
+// }
+
+// private cargarRemitentesCentrales(): void {
+//   this.apiService
+//     .getData<RemitenteCentralResponse[]>('catalogos/remitentes-centrales')
+//     .subscribe({
+//       next: (response: HttpResponse<RemitenteCentralResponse[]>) => {
+//         console.log('STATUS centrales:', response.status);
+
+//         const data = response.body ?? [];
+
+//         this.centralesPorGeneral = data.reduce(
+//           (
+//             acc: Record<string, SelectOption[]>,
+//             item: RemitenteCentralResponse
+//           ) => {
+//             if (!acc[item.claveGeneral]) {
+//               acc[item.claveGeneral] = [];
+//             }
+
+//             acc[item.claveGeneral].push({
+//               value: item.clave,
+//               label: `${item.clave} - ${item.descripcion}`,
+//             });
+
+//             return acc;
+//           },
+//           {} as Record<string, SelectOption[]>
+//         );
+//       },
+//       error: (error: unknown) => {
+//         this.logger.error('Error al cargar remitentes centrales:', error);
+//       },
+//     });
+// }
 
   // Obtener las Centrales según la General seleccionada
   get remitenteCentralOptions(): SelectOption[] {

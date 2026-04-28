@@ -1,18 +1,17 @@
-export interface TipoMedioRecepcionResponse {
+export interface CatalogoGeneralResponse {
   id: number;
   clave: string;
-  descripcion: string;
+  nombre: string;
 }
 
-export interface RemitenteGeneralResponse {
+export interface CatalogoCentralResponse {
   id: number;
   clave: string;
-  descripcion: string;
+  nombre: string;
+  general_clave: string;
 }
 
-export interface RemitenteCentralResponse {
-  id: number;
-  clave: string;
-  descripcion: string;
-  claveGeneral: string;
+export interface CatalogoGeneralesCentralResponse {
+  gene: CatalogoGeneralResponse[];
+  centra: CatalogoCentralResponse[];
 }
