@@ -248,7 +248,7 @@ private cargarGenerales(): void {
 }
 
 private cargarCentrales(): void {
-  this.apiService.getData<CatalogoCentralResponse[]>('catalogos/catalogo_central').subscribe({
+  this.apiService.getData<CatalogoCentralResponse[]>('catalogo/central').subscribe({
     next: (response: HttpResponse<CatalogoCentralResponse[]>) => {
       console.log('STATUS centrales:', response.status);
       console.log('Centrales:', response.body);

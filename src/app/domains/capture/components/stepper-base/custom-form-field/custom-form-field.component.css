@@ -1,5 +1,4 @@
-/* DISEÑO SÚPER ATRACTIVO CON GLASSMORPHISM - Sin líneas intermedias */
-.custom-form-field {
+/* .custom-form-field {
   position: relative;
   margin-bottom: 28px;
   width: 100%;
@@ -113,7 +112,6 @@
   transform: none;
 }
 
-/* Efecto de borde animado */
 .input-border {
   position: absolute;
   top: -3px;
@@ -132,7 +130,6 @@
   animation: borderGlow 2s ease-in-out infinite;
 }
 
-/* Efecto de resaltado */
 .input-highlight {
   position: absolute;
   bottom: 0;
@@ -149,7 +146,6 @@
   transform: scaleX(1);
 }
 
-/* Estados del campo */
 .custom-form-field.focused .custom-label {
   color: #691C32;
   font-weight: 800;
@@ -187,7 +183,6 @@
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
 }
 
-/* Texto de ayuda */
 .hint-text {
   font-size: 13px;
   color: #6b7280;
@@ -210,7 +205,6 @@
   text-shadow: 0 1px 2px rgba(239, 68, 68, 0.1);
 }
 
-/* Animaciones */
 @keyframes borderGlow {
   0%, 100% {
     box-shadow: 0 0 20px rgba(105, 28, 50, 0.3);
@@ -325,7 +319,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .custom-input {
     padding: 16px 20px;
@@ -342,7 +335,6 @@
   }
 }
 
-/* Efecto de partículas en focus */
 .custom-form-field.focused .input-container::after {
   content: '';
   position: absolute;
@@ -370,4 +362,4 @@
     opacity: 0;
     transform: translate(-50%, -50%) scale(0) translateY(-20px);
   }
-}
+} */

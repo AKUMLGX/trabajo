@@ -1,5 +1,4 @@
 @if ((documents.length > 0 || expedientesTlalcalli.length > 0) && !fileIsOpen && mostrarTabla ) {
-<!-- Header de Resultados Mejorado -->
 <div class="mx-4 mb-4">
   <div class="bg-white rounded-lg shadow-md px-6 py-4 border-l-4" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'border-[#34005b]' : 'border-[#235B4E]'">
     <div class="flex items-center justify-between">
@@ -32,65 +31,89 @@
   <div class="w-full mx-auto px-4">
     <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-xl bg-white border border-gray-200">
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <div class="table-container">
-          <div class="overflow-x-auto">
-          <!-- TABLA PARA EXPEDIENTES TLALCALLI -->
-          <!-- Columnas simplificadas: Ver, Expediente, N° Entrada, Oficio, Remitente, Fecha Doc. -->
-          <!-- Los demás campos se ven en el modal de detalle -->
+        <div class="relative w-full hover:after:opacity-100 after:pointer-events-none after:absolute after:right-0 after:top-0 after:z-[1] after:h-full after:w-10 after:bg-gradient-to-l after:from-[#34005b]/15 after:to-transparent after:opacity-0 after:transition-opacity">
+          <div class="max-h-[70vh] overflow-x-auto overflow-y-auto pb-2.5 [scrollbar-color:#34005b_#f3f4f6] [scrollbar-width:thin]">
           @if (tipoBusqueda === 'Tlalcalli' && expedientesTlalcalli.length > 0) {
-          <table class="min-w-full border-collapse">
-            <thead class="bg-gradient-to-r from-[#34005b] to-[#3e0065]">
-              <tr>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                    Ver
-                  </div>
-                </th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Expediente</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">N° Entrada</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Oficio</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Remitente</th>
-                <th class="px-4 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Fecha Doc.</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
-              @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-              <tr class="hover:bg-gray-50 transition-colors duration-200">
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="flex gap-2 justify-start">
-                    <!-- Botón Ver Detalle -->
-                    <button 
-                      class="p-2 rounded-lg bg-[#34005b]/10 text-[#34005b] hover:bg-[#34005b] hover:text-white transition-all duration-200 hover:shadow-md" 
-                      (click)="verDetalleExpediente(expediente)" 
-                      title="Ver detalle completo">
-                      <mat-icon class="!w-5 !h-5 !text-base">visibility</mat-icon>
-                    </button>
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-[#34005b]">{{ expediente.expediente || '-' }}</div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">{{ expediente.numero_entrada_central || '-' }}</div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">{{ expediente.oficio || '-' }}</div>
-                </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-700 max-w-xs truncate" [title]="expediente.remitente_area">
-                    {{ expediente.remitente_area || '-' }}
-                  </div>
-                </td>
-                <td class="px-4 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-700">
-                    {{ expediente.fecha_documento ? (formatearFecha(expediente.fecha_documento)) : '-' }}
-                  </div>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
+<table class="min-w-full table-fixed border-collapse">
+  <thead class="bg-gradient-to-r from-[#34005b] to-[#3e0065]">
+    <tr>
+      <th class="w-[90px] px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
+        Ver
+      </th>
+
+      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
+        Expediente
+      </th>
+
+      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
+        N° Entrada
+      </th>
+
+      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
+        Oficio
+      </th>
+
+      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
+        Remitente
+      </th>
+
+      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
+        Fecha Doc.
+      </th>
+    </tr>
+  </thead>
+
+  <tbody class="divide-y divide-gray-200 bg-white">
+    @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
+      <tr class="transition-colors duration-200 hover:bg-gray-50">
+
+        <td class="px-4 py-4 text-center align-middle">
+          <div class="flex justify-center">
+            <button
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#34005b]/10 text-[#34005b] transition-all duration-200 hover:bg-[#34005b] hover:text-white hover:shadow-md"
+              (click)="verDetalleExpediente(expediente)"
+              title="Ver detalle completo">
+              <mat-icon class="!h-5 !w-5 !text-base">visibility</mat-icon>
+            </button>
+          </div>
+        </td>
+
+        <td class="px-4 py-4 text-center align-middle">
+          <div class="whitespace-normal break-words text-sm font-semibold text-[#34005b]">
+            {{ expediente.expediente || '-' }}
+          </div>
+        </td>
+
+        <td class="px-4 py-4 text-center align-middle">
+          <div class="whitespace-normal break-words text-sm text-gray-700">
+            {{ expediente.numero_entrada_central || '-' }}
+          </div>
+        </td>
+
+        <td class="px-4 py-4 text-center align-middle">
+          <div class="whitespace-normal break-words text-sm text-gray-700">
+            {{ expediente.oficio || '-' }}
+          </div>
+        </td>
+
+        <td class="px-4 py-4 text-center align-middle">
+          <div
+            class="mx-auto max-w-xs whitespace-normal break-words text-sm text-gray-700"
+            [title]="expediente.remitente_area">
+            {{ expediente.remitente_area || '-' }}
+          </div>
+        </td>
+
+        <td class="px-4 py-4 text-center align-middle">
+          <div class="whitespace-nowrap text-sm text-gray-700">
+            {{ expediente.fecha_documento ? (formatearFecha(expediente.fecha_documento)) : '-' }}
+          </div>
+        </td>
+
+      </tr>
+    }
+  </tbody>
+</table>
           }
           
           <!-- TABLA PARA ASUNTOS AKAMBA (original) -->
@@ -153,7 +176,7 @@
               <tr>
                 <td class="px-2 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
                   <div>
-                    <div class="options">
+                    <div class="flex justify-evenly gap-2">                      
                       @if(document.documento_escaneado !== null) {
                       @if(getExtension(document.documento_escaneado) === 'pdf')
                       {
@@ -241,7 +264,9 @@
                     <p>
                       @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
                       {{document.descripcion | slice: 0 : 25}}
-                      <button class="button-read-more  font-semibold " (click)="toggleExpansion($index) "> Leer más
+                      <button 
+                      class="font-semibold text-[#34005b] underline decoration-[#34005b] transition hover:text-[#d6ae67]"
+                      (click)="toggleExpansion($index) "> Leer más
                         <strong class="points ">...</strong> </button>
                       }@else if (document.descripcion !== null && document.descripcion.length <= 24){ <p>
                         {{document.descripcion}}
@@ -313,16 +338,33 @@
                     "></li>
               }
             </ul>
-            <div class="has-text-centered">
-              <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labels.nextLabel"
-                [previousLabel]="labels.previousLabel"></pagination-controls>
+            <div
+              class="text-center
+              [&_.ngx-pagination_.current]:!rounded-[10px]
+              [&_.ngx-pagination_.current]:!bg-gradient-to-br
+            [&_.ngx-pagination_.current]:!from-[#34005b]
+            [&_.ngx-pagination_.current]:!to-[#3e0065]
+              [&_.ngx-pagination_.current]:!font-bold
+            [&_.ngx-pagination_.current]:!text-white
+              [&_.ngx-pagination_.current]:!shadow-[0_4px_12px_rgba(52,0,91,0.3)]
+              [&_.ngx-pagination_li_a]:!rounded-lg
+            [&_.ngx-pagination_li_a]:!text-[#34005b]
+              [&_.ngx-pagination_li_a]:!transition-all
+              [&_.ngx-pagination_li:hover_a]:!rounded-[10px]
+              [&_.ngx-pagination_li:hover_a]:!bg-gradient-to-br
+            [&_.ngx-pagination_li:hover_a]:!from-[#34005b]
+            [&_.ngx-pagination_li:hover_a]:!to-[#3e0065]
+            [&_.ngx-pagination_li:hover_a]:!text-white">
+              <pagination-controls
+                (pageChange)="pageSelected = $event"
+                [nextLabel]="labels.nextLabel"
+                [previousLabel]="labels.previousLabel">
+              </pagination-controls>
             </div>
             }
           </div>
         </div>
-        <!-- Información de paginación mejorada -->
         <div class="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4 px-4">
-          <!-- Información de registros -->
           <div class="flex items-center gap-3 bg-gradient-to-r from-[#34005b]/10 to-[#3e0065]/10 px-6 py-3 rounded-lg border border-[#34005b]/20">
             <svg class="w-5 h-5 text-[#34005b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -342,7 +384,6 @@
           </p>
           </div>
 
-          <!-- Botón de descarga mejorado -->
           <button 
             (click)="getDownloadExcel()" 
             class="flex items-center gap-2 bg-gradient-to-r from-[#34005b] to-[#3e0065] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]">
@@ -358,25 +399,20 @@
   </div>
 </section>
 }@else if(!fileIsOpen && mostrarTabla) {
-<!-- Estado vacío mejorado -->
 <div class="flex flex-col items-center justify-center py-16 px-4">
   <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-12 max-w-md w-full shadow-lg border border-gray-200">
     <div class="flex flex-col items-center text-center">
-      <!-- Icono -->
       <div class="mb-6 p-4 bg-white rounded-full shadow-md">
         <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
       </div>
-      <!-- Título -->
       <h3 class="text-xl font-bold text-gray-800 mb-2">
         No se encontraron resultados
       </h3>
-      <!-- Descripción -->
       <p class="text-gray-600 mb-6">
         No hay expedientes que coincidan con los criterios de búsqueda especificados.
       </p>
-      <!-- Sugerencias -->
       <div class="bg-blue-50 rounded-lg p-4 w-full border border-blue-100">
         <p class="text-sm text-blue-800 font-medium mb-2">💡 Sugerencias:</p>
         <ul class="text-xs text-blue-700 text-left space-y-1">

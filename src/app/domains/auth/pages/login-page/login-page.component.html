@@ -1,63 +1,49 @@
-<!-- Login Page Premium - Tlálcalli -->
-<div class="login-container">
-  <!-- Fondo con patrón SVG -->
-  <div class="background-pattern"></div>
-  
-  <!-- Contenido principal -->
-  <div class="login-content">
-    <!-- Card de login -->
-    <div class="login-card">
-      <!-- Header con logos institucionales -->
-      <div class="card-header">
-        <img 
-          src="../../../../..{{environment.base}}/assets/images/imagotipos_hacienda_sat_color.png" 
-          alt="Hacienda SAT" 
-          class="header-logos" 
+<div class="relative min-h-screen w-full flex items-center justify-center bg-[#34005b] overflow-hidden">
+
+  <div
+    class="absolute inset-0 w-full h-full bg-[url('/assets/images/tlalcalli-background.svg')] bg-cover bg-center bg-no-repeat">
+  </div>
+
+  <div class="absolute top-1/2 left-1/2 z-10 w-full max-w-[360px] -translate-x-1/2 -translate-y-1/2 px-4">
+
+    <div class="w-full max-w-[320px] mx-auto overflow-hidden rounded-3xl backdrop-blur-[10px] shadow-[0_25px_80px_rgba(0,0,0,0.4),0_0_60px_rgba(74,0,128,0.3)]">
+
+      <div class="flex items-center justify-center border-b border-black/5 bg-gradient-to-b from-white to-[#f8f9fa] px-8 py-6">
+        <img
+          src="../../../../..{{environment.base}}/assets/images/imagotipos_hacienda_sat_color.png"
+          alt="Hacienda SAT"
+          class="h-12 w-auto object-contain"
         />
       </div>
-      
-      <!-- Cuerpo del card -->
-      <div class="card-body">
-        <!-- Logo Tlálcalli -->
-        <div class="logo-container">
-          <div class="logo-box">
-            <img 
-              src="../../../../..{{environment.base}}/assets/images/tlalcalli-simbolo.svg" 
-              alt="Tlálcalli Logo" 
-              class="logo-image" 
+
+      <div class="bg-tlalcalli-primary px-6 py-8 text-center sm:px-10 sm:py-12">
+
+        <div class="mb-6 flex justify-center">
+          <div class="h-32 w-32 sm:h-[140px] sm:w-[140px] rounded-2xl p-3">
+            <img
+              src="../../../../..{{environment.base}}/assets/images/TLALCALLI2.svg"
+              alt="Tlálcalli Logo"
+              class="h-full w-full object-contain"
             />
           </div>
         </div>
-        
-        <!-- Título -->
-        <h1 class="app-title">Tlálcalli</h1>
-        <p class="app-subtitle">Bienvenido</p>
-        
-        <!-- Línea decorativa dorada -->
-        <!-- <div class="decorative-line">
-          <span class="line left"></span>
-          <span class="dot"></span>
-          <span class="line right"></span>
-        </div> -->
 
-        <!-- Botón de login -->
-        <button (click)="login()" type="button" class="login-button">
-          <!-- <svg xmlns="http://www.w3.org/2000/svg" class="button-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-          </svg> -->
+        <h1 class="mb-2 text-[2.25rem] sm:text-[2.75rem] font-bold tracking-[-0.5px] text-white drop-shadow-[0_3px_15px_rgba(0,0,0,0.3)]">
+          Tlálcalli
+        </h1>
+
+        <p class="mb-8 text-xs sm:text-sm font-medium uppercase tracking-[1.5px] sm:tracking-[2px] text-white/70">
+          Bienvenido
+        </p>
+
+        <button
+          (click)="login()"
+          type="button"
+          class="flex w-full items-center justify-center gap-3 rounded-xl border-0 bg-gradient-to-br from-[#d6ae67] via-[#c9a45d] to-[#dbb872] px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-bold uppercase tracking-[1.5px] text-[#2a0047] shadow-[0_8px_25px_rgba(214,174,103,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_35px_rgba(214,174,103,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] active:translate-y-0 active:shadow-[0_4px_15px_rgba(214,174,103,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]">
           INICIAR SESIÓN
         </button>
+
       </div>
-      
-      <!-- Footer del card -->
-      <!-- <div class="card-footer">
-        <p>SERVICIO DE ADMINISTRACIÓN TRIBUTARIA</p>
-      </div> -->
     </div>
-    
-    <!-- Copyright -->
-    <!-- <div class="copyright">
-      <p>© 2025 SAT - Todos los derechos reservados</p>
-    </div> -->
   </div>
 </div>

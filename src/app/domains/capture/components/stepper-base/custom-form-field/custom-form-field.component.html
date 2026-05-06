@@ -1,0 +1,107 @@
+<div class="relative mb-7 w-full">
+
+  <label
+    [for]="fieldId"
+    class="mb-2.5 block text-[15px] font-bold tracking-wide text-gray-800 transition-colors duration-300"
+    [ngClass]="{
+      'text-tlalcalli-primary': isFocused && !errorMessage,
+      'text-red-500': errorMessage
+    }">
+
+    {{ label }}
+
+    <span *ngIf="required" class="ml-1 font-bold text-red-500">*</span>
+  </label>
+
+  <div
+    class="relative w-full overflow-visible rounded-2xl transition-transform duration-300"
+    [ngClass]="{
+      '-translate-y-0.5': isFocused
+    }">
+
+    <input
+      #inputElement
+      [id]="fieldId"
+      [type]="type"
+      [placeholder]="placeholder"
+      [value]="value"
+      [disabled]="disabled"
+      [attr.maxlength]="maxlength"
+      [attr.list]="datalistOptions && datalistOptions.length > 0 ? fieldId + '-list' : null"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keydown)="onKeyDown($event)"
+      [appKeyboardNavigation]="true"
+      [skipOnEnter]="enableAutocomplete && showOptions"
+      class="w-full rounded-2xl border-2 px-6 py-4 text-base font-medium tracking-wide text-gray-800 outline-none transition-all duration-300 placeholder:font-normal placeholder:italic placeholder:text-gray-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:opacity-70"
+      [ngClass]="{
+        'border-white/30 bg-white/25 pr-[60px] shadow-[0_8px_32px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.40)] backdrop-blur-xl hover:border-tlalcalli-primary/20 hover:bg-white hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)] hover:-translate-y-0.5': !isFocused && !errorMessage,
+        'border-tlalcalli-primary bg-white shadow-[0_0_0_6px_rgba(48,38,76,0.10),0_8px_25px_rgba(0,0,0,0.15)]': isFocused && !errorMessage,
+        'border-red-500 bg-red-50 shadow-[0_0_0_6px_rgba(239,68,68,0.10),0_8px_25px_rgba(239,68,68,0.15)]': errorMessage,
+        'pr-[60px]': enableAutocomplete && datalistOptions && datalistOptions.length > 0
+      }"
+    />
+
+    <datalist *ngIf="datalistOptions && datalistOptions.length > 0" [id]="fieldId + '-list'">
+      <option *ngFor="let option of datalistOptions" [value]="option"></option>
+    </datalist>
+
+    <button
+      *ngIf="enableAutocomplete && datalistOptions && datalistOptions.length > 0"
+      type="button"
+      class="absolute right-[18px] top-1/2 flex -translate-y-1/2 items-center justify-center rounded-xl border-2 border-tlalcalli-primary/25 bg-tlalcalli-primary/10 px-2 py-1.5 text-tlalcalli-primary transition hover:border-tlalcalli-primary/40 hover:bg-tlalcalli-primary/15"
+      (mousedown)="toggleOptions($event)"
+      aria-label="Mostrar opciones">
+
+      <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+        <path
+          d="M1 1.5L7 6.5L13 1.5"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <div
+      class="pointer-events-none absolute bottom-0 left-0 h-[3px] rounded-full transition-all duration-300"
+      [ngClass]="{
+        'w-full bg-tlalcalli-primary shadow-[0_0_8px_rgba(48,38,76,0.30)]': isFocused && !errorMessage,
+        'w-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.30)]': errorMessage,
+        'w-0': !isFocused && !errorMessage
+      }">
+    </div>
+  </div>
+
+  <div
+    *ngIf="enableAutocomplete && showOptions && filteredOptions.length > 0"
+    class="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[220px] overflow-y-auto rounded-2xl border border-tlalcalli-primary/25 bg-white/95 p-1.5 shadow-[0_20px_40px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+
+    <div
+      *ngFor="let option of filteredOptions; let idx = index"
+      class="mb-1 flex cursor-pointer items-center rounded-xl px-3.5 py-3 text-sm font-semibold text-gray-700 transition last:mb-0 hover:translate-x-1 hover:bg-tlalcalli-primary/10 hover:text-tlalcalli-primary"
+      [ngClass]="{
+        'translate-x-1 bg-tlalcalli-primary/10 text-tlalcalli-primary': idx === highlightedIndex
+      }"
+      (mousedown)="selectOption(option, $event)">
+      {{ option }}
+    </div>
+  </div>
+
+  <div
+    *ngIf="hint && !errorMessage"
+    class="mt-2 text-[13px] font-medium italic text-gray-500"
+    [ngClass]="{
+      'font-semibold text-tlalcalli-primary': isFocused
+    }">
+    {{ hint }}
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="mt-2 text-[13px] font-bold text-red-500">
+    {{ errorMessage }}
+  </div>
+
+</div>

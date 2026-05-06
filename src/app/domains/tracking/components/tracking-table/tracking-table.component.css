@@ -1,9 +1,4 @@
-/* =====================================================
-   TRACKING TABLE - Paleta Institucional SAT
-   ===================================================== */
-
-/* Paginación con colores institucionales */
-::ng-deep .ngx-pagination .current {
+/* ::ng-deep .ngx-pagination .current {
   background: linear-gradient(145deg, #34005b 0%, #3e0065 100%) !important;
   border-color: #34005b !important;
   color: white !important;
@@ -101,7 +96,6 @@
   transform: translateY(-2px);
  }
 
-/* Animaciones y efectos visuales modernos */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -117,7 +111,6 @@ table tbody tr {
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Efecto hover en filas con color institucional */
 table tbody tr:hover {
   box-shadow: 0 4px 15px -2px rgba(52, 0, 91, 0.12), 0 2px 6px -1px rgba(52, 0, 91, 0.08);
   transform: scale(1.002);
@@ -125,22 +118,18 @@ table tbody tr:hover {
   background: linear-gradient(to right, rgba(52, 0, 91, 0.02), transparent);
 }
 
-/* Scroll suave para la tabla con colores institucionales - MEJORADO */
 .table-container {
   position: relative;
   width: 100%;
 }
 
 .table-container .overflow-x-auto {
-  /* Scroll horizontal siempre visible y accesible */
   scrollbar-width: thin;
   scrollbar-color: #34005b #f3f4f6;
   -webkit-overflow-scrolling: touch;
-  /* Asegurar que el scroll sea visible sin necesidad de bajar */
   max-height: 70vh;
   overflow-y: auto;
   overflow-x: auto;
-  /* Hacer el scrollbar más visible */
   padding-bottom: 10px;
 }
 
@@ -167,13 +156,11 @@ table tbody tr:hover {
   box-shadow: 0 4px 12px rgba(214, 174, 103, 0.3);
 }
 
-/* Asegurar que la tabla tenga ancho mínimo para forzar scroll horizontal */
 .table-container table {
   min-width: 100%;
   width: max-content;
 }
 
-/* Indicador visual de que hay más contenido a la derecha */
 .table-container::before {
   content: '';
   position: absolute;
@@ -192,7 +179,6 @@ table tbody tr:hover {
   opacity: 1;
 }
 
-/* Efecto para los badges */
 @keyframes pulse-badge {
   0%, 100% {
     opacity: 1;
@@ -206,7 +192,6 @@ table tbody tr:hover {
   animation: pulse-badge 2s ease-in-out infinite;
 }
 
-/* Mejora visual del estado de carga con colores institucionales */
 .loading-shimmer {
   background: linear-gradient(
     90deg,
@@ -227,19 +212,16 @@ table tbody tr:hover {
   }
 }
 
-/* Estilo para tooltips */
 [title] {
   position: relative;
 }
 
-/* Mejora de accesibilidad con color institucional */
 button:focus-visible {
   outline: 2px solid #d6ae67;
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(214, 174, 103, 0.2);
 }
 
-/* Efecto de card elevation */
 .shadow-card {
   box-shadow: 0 2px 8px 0 rgba(52, 0, 91, 0.08), 0 1px 3px 0 rgba(52, 0, 91, 0.06);
   transition: box-shadow 0.3s ease-in-out;
@@ -249,7 +231,6 @@ button:focus-visible {
   box-shadow: 0 12px 30px -5px rgba(52, 0, 91, 0.12), 0 6px 12px -3px rgba(52, 0, 91, 0.08);
 }
 
-/* Responsive improvements */
 @media (max-width: 768px) {
   table {
     font-size: 0.875rem;
@@ -258,4 +239,4 @@ button:focus-visible {
   th, td {
     padding: 0.5rem !important;
   }
-}
+} */

@@ -1,10 +1,4 @@
-/* ============================================
-   LOGIN PAGE - TLÁLCALLI
-   Diseño institucional SAT
-   ============================================ */
-
-/* Contenedor principal */
-.login-container {
+/* .login-container {
   position: relative;
   min-height: 100vh;
   width: 100%;
@@ -15,7 +9,6 @@
   overflow: hidden;
 }
 
-/* Fondo con patrón SVG */
 .background-pattern {
   position: absolute;
   inset: 0;
@@ -27,7 +20,6 @@
   height: 100%;
 }
 
-/* Contenido centrado */
 .login-content {
   position: absolute;
   top: 50%;
@@ -39,7 +31,6 @@
   max-width: 360px;
 }
 
-/* Card principal */
 .login-card {
   width: 100%;
   max-width: 320px;
@@ -51,7 +42,6 @@
   backdrop-filter: blur(10px);
 }
 
-/* Header blanco con logos */
 .card-header {
   background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
   padding: 1.5rem 2rem;
@@ -67,14 +57,12 @@
   object-fit: contain;
 }
 
-/* Cuerpo del card */
 .card-body {
   background: linear-gradient(180deg, #3d0066 0%, #2a0047 100%);
   padding: 3rem 2.5rem;
   text-align: center;
 }
 
-/* Contenedor del logo */
 .logo-container {
   display: flex;
   justify-content: center;
@@ -106,7 +94,6 @@
   object-fit: contain;
 }
 
-/* Título de la aplicación */
 .app-title {
   font-size: 2.75rem;
   font-weight: 700;
@@ -125,7 +112,6 @@
   text-transform: uppercase;
 }
 
-/* Línea decorativa */
 .decorative-line {
   display: flex;
   align-items: center;
@@ -156,7 +142,6 @@
   box-shadow: 0 0 15px rgba(214, 174, 103, 0.6);
 }
 
-/* Botón de login */
 .login-button {
   width: 100%;
   display: flex;
@@ -198,7 +183,6 @@
   height: 22px;
 }
 
-/* Footer del card */
 .card-footer {
   background: rgba(42, 0, 71, 0.6);
   padding: 1rem 2rem;
@@ -215,7 +199,6 @@
   text-transform: uppercase;
 }
 
-/* Copyright */
 .copyright {
   margin-top: 1.5rem;
 }
@@ -227,9 +210,6 @@
   text-align: center;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 
 @media (max-width: 480px) {
   .login-content {
@@ -259,4 +239,4 @@
     font-size: 0.875rem;
   }
 }
-
+ */

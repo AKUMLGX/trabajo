@@ -1,17 +1,15 @@
 <div class="expediente-detalle-modal">
-  <!-- HEADER -->
   <div class="modal-header">
     <div class="header-top">
       <div class="header-info">
-        <p class="eyebrow">Expediente</p>
         <h2 class="title">Detalle del Expediente</h2>
         <p class="folio" *ngIf="expediente?.expediente">{{ expediente.expediente }}</p>
       </div>
       <div class="header-actions">
-        <div class="status-badge">
+        <!-- <div class="status-badge">
           <mat-icon>radio_button_checked</mat-icon>
           Expediente
-        </div>
+        </div> -->
         <button class="close-btn" (click)="cerrar()">
           <mat-icon>close</mat-icon>
         </button>
@@ -19,14 +17,12 @@
     </div>
   </div>
 
-  <!-- CONTENIDO PRINCIPAL - Solo campos de captura -->
   <div class="modal-body">
     
-    <!-- SECCIÓN: REQUERIMIENTO -->
     <div class="info-section requerimiento-section">
       <div class="section-header">
         <mat-icon>description</mat-icon>
-        <h3>REQUERIMIENTO</h3>
+        <h3>Requerimiento</h3>
       </div>
       <div class="section-content">
         <div class="fields-grid">
@@ -58,7 +54,6 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: EXPEDIENTE -->
     <div class="info-section expediente-section">
       <div class="section-header">
         <mat-icon>folder</mat-icon>
@@ -78,7 +73,6 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: ENTRADA -->
     <div class="info-section entrada-section">
       <div class="section-header">
         <mat-icon>input</mat-icon>
@@ -98,7 +92,6 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: ASIGNACIÓN -->
     <div class="info-section asignacion-section">
       <div class="section-header">
         <mat-icon>assignment_ind</mat-icon>
@@ -114,7 +107,6 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: SISTEMA Y SEGUIMIENTO -->
     <div class="info-section sistema-section">
       <div class="section-header">
         <mat-icon>computer</mat-icon>
@@ -130,7 +122,6 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: ESTADO -->
     <div class="info-section estado-section">
       <div class="section-header">
         <mat-icon>check_circle</mat-icon>
@@ -147,7 +138,6 @@
 
   </div>
 
-  <!-- FOOTER -->
   <div class="modal-footer">
     <button class="btn-primary" (click)="cerrar()">
       Cerrar

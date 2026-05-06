@@ -1,364 +1,6 @@
-<!-- <section class="py-1 bg-blueGray-50">
-  <div class="w-full lg:w-12/12 mx-auto mt-2">
-    <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-      <div class="rounded-t bg-white mb-0 px-6 py-6"></div>
-      <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <form [formGroup]="consultForm" (ngSubmit)="onSave()" (ngSubmit)="sendDatos()">
-          <div class="flex flex-wrap">
-            <div class="w-full lg:w-6/12 px-4" (mouseenter)="DetectInput(true, 'expediente')"
-              (mouseleave)="DetectInput(false, 'expediente')">
-              <div class="relative w-full mb-3">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Expediente
-                  <span title="Número de expediente (Ej: Exp.001-2025)"><mat-icon
-                      class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <input [(ngModel)]="formData.expediente" type="text" placeholder="Exp.001-2025"
-                  class="modern-input"
-                  formControlName="expediente" value="" [(ngModel)]="campoValor['expediente']"
-                  (ngModelChange)="getValueInput()" #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['expediente'] && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </div>
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'tipoMedioRecepcion')"
-                (mouseleave)="DetectInput(false, 'tipoMedioRecepcion')">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Tipo de Medio de Recepción
-                  <span title="Medio por el cual se recibió el requerimiento"><mat-icon
-                      class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <input [(ngModel)]="formData.tipo_medio_recepcion" type="text" placeholder="ATENTA_NOTA, OFICIO, etc."
-                  class="modern-input"
-                  formControlName="tipo_medio_recepcion" value="" [(ngModel)]="campoValor['tipoMedioRecepcion']"
-                  (ngModelChange)="getValueInput()" #InputFormulario />
-
-                <mat-list *ngIf="showCoincidencias['tipoMedioRecepcion']  && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </div>
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'oficio')"
-                (mouseleave)="DetectInput(false, 'oficio')">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Oficio
-                  <span title="Número de oficio asignado al documento."><mat-icon
-                      class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <input [(ngModel)]="formData.oficio" type="text" placeholder="Oficio"
-                  class="modern-input"
-                  formControlName="oficio" value="" [(ngModel)]="campoValor['oficio']" (ngModelChange)="getValueInput()"
-                  #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['oficio'] && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </div>
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'remitenteArea')"
-                (mouseleave)="DetectInput(false, 'remitenteArea')">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Remitente (Área)
-                  <span title="Área que remite el requerimiento (General + Central + Identificador)"><mat-icon
-                      class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <input [(ngModel)]="formData.remitente_area" type="text" placeholder="Remitente área"
-                  class="modern-input"
-                  formControlName="remitente_area" value="" [(ngModel)]="campoValor['remitenteArea']"
-                  (ngModelChange)="getValueInput()" #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['remitenteArea'] && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </div>
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3"  (mouseenter)="DetectInput(true, 'numeroEntradaCentral')"
-                (mouseleave)="DetectInput(false, 'numeroEntradaCentral')">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Número Entrada Central
-                  <span title="Número de entrada central del expediente"><mat-icon
-                      class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <input [(ngModel)]="formData.numero_entrada_central" type="text" placeholder="Número entrada central"
-                  class="modern-input"
-                  formControlName="numero_entrada_central" value="" [(ngModel)]="campoValor['numeroEntradaCentral']"
-                  (ngModelChange)="getValueInput()" #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['numeroEntradaCentral'] && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </div>
-
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'responsable')"
-                (mouseleave)="DetectInput(false, 'responsable')">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Responsable
-                  <span title="Persona responsable del expediente"><mat-icon class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <input [(ngModel)]="formData.responsable" type="text" placeholder="Responsable"
-                  class="modern-input"
-                  formControlName="responsable" value="" [(ngModel)]="campoValor['responsable']"
-                  (ngModelChange)="getValueInput()" #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['responsable']  && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </div>
-
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3" (mouseenter)="DetectInput(true, 'prioridad')"
-                (mouseleave)="DetectInput(false, 'prioridad')">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Prioridad
-                  <span title="Nivel de prioridad del expediente"><mat-icon class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <input [(ngModel)]="formData.prioridad" type="text" placeholder="URGENTE, ALTA, MEDIA, BAJA"
-                  class="modern-input"
-                  formControlName="prioridad" value="" [(ngModel)]="campoValor['prioridad']"
-                  (ngModelChange)="getValueInput()" #InputFormulario />
-                <mat-list *ngIf="showCoincidencias['prioridad'] && coincidencias.length > 0"
-                  class="border-1 px-5 py-3 placeholder-blueGray-300 text-wine bg-white rounded text-sm shadow focus:outline-none focus:ring ring-wine w-full ease-linear transition-all duration-150"
-                  [@fadeInOut]>
-                  <mat-list-item *ngFor="let coincidencia of coincidencias; let i = index"
-                    (click)="selectCoincidencia(coincidencia)" class="hover-item" [@fadeInOut]>
-                    {{ coincidencia }}
-                    <hr style="background-color: #783246;  padding: 1px 0;" />
-                  </mat-list-item>
-                </mat-list>
-              </div>
-            </div>
-
-            <div class="w-full lg:w-6/12 px-4">
-              <div class="relative w-full mb-3">
-                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlfor="grid-password">
-                  Fecha de Registro
-                  <span title="Rango de fechas de registro del expediente"><mat-icon class="icon-display">help_outline</mat-icon></span>
-                </label>
-                <div class="flex gap-2">
-                  <input [(ngModel)]="formData.fecha_creacion_desde" type="date" placeholder="Desde"
-                    class="modern-input-date"
-                    formControlName="fecha_creacion_desde" />
-                  <input [(ngModel)]="formData.fecha_creacion_hasta" type="date" placeholder="Hasta"
-                    class="modern-input-date"
-                    formControlName="fecha_creacion_hasta" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <br />
-          <div class="flex flex-row  justify-between">
-            <button
-              class="modern-search-btn"
-              type="submit">
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-              </svg>
-              Buscar
-            </button>
-            <mat-dialog-content *ngIf="false">
-              <div class="  mt-2">
-                <select class="bg-gray-50 border-[#691C32] text-center
-                     text-gray-900 mb-6 text-md rounded-lg focus:ring-blue-500
-                     focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-70
-                     0 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                      dark:focus:ring-blue-500 dark:focus:border-blue-500" (change)="onSelectedOption($event)">
-                  <option disabled selected value="">Selecciona una opción</option>
-                  <option value="fecha">Descargar por Fechas</option>
-                  <option value="folio">Descargar por Folio Scanner </option>
-                </select>
-              </div>
-              @if(selecionarOpcion === "fecha"){
-              <div class="flex justify-center  ">
-                <div class="w-full">
-                  <div class="flex justify-center mb-4">
-                    <div class="  p-4 ">
-                        <p>Formato</p>
-                        <div style="border: 2px solid #691C32;" class="mb-4">
-                          <select id="formato" [formControl]="formato"
-                            style="background-color: transparent; width: 100%; height: 30px;">
-                            <option value="pdf">pdf</option>
-                            <option value="csv">csv</option>
-                            <option value="xlsx">xlsx</option>
-                          </select>
-                        </div>
-                    </div>
-                    <div class="p-4  mx-4">
-                        <p>Administración</p>
-                        <div style="border: 2px solid #691C32;" class="mb-4">
-                          <select id="administracion" [formControl]="administracion"
-                            style="background-color: transparent; width: 100%; height: 30px;">
-                            <option [ngValue]="null" disabled>Elija una administración</option>
-                            <option value=" ">&nbsp;</option>
-                            <option value="a_1">Administración 1</option>
-                            <option value="a_2">Administración 2</option>
-                            <option value="a_3">Administración 3</option>
-                            <option value="a_4">Administración 4</option>
-                            <option value="a_5">Administración 5</option>
-                          </select>
-                        </div>
-
-                    </div>
-                  </div>
-                  <div class="flex justify-center mb-8">
-                    <div class=" p-4 mx-1">
-                        <p>Fecha Inicial:</p>
-                        <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0"
-                          [formControl]="fecha_inicial" required />
-
-                    </div>
-                    <div class=" p-4 ">
-                        <p>Fecha Final:</p>
-                        <input type="date" [max]="getToday()" class="mr-10 date mb-4 md:mb-0"
-                          [formControl]="fecha_final" required />
-                    </div>
-                  </div>
-                  <div class="flex justify-center p-4 ">
-                      <button type="button" (click)="descargarAcuse()" class="download-btn">
-                        Descargar acuse
-                      </button>
-                  </div>
-                </div>
-              </div>
-              }@else if (selecionarOpcion === "folio") {
-              <form [formGroup]="downloadByFolioScan">
-                <div class="grid grid-cols-2 grid-rows-3 gap-2">
-                  <div class="col-span-2">
-                    <p>Formato</p>
-                    <div style="border: 2px solid #691C32;" class="mb-4">
-                      <select id="formato" [formControl]="formato"
-                        style="background-color: transparent; width: 100%; height: 30px;">
-                        <option value="pdf">pdf</option>
-                        <option value="csv">csv</option>
-                        <option value="xlsx">xlsx</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-span-2">
-                    <p>Administración</p>
-                    <div style="border: 2px solid #691C32;" class="mb-4">
-                      <select id="administracion" [formControl]="administracion"
-                        style="background-color: transparent; width: 100%; height: 30px;">
-                        <option [ngValue]="null" disabled>Elija una administración</option>
-                        <option value=" ">&nbsp;</option>
-                        <option value="a_1">Administración 1</option>
-                        <option value="a_2">Administración 2</option>
-                        <option value="a_3">Administración 3</option>
-                        <option value="a_4">Administración 4</option>
-                        <option value="a_5">Administración 5</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <mat-form-field>
-                        <mat-label>Folio Inicial:</mat-label>
-
-                        <input formControlName="input_one" type="number" matInput placeholder="Folio Inicial">
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div>
-                    <mat-form-field>
-                      <mat-label>Folio 2 :</mat-label>
-                      <input formControlName="input_two" type="number" matInput placeholder="Folio Final">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-span-2">
-
-                    <button type="button" [disabled]="!downloadByFolioScan.valid"
-                      [ngClass]=" !downloadByFolioScan.valid ? 'next-button-disabled' : 'next-button' "
-                      class="download-btn"
-                      (click)="descargarAcuseFolio()">
-                      Descargar acuse
-                    </button>
-                    <div class="bg-white border-2 rounded border-wine">
-                      @if (
-                      (downloadByFolioScan.controls['input_one'].invalid &&
-                      (downloadByFolioScan.controls['input_one'].dirty ||
-                      downloadByFolioScan.controls['input_one'].touched))
-                      ){
-                      @if (
-                      (downloadByFolioScan.get('input_one')?.errors?.['required'])
-                      ){
-                      <div class="text-wine text-base p-3 flex gap-3">
-                        <span>REQUERIDO</span>
-                        <mat-icon>error</mat-icon>
-                      </div>
-                      }
-                      }
-                    </div>
-                  </div>
-                </div>
-              </form>
-              }
-            </mat-dialog-content>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section> -->
-
-
-
-
-
-
-
-
-
 <section class="bg-tlalcalli-light-cream px-4 py-4">
   <div class="mx-auto w-full">
     <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
-
-      <div class="border-b border-tlalcalli-light-base px-6 py-5">
-        <h2 class="text-xl font-extrabold text-tlalcalli-primary">
-          Búsqueda de expedientes
-        </h2>
-        <p class="mt-1 text-sm text-tlalcalli-gray">
-          Consulta expedientes por filtros principales.
-        </p>
-      </div>
 
       <div class="px-4 py-6 lg:px-10">
         <form [formGroup]="consultForm" (ngSubmit)="onSave(); sendDatos()">
@@ -366,7 +8,7 @@
           <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
 
             <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Expediente
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Número de expediente">
                   help_outline
@@ -399,7 +41,7 @@
             </div>
 
             <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Tipo de medio de recepción
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Medio por el cual se recibió">
                   help_outline
@@ -432,7 +74,7 @@
             </div>
 
             <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Oficio
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Número de oficio asignado">
                   help_outline
@@ -465,7 +107,7 @@
             </div>
 
             <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Remitente Área
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold" title="Área que remite el requerimiento">
                   help_outline
@@ -498,7 +140,7 @@
             </div>
 
             <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Número entrada central
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
                   help_outline
@@ -519,7 +161,7 @@
             </div>
 
             <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Responsable
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
                   help_outline
@@ -540,7 +182,7 @@
             </div>
 
             <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Prioridad
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
                   help_outline
@@ -561,7 +203,7 @@
             </div>
 
             <div>
-              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold uppercase tracking-wide text-tlalcalli-primary">
+              <label class="mb-2 flex items-center gap-1 text-xs font-extrabold tracking-wide text-tlalcalli-primary">
                 Fecha de registro
                 <mat-icon class="!h-4 !w-4 !text-base !text-tlalcalli-gold">
                   help_outline
