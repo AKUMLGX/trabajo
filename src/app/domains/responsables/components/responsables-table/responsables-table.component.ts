@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, CUSTOM_ELEMENTS_SCHEMA } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ResponsablesService, FiltrosResponsable } from '../../services/responsables.service';
 import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
@@ -9,6 +10,7 @@ import { ExpedienteTlalcalli } from '../../../capture/interfaces/expediente-tlal
 import { ExpedienteDetalleModalComponent } from '../../../tracking/components/expediente-detalle-modal/expediente-detalle-modal.component';
 import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { environment } from '../../../../../environments/environment';
 
 /**
  * Interfaz para el semáforo de prioridad basado en TIEMPO TRANSCURRIDO
@@ -39,6 +41,7 @@ export interface SemaforoPrioridad {
     CommonModule,
     FormsModule,
     MatIcon,
+    MatSlideToggleModule,
     NgxPaginationModule
   ],
   templateUrl: './responsables-table.component.html',
@@ -95,6 +98,19 @@ export class ResponsablesTableComponent implements OnInit {
     { value: 'REVISION_LEGAL', label: 'Revisión Legal' }
   ];
 
+  /**
+   * Si está activo, el backend devuelve todas las capturas sin filtrar por responsable
+   * (query incluir_todos). La vista Por atender / Análisis sigue aplicándose en el cliente.
+   * En local, env.js puede forzar el valor inicial con devIncluirTodasCapturasResponsables.
+   */
+  incluirTodosCapturas = environment.devIncluirTodasCapturasResponsables;
+
+  /**
+   * Mientras no haya roles: env.js con devVistaEquipoCentroControl envía vista_equipo (solo equipo de captura).
+   * Se ignora si incluirTodosCapturas está activo.
+   */
+  vistaEquipoCentroControl = environment.devVistaEquipoCentroControl;
+
   // ========= SWITCH PENDIENTES / ATENDIDOS =========
   vistaActual: 'pendientes' | 'atendidos' = 'pendientes';
   
@@ -146,7 +162,14 @@ export class ResponsablesTableComponent implements OnInit {
     this.cargando = true;
     this.mostrarTabla = false;
 
-    this.responsablesService.obtenerMisExpedientes(this.filtros).subscribe({
+    const filtrosReq: FiltrosResponsable = { ...this.filtros };
+    if (this.incluirTodosCapturas) {
+      filtrosReq.incluirTodos = true;
+    } else if (this.vistaEquipoCentroControl) {
+      filtrosReq.vistaEquipo = true;
+    }
+
+    this.responsablesService.obtenerMisExpedientes(filtrosReq).subscribe({
       next: (response) => {
         let expedientes = response.data || [];
         
@@ -423,11 +446,18 @@ export class ResponsablesTableComponent implements OnInit {
     this.vistaActual = vista;
     this.pageSelected = 1;
     this.cargarExpedientes();
-    
+
     // Si cambia a "atendidos", cargar las atenciones de esos expedientes
     if (vista === 'atendidos') {
       setTimeout(() => this.cargarAtencionesExpedientes(), 500);
     }
+  }
+
+  /** Activa/desactiva carga de todas las capturas desde el backend (sin filtro por responsable). */
+  onToggleIncluirTodos(activo: boolean): void {
+    this.incluirTodosCapturas = activo;
+    this.pageSelected = 1;
+    this.cargarExpedientes();
   }
 
   /**

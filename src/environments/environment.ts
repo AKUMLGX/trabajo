@@ -90,6 +90,27 @@ const env = (window as unknown as Window & { env: WindowEnv }).env;
     getPdfEndpoint: 'getPdf',
     getMsgEndpoint: 'getMsg',
     base: '/tlalcalli',
+
+    /**
+     * Solo para pruebas locales: si env.js define devIncluirTodasCapturasResponsables=true,
+     * Centro de control carga por defecto todas las capturas (incluir_todos).
+     * En producción omitir la variable o poner false.
+     */
+    devIncluirTodasCapturasResponsables: (() => {
+      const env = (window as { [key: string]: any })['env'];
+      const v = env?.['devIncluirTodasCapturasResponsables'];
+      return v === true || v === 'true' || v === 1 || v === '1';
+    })(),
+
+    /**
+     * Sin roles aún: si true y no está activo "Todas las capturas", el backend usa vista_equipo
+     * (solo expedientes de Irma, Karen, Héctor y Carlos según lista del servidor).
+     */
+    devVistaEquipoCentroControl: (() => {
+      const env = (window as { [key: string]: any })['env'];
+      const v = env?.['devVistaEquipoCentroControl'];
+      return v === true || v === 'true' || v === 1 || v === '1';
+    })(),
   
     }
   

@@ -61,6 +61,10 @@ export interface FiltrosResponsable {
   remitente_area?: string;
   fecha_desde?: string;
   fecha_hasta?: string;
+  /** Si true, el backend omite el filtro por responsable y devuelve todas las capturas (query incluir_todos). */
+  incluirTodos?: boolean;
+  /** Si true, el backend filtra por los responsables oficiales del equipo de captura (query vista_equipo). Ignorado si incluirTodos es true. */
+  vistaEquipo?: boolean;
 }
 
 /**
@@ -90,6 +94,8 @@ export class ResponsablesService {
       if (filtros.remitente_area) params.remitente_area = filtros.remitente_area;
       if (filtros.fecha_desde) params.fecha_desde = filtros.fecha_desde;
       if (filtros.fecha_hasta) params.fecha_hasta = filtros.fecha_hasta;
+      if (filtros.incluirTodos) params.incluir_todos = 'true';
+      if (filtros.vistaEquipo) params.vista_equipo = 'true';
     }
 
     return this.http.get<MisExpedientesResponse>(url, { params, withCredentials: true }).pipe(
