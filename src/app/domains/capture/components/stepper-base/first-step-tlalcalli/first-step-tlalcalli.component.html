@@ -190,15 +190,18 @@
           [ngClass]="{
             'rounded-xl border-2 border-tlalcalli-warning bg-yellow-50 p-3': tieneCaracteresProblematicos
           }">
-        <div class="mb-6">
-          <p class="mb-1 text-xs font-medium text-tlalcalli-gray">
-            Número
-          </p>
-
-          <p class="ubuntu-mono text-2xl font-black tracking-wider text-black">
-            {{ formulario.get('oficio')?.value || '199 06 02 00 00 2025-01' }}
-          </p>
-        </div>
+<div class="mb-6">
+  <app-custom-form-field
+    label="Número"
+    [required]="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'"
+    placeholder="199 06 02 00 00 2025-01"
+    [errorMessage]="oficioError"
+    formControlName="oficio"
+    [appKeyboardNavigation]="true"
+    [actionOnCtrlEnter]="abrirModalBusqueda.bind(this)"
+    [skipOnEnter]="true">
+  </app-custom-form-field>
+</div>ñ
 
           @if (formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL') {
             <p class="mt-1 text-xs text-tlalcalli-gray">Número de oficio</p>

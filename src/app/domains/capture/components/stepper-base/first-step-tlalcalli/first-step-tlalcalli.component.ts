@@ -82,16 +82,16 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   camposCompletados = 0;
   camposTotales = 0;
 
-  tipoMedioRecepcionOptions: SelectOption[] = [];
+  // tipoMedioRecepcionOptions: SelectOption[] = [];
   remitentesGenerales: SelectOption[] = [];
   centralesPorGeneral: Record<string, SelectOption[]> = {};
 
-  // tipoMedioRecepcionOptions: SelectOption[] = [
-  //   { value: 'ATENTA_NOTA', label: 'Atenta nota' },
-  //   { value: 'OFICIO', label: 'Oficio' },
-  //   { value: 'REQUERIMIENTO_VERBAL', label: 'Petición interna' },
-  //   { value: 'CORREO_ELECTRONICO', label: 'Correo electrónico' }
-  // ];
+  tipoMedioRecepcionOptions: SelectOption[] = [
+    { value: 'ATENTA_NOTA', label: 'Atenta nota' },
+    { value: 'OFICIO', label: 'Oficio' },
+    { value: 'REQUERIMIENTO_VERBAL', label: 'Petición interna' },
+    { value: 'CORREO_ELECTRONICO', label: 'Correo electrónico' }
+  ];
 
   // remitentesGenerales: SelectOption[] = [
   //   { value: 'AGSC', label: 'AGSC - Administración General de Servicios Centrales' },
