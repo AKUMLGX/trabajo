@@ -199,13 +199,14 @@
         @if (filtroPrioridad) {
           <span class="flex items-center gap-2 rounded-full bg-tlalcalli-light-cream px-3 py-1 text-xs font-bold text-tlalcalli-primary">
             {{ filtroPrioridad }}
-            <button (click)="filtroPrioridad = ''; aplicarFiltros()" class="text-base leading-none">×</button>
+            <button type="button" (click)="filtroPrioridad = ''; aplicarFiltros()" class="text-base leading-none">×</button>
           </span>
         }
       </div>
 
-      <div class="flex w-full max-w-[274px] rounded-lg bg-tlalcalli-lavender p-1">
+      <div class="flex w-full max-w-[274px] shrink-0 rounded-lg bg-tlalcalli-lavender p-1">
         <button
+          type="button"
           class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold text-tlalcalli-primary"
           [ngClass]="{ 'bg-white text-tlalcalli-primary': vistaActual === 'pendientes' }"
           (click)="cambiarVista('pendientes')">
@@ -218,6 +219,7 @@
         </button>
 
         <button
+          type="button"
           class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold text-tlalcalli-primary"
           [ngClass]="{ 'bg-white text-tlalcalli-primary': vistaActual === 'atendidos' }"
           (click)="cambiarVista('atendidos')">
