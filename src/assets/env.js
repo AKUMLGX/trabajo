@@ -10,4 +10,9 @@
   window["env"]["layoutUrl"]= "http://localhost:4200/tlalcalli/layout/capture";
   window["env"]["loginUrl"]= "http://localhost:4200/tlalcalli/home";
   window["env"]["logoutUrl"]= "https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout";
+
+  /** Centro de control: listado global (GET /expedientes) para ver expedientes de todos los responsables. En prod, false o omitir. */
+  window["env"]["devIncluirTodasCapturasResponsables"] = true;
+  /** Si true y lo anterior es false: mismo listado global filtrado en cliente al equipo de captura. */
+  window["env"]["devVistaEquipoCentroControl"] = false;
 })(this);

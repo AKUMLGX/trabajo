@@ -11,6 +11,7 @@ import { ExpedienteDetalleModalComponent } from '../../../tracking/components/ex
 import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '../../../../../environments/environment';
+import { ExpedienteTlalcalliService } from '../../../capture/services/expediente-tlalcalli.service';
 
 /**
  * Interfaz para el semáforo de prioridad basado en TIEMPO TRANSCURRIDO
@@ -113,12 +114,12 @@ export class ResponsablesTableComponent implements OnInit {
 
   // ========= SWITCH PENDIENTES / ATENDIDOS =========
   vistaActual: 'pendientes' | 'atendidos' = 'pendientes';
-  
-  // Estatus que significan "pendiente de atención"
-  estatusPendientes = ['ASIGNADO', 'PENDIENTE'];
-  
-  // Estatus que significan "ya atendido/en proceso"
+
+  // Estatus que significan "ya atendidos / en proceso de cierre" (lo demás aparece en "Por atender")
   estatusAtendidos = ['EN_ATENCION', 'RECHAZADO', 'ATENCION_PARCIAL', 'ATENCION_TOTAL', 'REVISION_LEGAL'];
+
+  /** Subcadenas en `responsable` para modo "vista equipo" (filtro cliente sobre listado global). */
+  private readonly RESPONSABLES_EQUIPO_SUBSTR = ['irma', 'karen', 'hector', 'carlos'];
 
   // Opciones de prioridad (semáforo basado en tiempo transcurrido)
   opcionesPrioridad = [
@@ -144,6 +145,7 @@ export class ResponsablesTableComponent implements OnInit {
 
   constructor(
     private responsablesService: ResponsablesService,
+    private expedienteService: ExpedienteTlalcalliService,
     private atencionService: AtencionService,
     private dialog: MatDialog
   ) {}
@@ -162,44 +164,34 @@ export class ResponsablesTableComponent implements OnInit {
     this.cargando = true;
     this.mostrarTabla = false;
 
-    const filtrosReq: FiltrosResponsable = { ...this.filtros };
-    if (this.incluirTodosCapturas) {
-      filtrosReq.incluirTodos = true;
-    } else if (this.vistaEquipoCentroControl) {
-      filtrosReq.vistaEquipo = true;
+    if (this.usarListadoGlobalExpedientes()) {
+      this.expedienteService.obtenerExpedientes().subscribe({
+        next: (lista) => {
+          let raw = lista || [];
+          if (this.vistaEquipoCentroControl && !this.incluirTodosCapturas) {
+            raw = raw.filter((exp) => this.esResponsableEquipoCaptura(exp));
+          }
+          raw = this.aplicarFiltrosConsultaLocales(raw);
+          const stats = this.estadisticasDesdeLista(raw);
+          const label = this.incluirTodosCapturas ? 'Todos los responsables' : 'Equipo de captura';
+          this.finalizarCargaLista(raw, stats, label);
+          console.log('✅ Expedientes cargados (listado global):', this.expedientes.length, '(Vista:', this.vistaActual, ')');
+        },
+        error: (error: Error) => {
+          console.error('❌ Error al obtener listado global de expedientes:', error);
+          this.expedientes = [];
+          this.todosLosExpedientes = [];
+          this.mostrarTabla = false;
+          this.cargando = false;
+        }
+      });
+      return;
     }
 
-    this.responsablesService.obtenerMisExpedientes(filtrosReq).subscribe({
+    this.responsablesService.obtenerMisExpedientes({ ...this.filtros }).subscribe({
       next: (response) => {
-        let expedientes = response.data || [];
-        
-        // Guardar todos para los contadores
-        this.todosLosExpedientes = expedientes;
-        
-        // Ordenar por prioridad (semáforo) - los más urgentes primero
-        expedientes = this.ordenarPorPrioridad(expedientes);
-        
-        // Aplicar filtro de vista (pendientes/atendidos)
-        expedientes = this.filtrarPorVista(expedientes);
-        
-        // Aplicar filtro de prioridad si está activo
-        if (this.filtroPrioridad) {
-          expedientes = expedientes.filter(exp => {
-            const semaforo = this.calcularSemaforo(exp);
-            return semaforo.nivel === this.filtroPrioridad;
-          });
-        }
-        
-        this.expedientes = expedientes;
-        this.estadisticas = response.estadisticas;
-        this.responsable = response.responsable;
-        
-        // Calcular estadísticas de semáforo
-        this.calcularEstadisticasSemaforo();
-        
-        this.paginarExpedientes();
-        this.mostrarTabla = true;
-        this.cargando = false;
+        const raw = response.data || [];
+        this.finalizarCargaLista(raw, response.estadisticas, response.responsable || '');
         console.log('✅ Expedientes cargados:', this.expedientes.length, '(Vista:', this.vistaActual, ')');
       },
       error: (error: Error) => {
@@ -210,6 +202,108 @@ export class ResponsablesTableComponent implements OnInit {
         this.cargando = false;
       }
     });
+  }
+
+  /** `mis-expedientes` ignora incluir_todos/vista_equipo en server: usamos GET /expedientes y filtramos aquí. */
+  private usarListadoGlobalExpedientes(): boolean {
+    return this.incluirTodosCapturas || this.vistaEquipoCentroControl;
+  }
+
+  private esResponsableEquipoCaptura(exp: ExpedienteTlalcalli): boolean {
+    const r = (exp.responsable || '').trim().toLowerCase();
+    if (!r) return false;
+    return this.RESPONSABLES_EQUIPO_SUBSTR.some((n) => r.includes(n));
+  }
+
+  /** Filtros del formulario aplicados sobre un arreglo local (same keys que MisExpedientes). */
+  private aplicarFiltrosConsultaLocales(data: ExpedienteTlalcalli[]): ExpedienteTlalcalli[] {
+    let rows = [...data];
+    const f = this.filtros;
+
+    if (f.estatus) {
+      const est = f.estatus.toUpperCase();
+      rows = rows.filter((e) => (e.estatus || '').toUpperCase() === est);
+    }
+
+    const q = (f.oficio || f.expediente || '').trim().toLowerCase();
+    if (q) {
+      rows = rows.filter(
+        (e) =>
+          (e.oficio || '').toLowerCase().includes(q) ||
+          (e.expediente || '').toLowerCase().includes(q) ||
+          (e.referencia_asunto || '').toLowerCase().includes(q) ||
+          (e.remitente_area || '').toLowerCase().includes(q)
+      );
+    }
+
+    if (f.remitente_area && !q) {
+      const rm = f.remitente_area.trim().toLowerCase();
+      rows = rows.filter((e) => (e.remitente_area || '').toLowerCase().includes(rm));
+    }
+
+    if (f.fecha_desde || f.fecha_hasta) {
+      rows = rows.filter((e) => {
+        const base = this.fechaFiltroExpediente(e);
+        if (!base) return false;
+        if (f.fecha_desde) {
+          const d0 = new Date(f.fecha_desde + 'T00:00:00');
+          if (base < d0) return false;
+        }
+        if (f.fecha_hasta) {
+          const d1 = new Date(f.fecha_hasta + 'T23:59:59');
+          if (base > d1) return false;
+        }
+        return true;
+      });
+    }
+
+    return rows;
+  }
+
+  private fechaFiltroExpediente(e: ExpedienteTlalcalli): Date | null {
+    const s = e.fecha_creacion || e.fecha_asignacion;
+    if (!s) return null;
+    const d = new Date(s as string | Date);
+    return Number.isFinite(d.getTime()) ? d : null;
+  }
+
+  private estadisticasDesdeLista(data: ExpedienteTlalcalli[]): {
+    total: number;
+    con_retraso: number;
+    urgentes: number;
+    por_estatus: { [key: string]: number };
+  } {
+    const por_estatus: { [key: string]: number } = {};
+    for (const e of data) {
+      const k = e.estatus || 'SIN_ESTATUS';
+      por_estatus[k] = (por_estatus[k] || 0) + 1;
+    }
+    return {
+      total: data.length,
+      con_retraso: 0,
+      urgentes: 0,
+      por_estatus
+    };
+  }
+
+  private finalizarCargaLista(
+    raw: ExpedienteTlalcalli[],
+    estadisticas: { total: number; con_retraso: number; urgentes: number; por_estatus: { [key: string]: number } },
+    responsableLabel: string
+  ): void {
+    this.todosLosExpedientes = raw;
+    let expedientes = this.ordenarPorPrioridad([...raw]);
+    expedientes = this.filtrarPorVista(expedientes);
+    if (this.filtroPrioridad) {
+      expedientes = expedientes.filter((exp) => this.calcularSemaforo(exp).nivel === this.filtroPrioridad);
+    }
+    this.expedientes = expedientes;
+    this.estadisticas = estadisticas;
+    this.responsable = responsableLabel;
+    this.calcularEstadisticasSemaforo();
+    this.paginarExpedientes();
+    this.mostrarTabla = true;
+    this.cargando = false;
   }
 
   /**
@@ -346,8 +440,9 @@ export class ResponsablesTableComponent implements OnInit {
       urgente: 0,    // 🔴 48-72h
       vencido: 0     // ⚫ +72h
     };
-    
-    this.expedientes.forEach(exp => {
+
+    const fuente = this.todosLosExpedientes.length ? this.todosLosExpedientes : this.expedientes;
+    fuente.forEach((exp) => {
       const semaforo = this.calcularSemaforo(exp);
       switch (semaforo.nivel) {
         case 'EN_TIEMPO':
@@ -465,23 +560,24 @@ export class ResponsablesTableComponent implements OnInit {
    */
   filtrarPorVista(expedientes: ExpedienteTlalcalli[]): ExpedienteTlalcalli[] {
     if (this.vistaActual === 'pendientes') {
-      return expedientes.filter(exp => 
-        !exp.estatus || this.estatusPendientes.includes(exp.estatus.toUpperCase())
-      );
-    } else {
-      return expedientes.filter(exp => 
-        exp.estatus && this.estatusAtendidos.includes(exp.estatus.toUpperCase())
-      );
+      return expedientes.filter((exp) => {
+        const s = (exp.estatus || '').toUpperCase();
+        return !s || !this.estatusAtendidos.includes(s);
+      });
     }
+    return expedientes.filter(
+      (exp) => exp.estatus && this.estatusAtendidos.includes(exp.estatus.toUpperCase())
+    );
   }
 
   /**
    * Contar expedientes por vista (usa TODOS los expedientes, no los filtrados)
    */
   get contadorPendientes(): number {
-    return this.todosLosExpedientes.filter(exp => 
-      !exp.estatus || this.estatusPendientes.includes(exp.estatus?.toUpperCase() || '')
-    ).length;
+    return this.todosLosExpedientes.filter((exp) => {
+      const s = (exp.estatus || '').toUpperCase();
+      return !s || !this.estatusAtendidos.includes(s);
+    }).length;
   }
 
   get contadorAtendidos(): number {
