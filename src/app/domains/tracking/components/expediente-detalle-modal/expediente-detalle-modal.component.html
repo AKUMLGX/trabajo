@@ -1,147 +1,286 @@
-<div class="expediente-detalle-modal">
-  <div class="modal-header">
-    <div class="header-top">
-      <div class="header-info">
-        <h2 class="title">Detalle del Expediente</h2>
-        <p class="folio" *ngIf="expediente?.expediente">{{ expediente.expediente }}</p>
+<div class="flex h-full w-full flex-col overflow-hidden bg-white">
+
+  <div class="relative shrink-0 overflow-hidden bg-gradient-to-br from-[#34005b] via-[#3e0065] to-[#5c1a7a] px-7 py-6 text-white">
+
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_10%_30%,rgba(214,174,103,0.15)_0%,transparent_50%),radial-gradient(circle_at_90%_70%,rgba(255,255,255,0.08)_0%,transparent_50%)]">
+    </div>
+
+    <div class="absolute left-0 top-0 h-[3px] w-full bg-gradient-to-r from-transparent via-[#d6ae67] to-transparent">
+    </div>
+
+    <div class="relative z-[1] flex items-start justify-between gap-4">
+
+      <div class="flex-1">
+        <h2 class="m-0 text-[26px] font-extrabold leading-tight text-white">
+          Detalle del Expediente
+        </h2>
+
+        @if (expediente?.expediente) {
+          <p class="mt-2 inline-block rounded-md bg-white/10 px-3 py-1 font-mono text-[13px] text-white/75">
+            {{ expediente.expediente }}
+          </p>
+        }
       </div>
-      <div class="header-actions">
-        <!-- <div class="status-badge">
-          <mat-icon>radio_button_checked</mat-icon>
-          Expediente
-        </div> -->
-        <button class="close-btn" (click)="cerrar()">
-          <mat-icon>close</mat-icon>
+
+      <div class="flex items-center gap-3">
+        <button
+          class="flex h-11 w-11 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white backdrop-blur transition duration-300 hover:scale-105 hover:border-[#d6ae67]/50 hover:bg-white/20"
+          (click)="cerrar()">
+
+          <mat-icon class="!h-[22px] !w-[22px] !text-[22px]">
+            close
+          </mat-icon>
         </button>
+
       </div>
     </div>
   </div>
 
-  <div class="modal-body">
-    
-    <div class="info-section requerimiento-section">
-      <div class="section-header">
-        <mat-icon>description</mat-icon>
-        <h3>Requerimiento</h3>
+  <div class="flex-1 overflow-y-auto bg-gradient-to-br from-[#f8f9fc] via-[#f0f2f8] to-[#e8edf5] p-7">
+
+    <div class="mb-5 overflow-hidden rounded-[18px] border border-[#34005b]/10 border-l-4 border-l-[#34005b] bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+
+      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
+        <mat-icon class="text-[#d6ae67]">description</mat-icon>
+
+        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+          Requerimiento
+        </h3>
       </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Tipo</span>
-            <span class="field-value">{{ formatearTipoMedioRecepcion(expediente.tipo_medio_recepcion) || 'N/A' }}</span>
+
+      <div class="p-6">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Tipo
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ formatearTipoMedioRecepcion(expediente.tipo_medio_recepcion) || 'N/A' }}
+            </span>
           </div>
-          <div class="field">
-            <span class="field-label">Número</span>
-            <span class="field-value mono">{{ expediente.oficio || 'N/A' }}</span>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Número
+            </span>
+
+            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-mono text-sm font-semibold text-[#1a1a1a]">
+              {{ expediente.oficio || 'N/A' }}
+            </span>
           </div>
-          <div class="field">
-            <span class="field-label">Fecha</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_requerimiento) }}</span>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Fecha
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ formatearFecha(expediente.fecha_requerimiento) }}
+            </span>
           </div>
-          <div class="field">
-            <span class="field-label">Remitente(Área)</span>
-            <span class="field-value">{{ expediente.remitente_area || 'N/A' }}</span>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Remitente(Área)
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ expediente.remitente_area || 'N/A' }}
+            </span>
           </div>
-          <div class="field full-width">
-            <span class="field-label">Asunto</span>
-            <span class="field-value" style="white-space: pre-wrap;">{{ expediente.referencia_asunto || 'N/A' }}</span>
+
+          <div class="flex flex-col gap-1 md:col-span-2">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Asunto
+            </span>
+
+            <span class="whitespace-pre-wrap text-sm font-medium text-[#1a1a1a]">
+              {{ expediente.referencia_asunto || 'N/A' }}
+            </span>
           </div>
-          <div class="field">
-            <span class="field-label">Nivel de Prioridad</span>
-            <span class="field-value highlight">{{ expediente.prioridad || 'N/A' }}</span>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Nivel de Prioridad
+            </span>
+
+            <span class="text-sm font-bold text-[#34005b]">
+              {{ expediente.prioridad || 'N/A' }}
+            </span>
           </div>
+
         </div>
       </div>
     </div>
 
-    <div class="info-section expediente-section">
-      <div class="section-header">
-        <mat-icon>folder</mat-icon>
-        <h3>Expediente</h3>
+    <div class="mb-5 overflow-hidden rounded-[18px] border border-[#34005b]/10 border-l-4 border-l-[#34005b] bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+
+      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
+        <mat-icon class="text-[#d6ae67]">folder</mat-icon>
+
+        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+          Expediente
+        </h3>
       </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Número de Expediente</span>
-            <span class="field-value mono highlight">{{ expediente.expediente || 'N/A' }}</span>
+
+      <div class="p-6">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Número de Expediente
+            </span>
+
+            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-mono text-sm font-bold text-[#34005b]">
+              {{ expediente.expediente || 'N/A' }}
+            </span>
           </div>
-          <div class="field">
-            <span class="field-label">Fecha del Documento</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_documento) }}</span>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Fecha del Documento
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ formatearFecha(expediente.fecha_documento) }}
+            </span>
           </div>
+
         </div>
       </div>
     </div>
 
-    <div class="info-section entrada-section">
-      <div class="section-header">
-        <mat-icon>input</mat-icon>
-        <h3>Entrada</h3>
+    <div class="mb-5 overflow-hidden rounded-[18px] border border-emerald-500/10 border-l-4 border-l-emerald-500 bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+
+      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-emerald-500/5 px-6 py-4">
+        <mat-icon class="text-emerald-500">input</mat-icon>
+
+        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+          Entrada
+        </h3>
       </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Número</span>
-            <span class="field-value">{{ expediente.numero_entrada_central || 'N/A' }}</span>
+
+      <div class="p-6">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Número
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ expediente.numero_entrada_central || 'N/A' }}
+            </span>
           </div>
-          <div class="field">
-            <span class="field-label">Fecha de Acuse</span>
-            <span class="field-value">{{ formatearFecha(expediente.fecha_recibido) }}</span>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Fecha de Acuse
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ formatearFecha(expediente.fecha_recibido) }}
+            </span>
           </div>
+
         </div>
       </div>
     </div>
 
-    <div class="info-section asignacion-section">
-      <div class="section-header">
-        <mat-icon>assignment_ind</mat-icon>
-        <h3>Asignación</h3>
+    <div class="mb-5 overflow-hidden rounded-[18px] border border-blue-500/10 border-l-4 border-l-blue-500 bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+
+      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-blue-500/5 px-6 py-4">
+        <mat-icon class="text-blue-500">assignment_ind</mat-icon>
+
+        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+          Asignación
+        </h3>
       </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Responsable</span>
-            <span class="field-value highlight">{{ expediente.responsable || 'N/A' }}</span>
+
+      <div class="p-6">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Responsable
+            </span>
+
+            <span class="text-sm font-bold text-[#34005b]">
+              {{ expediente.responsable || 'N/A' }}
+            </span>
           </div>
+
         </div>
       </div>
     </div>
 
-    <div class="info-section sistema-section">
-      <div class="section-header">
-        <mat-icon>computer</mat-icon>
-        <h3>Sistema y Seguimiento</h3>
+    <div class="mb-5 overflow-hidden rounded-[18px] border border-violet-500/10 border-l-4 border-l-violet-500 bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+
+      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-violet-500/5 px-6 py-4">
+        <mat-icon class="text-violet-500">computer</mat-icon>
+
+        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+          Sistema y Seguimiento
+        </h3>
       </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Sistema / Aplicativo</span>
-            <span class="field-value">{{ expediente.sistema_aplicativo || 'N/A' }}</span>
+
+      <div class="p-6">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Sistema / Aplicativo
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ expediente.sistema_aplicativo || 'N/A' }}
+            </span>
           </div>
+
         </div>
       </div>
     </div>
 
-    <div class="info-section estado-section">
-      <div class="section-header">
-        <mat-icon>check_circle</mat-icon>
-        <h3>Estado</h3>
+    <div class="mb-5 overflow-hidden rounded-[18px] border border-emerald-500/10 border-l-4 border-l-emerald-500 bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+
+      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-emerald-500/5 px-6 py-4">
+        <mat-icon class="text-emerald-500">check_circle</mat-icon>
+
+        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+          Estado
+        </h3>
       </div>
-      <div class="section-content">
-        <div class="fields-grid">
-          <div class="field">
-            <span class="field-label">Estatus</span>
+
+      <div class="p-6">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+          <div class="flex flex-col gap-1">
+            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+              Estatus
+            </span>
+
+            <span class="text-sm font-medium text-[#1a1a1a]">
+              {{ expediente.estatus || 'N/A' }}
+            </span>
           </div>
+
         </div>
       </div>
     </div>
 
   </div>
 
-  <div class="modal-footer">
-    <button class="btn-primary" (click)="cerrar()">
+  <div class="flex shrink-0 justify-end gap-4 border-t-2 border-[#34005b]/10 bg-white px-7 py-5">
+
+    <button
+      class="rounded-xl bg-gradient-to-br from-[#34005b] to-[#3e0065] px-8 py-3.5 text-sm font-bold text-white shadow-[0_6px_20px_rgba(52,0,91,0.35)] transition duration-300 hover:-translate-y-1 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]"
+      (click)="cerrar()">
+
       Cerrar
     </button>
+
   </div>
 </div>
 
