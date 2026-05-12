@@ -111,13 +111,18 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   }
 
   // Paso 2 (seguimiento + documento)
-  onPaso2Completado(datos: any) {
+onPaso2Completado(datos: any) {
   if (!datos) {
     this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
     return;
   }
 
   this.datosPaso2 = datos as FormularioPaso2;
+
+  this.documentoPasoFinal = {
+    campos_pospuestos: []
+  };
+
   this.transicionarPaso(2);
   this.mostrarMensaje('Paso 2 completado correctamente', 'success');
 }
@@ -458,24 +463,36 @@ onPaso3Completado(datos: any) {
     }, 200);
   }
 
-  regenerarPDF() {
-    if (this.datosPaso1 && this.datosPaso2 && this.documentoPasoFinal) {
-      this.pdfService.generarPDFExpediente(
-        this.datosPaso1,
-        this.datosPaso2,
-        this.documentoPasoFinal,
-        this.expedienteId || undefined
-      );
-      this.mostrarMensaje('PDF generado nuevamente', 'success', 3000);
-    } else {
-      this.mostrarMensaje('⚠️ No hay datos para generar el PDF', 'warning', 3000);
-    }
-  }
+  // regenerarPDF() {
+  //   if (this.datosPaso1 && this.datosPaso2 && this.documentoPasoFinal) {
+  //     this.pdfService.generarPDFExpediente(
+  //       this.datosPaso1,
+  //       this.datosPaso2,
+  //       this.documentoPasoFinal,
+  //       this.expedienteId || undefined
+  //     );
+  //     this.mostrarMensaje('PDF generado nuevamente', 'success', 3000);
+  //   } else {
+  //     this.mostrarMensaje('⚠️ No hay datos para generar el PDF', 'warning', 3000);
+  //   }
+  // }
 
-  /**
-   * Reiniciar completamente el formulario - todo en blanco
-   * Limpia todos los datos y vuelve al paso 1
-   */
+  regenerarPDF() {
+  if (this.datosPaso1 && this.datosPaso2) {
+    this.pdfService.generarPDFExpediente(
+      this.datosPaso1,
+      this.datosPaso2,
+      this.documentoPasoFinal ?? {},
+      this.expedienteId || undefined
+    );
+
+    this.mostrarMensaje('PDF generado nuevamente', 'success', 3000);
+  } else {
+    this.mostrarMensaje('⚠️ No hay datos para generar el PDF', 'warning', 3000);
+  }
+}
+
+
   reiniciarFormulario() {
     this.isTransitioning = true;
     setTimeout(() => {
