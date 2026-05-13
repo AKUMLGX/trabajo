@@ -79,7 +79,9 @@ export interface FormularioPaso2 {
   fecha_vencimiento?: Date; // Fecha calculada
   dias_retraso?: number; // Calculado automáticamente
   sistema_aplicativo?: string; // Ej: "No aplica"
-  responsable_fecha_asignacion?: string; // Ej: "N/A"
+  /** Nombre del responsable (paso 2 actual) */
+  responsable?: string;
+  responsable_fecha_asignacion?: string; // Ej: "N/A" (flujos legacy)
   woos?: string; // Ej: "REQS00002058748"
   numero_solicitudes_reales?: number; // Número de solicitudes
   observaciones?: string; // Ej: "059 Víctor 2025"

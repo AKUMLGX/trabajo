@@ -19,8 +19,6 @@ import {
 } from '../../../interfaces/expediente-tlalcalli.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ThirdStepTlalcalliComponent } from '../third-step-tlalcalli/third-step-tlalcalli.component';
-
 @Component({
   selector: 'app-stepper-tlalcalli',
   standalone: true,
@@ -34,8 +32,7 @@ import { ThirdStepTlalcalliComponent } from '../third-step-tlalcalli/third-step-
     MatDialogModule,
     MatTooltipModule,
     FirstStepTlalcalliComponent,
-    SecondStepTlalcalliComponent,
-    ThirdStepTlalcalliComponent
+    SecondStepTlalcalliComponent
   ],
   templateUrl: './stepper-tlalcalli.component.html',
   styleUrls: ['./stepper-tlalcalli.component.css', './stepper-tlalcalli-global.css']
@@ -44,7 +41,6 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   @ViewChild(MatStepper) stepper!: MatStepper;
   @ViewChild(FirstStepTlalcalliComponent) paso1Component!: FirstStepTlalcalliComponent;
   @ViewChild(SecondStepTlalcalliComponent) paso2Component!: SecondStepTlalcalliComponent;
-  @ViewChild(ThirdStepTlalcalliComponent) paso3Component!: ThirdStepTlalcalliComponent;
 
   datosPaso1: FormularioPaso1 | null = null;
   datosPaso2: FormularioPaso2 | null = null;
@@ -110,53 +106,23 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Paso 2 (seguimiento + documento)
-onPaso2Completado(datos: any) {
-  if (!datos) {
-    this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
-    return;
+  // Paso 2 (seguimiento): confirmar en modal → POST en finalizarExpediente() → paso 3 (éxito)
+  onPaso2Completado(datos: any) {
+    if (!datos) {
+      this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
+      return;
+    }
+
+    const { documento_pdf, campos_pospuestos, ...seguimiento } = datos;
+    this.datosPaso2 = seguimiento as FormularioPaso2;
+    this.documentoPasoFinal = {
+      documento_pdf: documento_pdf as File | undefined,
+      documento_pdf_nombre: documento_pdf ? (documento_pdf as File).name : undefined,
+      campos_pospuestos: campos_pospuestos || []
+    };
+
+    this.mostrarModalConfirmacion();
   }
-
-  this.datosPaso2 = datos as FormularioPaso2;
-
-  this.documentoPasoFinal = {
-    campos_pospuestos: []
-  };
-
-  this.transicionarPaso(2);
-  this.mostrarMensaje('Paso 2 completado correctamente', 'success');
-}
-  // onPaso2Completado(datos: any) {
-  //   if (!datos) {
-  //     this.mostrarMensaje('No se recibieron datos del paso 2', 'error');
-  //     return;
-  //   }
-
-  //   const { documento_pdf, campos_pospuestos, ...seguimiento } = datos;
-  //   this.datosPaso2 = seguimiento as FormularioPaso2;
-  //   this.documentoPasoFinal = {
-  //     documento_pdf: documento_pdf as File,
-  //     documento_pdf_nombre: documento_pdf ? documento_pdf.name : undefined,
-  //     campos_pospuestos: campos_pospuestos || []
-  //   };
-
-  //   this.mostrarModalConfirmacion();
-  // }
-  onPaso3Siguiente() {
-  if (this.paso3Component) {
-    this.paso3Component.onSubmit();
-  }
-}
-
-onPaso3Completado(datos: any) {
-  this.documentoPasoFinal = {
-    documento_pdf: datos.documento_pdf || null,
-    documento_pdf_nombre: datos.documento_pdf ? datos.documento_pdf.name : undefined,
-    campos_pospuestos: datos.campos_pospuestos || []
-  };
-
-  this.mostrarModalConfirmacion();
-}
 
   // Modal de pre-confirmación con resumen de datos organizados en secciones
   private mostrarModalConfirmacion() {
@@ -276,10 +242,13 @@ onPaso3Completado(datos: any) {
     if (this.datosPaso2) {
       const camposAsignacion: CampoResumen[] = [];
 
-      if (this.datosPaso2.responsable_fecha_asignacion) {
+      const nombreResponsable =
+        this.datosPaso2.responsable_fecha_asignacion || this.datosPaso2.responsable;
+
+      if (nombreResponsable) {
         camposAsignacion.push({
           etiqueta: 'Responsable',
-          valor: this.datosPaso2.responsable_fecha_asignacion,
+          valor: nombreResponsable,
           icono: 'person',
           tipo: 'responsable'
         });
@@ -532,7 +501,8 @@ onPaso3Completado(datos: any) {
       remitente_general: (this.datosPaso1 as any)?.remitente_general,
       remitente_central: (this.datosPaso1 as any)?.remitente_central,
       prioridad: this.datosPaso1?.prioridad,
-      responsable: this.datosPaso2?.responsable_fecha_asignacion
+      responsable:
+        this.datosPaso2?.responsable_fecha_asignacion || this.datosPaso2?.responsable
     };
 
     setTimeout(() => {

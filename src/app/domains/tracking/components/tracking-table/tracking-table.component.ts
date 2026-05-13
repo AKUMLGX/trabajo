@@ -6,7 +6,7 @@ import { Asunto } from '../../../interfaces/asuntos.interfaces';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatIcon } from '@angular/material/icon';
 import { NgxPaginationModule } from 'ngx-pagination';
-import   '../../../../../../node_modules/lib-itsi/src/components/button/button.js';
+import 'lib-itsi/src/components/button/button.js';
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../../services/file.service';
 import { EditTackingTableComponent } from '../edit-tacking-table/edit-tacking-table.component';
