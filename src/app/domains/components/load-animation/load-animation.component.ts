@@ -11,10 +11,10 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './load-animation.component.css',
 })
 export class LoadAnimationComponent {
-  public environment = environment;
+  /** GIF del overlay global; respeta `environment.base` al desplegar bajo subruta (p. ej. /tlalcalli). */
+  readonly loaderGifSrc = `${(environment.base ?? '').replace(/\/$/, '')}/assets/animations/load.gif`;
+
   isLoading$ = this.loadAnimationService.isLoading$;
+
   constructor(private loadAnimationService: LoadAnimationService) {}
-  
-
-
 }
