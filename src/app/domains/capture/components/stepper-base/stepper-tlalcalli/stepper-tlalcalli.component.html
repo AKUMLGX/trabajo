@@ -37,56 +37,11 @@
 
   </div>
 </header>
-    <!-- <section class="mx-5 mt-6 overflow-hidden rounded-t-2xl bg-tlalcalli-primary px-5 py-8">
-      <div class="relative flex items-center justify-between">
-        <div class="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-tlalcalli-gold/40"></div>
-
-        <button
-          type="button"
-          class="relative z-[1] min-w-[180px] rounded-xl border px-5 py-4 text-left"
-          [ngClass]="pasoActual === 0
-            ? 'border-tlalcalli-gold bg-tlalcalli-purple-muted text-white'
-            : 'border-white/30 bg-white/10 text-white/80'">
-          <span class="absolute -top-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-tlalcalli-gold text-xs font-black text-tlalcalli-primary">
-            1
-          </span>
-          <span class="text-xs font-extrabold">Información básica</span>
-        </button>
-
-        <button
-          type="button"
-          class="relative z-[1] min-w-[220px] rounded-xl border px-5 py-4 text-center"
-          [ngClass]="pasoActual === 1
-            ? 'border-tlalcalli-gold bg-tlalcalli-purple-muted text-white'
-            : 'border-white/30 bg-white/10 text-white/80'">
-          <span class="absolute -top-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-tlalcalli-gold text-xs font-black text-tlalcalli-primary">
-            2
-          </span>
-          <span class="text-xs font-extrabold">Seguimiento y Documentación</span>
-        </button>
-
-        <button
-          type="button"
-          class="relative z-[1] min-w-[160px] rounded-xl border px-5 py-4 text-center"
-          [ngClass]="pasoActual === 2
-            ? 'border-tlalcalli-gold bg-tlalcalli-purple-muted text-white'
-            : 'border-white/30 bg-white/10 text-white/80'">
-          <span class="absolute -top-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-tlalcalli-gold text-xs font-black text-tlalcalli-primary">
-            3
-          </span>
-          <span class="text-xs font-extrabold">Resumen</span>
-        </button>
-      </div>
-    </section> -->
-
 
     <section class="mx-5 mt-6 overflow-hidden rounded-t-2xl bg-tlalcalli-primary px-8 py-8">
-  <div class="relative grid grid-cols-3 items-center gap-6">
+    
+    <div class="flex items-center">
 
-    <!--<div class="absolute left-[16.66%] right-[50%] top-1/2 h-px -translate-y-1/2 bg-tlalcalli-gold/40"></div>
-
-    <div class="absolute left-[50%] right-[16.66%] top-1/2 h-px -translate-y-1/2 bg-tlalcalli-gold/40"></div>
-  -->
     <button
       type="button"
       class="relative z-[1] mx-auto w-full max-w-[220px] rounded-xl border px-5 py-4 text-center"
@@ -102,6 +57,7 @@
         Información básica
       </span>
     </button>
+    <div class="mx-4 h-px flex-1 bg-tlalcalli-gold/40"></div>
 
     <button
       type="button"
@@ -118,6 +74,7 @@
         Seguimiento y Documentación
       </span>
     </button>
+    <div class="mx-4 h-px flex-1 bg-tlalcalli-gold/40"></div>
 
     <button
       type="button"
