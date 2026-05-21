@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { Oauth2Service } from '../../../services/ouath2.service';
 import { Oauth2Code, UsuarioCompleto } from '../../../interfaces/oauth2.interfaces';
-import { LoadAnimationComponent } from '../../../components/load-animation/load-animation.component';
+//import { LoadAnimationComponent } from '../../../components/load-animation/load-animation.component';
 import { UserService } from '../../../services/user.service';
 import { UserProfileComponent } from '../../../components/user-profile/user-profile.component';
 import { Subject, takeUntil } from 'rxjs';
@@ -33,7 +33,7 @@ import { PermissionsService } from '../../../services/permissions.service';
     CustomSidenavComponent,
     NavbarContentComponent,
     NavbarContentInfoComponent,
-    LoadAnimationComponent,
+    //LoadAnimationComponent,
     RouterModule,
     CommonModule,
     NotificationsComponent,
@@ -53,7 +53,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   puedeVerRevisionFinal = false;
 
   constructor(
-    private oauth2Service: Oauth2Service, 
+    private oauth2Service: Oauth2Service,
     private modalService: ModalService,
     private userService: UserService,
     private permissionsService: PermissionsService
