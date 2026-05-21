@@ -20,11 +20,20 @@ export class ModalService {
     return this.matDialog.open(CustomModalComponent, {data})
   }
   
-  openCustomDialogWithTemplate(data: TemplateModalData){
-    return this.matDialog.open(
-      CustomModalWithTemplateComponent, {data, disableClose: false}
-    )
-  }
+openCustomDialogWithTemplate(data: TemplateModalData) {
+  return this.matDialog.open(CustomModalWithTemplateComponent, {
+    data,
+    disableClose: false,
+
+    panelClass: [
+      '!bg-transparent',
+      '!shadow-none',
+      '!overflow-visible'
+    ],
+
+    backdropClass: 'bg-black/60'
+  });
+}
 
   closeAllDialogs() {
     this.matDialog.closeAll();

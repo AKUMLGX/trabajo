@@ -60,14 +60,24 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   ) { }
 
   collapsed = signal(false);
+  showUserInfoModal = signal(false);
 
   sidenavWidth = computed(() => (this.collapsed() ? '65px' : '270px'));
 
   openModal(template: TemplateRef<any>) {
     this.dialogRef = this.modalService.openCustomDialogWithTemplate({
-      template
+      template,
     });
   }
+
+
+openUserInfoModal() {
+  this.showUserInfoModal.set(true);
+}
+
+closeUserInfoModal() {
+  this.showUserInfoModal.set(false);
+}
 
 
   ngOnInit(): void {

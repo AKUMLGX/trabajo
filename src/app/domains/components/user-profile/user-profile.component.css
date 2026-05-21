@@ -1,16 +1,11 @@
-/* ==========================================
-   🎨 DISEÑO ELEGANTE PARA PERFIL DE USUARIO SAT
-   ========================================== */
-
-/* Contenedor principal con efectos modernos - SIN esquinas blancas */
-.user-profile-container {
+/* .user-profile-container {
   max-width: 500px;
   width: 100%;
   margin: 0 !important;
   background: #ffffff !important;
   border-radius: 20px !important;
   overflow: hidden !important;
-  box-shadow: none !important; /* Las sombras las maneja el modal padre */
+  box-shadow: none !important;
   position: relative;
   animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   border: none !important;
@@ -22,9 +17,6 @@
   min-height: auto;
 }
 
-/* ========================================== */
-/* 🎨 HEADER ELEGANTE CON GRADIENTES Y PATRONES */
-/* ========================================== */
 
 .profile-header-elegant {
   position: relative;
@@ -36,7 +28,6 @@
   margin: 0 !important;
 }
 
-/* Fondo con múltiples capas para efecto premium */
 .header-background {
   position: absolute;
   top: 0;
@@ -50,7 +41,6 @@
     #B8446F 100%);
 }
 
-/* Patrón decorativo sutil */
 .pattern-overlay {
   position: absolute;
   top: 0;
@@ -64,7 +54,6 @@
   animation: patternFloat 8s ease-in-out infinite;
 }
 
-/* Gradiente adicional para profundidad */
 .gradient-overlay {
   position: absolute;
   top: 0;
@@ -77,7 +66,6 @@
     rgba(255, 255, 255, 0.05) 100%);
 }
 
-/* Contenido del header */
 .header-content {
   position: relative;
   z-index: 2;
@@ -86,16 +74,12 @@
   gap: 20px;
 }
 
-/* ========================================== */
-/* 🎨 AVATAR ELEGANTE CON EFECTOS 3D */
-/* ========================================== */
 
 .avatar-container {
   position: relative;
   flex-shrink: 0;
 }
 
-/* Anillo exterior con animación */
 .avatar-ring {
   position: absolute;
   top: -6px;
@@ -107,7 +91,6 @@
   animation: ringPulse 3s ease-in-out infinite;
 }
 
-/* Avatar principal con efectos 3D */
 .user-avatar-elegant {
   width: 80px;
   height: 80px;
@@ -147,7 +130,6 @@
   letter-spacing: 1px;
 }
 
-/* Badge de estado del usuario */
 .status-badge {
   position: absolute;
   bottom: 2px;
@@ -183,13 +165,10 @@
   height: 16px;
 }
 
-/* ========================================== */
-/* 🎨 INFORMACIÓN PRINCIPAL DEL USUARIO */
-/* ========================================== */
 
 .user-info-main {
   flex: 1;
-  min-width: 0; /* Para truncamiento correcto */
+  min-width: 0;
 }
 
 .user-name-elegant {
@@ -238,9 +217,6 @@
   height: 16px;
 }
 
-/* ========================================== */
-/* 🎨 INDICADOR DE SESIÓN MODERNO */
-/* ========================================== */
 
 .session-indicator {
   margin-top: 20px;
@@ -289,7 +265,6 @@
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
 }
 
-/* Barra de progreso de sesión personalizada */
 .session-progress-container {
   width: 100%;
   height: 6px;
@@ -324,7 +299,6 @@
   animation: shimmer 2s ease-in-out infinite;
 }
 
-/* Progress bar de sesión */
 .session-progress {
   margin: 16px 0;
   padding: 0 16px;
@@ -359,7 +333,6 @@
   50% { opacity: 0.7; }
 }
 
-/* Secciones de información */
 .section-title {
   display: flex;
   align-items: center;
@@ -375,7 +348,6 @@
   font-size: 20px;
 }
 
-/* Grid de información general */
 .info-grid {
   display: grid;
   gap: 12px;
@@ -423,7 +395,6 @@
   font-weight: 600;
 }
 
-/* Sección de roles */
 .roles-section {
   margin: 16px 0;
 }
@@ -450,7 +421,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Grid de información de sesión */
 .session-grid {
   display: grid;
   gap: 12px;
@@ -493,7 +463,6 @@
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
 }
 
-/* Alertas de seguridad */
 .security-alerts {
   margin-top: 16px;
 }
@@ -518,7 +487,6 @@
   font-size: 18px;
 }
 
-/* Versión compacta */
 .compact-content {
   padding: 16px;
 }
@@ -545,7 +513,6 @@
   border-radius: 10px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .user-profile-card {
     max-width: 100%;
@@ -578,9 +545,6 @@
   }
 }
 
-/* ========================================== */
-/* 🎨 CONTENIDO PRINCIPAL ELEGANTE */
-/* ========================================== */
 
 .profile-content-elegant {
   padding: 24px;
@@ -590,9 +554,6 @@
   margin: 0 !important;
 }
 
-/* ========================================== */
-/* 🎨 ANIMACIONES PREMIUM */
-/* ========================================== */
 
 @keyframes slideInUp {
   from {
@@ -654,9 +615,6 @@
   }
 }
 
-/* ========================================== */
-/* 🎨 SECCIONES DE INFORMACIÓN MEJORADAS */
-/* ========================================== */
 
 .info-section {
   margin: 20px 0;
@@ -682,7 +640,6 @@
   border-radius: 6px;
 }
 
-/* Grid de información mejorado */
 .info-grid {
   display: grid;
   gap: 16px;
@@ -734,9 +691,6 @@
   flex-shrink: 0;
 }
 
-/* ========================================== */
-/* 🎨 CHIPS DE ROLES MODERNOS */
-/* ========================================== */
 
 .roles-section {
   margin: 24px 0;
@@ -786,9 +740,6 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* ========================================== */
-/* 🎨 DIVIDERS Y ELEMENTOS DECORATIVOS */
-/* ========================================== */
 
 mat-divider {
   margin: 24px 0;
@@ -800,9 +751,6 @@ mat-divider {
   border: none;
 }
 
-/* ========================================== */
-/* 🎨 ESTILOS PARA INFORMACIÓN DE ADMINISTRACIÓN */
-/* ========================================== */
 
 .administracion-item {
   background: linear-gradient(135deg, 
@@ -836,7 +784,6 @@ mat-divider {
   font-weight: 500;
 }
 
-/* Efecto especial para el item de administración */
 .administracion-item:hover {
   background: linear-gradient(135deg, 
     rgba(105, 28, 50, 0.08) 0%, 
@@ -847,7 +794,6 @@ mat-divider {
     0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos generales para info-content */
 .info-content {
   display: flex;
   flex-direction: column;
@@ -869,9 +815,6 @@ mat-divider {
   color: #374151;
 }
 
-/* ========================================== */
-/* 🎨 RESPONSIVE DESIGN MEJORADO */
-/* ========================================== */
 
 @media (max-width: 768px) {
   .user-profile-container {
@@ -914,4 +857,4 @@ mat-divider {
   .administracion-descripcion {
     font-size: 0.8rem;
   }
-} 
+}  */

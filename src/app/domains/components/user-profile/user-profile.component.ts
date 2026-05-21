@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, signal, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +28,7 @@ import { UsuarioCompleto } from '../../interfaces/oauth2.interfaces';
 export class UserProfileComponent implements OnInit, OnDestroy {
   @Input() compact = false; // Para diferentes variaciones del componente
   @Input() showAdvancedInfo = true; // Mostrar información avanzada (JWT)
+  @Output() closeProfile = new EventEmitter<void>();
 
   usuario: UsuarioCompleto | null = null;
   private destroy$ = new Subject<void>();
@@ -47,9 +48,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Obtiene las iniciales del nombre para el avatar
-   */
+
   getIniciales(): string {
     if (!this.usuario?.nombre) return 'U';
     
@@ -60,9 +59,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return this.usuario.nombre.charAt(0).toUpperCase();
   }
 
-  /**
-   * Obtiene el color del badge según el tiempo restante
-   */
+
   getBadgeColor(): 'primary' | 'accent' | 'warn' {
     if (!this.usuario) return 'primary';
     
@@ -71,9 +68,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return 'primary';
   }
 
-  /**
-   * Obtiene el texto del tiempo restante formateado
-   */
+
   getTiempoRestanteTexto(): string {
     if (!this.usuario) return '';
     
@@ -86,9 +81,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return `${horas}h ${minutosRestantes}m`;
   }
 
-  /**
-   * Obtiene el color del chip para cada rol
-   */
+
   getRolColor(rol: string): string {
     if (rol.includes('SUPERVISA')) return 'primary';
     if (rol.includes('CAPTURA')) return 'accent';
@@ -96,9 +89,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return 'basic';
   }
 
-  /**
-   * Obtiene el ícono para cada tipo de rol
-   */
+
   getRolIcon(rol: string): string {
     if (rol.includes('SUPERVISA')) return 'supervisor_account';
     if (rol.includes('CAPTURA')) return 'edit';
@@ -106,9 +97,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return 'person';
   }
 
-  /**
-   * Formatea la fecha de manera legible
-   */
+
   formatearFecha(fecha: Date): string {
     return fecha.toLocaleString('es-MX', {
       year: 'numeric',
@@ -119,9 +108,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Obtiene el porcentaje de tiempo transcurrido de la sesión
-   */
+
   getPorcentajeSesion(): number {
     if (!this.usuario) return 0;
     
@@ -131,9 +118,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return Math.min(100, Math.max(0, (tiempoTranscurrido / duracionTotal) * 100));
   }
 
-  /**
-   * Obtiene la descripción del tipo de usuario
-   */
+
   getTipoUsuarioDescripcion(): string {
     if (!this.usuario) return '';
     
@@ -146,9 +131,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return 'Usuario';
   }
 
-  /**
-   * Obtiene el ícono para el tipo de usuario
-   */
   getTipoUsuarioIcon(): string {
     if (!this.usuario) return 'person';
     
