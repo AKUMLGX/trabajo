@@ -127,7 +127,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   // Modal de pre-confirmación con resumen de datos organizados en secciones
   private mostrarModalConfirmacion() {
     const secciones: SeccionResumen[] = this.construirSeccionesResumen();
-    
+
     const dialogRef = this.dialog.open(PreConfirmacionModalComponent, {
       width: '650px',
       maxWidth: '95vw',
@@ -155,9 +155,11 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   // Construir secciones organizadas para el modal
   private construirSeccionesResumen(): SeccionResumen[] {
     const secciones: SeccionResumen[] = [];
-    
+
     // Sección 1: Información del Requerimiento
     if (this.datosPaso1) {
+      let fecha_acuse : string = this.datosPaso1.fecha_recibido?.toString() || "";
+      let fecha_vencimiento : string = this.datosPaso1.fecha_vencimiento?.toString() || "";
       const camposRequerimiento: CampoResumen[] = [];
 
       camposRequerimiento.push({
@@ -204,7 +206,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       if (this.datosPaso1.fecha_recibido) {
         camposFechas.push({
           etiqueta: 'Fecha de Acuse',
-          valor: this.formatearFecha(this.datosPaso1.fecha_recibido),
+          valor:   this.reformateo_fast(fecha_acuse), //new Date(this.datosPaso1.fecha_recibido).toString(),   //this.formatearFecha(this.datosPaso1.fecha_recibido),
           icono: 'event',
           tipo: 'fecha'
         });
@@ -213,7 +215,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       if (this.datosPaso1.fecha_vencimiento) {
         camposFechas.push({
           etiqueta: 'Fecha Vencimiento',
-          valor: this.formatearFecha(this.datosPaso1.fecha_vencimiento),
+          valor:  this.reformateo_fast(fecha_vencimiento),//this.datosPaso1.fecha_vencimiento.toString(),//this.formatearFecha(this.datosPaso1.fecha_vencimiento),
           icono: 'event_busy',
           tipo: 'fecha'
         });
@@ -280,6 +282,11 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     if (!fecha) return 'N/A';
     const d = typeof fecha === 'string' ? new Date(fecha) : fecha;
     return d.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  private reformateo_fast(fecha : string) : string {
+    let elementos = fecha.split('-'); //obtenemos año mes dia
+    return `${elementos[2]}-${elementos[1]}-${elementos[0]}`
   }
 
   private obtenerColorPrioridad(prioridad: string): string {
@@ -474,7 +481,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       this.expedienteId = null;
       this.paso1Valido = false;
       this.isTransitioning = false;
-      
+
       // Reiniciar componentes hijos si existen
       if (this.paso1Component) {
         this.paso1Component.reiniciarFormulario?.();
@@ -482,7 +489,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       if (this.paso2Component) {
         this.paso2Component.reiniciarFormulario?.();
       }
-      
+
       this.mostrarMensaje('Formulario reiniciado completamente', 'info');
     }, 300);
   }
@@ -494,7 +501,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
    */
   crearNuevoRegistro() {
     this.isTransitioning = true;
-    
+
     // Guardar datos que queremos precargar
     const datosPrecargar = {
       tipo_medio_recepcion: this.datosPaso1?.tipo_medio_recepcion,
@@ -515,12 +522,12 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       this.expedienteId = null;
       this.paso1Valido = false;
       this.isTransitioning = false;
-      
+
       // Precargar datos en el paso 1
       if (this.paso1Component && datosPrecargar) {
         this.paso1Component.precargarDatos?.(datosPrecargar);
       }
-      
+
       this.mostrarMensaje('Nuevo registro - algunos datos fueron precargados', 'success');
     }, 300);
   }

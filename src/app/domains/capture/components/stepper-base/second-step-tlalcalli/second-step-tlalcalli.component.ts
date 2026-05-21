@@ -27,12 +27,12 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
 
   formulario: FormGroup;
   private destroy$ = new Subject<void>();
-  
+
   // Progreso del formulario
   progresoFormulario = 0;
   camposCompletados = 0;
   camposTotales = 0;
-  
+
   // Opciones para el dropdown de responsables
   opcionesResponsables: SelectOption[] = [
     { value: 'Irma Guerrero', label: 'Irma Guerrero' },
@@ -40,7 +40,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     { value: 'Carlos Hernández', label: 'Carlos Hernández' }
   ];
 
-  
+
   // Opciones para los selects
   opcionesEstatus: SelectOption[] = [
     { value: 'ASIGNADO', label: 'Asignado' },
@@ -69,7 +69,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   ) {
     // Obtener fecha de hoy en formato YYYY-MM-DD
     const hoy = this.formHelper.getFechaActual();
-    
+
     this.formulario = this.fb.group({
       // Campos de entrada
       responsable: ['', [Validators.required, Validators.maxLength(100)]]
@@ -83,10 +83,10 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Calcular campos totales
     this.camposTotales = Object.keys(this.formulario.controls).length;
-    
+
     // Calcular progreso inicial
     this.calcularProgreso();
-    
+
     // Suscribirse a cambios para actualizar progreso y guardar borrador
     this.formulario.valueChanges
       .pipe(debounceTime(300), takeUntil(this.destroy$))
@@ -94,7 +94,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
         this.calcularProgreso();
         this.guardarBorrador();
       });
-    
+
     // Cargar borrador si existe
     this.cargarBorrador();
   }
@@ -142,7 +142,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
           }
         }
       });
-      
+
       if (Object.keys(datosCargar).length > 0) {
         this.formulario.patchValue(datosCargar, { emitEvent: false });
         this.logger.debug('Borrador Paso 2 cargado:', Object.keys(datosCargar).length, 'campos');
@@ -187,7 +187,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
         camposInvalidos.push(key);
       }
     });
-    
+
     if (camposInvalidos.length > 0) {
       // Mostrar error con modal (se implementará después)
       const mensaje = `⚠️ PASO 2 - Faltan los siguientes campos:\n\n${camposInvalidos.map(c => `• ${c}`).join('\n')}`;
@@ -219,7 +219,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
    */
   reiniciarFormulario(): void {
     this.logger.debug('Reiniciando formulario del paso 2 completamente');
-    
+
     // Reset del formulario a valores iniciales
     this.formulario.reset({
       responsable: ''
@@ -230,7 +230,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
 
     // Recalcular progreso
     this.calcularProgreso();
-    
+
     this.logger.debug('Formulario paso 2 reiniciado completamente');
   }
 }

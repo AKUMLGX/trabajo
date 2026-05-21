@@ -129,7 +129,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   // Modal de pre-confirmación con resumen de datos organizados en secciones
   private mostrarModalConfirmacion() {
     const secciones: SeccionResumen[] = this.construirSeccionesResumen();
-    
+
     const dialogRef = this.dialog.open(PreConfirmacionModalComponent, {
       width: '650px',
       maxWidth: '95vw',
@@ -157,7 +157,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   // Construir secciones organizadas para el modal
   private construirSeccionesResumen(): SeccionResumen[] {
     const secciones: SeccionResumen[] = [];
-    
+
     // Sección 1: Información del Requerimiento
     if (this.datosPaso1) {
       const camposRequerimiento: CampoResumen[] = [];
@@ -461,7 +461,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       this.expedienteId = null;
       this.paso1Valido = false;
       this.isTransitioning = false;
-      
+
       // Reiniciar componentes hijos si existen
       if (this.paso1Component) {
         this.paso1Component.reiniciarFormulario?.();
@@ -469,7 +469,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       if (this.paso2Component) {
         this.paso2Component.reiniciarFormulario?.();
       }
-      
+
       this.mostrarMensaje('Formulario reiniciado completamente', 'info');
     }, 300);
   }
@@ -481,7 +481,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
    */
   crearNuevoRegistro() {
     this.isTransitioning = true;
-    
+
     // Guardar datos que queremos precargar
     const datosPrecargar = {
       tipo_medio_recepcion: this.datosPaso1?.tipo_medio_recepcion,
@@ -501,12 +501,12 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       this.expedienteId = null;
       this.paso1Valido = false;
       this.isTransitioning = false;
-      
+
       // Precargar datos en el paso 1
       if (this.paso1Component && datosPrecargar) {
         this.paso1Component.precargarDatos?.(datosPrecargar);
       }
-      
+
       this.mostrarMensaje('Nuevo registro - algunos datos fueron precargados', 'success');
     }, 300);
   }
