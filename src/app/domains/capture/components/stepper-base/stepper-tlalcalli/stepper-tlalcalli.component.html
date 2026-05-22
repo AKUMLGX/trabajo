@@ -99,12 +99,16 @@
       @switch (pasoActual) {
         @case (0) {
           <div>
-            <div class="sticky top-0 z-50 flex justify-end rounded-b-xl bg-tlalcalli-light-cream px-5 py-4 shadow-md">              <button
+            <div class="sticky top-0 z-50 flex justify-end rounded-b-xl bg-tlalcalli-light-cream px-5 py-4 shadow-md">              
+              <button
                 type="button"
                 (click)="onPaso1Siguiente()"
                 [disabled]="!puedeAvanzarPaso1"
-                class="flex items-center gap-2 rounded-lg bg-tlalcalli-lavender px-6 py-2.5 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-50">
-                Siguiente
+                class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-extrabold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+                [ngClass]="puedeAvanzarPaso1
+                ? 'bg-tlalcalli-primary hover:bg-tlalcalli-deep'
+                : 'bg-tlalcalli-lavender'">
+                  Siguiente
                 <mat-icon class="!text-[18px]">arrow_forward</mat-icon>
               </button>
             </div>

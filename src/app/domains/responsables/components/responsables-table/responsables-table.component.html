@@ -204,32 +204,41 @@
         }
       </div>
 
-      <div class="flex w-full max-w-[274px] shrink-0 rounded-lg bg-tlalcalli-lavender p-1">
-        <button
-          type="button"
-          class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold text-tlalcalli-primary"
-          [ngClass]="{ 'bg-white text-tlalcalli-primary': vistaActual === 'pendientes' }"
-          (click)="cambiarVista('pendientes')">
-          Por atender
-          <span
-            class="flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs text-white"
-            [ngClass]="vistaActual === 'pendientes' ? 'bg-tlalcalli-lavender' : 'bg-tlalcalli-primary'">
-            {{ contadorPendientes }}
-          </span>
-        </button>
+<div class="flex w-full max-w-[274px] shrink-0 rounded-lg bg-tlalcalli-lavender p-1">
+  <button
+    type="button"
+    class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold transition"
+    [ngClass]="vistaActual === 'pendientes'
+      ? 'bg-white text-tlalcalli-primary'
+      : 'text-white'"
+    (click)="cambiarVista('pendientes')">
+    Por atender
+    <span
+      class="flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs text-white"
+      [ngClass]="vistaActual === 'pendientes'
+        ? 'bg-tlalcalli-lavender'
+        : 'bg-tlalcalli-primary'">
+      {{ contadorPendientes }}
+    </span>
+  </button>
 
-        <button
-          type="button"
-          class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold text-tlalcalli-primary"
-          [ngClass]="{ 'bg-white text-tlalcalli-primary': vistaActual === 'atendidos' }"
-          (click)="cambiarVista('atendidos')">
-          Atendidos
-          <span
-            class="flex h-6 min-w-6 items-center justify-center rounded-full bg-tlalcalli-success px-2 text-xs text-white">
-            {{ contadorAtendidos }}
-          </span>
-        </button>
-      </div>
+  <button
+    type="button"
+    class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold transition"
+    [ngClass]="vistaActual === 'atendidos'
+      ? 'bg-white text-tlalcalli-primary'
+      : 'text-white'"
+    (click)="cambiarVista('atendidos')">
+    Atendidos
+    <span
+      class="flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs text-white"
+      [ngClass]="vistaActual === 'atendidos'
+        ? 'bg-tlalcalli-lavender'
+        : 'bg-tlalcalli-success'">
+      {{ contadorAtendidos }}
+    </span>
+  </button>
+</div>
     </div>
 
     <div class="overflow-x-auto">
@@ -339,15 +348,17 @@
                 <td class="px-4 py-7 text-center">
                   <div class="flex items-center justify-center gap-3">
                     <button
-                      (click)="verDetalleExpediente(expediente)"
-                      class="h-7 w-7 rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
-                      title="Ver detalle">
+                    (click)="verDetalleExpediente(expediente)"
+                    class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
+                    title="Ver detalle">
+                      👁
                     </button>
 
                     <button
-                      (click)="abrirModalAtencion(expediente)"
-                      class="h-7 w-7 rounded-md bg-tlalcalli-success transition hover:bg-tlalcalli-success-muted"
-                      title="Atender expediente">
+                    (click)="abrirModalAtencion(expediente)"
+                    class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-success text-white transition hover:bg-tlalcalli-success-muted"
+                    title="Atender expediente">
+                      ✓
                     </button>
                   </div>
                 </td>
@@ -420,8 +431,9 @@
                 <td class="px-4 py-6 text-center">
                   <button
                     (click)="verDetalleExpediente(expediente)"
-                    class="h-7 w-7 rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
+                    class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
                     title="Ver detalle">
+                      👁
                   </button>
                 </td>
               </tr>
