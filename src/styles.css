@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
+
+.font-ubuntu-mono {
+    font-family: 'Ubuntu Mono', monospace;
+}
 
 html, body { height: 100%; }
 body { 

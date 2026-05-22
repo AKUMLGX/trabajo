@@ -4,7 +4,7 @@
 
 
     <!-- <section class="mx-auto max-w-4xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"> -->
-    <section class="w-full rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
+    <section class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
 
       <div class="mb-2 flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -38,7 +38,7 @@
     </section>
 
     <!-- <section class="mx-auto max-w-4xl rounded-xl border border-tlalcalli-light-muted bg-tlalcalli-light-lavender p-6 shadow-md"> -->
-          <section class="w-full rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
+          <section class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
 
       <div class="mb-6 flex items-center gap-3 border-b border-tlalcalli-light-muted pb-4">
         <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-primary text-white">
@@ -94,7 +94,7 @@
       Número
     </p>
 
-    <p class="text-2xl font-black leading-none text-black">
+    <p class="font-ubuntu-mono text-2xl font-black leading-none text-black">
       {{ formulario.get('expediente')?.value || 'EXP-2601-0001' }}
     </p>
   </div>
@@ -120,7 +120,7 @@
     </section>
     <!-- <section class="w-full rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"> -->
 
-    <section class="w-full rounded-xl border border-tlalcalli-success/30 bg-tlalcalli-success/10 p-6 shadow-md">
+    <section class= "mx-auto w-[80%] max-w-6xl rounded-xl border-tlalcalli-success/30 bg-tlalcalli-success/10 p-6 shadow-md">
       <div class="mb-6 flex items-center gap-3 border-b border-tlalcalli-success/30 pb-4">
         <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-success text-white">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +166,7 @@
 
         <!-- <section class="w-full rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"> -->
 
-    <section class="w-full  overflow-hidden rounded-xl bg-tlalcalli-primary shadow-xl">
+    <section class="mx-auto w-[80%] max-w-6xl rounded-xl bg-tlalcalli-primary shadow-xl">
       <div class="flex items-center gap-4 border-b border-white/20 px-6 py-5">
         <div class="flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-white/15 text-white">
           <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,7 +199,7 @@
           [ngClass]="{
             'rounded-xl border-2 border-tlalcalli-warning bg-yellow-50 p-3': tieneCaracteresProblematicos
           }">
-<div class="mb-6">
+<div class="mb-6 font-ubuntu-mono">
   <app-custom-form-field
     label="Número"
     [required]="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'"
