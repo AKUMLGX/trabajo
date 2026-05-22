@@ -36,13 +36,14 @@
   <nav class="relative z-[1] w-full flex-1 overflow-y-auto overflow-x-hidden">
     <mat-nav-list class="!p-0">
       @for (item of menuItems(); track item.label) {
-        <a
+<a
   mat-list-item
   [routerLink]="item.route"
   routerLinkActive="menu-item-active"
   #rla="routerLinkActive"
-  class="!mb-2 !h-auto !rounded-xl !p-0 transition-all duration-200"
+  class="!h-auto !rounded-xl !p-0 transition-all duration-200"
   [ngClass]="[
+    collapsed ? '!mb-6' : '!mb-3',
     collapsed ? '!mx-auto !w-12' : '!w-full',
     rla.isActive
       ? '!bg-tlalcalli-gold !text-tlalcalli-primary'
