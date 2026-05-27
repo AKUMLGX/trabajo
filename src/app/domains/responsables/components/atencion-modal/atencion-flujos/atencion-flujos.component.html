@@ -1,0 +1,313 @@
+<section class="mb-8">
+  <h3 class="mb-6 flex items-center gap-4 text-xl font-black text-gray-700">
+    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4b0075] text-sm font-black text-white shadow-lg shadow-[#4b0075]/30">
+      2
+    </span>
+    Seleccionar Flujo de Trabajo
+  </h3>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <button
+      type="button"
+      *ngFor="let flujo of opcionesFlujosAsignado"
+      (click)="seleccionarFlujo(flujo.value)"
+      class="relative flex min-h-[88px] items-center gap-4 rounded-2xl border-2 bg-white px-5 py-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      [ngClass]="formulario.flujoAsignadoSeleccionado === flujo.value
+        ? 'border-[#4b0075] bg-[#4b0075]/[0.03] shadow-[#4b0075]/20'
+        : 'border-gray-200'">
+
+      <div
+        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+        [ngClass]="[flujo.bg, flujo.color]">
+        <mat-icon>{{ flujo.icon }}</mat-icon>
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <span class="block text-lg font-black text-gray-700">{{ flujo.label }}</span>
+        <span class="mt-2 block text-sm font-medium text-gray-400">{{ flujo.description }}</span>
+      </div>
+
+      <mat-icon
+        *ngIf="formulario.flujoAsignadoSeleccionado === flujo.value"
+        class="absolute right-4 top-4 text-[#4b0075]">
+        check_circle
+      </mat-icon>
+    </button>
+  </div>
+</section>
+
+<section *ngIf="formulario.flujoAsignadoSeleccionado" class="mb-8">
+  <h3 class="mb-6 flex items-center gap-4 text-xl font-black text-gray-700">
+    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4b0075] text-sm font-black text-white shadow-lg shadow-[#4b0075]/30">
+      3
+    </span>
+    Detalles del Flujo
+  </h3>
+
+  <div class="rounded-2xl border border-gray-200 bg-white px-6 py-6">
+
+    <div *ngIf="formulario.flujoAsignadoSeleccionado === 'ADQUISICION_INFO'">
+
+      <div class="mb-8">
+        <div class="mb-5 flex items-start justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
+              [ngClass]="formulario.tipoInsumo ? 'bg-tlalcalli-primary' : 'bg-[#7a006e]'">
+              <mat-icon *ngIf="formulario.tipoInsumo">check</mat-icon>
+              <span *ngIf="!formulario.tipoInsumo" class="font-black">1</span>
+            </div>
+
+            <div>
+              <h4 class="m-0 flex items-center gap-2 text-lg font-black text-tlalcalli-primary">
+                <mat-icon class="text-tlalcalli-primary">inventory_2</mat-icon>
+                Selecciona el Insumo
+              </h4>
+              <p class="m-0 mt-2 text-sm font-medium text-gray-400">
+                Elige un tipo de insumo para este expediente
+              </p>
+            </div>
+          </div>
+
+          <span
+            *ngIf="formulario.tipoInsumo"
+            class="rounded-full bg-[#7a006e] px-4 py-2 text-sm font-black text-white">
+            1 seleccionado
+          </span>
+        </div>
+
+        <div class="border-t border-gray-200 pt-5">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <button
+              type="button"
+              *ngFor="let insumo of catalogos.tipos_insumo"
+              (click)="seleccionarInsumo(insumo.codigo)"
+              class="flex min-h-[74px] items-center gap-4 rounded-2xl border-2 bg-white px-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              [ngClass]="formulario.tipoInsumo === insumo.codigo
+                ? 'border-tlalcalli-primary bg-emerald-50 text-tlalcalli-primary'
+                : 'border-gray-200 text-gray-500'">
+
+              <span
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2"
+                [ngClass]="formulario.tipoInsumo === insumo.codigo ? 'border-tlalcalli-primary' : 'border-gray-300'">
+                <span *ngIf="formulario.tipoInsumo === insumo.codigo" class="h-3 w-3 rounded-full bg-tlalcalli-primary"></span>
+              </span>
+
+                <mat-icon class="!text-[22px] !h-[22px] !w-[22px] shrink-0">{{ getInsumoIcon(insumo.codigo) }}</mat-icon>        
+                  <span class="text-base font-bold">{{ insumo.descripcion }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <div class="mb-5 flex items-start justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
+              [ngClass]="formulario.tiposResultado.length > 0 ? 'bg-tlalcalli-primary' : 'bg-[#7a006e]'">
+              <mat-icon *ngIf="formulario.tiposResultado.length > 0">check</mat-icon>
+              <span *ngIf="formulario.tiposResultado.length === 0" class="font-black">2</span>
+            </div>
+
+            <div>
+              <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
+                <mat-icon class="text-[#4b0075]">fact_check</mat-icon>
+                Selecciona el Resultado
+              </h4>
+              <p class="m-0 mt-2 text-sm font-medium text-gray-400">
+                Selecciona uno o más documentos a generar
+              </p>
+            </div>
+          </div>
+
+          <span
+            *ngIf="formulario.tiposResultado.length > 0"
+            class="rounded-full bg-tlalcalli-primary px-4 py-2 text-sm font-black text-white">
+            {{ formulario.tiposResultado.length }} seleccionado(s)
+          </span>
+        </div>
+
+        <div class="border-t border-gray-200 pt-5">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+            <button
+              type="button"
+              *ngFor="let resultado of catalogos.tipos_resultado"
+              (click)="toggleResultado(resultado.codigo)"
+              class="relative flex min-h-[114px] flex-col items-center justify-center rounded-2xl border-2 bg-white px-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              [ngClass]="seleccionado(formulario.tiposResultado, resultado.codigo)
+                ? 'border-[#4b0075] bg-[#4b0075]/[0.03] text-[#4b0075]'
+                : 'border-gray-200 text-gray-500'">
+
+              <mat-icon class="mb-3 !h-8 !w-8 !text-[32px]">description</mat-icon>
+              <span class="text-sm font-bold">{{ resultado.descripcion }}</span>
+
+              <mat-icon
+                *ngIf="seleccionado(formulario.tiposResultado, resultado.codigo)"
+                class="absolute right-3 top-3 text-tlalcalli-primary">
+                check_circle
+              </mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="formulario.flujoAsignadoSeleccionado !== 'ADQUISICION_INFO'" class="mb-8">
+      <div class="mb-5 flex items-start justify-between gap-4">
+        <div class="flex items-start gap-4">
+          <div
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
+            [ngClass]="formulario.opcionesSeleccionadas.length > 0 ? 'bg-emerald-500' : 'bg-[#7a006e]'">
+            <mat-icon *ngIf="formulario.opcionesSeleccionadas.length > 0">check</mat-icon>
+            <span *ngIf="formulario.opcionesSeleccionadas.length === 0" class="font-black">1</span>
+          </div>
+
+          <div>
+            <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
+              <mat-icon class="text-[#4b0075]">checklist</mat-icon>
+              Selecciona opción(es)
+            </h4>
+            <p class="m-0 mt-2 text-sm font-medium text-gray-400">
+              Selecciona una o más opciones del flujo
+            </p>
+          </div>
+        </div>
+
+        <span
+          *ngIf="formulario.opcionesSeleccionadas.length > 0"
+          class="rounded-full bg-emerald-500 px-4 py-2 text-sm font-black text-white">
+          {{ formulario.opcionesSeleccionadas.length }} seleccionado(s)
+        </span>
+      </div>
+
+      <div class="border-t border-gray-200 pt-5">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <button
+            type="button"
+            *ngFor="let opcion of opcionesActuales"
+            (click)="toggleOpcion(opcion.codigo)"
+            class="relative flex min-h-[78px] items-center gap-4 rounded-2xl border-2 bg-white px-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            [ngClass]="seleccionado(formulario.opcionesSeleccionadas, opcion.codigo)
+              ? 'border-[#4b0075] bg-[#4b0075]/[0.03] text-[#4b0075]'
+              : 'border-gray-200 text-gray-500'">
+
+            <mat-icon class="!text-[28px]">{{ opcion.icon }}</mat-icon>
+            <span class="text-base font-bold">{{ opcion.descripcion }}</span>
+
+            <mat-icon
+              *ngIf="seleccionado(formulario.opcionesSeleccionadas, opcion.codigo)"
+              class="absolute right-4 top-4 text-emerald-500">
+              check_circle
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <app-atencion-especialistas
+        [externos]="externos"
+        [internos]="internos"
+        [(seleccionados)]="formulario.especialistasSeleccionados"
+        [max]="maxEspecialistas">
+      </app-atencion-especialistas>
+    </div>
+
+    <div class="mb-8 border-t border-gray-200 pt-6">
+      <div class="mb-5 flex items-start justify-between gap-4">
+        <div class="flex items-start gap-4">
+          <div
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
+            [ngClass]="formulario.fechaEntrega ? 'bg-emerald-500' : 'bg-[#7a006e]'">
+            <mat-icon *ngIf="formulario.fechaEntrega">check</mat-icon>
+            <span *ngIf="!formulario.fechaEntrega" class="font-black">4</span>
+          </div>
+
+          <div>
+            <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
+              <mat-icon class="text-[#4b0075]">event</mat-icon>
+              Fecha de Entrega
+            </h4>
+            <p class="m-0 mt-2 text-sm font-medium text-gray-400">
+              ¿Cuándo debe completarse esta tarea?
+            </p>
+          </div>
+        </div>
+
+        <span
+          *ngIf="formulario.fechaEntrega"
+          class="rounded-full bg-sky-500 px-4 py-2 text-sm font-black text-white">
+          {{ formatearFecha(formulario.fechaEntrega) }}
+        </span>
+      </div>
+
+      <div class="rounded-2xl border-2 border-emerald-500 bg-sky-50 px-6 py-6">
+        <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div class="flex items-center gap-5">
+            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-500 text-white shadow-lg shadow-sky-500/30">
+              <mat-icon class="!h-9 !w-9 !text-[36px]">schedule</mat-icon>
+            </div>
+
+            <div>
+              <label class="mb-2 block text-sm font-black uppercase text-sky-700">
+                Selecciona la fecha límite
+              </label>
+
+              <input
+                type="date"
+                [(ngModel)]="formulario.fechaEntrega"
+                class="h-14 rounded-xl border-2 border-sky-300 bg-white px-5 text-base font-black text-gray-700 outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-200" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <button
+              type="button"
+              (click)="setFechaRapida('manana')"
+              class="rounded-xl bg-white px-5 py-3 text-center text-sm font-black text-sky-600 shadow-sm transition hover:bg-sky-100">
+              <mat-icon class="mx-auto block">event</mat-icon>
+              Mañana
+            </button>
+
+            <button
+              type="button"
+              (click)="setFechaRapida('tresDias')"
+              class="rounded-xl bg-white px-5 py-3 text-center text-sm font-black text-sky-600 shadow-sm transition hover:bg-sky-100">
+              <mat-icon class="mx-auto block">event</mat-icon>
+              3 días
+            </button>
+
+            <button
+              type="button"
+              (click)="setFechaRapida('semana')"
+              class="rounded-xl bg-white px-5 py-3 text-center text-sm font-black text-sky-600 shadow-sm transition hover:bg-sky-100">
+              <mat-icon class="mx-auto block">event</mat-icon>
+              1 semana
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="flujoCompleto" class="rounded-2xl border border-emerald-100 bg-emerald-50 px-6 py-5">
+      <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-white">
+          <mat-icon>verified</mat-icon>
+        </div>
+
+        <div>
+          <h4 class="m-0 text-lg font-black text-emerald-800">¡Selección completa!</h4>
+          <p class="m-0 mt-1 text-sm font-bold text-emerald-700">
+            <ng-container *ngIf="formulario.flujoAsignadoSeleccionado === 'ADQUISICION_INFO'">
+              1 insumo • {{ formulario.tiposResultado.length }} resultado(s) •
+            </ng-container>
+            {{ formulario.especialistasSeleccionados.length }} especialista(s) •
+            {{ formatearFecha(formulario.fechaEntrega) }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

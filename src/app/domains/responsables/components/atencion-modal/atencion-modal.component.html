@@ -1,1020 +1,231 @@
-<div class="atencion-modal">
-  <div class="modal-header">
-    <div class="header-content">
-      <div class="header-icon">
-        <mat-icon>assignment_turned_in</mat-icon>
+<div class="flex max-h-[calc(100vh-28px)] w-[min(1060px,94vw)] flex-col overflow-hidden rounded-[28px] bg-white shadow-2xl">
+
+  <header class="shrink-0 bg-gradient-to-r from-[#3b005f] via-[#4b0075] to-[#5b1180] px-10 py-8 text-white">
+    <div class="flex items-center justify-between gap-6">
+      <div class="flex items-center gap-5">
+        <div class="flex h-[58px] w-[58px] items-center justify-center rounded-2xl bg-white/15 shadow-lg backdrop-blur">
+          <mat-icon class="!h-8 !w-8 !text-[32px] !leading-8">assignment_turned_in</mat-icon>
+        </div>
+
+        <div>
+          <p class="m-0 text-[12px] font-bold uppercase tracking-[3px] text-white/65">
+            Atender Expediente
+          </p>
+
+          <h2 class="m-0 mt-1 text-[27px] font-ubuntu-mono font-black leading-none tracking-tight text-white">
+            {{ expediente.expediente }}
+          </h2>
+
+          <p class="m-0 mt-3 text-sm font-semibold text-white/65">
+            {{ expediente.oficio || 'Sin oficio' }}
+          </p>
+        </div>
       </div>
-      <div class="header-text">
-        <p class="header-eyebrow">Atender Expediente</p>
-        <h2 class="header-title">{{ expediente.expediente }}</h2>
-        <p class="header-subtitle">{{ expediente.oficio || 'Sin oficio' }}</p>
-      </div>
+
+      <button
+        type="button"
+        (click)="cerrar()"
+        [disabled]="guardando"
+        class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 text-white transition hover:scale-105 hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-50">
+        <mat-icon class="!text-[30px]">close</mat-icon>
+      </button>
     </div>
-    <button class="close-btn" (click)="cerrar()" [disabled]="guardando">
-      <mat-icon>close</mat-icon>
-    </button>
+  </header>
+
+  <div *ngIf="cargandoCatalogos" class="flex min-h-[420px] items-center justify-center bg-[#f8f8f9]">
+    <div class="text-center">
+      <div class="mx-auto h-11 w-11 animate-spin rounded-full border-4 border-gray-200 border-t-[#4b0075]"></div>
+      <p class="mt-4 text-sm font-bold text-gray-500">Cargando catálogos...</p>
+    </div>
   </div>
 
-  <div class="modal-body" *ngIf="!cargandoCatalogos">
-    
-    <div class="expediente-info">
-      <div class="info-item">
-        <span class="label">Responsable</span>
-        <span class="value">{{ expediente.responsable }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Asunto</span>
-        <span class="value truncate">{{ expediente.referencia_asunto || 'N/A' }}</span>
-      </div>
-    </div>
+  <main *ngIf="!cargandoCatalogos" class="flex-1 overflow-y-auto bg-[#f8f8f9] px-10 py-8">
 
-    <div class="form-section">
-      <h3 class="section-title">
-        <span class="step-number">1</span>
+    <section class="mb-8 grid grid-cols-1 gap-6 rounded-2xl border border-gray-200 bg-white px-6 py-5 shadow-sm md:grid-cols-2">
+      <div>
+        <span class="block text-xs font-black uppercase tracking-wide text-gray-400">Responsable</span>
+        <span class="mt-2 block text-base font-semibold text-gray-700">
+          {{ expediente.responsable || 'Sin responsable' }}
+        </span>
+      </div>
+
+      <div class="min-w-0">
+        <span class="block text-xs font-black uppercase tracking-wide text-gray-400">Asunto</span>
+        <span class="mt-2 block truncate text-base font-semibold text-gray-700">
+          {{ expediente.referencia_asunto || 'N/A' }}
+        </span>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h3 class="mb-6 flex items-center gap-4 text-xl font-bold text-tlalcalli-primary">
+        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4b0075] text-sm font-black text-white shadow-lg shadow-[#4b0075]/30">
+          1
+        </span>
         Tipo de Acción
       </h3>
-      <div class="action-cards">
-        <div 
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <button
+          type="button"
           *ngFor="let opcion of opcionesTipoAccion"
-          class="action-card"
-          [class.selected]="formulario.tipoAccion === opcion.value"
-          (click)="formulario.tipoAccion = opcion.value; onTipoAccionChange()">
-          <div class="card-icon" [ngClass]="opcion.color">
-            <mat-icon>{{ opcion.icon }}</mat-icon>
-          </div>
-          <div class="card-content">
-            <span class="card-label">{{ opcion.label }}</span>
-            <span class="card-description">{{ opcion.description }}</span>
-          </div>
-          <div class="card-check" *ngIf="formulario.tipoAccion === opcion.value">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-        </div>
-      </div>
-    </div>
+          (click)="seleccionarTipoAccion(opcion.value)"
+          class="relative flex min-h-[88px] items-center gap-4 rounded-2xl border-2 bg-white px-5 py-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+          [ngClass]="formulario.tipoAccion === opcion.value
+            ? 'border-[#4b0075] bg-[#4b0075]/[0.03] shadow-[#4b0075]/20'
+            : 'border-gray-200'">
 
-    
-    <div class="form-section" *ngIf="formulario.tipoAccion === 'RECHAZADO'">
-      <h3 class="section-title">
-        <span class="step-number">2</span>
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+            [ngClass]="[opcion.bg, opcion.color]">
+            <mat-icon class="!h-6 !w-6 !text-[24px]">{{ opcion.icon }}</mat-icon>
+          </div>
+
+          <div class="min-w-0 flex-1">
+            <span class="block text-lg font-black text-gray-700">{{ opcion.label }}</span>
+            <span class="mt-2 block text-sm font-medium text-gray-400">{{ opcion.description }}</span>
+          </div>
+
+          <mat-icon
+            *ngIf="formulario.tipoAccion === opcion.value"
+            class="absolute right-4 top-4 !h-6 !w-6 !text-[24px] text-[#4b0075]">
+            check_circle
+          </mat-icon>
+        </button>
+      </div>
+    </section>
+
+    <section *ngIf="mostrarEspecialistasDirecto" class="mb-8">
+      <h3 class="mb-6 flex items-center gap-4 text-xl font-black text-gray-700">
+        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4b0075] text-sm font-black text-white shadow-lg shadow-[#4b0075]/30">
+          2
+        </span>
         Asignar Especialistas
       </h3>
-      <div class="dynamic-form">
-        <div class="wizard-step active">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
-                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
-                <span *ngIf="formulario.especialistasSeleccionados.length === 0">1</span>
-              </span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>groups</mat-icon>
-                Selecciona Especialista(s)
-              </h4>
-              <p class="step-desc">Selecciona uno o más especialistas para el rechazo</p>
-            </div>
-            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
-              {{ formulario.especialistasSeleccionados.length }} asignado(s)
-            </div>
-          </div>
-          <div class="step-content">
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge externo">
-                  <mat-icon>work_outline</mat-icon>
-                  Externos
-                </span>
-                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasExternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar externo">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Externo</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-            
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge interno">
-                  <mat-icon>badge</mat-icon>
-                  Internos
-                </span>
-                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasInternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar interno">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Interno</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="form-section" *ngIf="formulario.tipoAccion === 'PENDIENTE_INFO'">
-      <h3 class="section-title">
-        <span class="step-number">2</span>
-        Asignar Especialistas
-      </h3>
-      <div class="dynamic-form">
-        <div class="wizard-step active">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
-                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
-                <span *ngIf="formulario.especialistasSeleccionados.length === 0">1</span>
-              </span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>groups</mat-icon>
-                Selecciona Especialista(s)
-              </h4>
-              <p class="step-desc">Selecciona uno o más especialistas para solicitar información</p>
-            </div>
-            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
-              {{ formulario.especialistasSeleccionados.length }} asignado(s)
-            </div>
-          </div>
-          <div class="step-content">
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge externo">
-                  <mat-icon>work_outline</mat-icon>
-                  Externos
-                </span>
-                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasExternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar externo">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Externo</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-            
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge interno">
-                  <mat-icon>badge</mat-icon>
-                  Internos
-                </span>
-                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasInternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar interno">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Interno</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <app-atencion-especialistas
+        [externos]="especialistasExternos"
+        [internos]="especialistasInternos"
+        [(seleccionados)]="formulario.especialistasSeleccionados"
+        [max]="MAX_ESPECIALISTAS">
+      </app-atencion-especialistas>
+    </section>
 
-    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO'">
-      <h3 class="section-title">
-        <mat-icon>computer</mat-icon>
+    <section *ngIf="formulario.tipoAccion === 'ASIGNADO'" class="mb-8">
+      <h3 class="mb-5 flex items-center gap-3 text-xl font-black text-gray-700">
+        <mat-icon class="!text-[28px] text-gray-700">computer</mat-icon>
         Sistema y Aplicativo
       </h3>
-      <div class="sistema-select-container">
-        <div class="sistema-input-wrapper">
-          <input 
+
+      <div class="relative">
+        <div class="relative flex items-center">
+          <input
             type="text"
-            class="sistema-input"
             [(ngModel)]="sistemaBusqueda"
             (ngModelChange)="onSistemaInputChange()"
             (focus)="sistemaDropdownAbierto = true; filtrarSistemas()"
             (blur)="cerrarSistemaDropdown()"
             placeholder="Busca o escribe un sistema"
-            autocomplete="off">
-          <button 
+            autocomplete="off"
+            class="h-[58px] w-full rounded-2xl border-2 border-gray-200 bg-white pl-5 pr-16 text-base font-medium text-gray-700 outline-none shadow-sm transition placeholder:text-gray-300 focus:border-[#4b0075] focus:ring-4 focus:ring-[#4b0075]/15" />
+
+          <button
             type="button"
-            class="sistema-dropdown-btn"
-            (click)="toggleSistemaDropdown()"
-            [class.active]="sistemaDropdownAbierto">
+            (mousedown)="$event.preventDefault()"
+            (click)="sistemaDropdownAbierto = !sistemaDropdownAbierto; filtrarSistemas()"
+            class="absolute right-2 flex h-11 w-11 items-center justify-center rounded-xl transition"
+            [ngClass]="sistemaDropdownAbierto ? 'bg-[#4b0075] text-white' : 'text-gray-400 hover:bg-gray-100 hover:text-[#4b0075]'">
             <mat-icon>{{ sistemaDropdownAbierto ? 'expand_less' : 'expand_more' }}</mat-icon>
           </button>
         </div>
-        
-        <div class="sistema-dropdown" *ngIf="sistemaDropdownAbierto" [@slideDown]>
-          <div class="dropdown-header">
-            <mat-icon>search</mat-icon>
-            <span>{{ sistemasFiltrados.length }} sistema(s) encontrado(s)</span>
-          </div>
-          <div class="dropdown-list">
-            <div 
-              *ngFor="let sistema of sistemasFiltrados"
-              class="dropdown-item"
-              (click)="seleccionarSistema(sistema)"
-              [class.selected]="formulario.sistema_aplicativo === sistema">
-              <mat-icon class="item-icon">apps</mat-icon>
-              <span class="item-text">{{ sistema }}</span>
-              <mat-icon class="item-check" *ngIf="formulario.sistema_aplicativo === sistema">check_circle</mat-icon>
-            </div>
-            <div class="dropdown-empty" *ngIf="sistemasFiltrados.length === 0">
-              <mat-icon>info</mat-icon>
-              <p>No se encontraron sistemas. Puedes escribir uno nuevo.</p>
-            </div>
-          </div>
-        </div>
-        
-        <p class="sistema-hint">
-          <mat-icon>info</mat-icon>
+
+        <p class="mt-3 flex items-center gap-2 text-sm font-medium text-gray-400">
+          <mat-icon class="!h-4 !w-4 !text-base text-[#d6ae67]">info</mat-icon>
           Selecciona un sistema del catálogo o escribe uno nuevo
         </p>
-      </div>
-    </div>
 
-    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO'">
-      <h3 class="section-title">
-        <span class="step-number">2</span>
-        Seleccionar Flujo de Trabajo
-      </h3>
-      <div class="action-cards">
-        <div 
-          *ngFor="let flujo of opcionesFlujosAsignado"
-          class="action-card"
-          [class.selected]="flujoAsignadoSeleccionado === flujo.value"
-          (click)="seleccionarFlujoAsignado(flujo.value)">
-          <div class="card-icon" [ngClass]="flujo.color">
-            <mat-icon>{{ flujo.icon }}</mat-icon>
+        <div
+          *ngIf="sistemaDropdownAbierto"
+          class="absolute left-0 right-0 top-[calc(100%+12px)] z-50 max-h-[360px] overflow-hidden rounded-2xl border-2 border-gray-200 bg-white shadow-2xl">
+
+          <div class="flex items-center gap-3 border-b border-gray-200 bg-gray-50 px-6 py-4 text-sm font-black uppercase tracking-wide text-gray-400">
+            <mat-icon class="!h-5 !w-5 !text-xl text-[#4b0075]">search</mat-icon>
+            {{ sistemasFiltrados.length }} sistema(s) encontrado(s)
           </div>
-          <div class="card-content">
-            <span class="card-label">{{ flujo.label }}</span>
-            <span class="card-description">{{ flujo.description }}</span>
-          </div>
-          <div class="card-check" *ngIf="flujoAsignadoSeleccionado === flujo.value">
-            <mat-icon>check_circle</mat-icon>
+
+          <div class="max-h-[296px] overflow-y-auto p-2">
+            <button
+              type="button"
+              *ngFor="let sistema of sistemasFiltrados"
+              (mousedown)="$event.preventDefault()"
+              (click)="seleccionarSistema(sistema)"
+              class="flex w-full items-center gap-4 rounded-xl px-5 py-4 text-left transition hover:bg-[#4b0075]/5"
+              [ngClass]="formulario.sistema_aplicativo === sistema ? 'bg-[#4b0075]/10 text-[#4b0075]' : 'text-gray-500'">
+
+              <mat-icon class="text-gray-400">apps</mat-icon>
+              <span class="flex-1 text-base font-bold">{{ sistema }}</span>
+              <mat-icon *ngIf="formulario.sistema_aplicativo === sistema" class="text-green-600">
+                check_circle
+              </mat-icon>
+            </button>
+
+            <div *ngIf="sistemasFiltrados.length === 0" class="px-4 py-10 text-center text-sm text-gray-400">
+              No se encontraron sistemas. Puedes escribir uno nuevo.
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO' && flujoAsignadoSeleccionado">
-      <h3 class="section-title">
-        <span class="step-number">3</span>
-        Detalles del Flujo
-      </h3>
+    <app-atencion-flujos
+      *ngIf="formulario.tipoAccion === 'ASIGNADO'"
+      [catalogos]="catalogos"
+      [externos]="especialistasExternos"
+      [internos]="especialistasInternos"
+      [formulario]="formulario"
+      [maxEspecialistas]="MAX_ESPECIALISTAS">
+    </app-atencion-flujos>
 
-      <div class="dynamic-form adquisicion-wizard" *ngIf="flujoAsignadoSeleccionado === 'ADQUISICION_INFO'">
-        
-        <div class="wizard-step active">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.tipoInsumo">
-                <mat-icon *ngIf="formulario.tipoInsumo">check</mat-icon>
-                <span *ngIf="!formulario.tipoInsumo">1</span>
-              </span>
-              <span class="step-line" [class.active]="formulario.tipoInsumo"></span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>inventory_2</mat-icon>
-                Selecciona el Insumo
-              </h4>
-              <p class="step-desc">Elige un tipo de insumo para este expediente</p>
-            </div>
-            <div class="step-badge" *ngIf="formulario.tipoInsumo">
-              1 seleccionado
-            </div>
-          </div>
-          <div class="step-content">
-            <div class="resultado-grid">
-              <label 
-                *ngFor="let insumo of catalogos.tipos_insumo"
-                class="resultado-card"
-                [class.selected]="insumoSeleccionado(insumo.codigo)">
-                <input 
-                  type="radio" 
-                  name="tipoInsumo"
-                  [value]="insumo.codigo"
-                  [checked]="insumoSeleccionado(insumo.codigo)"
-                  (change)="seleccionarInsumo(insumo.codigo)">
-                <div class="radio-indicator">
-                  <span class="radio-dot"></span>
-                </div>
-                <mat-icon class="card-icon">{{ getInsumoIcon(insumo.codigo) }}</mat-icon>
-                <span class="card-text">{{ insumo.descripcion }}</span>
-              </label>
-            </div>
-          </div>
+    <section *ngIf="seleccionDirectaCompleta" class="mb-8 rounded-2xl border border-emerald-100 bg-emerald-50 px-6 py-5">
+      <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-white">
+          <mat-icon>verified</mat-icon>
         </div>
 
-        <div class="wizard-step" [class.active]="formulario.tipoInsumo" [class.disabled]="!formulario.tipoInsumo">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.tiposResultado.length > 0">
-                <mat-icon *ngIf="formulario.tiposResultado.length > 0">check</mat-icon>
-                <span *ngIf="formulario.tiposResultado.length === 0">2</span>
-              </span>
-              <span class="step-line" [class.active]="formulario.tiposResultado.length > 0"></span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>fact_check</mat-icon>
-                Selecciona el Resultado
-              </h4>
-              <p class="step-desc">Selecciona uno o más documentos a generar</p>
-            </div>
-            <div class="step-badge resultado" *ngIf="formulario.tiposResultado.length > 0">
-              {{ formulario.tiposResultado.length }} seleccionado(s)
-            </div>
-          </div>
-          <div class="step-content" *ngIf="formulario.tipoInsumo" @slideDown>
-            <div class="insumo-grid">
-              <label 
-                *ngFor="let resultado of catalogos.tipos_resultado"
-                class="insumo-card"
-                [class.selected]="resultadoAdquisicionSeleccionado(resultado.codigo)">
-                <input 
-                  type="checkbox" 
-                  [checked]="resultadoAdquisicionSeleccionado(resultado.codigo)"
-                  (change)="toggleResultadoAdquisicion(resultado.codigo)">
-                <div class="card-check">
-                  <mat-icon>check</mat-icon>
-                </div>
-                <mat-icon class="card-icon">{{ getResultadoIcon(resultado.codigo) }}</mat-icon>
-                <span class="card-text">{{ resultado.descripcion }}</span>
-              </label>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="!formulario.tipoInsumo">
-            <mat-icon>lock</mat-icon>
-            <span>Primero selecciona un insumo</span>
-          </div>
-        </div>
-
-        <div class="wizard-step" [class.active]="formulario.tiposResultado.length > 0" [class.disabled]="formulario.tiposResultado.length === 0">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
-                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
-                <span *ngIf="formulario.especialistasSeleccionados.length === 0">3</span>
-              </span>
-              <span class="step-line" [class.active]="formulario.especialistasSeleccionados.length > 0"></span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>groups</mat-icon>
-                Asigna Especialista(s)
-              </h4>
-              <p class="step-desc">Selecciona uno o más especialistas para atender</p>
-            </div>
-            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
-              {{ formulario.especialistasSeleccionados.length }} asignado(s)
-            </div>
-          </div>
-          <div class="step-content" *ngIf="formulario.tiposResultado.length > 0" @slideDown>
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge externo">
-                  <mat-icon>work_outline</mat-icon>
-                  Externos
-                </span>
-                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasExternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar externo">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Externo</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-            
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge interno">
-                  <mat-icon>badge</mat-icon>
-                  Internos
-                </span>
-                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasInternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar interno">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Interno</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="formulario.tiposResultado.length === 0">
-            <mat-icon>lock</mat-icon>
-            <span>Primero selecciona al menos un resultado</span>
-          </div>
-        </div>
-
-        <div class="wizard-step" [class.active]="formulario.especialistasSeleccionados.length > 0" [class.disabled]="formulario.especialistasSeleccionados.length === 0">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.fechaEntrega">
-                <mat-icon *ngIf="formulario.fechaEntrega">check</mat-icon>
-                <span *ngIf="!formulario.fechaEntrega">4</span>
-              </span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>event</mat-icon>
-                Fecha de Entrega
-              </h4>
-              <p class="step-desc">¿Cuándo debe completarse esta tarea?</p>
-            </div>
-            <div class="step-badge fecha" *ngIf="formulario.fechaEntrega">
-              {{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}
-            </div>
-          </div>
-          <div class="step-content" *ngIf="formulario.especialistasSeleccionados.length > 0">
-            <div class="fecha-picker-container">
-              <div class="fecha-picker-icon">
-                <mat-icon>schedule</mat-icon>
-              </div>
-              <div class="fecha-picker-wrapper">
-                <label class="fecha-label">Selecciona la fecha límite</label>
-                <input 
-                  type="date" 
-                  class="fecha-input"
-                  [(ngModel)]="formulario.fechaEntrega"
-                  [min]="getFechaMinima()">
-              </div>
-              <div class="fecha-quick-options">
-                <button type="button" class="quick-option" (click)="setFechaRapida(1)">
-                  <mat-icon>today</mat-icon>
-                  <span>Mañana</span>
-                </button>
-                <button type="button" class="quick-option" (click)="setFechaRapida(3)">
-                  <mat-icon>date_range</mat-icon>
-                  <span>3 días</span>
-                </button>
-                <button type="button" class="quick-option" (click)="setFechaRapida(7)">
-                  <mat-icon>event_note</mat-icon>
-                  <span>1 semana</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="formulario.especialistasSeleccionados.length === 0">
-            <mat-icon>lock</mat-icon>
-            <span>Primero asigna al menos un especialista</span>
-          </div>
-        </div>
-
-        <div class="wizard-summary" *ngIf="formulario.tipoInsumo && formulario.tiposResultado.length > 0 && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
-          <div class="summary-icon">
-            <mat-icon>verified</mat-icon>
-          </div>
-          <div class="summary-text">
-            <h4>¡Selección completa!</h4>
-            <p>
-              <strong>1</strong> insumo • 
-              <strong>{{ formulario.tiposResultado.length }}</strong> resultado(s) • 
-              <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s) • 
-              <strong>{{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}</strong>
-            </p>
-          </div>
+        <div>
+          <h4 class="m-0 text-lg font-black text-emerald-800">¡Selección completa!</h4>
+          <p class="m-0 mt-1 text-sm font-bold text-emerald-700">
+            {{ formulario.especialistasSeleccionados.length }} especialista(s) asignado(s)
+          </p>
         </div>
       </div>
+    </section>
 
-      <div class="dynamic-form adquisicion-wizard" *ngIf="flujoAsignadoSeleccionado && esFlujoConOpcionesAsignado()">
-        
-        <div class="wizard-step active">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.opcionSeleccionada">
-                <mat-icon *ngIf="formulario.opcionSeleccionada">check</mat-icon>
-                <span *ngIf="!formulario.opcionSeleccionada">1</span>
-              </span>
-              <span class="step-line" [class.active]="formulario.opcionSeleccionada"></span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>category</mat-icon>
-                {{ getTituloOpciones() }}
-              </h4>
-              <p class="step-desc">Selecciona una opción</p>
-            </div>
-            <div class="step-badge" *ngIf="formulario.opcionSeleccionada">
-              1 seleccionado
-            </div>
-          </div>
-          <div class="step-content">
-            <div class="resultado-grid">
-              <label 
-                *ngFor="let opcion of getOpcionesActualesAsignado()"
-                class="resultado-card"
-                [class.selected]="opcionSeleccionada(opcion.codigo)">
-                <input 
-                  type="radio" 
-                  name="opcionFlujo"
-                  [value]="opcion.codigo"
-                  [checked]="opcionSeleccionada(opcion.codigo)"
-                  (change)="seleccionarOpcion(opcion.codigo)">
-                <div class="radio-indicator">
-                  <span class="radio-dot"></span>
-                </div>
-                <mat-icon class="card-icon">{{ opcion.icon }}</mat-icon>
-                <span class="card-text">{{ opcion.descripcion }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
+  </main>
 
-        <div class="wizard-step" [class.active]="formulario.opcionSeleccionada" [class.disabled]="!formulario.opcionSeleccionada">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.resultadosSeleccionados.length > 0">
-                <mat-icon *ngIf="formulario.resultadosSeleccionados.length > 0">check</mat-icon>
-                <span *ngIf="formulario.resultadosSeleccionados.length === 0">2</span>
-              </span>
-              <span class="step-line" [class.active]="formulario.resultadosSeleccionados.length > 0"></span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>description</mat-icon>
-                Tipo de Documento
-              </h4>
-              <p class="step-desc">Selecciona uno o más documentos a generar</p>
-            </div>
-            <div class="step-badge resultado" *ngIf="formulario.resultadosSeleccionados.length > 0">
-              {{ formulario.resultadosSeleccionados.length }} seleccionado(s)
-            </div>
-          </div>
-          <div class="step-content" *ngIf="formulario.opcionSeleccionada">
-            <div class="insumo-grid">
-              <label 
-                *ngFor="let resultado of getResultadosActualesAsignado()"
-                class="insumo-card"
-                [class.selected]="resultadoSeleccionado(resultado.codigo)">
-                <input 
-                  type="checkbox" 
-                  [checked]="resultadoSeleccionado(resultado.codigo)"
-                  (change)="toggleResultado(resultado.codigo)">
-                <div class="card-check">
-                  <mat-icon>check</mat-icon>
-                </div>
-                <mat-icon class="card-icon">{{ resultado.icon }}</mat-icon>
-                <span class="card-text">{{ resultado.descripcion }}</span>
-              </label>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="!formulario.opcionSeleccionada">
-            <mat-icon>lock</mat-icon>
-            <span>Primero selecciona una opción</span>
-          </div>
-        </div>
+  <footer class="shrink-0 border-t border-gray-200 bg-white px-10 py-5">
+    <div class="flex justify-end gap-4">
+      <button
+        type="button"
+        (click)="cerrar()"
+        [disabled]="guardando"
+        class="h-12 rounded-xl border-2 border-gray-200 bg-white px-8 text-base font-bold text-gray-500 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
+        Cancelar
+      </button>
 
-        <div class="wizard-step" [class.active]="formulario.resultadosSeleccionados.length > 0" [class.disabled]="formulario.resultadosSeleccionados.length === 0">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
-                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
-                <span *ngIf="formulario.especialistasSeleccionados.length === 0">3</span>
-              </span>
-              <span class="step-line" [class.active]="formulario.especialistasSeleccionados.length > 0"></span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>groups</mat-icon>
-                Asigna Especialista(s)
-              </h4>
-              <p class="step-desc">Selecciona uno o más especialistas</p>
-            </div>
-            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
-              {{ formulario.especialistasSeleccionados.length }} asignado(s)
-            </div>
-          </div>
-          <div class="step-content" *ngIf="formulario.resultadosSeleccionados.length > 0">
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge externo">
-                  <mat-icon>work_outline</mat-icon>
-                  Externos
-                </span>
-                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasExternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar externo">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Externo</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-            
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge interno">
-                  <mat-icon>badge</mat-icon>
-                  Internos
-                </span>
-                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasInternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar interno">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Interno</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="formulario.resultadosSeleccionados.length === 0">
-            <mat-icon>lock</mat-icon>
-            <span>Primero selecciona al menos un resultado</span>
-          </div>
-        </div>
+      <button
+        type="button"
+        (click)="guardar()"
+        [disabled]="guardando || !formularioValido()"
+        class="flex h-12 min-w-[240px] items-center justify-center gap-3 rounded-xl px-8 text-base font-black text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-60"
+        [ngClass]="formularioValido()
+          ? 'bg-[#4b0075] hover:bg-[#39005a] shadow-[#4b0075]/30'
+          : 'bg-[#9d80b3]'">
 
-        <div class="wizard-step" [class.active]="formulario.especialistasSeleccionados.length > 0" [class.disabled]="formulario.especialistasSeleccionados.length === 0">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.fechaEntrega">
-                <mat-icon *ngIf="formulario.fechaEntrega">check</mat-icon>
-                <span *ngIf="!formulario.fechaEntrega">4</span>
-              </span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>event</mat-icon>
-                Fecha de Entrega
-              </h4>
-              <p class="step-desc">¿Cuándo debe completarse esta tarea?</p>
-            </div>
-            <div class="step-badge fecha" *ngIf="formulario.fechaEntrega">
-              {{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}
-            </div>
-          </div>
-          <div class="step-content" *ngIf="formulario.especialistasSeleccionados.length > 0">
-            <div class="fecha-picker-container">
-              <div class="fecha-picker-icon">
-                <mat-icon>schedule</mat-icon>
-              </div>
-              <div class="fecha-picker-wrapper">
-                <label class="fecha-label">Selecciona la fecha límite</label>
-                <input 
-                  type="date" 
-                  class="fecha-input"
-                  [(ngModel)]="formulario.fechaEntrega"
-                  [min]="getFechaMinima()">
-              </div>
-              <div class="fecha-quick-options">
-                <button type="button" class="quick-option" (click)="setFechaRapida(1)">
-                  <mat-icon>today</mat-icon>
-                  <span>Mañana</span>
-                </button>
-                <button type="button" class="quick-option" (click)="setFechaRapida(3)">
-                  <mat-icon>date_range</mat-icon>
-                  <span>3 días</span>
-                </button>
-                <button type="button" class="quick-option" (click)="setFechaRapida(7)">
-                  <mat-icon>event_note</mat-icon>
-                  <span>1 semana</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="formulario.especialistasSeleccionados.length === 0">
-            <mat-icon>lock</mat-icon>
-            <span>Primero asigna al menos un especialista</span>
-          </div>
-        </div>
-
-        <div class="wizard-summary" *ngIf="formulario.opcionSeleccionada && formulario.resultadosSeleccionados.length > 0 && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
-          <div class="summary-icon">
-            <mat-icon>verified</mat-icon>
-          </div>
-          <div class="summary-text">
-            <h4>¡Selección completa!</h4>
-            <p>
-              <strong>1</strong> opción • 
-              <strong>{{ formulario.resultadosSeleccionados.length }}</strong> resultado(s) • 
-              <strong>{{ formulario.especialistasSeleccionados.length }}</strong> especialista(s) • 
-              <strong>{{ formulario.fechaEntrega | date:'dd/MM/yyyy' }}</strong>
-            </p>
-          </div>
-        </div>
-      </div>
+        <mat-icon *ngIf="!guardando" class="!h-5 !w-5 !text-xl">save</mat-icon>
+        <span *ngIf="guardando" class="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></span>
+        {{ guardando ? 'Guardando...' : 'Guardar Atención' }}
+      </button>
     </div>
-
-    <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO' && flujoAsignadoSeleccionado === 'SOLICITUD_INFORMACION'">
-      <h3 class="section-title">
-        <span class="step-number">3</span>
-        Detalles de Solicitud de Información
-      </h3>
-      
-      <div class="dynamic-form">
-        <div class="wizard-step active">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="tipoSolicitudSeleccionado">
-                <mat-icon *ngIf="tipoSolicitudSeleccionado">check</mat-icon>
-                <span *ngIf="!tipoSolicitudSeleccionado">1</span>
-              </span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>category</mat-icon>
-                Tipo de Solicitud
-              </h4>
-              <p class="step-desc">Selecciona el tipo de solicitud de información</p>
-            </div>
-          </div>
-          <div class="step-content">
-            <div class="action-cards" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-              <div 
-                *ngFor="let opcion of opcionesSolicitudInfo"
-                class="action-card"
-                [class.selected]="tipoSolicitudSeleccionado === opcion.value"
-                (click)="seleccionarTipoSolicitud(opcion.value)">
-                <div class="card-icon" [ngClass]="opcion.value === 'CORRELACION' ? 'text-blue-600' : 'text-gray-600'">
-                  <mat-icon>{{ opcion.icon }}</mat-icon>
-                </div>
-                <div class="card-content">
-                  <span class="card-label">{{ opcion.label }}</span>
-                </div>
-                <div class="card-check" *ngIf="tipoSolicitudSeleccionado === opcion.value">
-                  <mat-icon>check_circle</mat-icon>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="wizard-step" [class.active]="tipoSolicitudSeleccionado === 'CORRELACION'" [class.disabled]="tipoSolicitudSeleccionado !== 'CORRELACION'">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="opcionesCorrelacionSeleccionadas.length > 0">
-                <mat-icon *ngIf="opcionesCorrelacionSeleccionadas.length > 0">check</mat-icon>
-                <span *ngIf="opcionesCorrelacionSeleccionadas.length === 0">2</span>
-              </span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>list</mat-icon>
-                Opciones de Correlación
-              </h4>
-              <p class="step-desc">Selecciona una o más opciones de correlación</p>
-            </div>
-            <div class="step-badge" *ngIf="opcionesCorrelacionSeleccionadas.length > 0">
-              {{ opcionesCorrelacionSeleccionadas.length }} seleccionado(s)
-            </div>
-          </div>
-          <div class="step-content" *ngIf="tipoSolicitudSeleccionado === 'CORRELACION'">
-            <div class="insumo-grid">
-              <label 
-                *ngFor="let opcion of opcionesCorrelacion"
-                class="insumo-card"
-                [class.selected]="opcionCorrelacionSeleccionada(opcion.codigo)">
-                <input 
-                  type="checkbox" 
-                  [checked]="opcionCorrelacionSeleccionada(opcion.codigo)"
-                  (change)="toggleOpcionCorrelacion(opcion.codigo)">
-                <div class="card-check">
-                  <mat-icon>check</mat-icon>
-                </div>
-                <mat-icon class="card-icon">{{ opcion.icon }}</mat-icon>
-                <span class="card-text">{{ opcion.descripcion }}</span>
-              </label>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="tipoSolicitudSeleccionado !== 'CORRELACION'">
-            <mat-icon>lock</mat-icon>
-            <span>Primero selecciona "Correlación"</span>
-          </div>
-        </div>
-
-        <div class="wizard-step" [class.active]="(tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length > 0) || (tipoSolicitudSeleccionado === 'OTRA_AREA')" [class.disabled]="!tipoSolicitudSeleccionado || (tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length === 0)">
-          <div class="step-header">
-            <div class="step-indicator">
-              <span class="step-num" [class.completed]="formulario.especialistasSeleccionados.length > 0">
-                <mat-icon *ngIf="formulario.especialistasSeleccionados.length > 0">check</mat-icon>
-                <span *ngIf="formulario.especialistasSeleccionados.length === 0">3</span>
-              </span>
-            </div>
-            <div class="step-info">
-              <h4 class="step-title">
-                <mat-icon>groups</mat-icon>
-                Asigna Especialista(s)
-              </h4>
-              <p class="step-desc">Selecciona uno o más especialistas para la solicitud</p>
-            </div>
-            <div class="step-badge especialista" *ngIf="formulario.especialistasSeleccionados.length > 0">
-              {{ formulario.especialistasSeleccionados.length }} asignado(s)
-            </div>
-          </div>
-          <div class="step-content" *ngIf="(tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length > 0) || (tipoSolicitudSeleccionado === 'OTRA_AREA')">
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge externo">
-                  <mat-icon>work_outline</mat-icon>
-                  Externos
-                </span>
-                <span class="section-count">{{ especialistasExternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasExternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar externo">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Externo</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-            
-            <div class="especialista-section">
-              <div class="section-header-esp">
-                <span class="section-badge interno">
-                  <mat-icon>badge</mat-icon>
-                  Internos
-                </span>
-                <span class="section-count">{{ especialistasInternos.length }} disponibles</span>
-              </div>
-              <div class="especialistas-list">
-                <label 
-                  *ngFor="let esp of especialistasInternos"
-                  class="especialista-card"
-                  [class.selected]="especialistaSeleccionado(esp.codigo)">
-                  <input 
-                    type="checkbox" 
-                    [checked]="especialistaSeleccionado(esp.codigo)"
-                    (change)="toggleEspecialista(esp.codigo)">
-                  <div class="esp-avatar interno">
-                    {{ esp.nombre_completo.charAt(0) }}
-                  </div>
-                  <div class="esp-info">
-                    <span class="esp-name">{{ esp.nombre_completo }}</span>
-                    <span class="esp-type">Especialista Interno</span>
-                  </div>
-                  <div class="esp-check">
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="step-locked" *ngIf="!tipoSolicitudSeleccionado || (tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length === 0)">
-            <mat-icon>lock</mat-icon>
-            <span>Primero completa los pasos anteriores</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="modal-body loading" *ngIf="cargandoCatalogos">
-    <div class="loader">
-      <div class="spinner"></div>
-      <p>Cargando catálogos...</p>
-    </div>
-  </div>
-
-  <div class="modal-footer">
-    <button class="btn-secondary" (click)="cerrar()" [disabled]="guardando">
-      Cancelar
-    </button>
-    <button 
-      class="btn-primary" 
-      (click)="guardar()" 
-      [disabled]="!formularioValido() || guardando">
-      <mat-icon *ngIf="!guardando">save</mat-icon>
-      <div class="btn-spinner" *ngIf="guardando"></div>
-      {{ guardando ? 'Guardando...' : 'Guardar Atención' }}
-    </button>
-  </div>
+  </footer>
 </div>

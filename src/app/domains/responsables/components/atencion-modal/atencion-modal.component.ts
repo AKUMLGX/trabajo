@@ -2,46 +2,31 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { trigger, transition, style, animate } from '@angular/animations';
+
 import { ExpedienteTlalcalli } from '../../../capture/interfaces/expediente-tlalcalli.interface';
-import { 
-  AtencionService, 
-  CatalogosAtencion, 
-  CrearAtencionDTO, 
+import {
+  AtencionService,
+  CatalogosAtencion,
+  CrearAtencionDTO,
   TipoAccion,
   Prioridad,
-  CatEspecialista,
-  CatTipoInsumo,
-  CatTipoResultado,
   MAX_ESPECIALISTAS
 } from '../../services/atencion.service';
 
-/**
- * Interfaz para el estado del formulario
- */
-interface FormularioAtencion {
+import { AtencionEspecialistasComponent } from './atencion-especialistas/atencion-especialistas.component';
+import { AtencionFlujosComponent } from './atencion-flujos/atencion-flujos.component';
+export interface FormularioAtencion {
   tipoAccion: TipoAccion | '';
-  // Rechazado (solo notas)
-  medioRechazo: 'OFICIO' | 'ATENTA_NOTA' | 'CORREO' | '';
-  // Atención Inmediata (ahora usa especialistas)
-  abogadoAsignado: string;
-  // Adquisición de Información
-  tipoInsumo: string; // Solo 1 insumo (cambiado de array a string)
-  tiposResultado: string[]; // Múltiples resultados (cambiado de string a array)
+  tipoInsumo: string;
+  tiposResultado: string[];
   especialistasSeleccionados: string[];
-  // Nuevos flujos
-  opcionSeleccionada: string;  // Para los nuevos flujos (single-select - solo 1 opción)
-  resultadosSeleccionados: string[]; // Para los resultados del flujo (multi-select - múltiples resultados)
-  // Fecha de entrega
+  flujoAsignadoSeleccionado: TipoAccion | '';
+  opcionesSeleccionadas: string[];
   fechaEntrega: string;
-  // Prioridad (común para todos los flujos)
-  prioridad: 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA' | '';
-  // Sistema y Aplicativo (movido desde bandeja de captura)
+  prioridad: Prioridad | '';
   sistema_aplicativo: string;
-  // Común
   notas: string;
 }
 
@@ -52,27 +37,20 @@ interface FormularioAtencion {
     CommonModule,
     FormsModule,
     MatDialogModule,
-    MatButtonModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AtencionEspecialistasComponent,
+    AtencionFlujosComponent
   ],
   templateUrl: './atencion-modal.component.html',
-  styleUrl: './atencion-modal.component.css',
-  animations: [
-    trigger('slideDown', [
-      transition(':enter', [
-        style({ opacity: 0, height: 0, transform: 'translateY(-10px)' }),
-        animate('300ms ease-out', style({ opacity: 1, height: '*', transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({ opacity: 0, height: 0, transform: 'translateY(-10px)' }))
-      ])
-    ])
-  ]
+  styleUrl: './atencion-modal.component.css'
 })
 export class AtencionModalComponent implements OnInit {
   expediente: ExpedienteTlalcalli;
-  // Catálogos con datos estáticos como fallback
+
+  cargandoCatalogos = true;
+  guardando = false;
+
   catalogos: CatalogosAtencion = {
     especialistas: [
       { id_especialista: 1, codigo: 'EX_ERIKA', nombre_completo: 'Erika', tipo: 'EXTERNO', activo: true },
@@ -102,55 +80,46 @@ export class AtencionModalComponent implements OnInit {
     ]
   };
 
-  // ============= CATÁLOGOS PARA NUEVOS FLUJOS =============
-  
-  // Investigación Forense Digital
-  opcionesInvestigacionForense = [
-    { codigo: 'ADQ_INFO', descripcion: 'Adquisición de información', icon: 'content_copy' },
-    { codigo: 'FUENTES_INFO', descripcion: 'Fuentes de información', icon: 'source' }
-  ];
-  resultadosInvestigacionForense = [
-    { codigo: 'RIF', descripcion: 'Reporte de Investigación Forense (RIF)', icon: 'assessment' }
+  formulario: FormularioAtencion = {
+    tipoAccion: '',
+    tipoInsumo: '',
+    tiposResultado: [],
+    especialistasSeleccionados: [],
+    flujoAsignadoSeleccionado: '',
+    opcionesSeleccionadas: [],
+    fechaEntrega: '',
+    prioridad: '',
+    sistema_aplicativo: '',
+    notas: ''
+  };
+
+  opcionesTipoAccion = [
+    {
+      value: 'RECHAZADO' as TipoAccion,
+      label: 'Rechazado',
+      icon: 'cancel',
+      description: 'Rechazar el expediente y asignar especialistas',
+      color: 'text-red-500',
+      bg: 'bg-red-50'
+    },
+    {
+      value: 'PENDIENTE_INFO' as TipoAccion,
+      label: 'Pendiente por Falta de Información',
+      icon: 'more_horiz',
+      description: 'Solicitar información adicional y asignar especialistas',
+      color: 'text-orange-500',
+      bg: 'bg-orange-50'
+    },
+    {
+      value: 'ASIGNADO' as TipoAccion,
+      label: 'Asignado',
+      icon: 'assignment',
+      description: 'Asignar a un flujo de trabajo especializado',
+      color: 'text-blue-500',
+      bg: 'bg-blue-50'
+    }
   ];
 
-  // Elaboración de Dictámenes
-  opcionesElaboracionDictamenes = [
-    { codigo: 'INV_FORENSE', descripcion: 'Investigación forense digital', icon: 'search' },
-    { codigo: 'JUICIO_NULIDAD', descripcion: 'Juicio de Nulidad', icon: 'gavel' },
-    { codigo: 'PISTAS_AUDITORIA', descripcion: 'Pistas de Auditoría', icon: 'track_changes' },
-    { codigo: 'OTROS', descripcion: 'Otros', icon: 'more_horiz' }
-  ];
-  resultadosElaboracionDictamenes = [
-    { codigo: 'DAF', descripcion: 'Dictamen Análisis Forense (DAF)', icon: 'analytics' },
-    { codigo: 'DPA', descripcion: 'Dictamen Pistas de Auditoría (DPA)', icon: 'track_changes' },
-    { codigo: 'DJN', descripcion: 'Dictamen Juicio de Nulidad (DJN)', icon: 'gavel' },
-    { codigo: 'DFP', descripcion: 'Dictamen Forense/Pistas (DFP)', icon: 'policy' },
-    { codigo: 'RG', descripcion: 'Reporte General (RG)', icon: 'summarize' }
-  ];
-
-  // Recuperación de Información
-  opcionesRecuperacionInfo = [
-    { codigo: 'PUESTO_SERVIDOR', descripcion: 'Puesto de Servicio / Servidor', icon: 'dns' },
-    { codigo: 'DISCO_EXTERNO', descripcion: 'Disco Externo', icon: 'storage' },
-    { codigo: 'USB', descripcion: 'USB', icon: 'usb' },
-    { codigo: 'OTROS', descripcion: 'Otros', icon: 'more_horiz' }
-  ];
-  resultadosRecuperacionInfo = [
-    { codigo: 'RR', descripcion: 'Reporte de Resultados (RR)', icon: 'description' }
-  ];
-
-  // Destrucción de Dispositivos
-  opcionesDestruccionDispositivos = [
-    { codigo: 'DISCO_EXTERNO', descripcion: 'Disco Externo', icon: 'storage' },
-    { codigo: 'USB', descripcion: 'USB', icon: 'usb' },
-    { codigo: 'CD', descripcion: 'CD', icon: 'album' },
-    { codigo: 'OTROS', descripcion: 'Otros', icon: 'more_horiz' }
-  ];
-  resultadosDestruccionDispositivos = [
-    { codigo: 'RDD', descripcion: 'Reporte de Destrucción de Dispositivos (RDD)', icon: 'delete_sweep' }
-  ];
-  
-  // Catálogo de Sistemas y Aplicativos
   sistemasAplicativos: string[] = [
     'SUN',
     'VISOR TRIBUTARIO',
@@ -170,203 +139,20 @@ export class AtencionModalComponent implements OnInit {
     'Sistema de Turnos del SAT (Muchkin)',
     'MAT RFC',
     'CUWEB/ CORUS/ CIEC (contraseña)',
-    'RESPONSIVAS SIMPLES Y CERTIFICADAS (No para Aplicativos, esas las entrega directo el área solicitante OIC, AGE)',
-    'Fiscalización Electrónica Básica',
-    'MAT NyV',
-    'MAT DYP',
-    'AGS Everest',
-    'SAC',
-    '.PST y conversaciones de Skype',
-    'FUERPS Certificadas',
-    'MODELO DE VIGILANCIA PROFUNDA (MVP)',
     'SISE',
     'CSF',
     'MAT Cobranza',
-    'Responsivas Extranet/VPN',
-    'Extranet/VPN',
     'BUZÓN TRIBUTARIO',
     'FUERPS',
     'Júpiter',
     'LAGS',
-    'CIF',
-    'ROLES HISTÓRICOS',
     'CERTISAT',
     'Opinión de Cumplimiento'
   ];
 
-  // Estado del dropdown de sistemas
-  sistemaDropdownAbierto: boolean = false;
-  sistemaBusqueda: string = '';
+  sistemaDropdownAbierto = false;
+  sistemaBusqueda = '';
   sistemasFiltrados: string[] = [];
-
-  /**
-   * Filtra los sistemas según la búsqueda
-   */
-  filtrarSistemas(): void {
-    if (!this.sistemaBusqueda || this.sistemaBusqueda.trim() === '') {
-      this.sistemasFiltrados = this.sistemasAplicativos;
-    } else {
-      const busqueda = this.sistemaBusqueda.toLowerCase().trim();
-      this.sistemasFiltrados = this.sistemasAplicativos.filter(sistema =>
-        sistema.toLowerCase().includes(busqueda)
-      );
-    }
-  }
-
-  /**
-   * Selecciona un sistema del catálogo
-   */
-  seleccionarSistema(sistema: string): void {
-    this.formulario.sistema_aplicativo = sistema;
-    this.sistemaBusqueda = sistema;
-    this.sistemaDropdownAbierto = false;
-    this.filtrarSistemas(); // Actualizar filtros
-  }
-
-  /**
-   * Maneja el input del sistema
-   */
-  onSistemaInputChange(): void {
-    // Actualizar el formulario con lo que el usuario escribe
-    this.formulario.sistema_aplicativo = this.sistemaBusqueda;
-    this.filtrarSistemas();
-    this.sistemaDropdownAbierto = true;
-  }
-
-  /**
-   * Abre/cierra el dropdown
-   */
-  toggleSistemaDropdown(): void {
-    this.sistemaDropdownAbierto = !this.sistemaDropdownAbierto;
-    if (this.sistemaDropdownAbierto) {
-      this.filtrarSistemas();
-    }
-  }
-
-  /**
-   * Cierra el dropdown cuando se hace clic fuera o se pierde el foco
-   */
-  cerrarSistemaDropdown(): void {
-    // Pequeño delay para permitir que el click en un item se procese primero
-    setTimeout(() => {
-      this.sistemaDropdownAbierto = false;
-    }, 150);
-  }
-
-  // Estado del formulario
-  formulario: FormularioAtencion = {
-    tipoAccion: '',
-    medioRechazo: '',
-    abogadoAsignado: '',
-    tipoInsumo: '', // Solo 1 insumo
-    tiposResultado: [], // Múltiples resultados para ADQUISICION_INFO
-    especialistasSeleccionados: [],
-    opcionSeleccionada: '', // Solo 1 opción (otros flujos)
-    resultadosSeleccionados: [], // Múltiples resultados (otros flujos)
-    fechaEntrega: '',
-    prioridad: '',
-    sistema_aplicativo: '', // Nuevo campo: Sistema y Aplicativo
-    notas: ''
-  };
-
-  // Nota: La prioridad ahora se asigna en la bandeja de captura, no en atención
-  
-  // Estados de UI
-  cargandoCatalogos = true;
-  guardando = false;
-  
-  // Opciones de tipo de acción (Paso 1: 3 opciones principales)
-  opcionesTipoAccion = [
-    { 
-      value: 'RECHAZADO' as TipoAccion, 
-      label: 'Rechazado', 
-      icon: 'cancel',
-      description: 'Rechazar el expediente y asignar especialistas',
-      color: 'text-red-600'
-    },
-    { 
-      value: 'PENDIENTE_INFO' as TipoAccion, 
-      label: 'Pendiente por Falta de Información', 
-      icon: 'pending',
-      description: 'Solicitar información adicional y asignar especialistas',
-      color: 'text-amber-600'
-    },
-    { 
-      value: 'ASIGNADO' as TipoAccion, 
-      label: 'Asignado', 
-      icon: 'assignment',
-      description: 'Asignar a un flujo de trabajo especializado',
-      color: 'text-blue-600'
-    }
-  ];
-
-  // Opciones de flujos para "Asignado" (Paso 2 cuando se selecciona "Asignado")
-  opcionesFlujosAsignado = [
-    { 
-      value: 'ADQUISICION_INFO' as TipoAccion, 
-      label: 'Adquisición de Información', 
-      icon: 'folder_special',
-      description: 'Proceso completo con insumos, resultado y especialistas',
-      color: 'text-green-600'
-    },
-    { 
-      value: 'SOLICITUD_INFORMACION' as TipoAccion, 
-      label: 'Solicitud de Información', 
-      icon: 'info',
-      description: 'Solicitar información mediante correlación u otra área',
-      color: 'text-blue-600'
-    },
-    { 
-      value: 'INVESTIGACION_FORENSE' as TipoAccion, 
-      label: 'Investigación Forense Digital', 
-      icon: 'search',
-      description: 'Análisis forense con reporte de investigación',
-      color: 'text-purple-600'
-    },
-    { 
-      value: 'ELABORACION_DICTAMENES' as TipoAccion, 
-      label: 'Elaboración de Dictámenes', 
-      icon: 'gavel',
-      description: 'Generación de dictámenes especializados',
-      color: 'text-indigo-600'
-    },
-    { 
-      value: 'RECUPERACION_INFO' as TipoAccion, 
-      label: 'Recuperación de Información', 
-      icon: 'restore',
-      description: 'Recuperación de datos de dispositivos de almacenamiento',
-      color: 'text-teal-600'
-    },
-    { 
-      value: 'DESTRUCCION_DISPOSITIVOS' as TipoAccion, 
-      label: 'Destrucción de Dispositivos', 
-      icon: 'delete_forever',
-      description: 'Destrucción segura de dispositivos de almacenamiento',
-      color: 'text-rose-600'
-    }
-  ];
-
-  // Opciones para Solicitud de Información
-  opcionesSolicitudInfo = [
-    { value: 'CORRELACION', label: 'Correlación', icon: 'link' },
-    { value: 'OTRA_AREA', label: 'Otra área', icon: 'domain' }
-  ];
-
-  // Opciones de Correlación
-  opcionesCorrelacion = [
-    { codigo: 'LAGS', descripcion: 'Lags', icon: 'schedule' },
-    { codigo: 'PISTAS', descripcion: 'Pistas', icon: 'track_changes' },
-    { codigo: 'BITACORAS', descripcion: 'Bitácoras', icon: 'history' },
-    { codigo: 'RELACIONES', descripcion: 'Relaciones', icon: 'share' },
-    { codigo: 'APLICATIVO', descripcion: 'APLICATIVO', icon: 'apps' }
-  ];
-
-  // Estado para Solicitud de Información
-  tipoSolicitudSeleccionado: 'CORRELACION' | 'OTRA_AREA' | '' = '';
-  opcionesCorrelacionSeleccionadas: string[] = [];
-
-  // Flujo seleccionado cuando se elige "Asignado"
-  flujoAsignadoSeleccionado: TipoAccion | '' = '';
 
   constructor(
     public dialogRef: MatDialogRef<AtencionModalComponent>,
@@ -375,664 +161,189 @@ export class AtencionModalComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.expediente = data.expediente;
-    console.log('📋 [AtencionModal] Expediente recibido:', this.expediente);
   }
 
   ngOnInit(): void {
-    // Inicializar sistemas filtrados
     this.sistemasFiltrados = this.sistemasAplicativos;
-    // Sincronizar búsqueda con el valor del formulario si existe
-    if (this.formulario.sistema_aplicativo) {
-      this.sistemaBusqueda = this.formulario.sistema_aplicativo;
-    }
     this.cargarCatalogos();
   }
 
-  /**
-   * Cargar catálogos desde el backend (usa fallback estático si falla)
-   */
   cargarCatalogos(): void {
     this.cargandoCatalogos = true;
+
     this.atencionService.obtenerCatalogos().subscribe({
       next: (catalogos) => {
-        // Solo actualizar si el backend devuelve datos
-        if (catalogos.tipos_insumo?.length > 0) {
-          this.catalogos.tipos_insumo = catalogos.tipos_insumo;
-        }
-        if (catalogos.tipos_resultado?.length > 0) {
-          this.catalogos.tipos_resultado = catalogos.tipos_resultado;
-        }
-        if (catalogos.especialistas?.length > 0) {
-          this.catalogos.especialistas = catalogos.especialistas;
-        }
+        if (catalogos.especialistas?.length) this.catalogos.especialistas = catalogos.especialistas;
+        if (catalogos.tipos_insumo?.length) this.catalogos.tipos_insumo = catalogos.tipos_insumo;
+        if (catalogos.tipos_resultado?.length) this.catalogos.tipos_resultado = catalogos.tipos_resultado;
+
         this.cargandoCatalogos = false;
-        console.log('✅ [AtencionModal] Catálogos cargados:', this.catalogos);
       },
-      error: (error) => {
-        console.warn('⚠️ [AtencionModal] Usando catálogos estáticos (backend no disponible):', error);
-        // Mantener los datos estáticos ya definidos
+      error: () => {
         this.cargandoCatalogos = false;
-        // No mostrar error, usar fallback silenciosamente
       }
     });
   }
 
-  /**
-   * Cerrar el modal
-   */
   cerrar(): void {
-    this.dialogRef.close();
+    if (!this.guardando) {
+      this.dialogRef.close();
+    }
   }
 
-  /**
-   * Verificar si el formulario es válido
-   */
+  seleccionarTipoAccion(tipo: TipoAccion): void {
+    this.formulario.tipoAccion = tipo;
+    this.formulario.tipoInsumo = '';
+    this.formulario.tiposResultado = [];
+    this.formulario.flujoAsignadoSeleccionado = '';
+    this.formulario.opcionesSeleccionadas = [];
+    this.formulario.especialistasSeleccionados = [];
+    this.formulario.fechaEntrega = '';
+    this.formulario.prioridad = '';
+  }
+
+  filtrarSistemas(): void {
+    const busqueda = this.sistemaBusqueda.trim().toLowerCase();
+
+    this.sistemasFiltrados = busqueda
+      ? this.sistemasAplicativos.filter(sistema => sistema.toLowerCase().includes(busqueda))
+      : this.sistemasAplicativos;
+  }
+
+  onSistemaInputChange(): void {
+    this.formulario.sistema_aplicativo = this.sistemaBusqueda;
+    this.sistemaDropdownAbierto = true;
+    this.filtrarSistemas();
+  }
+
+  seleccionarSistema(sistema: string): void {
+    this.formulario.sistema_aplicativo = sistema;
+    this.sistemaBusqueda = sistema;
+    this.sistemaDropdownAbierto = false;
+  }
+
+  cerrarSistemaDropdown(): void {
+    setTimeout(() => {
+      this.sistemaDropdownAbierto = false;
+    }, 150);
+  }
+
+  get especialistasExternos() {
+    return this.catalogos.especialistas.filter(e => e.tipo === 'EXTERNO' && e.activo);
+  }
+
+  get especialistasInternos() {
+    return this.catalogos.especialistas.filter(e => e.tipo === 'INTERNO' && e.activo);
+  }
+
+  get mostrarEspecialistasDirecto(): boolean {
+    return this.formulario.tipoAccion === 'RECHAZADO' || this.formulario.tipoAccion === 'PENDIENTE_INFO';
+  }
+
+  get seleccionDirectaCompleta(): boolean {
+    return this.mostrarEspecialistasDirecto && this.formulario.especialistasSeleccionados.length > 0;
+  }
+
   formularioValido(): boolean {
     if (!this.formulario.tipoAccion) return false;
-    
-    // Nota: La prioridad ya no se valida aquí, se asigna en captura
-    
-    switch (this.formulario.tipoAccion) {
-      case 'RECHAZADO':
-        // Rechazado requiere especialistas (sin notas)
-        return this.formulario.especialistasSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS;
-      case 'PENDIENTE_INFO':
-        // Pendiente por falta de información requiere especialistas
-        return this.formulario.especialistasSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS;
-      case 'ASIGNADO':
-        // Asignado requiere que se haya seleccionado un flujo
-        if (!this.flujoAsignadoSeleccionado) return false;
-        // Validar según el flujo seleccionado
-        return this.validarFlujoAsignado(this.flujoAsignadoSeleccionado);
-      case 'ADQUISICION_INFO':
-        return !!this.formulario.tipoInsumo && 
-               this.formulario.tiposResultado.length > 0 &&
-               this.formulario.especialistasSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
-               !!this.formulario.fechaEntrega;
-      case 'INVESTIGACION_FORENSE':
-      case 'ELABORACION_DICTAMENES':
-      case 'RECUPERACION_INFO':
-      case 'DESTRUCCION_DISPOSITIVOS':
-        return !!this.formulario.opcionSeleccionada && 
-               this.formulario.resultadosSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
-               !!this.formulario.fechaEntrega;
-      default:
-        return false;
+
+    if (this.formulario.tipoAccion === 'RECHAZADO' || this.formulario.tipoAccion === 'PENDIENTE_INFO') {
+      return this.formulario.especialistasSeleccionados.length > 0;
     }
-  }
 
-  /**
-   * Validar flujo cuando se selecciona "Asignado"
-   */
-  validarFlujoAsignado(flujo: TipoAccion): boolean {
-    switch (flujo) {
-      case 'ADQUISICION_INFO':
-        return !!this.formulario.tipoInsumo && 
-               this.formulario.tiposResultado.length > 0 &&
-               this.formulario.especialistasSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
-               !!this.formulario.fechaEntrega;
-      case 'INVESTIGACION_FORENSE':
-      case 'ELABORACION_DICTAMENES':
-      case 'RECUPERACION_INFO':
-      case 'DESTRUCCION_DISPOSITIVOS':
-        return !!this.formulario.opcionSeleccionada && 
-               this.formulario.resultadosSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length > 0 &&
-               this.formulario.especialistasSeleccionados.length <= MAX_ESPECIALISTAS &&
-               !!this.formulario.fechaEntrega;
-      default:
-        return false;
-    }
-  }
+    if (this.formulario.tipoAccion === 'ASIGNADO') {
+      if (!this.formulario.sistema_aplicativo.trim()) return false;
+      if (!this.formulario.flujoAsignadoSeleccionado) return false;
+      if (!this.formulario.fechaEntrega) return false;
+      if (this.formulario.especialistasSeleccionados.length === 0) return false;
 
-  /**
-   * Seleccionar un insumo (único - ADQUISICION_INFO)
-   */
-  seleccionarInsumo(codigo: string): void {
-    this.formulario.tipoInsumo = codigo;
-    // Limpiar resultados al cambiar de insumo
-    this.formulario.tiposResultado = [];
-  }
-
-  /**
-   * Verificar si un insumo está seleccionado
-   */
-  insumoSeleccionado(codigo: string): boolean {
-    return this.formulario.tipoInsumo === codigo;
-  }
-
-  /**
-   * Toggle de resultado para ADQUISICION_INFO (múltiples)
-   */
-  toggleResultadoAdquisicion(codigo: string): void {
-    const index = this.formulario.tiposResultado.indexOf(codigo);
-    if (index > -1) {
-      this.formulario.tiposResultado.splice(index, 1);
-    } else {
-      this.formulario.tiposResultado.push(codigo);
-    }
-  }
-
-  /**
-   * Verificar si un resultado está seleccionado (ADQUISICION_INFO)
-   */
-  resultadoAdquisicionSeleccionado(codigo: string): boolean {
-    return this.formulario.tiposResultado.includes(codigo);
-  }
-
-  /**
-   * Toggle de especialista seleccionado (máximo 3)
-   */
-  toggleEspecialista(codigo: string): void {
-    const index = this.formulario.especialistasSeleccionados.indexOf(codigo);
-    if (index > -1) {
-      // Deseleccionar
-      this.formulario.especialistasSeleccionados.splice(index, 1);
-    } else {
-      // Validar máximo 3 especialistas
-      if (this.formulario.especialistasSeleccionados.length >= MAX_ESPECIALISTAS) {
-        this.mostrarError(`Máximo ${MAX_ESPECIALISTAS} especialistas permitidos`);
-        return;
+      if (this.formulario.flujoAsignadoSeleccionado === 'ADQUISICION_INFO') {
+        return !!this.formulario.tipoInsumo && this.formulario.tiposResultado.length > 0;
       }
-      this.formulario.especialistasSeleccionados.push(codigo);
+
+      return this.formulario.opcionesSeleccionadas.length > 0;
     }
+
+    return false;
   }
 
-  /**
-   * Verificar si se puede agregar más especialistas
-   */
-  puedeAgregarEspecialista(): boolean {
-    return this.formulario.especialistasSeleccionados.length < MAX_ESPECIALISTAS;
+  private obtenerNombreEspecialista(codigo: string): string {
+    return this.catalogos.especialistas.find(e => e.codigo === codigo)?.nombre_completo || codigo;
   }
 
-  /**
-   * Verificar si un especialista está seleccionado
-   */
-  especialistaSeleccionado(codigo: string): boolean {
-    return this.formulario.especialistasSeleccionados.includes(codigo);
+  private construirDTO(): CrearAtencionDTO {
+    const tipoAccion = this.formulario.tipoAccion === 'ASIGNADO'
+      ? this.formulario.flujoAsignadoSeleccionado as TipoAccion
+      : this.formulario.tipoAccion as TipoAccion;
+
+    const dto: CrearAtencionDTO = {
+      id_expediente: this.expediente.id_expediente!,
+      tipo_accion: tipoAccion,
+      sistema_aplicativo: this.formulario.sistema_aplicativo || undefined,
+      fecha_entrega: this.formulario.fechaEntrega || undefined,
+      prioridad: this.formulario.prioridad || undefined,
+      notas: this.formulario.notas || undefined,
+      especialistas: this.formulario.especialistasSeleccionados.map(codigo => ({
+        codigo,
+        nombre: this.obtenerNombreEspecialista(codigo)
+      }))
+    };
+
+    if (tipoAccion === 'ADQUISICION_INFO') {
+      dto.tipos_insumo = [this.formulario.tipoInsumo];
+      dto.tipo_resultado = this.formulario.tiposResultado[0];
+    }
+
+    if (
+      tipoAccion === 'INVESTIGACION_FORENSE' ||
+      tipoAccion === 'ELABORACION_DICTAMENES' ||
+      tipoAccion === 'RECUPERACION_INFO' ||
+      tipoAccion === 'DESTRUCCION_DISPOSITIVOS' ||
+      tipoAccion === 'SOLICITUD_INFORMACION'
+    ) {
+      dto.opcion_seleccionada = this.formulario.opcionesSeleccionadas;
+    }
+
+    return dto;
   }
 
-  /**
-   * Obtener especialistas externos
-   */
-  get especialistasExternos(): CatEspecialista[] {
-    return this.catalogos.especialistas.filter(e => e.tipo === 'EXTERNO');
-  }
-
-  /**
-   * Obtener especialistas internos
-   */
-  get especialistasInternos(): CatEspecialista[] {
-    return this.catalogos.especialistas.filter(e => e.tipo === 'INTERNO');
-  }
-
-  /**
-   * Guardar la atención
-   */
   guardar(): void {
     if (!this.formularioValido()) {
-      this.mostrarError('Por favor complete todos los campos requeridos');
+      this.snackBar.open('Completa los campos requeridos antes de guardar.', 'Cerrar', {
+        duration: 4000,
+        panelClass: ['warning-snackbar']
+      });
+      return;
+    }
+
+    if (!this.expediente.id_expediente) {
+      this.snackBar.open('El expediente no tiene ID válido.', 'Cerrar', {
+        duration: 4000,
+        panelClass: ['error-snackbar']
+      });
       return;
     }
 
     this.guardando = true;
 
-    // Verificar que tenemos id_expediente
-    if (!this.expediente.id_expediente) {
-      this.mostrarError('Error: El expediente no tiene ID válido');
-      this.guardando = false;
-      return;
-    }
-
-    // Determinar el tipo de acción final (si es ASIGNADO, usar el flujo seleccionado)
-    const tipoAccionFinal = this.formulario.tipoAccion === 'ASIGNADO' 
-      ? this.flujoAsignadoSeleccionado as TipoAccion
-      : this.formulario.tipoAccion as TipoAccion;
-
-    // Construir el DTO (prioridad ya no se envía, viene del expediente)
-    const dto: CrearAtencionDTO = {
-      id_expediente: this.expediente.id_expediente,
-      tipo_accion: tipoAccionFinal,
-      sistema_aplicativo: this.formulario.sistema_aplicativo || undefined,
-      notas: undefined // Notas solo para flujos que las requieren
-    };
-
-    // Agregar campos según el tipo de acción
-    switch (this.formulario.tipoAccion) {
-      case 'RECHAZADO':
-        // Rechazado: especialistas (sin notas)
-        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
-          const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
-          return {
-            codigo: codigo,
-            nombre: esp?.nombre_completo || codigo
-          };
-        });
-        break;
-      case 'PENDIENTE_INFO':
-        // Pendiente por falta de información: especialistas
-        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
-          const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
-          return {
-            codigo: codigo,
-            nombre: esp?.nombre_completo || codigo
-          };
-        });
-        break;
-      case 'ASIGNADO':
-        // Asignado: usar el flujo seleccionado
-        if (this.flujoAsignadoSeleccionado === 'ADQUISICION_INFO') {
-          dto.tipos_insumo = this.formulario.tipoInsumo ? [this.formulario.tipoInsumo] : []; // Solo 1 insumo
-          dto.tipo_resultado = this.formulario.tiposResultado.join(','); // Múltiples resultados
-          dto.fecha_entrega = this.formulario.fechaEntrega;
-          dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
-            const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
-            return {
-              codigo: codigo,
-              nombre: esp?.nombre_completo || codigo
-            };
-          });
-        } else         if (this.flujoAsignadoSeleccionado === 'SOLICITUD_INFORMACION') {
-          // Solicitud de Información: enviar tipo y opciones de correlación si aplica
-          dto.opcion_seleccionada = this.tipoSolicitudSeleccionado === 'CORRELACION' 
-            ? this.opcionesCorrelacionSeleccionadas 
-            : ['OTRA_AREA'];
-          // Solicitud de Información requiere especialistas
-          if (this.formulario.especialistasSeleccionados.length > 0) {
-            dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
-              const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
-              return {
-                codigo: codigo,
-                nombre: esp?.nombre_completo || codigo
-              };
-            });
-          }
-        } else if (['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.flujoAsignadoSeleccionado)) {
-          dto.opcion_seleccionada = this.formulario.opcionSeleccionada ? [this.formulario.opcionSeleccionada] : [];
-          dto.tipo_resultado = this.formulario.resultadosSeleccionados.join(','); // Múltiples resultados separados por coma
-          dto.fecha_entrega = this.formulario.fechaEntrega;
-          dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
-            const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
-            return {
-              codigo: codigo,
-              nombre: esp?.nombre_completo || codigo
-            };
-          });
-        }
-        break;
-      // Mantener compatibilidad con flujos directos (legacy)
-      case 'ADQUISICION_INFO':
-        dto.tipos_insumo = this.formulario.tipoInsumo ? [this.formulario.tipoInsumo] : []; // Solo 1 insumo
-        dto.tipo_resultado = this.formulario.tiposResultado.join(','); // Múltiples resultados
-        dto.fecha_entrega = this.formulario.fechaEntrega;
-        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
-          const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
-          return {
-            codigo: codigo,
-            nombre: esp?.nombre_completo || codigo
-          };
-        });
-        break;
-      case 'INVESTIGACION_FORENSE':
-      case 'ELABORACION_DICTAMENES':
-      case 'RECUPERACION_INFO':
-      case 'DESTRUCCION_DISPOSITIVOS':
-        dto.opcion_seleccionada = this.formulario.opcionSeleccionada ? [this.formulario.opcionSeleccionada] : [];
-        dto.tipo_resultado = this.formulario.resultadosSeleccionados.join(','); // Múltiples resultados
-        dto.fecha_entrega = this.formulario.fechaEntrega;
-        dto.especialistas = this.formulario.especialistasSeleccionados.slice(0, MAX_ESPECIALISTAS).map(codigo => {
-          const esp = this.catalogos.especialistas.find(e => e.codigo === codigo);
-          return {
-            codigo: codigo,
-            nombre: esp?.nombre_completo || codigo
-          };
-        });
-        break;
-    }
-
-    console.log('💾 [AtencionModal] Guardando atención:', dto);
-
-    this.atencionService.crearAtencion(dto).subscribe({
+    this.atencionService.crearAtencion(this.construirDTO()).subscribe({
       next: (response) => {
-        console.log('✅ [AtencionModal] Atención guardada:', response);
         this.guardando = false;
-        this.mostrarExito('Atención registrada correctamente');
-        this.dialogRef.close({ success: true, data: response });
+        this.snackBar.open(response.message || 'Atención guardada correctamente.', 'Cerrar', {
+          duration: 4000,
+          panelClass: ['success-snackbar']
+        });
+        this.dialogRef.close(response.data);
       },
-      error: (error) => {
-        console.error('❌ [AtencionModal] Error al guardar:', error);
+      error: () => {
         this.guardando = false;
-        this.mostrarError('Error al registrar la atención');
+        this.snackBar.open('Error al guardar la atención.', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
       }
     });
   }
 
-  /**
-   * Mostrar mensaje de éxito
-   */
-  private mostrarExito(mensaje: string): void {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: ['snackbar-success']
-    });
-  }
-
-  /**
-   * Mostrar mensaje de error
-   */
-  private mostrarError(mensaje: string): void {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 5000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: ['snackbar-error']
-    });
-  }
-
-  /**
-   * Obtener la descripción del tipo de acción seleccionado
-   */
-  getDescripcionTipoAccion(): string {
-    const opcion = this.opcionesTipoAccion.find(o => o.value === this.formulario.tipoAccion);
-    return opcion?.description || '';
-  }
-
-  /**
-   * Resetear campos al cambiar tipo de acción
-   */
-  onTipoAccionChange(): void {
-    // Resetear campos específicos (pero mantener sistema_aplicativo)
-    this.formulario.medioRechazo = '';
-    this.formulario.abogadoAsignado = '';
-    this.formulario.tipoInsumo = ''; // Solo 1 insumo
-    this.formulario.tiposResultado = []; // Múltiples resultados ADQUISICION_INFO
-    this.formulario.especialistasSeleccionados = [];
-    this.formulario.opcionSeleccionada = ''; // Solo 1 opción (otros flujos)
-    this.formulario.resultadosSeleccionados = []; // Múltiples resultados (otros flujos)
-    this.formulario.fechaEntrega = '';
-    this.formulario.prioridad = '';
-    this.formulario.notas = '';
-    this.flujoAsignadoSeleccionado = ''; // Resetear flujo cuando cambia el tipo de acción principal
-    // Resetear campos de Solicitud de Información
-    this.tipoSolicitudSeleccionado = '';
-    this.opcionesCorrelacionSeleccionadas = [];
-    // sistema_aplicativo se mantiene al cambiar tipo de acción
-  }
-
-  /**
-   * Seleccionar flujo cuando se elige "Asignado"
-   */
-  seleccionarFlujoAsignado(flujo: TipoAccion): void {
-    this.flujoAsignadoSeleccionado = flujo;
-    // Resetear campos del formulario al cambiar de flujo
-    this.formulario.tipoInsumo = ''; // Solo 1 insumo
-    this.formulario.tiposResultado = []; // Múltiples resultados ADQUISICION_INFO
-    this.formulario.especialistasSeleccionados = [];
-    this.formulario.opcionSeleccionada = ''; // Solo 1 opción (otros flujos)
-    this.formulario.resultadosSeleccionados = []; // Múltiples resultados (otros flujos)
-    this.formulario.fechaEntrega = '';
-    this.formulario.notas = '';
-    // Resetear campos de Solicitud de Información
-    this.tipoSolicitudSeleccionado = '';
-    this.opcionesCorrelacionSeleccionadas = [];
-  }
-
-  /**
-   * Seleccionar tipo de solicitud (Correlación u Otra área)
-   */
-  seleccionarTipoSolicitud(tipo: string): void {
-    if (tipo === 'CORRELACION' || tipo === 'OTRA_AREA') {
-      this.tipoSolicitudSeleccionado = tipo;
-    } else {
-      this.tipoSolicitudSeleccionado = '';
-    }
-
-    // Si no es correlación, limpiar opciones de correlación
-    if (tipo !== 'CORRELACION') {
-      this.opcionesCorrelacionSeleccionadas = [];
-    }
-  }
-
-  /**
-   * Toggle opción de correlación
-   */
-  toggleOpcionCorrelacion(codigo: string): void {
-    const index = this.opcionesCorrelacionSeleccionadas.indexOf(codigo);
-    if (index > -1) {
-      this.opcionesCorrelacionSeleccionadas.splice(index, 1);
-    } else {
-      this.opcionesCorrelacionSeleccionadas.push(codigo);
-    }
-  }
-
-  /**
-   * Verificar si una opción de correlación está seleccionada
-   */
-  opcionCorrelacionSeleccionada(codigo: string): boolean {
-    return this.opcionesCorrelacionSeleccionadas.includes(codigo);
-  }
-
-  /**
-   * Seleccionar opción única (para nuevos flujos - solo permite 1)
-   */
-  seleccionarOpcion(codigo: string): void {
-    this.formulario.opcionSeleccionada = codigo;
-    // Limpiar resultados al cambiar de opción
-    this.formulario.resultadosSeleccionados = [];
-  }
-
-  /**
-   * Verificar si una opción está seleccionada
-   */
-  opcionSeleccionada(codigo: string): boolean {
-    return this.formulario.opcionSeleccionada === codigo;
-  }
-
-  /**
-   * Toggle resultado seleccionado (permite múltiples)
-   */
-  toggleResultado(codigo: string): void {
-    const index = this.formulario.resultadosSeleccionados.indexOf(codigo);
-    if (index > -1) {
-      this.formulario.resultadosSeleccionados.splice(index, 1);
-    } else {
-      this.formulario.resultadosSeleccionados.push(codigo);
-    }
-  }
-
-  /**
-   * Verificar si un resultado está seleccionado
-   */
-  resultadoSeleccionado(codigo: string): boolean {
-    return this.formulario.resultadosSeleccionados.includes(codigo);
-  }
-
-  /**
-   * Obtener opciones según el tipo de acción
-   */
-  getOpcionesActuales(): any[] {
-    switch (this.formulario.tipoAccion) {
-      case 'INVESTIGACION_FORENSE':
-        return this.opcionesInvestigacionForense;
-      case 'ELABORACION_DICTAMENES':
-        return this.opcionesElaboracionDictamenes;
-      case 'RECUPERACION_INFO':
-        return this.opcionesRecuperacionInfo;
-      case 'DESTRUCCION_DISPOSITIVOS':
-        return this.opcionesDestruccionDispositivos;
-      default:
-        return [];
-    }
-  }
-
-  /**
-   * Obtener opciones según el flujo asignado
-   */
-  getOpcionesActualesAsignado(): any[] {
-    if (!this.flujoAsignadoSeleccionado) return [];
-    switch (this.flujoAsignadoSeleccionado) {
-      case 'INVESTIGACION_FORENSE':
-        return this.opcionesInvestigacionForense;
-      case 'ELABORACION_DICTAMENES':
-        return this.opcionesElaboracionDictamenes;
-      case 'RECUPERACION_INFO':
-        return this.opcionesRecuperacionInfo;
-      case 'DESTRUCCION_DISPOSITIVOS':
-        return this.opcionesDestruccionDispositivos;
-      default:
-        return [];
-    }
-  }
-
-  /**
-   * Obtener resultados según el tipo de acción
-   */
-  getResultadosActuales(): any[] {
-    switch (this.formulario.tipoAccion) {
-      case 'INVESTIGACION_FORENSE':
-        return this.resultadosInvestigacionForense;
-      case 'ELABORACION_DICTAMENES':
-        return this.resultadosElaboracionDictamenes;
-      case 'RECUPERACION_INFO':
-        return this.resultadosRecuperacionInfo;
-      case 'DESTRUCCION_DISPOSITIVOS':
-        return this.resultadosDestruccionDispositivos;
-      default:
-        return [];
-    }
-  }
-
-  /**
-   * Obtener resultados según el flujo asignado
-   */
-  getResultadosActualesAsignado(): any[] {
-    if (!this.flujoAsignadoSeleccionado) return [];
-    switch (this.flujoAsignadoSeleccionado) {
-      case 'INVESTIGACION_FORENSE':
-        return this.resultadosInvestigacionForense;
-      case 'ELABORACION_DICTAMENES':
-        return this.resultadosElaboracionDictamenes;
-      case 'RECUPERACION_INFO':
-        return this.resultadosRecuperacionInfo;
-      case 'DESTRUCCION_DISPOSITIVOS':
-        return this.resultadosDestruccionDispositivos;
-      default:
-        return [];
-    }
-  }
-
-  /**
-   * Verificar si es un flujo con wizard de opciones (legacy - mantener para compatibilidad)
-   */
-  esFlujoConOpciones(): boolean {
-    // Este método ya no se usa en la nueva estructura, pero se mantiene para compatibilidad
-    // La nueva estructura usa esFlujoConOpcionesAsignado()
-    return false;
-  }
-
-  /**
-   * Verificar si el flujo asignado es uno con wizard de opciones
-   */
-  esFlujoConOpcionesAsignado(): boolean {
-    if (!this.flujoAsignadoSeleccionado) return false;
-    return ['INVESTIGACION_FORENSE', 'ELABORACION_DICTAMENES', 'RECUPERACION_INFO', 'DESTRUCCION_DISPOSITIVOS'].includes(this.flujoAsignadoSeleccionado as TipoAccion);
-  }
-
-  /**
-   * Obtener el título del paso de opciones según el flujo
-   */
-  getTituloOpciones(): string {
-    const flujo = this.formulario.tipoAccion === 'ASIGNADO' ? this.flujoAsignadoSeleccionado : this.formulario.tipoAccion;
-    switch (flujo) {
-      case 'INVESTIGACION_FORENSE':
-        return 'Tipo de Investigación';
-      case 'ELABORACION_DICTAMENES':
-        return 'Tipo de Dictamen';
-      case 'RECUPERACION_INFO':
-        return 'Tipo de Dispositivo';
-      case 'DESTRUCCION_DISPOSITIVOS':
-        return 'Dispositivo a Destruir';
-      default:
-        return 'Opciones';
-    }
-  }
-
-  /**
-   * Obtener descripción de los resultados seleccionados para nuevos flujos
-   */
-  getDescripcionResultadoNuevo(): string {
-    if (this.formulario.resultadosSeleccionados.length === 0) return '';
-    const todosResultados = this.getResultadosActualesAsignado();
-    const descripciones = this.formulario.resultadosSeleccionados.map(codigo => {
-      const resultado = todosResultados.find(r => r.codigo === codigo);
-      return resultado?.descripcion || codigo;
-    });
-    return descripciones.join(', ');
-  }
-
-  /**
-   * Obtener fecha mínima (hoy)
-   */
-  getFechaMinima(): string {
-    return new Date().toISOString().split('T')[0];
-  }
-
-  /**
-   * Establecer fecha rápida (X días desde hoy)
-   */
-  setFechaRapida(dias: number): void {
-    const fecha = new Date();
-    fecha.setDate(fecha.getDate() + dias);
-    this.formulario.fechaEntrega = fecha.toISOString().split('T')[0];
-  }
-
-  /**
-   * Obtener la descripción de los resultados seleccionados (ADQUISICION_INFO)
-   */
-  getDescripcionResultado(): string {
-    if (this.formulario.tiposResultado.length === 0) return '';
-    const descripciones = this.formulario.tiposResultado.map(codigo => {
-      const resultado = this.catalogos.tipos_resultado.find(r => r.codigo === codigo);
-      return resultado?.descripcion || codigo;
-    });
-    return descripciones.join(', ');
-  }
-
-  /**
-   * Obtener icono para cada tipo de insumo
-   */
-  getInsumoIcon(codigo: string): string {
-    const iconos: { [key: string]: string } = {
-      'EQUIPO_FISICO': 'computer',
-      'EQUIPO_VIRTUAL': 'cloud',
-      'EQUIPO_MOVIL': 'smartphone',
-      'EQUIPO_REMOTO': 'settings_remote',
-      'IMAGEN_CIFRADA': 'enhanced_encryption',
-      'PERSONALIZADA': 'tune',
-      'OTROS': 'more_horiz'
-    };
-    return iconos[codigo] || 'inventory_2';
-  }
-
-  /**
-   * Obtener icono para cada tipo de resultado
-   */
-  getResultadoIcon(codigo: string): string {
-    const iconos: { [key: string]: string } = {
-      'ACTA_HECHOS': 'description',
-      'CADENA_CUSTODIA': 'link',
-      'MEMORIA_TECNICA': 'article',
-      'NO_APLICA': 'block'
-    };
-    return iconos[codigo] || 'fact_check';
-  }
+  protected readonly MAX_ESPECIALISTAS = MAX_ESPECIALISTAS;
 }
-

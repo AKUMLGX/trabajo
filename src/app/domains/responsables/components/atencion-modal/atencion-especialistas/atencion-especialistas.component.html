@@ -1,0 +1,95 @@
+<div class="rounded-2xl border border-gray-200 bg-white px-6 py-6">
+
+  <div class="mb-6 flex items-start justify-between gap-4">
+    <div class="flex items-start gap-4">
+      <div
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
+        [ngClass]="seleccionados.length > 0 ? 'bg-tlalcalli-primary' : 'bg-[#7a006e]'">
+        <mat-icon *ngIf="seleccionados.length > 0">check</mat-icon>
+        <span *ngIf="seleccionados.length === 0" class="font-black">1</span>
+      </div>
+
+      <div>
+        <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
+          <mat-icon class="!h-5 !w-5 !text-xl text-[#4b0075]">groups</mat-icon>
+          Asigna Especialista(s)
+        </h4>
+        <p class="m-0 mt-2 text-sm font-medium text-gray-400">
+          Selecciona uno o más especialistas para atender
+        </p>
+      </div>
+    </div>
+
+    <span
+      *ngIf="seleccionados.length > 0"
+      class="rounded-full bg-tlalcalli-primary px-4 py-2 text-sm font-black text-white">
+      {{ seleccionados.length }} asignado(s)
+    </span>
+  </div>
+
+  <div class="border-t border-gray-200 pt-5">
+    <div class="mb-3 flex items-center justify-between">
+      <span class="inline-flex items-center gap-2 rounded-md bg-tlalcalli-primary px-3 py-1 text-xs font-black uppercase text-white">
+        <mat-icon class="!h-4 !w-4 !text-base">work_outline</mat-icon>
+        Externos
+      </span>
+      <span class="text-sm font-semibold text-gray-400">{{ externos.length }} disponibles</span>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+      <button
+        type="button"
+        *ngFor="let esp of externos"
+        (click)="toggle(esp.codigo)"
+        class="relative flex h-[78px] items-center gap-4 rounded-xl border-2 bg-white px-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+        [ngClass]="seleccionado(esp.codigo)
+          ? 'border-emerald-500 bg-emerald-500'
+          : 'border-gray-200'">
+
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-tlalcalli-primary text-sm font-black text-white">
+          {{ esp.nombre_completo.charAt(0) }}
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <span class="block truncate text-base font-black text-gray-700">{{ esp.nombre_completo }}</span>
+          <span class="mt-1 block truncate text-xs font-medium text-gray-400">Especialista Externo</span>
+        </div>
+
+        <mat-icon *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <div class="mb-3 flex items-center justify-between">
+      <span class="inline-flex items-center gap-2 rounded-md bg-emerald-500 px-3 py-1 text-xs font-black uppercase text-white">
+        <mat-icon class="!h-4 !w-4 !text-base">badge</mat-icon>
+        Internos
+      </span>
+      <span class="text-sm font-semibold text-gray-400">{{ internos.length }} disponibles</span>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+      <button
+        type="button"
+        *ngFor="let esp of internos"
+        (click)="toggle(esp.codigo)"
+        class="relative flex h-[78px] items-center gap-4 rounded-xl border-2 bg-white px-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+        [ngClass]="seleccionado(esp.codigo)
+          ? 'border-emerald-500 bg-emerald-500'
+          : 'border-gray-200'">
+
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500 text-sm font-black text-white">
+          {{ esp.nombre_completo.charAt(0) }}
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <span class="block truncate text-base font-black text-gray-700">{{ esp.nombre_completo }}</span>
+          <span class="mt-1 block truncate text-xs font-medium text-gray-400">Especialista Interno</span>
+        </div>
+
+        <mat-icon *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
