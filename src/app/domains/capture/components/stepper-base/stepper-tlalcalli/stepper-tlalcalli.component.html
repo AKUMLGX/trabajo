@@ -129,19 +129,29 @@
                 Anterior
               </button>
 
-              <button
-                type="button"
-                (click)="onPaso2Siguiente()"
-                class="rounded-lg bg-tlalcalli-lavender px-6 py-2.5 text-sm font-extrabold text-white">
-                Siguiente
-              </button>
+<button
+  type="button"
+  (click)="onPaso2Siguiente()"
+  [disabled]="!puedeAvanzarPaso2"
+  class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-extrabold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+  [ngClass]="puedeAvanzarPaso2
+    ? 'bg-tlalcalli-primary hover:bg-tlalcalli-deep'
+    : 'bg-tlalcalli-lavender'">
+  Siguiente
+  <mat-icon class="!text-[18px]">arrow_forward</mat-icon>
+</button>
             </div>
 
-            <app-second-step-tlalcalli
+            <!-- <app-second-step-tlalcalli
               [datosPaso1]="datosPaso1"
               (formularioCompletado)="onPaso2Completado($event)"
               (pasoAnterior)="onPaso2Anterior()">
-            </app-second-step-tlalcalli>
+            </app-second-step-tlalcalli> -->
+          <app-second-step-tlalcalli
+            [datosPaso1]="datosPaso1"
+            (formularioCompletado)="onPaso2Completado($event)"
+            (pasoAnterior)="onPaso2Anterior()">
+          </app-second-step-tlalcalli>
           </div>
         }
 

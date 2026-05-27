@@ -24,6 +24,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   @Output() formularioCompletado = new EventEmitter<any>();
   @Output() siguientePaso = new EventEmitter<void>();
   @Output() pasoAnterior = new EventEmitter<void>();
+  @Output() validezCambiada = new EventEmitter<boolean>();
 
   formulario: FormGroup;
   private destroy$ = new Subject<void>();

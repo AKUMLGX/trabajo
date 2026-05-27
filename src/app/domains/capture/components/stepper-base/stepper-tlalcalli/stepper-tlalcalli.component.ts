@@ -52,6 +52,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   guardando = false;
   isTransitioning = false;
   paso1Valido = false;
+  paso2Valido = false;
 
   constructor(
     private expedienteService: ExpedienteTlalcalliService,
@@ -414,6 +415,14 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
 
   get puedeAvanzarPaso1(): boolean {
     return this.paso1Valido;
+  }
+
+  get puedeAvanzarPaso2(): boolean {
+  return this.paso2Component?.formulario?.valid ?? false;
+  }
+
+  onPaso2ValidezCambiada(valido: boolean) {
+  this.paso2Valido = valido;
   }
 
   get estaCompletado(): boolean {

@@ -204,64 +204,64 @@
         }
       </div>
 
-<div class="flex w-full max-w-[274px] shrink-0 rounded-lg bg-tlalcalli-lavender p-1">
+<div class="flex w-full max-w-[330px] shrink-0 rounded-lg border-4 border-tlalcalli-lavender bg-tlalcalli-lavender overflow-hidden">
   <button
     type="button"
-    class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold transition"
+    class="flex h-10 flex-1 items-center justify-center gap-3 rounded-md px-4 text-sm font-extrabold transition"
     [ngClass]="vistaActual === 'pendientes'
       ? 'bg-white text-tlalcalli-primary'
-      : 'text-white'"
+      : 'bg-white/20 text-white'"
     (click)="cambiarVista('pendientes')">
     Por atender
     <span
-      class="flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs text-white"
+      class="flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-sm font-black"
       [ngClass]="vistaActual === 'pendientes'
-        ? 'bg-tlalcalli-lavender'
-        : 'bg-tlalcalli-primary'">
+        ? 'bg-tlalcalli-lavender text-white'
+        : 'bg-white/25 text-white'">
       {{ contadorPendientes }}
     </span>
   </button>
 
   <button
     type="button"
-    class="flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-xs font-extrabold transition"
+    class="flex h-10 flex-1 items-center justify-center gap-3 rounded-md px-4 text-sm font-extrabold transition"
     [ngClass]="vistaActual === 'atendidos'
       ? 'bg-white text-tlalcalli-primary'
-      : 'text-white'"
+      : 'bg-white/20 text-white'"
     (click)="cambiarVista('atendidos')">
     Atendidos
     <span
-      class="flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs text-white"
+      class="flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-sm font-black"
       [ngClass]="vistaActual === 'atendidos'
-        ? 'bg-tlalcalli-lavender'
-        : 'bg-tlalcalli-success'">
+        ? 'bg-tlalcalli-success text-white'
+        : 'bg-white/25 text-white'">
       {{ contadorAtendidos }}
     </span>
   </button>
 </div>
     </div>
 
-    <div class="overflow-x-auto">
-      <table class="w-full min-w-[920px] border-collapse">
+    <div class="w-full overflow-hidden">
+      <table class="w-full table-fixed border-collapse">
         <thead>
           <tr class="bg-tlalcalli-light-lavender">
             @if (vistaActual === 'pendientes') {
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Oficio</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Remitente</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Asunto</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Estatus</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Tiempo</th>
-              <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Acciones</th>
+              <th class="w-[12%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
+              <th class="w-[13%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
+              <th class="w-[11%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Oficio</th>
+              <th class="w-[16%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Remitente</th>
+              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Asunto</th>
+              <th class="w-[12%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Estatus</th>
+              <th class="w-[11%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Tiempo</th>
+              <th class="w-[10%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Acciones</th>
             } @else {
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Tipo Atención</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Especialistas</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">F. Entrega</th>
-              <th class="px-4 py-4 text-left text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Notas</th>
-              <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Acciones</th>
+              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
+              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Tipo Atención</th>
+              <th class="w-[12%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
+              <th class="w-[22%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Especialistas</th>
+              <th class="w-[13%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">F. Entrega</th>
+              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Notas</th>
+              <th class="w-[8%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Acciones</th>
             }
           </tr>
         </thead>
@@ -271,7 +271,7 @@
 
             @if (vistaActual === 'pendientes') {
               <tr class="border-b border-tlalcalli-light-base bg-white">
-                <td class="px-4 py-7">
+                <td class="px-2 py-7 text-center">
                   <div
                     class="inline-flex min-w-[104px] justify-center rounded-md border px-4 py-2 text-center"
                     [ngClass]="{
@@ -287,27 +287,25 @@
                   </div>
                 </td>
 
-                <td class="px-4 py-7 text-xs font-extrabold text-black">
+                <td class="px-2 py-7 text-center text-sm font-ubuntu-mono font-black text-black">
                   {{ expediente.expediente || '-' }}
                 </td>
 
-                <td class="px-4 py-7 text-xs font-bold text-tlalcalli-gray">
+                <td class="px-2 py-7 text-center text-xs font-bold text-tlalcalli-gray">
                   {{ expediente.oficio || '-' }}
                 </td>
 
-                <td class="px-4 py-7 text-xs font-bold text-tlalcalli-gray">
-                  <span class="block max-w-[160px] truncate" [title]="expediente.remitente_area || ''">
-                    {{ expediente.remitente_area || '-' }}
-                  </span>
+                <td class="px-2 py-7 text-center text-xs font-bold text-tlalcalli-gray">
+                  <span class="mx-auto block max-w-[130px] truncate" [title]="expediente.referencia_asunto || ''">                  </span>
                 </td>
 
-                <td class="px-4 py-7 text-xs font-bold text-tlalcalli-gray">
+                <td class="px-2 py-7 text-center text-xs font-bold text-tlalcalli-gray">
                   <span class="block max-w-[170px] truncate" [title]="expediente.referencia_asunto || ''">
                     {{ expediente.referencia_asunto ? (expediente.referencia_asunto.length > 40 ? (expediente.referencia_asunto | slice:0:40) + '...' : expediente.referencia_asunto) : '-' }}
                   </span>
                 </td>
 
-                <td class="px-4 py-7">
+                <td class="px-2 py-7 text-center">
                   <span class="rounded-md bg-tlalcalli-light-lavender px-4 py-2 text-xs font-extrabold text-tlalcalli-primary">
                     {{ expediente.estatus === 'ASIGNADO' ? 'Asignado' :
                       expediente.estatus === 'PENDIENTE' ? 'Pendiente' :
@@ -317,8 +315,8 @@
                   </span>
                 </td>
 
-                <td class="px-4 py-7">
-                  <div class="w-[88px]">
+                <td class="px-2 py-7 text-center">
+                  <div class="mx-auto w-[88px]">
                     <div class="h-1.5 rounded bg-tlalcalli-light-base">
                       <div
                         class="h-full rounded bg-tlalcalli-success"
@@ -345,7 +343,7 @@
                   </div>
                 </td>
 
-                <td class="px-4 py-7 text-center">
+                <td class="px-2 py-7 text-center">
                   <div class="flex items-center justify-center gap-3">
                     <button
                     (click)="verDetalleExpediente(expediente)"
@@ -365,79 +363,83 @@
               </tr>
             }
 
-            @if (vistaActual === 'atendidos') {
-              <tr class="border-b border-tlalcalli-light-base bg-white">
-                <td class="px-4 py-6 text-xs font-extrabold text-tlalcalli-primary">
-                  <div class="flex flex-col">
-                    <span>{{ expediente.expediente || '-' }}</span>
-                    <span class="text-[11px] font-semibold text-tlalcalli-gray">{{ expediente.oficio || '' }}</span>
-                  </div>
-                </td>
+@if (vistaActual === 'atendidos') {
+  <tr class="border-b border-tlalcalli-light-base bg-white">
+    <td class="px-2 py-6 text-center text-sm font-ubuntu-mono font-black text-black">
+      <div class="flex flex-col items-center justify-center">
+        <span>{{ expediente.expediente || '-' }}</span>
+        <span class="text-[11px] font-semibold text-tlalcalli-gray">{{ expediente.oficio || '' }}</span>
+      </div>
+    </td>
 
-                <td class="px-4 py-6 text-xs">
-                  @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-                    <span class="rounded-md bg-tlalcalli-light-lavender px-3 py-1.5 font-bold text-tlalcalli-primary">
-                      {{ getLabelTipoAccion(atencionData.atencion.tipo_accion) }}
-                    </span>
-                  } @else {
-                    <span class="rounded-md bg-tlalcalli-light-lavender px-3 py-1.5 font-bold text-tlalcalli-gray">
-                      Cargando...
-                    </span>
-                  }
-                </td>
+    <td class="px-2 py-6 text-center text-xs">
+      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+        <span class="inline-flex justify-center rounded-md bg-tlalcalli-light-lavender px-3 py-1.5 font-bold text-tlalcalli-primary">
+          {{ getLabelTipoAccion(atencionData.atencion.tipo_accion) }}
+        </span>
+      } @else {
+        <span class="inline-flex justify-center rounded-md bg-tlalcalli-light-lavender px-3 py-1.5 font-bold text-tlalcalli-gray">
+          Cargando...
+        </span>
+      }
+    </td>
 
-                <td class="px-4 py-6 text-xs font-bold">
-                  @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-                    {{ atencionData.atencion.prioridad || '—' }}
-                  } @else {
-                    —
-                  }
-                </td>
+    <td class="px-2 py-6 text-center text-xs font-bold text-tlalcalli-gray">
+      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+        {{ atencionData.atencion.prioridad || '—' }}
+      } @else {
+        —
+      }
+    </td>
 
-                <td class="px-4 py-6 text-xs">
-                  @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-                    @if (atencionData.especialistas && atencionData.especialistas.length > 0) {
-                      <div class="flex flex-wrap gap-1">
-                        @for (esp of atencionData.especialistas; track esp.codigo_especialista) {
-                          <span class="rounded-full bg-tlalcalli-light-lavender px-2 py-1 font-semibold text-tlalcalli-primary">
-                            {{ esp.nombre_especialista }}
-                          </span>
-                        }
-                      </div>
-                    } @else {
-                      <span class="italic text-tlalcalli-gray">Sin asignar</span>
-                    }
-                  } @else {
-                    <span class="italic text-tlalcalli-gray">—</span>
-                  }
-                </td>
-
-                <td class="px-4 py-6 text-xs font-semibold text-tlalcalli-gray">
-                  @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-                    {{ atencionData.atencion.fecha_entrega || 'No definida' }}
-                  } @else {
-                    —
-                  }
-                </td>
-
-                <td class="px-4 py-6 text-xs text-tlalcalli-gray">
-                  @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-                    {{ atencionData.atencion.notas ? (atencionData.atencion.notas.length > 30 ? (atencionData.atencion.notas | slice:0:30) + '...' : atencionData.atencion.notas) : 'Sin notas' }}
-                  } @else {
-                    —
-                  }
-                </td>
-
-                <td class="px-4 py-6 text-center">
-                  <button
-                    (click)="verDetalleExpediente(expediente)"
-                    class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
-                    title="Ver detalle">
-                      👁
-                  </button>
-                </td>
-              </tr>
+    <td class="px-2 py-6 text-center text-xs">
+      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+        @if (atencionData.especialistas && atencionData.especialistas.length > 0) {
+          <div class="flex flex-col items-center gap-1">
+            @for (esp of atencionData.especialistas; track esp.codigo_especialista) {
+              <span class="rounded-full bg-tlalcalli-light-lavender px-2 py-1 font-semibold text-tlalcalli-primary">
+                {{ esp.nombre_especialista }}
+              </span>
             }
+          </div>
+        } @else {
+          <span class="italic text-tlalcalli-gray">Sin asignar</span>
+        }
+      } @else {
+        <span class="italic text-tlalcalli-gray">—</span>
+      }
+    </td>
+
+    <td class="px-2 py-6 text-center text-xs font-semibold text-tlalcalli-gray">
+      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+        {{ atencionData.atencion.fecha_entrega || 'No definida' }}
+      } @else {
+        —
+      }
+    </td>
+
+    <td class="px-2 py-6 text-center text-xs text-tlalcalli-gray">
+      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
+        <span class="mx-auto block max-w-[140px] truncate">
+          {{ atencionData.atencion.notas ? (atencionData.atencion.notas.length > 30 ? (atencionData.atencion.notas | slice:0:30) + '...' : atencionData.atencion.notas) : 'Sin notas' }}
+        </span>
+      } @else {
+        —
+      }
+    </td>
+
+    <td class="px-2 py-6 text-center">
+      <div class="flex items-center justify-center">
+        <button
+          (click)="verDetalleExpediente(expediente)"
+          class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
+          title="Ver detalle">
+          👁
+        </button>
+      </div>
+    </td>
+  </tr>
+}
           }
         </tbody>
       </table>
