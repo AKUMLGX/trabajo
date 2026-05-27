@@ -1,5 +1,4 @@
 <div class="atencion-modal">
-  <!-- HEADER -->
   <div class="modal-header">
     <div class="header-content">
       <div class="header-icon">
@@ -16,10 +15,8 @@
     </button>
   </div>
 
-  <!-- CONTENIDO -->
   <div class="modal-body" *ngIf="!cargandoCatalogos">
     
-    <!-- Información del expediente -->
     <div class="expediente-info">
       <div class="info-item">
         <span class="label">Responsable</span>
@@ -31,7 +28,6 @@
       </div>
     </div>
 
-    <!-- PASO 1: Selección de tipo de acción -->
     <div class="form-section">
       <h3 class="section-title">
         <span class="step-number">1</span>
@@ -57,9 +53,7 @@
       </div>
     </div>
 
-    <!-- PASO 2: Detalles específicos según tipo de acción -->
     
-    <!-- RECHAZADO: Lista de Especialistas -->
     <div class="form-section" *ngIf="formulario.tipoAccion === 'RECHAZADO'">
       <h3 class="section-title">
         <span class="step-number">2</span>
@@ -86,7 +80,6 @@
             </div>
           </div>
           <div class="step-content">
-            <!-- Externos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge externo">
@@ -118,7 +111,6 @@
               </div>
             </div>
             
-            <!-- Internos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge interno">
@@ -154,7 +146,6 @@
       </div>
     </div>
 
-    <!-- PENDIENTE_INFO: Lista de Especialistas -->
     <div class="form-section" *ngIf="formulario.tipoAccion === 'PENDIENTE_INFO'">
       <h3 class="section-title">
         <span class="step-number">2</span>
@@ -181,7 +172,6 @@
             </div>
           </div>
           <div class="step-content">
-            <!-- Externos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge externo">
@@ -213,7 +203,6 @@
               </div>
             </div>
             
-            <!-- Internos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge interno">
@@ -249,7 +238,6 @@
       </div>
     </div>
 
-    <!-- CATÁLOGO: Sistema y Aplicativo (solo para ASIGNADO) -->
     <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO'">
       <h3 class="section-title">
         <mat-icon>computer</mat-icon>
@@ -275,7 +263,6 @@
           </button>
         </div>
         
-        <!-- Dropdown mejorado -->
         <div class="sistema-dropdown" *ngIf="sistemaDropdownAbierto" [@slideDown]>
           <div class="dropdown-header">
             <mat-icon>search</mat-icon>
@@ -305,7 +292,6 @@
       </div>
     </div>
 
-    <!-- ASIGNADO: Selección de Flujo -->
     <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO'">
       <h3 class="section-title">
         <span class="step-number">2</span>
@@ -331,17 +317,14 @@
       </div>
     </div>
 
-    <!-- Detalles de flujos cuando se selecciona "Asignado" -->
     <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO' && flujoAsignadoSeleccionado">
       <h3 class="section-title">
         <span class="step-number">3</span>
         Detalles del Flujo
       </h3>
 
-      <!-- ADQUISICION_INFO - FLUJO PROGRESIVO -->
       <div class="dynamic-form adquisicion-wizard" *ngIf="flujoAsignadoSeleccionado === 'ADQUISICION_INFO'">
         
-        <!-- ========== PASO 1: INSUMO (solo 1) ========== -->
         <div class="wizard-step active">
           <div class="step-header">
             <div class="step-indicator">
@@ -384,7 +367,6 @@
           </div>
         </div>
 
-        <!-- ========== PASO 2: RESULTADO (múltiples - aparece cuando hay insumo) ========== -->
         <div class="wizard-step" [class.active]="formulario.tipoInsumo" [class.disabled]="!formulario.tipoInsumo">
           <div class="step-header">
             <div class="step-indicator">
@@ -423,14 +405,12 @@
               </label>
             </div>
           </div>
-          <!-- Mensaje bloqueado -->
           <div class="step-locked" *ngIf="!formulario.tipoInsumo">
             <mat-icon>lock</mat-icon>
             <span>Primero selecciona un insumo</span>
           </div>
         </div>
 
-        <!-- ========== PASO 3: ESPECIALISTA (aparece cuando hay resultado) ========== -->
         <div class="wizard-step" [class.active]="formulario.tiposResultado.length > 0" [class.disabled]="formulario.tiposResultado.length === 0">
           <div class="step-header">
             <div class="step-indicator">
@@ -452,7 +432,6 @@
             </div>
           </div>
           <div class="step-content" *ngIf="formulario.tiposResultado.length > 0" @slideDown>
-            <!-- Externos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge externo">
@@ -484,7 +463,6 @@
               </div>
             </div>
             
-            <!-- Internos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge interno">
@@ -516,14 +494,12 @@
               </div>
             </div>
           </div>
-          <!-- Mensaje bloqueado -->
           <div class="step-locked" *ngIf="formulario.tiposResultado.length === 0">
             <mat-icon>lock</mat-icon>
             <span>Primero selecciona al menos un resultado</span>
           </div>
         </div>
 
-        <!-- ========== PASO 4: FECHA DE ENTREGA ========== -->
         <div class="wizard-step" [class.active]="formulario.especialistasSeleccionados.length > 0" [class.disabled]="formulario.especialistasSeleccionados.length === 0">
           <div class="step-header">
             <div class="step-indicator">
@@ -578,7 +554,6 @@
           </div>
         </div>
 
-        <!-- ========== RESUMEN FINAL ========== -->
         <div class="wizard-summary" *ngIf="formulario.tipoInsumo && formulario.tiposResultado.length > 0 && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
           <div class="summary-icon">
             <mat-icon>verified</mat-icon>
@@ -595,10 +570,8 @@
         </div>
       </div>
 
-      <!-- ========== FLUJOS NUEVOS: INVESTIGACIÓN, DICTÁMENES, RECUPERACIÓN, DESTRUCCIÓN ========== -->
       <div class="dynamic-form adquisicion-wizard" *ngIf="flujoAsignadoSeleccionado && esFlujoConOpcionesAsignado()">
         
-        <!-- ========== PASO 1: OPCIONES DEL FLUJO (solo 1) ========== -->
         <div class="wizard-step active">
           <div class="step-header">
             <div class="step-indicator">
@@ -641,7 +614,6 @@
           </div>
         </div>
 
-        <!-- ========== PASO 2: RESULTADO (múltiples) ========== -->
         <div class="wizard-step" [class.active]="formulario.opcionSeleccionada" [class.disabled]="!formulario.opcionSeleccionada">
           <div class="step-header">
             <div class="step-indicator">
@@ -686,7 +658,6 @@
           </div>
         </div>
 
-        <!-- ========== PASO 3: ESPECIALISTAS ========== -->
         <div class="wizard-step" [class.active]="formulario.resultadosSeleccionados.length > 0" [class.disabled]="formulario.resultadosSeleccionados.length === 0">
           <div class="step-header">
             <div class="step-indicator">
@@ -708,7 +679,6 @@
             </div>
           </div>
           <div class="step-content" *ngIf="formulario.resultadosSeleccionados.length > 0">
-            <!-- Externos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge externo">
@@ -740,7 +710,6 @@
               </div>
             </div>
             
-            <!-- Internos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge interno">
@@ -778,7 +747,6 @@
           </div>
         </div>
 
-        <!-- ========== PASO 4: FECHA DE ENTREGA ========== -->
         <div class="wizard-step" [class.active]="formulario.especialistasSeleccionados.length > 0" [class.disabled]="formulario.especialistasSeleccionados.length === 0">
           <div class="step-header">
             <div class="step-indicator">
@@ -833,7 +801,6 @@
           </div>
         </div>
 
-        <!-- ========== RESUMEN FINAL ========== -->
         <div class="wizard-summary" *ngIf="formulario.opcionSeleccionada && formulario.resultadosSeleccionados.length > 0 && formulario.especialistasSeleccionados.length > 0 && formulario.fechaEntrega">
           <div class="summary-icon">
             <mat-icon>verified</mat-icon>
@@ -851,14 +818,12 @@
       </div>
     </div>
 
-    <!-- SOLICITUD DE INFORMACIÓN: Detalles del flujo -->
     <div class="form-section" *ngIf="formulario.tipoAccion === 'ASIGNADO' && flujoAsignadoSeleccionado === 'SOLICITUD_INFORMACION'">
       <h3 class="section-title">
         <span class="step-number">3</span>
         Detalles de Solicitud de Información
       </h3>
       
-      <!-- Selección de tipo: Correlación u Otra área -->
       <div class="dynamic-form">
         <div class="wizard-step active">
           <div class="step-header">
@@ -897,7 +862,6 @@
           </div>
         </div>
 
-        <!-- Opciones de Correlación (solo si se selecciona Correlación) -->
         <div class="wizard-step" [class.active]="tipoSolicitudSeleccionado === 'CORRELACION'" [class.disabled]="tipoSolicitudSeleccionado !== 'CORRELACION'">
           <div class="step-header">
             <div class="step-indicator">
@@ -941,7 +905,6 @@
           </div>
         </div>
 
-        <!-- Paso 3: Especialistas (requerido para Solicitud de Información) -->
         <div class="wizard-step" [class.active]="(tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length > 0) || (tipoSolicitudSeleccionado === 'OTRA_AREA')" [class.disabled]="!tipoSolicitudSeleccionado || (tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length === 0)">
           <div class="step-header">
             <div class="step-indicator">
@@ -962,7 +925,6 @@
             </div>
           </div>
           <div class="step-content" *ngIf="(tipoSolicitudSeleccionado === 'CORRELACION' && opcionesCorrelacionSeleccionadas.length > 0) || (tipoSolicitudSeleccionado === 'OTRA_AREA')">
-            <!-- Externos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge externo">
@@ -994,7 +956,6 @@
               </div>
             </div>
             
-            <!-- Internos -->
             <div class="especialista-section">
               <div class="section-header-esp">
                 <span class="section-badge interno">
@@ -1036,7 +997,6 @@
 
   </div>
 
-  <!-- LOADING -->
   <div class="modal-body loading" *ngIf="cargandoCatalogos">
     <div class="loader">
       <div class="spinner"></div>
@@ -1044,7 +1004,6 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
   <div class="modal-footer">
     <button class="btn-secondary" (click)="cerrar()" [disabled]="guardando">
       Cancelar

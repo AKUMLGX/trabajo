@@ -16,6 +16,31 @@ body {
   background: #f8f9fc;
 }
 
+
+.scrollbar-none {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+
+/* Ocultar scrollbar en Chrome, Edge y Safari */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ocultar scrollbar en Firefox */
+* {
+  scrollbar-width: none; /* Oculta */
+}
+
+/* Ocultar scrollbar en IE y Edge Legacy */
+* {
+  -ms-overflow-style: none;
+}
+
 .mat-stroked-button.modern-btn-secondary,
 .mat-raised-button.modern-btn-primary,
 .mat-raised-button.modern-btn-success {
