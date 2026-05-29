@@ -19,6 +19,34 @@ import {
 } from '../../../interfaces/expediente-tlalcalli.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ApiService } from '../../../services/api.service';
+import { TemporalInsertRequest } from '../../../interfaces/temporal.interface';
+import { TemporalInsertResponse } from '../../../interfaces/temporal.interface';
+import { TemporalRegistroRequest, TemporalRegistroResponse } from '../../../interfaces/temporal.interface';
+
+
+
+type Paso1TemporalExtra = FormularioPaso1 & {
+  numero_entrada_central?: string;
+  fecha_documento?: Date | string;
+  dias_retraso?: number;
+  fecha_requerimiento?: Date | string;
+};
+
+type Paso2TemporalExtra = FormularioPaso2 & {
+  fecha_asignacion?: Date | string;
+  sistema_aplicativo?: string;
+  woos?: string;
+  estatus?: string;
+  ubicacion?: string;
+  tipo_respuesta?: string;
+  tipo_documento?: string;
+  expediente_fisico_digital?: string;
+  fecha_atencion_inicial?: Date | string;
+  fecha_estimada_atencion?: Date | string;
+  fecha_atencion_realizada?: Date | string;
+  fecha_vencimiento_35_dias?: Date | string;
+};
 @Component({
   selector: 'app-stepper-tlalcalli',
   standalone: true,
@@ -59,7 +87,8 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     private pdfService: PdfGeneratorService,
     private snackBar: MatSnackBar,
     private logger: LoggerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private apiService: ApiService,
   ) {}
 
   ngOnInit(): void {}
@@ -144,14 +173,15 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(confirmado => {
-      if (confirmado) {
-        this.finalizarExpediente();
-      } else {
-        this.mostrarMensaje('Puede revisar y modificar los datos antes de guardar', 'info', 3000);
-      }
-    });
+  dialogRef.afterClosed().subscribe(confirmado => {
+    if (confirmado) {
+    this.finalizarExpediente();
+  } else {
+    this.insertarTemporal();
   }
+  });
+
+}
 
   // Construir secciones organizadas para el modal
   private construirSeccionesResumen(): SeccionResumen[] {
@@ -306,8 +336,8 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onPaso2Anterior() {
-    this.transicionarPaso(0);
+  onPaso2Anterior(): void {
+    this.obtenerRegistroTemporal();
   }
 
   // Finalizar expediente
@@ -349,6 +379,211 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
       this.guardando = false;
     }
   }
+
+
+  private insertarTemporal(): void {
+  if (!this.datosPaso1 || !this.datosPaso2) {
+    this.mostrarMensaje('Faltan datos para guardar el registro temporal', 'warning');
+    return;
+  }
+
+  const body = this.construirBodyTemporal();
+
+  this.guardando = true;
+
+  this.apiService
+    .postTemporal<TemporalInsertResponse>('temporal/insert', body)
+    .subscribe({
+      next: (response) => {
+        const uuid = response.body?.uuid;
+
+        if (!uuid) {
+          this.mostrarMensaje('El servicio no devolvió UUID', 'warning');
+          this.guardando = false;
+          return;
+        }
+
+        localStorage.setItem('uuid_temporal_expediente', uuid);
+
+        console.log('UUID temporal guardado:', uuid);
+
+        this.mostrarMensaje(
+          'Registro temporal guardado correctamente. Puedes revisar los datos antes de guardar.',
+          'success',
+          4000
+        );
+
+        this.guardando = false;
+      },
+      error: (error) => {
+        this.guardando = false;
+        this.manejarError(error);
+      }
+    });
+}
+
+private construirBodyTemporal(): TemporalInsertRequest {
+  const ahora = new Date().toISOString();
+
+  const paso1 = this.datosPaso1 as Paso1TemporalExtra;
+  const paso2 = this.datosPaso2 as Paso2TemporalExtra;
+
+  const responsable =
+    paso2.responsable_fecha_asignacion ||
+    paso2.responsable ||
+    '';
+
+  return {
+    id_expediente: this.expedienteId ?? 0,
+
+    oficio: paso1.oficio || '',
+    expediente: paso1.expediente || '',
+    numero_entrada_central: paso1.numero_entrada_central || '',
+    remitente_area: paso1.remitente_area || '',
+    fecha_documento: this.formatearFechaParaApi(paso1.fecha_documento),
+    fecha_recibido: this.formatearFechaParaApi(paso1.fecha_recibido),
+    referencia_asunto: paso1.referencia_asunto || '',
+    fecha_vencimiento: this.formatearFechaParaApi(paso1.fecha_vencimiento),
+
+    dias_retraso: paso1.dias_retraso || 0,
+    responsable,
+    fecha_asignacion: this.formatearFechaParaApi(paso2.fecha_asignacion),
+
+    sistema_aplicativo: paso2.sistema_aplicativo || '',
+    woos: paso2.woos || '',
+    estatus: paso2.estatus || 'En revisión',
+    ubicacion: paso2.ubicacion || '',
+    tipo_respuesta: paso2.tipo_respuesta || '',
+    tipo_documento: paso2.tipo_documento || '',
+
+    expediente_fisico_digital: paso2.expediente_fisico_digital || '',
+
+    fecha_creacion: ahora,
+    fecha_actualizacion: ahora,
+    usuario_creacion: 'admin',
+    usuario_actualizacion: 'admin',
+
+    tipo_medio_recepcion: paso1.tipo_medio_recepcion || '',
+    tiene_fecha_atencion_inicial: !!paso2.fecha_atencion_inicial,
+    fecha_atencion_inicial: this.formatearFechaParaApi(paso2.fecha_atencion_inicial),
+    fecha_estimada_atencion: this.formatearFechaParaApi(paso2.fecha_estimada_atencion),
+    fecha_atencion_realizada: this.formatearFechaParaApi(paso2.fecha_atencion_realizada),
+    fecha_vencimiento_35_dias: this.formatearFechaParaApi(paso2.fecha_vencimiento_35_dias),
+
+    documento_pdf_nombre: this.documentoPasoFinal?.documento_pdf_nombre || '',
+    prioridad: paso1.prioridad || '',
+    fecha_requerimiento: this.formatearFechaParaApi(paso1.fecha_requerimiento)
+  };
+}
+
+private formatearFechaParaApi(fecha: Date | string | null | undefined): string {
+  if (!fecha) return '';
+
+  if (typeof fecha === 'string') {
+    return fecha.includes('T') ? fecha.split('T')[0] : fecha;
+  }
+
+  return fecha.toISOString().split('T')[0];
+}
+
+
+private obtenerRegistroTemporal(): void {
+  const uuid = localStorage.getItem('uuid_temporal_expediente');
+
+  if (!uuid) {
+    this.mostrarMensaje(
+      'No hay UUID temporal guardado. Regresando al paso anterior.',
+      'warning',
+      3000
+    );
+
+    this.transicionarPaso(0);
+    return;
+  }
+
+  const body: TemporalRegistroRequest = {
+    uuid
+  };
+
+  this.guardando = true;
+
+  this.apiService
+    .getTemporalWithBody<TemporalRegistroResponse>('temporal/registro', body)
+    .subscribe({
+      next: (response) => {
+        const registro = response.body;
+
+        if (!registro) {
+          this.mostrarMensaje('No se encontró información temporal', 'warning');
+          this.guardando = false;
+          this.transicionarPaso(0);
+          return;
+        }
+
+        console.log('Registro temporal recuperado:', registro);
+
+        this.cargarRegistroTemporalEnFormulario(registro);
+
+        this.mostrarMensaje(
+          'Registro temporal recuperado correctamente',
+          'success',
+          3000
+        );
+
+        this.guardando = false;
+        this.transicionarPaso(0);
+      },
+      error: (error) => {
+        this.guardando = false;
+        this.manejarError(error);
+      }
+    });
+}
+
+
+private cargarRegistroTemporalEnFormulario(
+  registro: TemporalRegistroResponse
+): void {
+  this.datosPaso1 = {
+    ...(this.datosPaso1 || {}),
+
+    oficio: registro.oficio,
+    expediente: registro.expediente,
+    numero_entrada_central: registro.numero_entrada_central,
+    remitente_area: registro.remitente_area,
+
+    fecha_documento: this.convertirFechaApiADate(registro.fecha_documento),
+    fecha_recibido: this.convertirFechaApiADate(registro.fecha_recibido),
+    fecha_vencimiento: this.convertirFechaApiADate(registro.fecha_vencimiento),
+    fecha_requerimiento: this.convertirFechaApiADate(registro.fecha_requerimiento),
+
+    referencia_asunto: registro.referencia_asunto,
+    tipo_medio_recepcion: registro.tipo_medio_recepcion,
+    prioridad: registro.prioridad
+  } as FormularioPaso1;
+
+  this.datosPaso2 = {
+    ...(this.datosPaso2 || {}),
+    responsable: registro.responsable
+  } as FormularioPaso2;
+
+  this.documentoPasoFinal = {
+    ...(this.documentoPasoFinal || {}),
+    documento_pdf_nombre: registro.documento_pdf_nombre
+  };
+
+  this.expedienteId = registro.id_expediente;
+  this.paso1Valido = true;
+  this.paso2Valido = true;
+}
+
+private convertirFechaApiADate(fecha: string | null | undefined): Date | undefined {
+  if (!fecha) return undefined;
+
+  return new Date(`${fecha}T00:00:00`);
+}
+
+
 
   private manejarError(error: any) {
     this.logger.error('Error al guardar expediente:', error);
