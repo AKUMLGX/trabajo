@@ -234,4 +234,21 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
 
     this.logger.debug('Formulario paso 2 reiniciado completamente');
   }
+
+
+
+  precargarDatos(datos: Partial<{ responsable: string }>): void {
+  this.formulario.patchValue(
+    {
+      responsable: datos.responsable || ''
+    },
+    { emitEvent: true }
+  );
+
+  this.calcularProgreso();
+  this.guardarBorrador();
+
+  this.logger.debug('Datos precargados en paso 2:', datos);
+  }
+
 }

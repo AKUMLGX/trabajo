@@ -22,7 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiService } from '../../../services/api.service';
 import { TemporalInsertRequest } from '../../../interfaces/temporal.interface';
 import { TemporalInsertResponse } from '../../../interfaces/temporal.interface';
-import { TemporalRegistroRequest, TemporalRegistroResponse } from '../../../interfaces/temporal.interface';
+import { TemporalRegistroRequest, TemporalRegistroResponse, TemporalEliminaRequest, TemporalEliminaResponse } from '../../../interfaces/temporal.interface';
 
 
 
@@ -362,6 +362,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
 
       this.expedienteId = expediente?.id_expediente || null;
       this.expedienteGuardado = true;
+      this.eliminarRegistroTemporal();
       this.transicionarPaso(2);
       this.mostrarMensaje('Expediente guardado exitosamente', 'success');
 
@@ -492,7 +493,7 @@ private obtenerRegistroTemporal(): void {
 
   if (!uuid) {
     this.mostrarMensaje(
-      'No hay UUID temporal guardado. Regresando al paso anterior.',
+      'No existe un registro temporal guardado',
       'warning',
       3000
     );
@@ -505,35 +506,44 @@ private obtenerRegistroTemporal(): void {
     uuid
   };
 
+  console.log('POST temporal/registro:', body);
+
   this.guardando = true;
 
   this.apiService
-    .getTemporalWithBody<TemporalRegistroResponse>('temporal/registro', body)
+    .postTemporal<TemporalRegistroResponse>(
+      'temporal/registro',
+      body
+    )
     .subscribe({
-      next: (response) => {
-        const registro = response.body;
+next: (response) => {
+  const registro = response.body;
 
-        if (!registro) {
-          this.mostrarMensaje('No se encontró información temporal', 'warning');
-          this.guardando = false;
-          this.transicionarPaso(0);
-          return;
-        }
+  if (!registro) {
+    this.mostrarMensaje('No se encontró información temporal', 'warning');
+    this.guardando = false;
+    this.transicionarPaso(0);
+    return;
+  }
 
-        console.log('Registro temporal recuperado:', registro);
+  console.log('Registro temporal recuperado:', registro);
 
-        this.cargarRegistroTemporalEnFormulario(registro);
+  this.guardando = false;
+  this.transicionarPaso(0);
 
-        this.mostrarMensaje(
-          'Registro temporal recuperado correctamente',
-          'success',
-          3000
-        );
+  setTimeout(() => {
+    this.cargarRegistroTemporalEnFormulario(registro);
+  }, 300);
 
-        this.guardando = false;
-        this.transicionarPaso(0);
-      },
+  this.mostrarMensaje(
+    'Información temporal recuperada correctamente',
+    'success'
+  );
+},
+
       error: (error) => {
+        console.error('ERROR temporal/registro:', error);
+
         this.guardando = false;
         this.manejarError(error);
       }
@@ -544,9 +554,7 @@ private obtenerRegistroTemporal(): void {
 private cargarRegistroTemporalEnFormulario(
   registro: TemporalRegistroResponse
 ): void {
-  this.datosPaso1 = {
-    ...(this.datosPaso1 || {}),
-
+  const datosPaso1 = {
     oficio: registro.oficio,
     expediente: registro.expediente,
     numero_entrada_central: registro.numero_entrada_central,
@@ -560,11 +568,20 @@ private cargarRegistroTemporalEnFormulario(
     referencia_asunto: registro.referencia_asunto,
     tipo_medio_recepcion: registro.tipo_medio_recepcion,
     prioridad: registro.prioridad
-  } as FormularioPaso1;
+  };
+
+  const datosPaso2 = {
+    responsable: registro.responsable
+  };
+
+  this.datosPaso1 = {
+    ...(this.datosPaso1 || {}),
+    ...datosPaso1
+  } as unknown as FormularioPaso1;
 
   this.datosPaso2 = {
     ...(this.datosPaso2 || {}),
-    responsable: registro.responsable
+    ...datosPaso2
   } as FormularioPaso2;
 
   this.documentoPasoFinal = {
@@ -575,12 +592,49 @@ private cargarRegistroTemporalEnFormulario(
   this.expedienteId = registro.id_expediente;
   this.paso1Valido = true;
   this.paso2Valido = true;
-}
 
+  setTimeout(() => {
+    this.paso1Component?.precargarDatos?.(datosPaso1);
+    this.paso2Component?.precargarDatos?.(datosPaso2);
+  }, 100);
+}
 private convertirFechaApiADate(fecha: string | null | undefined): Date | undefined {
   if (!fecha) return undefined;
 
   return new Date(`${fecha}T00:00:00`);
+}
+
+
+private eliminarRegistroTemporal(): void {
+  const uuid = localStorage.getItem('uuid_temporal_expediente');
+
+  if (!uuid) {
+    console.log('No hay UUID temporal para eliminar');
+    return;
+  }
+
+  const body: TemporalEliminaRequest = {
+    uuid
+  };
+
+  this.apiService
+    .deleteTemporal<TemporalEliminaResponse>('temporal/elimina', body)
+    .subscribe({
+      next: (response) => {
+        console.log('Temporal eliminado correctamente:', response.body);
+
+        localStorage.removeItem('uuid_temporal_expediente');
+      },
+      error: (error) => {
+        console.error('Error al eliminar temporal:', error);
+
+        this.mostrarMensaje(
+          'El expediente se guardó, pero no se pudo eliminar el registro temporal',
+          'warning',
+          5000
+        );
+      }
+    });
 }
 
 

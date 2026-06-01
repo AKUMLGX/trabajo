@@ -89,16 +89,38 @@ getData<T>(endpoint: string): Observable<HttpResponse<T>> {
 
   //ENDPOINTS MODULO DE CAPTURA STEPPER
   postTemporal<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
-  return this.http.post<T>(this.buildUrl(endpoint), body, {
+    return this.http.post<T>(this.buildUrl(endpoint), body, {
     observe: 'response',
     });
   }
 
-  getTemporalWithBody<T>(endpoint: string,body: object): Observable<HttpResponse<T>> {
-  return this.http.request<T>('GET', this.buildUrl(endpoint), {
+  deleteTemporal<T>(endpoint: string,body: object): Observable<HttpResponse<T>> {
+    return this.http.delete<T>(this.buildUrl(endpoint), {
     body,
     observe: 'response',
     });
   }
 
+  //ENDPOINTS DE LOS APLICATIVOS, MODULO CENTRO DE CONTROL
+  putDataBody<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
+  return this.http.put<T>(this.buildUrl(endpoint), body, {
+    observe: 'response',
+    });
+  }
+
+updateAplicativo<T>(body: object): Observable<HttpResponse<T>> {
+  return this.http.put<T>(
+    this.buildUrl('catalogo/update_aplicativos'),
+    body,
+    { observe: 'response' }
+  );
+}
+
+deleteAplicativo<T>(id: number | string): Observable<HttpResponse<T>> {
+  return this.http.put<T>(
+    this.buildUrl(`catalogo/aplicativos/${id}`),
+    {},
+    { observe: 'response' }
+  );
+}
 }

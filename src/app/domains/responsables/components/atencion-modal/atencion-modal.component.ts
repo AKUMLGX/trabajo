@@ -17,6 +17,8 @@ import {
 
 import { AtencionEspecialistasComponent } from './atencion-especialistas/atencion-especialistas.component';
 import { AtencionFlujosComponent } from './atencion-flujos/atencion-flujos.component';
+import { ApiService } from '../../../capture/services/api.service';
+import { Aplicativo, CrearAplicativoDTO,ActualizarAplicativoDTO,MensajeResponse } from '../../../capture/interfaces/aplicativo.interface';
 export interface FormularioAtencion {
   tipoAccion: TipoAccion | '';
   tipoInsumo: string;
@@ -43,7 +45,6 @@ export interface FormularioAtencion {
     AtencionFlujosComponent
   ],
   templateUrl: './atencion-modal.component.html',
-  styleUrl: './atencion-modal.component.css'
 })
 export class AtencionModalComponent implements OnInit {
   expediente: ExpedienteTlalcalli;
@@ -120,53 +121,93 @@ export class AtencionModalComponent implements OnInit {
     }
   ];
 
-  sistemasAplicativos: string[] = [
-    'SUN',
-    'VISOR TRIBUTARIO',
-    'SIPRED',
-    'CRP',
-    'SIINCO',
-    'SICRE',
-    'DYP',
-    'SIATCO',
-    'MAT DYC (Trámites)',
-    'MAT DYC (Pistas)',
-    'CFDI',
-    'CORREOS ELECTRONICOS',
-    'EFU',
-    'SIREFE',
-    'CITASAT',
-    'Sistema de Turnos del SAT (Muchkin)',
-    'MAT RFC',
-    'CUWEB/ CORUS/ CIEC (contraseña)',
-    'SISE',
-    'CSF',
-    'MAT Cobranza',
-    'BUZÓN TRIBUTARIO',
-    'FUERPS',
-    'Júpiter',
-    'LAGS',
-    'CERTISAT',
-    'Opinión de Cumplimiento'
-  ];
+  aplicativos: Aplicativo[] = [];
+  aplicativosFiltrados: Aplicativo[] = [];
+
+  sistemasAplicativos: string[] = [];
+  sistemasFiltrados: string[] = [];
 
   sistemaDropdownAbierto = false;
   sistemaBusqueda = '';
-  sistemasFiltrados: string[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<AtencionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { expediente: ExpedienteTlalcalli },
     private atencionService: AtencionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private apiService: ApiService,
   ) {
     this.expediente = data.expediente;
   }
 
   ngOnInit(): void {
-    this.sistemasFiltrados = this.sistemasAplicativos;
     this.cargarCatalogos();
+    this.cargarAplicativos();
   }
+
+
+cargarAplicativos(): void {
+  this.apiService.getData<Aplicativo[]>('catalogo/aplicativos').subscribe({
+    next: (response) => {
+      const data = response.body ?? [];
+
+      this.aplicativos = data;
+      this.aplicativosFiltrados = [...data];
+
+      this.sistemasAplicativos = data.map(app => app.nombre);
+      this.sistemasFiltrados = [...this.sistemasAplicativos];
+    },
+    error: (error) => {
+      console.error('ERROR APLICATIVOS:', error);
+
+      this.snackBar.open('Error al cargar aplicativos.', 'Cerrar', {
+        duration: 4000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  });
+}
+
+
+existeAplicativo(nombre: string): boolean {
+  return this.aplicativos.some(
+    app => app.nombre.trim().toLowerCase() === nombre.trim().toLowerCase()
+  );
+}
+
+crearAplicativoDesdeBusqueda(): void {
+  const nombre = this.sistemaBusqueda.trim();
+
+  if (!nombre) return;
+  if (this.existeAplicativo(nombre)) return;
+
+  this.crearAplicativo(nombre);
+}
+
+
+
+private crearAplicativo(nombre: string): void {
+  const body: CrearAplicativoDTO = { nombre };
+
+  this.apiService.postData<Aplicativo>('catalogo/aplicativos', body).subscribe({
+    next: (response) => {
+      if (response.body) {
+        this.aplicativos = [...this.aplicativos, response.body];
+        this.sistemasAplicativos = this.aplicativos.map(app => app.nombre);
+        this.sistemasFiltrados = [...this.sistemasAplicativos];
+
+        this.seleccionarSistema(response.body.nombre);
+
+        this.snackBar.open('Aplicativo creado correctamente.', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      }
+    }
+  });
+}
+
+
 
   cargarCatalogos(): void {
     this.cargandoCatalogos = true;
@@ -185,6 +226,66 @@ export class AtencionModalComponent implements OnInit {
     });
   }
 
+
+editarAplicativo(app: Aplicativo): void {
+  if (app.es_sistema) {
+    this.snackBar.open('No se pueden modificar aplicativos predefinidos.', 'Cerrar', {
+      duration: 4000
+    });
+    return;
+  }
+
+  const nombre = prompt('Nuevo nombre del aplicativo:', app.nombre)?.trim();
+  if (!nombre) return;
+
+  const body: ActualizarAplicativoDTO = {
+    id_aplicativo: app.id_aplicativo,
+    nombre
+  };
+
+  this.apiService.updateAplicativo<MensajeResponse>(body).subscribe({
+    next: () => {
+      this.snackBar.open('Aplicativo actualizado correctamente.', 'Cerrar', {
+        duration: 3000
+      });
+      this.cargarAplicativos();
+    },
+    error: (error) => {
+      console.error('ERROR UPDATE APLICATIVO:', error);
+      this.snackBar.open('Error al actualizar aplicativo.', 'Cerrar', {
+        duration: 4000
+      });
+    }
+  });
+}
+
+eliminarAplicativo(app: Aplicativo): void {
+  if (app.es_sistema) {
+    this.snackBar.open('No se pueden eliminar aplicativos predefinidos.', 'Cerrar', {
+      duration: 4000
+    });
+    return;
+  }
+
+  const confirmar = confirm(`¿Deseas eliminar "${app.nombre}"?`);
+  if (!confirmar) return;
+
+  this.apiService.deleteAplicativo<MensajeResponse>(app.id_aplicativo).subscribe({
+    next: () => {
+      this.snackBar.open('Aplicativo eliminado correctamente.', 'Cerrar', {
+        duration: 3000
+      });
+      this.cargarAplicativos();
+    },
+    error: (error) => {
+      console.error('ERROR DELETE APLICATIVO:', error);
+      this.snackBar.open('Error al eliminar aplicativo.', 'Cerrar', {
+        duration: 4000
+      });
+    }
+  });
+}
+
   cerrar(): void {
     if (!this.guardando) {
       this.dialogRef.close();
@@ -202,13 +303,17 @@ export class AtencionModalComponent implements OnInit {
     this.formulario.prioridad = '';
   }
 
-  filtrarSistemas(): void {
-    const busqueda = this.sistemaBusqueda.trim().toLowerCase();
+filtrarSistemas(): void {
+  const busqueda = this.sistemaBusqueda.trim().toLowerCase();
 
-    this.sistemasFiltrados = busqueda
-      ? this.sistemasAplicativos.filter(sistema => sistema.toLowerCase().includes(busqueda))
-      : this.sistemasAplicativos;
-  }
+  this.aplicativosFiltrados = busqueda
+    ? this.aplicativos.filter(app =>
+        app.nombre.toLowerCase().includes(busqueda)
+      )
+    : [...this.aplicativos];
+
+  this.sistemasFiltrados = this.aplicativosFiltrados.map(app => app.nombre);
+}
 
   onSistemaInputChange(): void {
     this.formulario.sistema_aplicativo = this.sistemaBusqueda;

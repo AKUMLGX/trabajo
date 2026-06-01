@@ -1258,44 +1258,82 @@ private cargarGeneralesConCentrales(): void {
    * Precargar datos parciales - mantiene algunos valores del formulario anterior
    * Se llama desde el stepper para "nuevo similar"
    */
-  precargarDatos(datos: any): void {
-    this.logger.debug('Precargando datos parciales en paso 1:', datos);
+precargarDatos(datos: any): void {
+  this.logger.debug('Precargando datos temporales en paso 1:', datos);
 
-    // Primero reiniciar para limpiar
-    this.reiniciarFormulario();
+  const remitenteParseado = this.separarRemitenteArea(datos.remitente_area);
 
-    // Luego aplicar los datos que queremos conservar
-    setTimeout(() => {
-      const valoresPrecargar: any = {};
+  this.formulario.get('expediente')?.enable({ emitEvent: false });
+  this.formulario.get('fecha_documento')?.enable({ emitEvent: false });
 
-      // Tipo de medio de recepción (si se proporcionó)
-      if (datos.tipo_medio_recepcion) {
-        valoresPrecargar.tipo_medio_recepcion = datos.tipo_medio_recepcion;
-      }
+  this.formulario.patchValue(
+    {
+      tipo_medio_recepcion: datos.tipo_medio_recepcion || '',
+      oficio: datos.oficio || '',
+      expediente: datos.expediente || '',
+      numero_entrada_central: datos.numero_entrada_central || '',
 
-      // Remitente general (si se proporcionó)
-      if (datos.remitente_general) {
-        valoresPrecargar.remitente_general = datos.remitente_general;
-      }
+      remitente_general: remitenteParseado.general,
+      remitente_central: remitenteParseado.central,
+      remitente_identificador: remitenteParseado.identificador,
 
-      // Remitente central (si se proporcionó)
-      if (datos.remitente_central) {
-        valoresPrecargar.remitente_central = datos.remitente_central;
-      }
+      fecha_documento: datos.fecha_documento || null,
+      fecha_recibido: datos.fecha_recibido || null,
+      fecha_requerimiento: datos.fecha_requerimiento || null,
+      fecha_vencimiento: datos.fecha_vencimiento || null,
 
-      // Prioridad (si se proporcionó)
-      if (datos.prioridad) {
-        valoresPrecargar.prioridad = datos.prioridad;
-      }
+      referencia_asunto: datos.referencia_asunto || '',
+      prioridad: datos.prioridad || 'MEDIA'
+    },
+    { emitEvent: true }
+  );
 
-      // Aplicar valores precargados
-      if (Object.keys(valoresPrecargar).length > 0) {
-        this.formulario.patchValue(valoresPrecargar, { emitEvent: true });
-        this.logger.debug('Datos precargados aplicados:', Object.keys(valoresPrecargar));
-      }
+  this.formulario.get('expediente')?.disable({ emitEvent: false });
+  this.formulario.get('fecha_documento')?.disable({ emitEvent: false });
 
-      // Recalcular progreso
-      this.calcularProgreso();
-    }, 100);
+  this.calcularProgreso();
+  this.guardarBorrador();
+
+  this.validezCambiada.emit(this.formulario.valid);
   }
+
+  private separarRemitenteArea(remitenteArea: string | null | undefined): {
+  general: string;
+  central: string;
+  identificador: string;
+} {
+  if (!remitenteArea) {
+    return {
+      general: '',
+      central: '',
+      identificador: ''
+    };
+  }
+
+  const generales = this.remitentesGenerales.map(item => String(item.value));
+
+  const general = generales.find(clave => remitenteArea.startsWith(clave)) || '';
+  const resto = general ? remitenteArea.replace(general, '') : remitenteArea;
+
+  const centrales = this.centralesPorGeneral[general] || [];
+  const central = centrales
+    .map(item => String(item.value))
+    .find(clave => resto.startsWith(clave)) || '';
+
+  const identificador = central ? resto.replace(central, '') : resto;
+
+  return {
+    general,
+    central,
+    identificador
+  };
+}
+
+
+
+
+
+
+
+
 }

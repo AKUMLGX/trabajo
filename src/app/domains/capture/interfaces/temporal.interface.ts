@@ -42,3 +42,13 @@ export interface TemporalRegistroRequest {
 }
 
 export interface TemporalRegistroResponse extends TemporalInsertRequest {}
+
+
+export interface TemporalEliminaRequest {
+  uuid: string;
+}
+
+export interface TemporalEliminaResponse {
+  message?: string;
+  success?: boolean;
+}

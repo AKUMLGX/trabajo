@@ -153,26 +153,77 @@
             {{ sistemasFiltrados.length }} sistema(s) encontrado(s)
           </div>
 
-          <div class="max-h-[296px] overflow-y-auto p-2">
-            <button
-              type="button"
-              *ngFor="let sistema of sistemasFiltrados"
-              (mousedown)="$event.preventDefault()"
-              (click)="seleccionarSistema(sistema)"
-              class="flex w-full items-center gap-4 rounded-xl px-5 py-4 text-left transition hover:bg-[#4b0075]/5"
-              [ngClass]="formulario.sistema_aplicativo === sistema ? 'bg-[#4b0075]/10 text-[#4b0075]' : 'text-gray-500'">
+<div class="max-h-[296px] overflow-y-auto p-2">
 
-              <mat-icon class="text-gray-400">apps</mat-icon>
-              <span class="flex-1 text-base font-bold">{{ sistema }}</span>
-              <mat-icon *ngIf="formulario.sistema_aplicativo === sistema" class="text-green-600">
-                check_circle
-              </mat-icon>
-            </button>
+  <div
+    *ngFor="let app of aplicativosFiltrados"
+    class="flex items-center gap-2 rounded-xl transition hover:bg-[#4b0075]/5">
 
-            <div *ngIf="sistemasFiltrados.length === 0" class="px-4 py-10 text-center text-sm text-gray-400">
-              No se encontraron sistemas. Puedes escribir uno nuevo.
-            </div>
-          </div>
+    <button
+      type="button"
+      (mousedown)="$event.preventDefault()"
+      (click)="seleccionarSistema(app.nombre)"
+      class="flex flex-1 items-center gap-4 rounded-xl px-5 py-4 text-left transition"
+      [ngClass]="formulario.sistema_aplicativo === app.nombre
+        ? 'bg-[#4b0075]/10 text-[#4b0075]'
+        : 'text-gray-500'">
+
+      <mat-icon class="text-gray-400">apps</mat-icon>
+
+      <span class="flex-1 text-base font-bold">
+        {{ app.nombre }}
+      </span>
+
+      <span
+        *ngIf="app.es_sistema"
+        class="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-black uppercase text-gray-400">
+        Sistema
+      </span>
+
+      <mat-icon
+        *ngIf="formulario.sistema_aplicativo === app.nombre"
+        class="text-green-600">
+        check_circle
+      </mat-icon>
+    </button>
+
+    <button
+      type="button"
+      *ngIf="!app.es_sistema"
+      (mousedown)="$event.preventDefault()"
+      (click)="editarAplicativo(app)"
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-blue-500 transition hover:bg-blue-50">
+      <mat-icon>edit</mat-icon>
+    </button>
+
+    <button
+      type="button"
+      *ngIf="!app.es_sistema"
+      (mousedown)="$event.preventDefault()"
+      (click)="eliminarAplicativo(app)"
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-red-500 transition hover:bg-red-50">
+      <mat-icon>delete</mat-icon>
+    </button>
+
+  </div>
+
+  <div
+    *ngIf="aplicativosFiltrados.length === 0"
+    class="px-4 py-10 text-center text-sm text-gray-400">
+    No se encontraron sistemas. Puedes escribir uno nuevo.
+  </div>
+
+  <button
+    type="button"
+    *ngIf="sistemaBusqueda.trim() && !existeAplicativo(sistemaBusqueda)"
+    (mousedown)="$event.preventDefault()"
+    (click)="crearAplicativoDesdeBusqueda()"
+    class="mx-4 mb-4 flex w-[calc(100%-2rem)] items-center justify-center gap-2 rounded-xl bg-[#4b0075] px-4 py-3 text-sm font-black text-white hover:bg-[#39005a]">
+    <mat-icon>add</mat-icon>
+    Crear "{{ sistemaBusqueda }}"
+  </button>
+
+</div>
         </div>
       </div>
     </section>
