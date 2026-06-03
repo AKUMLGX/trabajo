@@ -1,0 +1,257 @@
+<div class="flex max-h-[90vh] w-[700px] max-w-[95vw] flex-col">
+
+  <!-- HEADER -->
+  <div class="flex items-start justify-between rounded-t-lg bg-gradient-to-br from-[#34005b] to-[#4a0080] px-6 py-5 text-white">
+    <div class="flex items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15">
+        <mat-icon class="!h-7 !w-7 !text-[28px] text-white">visibility</mat-icon>
+      </div>
+
+      <div>
+        <p class="m-0 text-xs uppercase tracking-[1px] opacity-80">
+          Detalle de Atención
+        </p>
+
+        <h2 class="my-1 font-ubuntu-mono font-black text-2xl text-white">
+          {{ data.expediente }}
+        </h2>
+
+        <p class="m-0 text-sm opacity-90">
+          ID Atención: {{ data.idAtencion }}
+        </p>
+      </div>
+    </div>
+
+    <!-- <button
+      type="button"
+      (click)="cerrar()"
+      class="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-white transition hover:bg-white/20">
+      <mat-icon>close</mat-icon>
+    </button> -->
+  </div>
+
+  <!-- BODY -->
+  <div
+    class="flex-1 overflow-y-auto bg-[#f8f9fa] p-6"
+    [ngClass]="{ 'flex min-h-[200px] items-center justify-center': cargando }">
+
+    @if (cargando) {
+      <div class="text-center">
+        <div class="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-[#34005b]"></div>
+        <p class="text-sm font-semibold text-gray-600">
+          Cargando información...
+        </p>
+      </div>
+    } @else if (detalle) {
+
+      <!-- DATOS DEL EXPEDIENTE -->
+      <div class="mb-4 rounded-xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+        <div class="mb-4 flex items-center gap-3 border-b-2 border-gray-100 pb-3">
+          <mat-icon class="text-[#34005b]">folder_open</mat-icon>
+          <h3 class="m-0 text-base font-semibold text-gray-800">
+            Datos del Expediente
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Expediente</span>
+            <span class="break-words text-lg font-ubuntu-mono font-black text-[#34005b]">{{ detalle.expediente || 'N/A' }}</span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Oficio</span>
+            <span class="break-words text-[15px] text-gray-800">{{ detalle.oficio || 'N/A' }}</span>
+          </div>
+
+          <div class="flex flex-col gap-1 sm:col-span-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Remitente</span>
+            <span class="break-words text-[15px] text-gray-800">{{ detalle.remitente || 'N/A' }}</span>
+          </div>
+
+          <div class="flex flex-col gap-1 sm:col-span-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Asunto</span>
+            <span class="break-words text-[15px] text-gray-800">{{ detalle.asunto || 'N/A' }}</span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Fecha Recibido</span>
+            <span class="text-[15px] text-gray-800">{{ formatearFecha(detalle.fechaRecibido) }}</span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Fecha Vencimiento</span>
+            <span class="text-[15px] text-gray-800">{{ formatearFecha(detalle.fechaVencimiento) }}</span>
+          </div>
+
+   <div class="flex flex-col gap-1">
+  <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+    Estatus
+  </span>
+
+<span
+  class="w-fit rounded-full border px-3 py-1 text-xs font-semibold"
+  [ngClass]="{
+    'bg-green-50 border-green-200 text-green-800': getEstatusClass(detalle.estatus) === 'estatus-atencion',
+    'bg-yellow-50 border-yellow-200 text-yellow-700': getEstatusClass(detalle.estatus) === 'estatus-pendiente',
+    'bg-red-50 border-red-200 text-red-600': getEstatusClass(detalle.estatus) === 'estatus-rechazado'
+  }">
+  {{ detalle.estatus || 'N/A' }}
+</span>
+</div>
+        </div>
+      </div>
+
+      <!-- DATOS DE LA ATENCIÓN -->
+      <div class="mb-4 rounded-xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+        <div class="mb-4 flex items-center gap-3 border-b-2 border-gray-100 pb-3">
+          <mat-icon class="text-[#34005b]">assignment</mat-icon>
+          <h3 class="m-0 text-base font-semibold text-gray-800">
+            Datos de la Atención
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Tipo de Acción</span>
+            <span class="w-fit rounded-full bg-gradient-to-br from-[#34005b] to-[#4a0080] px-3 py-1 text-xs font-semibold text-white">
+              {{ formatearTipoAccion(detalle.tipoAccion) }}
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Prioridad</span>
+            <span
+              class="w-fit rounded-full px-3 py-1 text-xs font-semibold"
+              [ngClass]="{
+                'bg-red-100 text-red-600': getPrioridadClass(detalle.prioridad) === 'prioridad-urgente',
+                'bg-orange-100 text-orange-600': getPrioridadClass(detalle.prioridad) === 'prioridad-alta',
+                'bg-yellow-100 text-yellow-700': getPrioridadClass(detalle.prioridad) === 'prioridad-media',
+                'bg-green-100 text-green-600': getPrioridadClass(detalle.prioridad) === 'prioridad-baja'
+              }">
+              {{ detalle.prioridad || 'N/A' }}
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Fecha de Entrega</span>
+            <span class="text-[15px] text-gray-800">{{ formatearFecha(detalle.fechaEntrega) }}</span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Estatus</span>
+            <span class="w-fit rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800">
+              {{ detalle.estadoAtencion || 'N/A' }}
+            </span>
+          </div>
+
+          @if (detalle.tiposInsumo && detalle.tiposInsumo.length > 0) {
+            <div class="flex flex-col gap-2 sm:col-span-2">
+              <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Tipos de Insumo</span>
+              <div class="flex flex-wrap gap-2">
+                @for (insumo of detalle.tiposInsumo; track insumo) {
+                  <span class="rounded-full bg-indigo-100 px-3 py-1.5 text-xs font-medium text-indigo-700">
+                    {{ insumo }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+
+          @if (detalle.tipoResultado) {
+            <div class="flex flex-col gap-1">
+              <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Tipo de Resultado</span>
+              <span class="text-[15px] text-gray-800">{{ detalle.tipoResultado }}</span>
+            </div>
+          }
+
+          @if (detalle.opcionSeleccionada && detalle.opcionSeleccionada.length > 0) {
+            <div class="flex flex-col gap-2 sm:col-span-2">
+              <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Opciones Seleccionadas</span>
+              <div class="flex flex-wrap gap-2">
+                @for (opcion of detalle.opcionSeleccionada; track opcion) {
+                  <span class="rounded-full bg-pink-100 px-3 py-1.5 text-xs font-medium text-pink-700">
+                    {{ opcion }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+
+          @if (detalle.sistemaAplicativo) {
+            <div class="flex flex-col gap-1 sm:col-span-2">
+              <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Sistema/Aplicativo</span>
+              <span class="break-words text-[15px] text-gray-800">{{ detalle.sistemaAplicativo }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ESPECIALISTAS -->
+      @if (detalle.especialistas && detalle.especialistas.length > 0) {
+        <div class="mb-4 rounded-xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+          <div class="mb-4 flex items-center gap-3 border-b-2 border-gray-100 pb-3">
+            <mat-icon class="text-[#34005b]">people</mat-icon>
+            <h3 class="m-0 text-base font-semibold text-gray-800">
+              Especialistas Asignados
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+            @for (esp of detalle.especialistas; track esp.codigo) {
+              <div class="flex items-center gap-3 rounded-lg border border-gray-200 bg-[#f8f9fa] p-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#34005b] to-[#4a0080]">
+                  <mat-icon class="text-white">person</mat-icon>
+                </div>
+
+                <div class="flex flex-col">
+                  <span class="font-semibold text-gray-800">{{ esp.nombre }}</span>
+                  <span class="text-xs text-gray-500">{{ esp.codigo }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- REGISTRO -->
+      <div class="mb-4 rounded-xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+        <div class="mb-4 flex items-center gap-3 border-b-2 border-gray-100 pb-3">
+          <mat-icon class="text-[#34005b]">history</mat-icon>
+          <h3 class="m-0 text-base font-semibold text-gray-800">
+            Información de Registro
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Usuario Registro</span>
+            <span class="break-words text-[15px] text-gray-800">{{ detalle.usuarioRegistro || 'N/A' }}</span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Fecha Registro</span>
+            <span class="text-[15px] text-gray-800">{{ formatearFechaHora(detalle.fechaRegistro) }}</span>
+          </div>
+        </div>
+      </div>
+
+    } @else {
+      <div class="py-10 text-center text-gray-500">
+        <mat-icon class="mb-4 !h-12 !w-12 !text-5xl">info</mat-icon>
+        <p>No se encontró información de la atención</p>
+      </div>
+    }
+  </div>
+
+  <!-- FOOTER -->
+  <div class="flex justify-end rounded-b-lg border-t border-gray-200 bg-white px-6 py-4">
+    <button
+      type="button"
+      (click)="cerrar()"
+      class="flex items-center gap-2 rounded-lg bg-gradient-to-br from-[#34005b] to-[#4a0080] px-6 py-2.5 font-semibold text-white transition hover:opacity-90">
+      <!-- <mat-icon>check</mat-icon> -->
+      Cerrar
+    </button>
+  </div>
+</div>

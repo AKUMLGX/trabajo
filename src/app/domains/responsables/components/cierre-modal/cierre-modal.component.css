@@ -1,7 +1,4 @@
-/* =====================================================
-   MODAL CONTAINER
-   ===================================================== */
-.cierre-modal {
+/* .cierre-modal {
   width: min(1000px, 95vw);
   max-height: calc(100vh - 60px);
   display: flex;
@@ -13,9 +10,6 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* =====================================================
-   HEADER
-   ===================================================== */
 .modal-header {
   display: flex;
   align-items: center;
@@ -127,9 +121,6 @@
   cursor: not-allowed;
 }
 
-/* =====================================================
-   BODY
-   ===================================================== */
 .modal-body {
   flex: 1;
   overflow-y: auto;
@@ -168,9 +159,6 @@
   gap: 32px;
 }
 
-/* =====================================================
-   FORM SECTIONS
-   ===================================================== */
 .form-section {
   background: white;
   border-radius: 20px;
@@ -201,7 +189,6 @@
   transform: translateY(-2px);
 }
 
-/* Secciones específicas con colores */
 .ticket-section::before {
   background: linear-gradient(90deg, #34005b 0%, #3e0065 100%);
 }
@@ -268,9 +255,7 @@
   font-weight: 500;
 }
 
-/* =====================================================
-   FORM FIELDS
-   ===================================================== */
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -350,9 +335,7 @@
   font-family: inherit;
 }
 
-/* =====================================================
-   FOOTER
-   ===================================================== */
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -416,9 +399,7 @@
   animation: spin 0.8s linear infinite;
 }
 
-/* =====================================================
-   SCROLLBAR
-   ===================================================== */
+
 .modal-body::-webkit-scrollbar {
   width: 10px;
 }
@@ -438,9 +419,7 @@
   background: linear-gradient(145deg, #d6ae67 0%, #dbb872 100%);
 }
 
-/* =====================================================
-   RESPONSIVE
-   ===================================================== */
+
 @media (max-width: 768px) {
   .cierre-modal {
     width: 100vw;
@@ -461,4 +440,4 @@
     align-items: flex-start;
   }
 }
-
+ */

@@ -88,29 +88,29 @@
         </div>
       </div>
 
-<div class="overflow-x-auto">
-  <table class="w-full min-w-[1350px] table-fixed border-collapse">
+<div class="w-full overflow-hidden">
+  <table class="w-full table-fixed border-collapse">
     <colgroup>
-      <col class="w-[150px]" />
-      <col class="w-[280px]" />
-      <col class="w-[200px]" />
-      <col class="w-[250px]" />
-      <col class="w-[170px]" />
-      <col class="w-[160px]" />
-      <col class="w-[140px]" />
-      <col class="w-[140px]" />
+      <col class="w-[13%]" />
+      <col class="w-[15%]" />
+      <col class="w-[15%]" />
+      <col class="w-[16%]" />
+      <col class="w-[13%]" />
+      <col class="w-[11%]" />
+      <col class="w-[8%]" />
+      <col class="w-[10%]" />
     </colgroup>
 
     <thead>
       <tr class="bg-tlalcalli-light-lavender">
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Tipo de Atención</th>
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Especialistas</th>
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Usuario Registro</th>
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Fecha Apertura</th>
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Días de atraso</th>
-        <th class="px-4 py-4 text-center text-[11px] font-black uppercase tracking-wide text-tlalcalli-gray">Acciones</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Tipo de Atención</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Especialistas</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Usuario Registro</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Fecha Apertura</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Días de atraso</th>
+        <th class="px-3 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray whitespace-nowrap">Acciones</th>
       </tr>
     </thead>
 
@@ -131,7 +131,7 @@
             </div>
           </td>
 
-          <td class="px-4 py-5 text-center align-middle">
+          <td class="px-2 py-5 text-center align-middle">
             <div class="flex flex-col items-center gap-1">
               <span class="whitespace-normal break-words text-sm font-ubuntu-mono font-bold leading-5 text-center text-black">
                 {{ item.expediente || '-' }}
@@ -142,13 +142,13 @@
             </div>
           </td>
 
-          <td class="px-4 py-5 align-middle">
+          <td class="px-2 py-5 align-middle">
             <span class="block w-full whitespace-normal break-words rounded-full bg-tlalcalli-primary/10 px-3 py-2 text-center text-xs font-bold uppercase leading-4 text-tlalcalli-primary">
               {{ item.tipoAccion }}
             </span>
           </td>
 
-          <td class="px-4 py-5 text-center align-middle">
+          <td class="px-2 py-5 text-center align-middle">
             @if (item.especialistas?.length) {
               <div class="flex flex-col items-center gap-2">
                 @for (esp of item.especialistas; track esp) {
@@ -170,20 +170,20 @@
             </span>
           </td>
 
-          <td class="px-4 py-5 text-center align-middle">
+          <td class="px-2 py-5 text-center align-middle">
             <span class="block text-sm text-tlalcalli-gray">
               {{ formatearFecha(item.ticketFechaApertura) }}
             </span>
           </td>
 
-          <td class="px-4 py-5 text-center align-middle">
+          <td class="px-2 py-5 text-center align-middle">
             <span class="text-center inline-flex rounded-full bg-black/5 px-3 py-1.5 text-sm font-bold text-black">
               {{ item.diasAtraso }} días
             </span>
           </td>
 
-          <td class="px-4 py-5 text-center align-middle">
-            <div class="flex items-center justify-center gap-2">
+          <td class="px-3 py-5 text-center align-middle">
+            <div class="flex items-center justify-center gap-3">
               <button
                 (click)="abrirModalDetalles(item)"
                 class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-teal-muted text-white transition hover:opacity-90"

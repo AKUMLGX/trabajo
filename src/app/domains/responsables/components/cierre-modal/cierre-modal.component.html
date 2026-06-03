@@ -1,215 +1,242 @@
-<div class="cierre-modal">
-  <!-- HEADER -->
-  <div class="modal-header">
-    <div class="header-content">
-      <div class="header-icon">
-        <mat-icon>assignment_turned_in</mat-icon>
+<div class="flex max-h-[calc(100vh-60px)] w-[min(1000px,95vw)] flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_30px_100px_-20px_rgba(52,0,91,0.4)] max-md:h-screen max-md:w-screen max-md:max-h-screen max-md:rounded-none">
+
+  <div class="relative flex items-center justify-between overflow-hidden bg-gradient-to-br from-[#34005b] via-[#3e0065] to-[#5c1a7a] px-8 py-10 text-white">
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(214,174,103,0.15)_0%,transparent_50%),radial-gradient(circle_at_80%_50%,rgba(219,184,114,0.1)_0%,transparent_50%)]"></div>
+
+    <div class="relative z-[1] flex items-center gap-5">
+     <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15">
+        <mat-icon class="!h-7 !w-7 !text-[28px] text-white">assignment_turned_in</mat-icon>
       </div>
-      <div class="header-text">
-        <p class="header-eyebrow">Formularios de Cierre</p>
-        <h2 class="header-title">Completar Información de Cierre</h2>
-        <p class="header-subtitle">Expediente: {{ data.expediente }}</p>
+
+      <div class="relative z-20 flex flex-col gap-2">
+        <p class="m-0 text-[11px] font-semibold uppercase tracking-[2px] text-[#d6ae67] opacity-90">
+          Formularios de Cierre
+        </p>
+
+        <h2 class="relative z-20 m-0 text-xl leading-tight font-bold text-white">
+          Completar Información de Cierre
+        </h2>
+
+        <p class="m-0 font-ubuntu-mono font-black text-[13px] text-white/90">
+          Expediente: {{ data.expediente }}
+        </p>
       </div>
     </div>
-    <button class="close-btn" (click)="cerrar()" [disabled]="guardando" matTooltip="Cerrar">
+
+    <!-- <button
+      type="button"
+      (click)="cerrar()"
+      [disabled]="guardando"
+      matTooltip="Cerrar"
+      class="relative z-[1] flex h-11 w-11 items-center justify-center rounded-xl border-2 border-white/20 bg-white/15 text-white transition duration-300 hover:scale-105 hover:rotate-90 hover:border-white/40 hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 disabled:hover:rotate-0">
       <mat-icon>close</mat-icon>
-    </button>
+    </button> -->
   </div>
 
-  <!-- BODY -->
-  <div class="modal-body" [class.loading]="cargando">
+  <div
+    class="flex-1 overflow-y-auto bg-gradient-to-b from-[#f8f9fa] to-white p-8 max-md:p-5"
+    [ngClass]="{ 'flex min-h-[400px] items-center justify-center': cargando }">
+
     @if (cargando) {
-      <div class="loader">
-        <div class="spinner"></div>
-        <p>Cargando información...</p>
+      <div class="text-center">
+        <div class="mx-auto mb-4 h-[50px] w-[50px] animate-spin rounded-full border-4 border-[#34005b]/10 border-t-[#34005b]"></div>
+        <p class="font-semibold text-gray-600">
+          Cargando información...
+        </p>
       </div>
     } @else {
-      <form [formGroup]="formulario" class="cierre-form">
-        
-        <!-- FORMULARIO 1: TICKET MS-SAT -->
-        <div class="form-section ticket-section">
-          <div class="section-header-form">
-            <div class="section-icon-wrapper">
-              <mat-icon class="section-icon">confirmation_number</mat-icon>
+      <form [formGroup]="formulario" class="flex flex-col gap-8">
+
+        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#34005b] before:to-[#3e0065] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
+          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
+            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
+              <mat-icon class="!h-7 !w-7 !text-[28px] text-white">confirmation_number</mat-icon>
             </div>
-            <div class="section-title-wrapper">
-              <h3 class="section-title">TICKET MS-SAT</h3>
-              <p class="section-subtitle">Información del ticket de seguimiento</p>
+
+            <div class="flex-1">
+              <h3 class="m-0 mb-1 text-xl font-extrabold tracking-[-0.3px] text-[#34005b]">Ticket MS-SAT</h3>
+              <p class="m-0 text-[13px] font-medium text-[#666]">Información del ticket de seguimiento</p>
             </div>
           </div>
-          <div class="form-grid">
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">tag</mat-icon>
+
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">tag</mat-icon>
                 Número de Ticket
               </label>
-              <input 
-                type="text" 
-                formControlName="ticketNumero"
-                class="premium-input"
-                placeholder="Ej: TKT-001-2025">
+              <input type="text" formControlName="ticketNumero" placeholder="Ej: TKT-001-2025"
+                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
             </div>
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">event</mat-icon>
+
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">event</mat-icon>
                 Fecha de Apertura
               </label>
-              <input 
-                type="date" 
-                formControlName="ticketFechaApertura"
-                class="premium-input">
+              <input type="date" formControlName="ticketFechaApertura"
+                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
             </div>
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">check_circle</mat-icon>
+
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">check_circle</mat-icon>
                 Fecha de Resolución
               </label>
-              <input 
-                type="date" 
-                formControlName="ticketFechaResolucion"
-                class="premium-input">
+              <input type="date" formControlName="ticketFechaResolucion"
+                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
             </div>
           </div>
         </div>
 
-        <!-- FORMULARIO 2: RESPUESTA -->
-        <div class="form-section respuesta-section">
-          <div class="section-header-form">
-            <div class="section-icon-wrapper">
-              <mat-icon class="section-icon">description</mat-icon>
+        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#3e0065] before:to-[#5c1a7a] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
+          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
+            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
+              <mat-icon class="!h-7 !w-7 !text-[28px] text-white">description</mat-icon>
             </div>
-            <div class="section-title-wrapper">
-              <h3 class="section-title">RESPUESTA</h3>
-              <p class="section-subtitle">Detalles de la respuesta generada</p>
+
+            <div class="flex-1">
+              <h3 class="m-0 mb-1 text-xl font-extrabold tracking-[-0.3px] text-[#34005b]">Respuesta</h3>
+              <p class="m-0 text-[13px] font-medium text-[#666]">Detalles de la respuesta generada</p>
             </div>
           </div>
-          <div class="form-grid">
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">flag</mat-icon>
+
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">flag</mat-icon>
                 Estado
               </label>
-              <select formControlName="respuestaEstado" class="premium-select">
+              <select formControlName="respuestaEstado"
+                class="w-full cursor-pointer appearance-none rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 pr-10 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
                 @for (estado of estadosRespuesta; track estado) {
                   <option [value]="estado">{{ estado }}</option>
                 }
               </select>
             </div>
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">category</mat-icon>
+
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">category</mat-icon>
                 Tipo
               </label>
-              <select formControlName="respuestaTipo" class="premium-select">
+              <select formControlName="respuestaTipo"
+                class="w-full cursor-pointer appearance-none rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 pr-10 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
                 <option value="">Seleccione...</option>
                 @for (tipo of tiposRespuesta; track tipo) {
                   <option [value]="tipo">{{ tipo }}</option>
                 }
               </select>
             </div>
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">tag</mat-icon>
+
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">tag</mat-icon>
                 Número
               </label>
-              <input 
-                type="text" 
-                formControlName="respuestaNumero"
-                class="premium-input"
-                placeholder="Ej: RES-001-2025">
+              <input type="text" formControlName="respuestaNumero" placeholder="Ej: RES-001-2025"
+                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
             </div>
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">event</mat-icon>
+
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">event</mat-icon>
                 Fecha
               </label>
-              <input 
-                type="date" 
-                formControlName="respuestaFecha"
-                class="premium-input">
+              <input type="date" formControlName="respuestaFecha"
+                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
             </div>
           </div>
         </div>
 
-        <!-- FORMULARIO 3: NOTIFICACIÓN -->
-        <div class="form-section notificacion-section">
-          <div class="section-header-form">
-            <div class="section-icon-wrapper">
-              <mat-icon class="section-icon">notifications</mat-icon>
+        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#5c1a7a] before:to-[#d6ae67] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
+          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
+            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
+              <mat-icon class="!h-7 !w-7 !text-[28px] text-white">notifications</mat-icon>
             </div>
-            <div class="section-title-wrapper">
-              <h3 class="section-title">NOTIFICACIÓN</h3>
-              <p class="section-subtitle">Información de notificación al remitente</p>
-            </div>
-          </div>
-          <div class="form-grid">
-            <div class="form-field full-width">
-              <label class="field-label">
-                <mat-icon class="label-icon">event</mat-icon>
-                Fecha de Notificación
-              </label>
-              <input 
-                type="date" 
-                formControlName="notificacionFecha"
-                class="premium-input">
+
+            <div class="flex-1">
+              <h3 class="m-0 mb-1 text-xl font-extrabold tracking-[-0.3px] text-[#34005b]">Notificación</h3>
+              <p class="m-0 text-[13px] font-medium text-[#666]">Información de notificación al remitente</p>
             </div>
           </div>
+
+<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
+
+  <div class="flex flex-col gap-2 max-w-[280px]">
+    <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+      <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">
+        event
+      </mat-icon>
+      Fecha de Notificación
+    </label>
+
+    <input
+      type="date"
+      formControlName="notificacionFecha"
+      class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333]
+      shadow-[0_2px_4px_rgba(0,0,0,0.02)]
+      transition duration-300
+      focus:-translate-y-px
+      focus:border-[#34005b]
+      focus:outline-none
+      focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
+    </div>
+
+</div>
         </div>
 
-        <!-- FORMULARIO 4: DISPOSITIVO -->
-        <div class="form-section dispositivo-section">
-          <div class="section-header-form">
-            <div class="section-icon-wrapper">
-              <mat-icon class="section-icon">devices</mat-icon>
+        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#d6ae67] before:to-[#dbb872] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
+          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
+            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
+              <mat-icon class="!h-7 !w-7 !text-[28px] text-white">devices</mat-icon>
             </div>
-            <div class="section-title-wrapper">
-              <h3 class="section-title">DISPOSITIVO</h3>
-              <p class="section-subtitle">Información del dispositivo involucrado</p>
+
+            <div class="flex-1">
+              <h3 class="m-0 mb-1 text-xl font-extrabold tracking-[-0.3px] text-[#34005b]">Dispositivo</h3>
+              <p class="m-0 text-[13px] font-medium text-[#666]">Información del dispositivo involucrado</p>
             </div>
           </div>
-          <div class="form-grid">
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">memory</mat-icon>
+
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">memory</mat-icon>
                 Serie del Dispositivo
               </label>
-              <input 
-                type="text" 
-                formControlName="dispositivoSerie"
-                class="premium-input"
-                placeholder="Ej: SER-001-2025">
+              <input type="text" formControlName="dispositivoSerie" placeholder="Ej: SER-001-2025"
+                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
             </div>
-            <div class="form-field">
-              <label class="field-label">
-                <mat-icon class="label-icon">style</mat-icon>
+
+            <div class="flex flex-col gap-2">
+              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
+                <mat-icon class="!h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">style</mat-icon>
                 Modelo del Dispositivo
               </label>
-              <input 
-                type="text" 
-                formControlName="dispositivoModelo"
-                class="premium-input"
-                placeholder="Ej: Modelo A, Modelo B">
+              <input type="text" formControlName="dispositivoModelo" placeholder="Ej: Modelo A, Modelo B"
+                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
             </div>
           </div>
         </div>
 
-        <!-- OBSERVACIONES GENERALES -->
-        <div class="form-section observaciones-section">
-          <div class="section-header-form">
-            <div class="section-icon-wrapper">
-              <mat-icon class="section-icon">comment</mat-icon>
+        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#34005b] before:to-[#d6ae67] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
+          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
+            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
+              <mat-icon class="!h-7 !w-7 !text-[28px] text-white">comment</mat-icon>
             </div>
-            <div class="section-title-wrapper">
-              <h3 class="section-title">OBSERVACIONES</h3>
-              <p class="section-subtitle">Comentarios adicionales</p>
+
+            <div class="flex-1">
+              <h3 class="m-0 mb-1 text-xl font-extrabold tracking-[-0.3px] text-[#34005b]">Observaciones</h3>
+              <p class="m-0 text-[13px] font-medium text-[#666]">Comentarios adicionales</p>
             </div>
           </div>
-          <div class="form-field full-width">
-            <textarea 
+
+          <div class="flex flex-col gap-2">
+            <textarea
               formControlName="observaciones"
-              class="premium-textarea"
               rows="4"
-              placeholder="Ingrese observaciones generales..."></textarea>
+              placeholder="Ingrese observaciones generales..."
+              class="min-h-[100px] w-full resize-y rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]"></textarea>
           </div>
         </div>
 
@@ -217,23 +244,28 @@
     }
   </div>
 
-  <!-- FOOTER -->
-  <div class="modal-footer">
-    <button 
-      class="btn-secondary" 
-      (click)="cerrar()" 
-      [disabled]="guardando">
-      <mat-icon>close</mat-icon>
+  <div class="flex justify-end gap-3 border-t-2 border-[#34005b]/10 bg-gradient-to-t from-[#f8f9fa] to-white px-8 py-6">
+    <button
+      type="button"
+      (click)="cerrar()"
+      [disabled]="guardando"
+      class="flex items-center gap-2 rounded-xl border-2 border-[#34005b] bg-white px-7 py-3.5 text-[15px] font-semibold text-[#34005b] shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#f8f9fa] hover:shadow-[0_6px_16px_rgba(52,0,91,0.15)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0">
+      <!-- <mat-icon>close</mat-icon> -->
       Cancelar
     </button>
-    <button 
-      class="btn-primary" 
-      (click)="guardar()" 
-      [disabled]="formulario.invalid || guardando">
-      <mat-icon *ngIf="!guardando">save</mat-icon>
-      <div class="btn-spinner" *ngIf="guardando"></div>
+
+    <button
+      type="button"
+      (click)="guardar()"
+      [disabled]="formulario.invalid || guardando"
+      class="flex items-center gap-2 rounded-xl bg-gradient-to-br from-[#34005b] to-[#3e0065] px-7 py-3.5 text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition duration-300 hover:-translate-y-0.5 hover:from-[#3e0065] hover:to-[#34005b] hover:shadow-[0_8px_20px_rgba(52,0,91,0.3)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0">
+      @if (!guardando) {
+        <mat-icon>save</mat-icon>
+      } @else {
+        <div class="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
+      }
+
       {{ guardando ? 'Guardando...' : 'Guardar Cierre' }}
     </button>
   </div>
 </div>
-
