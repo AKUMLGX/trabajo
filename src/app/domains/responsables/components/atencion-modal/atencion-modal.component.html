@@ -189,7 +189,7 @@
 
     <button
       type="button"
-      *ngIf="!app.es_sistema"
+      *ngIf="esEditable(app)"
       (mousedown)="$event.preventDefault()"
       (click)="editarAplicativo(app)"
       class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-blue-500 transition hover:bg-blue-50">
@@ -198,7 +198,7 @@
 
     <button
       type="button"
-      *ngIf="!app.es_sistema"
+      *ngIf="esEditable(app)"
       (mousedown)="$event.preventDefault()"
       (click)="eliminarAplicativo(app)"
       class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-red-500 transition hover:bg-red-50">
@@ -280,3 +280,26 @@
     </div>
   </footer>
 </div>
+
+
+
+<app-custom-modal
+  [visible]="modalEliminarVisible"
+  type="confirm"
+  [title]="'¿Deseas eliminar &quot;' + (aplicativoSeleccionado?.nombre || '') + '&quot;?'"
+  confirmText="Aceptar"
+  cancelText="Cancelar"
+  (cancelClick)="cerrarModalAplicativo()"
+  (confirm)="confirmarEliminacionAplicativo()">
+</app-custom-modal>
+
+<app-custom-modal
+  [visible]="modalEditarVisible"
+  type="input"
+  [inputValue]="aplicativoSeleccionado?.nombre || ''"
+  inputPlaceholder="Escribe el nombre del Sistema a agregar"
+  confirmText="Aceptar"
+  cancelText="Cancelar"
+  (cancelClick)="cerrarModalAplicativo()"
+  (confirm)="confirmarEdicionAplicativo($event)">
+</app-custom-modal>

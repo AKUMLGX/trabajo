@@ -130,13 +130,19 @@ export interface PreConfirmacionModalData {
     </div>
   `,
   styles: [`
-    .pre-confirmacion-modal {
-      width: 600px;
-      max-width: 95vw;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
+.pre-confirmacion-modal {
+  width: 900px;
+  max-width: 95vw;
+  height: 86vh;
+  max-height: 86vh;
+
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+}
 
     /* Header Premium */
     .modal-header {
@@ -265,12 +271,17 @@ export interface PreConfirmacionModalData {
     }
 
     /* Modal Content */
-    .modal-content {
-      padding: 20px 24px;
-      max-height: 50vh;
-      overflow-y: auto;
-      background: #fafafa;
-    }
+.modal-content {
+  flex: 1;
+  min-height: 0;
+
+  padding: 26px 30px 32px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: #fafafa;
+}
 
     /* Secciones */
     .seccion {
@@ -446,14 +457,18 @@ export interface PreConfirmacionModalData {
     }
 
     /* Footer mejorado */
-    .modal-footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 20px 24px;
-      background: white;
-      border-top: 1px solid #e5e7eb;
-    }
+.modal-footer {
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 24px 30px;
+
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
 
     .btn-cancelar, .btn-confirmar {
       flex: 1;

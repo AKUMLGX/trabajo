@@ -159,8 +159,9 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     const secciones: SeccionResumen[] = this.construirSeccionesResumen();
 
     const dialogRef = this.dialog.open(PreConfirmacionModalComponent, {
-      width: '650px',
+      width: '900px',
       maxWidth: '95vw',
+      maxHeight: '90vh',
       disableClose: true,
       panelClass: 'pre-confirmacion-dialog',
       data: {
@@ -177,7 +178,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     if (confirmado) {
     this.finalizarExpediente();
   } else {
-    this.insertarTemporal();
+    this.insertarTemporal(true);
   }
   });
 
@@ -382,7 +383,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   }
 
 
-  private insertarTemporal(): void {
+private insertarTemporal(regresarAPaso1: boolean = false): void {
   if (!this.datosPaso1 || !this.datosPaso2) {
     this.mostrarMensaje('Faltan datos para guardar el registro temporal', 'warning');
     return;
@@ -408,13 +409,21 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
 
         console.log('UUID temporal guardado:', uuid);
 
+        this.guardando = false;
+
+        if (regresarAPaso1) {
+          this.transicionarPaso(0);
+
+          setTimeout(() => {
+            this.paso1Component?.precargarDatos?.(this.datosPaso1);
+          }, 300);
+        }
+
         this.mostrarMensaje(
           'Registro temporal guardado correctamente. Puedes revisar los datos antes de guardar.',
           'success',
           4000
         );
-
-        this.guardando = false;
       },
       error: (error) => {
         this.guardando = false;

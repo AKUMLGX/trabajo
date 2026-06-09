@@ -19,6 +19,7 @@ import { AtencionEspecialistasComponent } from './atencion-especialistas/atencio
 import { AtencionFlujosComponent } from './atencion-flujos/atencion-flujos.component';
 import { ApiService } from '../../../capture/services/api.service';
 import { Aplicativo, CrearAplicativoDTO,ActualizarAplicativoDTO,MensajeResponse } from '../../../capture/interfaces/aplicativo.interface';
+import { CustomModalComponent } from './custom-modal/custom-modal/custom-modal.component';
 export interface FormularioAtencion {
   tipoAccion: TipoAccion | '';
   tipoInsumo: string;
@@ -42,15 +43,20 @@ export interface FormularioAtencion {
     MatIconModule,
     MatSnackBarModule,
     AtencionEspecialistasComponent,
-    AtencionFlujosComponent
+    AtencionFlujosComponent,
+    CustomModalComponent
   ],
   templateUrl: './atencion-modal.component.html',
 })
 export class AtencionModalComponent implements OnInit {
   expediente: ExpedienteTlalcalli;
-
   cargandoCatalogos = true;
   guardando = false;
+
+  
+  modalEliminarVisible = false;
+  modalEditarVisible = false;
+  aplicativoSeleccionado: Aplicativo | null = null;
 
   catalogos: CatalogosAtencion = {
     especialistas: [
@@ -147,14 +153,19 @@ export class AtencionModalComponent implements OnInit {
 
 
 cargarAplicativos(): void {
+
   this.apiService.getData<Aplicativo[]>('catalogo/aplicativos').subscribe({
     next: (response) => {
       const data = response.body ?? [];
 
-      this.aplicativos = data;
-      this.aplicativosFiltrados = [...data];
+      this.aplicativos = data.map(app => ({
+      ...app,
+      es_usuario: false
+      }));
 
-      this.sistemasAplicativos = data.map(app => app.nombre);
+      this.aplicativosFiltrados = [...this.aplicativos];
+
+      this.sistemasAplicativos = this.aplicativos.map(app => app.nombre);
       this.sistemasFiltrados = [...this.sistemasAplicativos];
     },
     error: (error) => {
@@ -192,7 +203,12 @@ private crearAplicativo(nombre: string): void {
   this.apiService.postData<Aplicativo>('catalogo/aplicativos', body).subscribe({
     next: (response) => {
       if (response.body) {
-        this.aplicativos = [...this.aplicativos, response.body];
+        const nuevoAplicativo: Aplicativo = {
+        ...response.body,
+        es_usuario: true
+      };
+
+        this.aplicativos = [...this.aplicativos, nuevoAplicativo];        
         this.sistemasAplicativos = this.aplicativos.map(app => app.nombre);
         this.sistemasFiltrados = [...this.sistemasAplicativos];
 
@@ -226,6 +242,10 @@ private crearAplicativo(nombre: string): void {
     });
   }
 
+  esEditable(app: Aplicativo): boolean {
+  return app.id_aplicativo > 40;
+  }
+
 
 editarAplicativo(app: Aplicativo): void {
   if (app.es_sistema) {
@@ -235,29 +255,10 @@ editarAplicativo(app: Aplicativo): void {
     return;
   }
 
-  const nombre = prompt('Nuevo nombre del aplicativo:', app.nombre)?.trim();
-  if (!nombre) return;
-
-  const body: ActualizarAplicativoDTO = {
-    id_aplicativo: app.id_aplicativo,
-    nombre
-  };
-
-  this.apiService.updateAplicativo<MensajeResponse>(body).subscribe({
-    next: () => {
-      this.snackBar.open('Aplicativo actualizado correctamente.', 'Cerrar', {
-        duration: 3000
-      });
-      this.cargarAplicativos();
-    },
-    error: (error) => {
-      console.error('ERROR UPDATE APLICATIVO:', error);
-      this.snackBar.open('Error al actualizar aplicativo.', 'Cerrar', {
-        duration: 4000
-      });
-    }
-  });
+  this.aplicativoSeleccionado = app;
+  this.modalEditarVisible = true;
 }
+
 
 eliminarAplicativo(app: Aplicativo): void {
   if (app.es_sistema) {
@@ -267,24 +268,73 @@ eliminarAplicativo(app: Aplicativo): void {
     return;
   }
 
-  const confirmar = confirm(`¿Deseas eliminar "${app.nombre}"?`);
-  if (!confirmar) return;
+  this.aplicativoSeleccionado = app;
+  this.modalEliminarVisible = true;
+}
 
-  this.apiService.deleteAplicativo<MensajeResponse>(app.id_aplicativo).subscribe({
+cerrarModalAplicativo(): void {
+  this.modalEliminarVisible = false;
+  this.modalEditarVisible = false;
+  this.aplicativoSeleccionado = null;
+}
+
+confirmarEdicionAplicativo(nombre: string | void): void {
+  if (!this.aplicativoSeleccionado) return;
+
+  const nombreLimpio = typeof nombre === 'string' ? nombre.trim() : '';
+
+  if (!nombreLimpio) return;
+
+  const body: ActualizarAplicativoDTO = {
+    id_aplicativo: this.aplicativoSeleccionado.id_aplicativo,
+    nombre: nombreLimpio
+  };
+
+  this.apiService.updateAplicativo<MensajeResponse>(body).subscribe({
+    next: () => {
+      this.snackBar.open('Aplicativo actualizado correctamente.', 'Cerrar', {
+        duration: 3000
+      });
+
+      this.cerrarModalAplicativo();
+      this.cargarAplicativos();
+    },
+    error: (error) => {
+      console.error('ERROR UPDATE APLICATIVO:', error);
+
+      this.snackBar.open('Error al actualizar aplicativo.', 'Cerrar', {
+        duration: 4000
+      });
+    }
+  });
+}
+
+confirmarEliminacionAplicativo(): void {
+  if (!this.aplicativoSeleccionado) return;
+
+  this.apiService.deleteAplicativo<MensajeResponse>(
+    this.aplicativoSeleccionado.id_aplicativo
+  ).subscribe({
     next: () => {
       this.snackBar.open('Aplicativo eliminado correctamente.', 'Cerrar', {
         duration: 3000
       });
+
+      this.cerrarModalAplicativo();
       this.cargarAplicativos();
     },
     error: (error) => {
       console.error('ERROR DELETE APLICATIVO:', error);
+
       this.snackBar.open('Error al eliminar aplicativo.', 'Cerrar', {
         duration: 4000
       });
     }
   });
 }
+
+
+
 
   cerrar(): void {
     if (!this.guardando) {

@@ -410,23 +410,23 @@ private cargarGeneralesConCentrales(): void {
       ]], // Identificador adicional (máximo 15 caracteres, opcional)
       fecha_documento: [this.formHelper.getFechaActual(), [
         Validators.required,
-        ExpedienteValidators.noFutureDate()
+        // ExpedienteValidators.noFutureDate()
       ]],
       fecha_recibido: [this.formHelper.getFechaActual(), [
         Validators.required,
-        ExpedienteValidators.noFutureDate(),
-        ExpedienteValidators.fechaRecibidoValida()
+        // ExpedienteValidators.noFutureDate(),
+        // ExpedienteValidators.fechaRecibidoValida()
       ]],
       fecha_requerimiento: [this.formHelper.getFechaActual(), [
         Validators.required,
-        ExpedienteValidators.noFutureDate()
+        // ExpedienteValidators.noFutureDate()
       ]],
       referencia_asunto: ['', [
         Validators.required,
         Validators.maxLength(1000)
       ]],
       fecha_vencimiento: [null, [
-        ExpedienteValidators.noFutureDate()
+        // ExpedienteValidators.noFutureDate()
       ]],
       // Nivel de Prioridad (movido del Step 2)
       prioridad: ['MEDIA', Validators.required]
@@ -447,9 +447,9 @@ private cargarGeneralesConCentrales(): void {
     this.formulario.get('fecha_documento')?.disable();
     
     // Revalidar fecha_recibido cuando cambia fecha_documento
-    this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
-      this.formulario.get('fecha_recibido')?.updateValueAndValidity();
-    });
+    // this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
+    //   this.formulario.get('fecha_recibido')?.updateValueAndValidity();
+    // });
 
 
     // Limpiar error de duplicado cuando el usuario modifica el oficio
