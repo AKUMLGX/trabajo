@@ -157,6 +157,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   // Modal de pre-confirmación con resumen de datos organizados en secciones
   private mostrarModalConfirmacion() {
     const secciones: SeccionResumen[] = this.construirSeccionesResumen();
+    console.log(`${secciones[0]}`);
 
     const dialogRef = this.dialog.open(PreConfirmacionModalComponent, {
       width: '900px',
@@ -363,6 +364,7 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
 
       this.expedienteId = expediente?.id_expediente || null;
       this.expedienteGuardado = true;
+      console.log('UUID antes de eliminar temporal:',localStorage.getItem('uuid_temporal_expediente'));
       this.eliminarRegistroTemporal();
       this.transicionarPaso(2);
       this.mostrarMensaje('Expediente guardado exitosamente', 'success');
@@ -616,6 +618,7 @@ private convertirFechaApiADate(fecha: string | null | undefined): Date | undefin
 
 private eliminarRegistroTemporal(): void {
   const uuid = localStorage.getItem('uuid_temporal_expediente');
+  console.log('UUID para eliminar temporal:', uuid);
 
   if (!uuid) {
     console.log('No hay UUID temporal para eliminar');
@@ -625,6 +628,8 @@ private eliminarRegistroTemporal(): void {
   const body: TemporalEliminaRequest = {
     uuid
   };
+
+  console.log('DELETE temporal/elimina:', body);
 
   this.apiService
     .deleteTemporal<TemporalEliminaResponse>('temporal/elimina', body)

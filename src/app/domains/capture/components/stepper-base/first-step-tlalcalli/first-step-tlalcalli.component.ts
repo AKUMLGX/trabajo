@@ -65,13 +65,13 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   ];
 
   // Obtener opciones de autocompletado combinando comunes e historial
-  get remitentesConHistorial(): string[] {
-    const historial = this.formHelper.obtenerHistorial('remitente_area');
-    // Combinar historial primero (más recientes) y luego comunes
-    const todos = [...historial, ...this.remitentesComunes];
-    // Eliminar duplicados manteniendo el orden
-    return Array.from(new Set(todos));
-  }
+  // get remitentesConHistorial(): string[] {
+  //   // const historial = this.formHelper.obtenerHistorial('remitente_area');
+  //   // Combinar historial primero (más recientes) y luego comunes
+  //   // const todos = [...historial, ...this.remitentesComunes];
+  //   // Eliminar duplicados manteniendo el orden
+  //   // return Array.from(new Set(todos));
+  // }
 
   get formularioValido(): boolean {
     return this.formulario.valid;
@@ -534,11 +534,14 @@ private cargarGeneralesConCentrales(): void {
       });
 
     // Cargar borrador si existe
-    this.cargarBorrador();
+    // this.cargarBorrador();
 
     // Obtener y AUTO-CARGAR el siguiente expediente
-    this.cargarYAplicarSiguienteExpediente();
-  }
+    const expedienteActual = this.formulario.get('expediente')?.value;
+
+    if (!expedienteActual) {
+      this.cargarYAplicarSiguienteExpediente();
+    }}
 
   /**
    * Calcular progreso del formulario
@@ -559,31 +562,31 @@ private cargarGeneralesConCentrales(): void {
    * Guardar borrador automáticamente
    */
   private guardarBorrador(): void {
-    const datos = this.formulario.getRawValue();
-    this.formHelper.guardarBorrador(1, datos);
+    // const datos = this.formulario.getRawValue();
+    // this.formHelper.guardarBorrador(1, datos);
   }
 
   /**
    * Cargar borrador si existe
    */
-  private cargarBorrador(): void {
-    const borrador = this.formHelper.obtenerBorrador(1);
-    if (borrador) {
-      // No sobreescribir campos críticos que ya tienen valor
-      const datosCargar: any = {};
-      Object.keys(borrador).forEach(key => {
-        const control = this.formulario.get(key);
-        if (control && (!control.value || control.value === '')) {
-          datosCargar[key] = borrador[key];
-        }
-      });
+  // private cargarBorrador(): void {
+  //   const borrador = this.formHelper.obtenerBorrador(1);
+  //   if (borrador) {
+  //     // No sobreescribir campos críticos que ya tienen valor
+  //     const datosCargar: any = {};
+  //     Object.keys(borrador).forEach(key => {
+  //       const control = this.formulario.get(key);
+  //       if (control && (!control.value || control.value === '')) {
+  //         datosCargar[key] = borrador[key];
+  //       }
+  //     });
       
-      if (Object.keys(datosCargar).length > 0) {
-        this.formulario.patchValue(datosCargar, { emitEvent: false });
-        this.logger.debug('Borrador cargado:', Object.keys(datosCargar).length, 'campos');
-      }
-    }
-  }
+  //     if (Object.keys(datosCargar).length > 0) {
+  //       this.formulario.patchValue(datosCargar, { emitEvent: false });
+  //       this.logger.debug('Borrador cargado:', Object.keys(datosCargar).length, 'campos');
+  //     }
+  //   }
+  // }
 
 
   // Cargar y APLICAR AUTOMÁTICAMENTE el siguiente expediente
@@ -902,11 +905,12 @@ private cargarGeneralesConCentrales(): void {
    * Continuar con el envío del formulario después de validar oficio
    */
   private continuarConFormulario() {
+
     // Obtener valor del expediente (aunque esté deshabilitado)
-    const expedienteUsado = this.formulario.get('expediente')?.value || this.siguienteExpediente;
-    if (expedienteUsado) {
-      this.autocompleteService.guardarUltimoExpediente(expedienteUsado);
-    }
+    // const expedienteUsado = this.formulario.get('expediente')?.value || this.siguienteExpediente;
+    // if (expedienteUsado) {
+    //   this.autocompleteService.guardarUltimoExpediente(expedienteUsado);
+    // }
 
     // Construir remitente_area combinando los tres campos: General + Central + Identificador
     const remitenteGeneral = this.formulario.get('remitente_general')?.value || '';
@@ -956,11 +960,11 @@ private cargarGeneralesConCentrales(): void {
 
     // Guardar valores en historial para autocompletado futuro
     if (remitenteCompleto) {
-      this.formHelper.guardarEnHistorial('remitente_area', remitenteCompleto);
+      // this.formHelper.guardarEnHistorial('remitente_area', remitenteCompleto);
     }
 
     // Limpiar borrador al completar
-    this.formHelper.limpiarBorrador(1);
+    // this.formHelper.limpiarBorrador(1);
 
     // Solo emitir formularioCompletado, el stepper se encargará de avanzar
     this.formularioCompletado.emit(datosFormulario);
@@ -1246,7 +1250,7 @@ private cargarGeneralesConCentrales(): void {
     this.cargarYAplicarSiguienteExpediente();
 
     // Limpiar borrador
-    this.formHelper.limpiarBorrador(1);
+    // this.formHelper.limpiarBorrador(1);
 
     // Recalcular progreso
     this.calcularProgreso();
@@ -1260,6 +1264,10 @@ private cargarGeneralesConCentrales(): void {
    */
 precargarDatos(datos: any): void {
   this.logger.debug('Precargando datos temporales en paso 1:', datos);
+
+  if (datos.expediente) {
+    this.siguienteExpediente = datos.expediente;
+  }
 
   const remitenteParseado = this.separarRemitenteArea(datos.remitente_area);
 
@@ -1292,7 +1300,7 @@ precargarDatos(datos: any): void {
   this.formulario.get('fecha_documento')?.disable({ emitEvent: false });
 
   this.calcularProgreso();
-  this.guardarBorrador();
+  // this.guardarBorrador();
 
   this.validezCambiada.emit(this.formulario.valid);
   }

@@ -60,19 +60,26 @@ export class ExpedienteAutocompleteService {
   /**
    * Obtiene el siguiente número de expediente nuevo (sin verificar oficio)
    */
-  private obtenerSiguienteExpedienteNuevo(): Observable<string> {
-    return this.http.get<{success: boolean, siguiente: string}>(`${TLALCALLI_BASE}expedientes/siguiente`, { withCredentials: true })
-      .pipe(
-        map(response => response.siguiente),
-        catchError(error => {
-          this.logger.error('Error al obtener siguiente expediente:', error);
-          // Fallback a LocalStorage
-          const ultimoNumero = this.getUltimoNumeroLocal();
-          const siguiente = ultimoNumero + 1;
-          return of(this.formatearExpediente(siguiente));
-        })
-      );
-  }
+private obtenerSiguienteExpedienteNuevo(): Observable<string> {
+  return this.http
+    .get<{ success: boolean; siguiente: string }>(
+      `${TLALCALLI_BASE}expedientes/siguiente`,
+      { withCredentials: true }
+    )
+    .pipe(
+      map((response) => {
+        if (!response.success || !response.siguiente) {
+          throw new Error('El servicio no devolvió un expediente válido');
+        }
+
+        return response.siguiente;
+      }),
+      catchError((error) => {
+        this.logger.error('Error al obtener siguiente expediente:', error);
+        return of('');
+      })
+    );
+}
 
   /**
    * Obtiene expedientes recientes para autocompletar

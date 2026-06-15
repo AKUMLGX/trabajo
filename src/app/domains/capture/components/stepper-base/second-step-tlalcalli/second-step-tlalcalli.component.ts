@@ -93,11 +93,11 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(() => {
         this.calcularProgreso();
-        this.guardarBorrador();
+        // this.guardarBorrador();
       });
 
     // Cargar borrador si existe
-    this.cargarBorrador();
+    // this.cargarBorrador();
   }
 
   ngOnDestroy() {
@@ -124,32 +124,32 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
    * Guardar borrador automáticamente
    */
   private guardarBorrador(): void {
-    const datos = this.formulario.getRawValue();
-    this.formHelper.guardarBorrador(2, datos);
+    // const datos = this.formulario.getRawValue();
+    // this.formHelper.guardarBorrador(2, datos);
   }
 
   /**
    * Cargar borrador si existe
    */
-  private cargarBorrador(): void {
-    const borrador = this.formHelper.obtenerBorrador(2);
-    if (borrador) {
-      const datosCargar: any = {};
-      Object.keys(borrador).forEach(key => {
-        if (key !== 'documento_pdf_nombre') {
-          const control = this.formulario.get(key);
-          if (control && (!control.value || control.value === '')) {
-            datosCargar[key] = borrador[key];
-          }
-        }
-      });
+  // private cargarBorrador(): void {
+  //   const borrador = this.formHelper.obtenerBorrador(2);
+  //   if (borrador) {
+  //     const datosCargar: any = {};
+  //     Object.keys(borrador).forEach(key => {
+  //       if (key !== 'documento_pdf_nombre') {
+  //         const control = this.formulario.get(key);
+  //         if (control && (!control.value || control.value === '')) {
+  //           datosCargar[key] = borrador[key];
+  //         }
+  //       }
+  //     });
 
-      if (Object.keys(datosCargar).length > 0) {
-        this.formulario.patchValue(datosCargar, { emitEvent: false });
-        this.logger.debug('Borrador Paso 2 cargado:', Object.keys(datosCargar).length, 'campos');
-      }
-    }
-  }
+  //     if (Object.keys(datosCargar).length > 0) {
+  //       this.formulario.patchValue(datosCargar, { emitEvent: false });
+  //       this.logger.debug('Borrador Paso 2 cargado:', Object.keys(datosCargar).length, 'campos');
+  //     }
+  //   }
+  // }
 
   onSubmit() {
     this.logger.debug('Validando Paso 2 - Formulario válido:', this.formulario.valid);
@@ -227,7 +227,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     });
 
     // Limpiar borrador
-    this.formHelper.limpiarBorrador(2);
+    // this.formHelper.limpiarBorrador(2);
 
     // Recalcular progreso
     this.calcularProgreso();
@@ -246,7 +246,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   );
 
   this.calcularProgreso();
-  this.guardarBorrador();
+  // this.guardarBorrador();
 
   this.logger.debug('Datos precargados en paso 2:', datos);
   }
