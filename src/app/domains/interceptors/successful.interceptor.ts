@@ -35,7 +35,7 @@ export const successfullInterceptor: HttpInterceptorFn = (
           }
         }
       } else {
-        if (request.method === "GET") {
+        if (request.method === "GET" && !request.url.includes('expedientes/siguiente')) {
           if (event instanceof HttpResponse) {
             if (event.status === 200) {
               if (event.status === 200) {

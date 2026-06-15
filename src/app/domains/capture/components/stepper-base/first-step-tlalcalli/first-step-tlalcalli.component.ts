@@ -13,7 +13,7 @@ import { FormHelperService } from '../../../services/form-helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExpedientesModalComponent, ExpedientesModalData } from '../expedientes-modal/expedientes-modal.component';
 import { ConfirmacionModalComponent, ConfirmacionModalData } from '../confirmacion-modal/confirmacion-modal.component';
-import { Subject, takeUntil, debounceTime, timer, switchMap } from 'rxjs';
+import { Subject, takeUntil, debounceTime, timer, switchMap, Subscription } from 'rxjs';
 import { inject } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGeneralResponse } from '../../../../interfaces/first-step-catalogos.interface';
@@ -63,6 +63,9 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
     'Subdirección de Recursos',
     'Área de Cobranza'
   ];
+
+  // subscripcion
+  private expedienteSub ?: Subscription;
 
   // Obtener opciones de autocompletado combinando comunes e historial
   // get remitentesConHistorial(): string[] {
@@ -444,14 +447,12 @@ private cargarGeneralesConCentrales(): void {
   ngOnInit() {
 
     // !FUNCIONALIDAD PARA ACTUALIZAR EL EXPEDIENTE
-
-     timer(0, 10000)
+    this.expedienteSub = timer(0, 10000)
     .pipe(
       switchMap( () => this.autocompleteService.obtenerSiguienteExpediente())
     )
     .subscribe( {
         next : (respuesta) => {
-            this.siguienteExpediente = respuesta;
             this.formulario.patchValue({
               expediente: respuesta
             });
@@ -460,7 +461,7 @@ private cargarGeneralesConCentrales(): void {
             console.error('Error al consultar el endpoint:', error);
         }
       }
-  )
+  );
 
     this.cargarCatalogos();
     // Deshabilitar fecha_documento (campo automático)
@@ -869,6 +870,7 @@ private cargarGeneralesConCentrales(): void {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.expedienteSub?.unsubscribe();
   }
 
   onSubmit() {
