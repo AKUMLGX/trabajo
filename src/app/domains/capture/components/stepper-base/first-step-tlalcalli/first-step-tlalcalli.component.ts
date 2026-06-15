@@ -13,7 +13,7 @@ import { FormHelperService } from '../../../services/form-helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExpedientesModalComponent, ExpedientesModalData } from '../expedientes-modal/expedientes-modal.component';
 import { ConfirmacionModalComponent, ConfirmacionModalData } from '../confirmacion-modal/confirmacion-modal.component';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject, takeUntil, debounceTime, timer, switchMap } from 'rxjs';
 import { inject } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGeneralResponse } from '../../../../interfaces/first-step-catalogos.interface';
@@ -45,11 +45,11 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   idOficioDuplicado: number | null = null; // ID del expediente con oficio duplicado
   buscandoExpedientes: boolean = false; // Indicador de búsqueda en progreso
   modalAbierto: boolean = false; // Indicador si el modal está abierto
-  
+
   // Detección de caracteres problemáticos en oficio
   caracteresProblematicos: { caracter: string; posicion: number; sugerencia: string }[] = [];
   tieneCaracteresProblematicos: boolean = false;
-  
+
   private destroy$ = new Subject<void>();
 
   // Catálogos para autocompletado
@@ -387,7 +387,7 @@ private cargarGeneralesConCentrales(): void {
       // OFICIO: Campo más importante (clave única)
       // Validación de duplicados se hace al hacer submit
       // Sin validación de formato - acepta cualquier string
-      oficio: ['', 
+      oficio: ['',
         [
           Validators.required,
           Validators.maxLength(100)
@@ -442,10 +442,30 @@ private cargarGeneralesConCentrales(): void {
   ];
 
   ngOnInit() {
+
+    // !FUNCIONALIDAD PARA ACTUALIZAR EL EXPEDIENTE
+
+     timer(0, 10000)
+    .pipe(
+      switchMap( () => this.autocompleteService.obtenerSiguienteExpediente())
+    )
+    .subscribe( {
+        next : (respuesta) => {
+            this.siguienteExpediente = respuesta;
+            this.formulario.patchValue({
+              expediente: respuesta
+            });
+        },
+        error : (error) => {
+            console.error('Error al consultar el endpoint:', error);
+        }
+      }
+  )
+
     this.cargarCatalogos();
     // Deshabilitar fecha_documento (campo automático)
     this.formulario.get('fecha_documento')?.disable();
-    
+
     // Revalidar fecha_recibido cuando cambia fecha_documento
     // this.formulario.get('fecha_documento')?.valueChanges.subscribe(() => {
     //   this.formulario.get('fecha_recibido')?.updateValueAndValidity();
@@ -457,7 +477,7 @@ private cargarGeneralesConCentrales(): void {
     this.formulario.get('oficio')?.valueChanges.subscribe((valor) => {
       this.errorOficioDuplicado = false;
       this.idOficioDuplicado = null;
-      
+
       // Si hay un oficio, verificar si ya tiene expediente y cargarlo
       if (valor && valor.trim()) {
         this.verificarYActualizarExpedientePorOficio(valor.trim());
@@ -479,7 +499,7 @@ private cargarGeneralesConCentrales(): void {
     this.formulario.get('tipo_medio_recepcion')?.valueChanges.subscribe((tipo) => {
       if (tipo) {
         this.aplicarValoresInicialesPorTipo(tipo);
-        
+
         // Si es "Petición interna", deshabilitar el campo oficio
         const oficioControl = this.formulario.get('oficio');
         if (tipo === 'REQUERIMIENTO_VERBAL') {
@@ -580,7 +600,7 @@ private cargarGeneralesConCentrales(): void {
   //         datosCargar[key] = borrador[key];
   //       }
   //     });
-      
+
   //     if (Object.keys(datosCargar).length > 0) {
   //       this.formulario.patchValue(datosCargar, { emitEvent: false });
   //       this.logger.debug('Borrador cargado:', Object.keys(datosCargar).length, 'campos');
@@ -593,7 +613,7 @@ private cargarGeneralesConCentrales(): void {
   // Si hay un oficio, verifica si ya tiene expediente asignado
   cargarYAplicarSiguienteExpediente() {
     const oficioActual = this.formulario.get('oficio')?.value;
-    
+
     this.autocompleteService.obtenerSiguienteExpediente(oficioActual).subscribe({
       next: (siguiente) => {
         this.siguienteExpediente = siguiente;
@@ -602,12 +622,12 @@ private cargarGeneralesConCentrales(): void {
           expediente: siguiente
         });
         this.formulario.get('expediente')?.disable();
-        
+
         // Asegurar que fecha_documento también esté deshabilitada
         this.formulario.get('fecha_documento')?.disable();
-        
+
         this.logger.debug('Expediente auto-cargado y bloqueado:', siguiente);
-        
+
         // Si el oficio ya tenía expediente, mostrar mensaje informativo
         if (oficioActual && oficioActual.trim()) {
           this.logger.info('Expediente asignado al oficio:', oficioActual, '->', siguiente);
@@ -654,9 +674,9 @@ private cargarGeneralesConCentrales(): void {
    */
   abrirModalBusqueda() {
     const oficio = this.formulario.get('oficio')?.value?.trim();
-    
+
     this.logger.debug('Iniciando búsqueda de oficio:', oficio);
-    
+
     if (!oficio || oficio.length < 3) {
       this.mostrarModalError(
         'Oficio inválido',
@@ -674,13 +694,13 @@ private cargarGeneralesConCentrales(): void {
 
     this.buscandoExpedientes = true;
     this.logger.debug('Llamando al servicio para buscar expedientes por oficio:', oficio);
-    
+
     // Buscar expedientes por oficio
     this.expedienteService.buscarExpedientesPorOficio(oficio).subscribe({
       next: (response) => {
         this.buscandoExpedientes = false;
         this.logger.debug('Respuesta del servicio - Total expedientes:', response.total);
-        
+
         if (response.success) {
           // Siempre abrir el modal, incluso si no hay expedientes
           this.abrirModalExpedientes(oficio, response.data || [], response.total || 0);
@@ -693,14 +713,14 @@ private cargarGeneralesConCentrales(): void {
       error: (error) => {
         this.buscandoExpedientes = false;
         this.logger.error('Error al buscar expedientes por oficio:', error);
-        
+
         // Mostrar error al usuario con modal
         this.mostrarModalError(
           'Error en la búsqueda',
           'No se pudo buscar expedientes',
           error.message || 'Error desconocido. Por favor, intenta nuevamente.'
         );
-        
+
         // Abrir modal con lista vacía en caso de error
         this.abrirModalExpedientes(oficio, [], 0);
       }
@@ -735,7 +755,7 @@ private cargarGeneralesConCentrales(): void {
     // Cuando el usuario selecciona un expediente
     dialogRef.afterClosed().subscribe((expedienteSeleccionado: any) => {
       this.modalAbierto = false;
-      
+
       if (expedienteSeleccionado) {
         this.logger.debug('Expediente seleccionado:', expedienteSeleccionado.id_expediente);
         this.precargarDatosExpediente(expedienteSeleccionado);
@@ -772,16 +792,16 @@ private cargarGeneralesConCentrales(): void {
     const datosPrecargados: any = {
       // Mantener el oficio que el usuario escribió
       oficio: this.formulario.get('oficio')?.value || expediente.oficio,
-      
+
       // Pre-cargar campos del expediente (solo si están disponibles)
       remitente_area: expediente.remitente_area || this.formulario.get('remitente_area')?.value || '',
       referencia_asunto: expediente.referencia_asunto || this.formulario.get('referencia_asunto')?.value || '',
       numero_entrada_central: expediente.numero_entrada_central || this.formulario.get('numero_entrada_central')?.value || '',
-      
+
       // Fechas (formateadas para inputs de tipo date)
       fecha_documento: formatearFechaParaInput(expediente.fecha_documento) || this.formulario.get('fecha_documento')?.value || '',
       fecha_recibido: formatearFechaParaInput(expediente.fecha_recibido) || this.formulario.get('fecha_recibido')?.value || '',
-      
+
       // Campos de plazo eliminados
     };
 
@@ -790,9 +810,9 @@ private cargarGeneralesConCentrales(): void {
 
         // Mantener el expediente auto-generado (no usar el del expediente seleccionado)
         // El expediente siempre será nuevo, pero podemos usar los datos del expediente seleccionado
-        
+
         this.logger.debug('Datos pre-cargados en el formulario');
-        
+
         // Mostrar modal de confirmación en lugar de alert
         this.mostrarModalConfirmacion(expediente.id_expediente);
   }
@@ -855,12 +875,12 @@ private cargarGeneralesConCentrales(): void {
     // Si el tipo es REQUERIMIENTO_VERBAL, habilitar temporalmente el campo oficio para obtener su valor (vacío)
     const tipoMedio = this.formulario.get('tipo_medio_recepcion')?.value;
     const oficioControl = this.formulario.get('oficio');
-    
+
     if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
       // Habilitar temporalmente para obtener el valor (será vacío)
       oficioControl?.enable({ emitEvent: false });
     }
-    
+
     // Validación del paso 1
     if (!this.formulario.valid) {
       // Si es REQUERIMIENTO_VERBAL, deshabilitar nuevamente después de la validación
@@ -871,7 +891,7 @@ private cargarGeneralesConCentrales(): void {
       this.mostrarCamposInvalidos();
       return;
     }
-    
+
     // Si es REQUERIMIENTO_VERBAL, deshabilitar nuevamente antes de continuar
     if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
       oficioControl?.disable({ emitEvent: false });
@@ -879,16 +899,16 @@ private cargarGeneralesConCentrales(): void {
 
     // ⚠️ VALIDACIÓN DE OFICIO TEMPORALMENTE DESHABILITADA
     // TODO: Arreglar problema de conexión con endpoint de validación
-    
+
     // Validación de oficio deshabilitada temporalmente (el backend validará al guardar)
-    
+
     // Continuar directamente sin validar
     this.continuarConFormulario();
-    
-    /* 
+
+    /*
     // CÓDIGO DE VALIDACIÓN (DESHABILITADO)
     const oficioValue = this.formulario.get('oficio')?.value?.trim();
-    
+
     if (!oficioValue) {
       alert('⚠️ El campo Oficio es obligatorio');
       return;
@@ -916,7 +936,7 @@ private cargarGeneralesConCentrales(): void {
     const remitenteGeneral = this.formulario.get('remitente_general')?.value || '';
     const remitenteCentral = this.formulario.get('remitente_central')?.value || '';
     const remitenteIdentificador = this.formulario.get('remitente_identificador')?.value || '';
-    
+
     // Validar que la General esté seleccionada (obligatorio)
     if (!remitenteGeneral) {
       this.mostrarModalError(
@@ -926,7 +946,7 @@ private cargarGeneralesConCentrales(): void {
       );
       return;
     }
-    
+
     // Combinar: General + Central + Identificador
     // Orden: primero General, luego Central (si existe), luego Identificador (si existe)
     const partes: string[] = [];
@@ -936,9 +956,9 @@ private cargarGeneralesConCentrales(): void {
       const identificadorLimpio = remitenteIdentificador.trim().substring(0, 10);
       partes.push(identificadorLimpio);
     }
-    
+
     let remitenteCompleto = partes.join('');
-    
+
     // El campo remitente_area en BD tiene límite, asegurar que no exceda
     if (remitenteCompleto.length > 50) {
       remitenteCompleto = remitenteCompleto.substring(0, 50);
@@ -1000,7 +1020,7 @@ private cargarGeneralesConCentrales(): void {
         camposInvalidos.push(key);
       }
     });
-    
+
     if (camposInvalidos.length > 0) {
       this.mostrarModalError(
         'Formulario incompleto',
@@ -1015,25 +1035,25 @@ private cargarGeneralesConCentrales(): void {
    */
   private aplicarValoresInicialesPorTipo(tipo: string): void {
     const valores: any = {};
-    
+
     switch (tipo) {
       case 'ATENTA_NOTA':
         // Valores sugeridos para atenta nota - no pre-llenar remitente
         break;
-        
+
       case 'OFICIO':
         // Valores para oficio formal - no necesita pre-llenado especial
         break;
-        
+
       case 'REQUERIMIENTO_VERBAL':
         // Valores para petición interna - no pre-llenar
         break;
-        
+
       case 'CORREO_ELECTRONICO':
         // Valores para correo electrónico - no pre-llenar
         break;
     }
-    
+
     // Aplicar valores solo si los campos están vacíos
     Object.keys(valores).forEach(key => {
       const control = this.formulario.get(key);
@@ -1041,7 +1061,7 @@ private cargarGeneralesConCentrales(): void {
         control.patchValue(valores[key], { emitEvent: false });
       }
     });
-    
+
     this.logger.debug('Valores iniciales aplicados para tipo de medio:', tipo, valores);
   }
 
@@ -1096,21 +1116,21 @@ private cargarGeneralesConCentrales(): void {
 
   get oficioError(): string | null {
     const control = this.formulario.get('oficio');
-    
+
     // Si hay error de duplicado (desde onSubmit)
     if (this.errorOficioDuplicado) {
-      const mensaje = this.idOficioDuplicado 
+      const mensaje = this.idOficioDuplicado
         ? `⚠️ Este oficio ya está registrado (ID: ${this.idOficioDuplicado})`
         : '⚠️ Este oficio ya está registrado';
       return mensaje;
     }
-    
+
     // Errores de validación del formulario
     if (control?.touched && control?.errors) {
       if (control.errors['required']) return 'Campo clave única obligatorio';
       if (control.errors['maxlength']) return 'Máximo 100 caracteres';
     }
-    
+
     // Sin errores
     return null;
   }
@@ -1153,7 +1173,7 @@ private cargarGeneralesConCentrales(): void {
     }
     return null;
   }
-  
+
   get fechaDocumentoError(): string | null {
     const control = this.formulario.get('fecha_documento');
     if (control?.touched && control?.errors) {
@@ -1162,7 +1182,7 @@ private cargarGeneralesConCentrales(): void {
     }
     return null;
   }
-  
+
   get fechaRecibidoError(): string | null {
     const control = this.formulario.get('fecha_recibido');
     if (control?.touched && control?.errors) {
@@ -1172,7 +1192,7 @@ private cargarGeneralesConCentrales(): void {
     }
     return null;
   }
-  
+
   get fechaRequerimientoError(): string | null {
     const control = this.formulario.get('fecha_requerimiento');
     if (control?.touched && control?.errors) {
@@ -1189,7 +1209,7 @@ private cargarGeneralesConCentrales(): void {
     }
     return null;
   }
-  
+
   get referenciaError(): string | null {
     const control = this.formulario.get('referencia_asunto');
     if (control?.touched && control?.errors) {
@@ -1219,7 +1239,7 @@ private cargarGeneralesConCentrales(): void {
    */
   reiniciarFormulario(): void {
     this.logger.debug('Reiniciando formulario del paso 1 completamente');
-    
+
     // Reset del formulario a valores iniciales
     this.formulario.reset({
       tipo_medio_recepcion: '',
@@ -1254,7 +1274,7 @@ private cargarGeneralesConCentrales(): void {
 
     // Recalcular progreso
     this.calcularProgreso();
-    
+
     this.logger.debug('Formulario reiniciado completamente');
   }
 
