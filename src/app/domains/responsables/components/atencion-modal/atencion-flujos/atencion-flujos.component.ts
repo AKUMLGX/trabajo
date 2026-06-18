@@ -85,7 +85,9 @@ export class AtencionFlujosComponent {
       { codigo: 'PISTAS_AUDITORIA', descripcion: 'Pistas de Auditoría', icon: 'track_changes' },
       { codigo: 'DAF', descripcion: 'Dictamen Análisis Forense (DAF)', icon: 'analytics' },
       { codigo: 'DPA', descripcion: 'Dictamen Pistas de Auditoría (DPA)', icon: 'track_changes' },
-      { codigo: 'DJN', descripcion: 'Dictamen Juicio de Nulidad (DJN)', icon: 'gavel' }
+      { codigo: 'DJN', descripcion: 'Dictamen Juicio de Nulidad (DJN)', icon: 'gavel' },
+      { codigo: 'DFP', descripcion: 'Dictamen Forense/Pistas (DFP)', icon: 'fact_check' },
+      { codigo: 'GR', descripcion: 'Reporte General (GR)', icon: 'summarize' }
     ],
     RECUPERACION_INFO: [
       { codigo: 'PUESTO_SERVIDOR', descripcion: 'Puesto de Servicio / Servidor', icon: 'dns' },
