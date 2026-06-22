@@ -36,7 +36,8 @@ const env = (window as unknown as Window & { env: WindowEnv }).env;
     environment: env.environment,
     hash: env.hash,
 
-    baseUrl: env.baseUrl,
+    // baseUrl: env.baseUrl,
+    baseUrl: 'https://balam.sat.gob.mx/tlalcalli/api/v1',
     layoutUrl: env.layoutUrl,
     loginUrl: env.loginUrl,
     logoutUrl: env.logoutUrl,

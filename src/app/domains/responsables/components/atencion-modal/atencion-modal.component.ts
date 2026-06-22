@@ -426,79 +426,91 @@ filtrarSistemas(): void {
     return this.catalogos.especialistas.find(e => e.codigo === codigo)?.nombre_completo || codigo;
   }
 
-  private construirDTO(): CrearAtencionDTO {
-    const tipoAccion = this.formulario.tipoAccion === 'ASIGNADO'
-      ? this.formulario.flujoAsignadoSeleccionado as TipoAccion
-      : this.formulario.tipoAccion as TipoAccion;
+private construirDTO(): any {
+  const tipoAccion = this.formulario.tipoAccion === 'ASIGNADO'
+    ? this.formulario.flujoAsignadoSeleccionado
+    : this.formulario.tipoAccion;
 
-    const dto: CrearAtencionDTO = {
-      id_expediente: this.expediente.id_expediente!,
-      tipo_accion: tipoAccion,
-      sistema_aplicativo: this.formulario.sistema_aplicativo || undefined,
-      fecha_entrega: this.formulario.fechaEntrega || undefined,
-      prioridad: this.formulario.prioridad || undefined,
-      notas: this.formulario.notas || undefined,
-      especialistas: this.formulario.especialistasSeleccionados.map(codigo => ({
-        codigo,
-        nombre: this.obtenerNombreEspecialista(codigo)
-      }))
-    };
+const dto: any = {
+  id_expediente: this.expediente.id_expediente!,
+  tipo_accion: tipoAccion,
+  prioridad: this.formulario.prioridad,
+  fecha_entrega: this.formulario.fechaEntrega,
+  tipos_insumo: [],
+  especialistas: this.formulario.especialistasSeleccionados.map(codigo => ({
+    codigo,
+    nombre: this.obtenerNombreEspecialista(codigo)
+  })),
+  sistema_aplicativo: this.formulario.sistema_aplicativo,
+  notas: this.formulario.notas
+};
 
-    if (tipoAccion === 'ADQUISICION_INFO') {
-      dto.tipos_insumo = [this.formulario.tipoInsumo];
-      dto.tipo_resultado = this.formulario.tiposResultado[0];
-    }
+  if (tipoAccion === 'ADQUISICION_INFO') {
+    dto.tipos_insumo = this.formulario.tipoInsumo
+      ? [this.formulario.tipoInsumo]
+      : [];
 
-    if (
-      tipoAccion === 'INVESTIGACION_FORENSE' ||
-      tipoAccion === 'ELABORACION_DICTAMENES' ||
-      tipoAccion === 'RECUPERACION_INFO' ||
-      tipoAccion === 'DESTRUCCION_DISPOSITIVOS' ||
-      tipoAccion === 'SOLICITUD_INFORMACION'
-    ) {
-      dto.opcion_seleccionada = this.formulario.opcionesSeleccionadas;
-    }
+    dto.tipo_resultado = this.formulario.tiposResultado;  }
 
-    return dto;
+  if (
+    tipoAccion === 'INVESTIGACION_FORENSE' ||
+    tipoAccion === 'ELABORACION_DICTAMENES' ||
+    tipoAccion === 'RECUPERACION_INFO' ||
+    tipoAccion === 'DESTRUCCION_DISPOSITIVOS' ||
+    tipoAccion === 'SOLICITUD_INFORMACION'
+  ) {
+    dto.opcion_seleccionada = this.formulario.opcionesSeleccionadas;
   }
 
-  guardar(): void {
-    if (!this.formularioValido()) {
-      this.snackBar.open('Completa los campos requeridos antes de guardar.', 'Cerrar', {
-        duration: 4000,
-        panelClass: ['warning-snackbar']
-      });
-      return;
-    }
+  return dto;
+}
 
-    if (!this.expediente.id_expediente) {
-      this.snackBar.open('El expediente no tiene ID válido.', 'Cerrar', {
+guardar(): void {
+  if (!this.formularioValido()) {
+    this.snackBar.open('Completa los campos requeridos antes de guardar.', 'Cerrar', {
+      duration: 4000,
+      panelClass: ['warning-snackbar']
+    });
+    return;
+  }
+
+  if (!this.expediente.id_expediente) {
+    this.snackBar.open('El expediente no tiene ID válido.', 'Cerrar', {
+      duration: 4000,
+      panelClass: ['error-snackbar']
+    });
+    return;
+  }
+
+  const body = this.construirDTO();
+
+  console.log('BODY ATENCIÓN:', body);
+
+  this.guardando = true;
+
+  this.apiService.crearAtencion<any>(body).subscribe({
+    next: (response) => {
+      this.guardando = false;
+
+      this.snackBar.open('Atención guardada correctamente.', 'Cerrar', {
         duration: 4000,
+        panelClass: ['success-snackbar']
+      });
+
+      this.dialogRef.close(response.body);
+    },
+    error: (error) => {
+      this.guardando = false;
+
+      console.error('ERROR ATENCIÓN:', error);
+
+      this.snackBar.open('Error al guardar la atención.', 'Cerrar', {
+        duration: 5000,
         panelClass: ['error-snackbar']
       });
-      return;
     }
-
-    this.guardando = true;
-
-    this.atencionService.crearAtencion(this.construirDTO()).subscribe({
-      next: (response) => {
-        this.guardando = false;
-        this.snackBar.open(response.message || 'Atención guardada correctamente.', 'Cerrar', {
-          duration: 4000,
-          panelClass: ['success-snackbar']
-        });
-        this.dialogRef.close(response.data);
-      },
-      error: () => {
-        this.guardando = false;
-        this.snackBar.open('Error al guardar la atención.', 'Cerrar', {
-          duration: 5000,
-          panelClass: ['error-snackbar']
-        });
-      }
-    });
-  }
+  });
+}
 
   protected readonly MAX_ESPECIALISTAS = MAX_ESPECIALISTAS;
 }

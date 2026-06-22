@@ -6,9 +6,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { NgApexchartsModule, ChartComponent, ApexChart, ApexNonAxisChartSeries, ApexAxisChartSeries, ApexXAxis, ApexYAxis, ApexPlotOptions, ApexFill, ApexStroke, ApexDataLabels, ApexLegend, ApexResponsive, ApexTitleSubtitle, ApexGrid, ApexTooltip } from 'ng-apexcharts';
 import { interval, Subscription } from 'rxjs';
-
 import { DashboardService, DashboardCompleto, ExpedienteCritico } from '../../services/dashboard.service';
-
+import { FolioCardsComponent } from '../../../responsables/components/folio-cards/folio-cards/folio-cards.component';
+import { FolioCard, EstadisticoAtencionResponse } from '../../../interfaces/foliocard.interface';
+import { ApiService } from '../../../capture/services/api.service';
+import { HttpResponse } from '@angular/common/http';
 // Tipos para los gráficos
 export type ChartOptions = {
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -37,7 +39,8 @@ export type ChartOptions = {
     MatProgressSpinnerModule,
     MatTooltipModule,
     RouterModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    FolioCardsComponent
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css'
@@ -60,11 +63,14 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   chartSemaforoOptions!: Partial<ChartOptions>;
   chartTipoAccionOptions!: Partial<ChartOptions>;
 
+  foliosCards: FolioCard[] = [];
+
   private refreshSubscription?: Subscription;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService, private apiService: ApiService) {}
 
   ngOnInit(): void {
+    this.cargarEstadisticosAtencion();
     this.cargarDatos();
     // Auto-refresh cada 60 segundos
     this.refreshSubscription = interval(60000).subscribe(() => {
@@ -491,6 +497,109 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   refrescar(): void {
     this.cargarDatos();
   }
+
+
+cargarEstadisticosAtencion(): void {
+  this.apiService
+    .getEstadisticosAtencion<EstadisticoAtencionResponse[]>()
+    .subscribe({
+      next: (response: HttpResponse<EstadisticoAtencionResponse[]>) => {
+        const data = response.body ?? [];
+        this.foliosCards = this.mapearFoliosCards(data);
+      },
+      error: (error: unknown) => {
+        console.error('ERROR ESTADÍSTICOS ATENCIÓN:', error);
+        this.foliosCards = [];
+      }
+    });
+}
+
+private mapearFoliosCards(data: EstadisticoAtencionResponse[]): FolioCard[] {
+  const mapa = new Map<string, FolioCard>();
+
+  data.forEach(item => {
+    const actual = mapa.get(item.acronimo);
+
+    if (!actual) {
+      mapa.set(item.acronimo, {
+        acronimo: item.acronimo,
+        titulo: this.obtenerTituloPorAcronimo(item.acronimo),
+        total: item.consecutivo,
+        ultimo_folio: item.ultimo_folio,
+        descripcion: this.obtenerDescripcionPorAcronimo(item.acronimo),
+        icono: this.obtenerIconoPorAcronimo(item.acronimo)
+      });
+
+      return;
+    }
+
+    if (item.consecutivo > actual.total) {
+      actual.total = item.consecutivo;
+    }
+
+    if (this.obtenerNumeroFolio(item.ultimo_folio) > this.obtenerNumeroFolio(actual.ultimo_folio || '')) {
+      actual.ultimo_folio = item.ultimo_folio;
+    }
+  });
+
+  return Array.from(mapa.values());
+}
+
+private obtenerNumeroFolio(folio: string): number {
+  const partes = folio.split('-');
+  return Number(partes[2]) || 0;
+}
+
+private obtenerTituloPorAcronimo(acronimo: string): string {
+  const titulos: Record<string, string> = {
+    AI: 'Adquisición de Información',
+    RIF: 'Reporte de Investigación Forense',
+    DAF: 'Dictamen de Análisis Forense',
+    DPA: 'Dictamen Pericial Auxiliar',
+    DJN: 'Dictamen Jurídico Normativo',
+    DFP: 'Dictamen Forense Pericial',
+    RG: 'Reporte General',
+    RR: 'Reporte de Recuperación',
+    RDD: 'Reporte de Destrucción de Dispositivos'
+  };
+
+  return titulos[acronimo] || acronimo;
+}
+
+private obtenerDescripcionPorAcronimo(acronimo: string): string {
+  const descripciones: Record<string, string> = {
+    AI: 'Acta de Hechos, Cadena de Custodia, Memoria Técnica y No Aplica',
+    RIF: 'Reporte de Investigación Forense',
+    DAF: 'Dictamen de Análisis Forense',
+    DPA: 'Dictamen Pericial Auxiliar',
+    DJN: 'Dictamen Jurídico Normativo',
+    DFP: 'Dictamen Forense Pericial',
+    RG: 'Reporte General',
+    RR: 'Reporte de Recuperación',
+    RDD: 'Reporte de Destrucción de Dispositivos'
+  };
+
+  return descripciones[acronimo] || 'Sin descripción';
+}
+
+private obtenerIconoPorAcronimo(acronimo: string): string {
+  const iconos: Record<string, string> = {
+    AI: 'assignment',
+    RIF: 'manage_search',
+    DAF: 'description',
+    DPA: 'fact_check',
+    DJN: 'gavel',
+    DFP: 'policy',
+    RG: 'summarize',
+    RR: 'restore_page',
+    RDD: 'delete_sweep'
+  };
+
+  return iconos[acronimo] || 'confirmation_number';
+}
+
+
+
 }
 
 

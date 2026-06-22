@@ -123,4 +123,35 @@ deleteAplicativo<T>(id: number | string): Observable<HttpResponse<T>> {
     { observe: 'response' }
   );
 }
+
+
+
+// ENDPOINT ATENCIÓN TLALCALLI
+// crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
+//   return this.http.post<T>(
+//     this.buildUrl('atencion'),
+//     body,
+//     { observe: 'response' }
+//   );
+//   }
+crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
+
+  const url = 'http://localhost:8090/tlalcalli/api/v1/atencion';
+
+  console.log('POST ATENCION =>', url);
+  console.log('BODY =>', body);
+
+  return this.http.post<T>(
+    url,
+    body,
+    { observe: 'response' }
+  );
+}
+
+getEstadisticosAtencion<T>(): Observable<HttpResponse<T>> {
+  return this.http.get<T>(
+    'http://localhost:8090/tlalcalli/api/v1/atencion/estadisticos_atencion',
+    { observe: 'response' }
+  );
+  }
 }
