@@ -432,36 +432,34 @@ private construirDTO(): any {
     ? this.formulario.flujoAsignadoSeleccionado
     : this.formulario.tipoAccion;
 
-const dto: any = {
-  id_expediente: this.expediente.id_expediente!,
-  tipo_accion: tipoAccion,
-  prioridad: this.formulario.prioridad,
-  fecha_entrega: this.formulario.fechaEntrega,
-  tipos_insumo: [],
-  especialistas: this.formulario.especialistasSeleccionados.map(codigo => ({
-    codigo,
-    nombre: this.obtenerNombreEspecialista(codigo)
-  })),
-  sistema_aplicativo: this.formulario.sistema_aplicativo,
-  notas: this.formulario.notas
-};
+  const resultados =
+    this.formulario.tiposResultado.length > 0
+      ? this.formulario.tiposResultado
+      : this.formulario.opcionesSeleccionadas;
 
-  if (tipoAccion === 'ADQUISICION_INFO') {
-    dto.tipos_insumo = this.formulario.tipoInsumo
+  const dto: any = {
+    id_expediente: this.expediente.id_expediente!,
+    tipo_accion: tipoAccion,
+
+    prioridad: this.formulario.prioridad || undefined,
+    fecha_entrega: this.formulario.fechaEntrega || undefined,
+
+    tipos_insumo: this.formulario.tipoInsumo
       ? [this.formulario.tipoInsumo]
-      : [];
+      : [],
 
-    dto.tipo_resultado = this.formulario.tiposResultado;  }
+    tipo_resultado: resultados,
 
-  if (
-    tipoAccion === 'INVESTIGACION_FORENSE' ||
-    tipoAccion === 'ELABORACION_DICTAMENES' ||
-    tipoAccion === 'RECUPERACION_INFO' ||
-    tipoAccion === 'DESTRUCCION_DISPOSITIVOS' ||
-    tipoAccion === 'SOLICITUD_INFORMACION'
-  ) {
-    dto.opcion_seleccionada = this.formulario.opcionesSeleccionadas;
-  }
+    opcion_seleccionada: this.formulario.opcionesSeleccionadas,
+
+    especialistas: this.formulario.especialistasSeleccionados.map(codigo => ({
+      codigo,
+      nombre: this.obtenerNombreEspecialista(codigo)
+    })),
+
+    sistema_aplicativo: this.formulario.sistema_aplicativo || undefined,
+    notas: this.formulario.notas || undefined
+  };
 
   return dto;
 }
