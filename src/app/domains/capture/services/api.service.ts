@@ -138,7 +138,7 @@ crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
 
   const url = 'http://localhost:8090/tlalcalli/api/v1/atencion';
 
-  console.log('POST ATENCION =>', url);
+  console.log('POST URL:', url);
   console.log('BODY =>', body);
 
   return this.http.post<T>(

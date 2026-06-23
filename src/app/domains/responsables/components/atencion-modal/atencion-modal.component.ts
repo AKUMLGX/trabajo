@@ -144,6 +144,7 @@ export class AtencionModalComponent implements OnInit {
     private apiService: ApiService,
   ) {
     this.expediente = data.expediente;
+    console.log('EXPEDIENTE RECIBIDO EN MODAL:', this.expediente);
   }
 
   ngOnInit(): void {
