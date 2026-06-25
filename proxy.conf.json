@@ -1,6 +1,6 @@
 {
   "/tlalcalli/api/v1": {
-    "target": "http://localhost:8090",
+    "target": "https://balam.sat.gob.mx",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true

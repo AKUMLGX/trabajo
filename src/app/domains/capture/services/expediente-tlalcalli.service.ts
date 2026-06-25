@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { LoggerService } from './logger.service';
 import { ExpedienteTlalcalli } from '../interfaces/expediente-tlalcalli.interface';
 
-// URL base del backend: environment.baseUrl = http://localhost:8090/tlalcalli/api/v1/
+// URL base del backend: environment.baseUrl = https://balam.sat.gob.mx/tlalcalli/api/v1/
 const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
 
 /**
@@ -26,7 +26,7 @@ export interface FormularioExpedienteCompleto {
     unidad: string; // 'dias', 'horas', 'ambos'
     es_urgente: boolean;
   };
-  
+
   // Paso 2: Seguimiento (10 campos - sin los calculados)
   responsable: string;
   fecha_asignacion: string;
@@ -36,7 +36,7 @@ export interface FormularioExpedienteCompleto {
   ubicacion?: string;
   oficios_comision?: string;
   tipo_respuesta?: string;
-  
+
   // Paso 3: Documentos
   documento_pdf_nombre?: string;
   campos_documentos_pospuestos?: string[];
@@ -50,7 +50,7 @@ export interface FormularioExpedienteCompleto {
 })
 export class ExpedienteTlalcalliService {
   private readonly BASE_URL = `${TLALCALLI_BASE}expedientes`;
-  
+
   // EventEmitter para notificar cuando se consultan expedientes (para la tabla)
   public expedientesConsultados = new EventEmitter<ExpedienteTlalcalli[]>();
 
@@ -70,7 +70,7 @@ export class ExpedienteTlalcalliService {
   consultarExpedientes(filtros: any): Observable<ExpedienteTlalcalli[]> {
     const url = `${TLALCALLI_BASE}expedientes/consulta`;
     const params: any = {};
-    
+
     // Agregar solo los filtros que tienen valor - Campos principales de captura
     if (filtros.oficio) params.oficio = filtros.oficio;
     if (filtros.expediente) params.expediente = filtros.expediente;
@@ -82,7 +82,7 @@ export class ExpedienteTlalcalliService {
     // Fecha de registro (fecha_creacion)
     if (filtros.fecha_creacion_desde) params.fecha_creacion_desde = filtros.fecha_creacion_desde;
     if (filtros.fecha_creacion_hasta) params.fecha_creacion_hasta = filtros.fecha_creacion_hasta;
-    
+
     return this.http.get<ExpedienteTlalcalli[]>(url, { params, withCredentials: true }).pipe(
       map(expedientes => {
         console.log('📥 [ExpedienteService] Expedientes recibidos del backend:', expedientes);
@@ -112,7 +112,7 @@ export class ExpedienteTlalcalliService {
   autocompletadoCampo(valor: string, campo: string): Observable<string[]> {
     const url = `${TLALCALLI_BASE}expedientes/autocompletado`;
     const params: any = { [campo]: valor };
-    
+
     return this.http.get<string[]>(url, { params, withCredentials: true }).pipe(
       catchError(error => {
         this.logger.error('Error al obtener autocompletado:', error);
@@ -141,7 +141,7 @@ export class ExpedienteTlalcalliService {
       referencia_asunto: paso1.referencia_asunto,
       fecha_vencimiento: paso1.fecha_vencimiento || null, // Nuevo campo: Fecha de vencimiento del requerimiento
       plazo_vencimiento_prioridad: paso1.plazo_vencimiento_prioridad,
-      
+
       // Paso 2: Seguimiento
       responsable: paso2.responsable,
       fecha_asignacion: null, // Campo eliminado - usar null o fecha actual por defecto
@@ -150,7 +150,7 @@ export class ExpedienteTlalcalliService {
       // ubicacion debe ser: 'CARPETA_GENERAL' o 'CARPETA_INDIVIDUAL'
       // Mapear valores del formulario (CARPETA_GENERAL_I, II, etc.) a valores válidos de BD
       ubicacion: this.mapearUbicacion(paso2.ubicacion),
-      
+
       // Campos eliminados del formulario pero requeridos por el backend
       // Se envían con valores por defecto que cumplen las restricciones CHECK de la BD
       woos: paso2.woos || 'N/A', // Campo eliminado, valor por defecto
@@ -158,7 +158,7 @@ export class ExpedienteTlalcalliService {
       tipo_respuesta: paso2.tipo_respuesta || 'PENDIENTE', // Campo eliminado, valor por defecto válido
       oficios_comision: paso2.oficios_comision || null, // Campo eliminado, opcional
       fecha_notificacion: paso2.fecha_notificacion || null, // Campo eliminado, opcional
-      
+
       // Paso 3: Documentos
       // Campos eliminados del formulario pero requeridos por el backend
       // tipo_documento debe ser: 'DICTAMEN', 'REPORTE', 'ACTA_HECHOS', 'MEMORIA_TECNICA', 'SIN_INFO'
@@ -168,11 +168,11 @@ export class ExpedienteTlalcalliService {
       // expediente_fisico_digital debe ser: 'FISICO', 'DIGITAL', 'AMBOS', 'NINGUNO'
       expediente_fisico_digital: paso3.expediente_fisico_digital || 'DIGITAL', // Campo eliminado, valor por defecto válido
       comentarios_omega: paso3.comentarios_omega || null, // Campo eliminado, opcional
-      
+
       // Campos que sí se usan
       documento_pdf_nombre: paso3.documento_pdf ? paso3.documento_pdf.name : undefined,
       campos_documentos_pospuestos: paso3.campos_pospuestos || [],
-      
+
       // Prioridad del expediente (asignada en captura - movida al Step 1)
       prioridad: paso1.prioridad || 'MEDIA'
     };
@@ -203,17 +203,17 @@ export class ExpedienteTlalcalliService {
     if (!ubicacion) {
       return 'CARPETA_GENERAL'; // Valor por defecto
     }
-    
+
     // Si comienza con CARPETA_GENERAL, mapear a CARPETA_GENERAL
     if (ubicacion.startsWith('CARPETA_GENERAL')) {
       return 'CARPETA_GENERAL';
     }
-    
+
     // Si es CARPETA_INDIVIDUAL, mantenerlo
     if (ubicacion === 'CARPETA_INDIVIDUAL') {
       return 'CARPETA_INDIVIDUAL';
     }
-    
+
     // Valor por defecto si no coincide
     return 'CARPETA_GENERAL';
   }
@@ -322,13 +322,13 @@ export class ExpedienteTlalcalliService {
   }> {
     const oficioEncoded = encodeURIComponent(oficio);
     const url = `${this.BASE_URL}/oficio/${oficioEncoded}`;
-    
+
     this.logger.debug('Buscando expedientes por oficio:', oficio);
-    
+
     return this.http.get<any>(url, { withCredentials: true }).pipe(
       map(response => {
         this.logger.debug('Respuesta del servidor - Total expedientes:', response?.total);
-        
+
         if (response && response.success) {
           const resultado = {
             success: true,
@@ -338,7 +338,7 @@ export class ExpedienteTlalcalliService {
           };
           return resultado;
         }
-        
+
         this.logger.warn('Respuesta no exitosa del servidor');
         throw new Error(response?.message || 'Error al buscar expedientes');
       }),
@@ -348,7 +348,7 @@ export class ExpedienteTlalcalliService {
           message: error?.message,
           url: error?.url
         });
-        
+
         // Re-lanzar el error para que el componente lo maneje
         throw error;
       })
@@ -361,7 +361,7 @@ export class ExpedienteTlalcalliService {
   descargarExcelExpedientes(filtros: any): Observable<Blob> {
     const url = `${TLALCALLI_BASE}expedientes/descargar-excel`;
     let params = new HttpParams();
-    
+
     // Agregar solo los filtros que tienen valor
     if (filtros.oficio) params = params.set('oficio', filtros.oficio);
     if (filtros.expediente) params = params.set('expediente', filtros.expediente);
@@ -372,11 +372,11 @@ export class ExpedienteTlalcalliService {
     if (filtros.prioridad) params = params.set('prioridad', filtros.prioridad);
     if (filtros.fecha_creacion_desde) params = params.set('fecha_creacion_desde', filtros.fecha_creacion_desde);
     if (filtros.fecha_creacion_hasta) params = params.set('fecha_creacion_hasta', filtros.fecha_creacion_hasta);
-    
-    return this.http.get(url, { 
-      params, 
+
+    return this.http.get(url, {
+      params,
       responseType: 'blob',
-      withCredentials: true 
+      withCredentials: true
     }).pipe(
       map(blob => blob),
       catchError(error => {

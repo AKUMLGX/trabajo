@@ -10,8 +10,8 @@
 }
 
 html, body { height: 100%; }
-body { 
-  margin: 0; 
+body {
+  margin: 0;
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #f8f9fc;
 }
@@ -243,3 +243,19 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
 
 .gradient-purple { background: linear-gradient(135deg, #34005b 0%, #3e0065 100%) !important; }
 .gradient-gold { background: linear-gradient(135deg, #d6ae67 0%, #dbb872 100%) !important; }
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}

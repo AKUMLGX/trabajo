@@ -136,7 +136,7 @@ deleteAplicativo<T>(id: number | string): Observable<HttpResponse<T>> {
 //   }
 crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
 
-  const url = 'http://localhost:8090/tlalcalli/api/v1/atencion';
+  const url = 'https://balam.sat.gob.mx/tlalcalli/api/v1/atencion';
 
   console.log('POST URL:', url);
   console.log('BODY =>', body);
@@ -150,7 +150,7 @@ crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
 
 getEstadisticosAtencion<T>(): Observable<HttpResponse<T>> {
   return this.http.get<T>(
-    'http://localhost:8090/tlalcalli/api/v1/atencion/estadisticos_atencion',
+    'https://balam.sat.gob.mx/tlalcalli/api/v1/atencion/estadisticos_atencion',
     { observe: 'response' }
   );
   }

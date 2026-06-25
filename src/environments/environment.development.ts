@@ -1,12 +1,10 @@
 export const environment = {
-  baseUrl: 'http://10.190.80.86:9090/tlalcalli/api/v1/',
+  baseUrl: 'https://balam.sat.gob.mx/tlalcalli/api/v1/',
 
   loginUrl: 'http://localhost:4200/login',
   logoutUrl: 'https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout',
   environment:"DEVELOPMENT",
   hash: "1111111",
-  CLIENT_ID:"dd424816-6874-41f0-978a-311ad21b602e",
-  CLIENT_SECRET:"SHfUrPWBJ7WnD6U81geLeK4k8QaF8TGjcrrXKs9iHGuXBl0p873zSPQbVYHSgVbdmg8q-ciJBYOYNfSOTwu2gg",
   REDIRECT_URI:"http://localhost:4200/home",
 
   oauthParametersEndpoint: 'login/get_oauth_parameters',
@@ -51,4 +49,22 @@ export const environment = {
   getMsgEndpoint: 'getMsg',
   base: '/',
 
+layoutUrl: 'http://localhost:4200',
+
+devIncluirTodasCapturasResponsables: (() => {
+  const env = (window as { [key: string]: any })['env'];
+  const v = env?.['devIncluirTodasCapturasResponsables'];
+
+  return v === true || v === 'true' || v === 1 || v === '1';
+})(),
+
+devVistaEquipoCentroControl: (() => {
+  const env = (window as { [key: string]: any })['env'];
+  const v = env?.['devVistaEquipoCentroControl'];
+
+  return v === true || v === 'true' || v === 1 || v === '1';
+})(),
+
 };
+
+

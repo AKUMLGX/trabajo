@@ -11,7 +11,7 @@ SPA construida con Angular 17 + Material que expone el formulario de tres pasos,
 - Angular CLI 17 global (opcional, pero recomendado):  
   `npm install -g @angular/cli@17`
 - `envsubst` (paquete `gettext-base`) si deseas autogenerar `env.js`.
-- Backend de Tlapohualli ejecutándose (por defecto en `http://localhost:8090/akamba` cuando se usa Docker o 8080/8000 si se corre directamente). Ajusta los puertos según tu entorno.
+- Backend de Tlapohualli ejecutándose (por defecto en `https://balam.sat.gob.mx/akamba` cuando se usa Docker o 8080/8000 si se corre directamente). Ajusta los puertos según tu entorno.
 
 ---
 
@@ -38,11 +38,11 @@ Crea un archivo `.env.frontend` (fuera de `src/` para no empacarlo) con los valo
 cat <<'EOF' > .env.frontend
 environment=DESARROLLO
 COMMIT_SHA=local-dev
-baseUrl=http://localhost:8090/akamba/api/v1/
+baseUrl=https://balam.sat.gob.mx/akamba/api/v1/
 layoutUrl=http://localhost:4200/akamba/tlapohualli/layout/capture
 loginUrl=http://localhost:4200/login
 logoutUrl=https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout
-authInfo=http://localhost:8090/akamba/login/get_oauth_parameters
+authInfo=https://balam.sat.gob.mx/akamba/login/get_oauth_parameters
 EOF
 ```
 
@@ -77,8 +77,8 @@ Cada ambiente (local, QA, prod) debe regenerar este archivo para evitar mezclar 
 Angular usa `proxy.conf.json` cuando ejecutas `npm start`. La configuración por defecto espera:
 
 ```json
-"/tlapohualli/api/v1/*" -> http://localhost:8090/akamba
-"/akamba/api/v1/*"      -> http://localhost:8090
+"/tlapohualli/api/v1/*" -> https://balam.sat.gob.mx/akamba
+"/akamba/api/v1/*"      -> https://balam.sat.gob.mx
 ```
 
 Si el backend corre en otro puerto (`8080`, `8000`, etc.) modifica `proxy.conf.json` **y** los valores de `baseUrl`/`layoutUrl` para que apunten al mismo host. Sin esto, el formulario, la bandeja y el autocompletado devolverán 404/CORS.
@@ -86,7 +86,7 @@ Si el backend corre en otro puerto (`8080`, `8000`, etc.) modifica `proxy.conf.j
 Para validar que el backend responde:
 
 ```bash
-curl http://localhost:8090/akamba/tlapohualli/api/v1/expedientes/dashboard
+curl https://balam.sat.gob.mx/akamba/tlapohualli/api/v1/expedientes/dashboard
 ```
 
 Debes recibir JSON válido antes de iniciar el front.

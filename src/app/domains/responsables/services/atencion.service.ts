@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
-// URL base del backend: environment.baseUrl = http://localhost:8090/tlalcalli/api/v1/
+// URL base del backend: environment.baseUrl = https://balam.sat.gob.mx/tlalcalli/api/v1/
 const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
 
 // =====================================================
@@ -14,9 +14,9 @@ const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl :
 /**
  * Tipos de acción de atención
  */
-export type TipoAccion = 
-  | 'RECHAZADO' 
-  | 'PENDIENTE_INFO' 
+export type TipoAccion =
+  | 'RECHAZADO'
+  | 'PENDIENTE_INFO'
   | 'ASIGNADO'
   | 'ATENCION_INMEDIATA' // Legacy, mantener para compatibilidad
   | 'ADQUISICION_INFO'
@@ -96,32 +96,32 @@ export type Prioridad = 'URGENTE' | 'ALTA' | 'MEDIA' | 'BAJA';
 export interface CrearAtencionDTO {
   id_expediente: number;
   tipo_accion: TipoAccion;
-  
+
   // Prioridad (requerido excepto RECHAZADO y PENDIENTE_INFO)
   prioridad?: Prioridad;
-  
+
   // Fecha de entrega (formato: "YYYY-MM-DD")
   fecha_entrega?: string;
-  
+
   // Para RECHAZADO
   medio_rechazo?: MedioRechazo;
-  
+
   // Para ATENCION_INMEDIATA (legacy)
   abogado_asignado?: string;
-  
+
   // Para ADQUISICION_INFO
   tipos_insumo?: string[];
   tipo_resultado?: string; // codigo del resultado
-  
+
   // Para nuevos flujos (Investigación, Dictámenes, Recuperación, Destrucción)
   opcion_seleccionada?: string[]; // JSON array de opciones
-  
+
   // Especialistas (MÁXIMO 3)
   especialistas?: EspecialistaDTO[];
-  
+
   // Sistema y Aplicativo (movido desde bandeja de captura)
   sistema_aplicativo?: string;
-  
+
   // Común
   notas?: string;
 }

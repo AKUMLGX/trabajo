@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
-// URL base del backend: environment.baseUrl = http://localhost:8090/tlalcalli/api/v1/
+// URL base del backend: environment.baseUrl = https://balam.sat.gob.mx/tlalcalli/api/v1/
 const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
 
 // =====================================================

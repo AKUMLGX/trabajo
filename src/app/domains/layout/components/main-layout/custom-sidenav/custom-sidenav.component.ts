@@ -26,14 +26,14 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
     private logoutService: LogoutService,
     private permissionsService: PermissionsService
   ) {}
-  
+
   @Input() collapsed = false;
 
   public environment = environment;
 
   // Menú dinámico basado en permisos
   menuItems = signal<MenuItem[]>([]);
-  
+
   private subscription: Subscription = new Subscription();
 
   ngOnInit() {

@@ -5,14 +5,14 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
 import { ApiService } from './api.service';
-// URL base del backend: environment.baseUrl = http://localhost:8090/tlalcalli/api/v1/
+// URL base del backend: environment.baseUrl = https://balam.sat.gob.mx/tlalcalli/api/v1/
 const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExpedienteAutocompleteService {
-  
+
   constructor(
     private http: HttpClient,
     private logger: LoggerService,
@@ -34,7 +34,7 @@ export class ExpedienteAutocompleteService {
         })
       );
     }
-    
+
     // Si no hay oficio, obtener el siguiente expediente nuevo
     return this.obtenerSiguienteExpedienteNuevo();
   }
@@ -85,14 +85,14 @@ private obtenerSiguienteExpedienteNuevo(): Observable<string> {
    * Obtiene expedientes recientes para autocompletar
    * @param termino - Término de búsqueda (ej: "EXP-00")
    */
-  // !FUNCIÓN DE CARLOS 
+  // !FUNCIÓN DE CARLOS
   // buscarExpedientes(termino: string): Observable<string[]> {
   //   // TODO: Conectar con el backend cuando esté listo
   //   // return this.http.get<string[]>(`/api/expedientes/buscar?q=${termino}`);
-    
+
   //   // Por ahora retornamos valores mock
   //   const expedientesMock = this.getExpedientesRecientesLocal();
-  //   const filtrados = expedientesMock.filter(exp => 
+  //   const filtrados = expedientesMock.filter(exp =>
   //     exp.toLowerCase().includes(termino.toLowerCase())
   //   );
   //   return of(filtrados.slice(0, 5)); // Máximo 5 resultados
@@ -131,7 +131,7 @@ private obtenerSiguienteExpedienteNuevo(): Observable<string> {
     const numero = this.extraerNumero(expediente);
     if (numero) {
       localStorage.setItem('ultimo_expediente', numero.toString());
-      
+
       // Guardar en lista de recientes
       const recientes = this.getExpedientesRecientesLocal();
       if (!recientes.includes(expediente)) {
@@ -212,7 +212,7 @@ private obtenerSiguienteExpedienteNuevo(): Observable<string> {
     const mesActual = (ahora.getMonth() + 1).toString().padStart(2, '0');
     const añoActual = (ahora.getFullYear() % 100).toString().padStart(2, '0');
     const aaMmActual = `${añoActual}${mesActual}`;
-    
+
     // Formato vigente: EXP-AAMM-0001
     const formatoVigente = new RegExp(`^EXP-${aaMmActual}-\\d{4}$`, 'i');
     // Formato nuevo anterior: EXP-001-MM-YY
@@ -222,7 +222,7 @@ private obtenerSiguienteExpedienteNuevo(): Observable<string> {
     const formatoIntermedio = new RegExp(`^EXP-\\d{4}-${añoCompleto}$`, 'i');
     // Formato antiguo: Exp.001-YYYY o Exp.001 (compatibilidad)
     const formatoAntiguo = /^Exp\.\d{3}(-\d{4})?$/i;
-    
+
     return (
       formatoVigente.test(expediente) ||
       formatoNuevoAnterior.test(expediente) ||
@@ -238,10 +238,10 @@ private obtenerSiguienteExpedienteNuevo(): Observable<string> {
   autoFormatear(valor: string): string {
     // Remover cualquier texto que no sea número
     const soloNumeros = valor.replace(/[^\d]/g, '');
-    
+
     if (soloNumeros.length === 0) return '';
     if (soloNumeros.length > 4) return valor; // No modificar si ya tiene más de 4 dígitos (consecutivo)
-    
+
     const ahora = new Date();
     const mes = (ahora.getMonth() + 1).toString().padStart(2, '0');
     const año = (ahora.getFullYear() % 100).toString().padStart(2, '0');
