@@ -5,14 +5,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
 
-.font-ubuntu-mono {
-    font-family: 'Ubuntu Mono', monospace;
+.font-noto-sans {
+  font-family: 'Noto Sans', sans-serif;
 }
+
+/* .font-ubuntu-mono {
+    font-family: 'Ubuntu Mono', monospace;
+} */
 
 html, body { height: 100%; }
 body {
   margin: 0;
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; */
+    font-family: 'Noto Sans', sans-serif;
+
   background: #f8f9fc;
 }
 
@@ -258,4 +264,21 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+
+
+.mat-mdc-typography,
+.mat-mdc-button,
+.mat-mdc-form-field,
+.mat-mdc-input-element,
+.mat-mdc-select,
+.mat-mdc-dialog-container {
+  font-family: 'Noto Sans', sans-serif !important;
+}
+
+@layer base {
+  body {
+    @apply font-noto-sans;
+  }
 }

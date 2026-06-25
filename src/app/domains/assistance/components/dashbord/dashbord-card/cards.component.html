@@ -1,7 +1,7 @@
 <div class="h-full  border-2 rounded-lg bg-[#F3EAE4] border-rojo-Akamba overflow-auto ">
   <!-- Título principal con estilo mejorado -->
   <div class="bg-gradient-to-r from-[#691C32] to-[#8B2A44] text-white py-4 px-6 mb-5 rounded-t-lg shadow-md">
-    <h1 class="text-2xl font-bold text-center">Asuntos asignados a la administración {{this.administracion}} </h1>
+    <h1 class="text-2xl font-noto-sans text-center">Asuntos asignados a la administración {{this.administracion}} </h1>
   </div>
 
   <!-- Tarjetas de estado - versión mejorada -->
@@ -14,7 +14,7 @@
           alt="por asignar">
         </div>
       </div>
-      <div class="text-3xl font-bold text-gray-800 mb-1">{{porAsignarTotal}}</div>
+      <div class="text-3xl font-noto-sans text-gray-800 mb-1">{{porAsignarTotal}}</div>
       <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block"> <button (click)="irAAsignacion()">Por asignar</button></div>
     </div>
 
@@ -26,7 +26,7 @@
             alt="En Trámite">
         </div>
       </div>
-      <div class="text-3xl font-bold text-gray-800 mb-1">{{requerimiento.en_tramite}}</div>
+      <div class="text-3xl font-noto-sans text-gray-800 mb-1">{{requerimiento.en_tramite}}</div>
       <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block"><button (click)="mostrarDetalle('nuevos')">En Trámite</button></div>
     </div>
 
@@ -37,7 +37,7 @@
           <img src="{{environment.base}}/assets/images/Parcial.svg " width="59px" height="57px">
         </div>
       </div>
-      <div class="text-3xl font-bold text-gray-800 mb-1">{{requerimiento.parcial}}</div>
+      <div class="text-3xl font-noto-sans text-gray-800 mb-1">{{requerimiento.parcial}}</div>
       <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block"><button (click)="mostrarDetalle('pendientes')">Parcial</button></div>
     </div>
 
@@ -48,7 +48,7 @@
           <img src="{{environment.base}}/assets/images/Finalizado.svg"width="59px" height="57px" alt="finalizado">
         </div>
       </div>
-      <div class="text-3xl font-bold text-gray-800 mb-1">{{requerimiento.total}}</div>
+      <div class="text-3xl font-noto-sans text-gray-800 mb-1">{{requerimiento.total}}</div>
       <div class="bg-[#691C32] text-white text-sm py-1.5 px-4 mt-2 rounded-md mx-auto inline-block"><button (click)="mostrarDetalle('total')">Total</button></div>
     </div>
 
@@ -61,7 +61,7 @@
           </svg>
         </div>
       </div>
-      <div class="text-3xl font-bold text-gray-800 mb-1">
+      <div class="text-3xl font-noto-sans text-gray-800 mb-1">
         <span *ngIf="!cargandoAprobaciones">{{asuntosPorAprobar.length}}</span>
         <span *ngIf="cargandoAprobaciones" class="animate-pulse">...</span>
       </div>
@@ -75,8 +75,8 @@
 
   <!-- 🔥 BOTÓN URGENTE CON EFECTO PULSO + GLOW MODERNO -->
   <div class="mb-6 mx-6">
-    <button 
-      (click)="irAAsignacionUrgentes()" 
+    <button
+      (click)="irAAsignacionUrgentes()"
       class="banner-urgente-moderno relative overflow-hidden rounded-xl shadow-2xl w-full transform transition-all duration-300 hover:scale-105 hover:shadow-3xl cursor-pointer border-none bg-transparent p-0"
       [disabled]="asuntosUrgentes === 0"
       [class.opacity-50]="asuntosUrgentes === 0"
@@ -86,37 +86,37 @@
         <div class="w-10 h-10 rounded-full flex items-center justify-center mr-4 icon-latido">
           <img src="{{environment.base}}/assets/images/A_urgentes.svg" alt="Ver Asuntos Urgentes" class="w-6 h-6">
         </div>
-        
+
         <div class="flex-1">
           <!-- Título con efecto brillante -->
-          <h3 class="text-[#2D2A26] text-xl font-bold tracking-wide mb-1 titulo-brillante">
+          <h3 class="text-[#2D2A26] text-xl font-noto-sans tracking-wide mb-1 titulo-brillante">
             ⚠️ Asuntos Urgentes
           </h3>
-          
+
           <!-- ✨ Texto principal con PULSO y sin movimiento lateral -->
           <div class="texto-urgente-pulso">
-            <span class="text-[#FF003F] text-2xl font-bold">
+            <span class="text-[#FF003F] text-2xl font-noto-sans">
               {{asuntosUrgentes}} asuntos requieren atención inmediata
             </span>
             </div>
-          
+
           <!-- 🎯 Indicador de acción -->
-          <div class="mt-2 text-sm text-gray-600 font-medium">
+          <div class="mt-2 text-sm text-gray-600 font-noto-sans">
             <span *ngIf="asuntosUrgentes > 0">👆 Haz clic para ver y gestionar los asuntos urgentes</span>
             <span *ngIf="asuntosUrgentes === 0">✅ No hay asuntos urgentes en este momento</span>
           </div>
         </div>
-        
+
         <!-- 🌟 Barra lateral con resplandor -->
         <div class="barra-glow absolute left-0 top-0 h-full w-3"></div>
-        
+
         <!-- ⚡ Efectos de partículas brillantes -->
         <div class="particulas-brillantes absolute inset-0 pointer-events-none">
           <div class="particula-1"></div>
           <div class="particula-2"></div>
           <div class="particula-3"></div>
         </div>
-        
+
         <!-- 🔥 Icono de acción en la esquina -->
         <div class="absolute top-3 right-3 text-[#FF003F] opacity-75" *ngIf="asuntosUrgentes > 0">
           <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@
           <button
             (click)="cambiarVista('atencion')"
             [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
-            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
+            class="px-4 py-2 text-sm font-noto-sans border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
             <span class="flex items-center">
               <svg class="w-5 h-5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -149,7 +149,7 @@
           <button
             (click)="cambiarVista('aprobacion')"
             [ngClass]="vistaActual === 'aprobacion' ? 'bg-[#691C32] text-white' : 'bg-white text-gray-700'"
-            class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
+            class="px-4 py-2 text-sm font-noto-sans border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-[#691C32]">
             <span class="flex items-center">
               <svg class="w-5 h-5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -205,7 +205,7 @@
             <h3 class="text-lg font-semibold text-gray-800">Filtrar por Dictaminador</h3>
             <span class="text-sm text-gray-500">(Vista: {{vistaActual === 'atencion' ? 'En Atención' : 'Por Aprobar'}})</span>
           </div>
-          
+
           <!-- Botón limpiar filtros -->
           <button *ngIf="dictaminadorActivoActual"
                   (click)="limpiarFiltroCarrusel()"
@@ -224,8 +224,8 @@
           <div class="flex space-x-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             <div class="flex-shrink-0">
               <button (click)="limpiarFiltroCarrusel()"
-                      [ngClass]="!dictaminadorActivoActual ? 
-                        'bg-[#691C32] text-white border-[#691C32] shadow-lg scale-105' : 
+                      [ngClass]="!dictaminadorActivoActual ?
+                        'bg-[#691C32] text-white border-[#691C32] shadow-lg scale-105' :
                         'bg-white text-gray-700 border-gray-200 hover:border-[#691C32] hover:shadow-md'"
                       class="min-w-[160px] p-4 rounded-xl border-2 transition-all duration-300 text-center group transform hover:scale-105">
                 <div class="flex flex-col items-center space-y-2">
@@ -236,7 +236,7 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-medium text-sm">Todos</p>
+                    <p class="font-noto-sans text-sm">Todos</p>
                     <p class="text-xs opacity-75">{{vistaActual === 'atencion' ? asuntosEnAtencion.length : asuntosPorAprobar.length}} asuntos</p>
                   </div>
                 </div>
@@ -247,8 +247,8 @@
             @for (dictaminador of dictaminadoresUnicos; track dictaminador) {
               <div class="flex-shrink-0">
                 <button (click)="seleccionarDictaminadorCarrusel(dictaminador)"
-                        [ngClass]="isDictaminadorActivo(dictaminador) ? 
-                          'bg-[#691C32] text-white border-[#691C32] shadow-lg scale-105' : 
+                        [ngClass]="isDictaminadorActivo(dictaminador) ?
+                          'bg-[#691C32] text-white border-[#691C32] shadow-lg scale-105' :
                           'bg-white text-gray-700 border-gray-200 hover:border-[#691C32] hover:shadow-md'"
                         class="min-w-[160px] p-4 rounded-xl border-2 transition-all duration-300 text-center group transform hover:scale-105">
                   <div class="flex flex-col items-center space-y-2">
@@ -257,10 +257,10 @@
                           class="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300">
                        {{obtenerIniciales(dictaminador)}}
                      </div>
-                    
+
                     <!-- Información del dictaminador -->
                     <div>
-                      <p class="font-medium text-sm truncate max-w-[140px]" [title]="dictaminador">{{dictaminador}}</p>
+                      <p class="font-noto-sans text-sm truncate max-w-[140px]" [title]="dictaminador">{{dictaminador}}</p>
                       <p class="text-xs opacity-75">{{contarAsuntosPorDictaminador(dictaminador)}} asuntos</p>
                     </div>
                   </div>
@@ -270,7 +270,7 @@
           </div>
 
           <!-- Indicador de que no hay dictaminadores -->
-          <div *ngIf="dictaminadoresUnicos.length === 0" 
+          <div *ngIf="dictaminadoresUnicos.length === 0"
                class="text-center py-8 text-gray-500">
             <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -280,7 +280,7 @@
         </div>
 
         <!-- Indicador de filtro activo -->
-        <div *ngIf="dictaminadorActivoActual" 
+        <div *ngIf="dictaminadorActivoActual"
              class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
@@ -288,7 +288,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z" />
               </svg>
               <span class="text-sm text-blue-800">
-                <strong>Filtro activo:</strong> {{dictaminadorActivoActual}} 
+                <strong>Filtro activo:</strong> {{dictaminadorActivoActual}}
                 <span class="font-normal">({{tablePorDictaminar.length}} asuntos encontrados)</span>
               </span>
             </div>
@@ -302,15 +302,15 @@
       <table class="min-w-full divide-y divide-gray-200 table-fixed">
         <thead [ngClass]="vistaActual === 'atencion' ? 'bg-[#691C32]' : 'bg-green-700'" class="text-white">
           <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-folio">Folio Interno</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-autoridad">Autoridad solicitante</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-fecha">Fecha Recepción</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-persona">Persona relacionada</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider col-folio">Folio Interno</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider col-autoridad">Autoridad solicitante</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider col-fecha">Fecha Recepción</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider col-persona">Persona relacionada</th>
             <!-- 🆕 Columna Dictaminador para ambas vistas: En Atención y Por Aprobar -->
-            <th *ngIf="vistaActual === 'atencion' || vistaActual === 'aprobacion'" scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-dictaminador">Dictaminador</th>
+            <th *ngIf="vistaActual === 'atencion' || vistaActual === 'aprobacion'" scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider col-dictaminador">Dictaminador</th>
             <!-- Columna específica para "Por Aprobar" -->
-            <th *ngIf="vistaActual === 'aprobacion'" scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider col-fecha">Fecha Atención</th>
-            <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider col-acciones">Acciones</th>
+            <th *ngIf="vistaActual === 'aprobacion'" scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider col-fecha">Fecha Atención</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-noto-sans uppercase tracking-wider col-acciones">Acciones</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -329,7 +329,7 @@
           <!-- Filas filtradas -->
           @for (asunto of pages [pageSelected-1] ;  track asunto.folio_interno; let i = $index) {
             <tr [ngClass]="{
-                  'fila-hover-atencion': vistaActual === 'atencion', 
+                  'fila-hover-atencion': vistaActual === 'atencion',
                   'fila-hover-aprobacion': vistaActual === 'aprobacion',
                   'fila-atencion-par': vistaActual === 'atencion' && i % 2 === 0,
                   'fila-atencion-impar': vistaActual === 'atencion' && i % 2 !== 0,
@@ -366,12 +366,12 @@
               <!-- 🆕 Columna Dictaminador para ambas vistas: En Atención y Por Aprobar -->
               <td *ngIf="vistaActual === 'atencion' || vistaActual === 'aprobacion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <div class="truncate max-w-[180px]" [title]="obtenerDictaminador(asunto) || 'Sin asignar'">
-                  <span *ngIf="obtenerDictaminador(asunto)" 
+                  <span *ngIf="obtenerDictaminador(asunto)"
                         [ngClass]="vistaActual === 'atencion' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'"
-                        class="text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        class="text-xs font-noto-sans px-2.5 py-0.5 rounded-full">
                     {{obtenerDictaminador(asunto)}}
                   </span>
-                  <span *ngIf="!obtenerDictaminador(asunto)" class="bg-gray-100 text-gray-500 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                  <span *ngIf="!obtenerDictaminador(asunto)" class="bg-gray-100 text-gray-500 text-xs font-noto-sans px-2.5 py-0.5 rounded-full">
                     Sin asignar
                   </span>
                 </div>
@@ -380,7 +380,7 @@
               <!-- Columna específica para "Por Aprobar" -->
               <td *ngIf="vistaActual === 'aprobacion'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 <!-- Aquí iría la fecha de atención, por ahora usamos un placeholder -->
-                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                <span class="bg-green-100 text-green-800 text-xs font-noto-sans px-2.5 py-0.5 rounded-full">
                   {{asunto.fecha_recepcion}}
                 </span>
               </td>
@@ -393,7 +393,7 @@
                           class="btn-accion-tabla focus:outline-none focus:ring-2 focus:ring-offset-1"
                           [class.focus:ring-[#691C32]]="vistaActual === 'atencion'"
                           [class.focus:ring-green-500]="vistaActual === 'aprobacion'"
-                          title="Ver detalle" 
+                          title="Ver detalle"
                           type="button">
                     <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <g clip-path="url(#clip0_1406_282)">
@@ -409,7 +409,7 @@
                   </button>
                   <!-- Insignia local de Aprobado persistente -->
                   <span *ngIf="estaAprobadoLocal(asunto)"
-                        class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300"
+                        class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-noto-sans bg-green-100 text-green-800 border border-green-300"
                         title="Aprobado (persistencia local)">
                     Aprobado
                   </span>
@@ -423,7 +423,7 @@
                   <svg [ngClass]="vistaActual === 'atencion' ? 'text-blue-300' : 'text-green-300'" class="w-12 h-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
-                  <p class="text-lg font-medium">No se encontraron asuntos</p>
+                  <p class="text-lg font-noto-sans">No se encontraron asuntos</p>
                   <p [ngClass]="vistaActual === 'atencion' ? 'text-blue-500' : 'text-green-500'" class="text-sm mt-1">
                     {{vistaActual === 'atencion' ? 'No hay asuntos en atención' : 'No hay asuntos por aprobar'}}
                   </p>
@@ -456,21 +456,21 @@
        <div class="flex justify-between items-center mt-4 px-4 py-2 bg-gray-50 rounded-lg">
         <p class="text-sm leading-5 text-gray-700">
           Mostrando
-          <span class="font-medium text-[#691C32]">{{
+          <span class="font-noto-sans text-[#691C32]">{{
             (pageSelected - 1) * itemsPerPage + 1
             }}</span>
           a
-          <span class="font-medium text-[#691C32]">{{
+          <span class="font-noto-sans text-[#691C32]">{{
             (pageSelected - 1) * itemsPerPage + itemsPerPage < tablePorDictaminar.length ? (pageSelected - 1) * itemsPerPage +
               itemsPerPage : tablePorDictaminar.length }}</span>
               de
-                             <span class="font-medium text-[#691C32]">{{ tablePorDictaminar.length }}</span>
+                             <span class="font-noto-sans text-[#691C32]">{{ tablePorDictaminar.length }}</span>
               resultados
                <span *ngIf="dictaminadorActivoActual" class="text-blue-600">
                  filtrados por <strong>{{dictaminadorActivoActual}}</strong>
                </span>
         </p>
-        
+
         <!-- ✨ Información adicional de la vista actual -->
         <div class="flex items-center space-x-2 text-xs text-gray-500">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -501,29 +501,29 @@
         <div class="grid grid-cols-2 gap-3">
           <div class="space-y-2">
             <div>
-              <label class="text-xs font-medium text-gray-500">Folio</label>
+              <label class="text-xs font-noto-sans text-gray-500">Folio</label>
               <p class="text-sm font-semibold text-gray-900">{{asuntoSeleccionado?.folio}}</p>
             </div>
             <div>
-              <label class="text-xs font-medium text-gray-500">Autoridad Solicitante</label>
+              <label class="text-xs font-noto-sans text-gray-500">Autoridad Solicitante</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.autoridad}}</p>
             </div>
             <div>
-              <label class="text-xs font-medium text-gray-500">Dictaminador</label>
+              <label class="text-xs font-noto-sans text-gray-500">Dictaminador</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.dictaminador}}</p>
             </div>
           </div>
           <div class="space-y-2">
             <div>
-              <label class="text-xs font-medium text-gray-500">Fecha</label>
+              <label class="text-xs font-noto-sans text-gray-500">Fecha</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.fecha}}</p>
             </div>
             <div>
-              <label class="text-xs font-medium text-gray-500">Fecha de Captura</label>
+              <label class="text-xs font-noto-sans text-gray-500">Fecha de Captura</label>
               <p class="text-sm text-gray-900">{{asuntoSeleccionado?.fechaCaptura}}</p>
             </div>
             <div>
-              <label class="text-xs font-medium text-gray-500">Estado</label>
+              <label class="text-xs font-noto-sans text-gray-500">Estado</label>
               <p class="text-sm text-gray-900">En Trámite</p>
             </div>
           </div>
@@ -568,7 +568,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <span class="text-sm font-medium">Página <span class="font-bold">{{paginaActual}}</span></span>
+          <span class="text-sm font-noto-sans">Página <span class="font-noto-sans">{{paginaActual}}</span></span>
           <button (click)="paginaSiguiente()" class="bg-[#691C32] text-white p-1.5 rounded hover:bg-[#4a1423] transition-colors" title="Página siguiente">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

@@ -1,5 +1,5 @@
 /* Estilos globales de tipografía */
-.font-sans {
+.font-noto-sans {
   font-family: 'Noto Sans', sans-serif;
 }
 
@@ -429,11 +429,11 @@
   .banner-urgente-moderno {
     margin: 0 1rem;
   }
-  
+
   .texto-urgente-pulso span {
     font-size: 1.25rem;
   }
-  
+
   .titulo-brillante {
     font-size: 1rem;
   }
@@ -589,7 +589,7 @@
     min-width: 160px;
     width: 160px;
   }
-  
+
   .col-persona {
     min-width: 140px;
     width: 140px;
@@ -601,27 +601,27 @@
     min-width: 120px;
     width: 120px;
   }
-  
+
   .col-autoridad {
     min-width: 140px;
     width: 140px;
   }
-  
+
   .col-fecha {
     min-width: 100px;
     width: 100px;
   }
-  
+
   .col-persona {
     min-width: 120px;
     width: 120px;
   }
-  
+
   .col-dictaminador {
     min-width: 120px;
     width: 120px;
   }
-  
+
   .btn-accion-tabla {
     width: 32px;
     height: 32px;

@@ -11,14 +11,14 @@
         <div>
           <h2 class="text-xl font-semibold text-gray-800">Resultados de Búsqueda</h2>
           <p class="text-sm text-gray-600">
-            <span class="font-medium" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
+            <span class="font-noto-sans" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
               {{ tipoBusqueda === 'Tlalcalli' ? 'Sistema Tlálcalli' : 'Sistema Tlálcalli' }}
             </span>
           </p>
         </div>
       </div>
       <div class="text-right">
-        <div class="text-2xl font-bold" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
+        <div class="text-2xl font-noto-sans" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
           {{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}
         </div>
         <div class="text-xs text-gray-500 uppercase tracking-wide">Expedientes</div>
@@ -115,7 +115,7 @@
   </tbody>
 </table>
           }
-          
+
           <!-- TABLA PARA ASUNTOS AKAMBA (original) -->
           @if (tipoBusqueda !== 'Tlalcalli' && documents.length > 0) {
           <table class="min-w-full border-collapse bg-white">
@@ -176,7 +176,7 @@
               <tr>
                 <td class="px-2 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
                   <div>
-                    <div class="flex justify-evenly gap-2">                      
+                    <div class="flex justify-evenly gap-2">
                       @if(document.documento_escaneado !== null) {
                       @if(getExtension(document.documento_escaneado) === 'pdf')
                       {
@@ -264,7 +264,7 @@
                     <p>
                       @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
                       {{document.descripcion | slice: 0 : 25}}
-                      <button 
+                      <button
                       class="font-semibold text-[#34005b] underline decoration-[#34005b] transition hover:text-[#d6ae67]"
                       (click)="toggleExpansion($index) "> Leer más
                         <strong class="points ">...</strong> </button>
@@ -344,7 +344,7 @@
               [&_.ngx-pagination_.current]:!bg-gradient-to-br
             [&_.ngx-pagination_.current]:!from-[#34005b]
             [&_.ngx-pagination_.current]:!to-[#3e0065]
-              [&_.ngx-pagination_.current]:!font-bold
+              [&_.ngx-pagination_.current]:!font-noto-sans
             [&_.ngx-pagination_.current]:!text-white
               [&_.ngx-pagination_.current]:!shadow-[0_4px_12px_rgba(52,0,91,0.3)]
               [&_.ngx-pagination_li_a]:!rounded-lg
@@ -371,21 +371,21 @@
             </svg>
             <p class="text-sm text-gray-700">
             Mostrando
-              <span class="font-bold text-[#34005b]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
+              <span class="font-noto-sans text-[#34005b]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
             a
-              <span class="font-bold text-[#34005b]">{{
-              tipoBusqueda === 'Tlalcalli' 
+              <span class="font-noto-sans text-[#34005b]">{{
+              tipoBusqueda === 'Tlalcalli'
                 ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlalcalli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlalcalli.length)
                 : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
             }}</span>
                 de
-              <span class="font-bold text-[#34005b]">{{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}</span>
+              <span class="font-noto-sans text-[#34005b]">{{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}</span>
               expedientes
           </p>
           </div>
 
-          <button 
-            (click)="getDownloadExcel()" 
+          <button
+            (click)="getDownloadExcel()"
             class="flex items-center gap-2 bg-gradient-to-r from-[#34005b] to-[#3e0065] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -407,14 +407,14 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
       </div>
-      <h3 class="text-xl font-bold text-gray-800 mb-2">
+      <h3 class="text-xl font-noto-sans text-gray-800 mb-2">
         No se encontraron resultados
       </h3>
       <p class="text-gray-600 mb-6">
         No hay expedientes que coincidan con los criterios de búsqueda especificados.
       </p>
       <div class="bg-blue-50 rounded-lg p-4 w-full border border-blue-100">
-        <p class="text-sm text-blue-800 font-medium mb-2">💡 Sugerencias:</p>
+        <p class="text-sm text-blue-800 font-noto-sans mb-2">💡 Sugerencias:</p>
         <ul class="text-xs text-blue-700 text-left space-y-1">
           <li>• Verifica los filtros aplicados</li>
           <li>• Intenta con criterios más amplios</li>

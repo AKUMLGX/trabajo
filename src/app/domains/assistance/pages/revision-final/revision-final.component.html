@@ -3,7 +3,7 @@
   <!-- Encabezado con información -->
   <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-xl font-medium text-[#691C32]">Revisión Final de Asuntos</h1>
+      <h1 class="text-xl font-noto-sans text-[#691C32]">Revisión Final de Asuntos</h1>
       <p class="text-sm text-gray-600">Panel de revisión y aprobación de asuntos dictaminados</p>
     </div>
     <div class="text-right">
@@ -14,19 +14,19 @@
 
   <!-- 🎯 Dashboard Inteligente según el contexto de AKAMBA 2 -->
   <div class="mb-6">
-    
+
     <!-- 📊 DASHBOARD PARA ASUNTOS CAPTURADOS (Flujo: Akamba 1 → Akamba 2 → Akamba 3) -->
     <div *ngIf="tabActiva === 'capturados'" class="grid grid-cols-4 gap-4 mb-4">
-      
+
       <!-- Recepción desde Akamba 1 -->
       <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-sm border border-blue-200 p-5">
         <div class="flex items-start justify-between">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
               <mat-icon class="text-blue-600 text-lg">download</mat-icon>
-              <p class="text-sm font-medium text-blue-700">Recibidos de Akamba 1</p>
+              <p class="text-sm font-noto-sans text-blue-700">Recibidos de Akamba 1</p>
       </div>
-            <p class="text-2xl font-bold text-blue-800">{{asuntosCapturados.length}}</p>
+            <p class="text-2xl font-noto-sans text-blue-800">{{asuntosCapturados.length}}</p>
             <p class="text-xs text-blue-600 mt-1">Asuntos capturados para revisar</p>
           </div>
           <div class="w-12 h-12 bg-blue-200 rounded-xl flex items-center justify-center">
@@ -41,9 +41,9 @@
       <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
               <mat-icon class="text-amber-600 text-lg">rate_review</mat-icon>
-              <p class="text-sm font-medium text-amber-700">En Revisión</p>
+              <p class="text-sm font-noto-sans text-amber-700">En Revisión</p>
             </div>
-            <p class="text-2xl font-bold text-amber-800">{{getPendientesRevision()}}</p>
+            <p class="text-2xl font-noto-sans text-amber-800">{{getPendientesRevision()}}</p>
             <p class="text-xs text-amber-600 mt-1">Pendientes de procesar</p>
           </div>
           <div class="w-12 h-12 bg-amber-200 rounded-xl flex items-center justify-center">
@@ -58,9 +58,9 @@
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
               <mat-icon class="text-emerald-600 text-lg">check_circle</mat-icon>
-              <p class="text-sm font-medium text-emerald-700">Procesados</p>
+              <p class="text-sm font-noto-sans text-emerald-700">Procesados</p>
             </div>
-            <p class="text-2xl font-bold text-emerald-800">{{estadisticas.listosParaEnviar}}</p>
+            <p class="text-2xl font-noto-sans text-emerald-800">{{estadisticas.listosParaEnviar}}</p>
             <p class="text-xs text-emerald-600 mt-1">Listos para Akamba 3</p>
           </div>
           <div class="w-12 h-12 bg-emerald-200 rounded-xl flex items-center justify-center">
@@ -75,9 +75,9 @@
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
               <mat-icon class="text-[#691C32] text-lg">check_circle_outline</mat-icon>
-              <p class="text-sm font-medium text-[#691C32]">Enviados</p>
+              <p class="text-sm font-noto-sans text-[#691C32]">Enviados</p>
             </div>
-            <p class="text-2xl font-bold text-[#4F1524]">{{estadisticas.enviados}}</p>
+            <p class="text-2xl font-noto-sans text-[#4F1524]">{{estadisticas.enviados}}</p>
             <p class="text-xs text-[#691C32] mt-1">Enviados a Akamba 3</p>
           </div>
           <div class="w-12 h-12 bg-[#691C32]/20 rounded-xl flex items-center justify-center">
@@ -87,7 +87,7 @@
       </div>
     </div>
 
-    
+
 
     <!-- 📋 DASHBOARD SIMPLIFICADO PARA DICTÁMENES PENDIENTES -->
     <div *ngIf="tabActiva === 'dictamenes'">
@@ -99,19 +99,19 @@
 
   <!-- Pestañas de navegación -->
   <mat-tab-group animationDuration="0ms" class="bg-white rounded-lg shadow-sm mb-6" (selectedTabChange)="onTabChange($event)">
-    
+
     <!-- 🆕 NUEVA PESTAÑA: Asuntos Capturados para Revisar -->
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="flex items-center py-2">
           <mat-icon class="mr-2 text-[#691C32]">input</mat-icon>
           <span>Asuntos Capturados</span>
-          <span *ngIf="asuntosCapturados.length > 0" class="ml-2 bg-purple-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-medium">
+          <span *ngIf="asuntosCapturados.length > 0" class="ml-2 bg-purple-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-noto-sans">
             {{asuntosCapturados.length}}
           </span>
         </div>
       </ng-template>
-      
+
       <!-- Contenido de la nueva pestaña -->
       <div class="p-6">
         <!-- Filtros y herramientas mejorados -->
@@ -120,33 +120,33 @@
           <div class="grid grid-cols-4 gap-4 mb-4">
             <!-- Folio Interno -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Folio Interno</label>
-              <input type="text" [(ngModel)]="filtroFolioInterno" (input)="calcularPaginacion()" 
-                     placeholder="Buscar por folio interno..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Folio Interno</label>
+              <input type="text" [(ngModel)]="filtroFolioInterno" (input)="calcularPaginacion()"
+                     placeholder="Buscar por folio interno..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Carpeta de Investigación -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Carpeta de Investigación</label>
-              <input type="text" [(ngModel)]="filtroCarpetaInvestigacion" (input)="calcularPaginacion()" 
-                     placeholder="Buscar por carpeta..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Carpeta de Investigación</label>
+              <input type="text" [(ngModel)]="filtroCarpetaInvestigacion" (input)="calcularPaginacion()"
+                     placeholder="Buscar por carpeta..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Número de Oficio -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Número de Oficio</label>
-              <input type="text" [(ngModel)]="filtroNumeroOficio" (input)="calcularPaginacion()" 
-                     placeholder="Buscar por oficio..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Número de Oficio</label>
+              <input type="text" [(ngModel)]="filtroNumeroOficio" (input)="calcularPaginacion()"
+                     placeholder="Buscar por oficio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Persona Relacionada -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Persona Relacionada</label>
-              <input type="text" [(ngModel)]="filtroPersonaRelacionada" (input)="calcularPaginacion()" 
-                     placeholder="Buscar por persona..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Persona Relacionada</label>
+              <input type="text" [(ngModel)]="filtroPersonaRelacionada" (input)="calcularPaginacion()"
+                     placeholder="Buscar por persona..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
           </div>
@@ -156,15 +156,15 @@
             <div class="flex gap-4 flex-1">
               <!-- Buscador general -->
               <div class="w-96">
-                <label class="text-sm font-medium text-[#691C32] block mb-2">Búsqueda General</label>
+                <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Búsqueda General</label>
                 <div class="relative">
-                  <input type="text" [(ngModel)]="filtroText" (input)="calcularPaginacion()" 
-                         placeholder="Buscar en todos los campos..." 
+                  <input type="text" [(ngModel)]="filtroText" (input)="calcularPaginacion()"
+                         placeholder="Buscar en todos los campos..."
                         class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                   <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
                     <mat-icon class="text-gray-400 text-lg">search</mat-icon>
                   </div>
-                  <button *ngIf="filtroText" 
+                  <button *ngIf="filtroText"
                           class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                           (click)="filtroText = ''; calcularPaginacion()">
                     <mat-icon class="text-sm">close</mat-icon>
@@ -175,7 +175,7 @@
 
             <!-- Botón limpiar filtros -->
             <div class="ml-4">
-              <label class="text-sm font-medium text-transparent block mb-2">.</label>
+              <label class="text-sm font-noto-sans text-transparent block mb-2">.</label>
               <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
                       (click)="limpiarFiltros()">
                 <mat-icon class="mr-1 text-sm">refresh</mat-icon>
@@ -192,18 +192,18 @@
                 <mat-icon class="mr-1 text-sm">filter_list</mat-icon>
                 <span>{{getAsuntosCapturasFiltrados().length}} de {{asuntosCapturados.length}} asuntos</span>
               </div>
-              
+
               <!-- Indicador de filtros activos -->
               <div *ngIf="tienesFiltrosActivos()" class="flex items-center gap-2">
-                <span class="text-xs text-blue-600 font-medium">Filtros activos:</span>
-                <span *ngIf="filtroEstadoCaptura !== 'TODOS'" 
+                <span class="text-xs text-blue-600 font-noto-sans">Filtros activos:</span>
+                <span *ngIf="filtroEstadoCaptura !== 'TODOS'"
                       class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
                   Estado: {{filtroEstadoCaptura}}
                   <button class="ml-1 hover:bg-blue-200 rounded-full p-0.5" (click)="filtroEstadoCaptura = 'TODOS'">
                     <mat-icon class="text-xs">close</mat-icon>
                   </button>
                 </span>
-                <span *ngIf="filtroAutoridadRemitente !== 'Todas'" 
+                <span *ngIf="filtroAutoridadRemitente !== 'Todas'"
                       class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                   Autoridad: {{filtroAutoridadRemitente}}
                   <button class="ml-1 hover:bg-green-200 rounded-full p-0.5" (click)="filtroAutoridadRemitente = 'Todas'">
@@ -218,7 +218,7 @@
               <!-- Contador de seleccionados -->
               <div *ngIf="getCountAsuntosSeleccionados() > 0" class="flex items-center bg-emerald-50 px-3 py-2 rounded-lg">
                 <mat-icon class="text-emerald-600 mr-2">check_circle</mat-icon>
-                <span class="text-emerald-700 font-medium">{{getCountAsuntosSeleccionados()}} seleccionado(s)</span>
+                <span class="text-emerald-700 font-noto-sans">{{getCountAsuntosSeleccionados()}} seleccionado(s)</span>
               </div>
 
               <!-- Botón seleccionar todos los listos -->
@@ -229,7 +229,7 @@
                 <span>{{todosProntosSeleccionados() ? 'Deseleccionar' : 'Seleccionar'}} listos</span>
               </button>
 
-              
+
             </div>
           </div>
         </div>
@@ -244,18 +244,18 @@
                   <mat-icon class="text-white text-2xl">view_list</mat-icon>
               </div>
                 <div>
-                  <h3 class="text-xl font-bold text-white">Asuntos Capturados</h3>
+                  <h3 class="text-xl font-noto-sans text-white">Asuntos Capturados</h3>
                   <p class="text-white/80 text-sm">Revisión y aprobación para Akamba 3</p>
                 </div>
                 </div>
               <div class="flex items-center gap-6 text-white text-sm">
                 <div class="flex items-center bg-white/10 px-3 py-2 rounded-lg">
                   <div class="w-3 h-3 bg-sky-400 rounded-full mr-2"></div>
-                  <span class="font-medium">Pendientes: {{getPendientesRevision()}}</span>
+                  <span class="font-noto-sans">Pendientes: {{getPendientesRevision()}}</span>
                 </div>
                 <div class="flex items-center bg-white/10 px-3 py-2 rounded-lg">
                   <div class="w-3 h-3 bg-emerald-400 rounded-full mr-2"></div>
-                  <span class="font-medium">Aprobados: {{estadisticas.listosParaEnviar}}</span>
+                  <span class="font-noto-sans">Aprobados: {{estadisticas.listosParaEnviar}}</span>
                 </div>
               </div>
             </div>
@@ -266,16 +266,16 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gradient-to-r from-slate-50 to-slate-100">
                 <tr>
-                  <th scope="col" class="w-16 px-4 py-4 text-center text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-16 px-4 py-4 text-center text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center justify-center">
-                      <input type="checkbox" 
+                      <input type="checkbox"
                              class="w-4 h-4 text-[#691C32] bg-gray-100 border-gray-300 rounded focus:ring-[#691C32] focus:ring-2"
                              [checked]="todosAprobadosSeleccionados()"
                              [indeterminate]="algunosAprobadosSeleccionados() && !todosAprobadosSeleccionados()"
                              (change)="toggleTodosAprobados($event)">
                     </div>
                   </th>
-                  <th scope="col" class="w-44 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-44 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
@@ -283,7 +283,7 @@
                       <span>Folio Interno</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
@@ -291,7 +291,7 @@
                       <span>Carpeta de Investigación</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
@@ -299,7 +299,7 @@
                       <span>Oficio</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-green-600 text-lg">person</mat-icon>
@@ -307,7 +307,7 @@
                       <span>Persona Relacionada</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
@@ -315,7 +315,7 @@
                       <span>Fecha Recepción</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-36 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-36 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-orange-600 text-lg">timer</mat-icon>
@@ -323,7 +323,7 @@
                       <span>Plazo Atención</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-emerald-600 text-lg">rate_review</mat-icon>
@@ -360,10 +360,10 @@
                       'bg-emerald-50 border-emerald-200': asunto.estado_revision === 'APROBADO'
                     }"
                     [class.row-aprobado]="asunto.estado_revision === 'APROBADO' || (asuntosAprobados?.includes(asunto.id))">
-                  
+
                   <!-- Checkbox de selección -->
                   <td class="w-16 px-4 py-5 text-center">
-                      <input type="checkbox" 
+                      <input type="checkbox"
                              [checked]="isAsuntoSeleccionado(asunto.id)"
                              (change)="toggleSeleccionAsunto(asunto.id)"
                              [disabled]="asunto.estado_revision !== 'APROBADO'"
@@ -378,13 +378,13 @@
 
                   <!-- Carpeta de Investigación -->
                   <td class="w-48 px-6 py-5">
-                      <div class="font-medium text-slate-900 text-sm">{{asunto.carpeta_investigacion}}</div>
+                      <div class="font-noto-sans text-slate-900 text-sm">{{asunto.carpeta_investigacion}}</div>
                   </td>
 
                   <!-- Oficio -->
                   <td class="w-40 px-6 py-5">
-                      <div 
-                        class="font-medium text-slate-900 text-sm cursor-help max-w-32 truncate"
+                      <div
+                        class="font-noto-sans text-slate-900 text-sm cursor-help max-w-32 truncate"
                         [matTooltip]="obtenerTextoCompleto(asunto.oficio || 'N/A')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.oficio || 'N/A', 25)}}
@@ -393,8 +393,8 @@
 
                   <!-- Persona Relacionada -->
                   <td class="w-48 px-6 py-5">
-                      <div 
-                        class="font-medium text-slate-900 text-sm cursor-help max-w-32 truncate"
+                      <div
+                        class="font-noto-sans text-slate-900 text-sm cursor-help max-w-32 truncate"
                         [matTooltip]="obtenerTextoCompleto(asunto.personaRelacionada || '')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.personaRelacionada || '', 35)}}
@@ -403,7 +403,7 @@
 
                   <!-- Fecha Recepción -->
                   <td class="w-40 px-6 py-5">
-                      <div class="font-medium text-slate-900 text-sm">{{asunto.fechaRecepcion || formatDate(asunto.fecha_captura)}}</div>
+                      <div class="font-noto-sans text-slate-900 text-sm">{{asunto.fechaRecepcion || formatDate(asunto.fecha_captura)}}</div>
                   </td>
 
                   <!-- Plazo Atención -->
@@ -423,8 +423,8 @@
                     <div class="flex items-center justify-center gap-2">
                       <!-- Botón principal de revisar/editar -->
                       <button class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105"
-                              [ngClass]="asunto.estado_revision === 'PENDIENTE' ? 
-                                'bg-gradient-to-r from-sky-500 to-sky-600 text-white hover:from-sky-600 hover:to-sky-700' : 
+                              [ngClass]="asunto.estado_revision === 'PENDIENTE' ?
+                                'bg-gradient-to-r from-sky-500 to-sky-600 text-white hover:from-sky-600 hover:to-sky-700' :
                                 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700'"
                               (click)="abrirModalRevisionCaptura(asunto)">
                         <mat-icon class="text-lg">{{
@@ -432,7 +432,7 @@
                           }}</mat-icon>
                           <span class="hidden sm:inline">{{asunto.estado_revision === 'PENDIENTE' ? 'Revisar' : 'Editar'}}</span>
                       </button>
-                      
+
                       <!-- Botón de asignación directa -->
                       <button class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700"
                               (click)="asignarAsuntoIndividual(asunto)"
@@ -450,7 +450,7 @@
           <div class="bg-slate-50 px-8 py-4 border-t border-slate-200">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-4 text-sm text-slate-600">
-                <span class="font-medium">{{asuntosPaginados.length}} de {{getAsuntosCapturasFiltrados().length}} asuntos (Página {{paginaActual}} de {{obtenerTotalPaginas()}})</span>
+                <span class="font-noto-sans">{{asuntosPaginados.length}} de {{getAsuntosCapturasFiltrados().length}} asuntos (Página {{paginaActual}} de {{obtenerTotalPaginas()}})</span>
                 <div class="flex items-center gap-3">
                   <div class="flex items-center gap-1">
                     <div class="w-3 h-3 bg-sky-400 rounded-full"></div>
@@ -462,11 +462,11 @@
                   </div>
                   </div>
                 </div>
-              
+
               <!-- Controles de paginación -->
               <div class="flex items-center gap-3">
                 <span class="text-sm text-slate-600">Filas por página:</span>
-                <select 
+                <select
                   [(ngModel)]="itemsPorPagina"
                   (change)="cambiarItemsPorPagina(itemsPorPagina)"
                   class="px-3 py-1 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
@@ -475,47 +475,47 @@
                   <option [value]="50" [selected]="itemsPorPagina === 50">50</option>
                   <option [value]="100" [selected]="itemsPorPagina === 100">100</option>
                 </select>
-                
+
                 <div class="flex items-center gap-1">
-                  <button 
+                  <button
                     (click)="primeraPagina()"
                     [disabled]="paginaActual === 1"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
                     <mat-icon class="text-slate-600 text-lg">keyboard_double_arrow_left</mat-icon>
                   </button>
-                  <button 
+                  <button
                     (click)="paginaAnterior()"
                     [disabled]="paginaActual === 1"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
                     <mat-icon class="text-slate-600 text-lg">keyboard_arrow_left</mat-icon>
                   </button>
-                  
+
                   <div class="flex items-center gap-1 mx-2">
-                    <span 
+                    <span
                       *ngFor="let pagina of obtenerRangoPaginas()"
                       (click)="cambiarPagina(pagina)"
                       class="px-3 py-1 rounded-lg text-sm cursor-pointer transition-colors"
-                      [ngClass]="pagina === paginaActual 
-                        ? 'bg-sky-500 text-white font-medium' 
+                      [ngClass]="pagina === paginaActual
+                        ? 'bg-sky-500 text-white font-noto-sans'
                         : 'text-slate-600 hover:bg-slate-100'">
                       {{pagina}}
                     </span>
-                    
+
                     <!-- Mostrar "..." si hay más páginas después del rango visible -->
-                    <span 
+                    <span
                       *ngIf="obtenerRangoPaginas().length > 0 && obtenerRangoPaginas()[obtenerRangoPaginas().length - 1] < obtenerTotalPaginas()"
                       class="text-slate-400">
                       ...
                     </span>
                   </div>
-                  
-                  <button 
+
+                  <button
                     (click)="paginaSiguiente()"
                     [disabled]="paginaActual >= obtenerTotalPaginas()"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
                     <mat-icon class="text-slate-600 text-lg">keyboard_arrow_right</mat-icon>
                   </button>
-                  <button 
+                  <button
                     (click)="ultimaPagina()"
                     [disabled]="paginaActual >= obtenerTotalPaginas()"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
@@ -543,7 +543,7 @@
               <div class="flex items-center gap-4 text-sm">
                 <div class="flex items-center gap-2 text-sky-600">
                   <mat-icon class="text-lg">rate_review</mat-icon>
-                  <span class="font-medium">Haz clic en "Revisar" para procesar cada asunto</span>
+                  <span class="font-noto-sans">Haz clic en "Revisar" para procesar cada asunto</span>
             </div>
               </div>
             </div>
@@ -551,7 +551,7 @@
         </div>
 
         <!-- 🚀 Panel flotante para envío a Akamba 3 -->
-        <div *ngIf="asuntosSeleccionados.length > 0" 
+        <div *ngIf="asuntosSeleccionados.length > 0"
              class="fixed bottom-6 right-6 bg-gradient-to-r from-[#691C32] to-[#4F1524] text-white rounded-2xl shadow-2xl p-6 z-50 min-w-80 max-w-md">
           <div class="flex items-start justify-between mb-4">
             <div class="flex items-center gap-3">
@@ -559,11 +559,11 @@
                 <mat-icon class="text-white text-xl">send</mat-icon>
               </div>
               <div>
-                <h3 class="font-bold text-lg">Enviar a Akamba 3</h3>
+                <h3 class="font-noto-sans text-lg">Enviar a Akamba 3</h3>
                 <p class="text-white/80 text-sm">{{asuntosSeleccionados.length}} asunto(s) seleccionado(s)</p>
               </div>
             </div>
-            <button (click)="limpiarSeleccion()" 
+            <button (click)="limpiarSeleccion()"
                     class="text-white/60 hover:text-white transition-colors">
               <mat-icon>close</mat-icon>
             </button>
@@ -571,16 +571,16 @@
 
           <!-- Lista de asuntos seleccionados -->
           <div class="max-h-40 overflow-y-auto mb-4 space-y-2">
-            <div *ngFor="let asunto of getAsuntosSeleccionados()" 
+            <div *ngFor="let asunto of getAsuntosSeleccionados()"
                  class="flex items-center gap-3 bg-white/10 rounded-lg p-2">
               <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                 <mat-icon class="text-white text-sm">description</mat-icon>
               </div>
               <div class="flex-1 min-w-0">
-                <div class="font-medium text-sm truncate">{{asunto.folio}}</div>
+                <div class="font-noto-sans text-sm truncate">{{asunto.folio}}</div>
                 <div class="text-white/70 text-xs truncate">{{asunto.personaRelacionada}}</div>
               </div>
-              <button (click)="toggleSeleccionAsunto(asunto.id)" 
+              <button (click)="toggleSeleccionAsunto(asunto.id)"
                       class="text-white/60 hover:text-white transition-colors">
                 <mat-icon class="text-sm">remove</mat-icon>
               </button>
@@ -614,12 +614,12 @@
         <div class="flex items-center py-2">
           <mat-icon class="mr-2 text-[#691C32]">pending_actions</mat-icon>
           <span>Dictámenes Pendientes</span>
-          <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-medium">
+          <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-noto-sans">
             {{asuntosPendientes.length}}
           </span>
         </div>
       </ng-template>
-      
+
       <!-- Contenido de la pestaña Pendientes -->
       <div class="p-6">
         <!-- Filtros y herramientas mejorados -->
@@ -628,41 +628,41 @@
           <div class="grid grid-cols-5 gap-4 mb-4">
             <!-- Folio -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Folio</label>
-              <input type="text" [(ngModel)]="filtroFolioDictamen" 
-                     placeholder="Buscar por folio..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Folio</label>
+              <input type="text" [(ngModel)]="filtroFolioDictamen"
+                     placeholder="Buscar por folio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                 </div>
 
             <!-- Carpeta de Investigación -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Carpeta</label>
-              <input type="text" [(ngModel)]="filtroCarpetaDictamen" 
-                     placeholder="Buscar por carpeta..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Carpeta</label>
+              <input type="text" [(ngModel)]="filtroCarpetaDictamen"
+                     placeholder="Buscar por carpeta..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
               </div>
 
             <!-- Oficio -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Oficio</label>
-              <input type="text" [(ngModel)]="filtroOficioDictamen" 
-                     placeholder="Buscar por oficio..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Oficio</label>
+              <input type="text" [(ngModel)]="filtroOficioDictamen"
+                     placeholder="Buscar por oficio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Persona Relacionada -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Persona</label>
-              <input type="text" [(ngModel)]="filtroPersonaDictamen" 
-                     placeholder="Buscar por persona..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Persona</label>
+              <input type="text" [(ngModel)]="filtroPersonaDictamen"
+                     placeholder="Buscar por persona..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Dictaminador -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Dictaminador</label>
-              <input type="text" [(ngModel)]="filtroDictaminador" 
-                     placeholder="Buscar por dictaminador..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Dictaminador</label>
+              <input type="text" [(ngModel)]="filtroDictaminador"
+                     placeholder="Buscar por dictaminador..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
           </div>
@@ -672,15 +672,15 @@
             <div class="flex gap-4 flex-1">
               <!-- Buscador general -->
             <div class="w-96">
-                <label class="text-sm font-medium text-[#691C32] block mb-2">Búsqueda General</label>
+                <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Búsqueda General</label>
               <div class="relative">
-                  <input type="text" [(ngModel)]="filtroText" 
-                         placeholder="Buscar en todos los campos..." 
+                  <input type="text" [(ngModel)]="filtroText"
+                         placeholder="Buscar en todos los campos..."
                       class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                 <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
                   <mat-icon class="text-gray-400 text-lg">search</mat-icon>
                 </div>
-                <button *ngIf="filtroText" 
+                <button *ngIf="filtroText"
                         class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                         (click)="filtroText = ''">
                   <mat-icon class="text-sm">close</mat-icon>
@@ -691,7 +691,7 @@
 
             <!-- Botón limpiar filtros -->
             <div class="ml-4">
-              <label class="text-sm font-medium text-transparent block mb-2">.</label>
+              <label class="text-sm font-noto-sans text-transparent block mb-2">.</label>
               <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
                       (click)="limpiarFiltros()">
                 <mat-icon class="mr-1 text-sm">refresh</mat-icon>
@@ -700,7 +700,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Tabla moderna con diseño mejorado -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
           <!-- Header moderno con gradiente guinda -->
@@ -711,14 +711,14 @@
                   <mat-icon class="text-white text-2xl">gavel</mat-icon>
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-white">Dictámenes Pendientes</h3>
+                  <h3 class="text-xl font-noto-sans text-white">Dictámenes Pendientes</h3>
                   <p class="text-white/80 text-sm">Pendientes de revisión final</p>
                 </div>
               </div>
               <div class="flex items-center gap-6 text-white text-sm">
                 <div class="flex items-center bg-white/10 px-3 py-2 rounded-lg">
                   <div class="w-3 h-3 bg-orange-400 rounded-full mr-2"></div>
-                  <span class="font-medium">Total: {{getDictamenesPendientesFiltrados().length}}</span>
+                  <span class="font-noto-sans">Total: {{getDictamenesPendientesFiltrados().length}}</span>
                 </div>
               </div>
             </div>
@@ -729,7 +729,7 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gradient-to-r from-slate-50 to-slate-100">
                 <tr>
-                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
@@ -737,7 +737,7 @@
                       <span>Folio</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
@@ -745,7 +745,7 @@
                       <span>Carpeta</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
@@ -753,7 +753,7 @@
                       <span>Oficio</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-green-600 text-lg">person</mat-icon>
@@ -761,7 +761,7 @@
                       <span>Persona</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-purple-600 text-lg">account_circle</mat-icon>
@@ -769,7 +769,7 @@
                       <span>Dictaminador</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
@@ -777,7 +777,7 @@
                       <span>Fecha Recepción</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-emerald-600 text-lg">settings</mat-icon>
@@ -809,7 +809,7 @@
                 <!-- Filas de datos -->
                 <tr *ngFor="let asunto of getDictamenesPendientesFiltrados(); let i = index"
                     class="hover:bg-slate-50 transition-all duration-200 group border-b border-slate-100">
-                  
+
                   <!-- Folio -->
                   <td class="w-32 px-6 py-5">
                     <div class="font-semibold text-slate-900 text-sm">{{asunto.folio}}</div>
@@ -817,27 +817,27 @@
 
                   <!-- Carpeta -->
                   <td class="w-40 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.carpetaInvestigacion}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.carpetaInvestigacion}}</div>
                   </td>
 
                   <!-- Oficio -->
                   <td class="w-32 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.oficio || 'N/A'}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.oficio || 'N/A'}}</div>
                   </td>
 
                   <!-- Persona Relacionada -->
                   <td class="w-48 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.personaRelacionada}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.personaRelacionada}}</div>
                   </td>
 
                   <!-- Dictaminador -->
                   <td class="w-40 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.dictaminador}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.dictaminador}}</div>
                   </td>
 
                   <!-- Fecha Recepción -->
                   <td class="w-32 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{formatDate(asunto.fechaRecepcion)}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{formatDate(asunto.fechaRecepcion)}}</div>
                   </td>
 
                   <!-- Acciones -->
@@ -858,18 +858,18 @@
         </div>
       </div>
     </mat-tab>
-    
+
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="flex items-center py-2">
           <mat-icon class="mr-2 text-[#691C32]">history</mat-icon>
           <span>Asuntos Revisados</span>
-          <span *ngIf="asuntosRevisados.length > 0" class="ml-2 bg-green-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-medium">
+          <span *ngIf="asuntosRevisados.length > 0" class="ml-2 bg-green-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-noto-sans">
             {{asuntosRevisados.length}}
           </span>
         </div>
       </ng-template>
-      
+
       <!-- Contenido de la pestaña Revisados -->
       <div class="p-6">
         <!-- Filtros y herramientas mejorados -->
@@ -878,41 +878,41 @@
           <div class="grid grid-cols-5 gap-4 mb-4">
             <!-- Folio -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Folio</label>
-              <input type="text" [(ngModel)]="filtroFolioRevisado" 
-                     placeholder="Buscar por folio..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Folio</label>
+              <input type="text" [(ngModel)]="filtroFolioRevisado"
+                     placeholder="Buscar por folio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Carpeta de Investigación -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Carpeta</label>
-              <input type="text" [(ngModel)]="filtroCarpetaRevisada" 
-                     placeholder="Buscar por carpeta..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Carpeta</label>
+              <input type="text" [(ngModel)]="filtroCarpetaRevisada"
+                     placeholder="Buscar por carpeta..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Oficio -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Oficio</label>
-              <input type="text" [(ngModel)]="filtroOficioRevisado" 
-                     placeholder="Buscar por oficio..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Oficio</label>
+              <input type="text" [(ngModel)]="filtroOficioRevisado"
+                     placeholder="Buscar por oficio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Persona Relacionada -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Persona</label>
-              <input type="text" [(ngModel)]="filtroPersonaRevisada" 
-                     placeholder="Buscar por persona..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Persona</label>
+              <input type="text" [(ngModel)]="filtroPersonaRevisada"
+                     placeholder="Buscar por persona..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
 
             <!-- Dictaminador -->
             <div>
-              <label class="text-sm font-medium text-[#691C32] block mb-2">Dictaminador</label>
-              <input type="text" [(ngModel)]="filtroDictaminadorRevisado" 
-                     placeholder="Buscar por dictaminador..." 
+              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Dictaminador</label>
+              <input type="text" [(ngModel)]="filtroDictaminadorRevisado"
+                     placeholder="Buscar por dictaminador..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
             </div>
           </div>
@@ -922,15 +922,15 @@
             <div class="flex gap-4 flex-1">
               <!-- Buscador general -->
           <div class="w-96">
-                <label class="text-sm font-medium text-[#691C32] block mb-2">Búsqueda General</label>
+                <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Búsqueda General</label>
             <div class="relative">
-                  <input type="text" [(ngModel)]="filtroText" 
-                         placeholder="Buscar en todos los campos..." 
+                  <input type="text" [(ngModel)]="filtroText"
+                         placeholder="Buscar en todos los campos..."
                     class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
               <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
                 <mat-icon class="text-gray-400 text-lg">search</mat-icon>
               </div>
-              <button *ngIf="filtroText" 
+              <button *ngIf="filtroText"
                       class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                       (click)="filtroText = ''">
                 <mat-icon class="text-sm">close</mat-icon>
@@ -938,10 +938,10 @@
             </div>
           </div>
         </div>
-        
+
             <!-- Botón limpiar filtros -->
             <div class="ml-4">
-              <label class="text-sm font-medium text-transparent block mb-2">.</label>
+              <label class="text-sm font-noto-sans text-transparent block mb-2">.</label>
               <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
                       (click)="limpiarFiltros()">
                 <mat-icon class="mr-1 text-sm">refresh</mat-icon>
@@ -961,14 +961,14 @@
                   <mat-icon class="text-white text-2xl">history</mat-icon>
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-white">Asuntos Revisados</h3>
+                  <h3 class="text-xl font-noto-sans text-white">Asuntos Revisados</h3>
                   <p class="text-white/80 text-sm">Histórico de asuntos procesados</p>
                 </div>
               </div>
               <div class="flex items-center gap-6 text-white text-sm">
                 <div class="flex items-center bg-white/10 px-3 py-2 rounded-lg">
                   <div class="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
-                  <span class="font-medium">Total: {{getAsuntosRevisadosFiltrados().length}}</span>
+                  <span class="font-noto-sans">Total: {{getAsuntosRevisadosFiltrados().length}}</span>
                 </div>
               </div>
             </div>
@@ -979,7 +979,7 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gradient-to-r from-slate-50 to-slate-100">
                 <tr>
-                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
@@ -987,7 +987,7 @@
                       <span>Folio</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
@@ -995,7 +995,7 @@
                       <span>Carpeta</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
@@ -1003,7 +1003,7 @@
                       <span>Oficio</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-green-600 text-lg">person</mat-icon>
@@ -1011,7 +1011,7 @@
                       <span>Persona</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-purple-600 text-lg">account_circle</mat-icon>
@@ -1019,7 +1019,7 @@
                       <span>Dictaminador</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
@@ -1027,7 +1027,7 @@
                       <span>Fecha Recepción</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-emerald-600 text-lg">check_circle</mat-icon>
@@ -1035,7 +1035,7 @@
                       <span>Estado</span>
                     </div>
                   </th>
-                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-bold text-slate-700">
+                  <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
                         <mat-icon class="text-gray-600 text-lg">visibility</mat-icon>
@@ -1067,7 +1067,7 @@
                 <!-- Filas de datos -->
                 <tr *ngFor="let asunto of getAsuntosRevisadosFiltrados(); let i = index"
                     class="hover:bg-slate-50 transition-all duration-200 group border-b border-slate-100">
-                  
+
                   <!-- Folio -->
                   <td class="w-32 px-6 py-5">
                     <div class="font-semibold text-slate-900 text-sm">{{asunto.folio}}</div>
@@ -1075,34 +1075,34 @@
 
                   <!-- Carpeta -->
                   <td class="w-40 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.carpetaInvestigacion}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.carpetaInvestigacion}}</div>
                   </td>
 
                   <!-- Oficio -->
                   <td class="w-32 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.oficio || 'N/A'}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.oficio || 'N/A'}}</div>
                   </td>
 
                   <!-- Persona Relacionada -->
                   <td class="w-48 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.personaRelacionada}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.personaRelacionada}}</div>
                   </td>
 
                   <!-- Dictaminador -->
                   <td class="w-40 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{asunto.dictaminador}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{asunto.dictaminador}}</div>
                   </td>
 
                   <!-- Fecha Recepción -->
                   <td class="w-32 px-6 py-5">
-                    <div class="font-medium text-slate-900 text-sm">{{formatDate(asunto.fechaRecepcion)}}</div>
+                    <div class="font-noto-sans text-slate-900 text-sm">{{formatDate(asunto.fechaRecepcion)}}</div>
                   </td>
 
                   <!-- Estado -->
                   <td class="w-32 px-6 py-5">
                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold"
-                          [ngClass]="asunto.estadoAtencion === 'Aprobado' ? 'bg-green-100 text-green-700' : 
-                                     asunto.estadoAtencion === 'Rechazado' ? 'bg-red-100 text-red-700' : 
+                          [ngClass]="asunto.estadoAtencion === 'Aprobado' ? 'bg-green-100 text-green-700' :
+                                     asunto.estadoAtencion === 'Rechazado' ? 'bg-red-100 text-red-700' :
                                      'bg-gray-100 text-gray-700'">
                       {{asunto.estadoAtencion}}
                     </span>
@@ -1131,7 +1131,7 @@
   <div class="bg-white rounded-lg shadow-xl w-[900px] max-w-[95vw] h-[85vh] flex flex-col transform transition-all overflow-hidden">
     <!-- Encabezado del modal -->
     <div class="bg-[#691C32] text-white py-4 px-6 flex items-center justify-between">
-      <h2 class="text-xl font-bold flex items-center">
+      <h2 class="text-xl font-noto-sans flex items-center">
         <svg class="w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
@@ -1158,7 +1158,7 @@
           <mat-icon class="text-red-500 text-6xl mb-4">error_outline</mat-icon>
           <h3 class="text-xl font-semibold text-gray-800 mb-2">Error al cargar el documento</h3>
           <p class="text-gray-600 text-center mb-4">No se pudo cargar el archivo PDF. Verifique que el documento existe.</p>
-          <button (click)="cerrarVisualizador()" 
+          <button (click)="cerrarVisualizador()"
                   class="bg-[#691C32] hover:bg-[#4F1524] text-white px-4 py-2 rounded-md transition-colors">
             Cerrar
           </button>
@@ -1166,7 +1166,7 @@
 
         <!-- PDF Viewer -->
         <div *ngIf="!pdfCargando && !pdfError && pdfUrl" class="h-full">
-          <iframe [src]="pdfUrl" 
+          <iframe [src]="pdfUrl"
                   class="w-full h-full border-0"
                   frameborder="0"
                   allowfullscreen>
@@ -1175,4 +1175,4 @@
       </div>
     </div>
   </div>
-</div> 
+</div>

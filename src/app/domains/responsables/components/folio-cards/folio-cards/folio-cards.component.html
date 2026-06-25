@@ -19,7 +19,7 @@
 
     <p
       *ngIf="folio.descripcion"
-      class="mt-2 line-clamp-2 text-sm font-medium text-gray-400">
+      class="mt-2 line-clamp-2 text-sm font-noto-sans text-gray-400">
       {{ folio.descripcion }}
     </p>
 
@@ -38,7 +38,9 @@
         Último folio
       </span>
 
-      <span class="mt-1 block text-sm font-black font-ubuntu-mono text-[#C1121F]">
+      <!-- <span class="mt-1 block text-sm font-black font-ubuntu-mono text-[#C1121F]"> -->
+              <span class="mt-1 block text-sm font-black font-noto-sans text-[#C1121F]">
+
         {{ folio.ultimo_folio || 'Sin folios' }}
       </span>
     </div>

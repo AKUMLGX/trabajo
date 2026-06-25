@@ -55,7 +55,7 @@
                       <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.autoridad_solicitante}}</td>
                       <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{fechaObj.fecha| date}}</td>
 
-                      <td><button class=" text-xs  font-medium text-center text-white bg-blue-400 rounded-lg
+                      <td><button class=" text-xs  font-noto-sans text-center text-white bg-blue-400 rounded-lg
                           hover:bg-blue-800 focus:ring-4 focus:outline-none
                           focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
                           (click)="seleccionarFila(dato)" (click)="mostrarComponente()" (click)="responder(i)">Responder
@@ -69,7 +69,7 @@
             </div>
           </div>
         </div> -->
-        <div class="flex justify-center items-center mb-8 text-xl mt-8 uppercase font-medium font-montserrat  ">Grafico
+        <div class="flex justify-center items-center mb-8 text-xl mt-8 uppercase font-noto-sans font-montserrat  ">Grafico
           de Calor </div>
         <section class="py-1 bg-blueGray-50">
           <div class="w-full lg:w-12/12 mx-auto mt-2">
@@ -119,7 +119,7 @@
 
                       <td [ngClass]="colorGrafica(fechaObj.fecha,0)"> </td>
                       <!-- <td><div [ngClass]="colorGrafica(fechaObj.fecha,0)"></div></td> -->
-                      <td><button class=" text-xs  font-medium text-center text-white bg-blue-400 rounded-lg
+                      <td><button class=" text-xs  font-noto-sans text-center text-white bg-blue-400 rounded-lg
                               hover:bg-blue-800 focus:ring-4 focus:outline-none
                               focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
                           (click)="seleccionarFila(dato)" (click)="mostrarComponente()" (click)="responder(i)">Responder
@@ -133,7 +133,7 @@
                 <div>
                   <nav class="relative z-0 inline-flex shadow-sm">
                     <button (click)="null"
-                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-noto-sans text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
                       aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
                       <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
@@ -142,7 +142,7 @@
                       </svg>
                     </button>
                     <button (click)="null"
-                      class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                      class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-noto-sans text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
                       aria-label="Next">
                       <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"

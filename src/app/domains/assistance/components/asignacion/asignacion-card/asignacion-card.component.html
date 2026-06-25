@@ -7,7 +7,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
     </button>
-    <h1 class="text-2xl font-bold text-center">Asuntos por Asignar {{yearActual}}</h1>
+    <h1 class="text-2xl font-sans text-center">Asuntos por Asignar {{yearActual}}</h1>
     Asignacion dddd
   </div>
 
@@ -30,7 +30,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           <!-- Filtro por folio -->
           <div>
-            <label for="filtroFolio" class="block text-sm font-medium text-gray-700 mb-1">Folio:</label>
+            <label for="filtroFolio" class="block text-sm font-sans text-gray-700 mb-1">Folio:</label>
             <input type="text" id="filtroFolio" [(ngModel)]="filtroFolio"
                    (keyup.enter)="aplicarFiltros()"
                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm"
@@ -39,7 +39,7 @@
 
           <!-- Filtro por autoridad -->
           <div>
-            <label for="filtroAutoridad" class="block text-sm font-medium text-gray-700 mb-1">Autoridad:</label>
+            <label for="filtroAutoridad" class="block text-sm font-sans text-gray-700 mb-1">Autoridad:</label>
             <select id="filtroAutoridad" [(ngModel)]="filtroAutoridad"
                     (change)="aplicarFiltros()"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
@@ -50,7 +50,7 @@
 
           <!-- Filtro por estado -->
           <div>
-            <label for="filtroEstado" class="block text-sm font-medium text-gray-700 mb-1">Estado:</label>
+            <label for="filtroEstado" class="block text-sm font-sans text-gray-700 mb-1">Estado:</label>
             <select id="filtroEstado" [(ngModel)]="filtroEstado"
                     (change)="aplicarFiltros()"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
@@ -63,7 +63,7 @@
 
           <!-- Filtro por tipo -->
           <div>
-            <label for="filtroTipo" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Asunto:</label>
+            <label for="filtroTipo" class="block text-sm font-sans text-gray-700 mb-1">Tipo de Asunto:</label>
             <select id="filtroTipo" [(ngModel)]="filtroTipo"
                     (change)="aplicarFiltros()"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
@@ -74,7 +74,7 @@
 
           <!-- Filtro por urgencia -->
           <div>
-            <label for="filtroUrgencia" class="block text-sm font-medium text-gray-700 mb-1">Urgencia:</label>
+            <label for="filtroUrgencia" class="block text-sm font-sans text-gray-700 mb-1">Urgencia:</label>
             <select id="filtroUrgencia" [(ngModel)]="filtroUrgencia"
                     (change)="aplicarFiltros()"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
@@ -85,14 +85,14 @@
 
           <!-- Filtro por fecha (desde) -->
           <div>
-            <label for="filtroFechaDesde" class="block text-sm font-medium text-gray-700 mb-1">Fecha desde:</label>
+            <label for="filtroFechaDesde" class="block text-sm font-sans text-gray-700 mb-1">Fecha desde:</label>
             <input type="date" id="filtroFechaDesde" [(ngModel)]="filtroFechaDesde"
                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
           </div>
 
           <!-- Filtro por fecha (hasta) -->
           <div>
-            <label for="filtroFechaHasta" class="block text-sm font-medium text-gray-700 mb-1">Fecha hasta:</label>
+            <label for="filtroFechaHasta" class="block text-sm font-sans text-gray-700 mb-1">Fecha hasta:</label>
             <input type="date" id="filtroFechaHasta" [(ngModel)]="filtroFechaHasta"
                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#691C32] focus:border-[#691C32] text-sm">
           </div>
@@ -101,7 +101,7 @@
         <!-- Botones de acción -->
         <div class="mt-4 flex justify-end space-x-2">
           <button (click)="limpiarFiltros()"
-                  class="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                  class="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-sans text-gray-700 hover:bg-gray-50 transition-colors">
             Limpiar
           </button>
           <button (click)="aplicarFiltros()"
@@ -114,7 +114,7 @@
 
     <!-- Contador de asuntos -->
     <div class="bg-white rounded-lg shadow-sm p-3 mb-4 text-center">
-      <span class="text-sm font-medium text-gray-700">Mostrando {{ rangoElementosMostrados }} asuntos por asignar</span>
+      <span class="text-sm font-sans text-gray-700">Mostrando {{ rangoElementosMostrados }} asuntos por asignar</span>
     </div>
   </div>
 
@@ -125,14 +125,14 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-[#691C32] text-white">
             <tr>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Folio</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Autoridad</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Tipo</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Urgencia</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha Límite</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Estado</th>
-              <th scope="col" class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Acciones</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-sans uppercase tracking-wider">Folio</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-sans uppercase tracking-wider">Autoridad</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-sans uppercase tracking-wider">Tipo</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-sans uppercase tracking-wider">Urgencia</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-sans uppercase tracking-wider">Fecha</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-sans uppercase tracking-wider">Fecha Límite</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-sans uppercase tracking-wider">Estado</th>
+              <th scope="col" class="px-4 py-3 text-center text-xs font-sans uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -214,7 +214,7 @@
             <button (click)="cambiarPagina('anterior')"
                     [disabled]="paginaActual === 1"
                     [class.opacity-50]="paginaActual === 1"
-                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-sans text-gray-500 hover:bg-gray-50">
               <span class="sr-only">Anterior</span>
               <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -225,7 +225,7 @@
             <ng-container *ngFor="let num of [].constructor(totalPaginas > 5 ? 5 : totalPaginas); let i = index">
               <button *ngIf="mostrarPagina(i + 1)"
                       (click)="cambiarPagina(getPaginaNumero(i))"
-                      [class]="paginaActual === getPaginaNumero(i) ? 'relative inline-flex items-center px-4 py-2 border border-[#691C32] bg-[#691C32] text-sm font-medium text-white' : 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50'">
+                      [class]="paginaActual === getPaginaNumero(i) ? 'relative inline-flex items-center px-4 py-2 border border-[#691C32] bg-[#691C32] text-sm font-sans text-white' : 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-sans text-gray-700 hover:bg-gray-50'">
                 {{ getPaginaNumero(i) }}
               </button>
             </ng-container>
@@ -234,7 +234,7 @@
             <button (click)="cambiarPagina('siguiente')"
                     [disabled]="paginaActual >= totalPaginas"
                     [class.opacity-50]="paginaActual >= totalPaginas"
-                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-sans text-gray-500 hover:bg-gray-50">
               <span class="sr-only">Siguiente</span>
               <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -273,7 +273,7 @@
             <span class="font-semibold">Urgencia:</span> {{ asuntoSeleccionado?.urgencia }}
           </p>
 
-          <label class="block text-sm font-medium text-gray-700 mb-2">Seleccionar Dictaminador</label>
+          <label class="block text-sm font-sans text-gray-700 mb-2">Seleccionar Dictaminador</label>
           <select [(ngModel)]="dictaminadorSeleccionado"
                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#691C32] focus:border-[#691C32]">
             <option value="">Seleccione un dictaminador</option>
@@ -315,7 +315,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <p class="text-lg font-medium mb-2">Visualizador de documentos</p>
+            <p class="text-lg font-sans mb-2">Visualizador de documentos</p>
             <p class="text-sm">Esta es una simulación de vista de PDF. En un entorno real, aquí se mostraría el documento del asunto.</p>
           </div>
         </div>

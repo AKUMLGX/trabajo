@@ -12,7 +12,9 @@
           Detalle de Atención
         </p>
 
-        <h2 class="my-1 font-ubuntu-mono font-black text-2xl text-white">
+        <!-- <h2 class="my-1 font-ubuntu-mono font-black text-2xl text-white"> -->
+                  <h2 class="my-1 font-noto-sans font-black text-2xl text-white">
+
           {{ data.expediente }}
         </h2>
 
@@ -56,7 +58,9 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div class="flex flex-col gap-1">
             <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Expediente</span>
-            <span class="break-words text-lg font-ubuntu-mono font-black text-[#34005b]">{{ detalle.expediente || 'N/A' }}</span>
+            <!-- <span class="break-words text-lg font-ubuntu-mono font-black text-[#34005b]">{{ detalle.expediente || 'N/A' }}</span> -->
+                         <span class="break-words text-lg font-noto-sans font-black text-[#34005b]">{{ detalle.expediente || 'N/A' }}</span>
+
           </div>
 
           <div class="flex flex-col gap-1">
@@ -150,7 +154,7 @@
               <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Tipos de Insumo</span>
               <div class="flex flex-wrap gap-2">
                 @for (insumo of detalle.tiposInsumo; track insumo) {
-                  <span class="rounded-full bg-indigo-100 px-3 py-1.5 text-xs font-medium text-indigo-700">
+                  <span class="rounded-full bg-indigo-100 px-3 py-1.5 text-xs font-noto-sans text-indigo-700">
                     {{ insumo }}
                   </span>
                 }
@@ -170,7 +174,7 @@
               <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Opciones Seleccionadas</span>
               <div class="flex flex-wrap gap-2">
                 @for (opcion of detalle.opcionSeleccionada; track opcion) {
-                  <span class="rounded-full bg-pink-100 px-3 py-1.5 text-xs font-medium text-pink-700">
+                  <span class="rounded-full bg-pink-100 px-3 py-1.5 text-xs font-noto-sans text-pink-700">
                     {{ opcion }}
                   </span>
                 }

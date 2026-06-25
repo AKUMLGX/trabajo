@@ -11,12 +11,12 @@
     <div class="relative z-[1] flex items-start justify-between gap-4">
 
       <div class="flex-1">
-        <h2 class="m-0 text-[26px] font-extrabold leading-tight text-white">
+        <h2 class="m-0 text-[26px] font-noto-sans leading-tight text-white">
           Detalle del Expediente
         </h2>
 
         @if (expediente?.expediente) {
-          <p class="mt-2 inline-block rounded-md bg-white/10 px-3 py-1 font-mono text-[13px] text-white/75">
+          <p class="mt-2 inline-block rounded-md bg-white/10 px-3 py-1 font-sans text-[13px] text-white/75">
             {{ expediente.expediente }}
           </p>
         }
@@ -43,7 +43,7 @@
       <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
         <mat-icon class="text-[#d6ae67]">description</mat-icon>
 
-        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
           Requerimiento
         </h3>
       </div>
@@ -52,61 +52,61 @@
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Tipo
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ formatearTipoMedioRecepcion(expediente.tipo_medio_recepcion) || 'N/A' }}
             </span>
           </div>
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Número
             </span>
 
-            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-mono text-sm font-semibold text-[#1a1a1a]">
+            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-sans text-sm font-semibold text-[#1a1a1a]">
               {{ expediente.oficio || 'N/A' }}
             </span>
           </div>
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Fecha
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ formatearFecha(expediente.fecha_requerimiento) }}
             </span>
           </div>
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Remitente(Área)
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ expediente.remitente_area || 'N/A' }}
             </span>
           </div>
 
           <div class="flex flex-col gap-1 md:col-span-2">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Asunto
             </span>
 
-            <span class="whitespace-pre-wrap text-sm font-medium text-[#1a1a1a]">
+            <span class="whitespace-pre-wrap text-sm font-noto-sans text-[#1a1a1a]">
               {{ expediente.referencia_asunto || 'N/A' }}
             </span>
           </div>
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Nivel de Prioridad
             </span>
 
-            <span class="text-sm font-bold text-[#34005b]">
+            <span class="text-sm font-noto-sans text-[#34005b]">
               {{ expediente.prioridad || 'N/A' }}
             </span>
           </div>
@@ -120,7 +120,7 @@
       <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
         <mat-icon class="text-[#d6ae67]">folder</mat-icon>
 
-        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
           Expediente
         </h3>
       </div>
@@ -129,21 +129,21 @@
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Número de Expediente
             </span>
 
-            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-mono text-sm font-bold text-[#34005b]">
+            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-sans text-sm font-noto-sans text-[#34005b]">
               {{ expediente.expediente || 'N/A' }}
             </span>
           </div>
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Fecha del Documento
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ formatearFecha(expediente.fecha_documento) }}
             </span>
           </div>
@@ -158,7 +158,7 @@
         <mat-icon class="text-emerald-500">input</mat-icon>
 
 
-        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
           Entrada
         </h3>
       </div>
@@ -167,21 +167,21 @@
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Número
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ expediente.numero_entrada_central || 'N/A' }}
             </span>
           </div>
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Fecha de Acuse
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ formatearFecha(expediente.fecha_recibido) }}
             </span>
           </div>
@@ -195,7 +195,7 @@
       <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
         <mat-icon class="text-tlalcalli-gold">assignment_ind</mat-icon>
 
-        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
           Asignación
         </h3>
       </div>
@@ -204,11 +204,11 @@
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Responsable
             </span>
 
-            <span class="text-sm font-bold text-[#34005b]">
+            <span class="text-sm font-noto-sans text-[#34005b]">
               {{ expediente.responsable || 'N/A' }}
             </span>
           </div>
@@ -222,7 +222,7 @@
       <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
         <mat-icon class="text-tlalcalli-gold">computer</mat-icon>
 
-        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
           Sistema y Seguimiento
         </h3>
       </div>
@@ -231,11 +231,11 @@
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Sistema / Aplicativo
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ expediente.sistema_aplicativo || 'N/A' }}
             </span>
           </div>
@@ -249,7 +249,7 @@
       <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-emerald-500/5 px-6 py-4">
         <mat-icon class="text-emerald-500">input</mat-icon>
 
-        <h3 class="text-sm font-extrabold uppercase tracking-wide text-[#34005b]">
+        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
           Estado
         </h3>
       </div>
@@ -258,11 +258,11 @@
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
           <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-bold uppercase tracking-wide text-[#3e0065]">
+            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
               Estatus
             </span>
 
-            <span class="text-sm font-medium text-[#1a1a1a]">
+            <span class="text-sm font-noto-sans text-[#1a1a1a]">
               {{ expediente.estatus || 'N/A' }}
             </span>
           </div>
@@ -276,7 +276,7 @@
   <div class="flex shrink-0 justify-end gap-4 border-t-2 border-[#34005b]/10 bg-white px-7 py-5">
 
     <button
-      class="rounded-xl bg-gradient-to-br from-[#34005b] to-[#3e0065] px-8 py-3.5 text-sm font-bold text-white shadow-[0_6px_20px_rgba(52,0,91,0.35)] transition duration-300 hover:-translate-y-1 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]"
+      class="rounded-xl bg-gradient-to-br from-[#34005b] to-[#3e0065] px-8 py-3.5 text-sm font-noto-sans text-white shadow-[0_6px_20px_rgba(52,0,91,0.35)] transition duration-300 hover:-translate-y-1 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]"
       (click)="cerrar()">
 
       Cerrar

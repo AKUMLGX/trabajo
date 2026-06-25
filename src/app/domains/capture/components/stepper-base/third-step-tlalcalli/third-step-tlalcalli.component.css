@@ -15,7 +15,7 @@
 .mat-mdc-form-field .mat-mdc-text-field-wrapper {
   background: linear-gradient(145deg, #ffffff, #f8fafc) !important;
   border-radius: 16px !important;
-  box-shadow: 
+  box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
@@ -42,7 +42,7 @@
 
 .mat-mdc-text-field-wrapper:hover {
   background: linear-gradient(145deg, #ffffff, #f1f5f9);
-  box-shadow: 
+  box-shadow:
     0 10px 25px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -66,7 +66,7 @@
 .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
   background: linear-gradient(145deg, #ffffff, #fefefe);
   border: 2px solid #691C32;
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(105, 28, 50, 0.1),
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -123,7 +123,7 @@
 
 .mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper {
   border: 2px solid #ef4444;
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(239, 68, 68, 0.1),
     0 10px 15px -3px rgba(239, 68, 68, 0.1);
   background: linear-gradient(145deg, #fef2f2, #ffffff);
@@ -380,7 +380,7 @@ textarea {
   line-height: 1.75rem;
 }
 
-.font-bold {
+.font-noto-sans {
   font-weight: 700;
 }
 

@@ -2,7 +2,7 @@
 
   <label
     [for]="fieldId"
-    class="mb-2.5 block text-[15px] font-bold tracking-wide text-gray-800 transition-colors duration-300"
+    class="mb-2.5 block text-[15px] font-noto-sans tracking-wide text-gray-800 transition-colors duration-300"
     [ngClass]="{
       'text-tlalcalli-primary': isFocused && !errorMessage,
       'text-red-500': errorMessage,
@@ -11,7 +11,7 @@
 
     {{ label }}
 
-    <span *ngIf="required" class="ml-1 font-bold text-red-500">*</span>
+    <span *ngIf="required" class="ml-1 font-noto-sans text-red-500">*</span>
   </label>
 
   <div class="relative w-full overflow-visible rounded-2xl">
@@ -23,8 +23,8 @@
       (change)="onSelectChange($event)"
       (focus)="onFocus()"
       (blur)="onBlur()"
-      class="w-full appearance-none rounded-2xl border-2 px-6 py-4 pr-[60px] text-base font-medium tracking-wide text-gray-800 outline-none transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:opacity-70
-      [&>option]:bg-white [&>option]:text-gray-800 [&>option]:font-medium
+      class="w-full appearance-none rounded-2xl border-2 px-6 py-4 pr-[60px] text-base font-noto-sans tracking-wide text-gray-800 outline-none transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:opacity-70
+      [&>option]:bg-white [&>option]:text-gray-800 [&>option]:font-noto-sans
       [&>option:disabled]:bg-gray-50 [&>option:disabled]:text-gray-400"
       [ngClass]="{
         'border-transparent bg-gradient-to-br from-white to-slate-50 shadow-[0_4px_6px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] hover:-translate-y-0.5 hover:border-tlalcalli-primary/20 hover:from-white hover:to-slate-100 hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)]': !isFocused && !errorMessage && !disabled,
@@ -77,7 +77,7 @@
 
   <div
     *ngIf="hint && !errorMessage"
-    class="mt-2 text-[13px] font-medium italic text-gray-500"
+    class="mt-2 text-[13px] font-noto-sans italic text-gray-500"
     [ngClass]="{
       'font-semibold text-tlalcalli-primary': isFocused
     }">
@@ -86,7 +86,7 @@
 
   <div
     *ngIf="errorMessage"
-    class="mt-2 text-[13px] font-bold text-red-500">
+    class="mt-2 text-[13px] font-noto-sans text-red-500">
     {{ errorMessage }}
   </div>
 

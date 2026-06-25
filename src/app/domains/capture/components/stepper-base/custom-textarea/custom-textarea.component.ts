@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
     <div class="custom-textarea" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage" [class.disabled]="disabled">
       <label class="custom-label" [for]="fieldId">
         {{ label }}
-        <span *ngIf="required" class="text-red-500 font-bold ml-1">*</span>
+        <span *ngIf="required" class="text-red-500 font-noto-sans ml-1">*</span>
       </label>
       <div class="textarea-container">
         <textarea

@@ -7,7 +7,7 @@
 }
 
 .label-field {
-  @apply block uppercase text-xs font-bold mb-2;
+  @apply block uppercase text-xs font-noto-sans mb-2;
   color: #34005b;
 }
 

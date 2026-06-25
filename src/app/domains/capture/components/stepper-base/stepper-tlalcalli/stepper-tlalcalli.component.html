@@ -10,20 +10,19 @@
           description
         </mat-icon>
       </div>
-
       <div>
-        <h1 class="m-0 text-[28px] font-extrabold leading-none text-white">
+        <h1 class="m-0 text-[28px] font-noto-sans leading-none text-white">
           Captura de expedientes
         </h1>
 
-        <p class="mt-2 text-sm font-medium text-white">
+        <p class="mt-2 text-sm font-noto-sans text-white">
           Sistema de Registro
         </p>
       </div>
     </div>
 
     <div class="hidden items-center gap-3 md:flex">
-      <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-extrabold text-white">
+      <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-noto-sans text-white">
         {{ pasoActual + 1 }} de 3 pasos
       </span>
 
@@ -39,7 +38,7 @@
 </header>
 
     <section class="mx-5 mt-6 overflow-hidden rounded-t-2xl bg-tlalcalli-primary px-8 py-8">
-    
+
     <div class="flex items-center">
 
     <button
@@ -53,7 +52,7 @@
         1
       </span>
 
-      <span class="block text-center text-xs font-extrabold">
+      <span class="block text-center text-xs font-noto-sans">
         Información básica
       </span>
     </button>
@@ -70,7 +69,7 @@
         2
       </span>
 
-      <span class="block text-center text-xs font-extrabold leading-4">
+      <span class="block text-center text-xs font-noto-sans leading-4">
         Seguimiento y Documentación
       </span>
     </button>
@@ -87,7 +86,7 @@
         3
       </span>
 
-      <span class="block text-center text-xs font-extrabold">
+      <span class="block text-center text-xs font-noto-sans">
         Resumen
       </span>
     </button>
@@ -99,12 +98,12 @@
       @switch (pasoActual) {
         @case (0) {
           <div>
-            <div class="sticky top-0 z-50 flex justify-end rounded-b-xl bg-tlalcalli-light-cream px-5 py-4 shadow-md">              
+            <div class="sticky top-0 z-50 flex justify-end rounded-b-xl bg-tlalcalli-light-cream px-5 py-4 shadow-md">
               <button
                 type="button"
                 (click)="onPaso1Siguiente()"
                 [disabled]="!puedeAvanzarPaso1"
-                class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-extrabold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+                class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-noto-sans text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
                 [ngClass]="puedeAvanzarPaso1
                 ? 'bg-tlalcalli-primary hover:bg-tlalcalli-deep'
                 : 'bg-tlalcalli-lavender'">
@@ -125,7 +124,7 @@
             <div class="sticky top-0 z-50 flex justify-between rounded-b-xl bg-tlalcalli-light-cream px-5 py-4 shadow-md">              <button
                 type="button"
                 (click)="onPaso2Anterior()"
-                class="rounded-lg border border-tlalcalli-primary px-6 py-2.5 text-sm font-extrabold text-tlalcalli-primary">
+                class="rounded-lg border border-tlalcalli-primary px-6 py-2.5 text-sm font-noto-sans text-tlalcalli-primary">
                 Anterior
               </button>
 
@@ -133,7 +132,7 @@
   type="button"
   (click)="onPaso2Siguiente()"
   [disabled]="!puedeAvanzarPaso2"
-  class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-extrabold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+  class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-noto-sans text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
   [ngClass]="puedeAvanzarPaso2
     ? 'bg-tlalcalli-primary hover:bg-tlalcalli-deep'
     : 'bg-tlalcalli-lavender'">
@@ -160,20 +159,20 @@
             <div class="rounded-xl border border-tlalcalli-success/30 bg-tlalcalli-success/10 p-6 text-center">
               <mat-icon class="!h-16 !w-16 !text-6xl !text-tlalcalli-success">check_circle</mat-icon>
 
-              <h3 class="mt-4 text-2xl font-extrabold text-tlalcalli-success-muted">
+              <h3 class="mt-4 text-2xl font-noto-sans text-tlalcalli-success-muted">
                 ¡Expediente creado exitosamente!
               </h3>
 
-              <p class="mt-2 text-sm text-tlalcalli-gray">
+              <p class="mt-2 text-sm font-noto-sans">
                 El expediente <strong>{{ datosPaso1?.expediente }}</strong> fue guardado correctamente.
               </p>
 
               <div class="mt-6 rounded-xl bg-white p-5 text-left">
-                <h4 class="mb-4 text-base font-extrabold text-tlalcalli-dark">
+                <h4 class="mb-4 text-base font-noto-sans text-tlalcalli-dark">
                   Resumen del expediente
                 </h4>
 
-                <div class="grid grid-cols-1 gap-3 text-sm text-tlalcalli-gray md:grid-cols-2">
+                <div class="grid grid-cols-1 gap-3 text-sm font-noto-sans md:grid-cols-2">
                   <p><strong>Expediente:</strong> {{ datosPaso1?.expediente }}</p>
                   <p><strong>Oficio:</strong> {{ datosPaso1?.oficio || 'N/A' }}</p>
                   <p><strong>Remitente:</strong> {{ datosPaso1?.remitente_area || 'N/A' }}</p>
@@ -190,21 +189,21 @@
                 <button
                   type="button"
                   (click)="regenerarPDF()"
-                  class="rounded-xl bg-tlalcalli-primary px-6 py-3 text-sm font-extrabold text-white">
+                  class="rounded-xl bg-tlalcalli-primary px-6 py-3 text-sm font-noto-sans text-white">
                   Descargar Acuse PDF
                 </button>
 
                 <button
                   type="button"
                   (click)="crearNuevoRegistro()"
-                  class="rounded-xl bg-tlalcalli-success px-6 py-3 text-sm font-extrabold text-white">
+                  class="rounded-xl bg-tlalcalli-success px-6 py-3 text-sm font-noto-sans text-white">
                   Reutilizar datos
                 </button>
 
                 <button
                   type="button"
                   (click)="reiniciarFormulario()"
-                  class="rounded-xl border border-tlalcalli-error px-6 py-3 text-sm font-extrabold text-tlalcalli-error">
+                  class="rounded-xl border border-tlalcalli-error px-6 py-3 text-sm font-noto-sans text-tlalcalli-error">
                   Empezar desde cero
                 </button>
               </div>

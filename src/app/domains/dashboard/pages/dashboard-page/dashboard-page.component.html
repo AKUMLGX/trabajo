@@ -6,10 +6,10 @@
         <div class="h-[54px] w-[54px] rounded-xl bg-tlalcalli-lavender"></div>
 
         <div>
-          <h1 class="m-0 text-[28px] font-extrabold leading-none text-white">
+          <h1 class="m-0 text-[28px] font-noto-sans leading-none text-white">
             Panel de estadísticas
           </h1>
-          <p class="mt-2 text-sm font-medium text-white">
+          <p class="mt-2 text-sm font-noto-sans text-white">
             Vista ejecutiva del estado de expedientes
           </p>
         </div>
@@ -18,7 +18,7 @@
       <div class="flex items-center gap-3">
         <div class="flex h-[48px] items-center gap-3 rounded-xl bg-tlalcalli-lavender px-4 text-white">
           <div class="h-7 w-7 bg-tlalcalli-light-base"></div>
-          <span class="text-sm font-bold">
+          <span class="text-sm font-noto-sans">
             Actualizado: {{ ultimaActualizacion | date:'HH:mm:ss' }}
           </span>
         </div>
@@ -37,19 +37,19 @@
   @if (cargando && !dashboard) {
     <div class="flex min-h-[420px] flex-col items-center justify-center text-tlalcalli-primary">
       <mat-spinner diameter="50"></mat-spinner>
-      <p class="mt-5 text-base font-bold">Cargando estadísticas...</p>
+      <p class="mt-5 text-base font-noto-sans">Cargando estadísticas...</p>
     </div>
   }
 
   @if (dashboard) {
     <main class="-mt-10">
 
-      <section class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">        
+      <section class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <div class="rounded-xl bg-white p-5">
           <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-teal-muted"></div>
           <span class="block text-4xl font-black leading-none text-black">{{ dashboard.generales.total_expedientes }}</span>
-          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Total expedientes</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-teal-muted px-3 py-1 text-[11px] font-extrabold text-white">Sistema</span>
+          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Total expedientes</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-teal-muted px-3 py-1 text-[11px] font-noto-sans text-white">Sistema</span>
         </div>
 
         <div class="rounded-xl bg-white p-5">
@@ -57,8 +57,8 @@
           <span class="block text-4xl font-black leading-none text-black">
             {{ dashboard.generales.asignados + dashboard.generales.pendientes }}
           </span>
-          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Por atender</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-purple-muted px-3 py-1 text-[11px] font-extrabold text-white">
+          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Por atender</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-purple-muted px-3 py-1 text-[11px] font-noto-sans text-white">
             {{ ((dashboard.generales.asignados + dashboard.generales.pendientes) / dashboard.generales.total_expedientes * 100).toFixed(0) }}%
           </span>
         </div>
@@ -68,8 +68,8 @@
           <span class="block text-4xl font-black leading-none text-black">
             {{ dashboard.generales.en_atencion + dashboard.generales.atendidos_total }}
           </span>
-          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Atendidos</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-orange-muted px-3 py-1 text-[11px] font-extrabold text-white">
+          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Atendidos</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-orange-muted px-3 py-1 text-[11px] font-noto-sans text-white">
             {{ ((dashboard.generales.en_atencion + dashboard.generales.atendidos_total) / dashboard.generales.total_expedientes * 100).toFixed(0) }}%
           </span>
         </div>
@@ -79,22 +79,22 @@
           <span class="block text-4xl font-black leading-none text-black">
             {{ dashboard.semaforo.urgente + dashboard.semaforo.vencido }}
           </span>
-          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Críticos</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-error px-3 py-1 text-[11px] font-extrabold text-white">Urgente</span>
+          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Críticos</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-error px-3 py-1 text-[11px] font-noto-sans text-white">Urgente</span>
         </div>
 
         <div class="rounded-xl bg-white p-5">
           <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-gold"></div>
           <span class="block text-4xl font-black leading-none text-black">{{ dashboard.generales.responsables_activos }}</span>
-          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Responsables</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-gold px-3 py-1 text-[11px] font-extrabold text-white">Activos</span>
+          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Responsables</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-gold px-3 py-1 text-[11px] font-noto-sans text-white">Activos</span>
         </div>
 
         <div class="rounded-xl bg-white p-5">
           <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-wine"></div>
           <span class="block text-4xl font-black leading-none text-black">{{ formatearHoras(dashboard.generales.promedio_horas_atencion) }}</span>
-          <span class="mt-2 block text-xs font-bold text-tlalcalli-gray">Tiempo promedio</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-wine px-3 py-1 text-[11px] font-extrabold text-white">En sistema</span>
+          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Tiempo promedio</span>
+          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-wine px-3 py-1 text-[11px] font-noto-sans text-white">En sistema</span>
         </div>
       </section>
 
@@ -103,7 +103,7 @@
         <div class="overflow-hidden rounded-xl bg-white">
           <div class="flex items-center gap-3 bg-tlalcalli-light-base px-5 py-4">
             <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-            <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+            <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
               Distribución por estatus
             </h3>
           </div>
@@ -130,11 +130,11 @@
           <div class="flex items-center justify-between gap-3 bg-tlalcalli-light-base px-5 py-4">
             <div class="flex items-center gap-3">
               <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-              <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+              <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
                 Semáforo de prioridades
               </h3>
             </div>
-            <span class="text-[11px] font-bold text-tlalcalli-gray">
+            <span class="text-[11px] font-noto-sans font-noto-sans">
               Basado en tiempo transcurrido
             </span>
           </div>
@@ -155,15 +155,15 @@
           </div>
 
           <div class="flex flex-wrap justify-center gap-5 px-6 pb-6">
-            <div class="flex items-center gap-2 text-xs font-bold text-tlalcalli-gray">
+            <div class="flex items-center gap-2 text-xs font-noto-sans font-noto-sans">
               <span class="h-3 w-3 rounded-full bg-tlalcalli-success"></span>
               En tiempo
             </div>
-            <div class="flex items-center gap-2 text-xs font-bold text-tlalcalli-gray">
+            <div class="flex items-center gap-2 text-xs font-noto-sans font-noto-sans">
               <span class="h-3 w-3 rounded-full bg-tlalcalli-warning"></span>
               Atención
             </div>
-            <div class="flex items-center gap-2 text-xs font-bold text-tlalcalli-gray">
+            <div class="flex items-center gap-2 text-xs font-noto-sans font-noto-sans">
               <span class="h-3 w-3 rounded-full bg-tlalcalli-error"></span>
               Urgente
             </div>
@@ -176,11 +176,11 @@
           <div class="flex items-center justify-between bg-tlalcalli-light-base px-5 py-4">
             <div class="flex items-center gap-3">
               <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-              <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+              <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
                 Tendencia semanal
               </h3>
             </div>
-            <span class="text-[11px] font-bold text-tlalcalli-gray">Últimas 4 semanas</span>
+            <span class="text-[11px] font-noto-sans font-noto-sans">Últimas 4 semanas</span>
           </div>
 
           <div class="flex min-h-[300px] items-center justify-center p-6">
@@ -200,7 +200,7 @@
                 [tooltip]="chartTendenciaOptions.tooltip!">
               </apx-chart>
             } @else {
-              <p class="text-sm font-bold text-tlalcalli-gray">Sin datos de tendencia disponibles</p>
+              <p class="text-sm font-noto-sans font-noto-sans">Sin datos de tendencia disponibles</p>
             }
           </div>
         </div>
@@ -209,11 +209,11 @@
           <div class="flex items-center justify-between bg-tlalcalli-light-base px-5 py-4">
             <div class="flex items-center gap-3">
               <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-              <h3 class="m-0 text-base font-extrabold text-tlalcalli-primary">
+              <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
                 Carga por responsable
               </h3>
             </div>
-            <span class="text-[11px] font-bold text-tlalcalli-gray">Top 6</span>
+            <span class="text-[11px] font-noto-sans font-noto-sans">Top 6</span>
           </div>
 
           <div class="flex min-h-[300px] items-center justify-center p-6">
@@ -233,7 +233,7 @@
                 [tooltip]="chartResponsablesOptions.tooltip!">
               </apx-chart>
             } @else {
-              <p class="text-sm font-bold text-tlalcalli-gray">Sin datos de responsables</p>
+              <p class="text-sm font-noto-sans font-noto-sans">Sin datos de responsables</p>
             }
           </div>
         </div>
@@ -245,10 +245,10 @@
   @if (error && !cargando) {
     <div class="flex min-h-[420px] flex-col items-center justify-center text-tlalcalli-primary">
       <mat-icon class="!h-[72px] !w-[72px] !text-[72px]">error_outline</mat-icon>
-      <p class="mt-5 text-base font-bold">{{ error }}</p>
+      <p class="mt-5 text-base font-noto-sans">{{ error }}</p>
       <button
         (click)="refrescar()"
-        class="mt-5 rounded-xl border border-tlalcalli-primary px-7 py-3 text-sm font-bold text-tlalcalli-primary">
+        class="mt-5 rounded-xl border border-tlalcalli-primary px-7 py-3 text-sm font-noto-sans text-tlalcalli-primary">
         Reintentar
       </button>
     </div>

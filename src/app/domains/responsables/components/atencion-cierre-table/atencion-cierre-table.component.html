@@ -5,10 +5,10 @@
       <div class="h-[54px] w-[54px] rounded-xl bg-tlalcalli-lavender"></div>
 
       <div>
-        <h1 class="m-0 text-[28px] font-extrabold leading-none text-white">
+        <h1 class="m-0 text-[28px] font-noto-sans leading-none text-white">
           Atención / Cierre
         </h1>
-        <p class="mt-2 text-sm font-medium text-white">
+        <p class="mt-2 text-sm font-noto-sans text-white">
           Gestión final de expedientes atendidos
         </p>
       </div>
@@ -18,7 +18,7 @@
   @if (cargando) {
     <div class="mt-5 flex min-h-[320px] flex-col items-center justify-center rounded-xl bg-white px-8 py-16 text-center">
       <div class="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-tlalcalli-light-base border-t-tlalcalli-primary"></div>
-      <p class="text-base font-bold text-tlalcalli-primary">
+      <p class="text-base font-noto-sans text-tlalcalli-primary">
         Cargando información de atenciones...
       </p>
     </div>
@@ -28,11 +28,11 @@
     <div class="mt-5 flex min-h-[360px] flex-col items-center justify-center rounded-xl bg-white px-8 py-16 text-center">
       <div class="mb-8 h-[70px] w-[70px] rounded-full bg-tlalcalli-light-lavender"></div>
 
-      <h2 class="m-0 text-lg font-extrabold text-tlalcalli-primary">
+      <h2 class="m-0 text-lg font-noto-sans text-tlalcalli-primary">
         No hay atenciones registradas
       </h2>
 
-      <p class="mt-4 max-w-[430px] text-sm leading-5 text-tlalcalli-gray">
+      <p class="mt-4 max-w-[430px] text-sm leading-5 font-noto-sans">
         Los expedientes aparecerán una vez que se registren atenciones
         en el Centro de Control
       </p>
@@ -45,7 +45,7 @@
       <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
         <span class="h-4 w-4 rounded-full bg-tlalcalli-success"></span>
         <div>
-          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">En tiempo</span>
+          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">En tiempo</span>
           <span class="block text-xl font-black text-black">{{ totalVerde }}</span>
         </div>
       </div>
@@ -53,7 +53,7 @@
       <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
         <span class="h-4 w-4 rounded-full bg-tlalcalli-warning"></span>
         <div>
-          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">Hasta 5 días hábiles</span>
+          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">Hasta 5 días hábiles</span>
           <span class="block text-xl font-black text-black">{{ totalNaranja }}</span>
         </div>
       </div>
@@ -61,7 +61,7 @@
       <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
         <span class="h-4 w-4 rounded-full bg-tlalcalli-error"></span>
         <div>
-          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">Después de 6 días hábiles</span>
+          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">Después de 6 días hábiles</span>
           <span class="block text-xl font-black text-black">{{ totalRojo }}</span>
         </div>
       </div>
@@ -69,7 +69,7 @@
       <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
         <span class="h-4 w-4 rounded-full bg-tlalcalli-primary"></span>
         <div>
-          <span class="block text-xs font-extrabold uppercase tracking-wide text-tlalcalli-gray">Total de atenciones</span>
+          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">Total de atenciones</span>
           <span class="block text-xl font-black text-black">{{ items.length }}</span>
         </div>
       </div>
@@ -78,11 +78,11 @@
     <section class="overflow-hidden rounded-xl bg-white">
       <div class="flex items-center justify-between border-b border-tlalcalli-light-base bg-tlalcalli-light-base px-5 py-4">
         <div class="flex flex-wrap items-center gap-3">
-          <h3 class="m-0 text-base font-extrabold text-black">
+          <h3 class="m-0 text-base font-noto-sans text-black">
             Expedientes con Atención Registrada
           </h3>
 
-          <span class="rounded-full bg-tlalcalli-lavender px-3 py-1 text-xs font-extrabold text-white">
+          <span class="rounded-full bg-tlalcalli-lavender px-3 py-1 text-xs font-noto-sans text-white">
             {{ items.length }} registros
           </span>
         </div>
@@ -103,14 +103,14 @@
 
     <thead>
       <tr class="bg-tlalcalli-light-lavender">
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Prioridad</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Expediente</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Tipo de Atención</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Especialistas</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Usuario Registro</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Fecha Apertura</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray">Días de atraso</th>
-        <th class="px-3 py-4 text-center text-[10px] font-black uppercase tracking-wide text-tlalcalli-gray whitespace-nowrap">Acciones</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Prioridad</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Expediente</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Tipo de Atención</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Especialistas</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Usuario Registro</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Fecha Apertura</th>
+        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Días de atraso</th>
+        <th class="px-3 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans whitespace-nowrap">Acciones</th>
       </tr>
     </thead>
 
@@ -120,7 +120,7 @@
 
           <td class="px-4 py-5 text-center align-middle">
             <div
-              class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold"
+              class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-noto-sans"
               [ngClass]="{
                 'border-tlalcalli-success bg-tlalcalli-success/10 text-tlalcalli-success-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-verde',
                 'border-tlalcalli-warning bg-tlalcalli-warning/10 text-tlalcalli-warning-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-naranja',
@@ -133,17 +133,19 @@
 
           <td class="px-2 py-5 text-center align-middle">
             <div class="flex flex-col items-center gap-1">
-              <span class="whitespace-normal break-words text-sm font-ubuntu-mono font-bold leading-5 text-center text-black">
+              <!-- <span class="whitespace-normal break-words text-sm font-ubuntu-mono font-noto-sans leading-5 text-center text-black"> -->
+                              <span class="whitespace-normal break-words text-sm font-noto-sans font-noto-sans leading-5 text-center text-black">
+
                 {{ item.expediente || '-' }}
               </span>
-              <span class="text-center text-xs text-tlalcalli-gray">
+              <span class="text-center text-xs font-noto-sans">
                 ID {{ item.idExpediente }}
               </span>
             </div>
           </td>
 
           <td class="px-2 py-5 align-middle">
-            <span class="block w-full whitespace-normal break-words rounded-full bg-tlalcalli-primary/10 px-3 py-2 text-center text-xs font-bold uppercase leading-4 text-tlalcalli-primary">
+            <span class="block w-full whitespace-normal break-words rounded-full bg-tlalcalli-primary/10 px-3 py-2 text-center text-xs font-noto-sans uppercase leading-4 text-tlalcalli-primary">
               {{ item.tipoAccion }}
             </span>
           </td>
@@ -158,26 +160,26 @@
                 }
               </div>
             } @else {
-              <span class="block rounded-lg bg-tlalcalli-light-lavender px-3 py-2 text-xs font-semibold text-tlalcalli-gray">
+              <span class="block rounded-lg bg-tlalcalli-light-lavender px-3 py-2 text-xs font-semibold font-noto-sans">
                 Sin especialistas
               </span>
             }
           </td>
 
           <td class="px-4 py-5 text-center align-middle">
-            <span class="block whitespace-normal break-words text-sm text-tlalcalli-gray text-center">
+            <span class="block whitespace-normal break-words text-sm font-noto-sans text-center">
               {{ item.usuarioRegistro || '—' }}
             </span>
           </td>
 
           <td class="px-2 py-5 text-center align-middle">
-            <span class="block text-sm text-tlalcalli-gray">
+            <span class="block text-sm font-noto-sans">
               {{ formatearFecha(item.ticketFechaApertura) }}
             </span>
           </td>
 
           <td class="px-2 py-5 text-center align-middle">
-            <span class="text-center inline-flex rounded-full bg-black/5 px-3 py-1.5 text-sm font-bold text-black">
+            <span class="text-center inline-flex rounded-full bg-black/5 px-3 py-1.5 text-sm font-noto-sans text-black">
               {{ item.diasAtraso }} días
             </span>
           </td>

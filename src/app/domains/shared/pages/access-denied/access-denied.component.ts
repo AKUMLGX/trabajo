@@ -11,47 +11,47 @@ import { Router } from '@angular/router';
   template: `
     <div class="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center p-4">
       <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-        
+
         <!-- Icono de acceso denegado -->
         <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <mat-icon class="text-red-600 text-4xl">block</mat-icon>
         </div>
-        
+
         <!-- Título y mensaje -->
-        <h1 class="text-2xl font-bold text-gray-900 mb-4">
+        <h1 class="text-2xl font-noto-sans text-gray-900 mb-4">
           Acceso Denegado
         </h1>
-        
+
         <p class="text-gray-600 mb-6">
-          No tienes permisos para acceder a esta sección del sistema. 
+          No tienes permisos para acceder a esta sección del sistema.
           Contacta a tu administrador si consideras que esto es un error.
         </p>
-        
+
         <!-- Botones de acción -->
         <div class="space-y-3">
-          <button 
-            mat-raised-button 
+          <button
+            mat-raised-button
             color="primary"
             (click)="volverInicio()"
             class="w-full">
             <mat-icon class="mr-2">home</mat-icon>
             Volver al Inicio
           </button>
-          
-          <button 
-            mat-stroked-button 
+
+          <button
+            mat-stroked-button
             (click)="irBandejasDisponibles()"
             class="w-full">
             <mat-icon class="mr-2">list</mat-icon>
             Ver Bandejas Disponibles
           </button>
         </div>
-        
+
         <!-- Información adicional -->
         <div class="mt-8 p-4 bg-gray-50 rounded-lg">
           <p class="text-sm text-gray-500">
             <mat-icon class="text-gray-400 text-sm mr-1">info</mat-icon>
-            Tu rol actual: <span class="font-medium">{{ obtenerRolUsuario() }}</span>
+            Tu rol actual: <span class="font-noto-sans">{{ obtenerRolUsuario() }}</span>
           </p>
         </div>
       </div>

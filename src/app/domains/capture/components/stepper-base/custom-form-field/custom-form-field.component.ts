@@ -14,7 +14,7 @@ import { KeyboardNavigationDirective } from '../../../directives/keyboard-naviga
   //   <div class="custom-form-field" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage">
   //     <label class="custom-label" [for]="fieldId">
   //       {{ label }}
-  //       <span *ngIf="required" class="text-red-500 font-bold ml-1">*</span>
+  //       <span *ngIf="required" class="text-red-500 font-noto-sans ml-1">*</span>
   //     </label>
   //     <div class="input-container">
   //       <input

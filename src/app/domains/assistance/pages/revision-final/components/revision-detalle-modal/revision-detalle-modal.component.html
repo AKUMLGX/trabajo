@@ -49,7 +49,7 @@
           'text-blue-600': asunto.estadoAtencion === 'Finalizado'
         }">
           <mat-icon class="text-sm inline-block align-middle mr-1">{{
-            asunto.estadoAtencion === 'Aprobado' ? 'check_circle' : 
+            asunto.estadoAtencion === 'Aprobado' ? 'check_circle' :
             asunto.estadoAtencion === 'Rechazado' ? 'cancel' : 'pending'
           }}</mat-icon>
           {{asunto.estadoAtencion}}
@@ -61,7 +61,7 @@
       </div>
       <div class="info-item">
         <label>Fecha Límite</label>
-        <span [ngClass]="{'text-red-600 font-medium': esFechaProxima(asunto.fechaLimite)}">
+        <span [ngClass]="{'text-red-600 font-noto-sans': esFechaProxima(asunto.fechaLimite)}">
           {{formatDate(asunto.fechaLimite)}}
           <mat-icon *ngIf="esFechaProxima(asunto.fechaLimite)" class="text-sm inline-block align-middle ml-1">warning</mat-icon>
         </span>
@@ -87,18 +87,18 @@
               <span>Detalles del Asunto</span>
             </div>
           </ng-template>
-          
+
           <div class="tab-content">
             <!-- Acciones rápidas dinámicas -->
             <div class="action-summary" *ngIf="archivos.length > 0">
-              <div *ngFor="let archivo of archivos.slice(0, 3)" 
-                   class="action-card" 
+              <div *ngFor="let archivo of archivos.slice(0, 3)"
+                   class="action-card"
                    (click)="seleccionarArchivo(archivo)">
                 <mat-icon>picture_as_pdf</mat-icon>
                 <span>{{archivo.nombre.length > 20 ? archivo.nombre.substring(0, 20) + '...' : archivo.nombre}}</span>
               </div>
             </div>
-            
+
             <div class="section">
               <h2>Información del Asunto</h2>
               <div class="info-grid">
@@ -138,7 +138,7 @@
 
               </div>
             </div>
-            
+
             <div class="section">
               <h2>Fechas del Proceso</h2>
               <div class="info-grid">
@@ -148,7 +148,7 @@
                 </div>
                 <div class="info-item">
                   <label>Fecha Límite:</label>
-                  <span [ngClass]="{'text-red-600 font-medium': esFechaProxima(asunto.fechaLimite)}">
+                  <span [ngClass]="{'text-red-600 font-noto-sans': esFechaProxima(asunto.fechaLimite)}">
                     {{formatDate(asunto.fechaLimite)}}
                   </span>
                 </div>
@@ -162,32 +162,32 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="section" *ngIf="archivos.length > 0">
               <h2>Resumen de Documentos</h2>
               <p class="text-content">
-                Se han adjuntado {{archivos.length}} documento(s) al expediente. 
+                Se han adjuntado {{archivos.length}} documento(s) al expediente.
                 Puedes visualizar cualquier documento seleccionándolo de la lista inferior.
               </p>
             </div>
-            
+
             <!-- Sección para documentación adjunta (cards) - IMPLEMENTACIÓN REAL -->
             <div class="section">
               <div class="flex items-center justify-between mb-4">
                 <h2>Documentación Adjunta</h2>
-                <button mat-icon-button (click)="recargarArchivos()" 
+                <button mat-icon-button (click)="recargarArchivos()"
                         class="text-blue-600 hover:bg-blue-50 rounded-full"
                         matTooltip="Recargar archivos">
                   <mat-icon>refresh</mat-icon>
                 </button>
               </div>
-              
+
               <!-- Estado de carga -->
               <div *ngIf="cargandoArchivos" class="flex items-center justify-center py-8">
                 <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                 <span class="ml-3 text-gray-600">Cargando documentos...</span>
               </div>
-              
+
               <!-- Mensaje de error -->
               <div *ngIf="errorArchivos && !cargandoArchivos" class="py-8 text-center">
                 <div class="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -199,11 +199,11 @@
                   </button>
                 </div>
               </div>
-              
+
               <!-- Lista de documentos reales desde el backend -->
               <div *ngIf="!cargandoArchivos && !errorArchivos && archivos.length > 0" class="documents-grid">
-                <div *ngFor="let archivo of archivos" 
-                     class="document-card" 
+                <div *ngFor="let archivo of archivos"
+                     class="document-card"
                      [class.selected]="archivoSeleccionado?.nombre === archivo.nombre"
                      (click)="seleccionarArchivo(archivo)">
                   <div class="document-icon">
@@ -217,7 +217,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- Estado vacío -->
               <div *ngIf="!cargandoArchivos && !errorArchivos && archivos.length === 0" class="text-center py-8">
                 <div class="bg-gray-50 border border-gray-200 rounded-lg p-8">
@@ -229,7 +229,7 @@
             </div>
           </div>
         </mat-tab>
-        
+
         <!-- Pestaña de Revisar y Decidir -->
         <mat-tab *ngIf="!soloLectura">
           <ng-template mat-tab-label>
@@ -238,19 +238,19 @@
               <span>Revisar y Decidir</span>
             </div>
           </ng-template>
-          
+
           <div class="tab-content">
             <div class="info-banner">
               <mat-icon>info</mat-icon>
               <p>Como revisor, debes evaluar la calidad y precisión del asunto para aprobar o rechazar la resolución.</p>
             </div>
-            
-            
-            
+
+
+
             <h2>Opciones de Revisión</h2>
-            
+
             <div class="decision-cards">
-              <div class="card approve" 
+              <div class="card approve"
                    [class.disabled]="resolviendo"
                    (click)="!resolviendo && aprobar()">
                 <div class="card-icon">
@@ -260,8 +260,8 @@
                 <h3>{{resolviendo ? 'Aprobando...' : 'Aprobar Asunto'}}</h3>
                 <p>El asunto es correcto y cumple con todos los requisitos</p>
               </div>
-              
-              <div class="card reject" 
+
+              <div class="card reject"
                    [class.disabled]="resolviendo"
                    (click)="!resolviendo && rechazarRapido()">
                 <div class="card-icon">
@@ -294,13 +294,13 @@
                 </div>
               </div>
             </div>
-            
-            
+
+
           </div>
         </mat-tab>
       </mat-tab-group>
     </div>
-    
+
     <!-- Panel derecho: visor de PDF maximizado -->
     <div class="right-panel">
       <div class="pdf-viewer">
@@ -319,7 +319,7 @@
             </button>
           </div>
         </div>
-        
+
         <!-- Contenido del visor de PDF maximizado -->
         <div class="pdf-viewer-content">
           <!-- Mensaje cuando no hay documento seleccionado -->
@@ -336,13 +336,13 @@
               <p class="text-sm text-gray-500 mt-2">No hay documentos disponibles</p>
             </div>
           </div>
-          
+
           <!-- Indicador de carga -->
           <div *ngIf="documentoSeleccionado && pdfCargando" class="loading-viewer">
             <div class="loading-spinner"></div>
             <p>Cargando documento: {{documentoSeleccionado}}</p>
           </div>
-          
+
           <!-- Error al cargar PDF -->
           <div *ngIf="documentoSeleccionado && pdfError && !pdfCargando" class="error-viewer">
             <mat-icon class="text-red-600 text-4xl mb-3">error_outline</mat-icon>
@@ -353,10 +353,10 @@
               Reintentar
             </button>
           </div>
-          
+
           <!-- Visualizador de PDF básico con iframe -->
           <div *ngIf="documentoSeleccionado && !pdfCargando && !pdfError && pdfUrl" class="pdf-document-container">
-            <iframe 
+            <iframe
               [src]="pdfUrl"
               class="w-full h-full border-0 rounded-lg"
               style="height: calc(100vh - 300px); min-height: 600px;">
@@ -366,4 +366,4 @@
       </div>
     </div>
   </div>
-</div> 
+</div>

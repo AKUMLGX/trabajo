@@ -15,11 +15,11 @@
 
     <div class="min-w-0 flex-1">
 
-      <h1 class="m-0 text-[2rem] font-extrabold leading-none text-white">
+      <h1 class="m-0 text-[2rem] font-noto-sans leading-none text-white">
         Información del Usuario
       </h1>
 
-      <p class="mt-3 text-sm font-medium text-white">
+      <p class="mt-3 text-sm font-noto-sans text-white">
         Perfil de sistema
       </p>
 
@@ -28,7 +28,7 @@
 
   <div class="mt-10 rounded-2xl border border-yohualli-border bg-[#AEACCB33] px-6 py-6 backdrop-blur-sm">
 
-    <h3 class="mb-8 flex items-center gap-4 text-[18px] font-extrabold text-white">
+    <h3 class="mb-8 flex items-center gap-4 text-[18px] font-noto-sans text-white">
 
       <div class="h-4 w-4 bg-white"></div>
 
@@ -39,7 +39,7 @@
     <div class="grid grid-cols-1 gap-x-14 gap-y-8 md:grid-cols-2">
 
       <div>
-        <p class="mb-2 text-sm font-medium text-white">
+        <p class="mb-2 text-sm font-noto-sans text-white">
           Nombre completo
         </p>
 
@@ -49,7 +49,7 @@
       </div>
 
       <div>
-        <p class="mb-2 text-sm font-medium text-white">
+        <p class="mb-2 text-sm font-noto-sans text-white">
           Correo electrónico
         </p>
 
@@ -59,7 +59,7 @@
       </div>
 
       <div>
-        <p class="mb-2 text-sm font-medium text-white">
+        <p class="mb-2 text-sm font-noto-sans text-white">
           Cargo
         </p>
 
@@ -69,7 +69,7 @@
       </div>
 
       <div>
-        <p class="mb-2 text-sm font-medium text-white">
+        <p class="mb-2 text-sm font-noto-sans text-white">
           Área
         </p>
 
@@ -83,7 +83,7 @@
     <div class="mt-10 flex justify-end">
 
       <button
-        class="rounded-xl bg-[#A12B53] px-8 py-3 text-sm font-extrabold text-white transition hover:bg-[#8C2447]">
+        class="rounded-xl bg-[#A12B53] px-8 py-3 text-sm font-noto-sans text-white transition hover:bg-[#8C2447]">
         Cerrar
       </button>
 
@@ -97,7 +97,7 @@
       <div class="relative z-[1] mt-5">
         <div class="mb-2 flex items-center justify-between">
           <div
-            class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-sm font-semibold"
+            class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 font-sans text-sm font-semibold"
             [ngClass]="usuario.sesionProximaExpirar
               ? 'border-orange-300/40 bg-orange-500/20 text-orange-50'
               : 'border-green-300/40 bg-green-500/20 text-green-50'">
@@ -122,7 +122,7 @@
 
       @if (!compact) {
         <div class="my-5">
-          <h4 class="mb-4 flex items-center gap-2 text-base font-extrabold uppercase tracking-wide text-[#691C32]">
+          <h4 class="mb-4 flex items-center gap-2 text-base font-noto-sans uppercase tracking-wide text-[#691C32]">
             <mat-icon class="rounded-md bg-[#691C32]/10 p-1 !text-[20px] !text-[#691C32]">
               info
             </mat-icon>
@@ -140,11 +140,11 @@
                   Administración SAT
                 </span>
 
-                <span class="text-lg font-bold text-[#691C32]">
+                <span class="text-lg font-noto-sans text-[#691C32]">
                   {{ usuario.administracion || 'No asignada' }}
                 </span>
 
-                <span class="text-sm font-medium leading-snug text-gray-500">
+                <span class="text-sm font-noto-sans leading-snug text-gray-500">
                   {{ usuario.descripcionAdministracion }}
                 </span>
               </div>
@@ -191,7 +191,7 @@
 
       <div class="my-5">
         @if (!compact) {
-          <h4 class="mb-4 flex items-center gap-2 text-base font-extrabold uppercase tracking-wide text-[#691C32]">
+          <h4 class="mb-4 flex items-center gap-2 text-base font-noto-sans uppercase tracking-wide text-[#691C32]">
             <mat-icon class="rounded-md bg-[#691C32]/10 p-1 !text-[20px] !text-[#691C32]">
               verified_user
             </mat-icon>
@@ -216,7 +216,7 @@
         <div>
           <mat-divider class="!my-6 !h-0.5 !border-none !bg-[#691C32]/20"></mat-divider>
 
-          <h4 class="mb-4 flex items-center gap-2 text-base font-extrabold uppercase tracking-wide text-[#691C32]">
+          <h4 class="mb-4 flex items-center gap-2 text-base font-noto-sans uppercase tracking-wide text-[#691C32]">
             <mat-icon class="rounded-md bg-[#691C32]/10 p-1 !text-[20px] !text-[#691C32]">
               access_time
             </mat-icon>
@@ -228,10 +228,10 @@
               <mat-icon class="!text-[20px] !text-[#691C32]">login</mat-icon>
 
               <div class="flex flex-col gap-0.5">
-                <span class="text-xs font-medium uppercase tracking-wide text-gray-500">
+                <span class="text-xs font-noto-sans uppercase tracking-wide text-gray-500">
                   Inicio de Sesión
                 </span>
-                <span class="font-mono text-sm font-medium text-gray-700">
+                <span class="font-sans text-sm font-noto-sans text-gray-700">
                   {{ formatearFecha(usuario.fechaEmision) }}
                 </span>
               </div>
@@ -241,10 +241,10 @@
               <mat-icon class="!text-[20px] !text-[#691C32]">logout</mat-icon>
 
               <div class="flex flex-col gap-0.5">
-                <span class="text-xs font-medium uppercase tracking-wide text-gray-500">
+                <span class="text-xs font-noto-sans uppercase tracking-wide text-gray-500">
                   Expiración
                 </span>
-                <span class="font-mono text-sm font-medium text-gray-700">
+                <span class="font-sans text-sm font-noto-sans text-gray-700">
                   {{ formatearFecha(usuario.fechaExpiracion) }}
                 </span>
               </div>
@@ -254,7 +254,7 @@
       }
 
       @if (usuario.sesionProximaExpirar) {
-        <div class="mt-4 flex items-center gap-2 rounded-lg border border-orange-300 bg-orange-50 p-3 text-sm font-medium text-orange-600">
+        <div class="mt-4 flex items-center gap-2 rounded-lg border border-orange-300 bg-orange-50 p-3 text-sm font-noto-sans text-orange-600">
           <mat-icon class="!text-[18px]">warning</mat-icon>
           <span>Tu sesión expirará pronto. Guarda tu trabajo.</span>
         </div>
@@ -275,7 +275,7 @@
         }
 
         @if (usuario.rolesArray.length > 2) {
-          <span class="rounded-full bg-gray-200 px-2 py-1 text-xs font-medium text-gray-600">
+          <span class="rounded-full bg-gray-200 px-2 py-1 text-xs font-noto-sans text-gray-600">
             +{{ usuario.rolesArray.length - 2 }} más
           </span>
         }
@@ -283,7 +283,7 @@
     </div>
   } -->
 
-<div class="relative w-[608px] overflow-hidden max-w-[95vw] rounded-[22px] bg-gradient-to-br from-[#6909A5] to-[#410567] px-8 py-8 shadow-2xl"  
+<div class="relative w-[608px] overflow-hidden max-w-[95vw] rounded-[22px] bg-gradient-to-br from-[#6909A5] to-[#410567] px-8 py-8 shadow-2xl"
   [ngClass]="compact ? 'max-w-[380px]' : 'max-w-[608px]'">
 
   <div class="mb-12 flex items-start gap-5">
@@ -294,25 +294,25 @@
     </div>
 
     <div>
-      <h1 class="m-0 text-[26px] font-extrabold leading-none text-white">
+      <h1 class="m-0 text-[26px] font-noto-sans leading-none text-white">
         Información del Usuario
       </h1>
 
-      <p class="mt-4 text-sm font-medium text-white">
+      <p class="mt-4 text-sm font-noto-sans text-white">
         Perfil de sistema
       </p>
     </div>
   </div>
 
   <div class="rounded-xl border border-[#756B92] bg-[#AEACCB33] px-6 py-7">
-    <h3 class="mb-8 flex items-center gap-4 text-[20px] font-extrabold text-white">
+    <h3 class="mb-8 flex items-center gap-4 text-[20px] font-noto-sans text-white">
       <span class="h-4 w-4 bg-white"></span>
       Datos personales
     </h3>
 
     <div class="grid grid-cols-1 gap-x-16 gap-y-7 md:grid-cols-2">
       <div>
-        <p class="mb-3 text-sm font-medium text-white">
+        <p class="mb-3 text-sm font-noto-sans text-white">
           Nombre completo
         </p>
         <p class="text-sm text-white">
@@ -321,7 +321,7 @@
       </div>
 
       <div>
-        <p class="mb-3 text-sm font-medium text-white">
+        <p class="mb-3 text-sm font-noto-sans text-white">
           Correo electrónico
         </p>
         <p class="text-sm text-white">
@@ -330,7 +330,7 @@
       </div>
 
       <div>
-        <p class="mb-3 text-sm font-medium text-white">
+        <p class="mb-3 text-sm font-noto-sans text-white">
           Cargo
         </p>
         <p class="text-sm text-white">
@@ -339,7 +339,7 @@
       </div>
 
       <div>
-        <p class="mb-3 text-sm font-medium text-white">
+        <p class="mb-3 text-sm font-noto-sans text-white">
           Área
         </p>
         <p class="text-sm leading-6 text-white">
@@ -353,7 +353,7 @@
     <button
     (click)="closeProfile.emit()"
     type="button"
-    class="rounded-xl bg-[#D6AE67] px-8 py-3 text-sm font-extrabold text-[#30264C] transition hover:brightness-105">
+    class="rounded-xl bg-[#D6AE67] px-8 py-3 text-sm font-noto-sans text-[#30264C] transition hover:brightness-105">
       Cerrar
     </button>
   </div>
