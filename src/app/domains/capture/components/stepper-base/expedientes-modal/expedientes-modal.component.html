@@ -17,7 +17,7 @@
       </div>
     </div>
     <button mat-icon-button class="close-button" (click)="cerrarSinSeleccionar()" aria-label="Cerrar">
-      <mat-icon>close</mat-icon>
+      <span class="icon-font">close</span>
     </button>
   </div>
 
@@ -107,7 +107,7 @@
                   class="btn-seleccionar"
                   (click)="seleccionarExpediente(expediente)"
                 >
-                  <mat-icon>check_circle</mat-icon>
+                  <span class="icon-font">check_circle</span>
                   Seleccionar
                 </button>
               </td>
@@ -121,7 +121,7 @@
   <!-- Footer del Modal -->
   <div class="modal-footer">
     <button mat-stroked-button (click)="cerrarSinSeleccionar()" class="btn-cancelar">
-      <mat-icon>close</mat-icon>
+      <span class="icon-font">close</span>
       {{ expedientes.length === 0 ? 'Continuar con nuevo expediente' : 'Crear nuevo expediente' }}
     </button>
     <p class="footer-hint">

@@ -4,7 +4,8 @@
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-2xl font-noto-sans text-gray-900">Atender Asunto {{asunto?.folio}}</h3>
       <button (click)="cerrarModal()" class="text-gray-500 hover:text-gray-700">
-        <mat-icon>close</mat-icon>
+        <!-- <mat-icon>close</mat-icon> -->
+         <span class="icon-font">close</span>
       </button>
     </div>
 
@@ -56,7 +57,8 @@
           <div class="text-center">
             <button type="button" (click)="fileInput.click()"
                     class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
-              <mat-icon class="mr-1">attach_file</mat-icon>
+              <!-- <mat-icon class="mr-1">attach_file</mat-icon> -->
+              <span class="icon-font">attach_file</span>
               Seleccionar Archivos
             </button>
           </div>
@@ -66,7 +68,8 @@
               <span class="text-sm">{{archivo.name}}</span>
               <button type="button" (click)="eliminarArchivo(archivo)"
                       class="text-red-600 hover:text-red-800">
-                <mat-icon>delete</mat-icon>
+                <!-- <mat-icon>delete</mat-icon> -->
+                <span class="icon-font">delete</span>
               </button>
             </div>
           </div>

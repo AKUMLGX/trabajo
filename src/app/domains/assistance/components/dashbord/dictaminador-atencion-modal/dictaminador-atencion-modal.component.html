@@ -2,22 +2,24 @@
 <div *ngIf="mostrarModal" class="modal-overlay">
   <!-- Backdrop -->
   <div class="modal-backdrop" (click)="onCerrarModal()"></div>
-  
+
   <!-- Modal Content -->
   <div class="modal-container">
-    
+
     <!-- Header del Modal -->
     <div class="modal-header">
       <div class="modal-header-content">
         <div class="modal-title-section">
-          <mat-icon class="modal-title-icon">assignment</mat-icon>
+          <!-- <mat-icon class="modal-title-icon">assignment</mat-icon> -->
+          <span class="icon-font">assignment</span>
           <div>
             <h2 class="modal-title">Finalizar Atención de Asunto</h2>
             <p class="modal-subtitle">{{asunto?.folio || 'N/A'}} - {{asunto?.personaRelacionada || 'N/A'}}</p>
           </div>
         </div>
         <button class="modal-close-btn" (click)="onCerrarModal()" type="button">
-          <mat-icon>close</mat-icon>
+          <!-- <mat-icon>close</mat-icon> -->
+          <span class="icon-font">close</span>
         </button>
       </div>
     </div>
@@ -62,29 +64,31 @@
       <!-- Datos de Respuesta a FGR -->
       <div *ngIf="pestanaActiva==='detalles'" class="respuesta-fgr-section">
         <h3 class="section-title">
-          <mat-icon class="section-icon">gavel</mat-icon>
+          <!-- <mat-icon class="section-icon">gavel</mat-icon> -->
+          <span class="icon-font">gravel</span>
+
           Respuesta a FGR
         </h3>
-        
+
         <div *ngIf="(datosRespuestaFGR || asunto?.datosRespuestaFGR) as datos" class="respuesta-content">
-          
+
           <!-- Grid de datos principales -->
           <div class="respuesta-grid">
             <div class="respuesta-item">
               <span class="respuesta-label">Folio Interno:</span>
               <span class="respuesta-value">{{datos.folioInterno}}</span>
             </div>
-            
+
             <div class="respuesta-item">
               <span class="respuesta-label">Número de Oficio:</span>
               <span class="respuesta-value">{{datos.numeroOficio}}</span>
             </div>
-            
+
             <div class="respuesta-item">
               <span class="respuesta-label">Fecha Acuse Entrega FGR:</span>
               <span class="respuesta-value">{{formatearFecha(datos.fechaAcuseEntrega)}}</span>
             </div>
-            
+
             <div class="respuesta-item">
               <span class="respuesta-label">Oficio FGR que se Atiende:</span>
               <span class="respuesta-value">{{datos.numeroOficioFGRAtiende}}</span>
@@ -95,7 +99,8 @@
           <div class="estado-atencion">
             <span class="respuesta-label">Estado de Atención:</span>
             <div class="estado-badge">
-              <mat-icon [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</mat-icon>
+              <!-- <mat-icon [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</mat-icon> -->
+              <span class="icon-font" [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</span>
               <span [class]="obtenerClaseEstadoAtencion()">
                 {{(datos.estadoAtencion || 'total') === 'total' ? 'Atención Total' : 'Atención Parcial'}}
               </span>
@@ -110,7 +115,9 @@
 
         <!-- Mensaje cuando no hay datos -->
         <div *ngIf="!asunto?.datosRespuestaFGR && !obtenerDatosEjemplo()" class="no-datos-message">
-          <mat-icon class="warning-icon">info</mat-icon>
+          <!-- <mat-icon class="warning-icon">info</mat-icon> -->
+          <span class="icon-font warning-icon">info</span>
+
           <p>No se han registrado datos de respuesta a FGR para este asunto.</p>
           <p class="warning-text">Complete el expediente antes de finalizar la atención.</p>
         </div>
@@ -119,7 +126,8 @@
       <!-- Documentos -->
       <div *ngIf="pestanaActiva==='documentos'" class="respuesta-fgr-section">
         <h3 class="section-title">
-          <mat-icon class="section-icon">folder</mat-icon>
+          <!-- <mat-icon class="section-icon">folder</mat-icon> -->
+          <span class="icon-font">folder</span>
           Documentos
         </h3>
 
@@ -127,7 +135,8 @@
         <div class="flex items-center justify-between mb-3">
           <span class="text-sm text-gray-600">{{archivos.length || 0}} documento(s)</span>
           <button class="btn-visualizar-pdf" type="button" (click)="recargarArchivos()">
-            <mat-icon>refresh</mat-icon>
+            <!-- <mat-icon>refresh</mat-icon> -->
+          <span class="icon-font">refresh</span>
             <span>Recargar</span>
           </button>
         </div>
@@ -139,7 +148,8 @@
         <div class="grid grid-cols-3 gap-4" *ngIf="!cargandoArchivos && archivos && archivos.length>0">
           <div class="col-span-1 border rounded p-2 max-h-64 overflow-auto">
             <div *ngFor="let a of archivos; let i=index" (click)="seleccionarArchivo(a)" class="px-2 py-1 rounded cursor-pointer hover:bg-gray-50" [class.bg-red-50]="pdfActual===a">
-              <mat-icon class="mr-1 text-red-600">picture_as_pdf</mat-icon>
+              <!-- <mat-icon class="mr-1 text-red-600">picture_as_pdf</mat-icon> -->
+              <span class="icon-font text-red-600">picture_as_pdf</span>
               <span class="text-sm">{{a.nombre}}</span>
             </div>
           </div>
@@ -157,20 +167,26 @@
     <!-- Footer del Modal -->
     <div class="modal-footer">
       <div class="footer-info">
-        <mat-icon class="info-icon">info</mat-icon>
+        <!-- <mat-icon class="info-icon">info</mat-icon> -->
+          <span class="icon-font info-icon">info</span>
         <span>Al finalizar, el asunto será enviado a revisión y no podrá modificarse.</span>
       </div>
       <div class="footer-actions">
         <button class="btn-cancelar" (click)="onCerrarModal()" type="button">
-          <mat-icon>close</mat-icon>
+          <!-- <mat-icon>close</mat-icon> -->
+          <span class="icon-font">close</span>
           <span>Cancelar</span>
         </button>
-        <button class="btn-finalizar" 
-                (click)="onFinalizarYEnviarRevision()" 
+        <button class="btn-finalizar"
+                (click)="onFinalizarYEnviarRevision()"
                 [disabled]="procesandoFinalizacion"
                 type="button">
-          <mat-icon *ngIf="!procesandoFinalizacion">check_circle</mat-icon>
-          <mat-icon *ngIf="procesandoFinalizacion" class="spinner">refresh</mat-icon>
+          <!-- <mat-icon *ngIf="!procesandoFinalizacion">check_circle</mat-icon> -->
+          <span class="icon-font" *ngIf="!procesandoFinalizacion">check_circle</span>
+
+          <!-- <mat-icon *ngIf="procesandoFinalizacion" class="spinner">refresh</mat-icon> -->
+          <span class="icon-font spinner" *ngIf="procesandoFinalizacion">refresh</span>
+
           <span>{{procesandoFinalizacion ? 'Enviando...' : 'Finalizar y enviar a revisión'}}</span>
         </button>
       </div>
@@ -184,4 +200,4 @@
 <div *ngIf="mostrarVisorPDF" class="pdf-modal-overlay">
   ...Modal content removido para evitar error 404...
 </div>
---> 
+-->

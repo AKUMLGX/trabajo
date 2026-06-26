@@ -9,7 +9,7 @@
       class="flex items-center justify-center overflow-hidden"
       [ngClass]="collapsed ? 'h-14 w-14 rounded-xl p-1' : 'h-[130px] w-[130px] rounded-2xl p-2'">
       <img
-        src="{{environment.base}}/assets/images/TLALCALLI2.svg"
+        src="/assets/images/TLALCALLI2.svg"
         alt="Tlálcalli Logo"
         class="h-full w-full object-contain" />
     </div>
@@ -63,11 +63,12 @@
           : 'bg-white/10 text-white'
       ]">
 
-      <mat-icon
+      <!-- <mat-icon
         class="!m-0 !leading-none"
         [ngClass]="collapsed ? '!h-6 !w-6 !text-[24px]' : '!h-5 !w-5 !text-[20px]'">
         {{ item.icon }}
-      </mat-icon>
+      </mat-icon> -->
+      <span class="icon-font">{{ item.icon }}</span>
     </div>
 
     @if (!collapsed) {
@@ -104,11 +105,12 @@
           class="flex shrink-0 items-center justify-center rounded-lg bg-red-500/20 text-red-200"
           [ngClass]="collapsed ? 'h-12 w-12' : 'h-9 w-9'">
 
-          <mat-icon
+          <!-- <mat-icon
             class="!m-0 !leading-none"
             [ngClass]="collapsed ? '!h-6 !w-6 !text-[24px]' : '!h-5 !w-5 !text-[20px]'">
             power_settings_new
-          </mat-icon>
+          </mat-icon> -->
+          <span class="icon-font">power_settings_new</span>
         </div>
 
         @if (!collapsed) {

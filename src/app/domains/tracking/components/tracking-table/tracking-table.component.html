@@ -73,7 +73,7 @@
               class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#34005b]/10 text-[#34005b] transition-all duration-200 hover:bg-[#34005b] hover:text-white hover:shadow-md"
               (click)="verDetalleExpediente(expediente)"
               title="Ver detalle completo">
-              <mat-icon class="!h-5 !w-5 !text-base">visibility</mat-icon>
+              <span class="icon-font !h-5 !w-5 !text-base">visibility</span>
             </button>
           </div>
         </td>
@@ -182,33 +182,33 @@
                       {
                       <button mat-button (click)="openPdfViewer(document.folio_interno, document.documento_escaneado)"
                         class="text-wine leading-5">
-                        <mat-icon>remove_red_eye</mat-icon>
+                        <span class="icon-font">remove_red_eye</span>
                       </button>
                       } @else if (getExtension(document.documento_escaneado) ===
                       'msg') {
                       <button mat-button (click)="openMsgReader(document.folio_interno, document.documento_escaneado)"
                         class="text-wine leading-5">
-                        <mat-icon>remove_red_eye</mat-icon>
+                        <span class="icon-font">remove_red_eye</span>
                       </button>
                       } @if(getExtension(document.documento_escaneado) ===
                       'pdf') {
                       <button mat-button (click)="printPdf(document.folio_interno, document.documento_escaneado)"
                         class="text-wine leading-5">
-                        <mat-icon style="margin-left: 5px">print</mat-icon>
+                        <span class="icon-font" style="margin-left: 5px">print</span>
                       </button>
                       }
                       }
                       @if (getRol() === "SIAT_AKAMBA_002_SUPERVISA"){
                       <button mat-button class="text-wine leading-5" (click)="updateTable(document)"
                         (click)="seleccionarFila(document)">
-                        <mat-icon style="margin-left: 5px;">edit_note</mat-icon>
+                        <span class="icon-font" style="margin-left: 5px;">edit_note</span>
                       </button>
                       }
 
                       @if (getRol() === "SIAT_AKAMBA_001_CAPTURA") {
                       <button mat-button class="text-wine leading-5" (click)="updateTable(document)"
                         (click)="seleccionarFila(document)">
-                        <mat-icon>info</mat-icon>
+                        <span class="icon-font">info</span>
                       </button>
                       }
                     </div>

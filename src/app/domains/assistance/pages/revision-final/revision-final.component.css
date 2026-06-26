@@ -5,7 +5,7 @@
 }
 
 /* Estilos para los paneles de estadísticas */
-.mat-icon {
+.mat-icon .icon-font {
   height: 24px;
   width: 24px;
   font-size: 24px;
@@ -79,7 +79,7 @@ app-asuntos-pendientes-table, app-asuntos-revisados-table {
 
 .priority-low {
   background-color: #10b981;
-} 
+}
 
 /* 🆕 ESTILOS PARA TOOLTIP GRANDE */
 ::ng-deep .tooltip-large {
@@ -100,12 +100,12 @@ app-asuntos-pendientes-table, app-asuntos-revisados-table {
 }
 
 @keyframes fadeIn {
-  from { 
-    opacity: 0; 
+  from {
+    opacity: 0;
     transform: scale(0.95);
   }
-  to { 
-    opacity: 1; 
+  to {
+    opacity: 1;
     transform: scale(1);
   }
 }
@@ -132,4 +132,4 @@ app-asuntos-pendientes-table, app-asuntos-revisados-table {
 
 .pdf-close-button:hover {
   transform: scale(1.1);
-} 
+}

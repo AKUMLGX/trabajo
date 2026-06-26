@@ -19,7 +19,7 @@
       <div
         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
         [ngClass]="[flujo.bg, flujo.color]">
-        <mat-icon>{{ flujo.icon }}</mat-icon>
+        <span class="icon-font">{{ flujo.icon }}</span>
       </div>
 
       <div class="min-w-0 flex-1">
@@ -27,11 +27,11 @@
         <span class="mt-2 block text-sm font-noto-sans text-gray-400">{{ flujo.description }}</span>
       </div>
 
-      <mat-icon
+      <span
         *ngIf="formulario.flujoAsignadoSeleccionado === flujo.value"
-        class="absolute right-4 top-4 text-[#4b0075]">
+        class="icon-font absolute right-4 top-4 text-[#4b0075]">
         check_circle
-      </mat-icon>
+      </span>
     </button>
   </div>
 </section>
@@ -54,13 +54,13 @@
             <div
               class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
               [ngClass]="formulario.tipoInsumo ? 'bg-tlalcalli-primary' : 'bg-[#7a006e]'">
-              <mat-icon *ngIf="formulario.tipoInsumo">check</mat-icon>
+              <span class="icon-font" *ngIf="formulario.tipoInsumo">check</span>
               <span *ngIf="!formulario.tipoInsumo" class="font-black">1</span>
             </div>
 
             <div>
               <h4 class="m-0 flex items-center gap-2 text-lg font-black text-tlalcalli-primary">
-                <mat-icon class="text-tlalcalli-primary">inventory_2</mat-icon>
+                <span class="icon-font text-tlalcalli-primary">inventory_2</span>
                 Selecciona el Insumo
               </h4>
               <p class="m-0 mt-2 text-sm font-noto-sans text-gray-400">
@@ -93,8 +93,8 @@
                 <span *ngIf="formulario.tipoInsumo === insumo.codigo" class="h-3 w-3 rounded-full bg-tlalcalli-primary"></span>
               </span>
 
-                <mat-icon class="!text-[22px] !h-[22px] !w-[22px] shrink-0">{{ getInsumoIcon(insumo.codigo) }}</mat-icon>
-                  <span class="text-base font-noto-sans">{{ insumo.descripcion }}</span>
+                <span class="icon-font !text-[22px] !h-[22px] !w-[22px] shrink-0">{{ getInsumoIcon(insumo.codigo) }}</span>
+                  <span class="text-base font-noto-sans font-bold">{{ insumo.descripcion }}</span>
             </button>
           </div>
         </div>
@@ -106,13 +106,13 @@
             <div
               class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
               [ngClass]="formulario.tiposResultado.length > 0 ? 'bg-tlalcalli-primary' : 'bg-[#7a006e]'">
-              <mat-icon *ngIf="formulario.tiposResultado.length > 0">check</mat-icon>
+              <span class="icon-font" *ngIf="formulario.tiposResultado.length > 0">check</span>
               <span *ngIf="formulario.tiposResultado.length === 0" class="font-black">2</span>
             </div>
 
             <div>
               <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
-                <mat-icon class="text-[#4b0075]">fact_check</mat-icon>
+                <span class="icon-font text-[#4b0075]">fact_check</span>
                 Selecciona el Resultado
               </h4>
               <p class="m-0 mt-2 text-sm font-noto-sans text-gray-400">
@@ -139,14 +139,14 @@
                 ? 'border-[#4b0075] bg-[#4b0075]/[0.03] text-[#4b0075]'
                 : 'border-gray-200 text-gray-500'">
 
-              <mat-icon class="mb-3 !h-8 !w-8 !text-[32px]">description</mat-icon>
-              <span class="text-sm font-noto-sans">{{ resultado.descripcion }}</span>
+              <span class="icon-font mb-3 !h-8 !w-8 !text-[32px]">description</span>
+              <span class="text-sm font-noto-sans font-bold">{{ resultado.descripcion }}</span>
 
-              <mat-icon
+              <span
                 *ngIf="seleccionado(formulario.tiposResultado, resultado.codigo)"
-                class="absolute right-3 top-3 text-tlalcalli-primary">
+                class="icon-font absolute right-3 top-3 text-tlalcalli-primary">
                 check_circle
-              </mat-icon>
+              </span>
             </button>
           </div>
         </div>
@@ -159,13 +159,13 @@
           <div
             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
             [ngClass]="formulario.opcionesSeleccionadas.length > 0 ? 'bg-emerald-500' : 'bg-[#7a006e]'">
-            <mat-icon *ngIf="formulario.opcionesSeleccionadas.length > 0">check</mat-icon>
+            <span class="icon-font" *ngIf="formulario.opcionesSeleccionadas.length > 0">check</span>
             <span *ngIf="formulario.opcionesSeleccionadas.length === 0" class="font-black">1</span>
           </div>
 
           <div>
             <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
-              <mat-icon class="text-[#4b0075]">checklist</mat-icon>
+              <span class="icon-font text-[#4b0075]">checklist</span>
               Selecciona opción(es)
             </h4>
             <p class="m-0 mt-2 text-sm font-noto-sans text-gray-400">
@@ -192,14 +192,14 @@
               ? 'border-[#4b0075] bg-[#4b0075]/[0.03] text-[#4b0075]'
               : 'border-gray-200 text-gray-500'">
 
-            <mat-icon class="!text-[28px]">{{ opcion.icon }}</mat-icon>
-            <span class="text-base font-noto-sans">{{ opcion.descripcion }}</span>
+            <span class="icon-font !text-[28px]">{{ opcion.icon }}</span>
+            <span class="text-base font-bold font-noto-sans">{{ opcion.descripcion }}</span>
 
-            <mat-icon
+            <span
               *ngIf="seleccionado(formulario.opcionesSeleccionadas, opcion.codigo)"
-              class="absolute right-4 top-4 text-emerald-500">
+              class="icon-font absolute right-4 top-4 text-emerald-500">
               check_circle
-            </mat-icon>
+            </span>
           </button>
         </div>
       </div>
@@ -220,13 +220,13 @@
           <div
             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
             [ngClass]="formulario.fechaEntrega ? 'bg-emerald-500' : 'bg-[#7a006e]'">
-            <mat-icon *ngIf="formulario.fechaEntrega">check</mat-icon>
+            <span class="icon-font" *ngIf="formulario.fechaEntrega">check</span>
             <span *ngIf="!formulario.fechaEntrega" class="font-black">4</span>
           </div>
 
           <div>
             <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
-              <mat-icon class="text-[#4b0075]">event</mat-icon>
+              <span class="icon-font text-[#4b0075]">event</span>
               Fecha de Entrega
             </h4>
             <p class="m-0 mt-2 text-sm font-noto-sans text-gray-400">
@@ -246,7 +246,7 @@
         <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div class="flex items-center gap-5">
             <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-500 text-white shadow-lg shadow-sky-500/30">
-              <mat-icon class="!h-9 !w-9 !text-[36px]">schedule</mat-icon>
+              <span class="icon-font !h-9 !w-9 !text-[36px]">schedule</span>
             </div>
 
             <div>
@@ -266,7 +266,7 @@
               type="button"
               (click)="setFechaRapida('manana')"
               class="rounded-xl bg-white px-5 py-3 text-center text-sm font-black text-sky-600 shadow-sm transition hover:bg-sky-100">
-              <mat-icon class="mx-auto block">event</mat-icon>
+              <span class="icon-font mx-auto block">event</span>
               Mañana
             </button>
 
@@ -274,7 +274,7 @@
               type="button"
               (click)="setFechaRapida('tresDias')"
               class="rounded-xl bg-white px-5 py-3 text-center text-sm font-black text-sky-600 shadow-sm transition hover:bg-sky-100">
-              <mat-icon class="mx-auto block">event</mat-icon>
+              <span class="icon-font mx-auto block">event</span>
               3 días
             </button>
 
@@ -282,7 +282,7 @@
               type="button"
               (click)="setFechaRapida('semana')"
               class="rounded-xl bg-white px-5 py-3 text-center text-sm font-black text-sky-600 shadow-sm transition hover:bg-sky-100">
-              <mat-icon class="mx-auto block">event</mat-icon>
+              <span class="icon-font mx-auto block">event</span>
               1 semana
             </button>
           </div>
@@ -293,7 +293,7 @@
     <div *ngIf="flujoCompleto" class="rounded-2xl border border-emerald-100 bg-emerald-50 px-6 py-5">
       <div class="flex items-center gap-4">
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-white">
-          <mat-icon>verified</mat-icon>
+          <span class="icon-font">verified</span>
         </div>
 
         <div>

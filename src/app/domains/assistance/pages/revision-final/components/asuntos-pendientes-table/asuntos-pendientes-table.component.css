@@ -16,7 +16,7 @@
 }
 
 /* Ajustes para los botones de acción */
-.action-button .mat-icon {
+.action-button .mat-icon .icon-font {
   font-size: 20px;
   height: 20px;
   width: 20px;
@@ -78,4 +78,4 @@
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-} 
+}

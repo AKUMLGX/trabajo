@@ -3,17 +3,17 @@
   <div class="modal-header" [class]="'header-' + tipo">
     <div class="header-content">
       <div class="header-icon">
-        <mat-icon *ngIf="tipo === 'success'" class="icon-success">check_circle</mat-icon>
-        <mat-icon *ngIf="tipo === 'info'" class="icon-info">info</mat-icon>
-        <mat-icon *ngIf="tipo === 'warning'" class="icon-warning">warning</mat-icon>
-        <mat-icon *ngIf="tipo === 'error'" class="icon-error">error</mat-icon>
+        <span *ngIf="tipo === 'success'" class="icon-font icon-success">check_circle</span>
+        <span *ngIf="tipo === 'info'" class="icon-font icon-info">info</span>
+        <span *ngIf="tipo === 'warning'" class="icon-font icon-warning">warning</span>
+        <span *ngIf="tipo === 'error'" class="icon-font icon-error">error</span>
       </div>
       <div class="header-text">
         <h2 class="modal-title">{{ titulo }}</h2>
       </div>
     </div>
     <button mat-icon-button class="close-button" (click)="aceptar()" aria-label="Cerrar">
-      <mat-icon>close</mat-icon>
+      <span class="icon-font">close</span>
     </button>
   </div>
 
@@ -27,12 +27,12 @@
 
   <!-- Footer del Modal -->
   <div class="modal-footer">
-    <button 
-      mat-raised-button 
+    <button
+      mat-raised-button
       [class]="'btn-' + tipo"
       (click)="aceptar()"
       class="btn-aceptar">
-      <mat-icon>check</mat-icon>
+      <span class="icon-font">check</span>
       {{ botonTexto }}
     </button>
   </div>

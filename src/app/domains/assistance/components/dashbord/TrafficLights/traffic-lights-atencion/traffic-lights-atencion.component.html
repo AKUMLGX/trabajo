@@ -5,7 +5,9 @@
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
         <div class="flex justify-end">
           <button [routerLink]="['/layout/assistance']"
-            class=" hover:bg-gray-600 rounded-lg active:bg-gray-400 focus:outline-none focus:ring "><mat-icon>close</mat-icon>
+            class=" hover:bg-gray-600 rounded-lg active:bg-gray-400 focus:outline-none focus:ring ">
+            <!-- <mat-icon>close</mat-icon> -->
+            <span class="icon-font">close</span>
           </button>
         </div>
 
@@ -123,7 +125,9 @@
                               hover:bg-blue-800 focus:ring-4 focus:outline-none
                               focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
                           (click)="seleccionarFila(dato)" (click)="mostrarComponente()" (click)="responder(i)">Responder
-                          <mat-icon>reply</mat-icon></button></td>
+                          <!-- <mat-icon>reply</mat-icon> -->
+                          <span class="icon-font">reply</span>
+                        </button></td>
                       }
                     </tr>
                   </tbody>

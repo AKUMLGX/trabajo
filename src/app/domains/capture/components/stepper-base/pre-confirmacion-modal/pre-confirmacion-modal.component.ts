@@ -42,26 +42,26 @@ export interface PreConfirmacionModalData {
       <!-- Header Premium -->
       <div class="modal-header">
         <div class="header-badge">
-          <mat-icon>verified</mat-icon>
+          <span class="icon-font">verified</span>
         </div>
         <div class="header-content">
           <div class="header-title">{{ titulo }}</div>
           <div class="header-subtitle" *ngIf="subtitulo">{{ subtitulo }}</div>
         </div>
         <button class="close-btn" (click)="cancelar()">
-          <mat-icon>close</mat-icon>
+          <span class="icon-font">close</span>
         </button>
       </div>
 
       <!-- Expediente Destacado -->
       <div class="expediente-banner" *ngIf="expediente">
-        <mat-icon>folder_special</mat-icon>
+        <span class="icon-font">folder_special</span>
         <div class="expediente-info">
           <span class="expediente-label">Expediente a registrar</span>
           <span class="expediente-numero">{{ expediente }}</span>
         </div>
         <div class="expediente-check">
-          <mat-icon>check_circle</mat-icon>
+          <span class="icon-font">check_circle</span>
         </div>
       </div>
 
@@ -70,19 +70,19 @@ export interface PreConfirmacionModalData {
         <!-- Secciones agrupadas -->
         <div *ngFor="let seccion of secciones" class="seccion">
           <div class="seccion-header">
-            <mat-icon>{{ seccion.icono }}</mat-icon>
+            <span class="icon-font">{{ seccion.icono }}</span>
             <span>{{ seccion.titulo }}</span>
           </div>
           <div class="seccion-campos">
-            <div *ngFor="let campo of seccion.campos" 
+            <div *ngFor="let campo of seccion.campos"
                  class="campo-row"
                  [class.campo-destacado]="campo.tipo === 'destacado'"
                  [class.campo-prioridad]="campo.tipo === 'prioridad'">
               <div class="campo-icono" *ngIf="campo.icono">
-                <mat-icon>{{ campo.icono }}</mat-icon>
+                <span class="icon-font">{{ campo.icono }}</span>
               </div>
               <div class="campo-etiqueta">{{ campo.etiqueta }}</div>
-              <div class="campo-valor" 
+              <div class="campo-valor"
                    [class.prioridad-urgente]="campo.prioridadColor === 'red'"
                    [class.prioridad-alta]="campo.prioridadColor === 'orange'"
                    [class.prioridad-media]="campo.prioridadColor === 'yellow'"
@@ -107,7 +107,7 @@ export interface PreConfirmacionModalData {
         <!-- Advertencia -->
         <div class="advertencia">
           <div class="advertencia-icono">
-            <mat-icon>task_alt</mat-icon>
+            <span class="icon-font">task_alt</span>
           </div>
           <div class="advertencia-texto">
             <strong>¿Los datos son correctos?</strong>
@@ -119,11 +119,11 @@ export interface PreConfirmacionModalData {
       <!-- Footer con botones mejorados -->
       <div class="modal-footer">
         <button class="btn-cancelar" (click)="cancelar()">
-          <mat-icon>arrow_back</mat-icon>
+          <span class="icon-font">arrow_back</span>
           {{ botonCancelar }}
         </button>
         <button class="btn-confirmar" (click)="confirmar()">
-          <mat-icon>save</mat-icon>
+          <span class="icon-font">save</span>
           {{ botonConfirmar }}
         </button>
       </div>

@@ -103,14 +103,14 @@
                   <div class="flex justify-center space-x-2">
                     <button (click)="abrirModalPDF(templatePDF)"
                       (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)" title="Ver PDF">
-                      <mat-icon>remove_red_eye</mat-icon>
+                      <span class="icon-font">remove_red_eye</span>
                     </button>
                     <button (click)="descargarPdf(asunto.folio_interno, asunto.documento_escaneado)" title="Descargar PDF">
-                      <mat-icon>download</mat-icon>
+                      <span class="icon-font">download</span>
                     </button>
                     <!-- Ir a Seguimiento con folio prellenado -->
                     <a [routerLink]="['/layout/tracking']" [queryParams]="{ folio: asunto.folio_interno }" title="Seguimiento">
-                      <mat-icon>open_in_new</mat-icon>
+                      <span class="icon-font">open_in_new</span>
                     </a>
                   </div>
                 </td>

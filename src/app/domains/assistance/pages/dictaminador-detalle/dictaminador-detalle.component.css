@@ -61,6 +61,9 @@
   font-weight: 500;
   color: #111827;
 }
+.font-noto-sans {
+  font-family: 'Noto Sans';
+}
 
 .priority-badge {
   @apply inline-flex items-center px-3 py-1.5 rounded-full text-sm font-noto-sans;
@@ -318,7 +321,7 @@
   border-radius: 4px !important;
 }
 
-.mat-icon {
+.mat-icon .icon-font {
   @apply h-5 w-5;
   font-size: 20px !important;
 }

@@ -1,7 +1,9 @@
 /* =====================================================
    EDIT TRACKING TABLE - Paleta Institucional SAT
    ===================================================== */
-
+.font-noto-sans {
+  font-family: 'Noto Sans';
+}
 .wrapping-individual-container {
   @apply w-full lg:w-6/12 px-4 relative mb-3;
 }

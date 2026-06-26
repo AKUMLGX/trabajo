@@ -1,3 +1,6 @@
+.font-noto-sans {
+  font-family: 'Noto Sans';
+}
 .instructions-text {
     @apply sm:text-xs md:text-base mt-2 ml-2 text-justify
 }

@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between gap-6">
       <div class="flex items-center gap-5">
         <div class="flex h-[58px] w-[58px] items-center justify-center rounded-2xl bg-white/15 shadow-lg backdrop-blur">
-          <mat-icon class="!h-8 !w-8 !text-[32px] !leading-8">assignment_turned_in</mat-icon>
+          <span class="icon-font !h-8 !w-8 !text-[32px] !leading-8">assignment_turned_in</span>
         </div>
 
         <div>
@@ -29,7 +29,7 @@
         (click)="cerrar()"
         [disabled]="guardando"
         class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 text-white transition hover:scale-105 hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-50">
-        <mat-icon class="!text-[30px]">close</mat-icon>
+        <span class="icon-font !text-[30px]">close</span>
       </button>
     </div>
   </header>
@@ -80,7 +80,7 @@
           <div
             class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
             [ngClass]="[opcion.bg, opcion.color]">
-            <mat-icon class="!h-6 !w-6 !text-[24px]">{{ opcion.icon }}</mat-icon>
+            <span class="icon-font !h-6 !w-6 !text-[24px]">{{ opcion.icon }}</span>
           </div>
 
           <div class="min-w-0 flex-1">
@@ -88,11 +88,11 @@
             <span class="mt-2 block text-sm font-noto-sans text-gray-400">{{ opcion.description }}</span>
           </div>
 
-          <mat-icon
+          <span
             *ngIf="formulario.tipoAccion === opcion.value"
-            class="absolute right-4 top-4 !h-6 !w-6 !text-[24px] text-[#4b0075]">
+            class="icon-font absolute right-4 top-4 !h-6 !w-6 !text-[24px] text-[#4b0075]">
             check_circle
-          </mat-icon>
+          </span>
         </button>
       </div>
     </section>
@@ -115,7 +115,7 @@
 
     <section *ngIf="formulario.tipoAccion === 'ASIGNADO'" class="mb-8">
       <h3 class="mb-5 flex items-center gap-3 text-xl font-black text-gray-700">
-        <mat-icon class="!text-[28px] text-gray-700">computer</mat-icon>
+        <span class="icon-font !text-[28px] text-gray-700">computer</span>
         Sistema y Aplicativo
       </h3>
 
@@ -137,12 +137,12 @@
             (click)="sistemaDropdownAbierto = !sistemaDropdownAbierto; filtrarSistemas()"
             class="absolute right-2 flex h-11 w-11 items-center justify-center rounded-xl transition"
             [ngClass]="sistemaDropdownAbierto ? 'bg-[#4b0075] text-white' : 'text-gray-400 hover:bg-gray-100 hover:text-[#4b0075]'">
-            <mat-icon>{{ sistemaDropdownAbierto ? 'expand_less' : 'expand_more' }}</mat-icon>
+            <span class="icon-font">{{ sistemaDropdownAbierto ? 'expand_less' : 'expand_more' }}</span>
           </button>
         </div>
 
-        <p class="mt-3 flex items-center gap-2 text-sm font-noto-sans text-gray-400">
-          <mat-icon class="!h-4 !w-4 !text-base text-[#d6ae67]">info</mat-icon>
+        <p class="mt-3 flex items-center gap-2 font-noto-sans text-sm font-medium text-gray-400">
+          <span class="icon-font !h-4 !w-4 !text-base text-[#d6ae67]">info</span>
           Selecciona un sistema del catálogo o escribe uno nuevo
         </p>
 
@@ -151,7 +151,7 @@
           class="absolute left-0 right-0 top-[calc(100%+12px)] z-50 max-h-[360px] overflow-hidden rounded-2xl border-2 border-gray-200 bg-white shadow-2xl">
 
           <div class="flex items-center gap-3 border-b border-gray-200 bg-gray-50 px-6 py-4 text-sm font-black uppercase tracking-wide text-gray-400">
-            <mat-icon class="!h-5 !w-5 !text-xl text-[#4b0075]">search</mat-icon>
+            <span class="icon-font !h-5 !w-5 !text-xl text-[#4b0075]">search</span>
             {{ sistemasFiltrados.length }} sistema(s) encontrado(s)
           </div>
 
@@ -170,7 +170,7 @@
         ? 'bg-[#4b0075]/10 text-[#4b0075]'
         : 'text-gray-500'">
 
-      <mat-icon class="text-gray-400">apps</mat-icon>
+      <span class="icon-font text-gray-400">apps</span>
 
       <span class="flex-1 text-base font-noto-sans">
         {{ app.nombre }}
@@ -182,11 +182,11 @@
         Sistema
       </span>
 
-      <mat-icon
+      <span
         *ngIf="formulario.sistema_aplicativo === app.nombre"
-        class="text-green-600">
+        class="icon-font text-green-600">
         check_circle
-      </mat-icon>
+      </span>
     </button>
 
     <button
@@ -195,7 +195,7 @@
       (mousedown)="$event.preventDefault()"
       (click)="editarAplicativo(app)"
       class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-blue-500 transition hover:bg-blue-50">
-      <mat-icon>edit</mat-icon>
+      <span class="icon-font">edit</span>
     </button>
 
     <button
@@ -204,7 +204,7 @@
       (mousedown)="$event.preventDefault()"
       (click)="eliminarAplicativo(app)"
       class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-red-500 transition hover:bg-red-50">
-      <mat-icon>delete</mat-icon>
+      <span class="icon-font">delete</span>
     </button>
 
   </div>
@@ -221,7 +221,7 @@
     (mousedown)="$event.preventDefault()"
     (click)="crearAplicativoDesdeBusqueda()"
     class="mx-4 mb-4 flex w-[calc(100%-2rem)] items-center justify-center gap-2 rounded-xl bg-[#4b0075] px-4 py-3 text-sm font-black text-white hover:bg-[#39005a]">
-    <mat-icon>add</mat-icon>
+    <span class="icon-font">add</span>
     Crear "{{ sistemaBusqueda }}"
   </button>
 
@@ -242,7 +242,7 @@
     <section *ngIf="seleccionDirectaCompleta" class="mb-8 rounded-2xl border border-emerald-100 bg-emerald-50 px-6 py-5">
       <div class="flex items-center gap-4">
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-white">
-          <mat-icon>verified</mat-icon>
+          <span class="icon-font">verified</span>
         </div>
 
         <div>
@@ -275,7 +275,7 @@
           ? 'bg-[#4b0075] hover:bg-[#39005a] shadow-[#4b0075]/30'
           : 'bg-[#9d80b3]'">
 
-        <mat-icon *ngIf="!guardando" class="!h-5 !w-5 !text-xl">save</mat-icon>
+        <span *ngIf="!guardando" class="icon-font !h-5 !w-5 !text-xl">save</span>
         <span *ngIf="guardando" class="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></span>
         {{ guardando ? 'Guardando...' : 'Guardar Atención' }}
       </button>

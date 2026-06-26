@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 
         <!-- Icono de acceso denegado -->
         <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <mat-icon class="text-red-600 text-4xl">block</mat-icon>
+          <span class="icon-font text-red-600 text-4xl">block</span>
         </div>
 
         <!-- Título y mensaje -->
@@ -34,7 +34,7 @@ import { Router } from '@angular/router';
             color="primary"
             (click)="volverInicio()"
             class="w-full">
-            <mat-icon class="mr-2">home</mat-icon>
+            <span class="icon-font mr-2">home</span>
             Volver al Inicio
           </button>
 
@@ -42,7 +42,7 @@ import { Router } from '@angular/router';
             mat-stroked-button
             (click)="irBandejasDisponibles()"
             class="w-full">
-            <mat-icon class="mr-2">list</mat-icon>
+            <span class="icon-font mr-2">list</span>
             Ver Bandejas Disponibles
           </button>
         </div>
@@ -50,8 +50,8 @@ import { Router } from '@angular/router';
         <!-- Información adicional -->
         <div class="mt-8 p-4 bg-gray-50 rounded-lg">
           <p class="text-sm text-gray-500">
-            <mat-icon class="text-gray-400 text-sm mr-1">info</mat-icon>
-            Tu rol actual: <span class="font-noto-sans">{{ obtenerRolUsuario() }}</span>
+            <span class="icon-font text-gray-400 text-sm mr-1">info</span>
+            Tu rol actual: <span class="font-noto-sans font-medium">{{ obtenerRolUsuario() }}</span>
           </p>
         </div>
       </div>

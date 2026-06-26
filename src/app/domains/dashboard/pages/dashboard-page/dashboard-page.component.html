@@ -28,7 +28,7 @@
           (click)="refrescar()"
           [disabled]="cargando"
           matTooltip="Actualizar datos">
-          <mat-icon [ngClass]="{ 'animate-spin': cargando }">refresh</mat-icon>
+          <span class="icon-font" [ngClass]="{ 'animate-spin': cargando }">refresh</span>
         </button>
       </div>
     </div>
@@ -244,8 +244,8 @@
 
   @if (error && !cargando) {
     <div class="flex min-h-[420px] flex-col items-center justify-center text-tlalcalli-primary">
-      <mat-icon class="!h-[72px] !w-[72px] !text-[72px]">error_outline</mat-icon>
-      <p class="mt-5 text-base font-noto-sans">{{ error }}</p>
+      <span class="icon-font !h-[72px] !w-[72px] !text-[72px]">error_outline</span>
+      <p class="mt-5 text-base font-noto-sans font-bold">{{ error }}</p>
       <button
         (click)="refrescar()"
         class="mt-5 rounded-xl border border-tlalcalli-primary px-7 py-3 text-sm font-noto-sans text-tlalcalli-primary">

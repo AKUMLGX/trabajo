@@ -23,14 +23,14 @@
         <div class="flex items-start justify-between">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <mat-icon class="text-blue-600 text-lg">download</mat-icon>
-              <p class="text-sm font-noto-sans text-blue-700">Recibidos de Akamba 1</p>
+              <span class="icon-font text-blue-600 text-lg">download</span>
+              <p class="text-sm font-noto-sans font-medium text-blue-700">Recibidos de Akamba 1</p>
       </div>
             <p class="text-2xl font-noto-sans text-blue-800">{{asuntosCapturados.length}}</p>
             <p class="text-xs text-blue-600 mt-1">Asuntos capturados para revisar</p>
           </div>
           <div class="w-12 h-12 bg-blue-200 rounded-xl flex items-center justify-center">
-            <mat-icon class="text-blue-700 text-xl">input</mat-icon>
+            <span class="icon-font text-blue-700 text-xl">input</span>
           </div>
         </div>
       </div>
@@ -40,14 +40,14 @@
         <div class="flex items-start justify-between">
       <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <mat-icon class="text-amber-600 text-lg">rate_review</mat-icon>
-              <p class="text-sm font-noto-sans text-amber-700">En Revisión</p>
+              <span class="icon-font text-amber-600 text-lg">rate_review</span>
+              <p class="text-sm font-noto-sans font-medium text-amber-700">En Revisión</p>
             </div>
             <p class="text-2xl font-noto-sans text-amber-800">{{getPendientesRevision()}}</p>
             <p class="text-xs text-amber-600 mt-1">Pendientes de procesar</p>
           </div>
           <div class="w-12 h-12 bg-amber-200 rounded-xl flex items-center justify-center">
-            <mat-icon class="text-amber-700 text-xl">pending</mat-icon>
+            <span class="icon-font text-amber-700 text-xl">pending</span>
           </div>
         </div>
       </div>
@@ -57,14 +57,14 @@
         <div class="flex items-start justify-between">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <mat-icon class="text-emerald-600 text-lg">check_circle</mat-icon>
-              <p class="text-sm font-noto-sans text-emerald-700">Procesados</p>
+              <span class="icon-font text-emerald-600 text-lg">check_circle</span>
+              <p class="text-sm font-noto-sans font-medium text-emerald-700">Procesados</p>
             </div>
             <p class="text-2xl font-noto-sans text-emerald-800">{{estadisticas.listosParaEnviar}}</p>
             <p class="text-xs text-emerald-600 mt-1">Listos para Akamba 3</p>
           </div>
           <div class="w-12 h-12 bg-emerald-200 rounded-xl flex items-center justify-center">
-            <mat-icon class="text-emerald-700 text-xl">done_all</mat-icon>
+            <span class="icon-font text-emerald-700 text-xl">done_all</span>
           </div>
         </div>
       </div>
@@ -74,14 +74,14 @@
         <div class="flex items-start justify-between">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <mat-icon class="text-[#691C32] text-lg">check_circle_outline</mat-icon>
-              <p class="text-sm font-noto-sans text-[#691C32]">Enviados</p>
+              <span class="icon-font font-noto-sans text-[#691C32] text-lg">check_circle_outline</span>
+              <p class="text-sm font-medium text-[#691C32]">Enviados</p>
             </div>
             <p class="text-2xl font-noto-sans text-[#4F1524]">{{estadisticas.enviados}}</p>
             <p class="text-xs text-[#691C32] mt-1">Enviados a Akamba 3</p>
           </div>
           <div class="w-12 h-12 bg-[#691C32]/20 rounded-xl flex items-center justify-center">
-            <mat-icon class="text-[#691C32] text-xl">done_all</mat-icon>
+            <span class="icon-font text-[#691C32] text-xl">done_all</span>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="flex items-center py-2">
-          <mat-icon class="mr-2 text-[#691C32]">input</mat-icon>
+          <span class="icon-font mr-2 text-[#691C32]">input</span>
           <span>Asuntos Capturados</span>
           <span *ngIf="asuntosCapturados.length > 0" class="ml-2 bg-purple-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-noto-sans">
             {{asuntosCapturados.length}}
@@ -120,7 +120,7 @@
           <div class="grid grid-cols-4 gap-4 mb-4">
             <!-- Folio Interno -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Folio Interno</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Folio Interno</label>
               <input type="text" [(ngModel)]="filtroFolioInterno" (input)="calcularPaginacion()"
                      placeholder="Buscar por folio interno..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -128,7 +128,7 @@
 
             <!-- Carpeta de Investigación -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Carpeta de Investigación</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Carpeta de Investigación</label>
               <input type="text" [(ngModel)]="filtroCarpetaInvestigacion" (input)="calcularPaginacion()"
                      placeholder="Buscar por carpeta..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -136,7 +136,7 @@
 
             <!-- Número de Oficio -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Número de Oficio</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Número de Oficio</label>
               <input type="text" [(ngModel)]="filtroNumeroOficio" (input)="calcularPaginacion()"
                      placeholder="Buscar por oficio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -144,7 +144,7 @@
 
             <!-- Persona Relacionada -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Persona Relacionada</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Persona Relacionada</label>
               <input type="text" [(ngModel)]="filtroPersonaRelacionada" (input)="calcularPaginacion()"
                      placeholder="Buscar por persona..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -162,12 +162,12 @@
                          placeholder="Buscar en todos los campos..."
                         class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                   <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
-                    <mat-icon class="text-gray-400 text-lg">search</mat-icon>
+                    <span class="icon-font text-gray-400 text-lg">search</span>
                   </div>
                   <button *ngIf="filtroText"
                           class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                           (click)="filtroText = ''; calcularPaginacion()">
-                    <mat-icon class="text-sm">close</mat-icon>
+                    <span class="icon-font text-sm">close</span>
                   </button>
                 </div>
               </div>
@@ -178,7 +178,7 @@
               <label class="text-sm font-noto-sans text-transparent block mb-2">.</label>
               <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
                       (click)="limpiarFiltros()">
-                <mat-icon class="mr-1 text-sm">refresh</mat-icon>
+                <span class="icon-font mr-1 text-sm">refresh</span>
                 <span>Limpiar</span>
               </button>
             </div>
@@ -189,25 +189,25 @@
             <!-- Panel de resultados -->
             <div class="flex items-center gap-4">
               <div class="flex items-center text-sm text-gray-600">
-                <mat-icon class="mr-1 text-sm">filter_list</mat-icon>
+                <span class="icon-font mr-1 text-sm">filter_list</span>
                 <span>{{getAsuntosCapturasFiltrados().length}} de {{asuntosCapturados.length}} asuntos</span>
               </div>
 
               <!-- Indicador de filtros activos -->
               <div *ngIf="tienesFiltrosActivos()" class="flex items-center gap-2">
-                <span class="text-xs text-blue-600 font-noto-sans">Filtros activos:</span>
+                <span class="text-xs text-blue-600 font-noto-sans font-medium">Filtros activos:</span>
                 <span *ngIf="filtroEstadoCaptura !== 'TODOS'"
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                      class="inline-flex font-noto-sans items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
                   Estado: {{filtroEstadoCaptura}}
                   <button class="ml-1 hover:bg-blue-200 rounded-full p-0.5" (click)="filtroEstadoCaptura = 'TODOS'">
-                    <mat-icon class="text-xs">close</mat-icon>
+                    <span class="icon-font text-xs">close</span>
                   </button>
                 </span>
                 <span *ngIf="filtroAutoridadRemitente !== 'Todas'"
                       class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                   Autoridad: {{filtroAutoridadRemitente}}
                   <button class="ml-1 hover:bg-green-200 rounded-full p-0.5" (click)="filtroAutoridadRemitente = 'Todas'">
-                    <mat-icon class="text-xs">close</mat-icon>
+                    <span class="icon-font text-xs">close</span>
                   </button>
                 </span>
               </div>
@@ -217,15 +217,15 @@
             <div class="flex items-center gap-3">
               <!-- Contador de seleccionados -->
               <div *ngIf="getCountAsuntosSeleccionados() > 0" class="flex items-center bg-emerald-50 px-3 py-2 rounded-lg">
-                <mat-icon class="text-emerald-600 mr-2">check_circle</mat-icon>
-                <span class="text-emerald-700 font-noto-sans">{{getCountAsuntosSeleccionados()}} seleccionado(s)</span>
+                <span class="icon-font text-emerald-600 mr-2">check_circle</span>
+                <span class="text-emerald-700 font-noto-sans font-medium">{{getCountAsuntosSeleccionados()}} seleccionado(s)</span>
               </div>
 
               <!-- Botón seleccionar todos los listos -->
               <button class="flex items-center px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-md text-sm transition-colors"
                       (click)="toggleSeleccionTodos()"
                       [class.bg-blue-200]="todosProntosSeleccionados()">
-                <mat-icon class="mr-1 text-sm">{{todosProntosSeleccionados() ? 'check_box' : 'check_box_outline_blank'}}</mat-icon>
+                <span class="icon-font mr-1 text-sm">{{todosProntosSeleccionados() ? 'check_box' : 'check_box_outline_blank'}}</span>
                 <span>{{todosProntosSeleccionados() ? 'Deseleccionar' : 'Seleccionar'}} listos</span>
               </button>
 
@@ -241,7 +241,7 @@
             <div class="flex justify-between items-center">
               <div class="flex items-center">
                 <div class="bg-white/20 p-3 rounded-xl mr-4">
-                  <mat-icon class="text-white text-2xl">view_list</mat-icon>
+                  <span class="icon-font text-white text-2xl">view_list</span>
               </div>
                 <div>
                   <h3 class="text-xl font-noto-sans text-white">Asuntos Capturados</h3>
@@ -278,7 +278,7 @@
                   <th scope="col" class="w-44 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
+                        <span class="icon-font text-blue-600 text-lg">confirmation_number</span>
                       </div>
                       <span>Folio Interno</span>
                     </div>
@@ -286,7 +286,7 @@
                   <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
+                        <span class="icon-font text-amber-600 text-lg">folder_open</span>
                       </div>
                       <span>Carpeta de Investigación</span>
                     </div>
@@ -294,7 +294,7 @@
                   <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
+                        <span class="icon-font text-cyan-600 text-lg">description</span>
                       </div>
                       <span>Oficio</span>
                     </div>
@@ -302,7 +302,7 @@
                   <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-green-600 text-lg">person</mat-icon>
+                        <span class="icon-font text-green-600 text-lg">person</span>
                       </div>
                       <span>Persona Relacionada</span>
                     </div>
@@ -310,7 +310,7 @@
                   <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
+                        <span class="icon-font text-indigo-600 text-lg">event</span>
                       </div>
                       <span>Fecha Recepción</span>
                     </div>
@@ -318,7 +318,7 @@
                   <th scope="col" class="w-36 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-orange-600 text-lg">timer</mat-icon>
+                        <span class="icon-font text-orange-600 text-lg">timer</span>
                       </div>
                       <span>Plazo Atención</span>
                     </div>
@@ -326,7 +326,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-emerald-600 text-lg">rate_review</mat-icon>
+                        <span class="icon-font text-emerald-600 text-lg">rate_review</span>
                       </div>
                       <span>Acción</span>
                     </div>
@@ -339,13 +339,13 @@
                   <td colspan="8" class="px-8 py-16 text-center">
                     <div class="flex flex-col items-center justify-center text-gray-500">
                       <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <mat-icon class="text-3xl text-gray-400">search_off</mat-icon>
+                        <span class="icon-font text-3xl text-gray-400">search_off</span>
                       </div>
                       <h3 class="text-lg font-semibold text-gray-700 mb-2">No se encontraron asuntos</h3>
                       <p class="text-sm text-gray-500 mb-4">Intenta ajustar los filtros de búsqueda</p>
                       <button class="px-6 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg text-sm hover:from-slate-700 hover:to-slate-800 transition-all transform hover:scale-105"
                               (click)="limpiarFiltros()">
-                        <mat-icon class="text-sm mr-2">refresh</mat-icon>
+                        <span class="icon-font text-sm mr-2">refresh</span>
                         Limpiar filtros
                       </button>
                     </div>
@@ -384,7 +384,7 @@
                   <!-- Oficio -->
                   <td class="w-40 px-6 py-5">
                       <div
-                        class="font-noto-sans text-slate-900 text-sm cursor-help max-w-32 truncate"
+                        class="font-medium font-noto-sans text-slate-900 text-sm cursor-help max-w-32 truncate"
                         [matTooltip]="obtenerTextoCompleto(asunto.oficio || 'N/A')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.oficio || 'N/A', 25)}}
@@ -394,7 +394,7 @@
                   <!-- Persona Relacionada -->
                   <td class="w-48 px-6 py-5">
                       <div
-                        class="font-noto-sans text-slate-900 text-sm cursor-help max-w-32 truncate"
+                        class="font-medium text-slate-900 font-noto-sans text-sm cursor-help max-w-32 truncate"
                         [matTooltip]="obtenerTextoCompleto(asunto.personaRelacionada || '')"
                         matTooltipClass="tooltip-large">
                         {{truncarTexto(asunto.personaRelacionada || '', 35)}}
@@ -427,9 +427,9 @@
                                 'bg-gradient-to-r from-sky-500 to-sky-600 text-white hover:from-sky-600 hover:to-sky-700' :
                                 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700'"
                               (click)="abrirModalRevisionCaptura(asunto)">
-                        <mat-icon class="text-lg">{{
+                        <span class="icon-font text-lg">{{
                             asunto.estado_revision === 'PENDIENTE' ? 'rate_review' : 'edit'
-                          }}</mat-icon>
+                          }}</span>
                           <span class="hidden sm:inline">{{asunto.estado_revision === 'PENDIENTE' ? 'Revisar' : 'Editar'}}</span>
                       </button>
 
@@ -437,7 +437,7 @@
                       <button class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700"
                               (click)="asignarAsuntoIndividual(asunto)"
                               matTooltip="Enviar">
-                        <mat-icon class="text-lg">assignment_turned_in</mat-icon>
+                        <span class="icon-font text-lg">assignment_turned_in</span>
                       </button>
                     </div>
                   </td>
@@ -481,13 +481,13 @@
                     (click)="primeraPagina()"
                     [disabled]="paginaActual === 1"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
-                    <mat-icon class="text-slate-600 text-lg">keyboard_double_arrow_left</mat-icon>
+                    <span class="icon-font text-slate-600 text-lg">keyboard_double_arrow_left</span>
                   </button>
                   <button
                     (click)="paginaAnterior()"
                     [disabled]="paginaActual === 1"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
-                    <mat-icon class="text-slate-600 text-lg">keyboard_arrow_left</mat-icon>
+                    <span class="icon-font text-slate-600 text-lg">keyboard_arrow_left</span>
                   </button>
 
                   <div class="flex items-center gap-1 mx-2">
@@ -496,8 +496,8 @@
                       (click)="cambiarPagina(pagina)"
                       class="px-3 py-1 rounded-lg text-sm cursor-pointer transition-colors"
                       [ngClass]="pagina === paginaActual
-                        ? 'bg-sky-500 text-white font-noto-sans'
-                        : 'text-slate-600 hover:bg-slate-100'">
+                        ? 'bg-sky-500 font-noto-sans text-white font-medium'
+                        : 'text-slate-600 font-noto-sans hover:bg-slate-100'">
                       {{pagina}}
                     </span>
 
@@ -513,13 +513,13 @@
                     (click)="paginaSiguiente()"
                     [disabled]="paginaActual >= obtenerTotalPaginas()"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
-                    <mat-icon class="text-slate-600 text-lg">keyboard_arrow_right</mat-icon>
+                    <span class="icon-font text-slate-600 text-lg">keyboard_arrow_right</span>
                   </button>
                   <button
                     (click)="ultimaPagina()"
                     [disabled]="paginaActual >= obtenerTotalPaginas()"
                     class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-300 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50">
-                    <mat-icon class="text-slate-600 text-lg">keyboard_double_arrow_right</mat-icon>
+                    <span class="icon-font text-slate-600 text-lg">keyboard_double_arrow_right</span>
                   </button>
               </div>
             </div>
@@ -533,7 +533,7 @@
         <div *ngIf="estadisticas.requierenCorreccion > 0" class="mt-8 bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-200 rounded-2xl p-6">
           <div class="flex items-start gap-4">
             <div class="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-sky-600 text-2xl">schedule</mat-icon>
+              <span class="icon-font text-sky-600 text-2xl">schedule</span>
             </div>
             <div>
               <h3 class="text-sky-800 font-semibold text-lg mb-2">Asuntos Pendientes de Revisión</h3>
@@ -542,8 +542,8 @@
               </p>
               <div class="flex items-center gap-4 text-sm">
                 <div class="flex items-center gap-2 text-sky-600">
-                  <mat-icon class="text-lg">rate_review</mat-icon>
-                  <span class="font-noto-sans">Haz clic en "Revisar" para procesar cada asunto</span>
+                  <span class="icon-font text-lg">rate_review</span>
+                  <span class="font-noto-sans font-medium">Haz clic en "Revisar" para procesar cada asunto</span>
             </div>
               </div>
             </div>
@@ -556,7 +556,7 @@
           <div class="flex items-start justify-between mb-4">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                <mat-icon class="text-white text-xl">send</mat-icon>
+                <span class="icon-font text-white text-xl">send</span>
               </div>
               <div>
                 <h3 class="font-noto-sans text-lg">Enviar a Akamba 3</h3>
@@ -565,7 +565,7 @@
             </div>
             <button (click)="limpiarSeleccion()"
                     class="text-white/60 hover:text-white transition-colors">
-              <mat-icon>close</mat-icon>
+              <span class="icon-font">close</span>
             </button>
           </div>
 
@@ -574,7 +574,7 @@
             <div *ngFor="let asunto of getAsuntosSeleccionados()"
                  class="flex items-center gap-3 bg-white/10 rounded-lg p-2">
               <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                <mat-icon class="text-white text-sm">description</mat-icon>
+                <span class="icon-font text-white text-sm">description</span>
               </div>
               <div class="flex-1 min-w-0">
                 <div class="font-noto-sans text-sm truncate">{{asunto.folio}}</div>
@@ -582,7 +582,7 @@
               </div>
               <button (click)="toggleSeleccionAsunto(asunto.id)"
                       class="text-white/60 hover:text-white transition-colors">
-                <mat-icon class="text-sm">remove</mat-icon>
+                <span class="icon-font text-sm">remove</span>
               </button>
             </div>
           </div>
@@ -591,12 +591,12 @@
           <div class="flex gap-3">
             <button (click)="enviarAsuntosSeleccionados()"
                     class="flex-1 bg-white text-[#691C32] px-4 py-2 rounded-xl font-semibold hover:bg-white/90 transition-colors flex items-center justify-center gap-2">
-              <mat-icon class="text-lg">rocket_launch</mat-icon>
+              <span class="icon-font text-lg">rocket_launch</span>
               Enviar Ahora
             </button>
             <button (click)="limpiarSeleccion()"
                     class="px-4 py-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
-              <mat-icon>clear_all</mat-icon>
+              <span class="icon-font">clear_all</span>
             </button>
           </div>
 
@@ -612,7 +612,7 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="flex items-center py-2">
-          <mat-icon class="mr-2 text-[#691C32]">pending_actions</mat-icon>
+          <span class="icon-font mr-2 text-[#691C32]">pending_actions</span>
           <span>Dictámenes Pendientes</span>
           <span *ngIf="asuntosPendientes.length > 0" class="ml-2 bg-blue-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-noto-sans">
             {{asuntosPendientes.length}}
@@ -628,7 +628,7 @@
           <div class="grid grid-cols-5 gap-4 mb-4">
             <!-- Folio -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Folio</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Folio</label>
               <input type="text" [(ngModel)]="filtroFolioDictamen"
                      placeholder="Buscar por folio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -636,7 +636,7 @@
 
             <!-- Carpeta de Investigación -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Carpeta</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Carpeta</label>
               <input type="text" [(ngModel)]="filtroCarpetaDictamen"
                      placeholder="Buscar por carpeta..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -644,7 +644,7 @@
 
             <!-- Oficio -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Oficio</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Oficio</label>
               <input type="text" [(ngModel)]="filtroOficioDictamen"
                      placeholder="Buscar por oficio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -652,7 +652,7 @@
 
             <!-- Persona Relacionada -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Persona</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Persona</label>
               <input type="text" [(ngModel)]="filtroPersonaDictamen"
                      placeholder="Buscar por persona..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -660,7 +660,7 @@
 
             <!-- Dictaminador -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Dictaminador</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Dictaminador</label>
               <input type="text" [(ngModel)]="filtroDictaminador"
                      placeholder="Buscar por dictaminador..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -678,12 +678,12 @@
                          placeholder="Buscar en todos los campos..."
                       class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
                 <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
-                  <mat-icon class="text-gray-400 text-lg">search</mat-icon>
+                  <span class="icon-font text-gray-400 text-lg">search</span>
                 </div>
                 <button *ngIf="filtroText"
                         class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                         (click)="filtroText = ''">
-                  <mat-icon class="text-sm">close</mat-icon>
+                  <span class="icon-font text-sm">close</span>
                 </button>
               </div>
             </div>
@@ -694,7 +694,7 @@
               <label class="text-sm font-noto-sans text-transparent block mb-2">.</label>
               <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
                       (click)="limpiarFiltros()">
-                <mat-icon class="mr-1 text-sm">refresh</mat-icon>
+                <span class="icon-font mr-1 text-sm">refresh</span>
                 <span>Limpiar</span>
               </button>
             </div>
@@ -708,7 +708,7 @@
             <div class="flex justify-between items-center">
               <div class="flex items-center">
                 <div class="bg-white/20 p-3 rounded-xl mr-4">
-                  <mat-icon class="text-white text-2xl">gavel</mat-icon>
+                  <span class="icon-font text-white text-2xl">gavel</span>
                 </div>
                 <div>
                   <h3 class="text-xl font-noto-sans text-white">Dictámenes Pendientes</h3>
@@ -732,7 +732,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
+                        <span class="icon-font text-blue-600 text-lg">confirmation_number</span>
                       </div>
                       <span>Folio</span>
                     </div>
@@ -740,7 +740,7 @@
                   <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
+                        <span class="icon-font text-amber-600 text-lg">folder_open</span>
                       </div>
                       <span>Carpeta</span>
                     </div>
@@ -748,7 +748,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
+                        <span class="icon-font text-cyan-600 text-lg">description</span>
                       </div>
                       <span>Oficio</span>
                     </div>
@@ -756,7 +756,7 @@
                   <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-green-600 text-lg">person</mat-icon>
+                        <span class="icon-font text-green-600 text-lg">person</span>
                       </div>
                       <span>Persona</span>
                     </div>
@@ -764,7 +764,7 @@
                   <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-purple-600 text-lg">account_circle</mat-icon>
+                        <span class="icon-font text-purple-600 text-lg">account_circle</span>
                       </div>
                       <span>Dictaminador</span>
                     </div>
@@ -772,7 +772,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
+                        <span class="icon-font text-indigo-600 text-lg">event</span>
                       </div>
                       <span>Fecha Recepción</span>
                     </div>
@@ -780,7 +780,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-emerald-600 text-lg">settings</mat-icon>
+                        <span class="icon-font text-emerald-600 text-lg">settings</span>
                       </div>
                       <span>Acciones</span>
                     </div>
@@ -793,13 +793,13 @@
                   <td colspan="7" class="px-8 py-16 text-center">
                     <div class="flex flex-col items-center justify-center text-gray-500">
                       <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <mat-icon class="text-3xl text-gray-400">search_off</mat-icon>
+                        <span class="icon-font text-3xl text-gray-400">search_off</span>
                       </div>
                       <h3 class="text-lg font-semibold text-gray-700 mb-2">No se encontraron dictámenes</h3>
                       <p class="text-sm text-gray-500 mb-4">Intenta ajustar los filtros de búsqueda</p>
                       <button class="px-6 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg text-sm hover:from-slate-700 hover:to-slate-800 transition-all transform hover:scale-105"
                               (click)="limpiarFiltros()">
-                        <mat-icon class="text-sm mr-2">refresh</mat-icon>
+                        <span class="icon-font text-sm mr-2">refresh</span>
                         Limpiar filtros
                       </button>
                     </div>
@@ -846,7 +846,7 @@
                       <!-- Botón revisar -->
                       <button class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 bg-gradient-to-r from-[#691C32] to-[#4F1524] text-white hover:from-[#4F1524] hover:to-[#691C32]"
                               (click)="openRevisionDetalleModal(asunto)">
-                        <mat-icon class="text-lg">visibility</mat-icon>
+                        <span class="icon-font text-lg">visibility</span>
                         <span class="hidden sm:inline">Revisar</span>
                       </button>
                     </div>
@@ -862,7 +862,7 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="flex items-center py-2">
-          <mat-icon class="mr-2 text-[#691C32]">history</mat-icon>
+          <span class="icon-font mr-2 text-[#691C32]">history</span>
           <span>Asuntos Revisados</span>
           <span *ngIf="asuntosRevisados.length > 0" class="ml-2 bg-green-500 text-white rounded-full min-w-[20px] h-5 px-1 inline-flex items-center justify-center text-xs font-noto-sans">
             {{asuntosRevisados.length}}
@@ -878,7 +878,7 @@
           <div class="grid grid-cols-5 gap-4 mb-4">
             <!-- Folio -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Folio</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Folio</label>
               <input type="text" [(ngModel)]="filtroFolioRevisado"
                      placeholder="Buscar por folio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -886,7 +886,7 @@
 
             <!-- Carpeta de Investigación -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Carpeta</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Carpeta</label>
               <input type="text" [(ngModel)]="filtroCarpetaRevisada"
                      placeholder="Buscar por carpeta..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -894,7 +894,7 @@
 
             <!-- Oficio -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Oficio</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Oficio</label>
               <input type="text" [(ngModel)]="filtroOficioRevisado"
                      placeholder="Buscar por oficio..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -902,7 +902,7 @@
 
             <!-- Persona Relacionada -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Persona</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Persona</label>
               <input type="text" [(ngModel)]="filtroPersonaRevisada"
                      placeholder="Buscar por persona..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -910,7 +910,7 @@
 
             <!-- Dictaminador -->
             <div>
-              <label class="text-sm font-noto-sans text-[#691C32] block mb-2">Dictaminador</label>
+              <label class="text-sm font-noto-sans font-medium text-[#691C32] block mb-2">Dictaminador</label>
               <input type="text" [(ngModel)]="filtroDictaminadorRevisado"
                      placeholder="Buscar por dictaminador..."
                      class="bg-white border border-gray-200 rounded-md shadow-sm px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
@@ -928,12 +928,12 @@
                          placeholder="Buscar en todos los campos..."
                     class="bg-white border border-gray-200 rounded-md shadow-sm pl-10 pr-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-transparent transition-all duration-200">
               <div class="absolute left-0 inset-y-0 flex items-center pl-3 pointer-events-none">
-                <mat-icon class="text-gray-400 text-lg">search</mat-icon>
+                <span class="icon-font text-gray-400 text-lg">search</span>
               </div>
               <button *ngIf="filtroText"
                       class="absolute right-0 inset-y-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                       (click)="filtroText = ''">
-                <mat-icon class="text-sm">close</mat-icon>
+                <span class="icon-font text-sm">close</span>
               </button>
             </div>
           </div>
@@ -944,7 +944,7 @@
               <label class="text-sm font-noto-sans text-transparent block mb-2">.</label>
               <button class="flex items-center px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm transition-colors"
                       (click)="limpiarFiltros()">
-                <mat-icon class="mr-1 text-sm">refresh</mat-icon>
+                <span class="icon-font mr-1 text-sm">refresh</span>
                 <span>Limpiar</span>
               </button>
             </div>
@@ -958,7 +958,7 @@
             <div class="flex justify-between items-center">
               <div class="flex items-center">
                 <div class="bg-white/20 p-3 rounded-xl mr-4">
-                  <mat-icon class="text-white text-2xl">history</mat-icon>
+                  <span class="icon-font text-white text-2xl">history</span>
                 </div>
                 <div>
                   <h3 class="text-xl font-noto-sans text-white">Asuntos Revisados</h3>
@@ -982,7 +982,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-blue-600 text-lg">confirmation_number</mat-icon>
+                        <span class="icon-font text-blue-600 text-lg">confirmation_number</span>
                       </div>
                       <span>Folio</span>
                     </div>
@@ -990,7 +990,7 @@
                   <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-amber-600 text-lg">folder_open</mat-icon>
+                        <span class="icon-font text-amber-600 text-lg">folder_open</span>
                       </div>
                       <span>Carpeta</span>
                     </div>
@@ -998,7 +998,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-cyan-600 text-lg">description</mat-icon>
+                        <span class="icon-font text-cyan-600 text-lg">description</span>
                       </div>
                       <span>Oficio</span>
                     </div>
@@ -1006,7 +1006,7 @@
                   <th scope="col" class="w-48 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-green-600 text-lg">person</mat-icon>
+                        <span class="icon-font text-green-600 text-lg">person</span>
                       </div>
                       <span>Persona</span>
                     </div>
@@ -1014,7 +1014,7 @@
                   <th scope="col" class="w-40 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-purple-600 text-lg">account_circle</mat-icon>
+                        <span class="icon-font text-purple-600 text-lg">account_circle</span>
                       </div>
                       <span>Dictaminador</span>
                     </div>
@@ -1022,7 +1022,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-indigo-600 text-lg">event</mat-icon>
+                        <span class="icon-font text-indigo-600 text-lg">event</span>
                       </div>
                       <span>Fecha Recepción</span>
                     </div>
@@ -1030,7 +1030,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-left text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center gap-2">
                       <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-emerald-600 text-lg">check_circle</mat-icon>
+                        <span class="icon-font text-emerald-600 text-lg">check_circle</span>
                       </div>
                       <span>Estado</span>
                     </div>
@@ -1038,7 +1038,7 @@
                   <th scope="col" class="w-32 px-6 py-4 text-center text-sm font-noto-sans text-slate-700">
                     <div class="flex items-center justify-center gap-2">
                       <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <mat-icon class="text-gray-600 text-lg">visibility</mat-icon>
+                        <span class="icon-font text-gray-600 text-lg">visibility</span>
                       </div>
                       <span>Acciones</span>
                     </div>
@@ -1051,13 +1051,13 @@
                   <td colspan="8" class="px-8 py-16 text-center">
                     <div class="flex flex-col items-center justify-center text-gray-500">
                       <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <mat-icon class="text-3xl text-gray-400">search_off</mat-icon>
+                        <span class="icon-font text-3xl text-gray-400">search_off</span>
                       </div>
                       <h3 class="text-lg font-semibold text-gray-700 mb-2">No se encontraron asuntos revisados</h3>
                       <p class="text-sm text-gray-500 mb-4">Intenta ajustar los filtros de búsqueda</p>
                       <button class="px-6 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg text-sm hover:from-slate-700 hover:to-slate-800 transition-all transform hover:scale-105"
                               (click)="limpiarFiltros()">
-                        <mat-icon class="text-sm mr-2">refresh</mat-icon>
+                        <span class="icon-font text-sm mr-2">refresh</span>
                         Limpiar filtros
                       </button>
                     </div>
@@ -1112,7 +1112,7 @@
                   <td class="w-32 px-6 py-5 text-center">
                     <button class="px-3 py-1 rounded-md text-white flex items-center mx-auto bg-[#691C32] hover:bg-[#4F1524] transition-colors duration-200"
                             (click)="verDetalleAsunto(asunto)">
-                      <mat-icon class="mr-1 text-base">visibility</mat-icon>
+                      <span class="icon-font mr-1 text-base">visibility</span>
                       <span>Ver detalle</span>
                     </button>
                   </td>
@@ -1155,7 +1155,7 @@
 
         <!-- Error al cargar -->
         <div *ngIf="pdfError && !pdfCargando" class="h-full flex flex-col items-center justify-center">
-          <mat-icon class="text-red-500 text-6xl mb-4">error_outline</mat-icon>
+          <span class="icon-font text-red-500 text-6xl mb-4">error_outline</span>
           <h3 class="text-xl font-semibold text-gray-800 mb-2">Error al cargar el documento</h3>
           <p class="text-gray-600 text-center mb-4">No se pudo cargar el archivo PDF. Verifique que el documento existe.</p>
           <button (click)="cerrarVisualizador()"

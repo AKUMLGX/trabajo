@@ -14,6 +14,9 @@ td, th {
 tr:nth-child(even) {
   background-color: #D9BCA3;
 }
+.font-noto-sans {
+  font-family: 'Noto Sans';
+}
 
 .modal-right-button {
   @apply bg-wine text-white active:bg-pink-600 font-noto-sans uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150

@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   template: `
     <div class="bg-white rounded-lg shadow-sm p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-        <mat-icon class="mr-2 text-blue-600">security</mat-icon>
+        <span class="icon-font mr-2 text-blue-600">security</span>
         Permisos del Usuario
       </h3>
 
@@ -55,13 +55,13 @@ import { Subscription } from 'rxjs';
           <div class="flex items-center justify-between p-3 border rounded-lg"
                [class]="permissions?.captura ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'">
             <div class="flex items-center">
-              <mat-icon class="mr-2" [class]="permissions?.captura ? 'text-green-600' : 'text-red-600'">
+              <span class="icon-font mr-2" [class]="permissions?.captura ? 'text-green-600' : 'text-red-600'">
                 {{ permissions?.captura ? 'check_circle' : 'block' }}
-              </mat-icon>
-              <span class="font-noto-sans">Bandeja de Captura</span>
+              </span>
+              <span class="font-noto-sans font-medium">Bandeja de Captura</span>
             </div>
             <span
-              class="px-3 py-1 rounded-full text-xs font-noto-sans"
+              class="px-3 py-1 rounded-full text-xs font-medium"
               [class]="permissions?.captura ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.captura ? 'Acceso Permitido' : 'Acceso Denegado' }}
             </span>
@@ -71,13 +71,13 @@ import { Subscription } from 'rxjs';
           <div class="flex items-center justify-between p-3 border rounded-lg"
                [class]="permissions?.atencion ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'">
             <div class="flex items-center">
-              <mat-icon class="mr-2" [class]="permissions?.atencion ? 'text-green-600' : 'text-red-600'">
+              <span class="icon-font mr-2" [class]="permissions?.atencion ? 'text-green-600' : 'text-red-600'">
                 {{ permissions?.atencion ? 'check_circle' : 'block' }}
-              </mat-icon>
-              <span class="font-noto-sans">Bandeja de Atención</span>
+              </span>
+              <span class="font-noto-sans font-medium">Bandeja de Atención</span>
             </div>
             <span
-              class="px-3 py-1 rounded-full text-xs font-noto-sans"
+              class="px-3 py-1 rounded-full text-xs font-medium"
               [class]="permissions?.atencion ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.atencion ? 'Acceso Permitido' : 'Acceso Denegado' }}
             </span>
@@ -87,13 +87,13 @@ import { Subscription } from 'rxjs';
           <div class="flex items-center justify-between p-3 border rounded-lg"
                [class]="permissions?.dictaminador ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'">
             <div class="flex items-center">
-              <mat-icon class="mr-2" [class]="permissions?.dictaminador ? 'text-green-600' : 'text-red-600'">
+              <span class="icon-font mr-2" [class]="permissions?.dictaminador ? 'text-green-600' : 'text-red-600'">
                 {{ permissions?.dictaminador ? 'check_circle' : 'block' }}
-              </mat-icon>
-              <span class="font-noto-sans">Bandeja de Dictaminador</span>
+              </span>
+              <span class="font-noto-sans font-medium">Bandeja de Dictaminador</span>
             </div>
             <span
-              class="px-3 py-1 rounded-full text-xs font-noto-sans"
+              class="px-3 py-1 rounded-full text-xs font-medium"
               [class]="permissions?.dictaminador ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.dictaminador ? 'Acceso Permitido' : 'Acceso Denegado' }}
             </span>
@@ -103,13 +103,13 @@ import { Subscription } from 'rxjs';
           <div class="flex items-center justify-between p-3 border rounded-lg"
                [class]="permissions?.seguimiento ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'">
             <div class="flex items-center">
-              <mat-icon class="mr-2" [class]="permissions?.seguimiento ? 'text-green-600' : 'text-red-600'">
+              <span class="icon-font mr-2" [class]="permissions?.seguimiento ? 'text-green-600' : 'text-red-600'">
                 {{ permissions?.seguimiento ? 'check_circle' : 'block' }}
-              </mat-icon>
-              <span class="font-noto-sans">Bandeja de Seguimiento</span>
+              </span>
+              <span class="font-noto-sans font-medium">Bandeja de Seguimiento</span>
             </div>
             <span
-              class="px-3 py-1 rounded-full text-xs font-noto-sans"
+              class="px-3 py-1 rounded-full text-xs font-medium"
               [class]="permissions?.seguimiento ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.seguimiento ? 'Acceso Permitido' : 'Acceso Denegado' }}
             </span>
@@ -119,13 +119,13 @@ import { Subscription } from 'rxjs';
           <div class="flex items-center justify-between p-3 border rounded-lg"
                [class]="permissions?.reportes ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'">
             <div class="flex items-center">
-              <mat-icon class="mr-2" [class]="permissions?.reportes ? 'text-green-600' : 'text-red-600'">
+              <span class="icon-font mr-2" [class]="permissions?.reportes ? 'text-green-600' : 'text-red-600'">
                 {{ permissions?.reportes ? 'check_circle' : 'block' }}
-              </mat-icon>
-              <span class="font-noto-sans">Bandeja de Reportes</span>
+              </span>
+              <span class="font-noto-sans font-medium">Bandeja de Reportes</span>
             </div>
             <span
-              class="px-3 py-1 rounded-full text-xs font-noto-sans"
+              class="px-3 py-1 rounded-full text-xs font-medium"
               [class]="permissions?.reportes ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.reportes ? 'Acceso Permitido' : 'Acceso Denegado' }}
             </span>
@@ -135,13 +135,13 @@ import { Subscription } from 'rxjs';
           <div class="flex items-center justify-between p-3 border rounded-lg"
                [class]="permissions?.revisionFinal ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'">
             <div class="flex items-center">
-              <mat-icon class="mr-2" [class]="permissions?.revisionFinal ? 'text-green-600' : 'text-red-600'">
+              <span class="icon-font mr-2" [class]="permissions?.revisionFinal ? 'text-green-600' : 'text-red-600'">
                 {{ permissions?.revisionFinal ? 'check_circle' : 'block' }}
-              </mat-icon>
-              <span class="font-noto-sans">Revisión Final de Asuntos</span>
+              </span>
+              <span class="font-noto-sans font-medium">Revisión Final de Asuntos</span>
             </div>
             <span
-              class="px-3 py-1 rounded-full text-xs font-noto-sans"
+              class="px-3 py-1 rounded-full text-xs font-medium"
               [class]="permissions?.revisionFinal ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
               {{ permissions?.revisionFinal ? 'Acceso Permitido' : 'Acceso Denegado' }}
             </span>
@@ -152,8 +152,8 @@ import { Subscription } from 'rxjs';
       <!-- Resumen de permisos -->
       <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <div class="flex items-center mb-2">
-          <mat-icon class="text-blue-600 mr-2">info</mat-icon>
-          <span class="font-noto-sans text-blue-800">Resumen de Permisos</span>
+          <span class="font-noto-sans icon-font text-blue-600 mr-2">info</span>
+          <span class="font-noto-sans font-medium text-blue-800">Resumen de Permisos</span>
         </div>
         <p class="text-blue-700 text-sm">
           Tienes acceso a <strong>{{ bandejasAccesibles }} de 6</strong> bandejas del sistema.

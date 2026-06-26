@@ -1,51 +1,51 @@
 <!-- OVERLAY DEL MODAL -->
 <div class="modal-overlay" (click)="cerrarModal()">
-  
+
   <!-- CONTENEDOR PRINCIPAL DEL MODAL -->
   <div class="modal-container" (click)="$event.stopPropagation()">
-    
+
     <!-- HEADER DEL MODAL -->
     <div class="modal-header">
       <div class="header-content">
         <div class="title-section">
-          <mat-icon class="header-icon">edit_document</mat-icon>
+          <span class="icon-font header-icon">edit_document</span>
           <div>
             <h2 class="modal-title">Revisión de Asunto Capturado</h2>
             <p class="modal-subtitle">Folio: {{ data.jsonOriginal?.asunto?.datos?.folio_interno || data.asunto.datos?.folio_interno || data.asunto.folio_interno || 'No disponible' }}</p>
           </div>
         </div>
-        
+
         <!-- Estado -->
         <div class="status-chips">
           <span [class]="'chip-estado estado-' + data.asunto.estado_revision.toLowerCase()">
             {{ data.asunto.estado_revision }}
           </span>
         </div>
-        
+
         <!-- Acciones principales en encabezado -->
         <div class="header-acciones">
-          <button mat-button 
+          <button mat-button
                   class="btn-accion btn-corregir"
                   (click)="abrirTrackingEnNuevaPestana()"
                   [disabled]="guardando"
                   matTooltip="Enviar a bandeja de seguimiento para correcciones">
-            <mat-icon>edit</mat-icon>
+            <span class="icon-font">edit</span>
             Solicitar Corrección
           </button>
-          <button mat-button 
+          <button mat-button
                   class="btn-accion btn-aprobar"
                   (click)="aprobarAsunto()"
                   [disabled]="guardando"
                   matTooltip="Aprobar asunto y enviar a Akamba 3">
-            <mat-icon>check</mat-icon>
+            <span class="icon-font">check</span>
             Aprobar Asunto
           </button>
         </div>
       </div>
-      
-      <button mat-icon-button class="close-button" (click)="cerrarModal()" 
+
+      <button mat-icon-button class="close-button" (click)="cerrarModal()"
               matTooltip="Cerrar modal">
-        <mat-icon>close</mat-icon>
+        <span class="icon-font">close</span>
       </button>
     </div>
 
@@ -54,19 +54,19 @@
 
     <!-- CUERPO DEL MODAL -->
     <div class="modal-body">
-      
+
       <!-- INFORMACIÓN ORIGINAL DEL ASUNTO -->
       <div class="seccion-info-original">
         <div class="seccion-header">
           <div class="header-icon">
-            <mat-icon>source</mat-icon>
+            <span class="icon-font">source</span>
           </div>
           <div class="header-text">
             <h3 class="seccion-titulo">Información Original</h3>
             <p class="seccion-subtitulo">Datos capturados en Akamba 1</p>
           </div>
         </div>
-        
+
         <!-- Información Original Unificada -->
         <div class="info-original-unificada">
           <div class="info-grid">
@@ -151,7 +151,7 @@
       <div class="seccion-pdfs">
         <div class="seccion-header">
           <div class="header-icon">
-          <mat-icon>picture_as_pdf</mat-icon>
+          <span class="icon-font">picture_as_pdf</span>
           </div>
           <div class="header-text">
             <h3 class="seccion-titulo">Documentos PDF</h3>
@@ -164,10 +164,10 @@
         <!-- Controles de PDF -->
         <div class="pdf-controles">
           <div class="pdf-tabs">
-            <button type="button" 
+            <button type="button"
                     [class]="mostrarPdfOriginal ? 'tab-activo' : 'tab-inactivo'"
                     (click)="cambiarVistaPdf(true)">
-              <mat-icon>description</mat-icon>
+              <span class="icon-font">description</span>
               PDF Original (Akamba 1)
             </button>
 
@@ -178,7 +178,7 @@
 
         <!-- Visualizador de PDF -->
         <div class="pdf-viewer-container">
-          
+
           <!-- PDF Cargando -->
           <div *ngIf="pdfCargando" class="pdf-loading">
             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -187,7 +187,7 @@
 
           <!-- PDF Error -->
           <div *ngIf="pdfError && !pdfCargando" class="pdf-error">
-            <mat-icon>error</mat-icon>
+            <span class="icon-font">error</span>
             <p>Error al cargar el documento PDF</p>
             <button mat-button color="primary" (click)="cargarPdfAutomatico()">
               Reintentar
@@ -196,19 +196,19 @@
 
           <!-- PDF Original -->
           <iframe *ngIf="mostrarPdfOriginal && pdfOriginalUrl && !pdfCargando && !pdfError"
-                  [src]="pdfOriginalUrl" 
+                  [src]="pdfOriginalUrl"
                   class="pdf-iframe">
           </iframe>
 
           <!-- PDF Corregido -->
           <iframe *ngIf="!mostrarPdfOriginal && pdfCorregidoUrl"
-                  [src]="pdfCorregidoUrl" 
+                  [src]="pdfCorregidoUrl"
                   class="pdf-iframe">
           </iframe>
 
           <!-- No hay PDF corregido -->
           <div *ngIf="!mostrarPdfOriginal && !pdfCorregidoUrl" class="no-pdf-corregido">
-            <mat-icon>upload_file</mat-icon>
+            <span class="icon-font">upload_file</span>
             <p>No has seleccionado un PDF corregido</p>
             <button mat-button color="primary" (click)="triggerFileInput()">
               Seleccionar archivo PDF
@@ -216,9 +216,9 @@
           </div>
 
           <!-- No hay PDF original -->
-          <div *ngIf="mostrarPdfOriginal && !pdfOriginalUrl && !pdfCargando && !pdfError" 
+          <div *ngIf="mostrarPdfOriginal && !pdfOriginalUrl && !pdfCargando && !pdfError"
                class="no-pdf-original">
-            <mat-icon>description</mat-icon>
+            <span class="icon-font">description</span>
             <p>No hay PDF original disponible</p>
           </div>
 
@@ -229,21 +229,21 @@
 
     <!-- FOOTER CON BOTONES DE ACCIÓN -->
     <div class="modal-footer">
-      
+
 
 
       <!-- Botones simplificados -->
       <div class="footer-botones">
         <!-- Solo botón Cerrar -->
-        <button mat-stroked-button 
-                (click)="cerrarModal()" 
+        <button mat-stroked-button
+                (click)="cerrarModal()"
                 [disabled]="guardando"
                 class="btn-cancelar">
-          <mat-icon>close</mat-icon>
+          <span class="icon-font">close</span>
           Cerrar
         </button>
       </div>
     </div>
 
   </div>
-</div> 
+</div>

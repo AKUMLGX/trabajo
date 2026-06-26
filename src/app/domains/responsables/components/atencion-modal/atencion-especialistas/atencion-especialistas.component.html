@@ -5,13 +5,13 @@
       <div
         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
         [ngClass]="seleccionados.length > 0 ? 'bg-tlalcalli-primary' : 'bg-[#7a006e]'">
-        <mat-icon *ngIf="seleccionados.length > 0">check</mat-icon>
+        <span class="icon-font" *ngIf="seleccionados.length > 0">check</span>
         <span *ngIf="seleccionados.length === 0" class="font-black">1</span>
       </div>
 
       <div>
         <h4 class="m-0 flex items-center gap-2 text-lg font-black text-gray-700">
-          <mat-icon class="!h-5 !w-5 !text-xl text-[#4b0075]">groups</mat-icon>
+          <span class="icon-font !h-5 !w-5 !text-xl text-[#4b0075]">groups</span>
           Asigna Especialista(s)
         </h4>
         <p class="m-0 mt-2 text-sm font-noto-sans text-gray-400">
@@ -30,7 +30,7 @@
   <div class="border-t border-gray-200 pt-5">
     <div class="mb-3 flex items-center justify-between">
       <span class="inline-flex items-center gap-2 rounded-md bg-tlalcalli-primary px-3 py-1 text-xs font-black uppercase text-white">
-        <mat-icon class="!h-4 !w-4 !text-base">work_outline</mat-icon>
+        <span class="icon-font !h-4 !w-4 !text-base">work_outline</span>
         Externos
       </span>
       <span class="text-sm font-semibold text-gray-400">{{ externos.length }} disponibles</span>
@@ -55,7 +55,7 @@
           <span class="mt-1 block truncate text-xs font-noto-sans text-gray-400">Especialista Externo</span>
         </div>
 
-        <mat-icon *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</mat-icon>
+        <span class="icon-font" *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</span>
       </button>
     </div>
   </div>
@@ -63,7 +63,7 @@
   <div class="mt-5">
     <div class="mb-3 flex items-center justify-between">
       <span class="inline-flex items-center gap-2 rounded-md bg-emerald-500 px-3 py-1 text-xs font-black uppercase text-white">
-        <mat-icon class="!h-4 !w-4 !text-base">badge</mat-icon>
+        <span class="icon-font !h-4 !w-4 !text-base">badge</span>
         Internos
       </span>
       <span class="text-sm font-semibold text-gray-400">{{ internos.length }} disponibles</span>
@@ -88,7 +88,7 @@
           <span class="mt-1 block truncate text-xs font-noto-sans text-gray-400">Especialista Interno</span>
         </div>
 
-        <mat-icon *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</mat-icon>
+        <span class="icon-font" *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</span>
       </button>
     </div>
   </div>

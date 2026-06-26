@@ -6,7 +6,8 @@
         <div class="flex items-center">
           <button mat-icon-button (click)="goBack()"
             class="mr-4 text-white hover:bg-white/20 rounded-full transition-all">
-            <mat-icon>arrow_back</mat-icon>
+            <!-- <span class="icon-font">arrow_back</span> -->
+            <span class="icon-font">arrow_back</span>
           </button>
           <div>
             <div class="flex items-center">
@@ -20,14 +21,17 @@
         </div>
         <div class="flex items-center gap-3">
           <span
-            [ngClass]="[asunto.plazo_atencion_original === 0 ? 'bg-red-600 text-white' : 'bg-green-600 text-white', 'px-3 py-1.5 rounded-full flex items-center text-sm font-noto-sans shadow-md border border-white/30 backdrop-blur-sm']">
-            <mat-icon class="text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' :
-              'check_circle'}}</mat-icon>
+            [ngClass]="[asunto.plazo_atencion_original === 0 ? 'bg-red-600 text-white' : 'bg-green-600 font-noto-sans text-white', 'px-3 py-1.5 rounded-full flex items-center text-sm font-noto-sans font-medium shadow-md border border-white/30 backdrop-blur-sm']">
+            <!-- <span class="icon-font text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' :
+              'check_circle'}}</span> -->
+          <span class="icon-font font-noto-sans text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' : 'check_circle}}</span>
+
             {{getPlazoAtencionText()}}
           </span>
           <span
-            [ngClass]="[getStatusClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-noto-sans shadow-md border border-white/30 backdrop-blur-sm']">
-            <mat-icon class="text-sm mr-1">{{getStatusIcon()}}</mat-icon>
+            [ngClass]="[getStatusClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
+            <!-- <span class="icon-font text-sm mr-1">{{getStatusIcon()}}</span> -->
+            <span class="icon-font text-sm mr-1">{{getStatusIcon()}}</span>
             {{getStatusText()}}
           </span>
         </div>
@@ -43,7 +47,8 @@
       class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-lg shadow-md">
       <div class="flex items-start">
         <div class="flex-shrink-0">
-          <mat-icon class="text-red-600">error</mat-icon>
+          <!-- <span class="icon-font text-red-600">error</span> -->
+          <span class="icon-font text-red-600">error</span>
         </div>
         <div class="ml-3">
           <p class="text-lg font-noto-sans">Este asunto ha sido rechazado</p>
@@ -51,8 +56,9 @@
             {{asunto.fechaRechazo | date:'dd/MM/yyyy'}}</p>
           <p class="mt-1">Motivo: <span class="font-noto-sans">{{asunto.motivoRechazo}}</span></p>
           <button (click)="mostrarRevision()"
-            class="mt-2 bg-red-600 hover:bg-red-700 text-white font-noto-sans py-1 px-3 rounded text-sm flex items-center">
-            <mat-icon class="mr-1 text-sm">visibility</mat-icon>
+            class="mt-2 bg-red-600 hover:bg-red-700 font-noto-sans text-white font-medium py-1 px-3 rounded text-sm flex items-center">
+            <!-- <span class="icon-font mr-1 text-sm">visibility</span> -->
+            <span class="icon-font mr-1 text-sm">visibility</span>
             Ver detalles del rechazo
           </button>
         </div>
@@ -67,7 +73,8 @@
           <div class="flex items-center">
             <div
               class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-4 border border-white/30">
-              <mat-icon class="text-white">description</mat-icon>
+              <!-- <span class="icon-font text-white">description</span> -->
+              <span class="icon-font text-white">description</span>
             </div>
             <div>
               <h3 class="text-xl font-noto-sans text-white">{{asunto.oficio || 'No disponible'}}</h3>
@@ -99,12 +106,14 @@
           </div>
           <div class="flex items-center gap-4">
             <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/30 flex items-center">
-              <mat-icon class="text-white/90 mr-2">schedule</mat-icon>
-              <span class="text-sm font-noto-sans text-white">{{asunto.diasTranscurridos}} días transcurridos</span>
+              <!-- <span class="icon-font text-white/90 mr-2">schedule</span> -->
+              <span class="icon-font text-white/90 mr-2">schedule</span>
+              <span class="text-sm font-noto-sans font-medium text-white">{{asunto.diasTranscurridos}} días transcurridos</span>
             </div>
             <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/30 flex items-center">
-              <mat-icon class="text-white/90 mr-2">calendar_today</mat-icon>
-              <span class="text-sm font-noto-sans text-white">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</span>
+              <!-- <span class="icon-font text-white/90 mr-2">calendar_today</span> -->
+              <span class="icon-font text-white/90 mr-2">calendar_today</span>
+              <span class="text-sm font-noto-sans font-medium text-white">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</span>
             </div>
           </div>
         </div>
@@ -118,7 +127,8 @@
               <div class="flex items-center mb-6">
                 <div
                   class="w-12 h-12 rounded-full bg-slate-500/10 flex items-center justify-center mr-4 border border-slate-200">
-                  <mat-icon class="text-slate-600">assignment</mat-icon>
+                  <!-- <span class="icon-font text-slate-600">assignment</span> -->
+                  <span class="icon-font text-slate-600">assignment</span>
                 </div>
                 <h3 class="text-xl font-noto-sans text-slate-800">Datos Generales del Requerimiento</h3>
               </div>
@@ -128,7 +138,8 @@
 
                 <!-- Carpeta de Investigación -->
                 <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 flex items-center">
-                  <mat-icon class="text-amber-600 mr-3">insert_drive_file</mat-icon>
+                  <!-- <span class="icon-font text-amber-600 mr-3">insert_drive_file</span> -->
+                  <span class="icon-font text-amber-600 mr-3">insert_drive_file</span>
                   <div class="min-w-0 flex-1">
                     <p class="text-sm text-gray-500 truncate">Carpeta de Investigación</p>
                     <p class="font-noto-sans text-amber-800 truncate">{{asunto.carpetaInvestigacion}}</p>
@@ -137,7 +148,8 @@
 
                 <!-- Número de Oficio -->
                 <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
-                  <mat-icon class="text-green-600 mr-3">article</mat-icon>
+                  <!-- <span class="icon-font text-green-600 mr-3">article</span> -->
+                  <span class="icon-font text-green-600 mr-3">article</span>
                   <div class="min-w-0 flex-1">
                     <p class="text-sm text-gray-500 truncate">Número de Oficio</p>
                     <p class="font-noto-sans text-green-800 truncate">{{asunto.oficio || 'No disponible'}}</p>
@@ -146,7 +158,8 @@
 
                 <!-- Folio Scanner -->
                 <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
-                  <mat-icon class="text-green-600 mr-3">qr_code</mat-icon>
+                  <!-- <span class="icon-font text-green-600 mr-3">qr_code</span> -->
+                  <span class="icon-font text-green-600 mr-3">qr_code</span>
                   <div class="min-w-0 flex-1">
                     <p class="text-sm text-gray-500 truncate">Folio Scanner</p>
                     <p class="font-noto-sans text-green-800 truncate">{{asunto.folioScanner || 'No disponible'}}</p>
@@ -155,7 +168,8 @@
 
                 <!-- Autoridad Remitente -->
                 <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
-                  <mat-icon class="text-purple-600 mr-3">account_balance</mat-icon>
+                  <!-- <span class="icon-font text-purple-600 mr-3">account_balance</span> -->
+                  <span class="icon-font text-purple-600 mr-3">account_balance</span>
                   <div class="min-w-0 flex-1">
                     <p class="text-sm text-gray-500 truncate">Autoridad Remitente</p>
                     <p class="font-noto-sans text-purple-800 truncate">{{asunto.autoridadRemitente || 'No disponible'}}</p>
@@ -164,7 +178,8 @@
 
                 <!-- Turno Jefatura -->
                 <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
-                  <mat-icon class="text-purple-600 mr-3">call_split</mat-icon>
+                  <!-- <span class="icon-font text-purple-600 mr-3">call_split</span> -->
+                  <span class="icon-font text-purple-600 mr-3">split</span>
                   <div class="min-w-0 flex-1">
                     <p class="text-sm text-gray-500 truncate">Turno Jefatura</p>
                     <p class="font-noto-sans text-purple-800 truncate">{{asunto.turnoJefatura || 'No disponible'}}</p>
@@ -173,7 +188,8 @@
 
                 <!-- Administración -->
                 <div class="p-4 rounded-lg bg-blue-50 border border-blue-200 flex items-center">
-                  <mat-icon class="text-blue-600 mr-3">business</mat-icon>
+                  <!-- <span class="icon-font text-blue-600 mr-3">business</span> -->
+                  <span class="icon-font text-blue-600 mr-3">business</span>
                   <div class="min-w-0 flex-1">
                     <p class="text-sm text-gray-500 truncate">Administración</p>
                     <p class="font-noto-sans text-blue-800 truncate">{{getAdministracionText()}}</p>
@@ -191,7 +207,8 @@
               <div class="flex items-center mb-4">
                 <div
                   class="w-10 h-10 rounded-full bg-[#691C32]/10 flex items-center justify-center mr-3 border border-[#691C32]/20">
-                  <mat-icon class="text-[#691C32]">tune</mat-icon>
+                  <!-- <span class="icon-font text-[#691C32]">tune</span> -->
+                  <span class="icon-font text-[#691C32]">tune</span>
                 </div>
                 <h3 class="text-lg font-noto-sans text-[#691C32]">Acciones Rápidas</h3>
               </div>
@@ -200,7 +217,8 @@
                 <button mat-stroked-button
                   class="w-full justify-start py-3 px-4 rounded-lg border-green-600 text-green-600 hover:bg-green-50 transition-all"
                   (click)="confirmarFinalizacion()">
-                  <mat-icon class="mr-3">done_all</mat-icon>
+                  <!-- <span class="icon-font mr-3">done_all</span> -->
+                  <span class="icon-font mr-3">done_all</span>
                   <span>Finalizar y Enviar a Revisión</span>
                 </button>
               </div>
@@ -218,7 +236,7 @@
       <div class="flex items-center">
         <div
           class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-          <mat-icon class="text-white">edit_note</mat-icon>
+            <span class="icon-font text-white">edit_note</span>
         </div>
         <h2 class="text-xl font-noto-sans text-white">Expediente</h2>
       </div>
@@ -249,7 +267,7 @@
           <div class="flex items-center justify-between mb-8">
             <h3 class="text-xl font-noto-sans text-blue-800 flex items-center">
               <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center mr-4">
-                <mat-icon class="text-blue-700">send</mat-icon>
+                <span class="icon-font text-blue-700">send</span>
               </div>
               Solicitud de Información
             </h3>
@@ -260,7 +278,7 @@
             <!-- Número de folio interno -->
             <div class="col-span-1">
               <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
-                <mat-icon class="text-blue-600 mr-2 text-lg">confirmation_number</mat-icon>
+                <span class="icon-font text-blue-600 mr-2 text-lg">confirmation_number</span>
                 Folio Scanner
               </label>
               <div class="relative">
@@ -268,7 +286,7 @@
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
                   placeholder="Ej: 12345">
                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <mat-icon class="text-blue-400 text-lg">#</mat-icon>
+                  <span class="icon-font text-blue-400 text-lg">#</span>
                 </div>
               </div>
             </div>
@@ -276,14 +294,14 @@
             <!-- Fecha del acuse -->
             <div class="col-span-1">
               <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
-                <mat-icon class="text-blue-600 mr-2 text-lg">event</mat-icon>
+                <span class="icon-font text-blue-600 mr-2 text-lg">event</span>
                 Fecha del acuse de solicitud *
               </label>
               <div class="relative">
                 <input type="date" formControlName="fecha_atencion"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800">
                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <mat-icon class="text-blue-400 text-lg">calendar_today</mat-icon>
+                  <span class="icon-font text-blue-400 text-lg">calendar_today</span>
                 </div>
               </div>
             </div>
@@ -291,7 +309,7 @@
             <!-- Número de oficio -->
             <div class="col-span-1">
               <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
-                <mat-icon class="text-blue-600 mr-2 text-lg">description</mat-icon>
+                <span class="icon-font text-blue-600 mr-2 text-lg">description</span>
                 Número de oficio (cuando aplique)
               </label>
               <div class="relative">
@@ -299,7 +317,7 @@
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
                   placeholder="Ej: SAT/001/2025">
                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <mat-icon class="text-blue-400 text-lg">article</mat-icon>
+                  <span class="icon-font text-blue-400 text-lg">article</span>
                 </div>
               </div>
             </div>
@@ -307,7 +325,7 @@
             <!-- Área solicitada -->
             <div class="col-span-1">
               <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
-                <mat-icon class="text-blue-600 mr-2 text-lg">business</mat-icon>
+                <span class="icon-font text-blue-600 mr-2 text-lg">business</span>
                 Área a quien se solicita información *
               </label>
               <div class="relative">
@@ -327,10 +345,10 @@
                   <option value="AGGC">Administración General de Grandes Contribuyentes (AGGC)</option>
                 </select>
                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <mat-icon class="text-blue-400 text-lg">domain</mat-icon>
+                  <span class="icon-font text-blue-400 text-lg">domain</span>
                 </div>
                 <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <mat-icon class="text-blue-400 text-lg">expand_more</mat-icon>
+                  <span class="icon-font text-blue-400 text-lg">expand_more</span>
                 </div>
               </div>
             </div>
@@ -338,7 +356,7 @@
             <!-- Descripción -->
             <div class="col-span-2">
               <label class="text-sm font-semibold text-blue-700 mb-3 flex items-center">
-                <mat-icon class="text-blue-600 mr-2 text-lg">edit_note</mat-icon>
+                <span class="icon-font text-blue-600 mr-2 text-lg">edit_note</span>
                 Breve descripción de lo solicitado *
               </label>
               <div class="relative">
@@ -346,7 +364,7 @@
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400 resize-none"
                   placeholder="Describa brevemente la información solicitada..."></textarea>
                 <div class="absolute left-4 top-4">
-                  <mat-icon class="text-blue-400 text-lg">notes</mat-icon>
+                  <span class="icon-font text-blue-400 text-lg">notes</span>
                 </div>
               </div>
             </div>
@@ -386,7 +404,7 @@
                 ) {
                     <div class="text-wine text-base p-3 flex gap-3">
                                         <span>REQUERIDO</span>
-                                        <mat-icon>error</mat-icon>
+                                        <span class="icon-font">error</span>
                                     </div>
                 }
             }
@@ -397,7 +415,7 @@
           (click)="requestformSolicitudDeInformacion()"
 
        >
-   <mat-icon class="mr-3">save</mat-icon>
+   <span class="icon-font mr-3">save</span>
           Guardar expediente
         </button>
       </div>
@@ -413,7 +431,7 @@
           <div class="flex items-center justify-between mb-8">
             <h3 class="text-xl font-noto-sans text-green-800 flex items-center">
               <div class="w-10 h-10 rounded-full bg-green-200 flex items-center justify-center mr-4">
-                <mat-icon class="text-green-700">reply</mat-icon>
+                <span class="icon-font text-green-700">reply</span>
               </div>
               Respuesta Interna
             </h3>
@@ -505,7 +523,7 @@
                 ) {
                     <div class="text-wine text-base p-3 flex gap-3">
                                         <span>REQUERIDO</span>
-                                        <mat-icon>error</mat-icon>
+                                        <span class="icon-font">error</span>
                                     </div>
                 }
             }
@@ -517,7 +535,7 @@
           (click)="requestformRespuestaInterna()"
 
        >
-   <mat-icon class="mr-3">save</mat-icon>
+   <span class="icon-font mr-3">save</span>
           Guardar expediente
         </button>
           </div>
@@ -533,7 +551,7 @@
           <div class="flex items-center justify-between mb-8">
             <h3 class="text-xl font-noto-sans text-purple-800 flex items-center">
               <div class="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center mr-4">
-                <mat-icon class="text-purple-700">gavel</mat-icon>
+                <span class="icon-font text-purple-700">gavel</span>
               </div>
               Respuesta a FGR
             </h3>
@@ -619,7 +637,7 @@
                 ) {
                     <div class="text-wine text-base p-3 flex gap-3">
                                         <span>REQUERIDO</span>
-                                        <mat-icon>error</mat-icon>
+                                        <span class="icon-font">error</span>
                                     </div>
                 }
             }
@@ -631,7 +649,7 @@
           (click)="requestformRespuestaAFGR()"
 
        >
-   <mat-icon class="mr-3">save</mat-icon>
+   <span class="icon-font mr-3">save</span>
           Guardar expediente
         </button>
       </div>
@@ -656,12 +674,12 @@
         <!-- Header -->
         <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-2xl p-6">
           <div class="flex items-center justify-between">
-            <h3 class="text-xl font-noto-sans text-white flex items-center">
-              <mat-icon class="mr-3">add_business</mat-icon>
+            <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
+              <span class="icon-font mr-3">add_business</span>
               Agregar Área de Seguimiento
             </h3>
             <button (click)="cerrarModalAgregarArea()" class="text-white hover:text-indigo-200 transition-colors">
-              <mat-icon>close</mat-icon>
+              <span class="icon-font">close</span>
             </button>
           </div>
         </div>
@@ -670,7 +688,7 @@
         <div class="p-6">
           <div class="mb-6">
             <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
-              <mat-icon class="text-indigo-600 mr-2">business</mat-icon>
+              <span class="icon-font text-indigo-600 mr-2">business</span>
               Seleccionar Área SAT
             </label>
             <select [(ngModel)]="areaSeleccionadaParaAgregar"
@@ -688,8 +706,8 @@
             <div *ngIf="areasDisponiblesBackend.length === 0"
               class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
               <div class="flex items-center">
-                <mat-icon class="text-yellow-600 mr-2">info</mat-icon>
-                <p class="text-sm text-yellow-800 font-noto-sans">
+                <span class="icon-font text-yellow-600 mr-2">info</span>
+                <p class="text-sm font-noto-sans text-yellow-800 font-medium">
                   No hay áreas disponibles para agregar
                 </p>
               </div>
@@ -709,7 +727,7 @@
           <!-- Información adicional -->
           <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <div class="flex items-start">
-              <mat-icon class="text-blue-600 mr-2 mt-0.5">info</mat-icon>
+              <span class="icon-font text-blue-600 mr-2 mt-0.5">info</span>
               <div class="text-sm text-blue-800">
                 <p class="font-noto-sans mb-1">Al agregar esta área podrás:</p>
                 <ul class="list-disc list-inside space-y-1 text-xs">
@@ -730,8 +748,8 @@
             Cancelar
           </button>
           <button (click)="confirmarAgregarArea()" [disabled]="!areaSeleccionadaParaAgregar"
-            class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all font-noto-sans shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
-            <mat-icon class="mr-2">add</mat-icon>
+            class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 font-noto-sans text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+            <span class="icon-font mr-2">add</span>
             Agregar Área
           </button>
         </div>
@@ -749,12 +767,12 @@
         <!-- Header -->
         <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-2xl p-6">
           <div class="flex items-center justify-between">
-            <h3 class="text-xl font-noto-sans text-white flex items-center">
-              <mat-icon class="mr-3">edit</mat-icon>
+            <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
+              <span class="icon-font mr-3">edit</span>
               Editar Seguimiento
             </h3>
             <button (click)="cerrarModalEditarArea()" class="text-white hover:text-blue-200 transition-colors">
-              <mat-icon>close</mat-icon>
+              <span class="icon-font">close</span>
             </button>
           </div>
         </div>
@@ -764,7 +782,7 @@
           <!-- Información del área -->
           <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div class="flex items-center mb-2">
-              <mat-icon class="text-blue-600 mr-2">business</mat-icon>
+              <span class="icon-font text-blue-600 mr-2">business</span>
               <span class="font-semibold text-blue-800"></span>
             </div>
             <p class="text-sm text-blue-700"></p>
@@ -773,7 +791,7 @@
           <!-- Solicitud Enviada -->
           <div class="mb-6">
             <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-              <mat-icon class="text-indigo-600 mr-2 text-sm">send</mat-icon>
+              <span class="icon-font text-indigo-600 mr-2 text-sm">send</span>
               Solicitud Enviada
             </h4>
             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
@@ -782,7 +800,7 @@
           <!-- Respuesta Recibida -->
           <div class="mb-6" *ngIf="false">
             <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-              <mat-icon class="text-green-600 mr-2 text-sm">reply</mat-icon>
+              <span class="icon-font text-green-600 mr-2 text-sm">reply</span>
               Respuesta Recibida
             </h4>
             <div class="space-y-3">
@@ -798,7 +816,7 @@
           <!-- Recordatorio -->
           <div class="mb-6" *ngIf="false">
             <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-              <mat-icon class="text-yellow-600 mr-2 text-sm">schedule_send</mat-icon>
+              <span class="icon-font text-yellow-600 mr-2 text-sm">schedule_send</span>
               Recordatorio
             </h4>
             <div class="space-y-3">
@@ -826,12 +844,12 @@
         <!-- Header -->
         <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl p-6">
           <div class="flex items-center justify-between">
-            <h3 class="text-xl font-noto-sans text-white flex items-center">
-              <mat-icon class="mr-3">delete_forever</mat-icon>
+            <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
+              <span class="icon-font mr-3">delete_forever</span>
               Eliminar Área del Seguimiento
             </h3>
             <button (click)="cerrarModalEliminar()" class="text-white hover:text-red-200 transition-colors">
-              <mat-icon>close</mat-icon>
+              <span class="icon-font">close</span>
             </button>
           </div>
         </div>
@@ -840,7 +858,7 @@
         <div class="p-6">
           <div class="text-center mb-6">
             <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-              <mat-icon class="text-red-600 text-2xl">warning</mat-icon>
+              <span class="icon-font text-red-600 text-2xl">warning</span>
             </div>
             <h4 class="text-lg font-semibold text-gray-800 mb-2">¿Estás seguro?</h4>
             <p class="text-gray-600 mb-4">
@@ -850,7 +868,7 @@
             <!-- Información del área a eliminar -->
             <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
               <div class="flex items-center mb-2">
-                <mat-icon class="text-red-600 mr-2">business</mat-icon>
+                <span class="icon-font text-red-600 mr-2">business</span>
                 <span class="font-semibold text-red-800"></span>
               </div>
               <p class="text-sm text-red-700"></p>
@@ -859,15 +877,15 @@
               <div class="mt-3 pt-3 border-t border-red-200">
                 <div class="grid grid-cols-2 gap-2 text-xs">
                   <div class="flex items-center">
-                    <mat-icon class="text-red-500 mr-1 text-sm">radio_button_unchecked</mat-icon>
+                    <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
                     <span class="text-red-500">Solicitud</span>
                   </div>
                   <div class="flex items-center">
-                    <mat-icon class="text-red-500 mr-1 text-sm">radio_button_unchecked</mat-icon>
+                    <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
                     <span class="text-red-500">Respuesta</span>
                   </div>
                   <div class="flex items-center">
-                    <mat-icon class="text-red-500 mr-1 text-sm">radio_button_unchecked</mat-icon>
+                    <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
                     <span class="text-red-500">Recordatorio</span>
                   </div>
                   <div class="text-xs">
@@ -890,8 +908,8 @@
             Cancelar
           </button>
           <button (click)="confirmarEliminarArea()"
-            class="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-noto-sans shadow-lg flex items-center">
-            <mat-icon class="mr-2">delete</mat-icon>
+            class="px-6 py-3 font-noto-sans bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-medium shadow-lg flex items-center">
+            <span class="icon-font mr-2">delete</span>
             Eliminar Área
           </button>
         </div>
@@ -902,7 +920,7 @@
       <div class="flex items-center">
         <div
           class="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center mr-4 border border-indigo-200">
-          <mat-icon class="text-indigo-600">checklist</mat-icon>
+          <span class="icon-font text-indigo-600">checklist</span>
         </div>
         <div>
           <h3 class="text-xl font-noto-sans text-indigo-800">Control de Seguimiento por Áreas</h3>
@@ -927,7 +945,7 @@
           [class.opacity-50]="areasDisponiblesBackend.length === 0"
           [class.cursor-not-allowed]="areasDisponiblesBackend.length === 0"
           (click)="agregarNuevaFilaArea()">
-          <mat-icon class="mr-2 text-lg">add</mat-icon>
+          <span class="icon-font mr-2 text-lg">add</span>
           Nueva Área
         </button>
       </div>
@@ -936,8 +954,8 @@
     <!-- FORMULARIO TIPO EXCEL PARA AGREGAR NUEVA ÁREA -->
     <div *ngIf="mostrarFormularioNuevaArea" class="bg-white rounded-lg shadow-sm border border-green-200 overflow-hidden mb-6">
       <div class="bg-green-50 px-4 py-2 border-b border-green-200">
-        <h4 class="text-sm font-noto-sans text-green-800 flex items-center">
-          <mat-icon class="mr-2 text-sm">add_circle</mat-icon>
+        <h4 class="text-sm font-noto-sans font-medium text-green-800 flex items-center">
+          <span class="icon-font mr-2 text-sm">add_circle</span>
           Agregar Nueva Área de Seguimiento
         </h4>
       </div>
@@ -945,7 +963,7 @@
         <div class="grid grid-cols-8 gap-3 items-end">
           <!-- Área (obligatorio) -->
           <div class="col-span-2">
-            <label class="block text-xs font-noto-sans text-gray-700 mb-1">Área Solicitada *</label>
+            <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Área Solicitada *</label>
             <select [(ngModel)]="nuevaAreaForm.area"
                     class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
               <option value="">Seleccionar área...</option>
@@ -957,7 +975,7 @@
 
           <!-- Estado Respuesta (opcional) -->
           <div>
-            <label class="block text-xs font-noto-sans text-gray-700 mb-1">Estado</label>
+            <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Estado</label>
             <select [(ngModel)]="nuevaAreaForm.id_estado_respuesta"
                     class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
               <option [value]="undefined">N/A</option>
@@ -969,7 +987,7 @@
 
           <!-- Fecha Solicitud (requerida) -->
           <div>
-            <label class="block text-xs font-noto-sans text-gray-700 mb-1">Fecha Solicitud *</label>
+            <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Fecha Solicitud *</label>
             <input type="date"
                    [(ngModel)]="nuevaAreaForm.fecha_solicitud"
                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
@@ -993,7 +1011,7 @@
 
           <!-- Fecha Recordatorio Respuesta (opcional) -->
           <div>
-            <label class="block text-xs font-noto-sans text-gray-700 mb-1">Recordatorio Respuesta</label>
+            <label class="block text-xs font-noto-sans font-medium text-gray-700 mb-1">Recordatorio Respuesta</label>
             <input type="date"
                    [(ngModel)]="nuevaAreaForm.fecha_recordatorio_respuesta"
                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
@@ -1001,7 +1019,7 @@
 
           <!-- Observaciones (opcional) -->
           <div>
-            <label class="block text-xs font-noto-sans text-gray-700 mb-1">Observaciones</label>
+            <label class="block text-xs font-noto-sans font-medium text-gray-700 mb-1">Observaciones</label>
             <input type="text"
                    [(ngModel)]="nuevaAreaForm.observaciones"
                    placeholder="Opcional..."
@@ -1013,8 +1031,8 @@
             <button
               (click)="guardarNuevaArea()"
               [disabled]="!nuevaAreaForm.area || guardandoNuevaArea"
-              class="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-noto-sans transition-colors flex items-center">
-              <mat-icon *ngIf="!guardandoNuevaArea" class="mr-1 text-sm">save</mat-icon>
+              class="bg-green-600 font-noto-sans hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+              <span *ngIf="!guardandoNuevaArea" class="icon-font mr-1 text-sm">save</span>
               <div *ngIf="guardandoNuevaArea" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1"></div>
               {{guardandoNuevaArea ? 'Guardando...' : 'Guardar'}}
             </button>
@@ -1055,11 +1073,11 @@
                            'bg-yellow-100': area.tipoRespuesta === 'parcial',
                            'bg-gray-100': area.tipoRespuesta === 'pendiente'
                          }">
-                    <mat-icon class="text-sm" [ngClass]="{
+                    <span class="icon-font text-sm" [ngClass]="{
                                   'text-blue-600': area.tipoRespuesta === 'completa',
                                   'text-yellow-600': area.tipoRespuesta === 'parcial',
                                   'text-gray-600': area.tipoRespuesta === 'pendiente'
-                                }">business</mat-icon>
+                                }">business</span>
                   </div>
                   <div>
                     <p class="text-sm font-noto-sans text-gray-900">{{area.area}}</p>
@@ -1316,7 +1334,7 @@
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-noto-sans text-[#691C32]">Confirmar subida de archivos</h3>
       <button (click)="cancelarSubidaArchivos()" class="text-gray-500 hover:text-gray-700">
-        <mat-icon>close</mat-icon>
+        <span class="icon-font">close</span>
       </button>
     </div>
 
@@ -1325,7 +1343,7 @@
       <ul class="bg-gray-50 rounded-lg p-3 max-h-60 overflow-y-auto">
         <li *ngFor="let archivo of archivosSeleccionados"
           class="flex items-center py-2 border-b border-gray-100 last:border-0">
-          <mat-icon class="text-[#691C32] mr-2">picture_as_pdf</mat-icon>
+          <span class="icon-font text-[#691C32] mr-2">picture_as_pdf</span>
           <span class="flex-1 truncate">{{archivo.name}}</span>
           <span class="text-sm text-gray-500">{{(archivo.size / 1024).toFixed(1)}} KB</span>
         </li>
@@ -1340,7 +1358,7 @@
       </button>
       <button mat-flat-button class="px-4 py-2 rounded-lg bg-[#691C32] text-white flex items-center"
         [disabled]="cargandoArchivos" (click)="subirArchivos()">
-        <mat-icon *ngIf="!cargandoArchivos" class="mr-1">cloud_upload</mat-icon>
+        <span *ngIf="!cargandoArchivos" class="icon-font mr-1">cloud_upload</span>
         <span *ngIf="!cargandoArchivos">Subir Archivos</span>
         <div *ngIf="cargandoArchivos" class="flex items-center">
           <div class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
@@ -1359,7 +1377,7 @@
         <div class="flex items-center">
           <div
             class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-            <mat-icon class="text-white">folder_copy</mat-icon>
+            <span class="icon-font text-white">folder_copy</span>
           </div>
           <h2 class="text-xl font-noto-sans text-white">Documentos Adjuntos</h2>
         </div>
@@ -1367,13 +1385,13 @@
           <button mat-stroked-button
             class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center"
             (click)="abrirSelectorArchivos()">
-            <mat-icon class="mr-2">upload_file</mat-icon>
+            <span class="icon-font mr-2">upload_file</span>
             <span>Subir archivos</span>
           </button>
           <button mat-stroked-button
             class="bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg flex items-center"
             (click)="refrescarArchivosAdjuntos()">
-            <mat-icon class="mr-2">refresh</mat-icon>
+            <span class="icon-font mr-2">refresh</span>
             <span>Actualizar</span>
           </button>
         </div>
@@ -1389,11 +1407,11 @@
       <!-- Mensaje de error -->
       <div *ngIf="errorArchivosAdjuntos && !cargandoArchivosAdjuntos" class="py-8 text-center">
         <div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
-          <mat-icon class="text-red-600">error_outline</mat-icon>
+          <span class="icon-font text-red-600">error_outline</span>
         </div>
         <p class="text-red-600 mb-2">{{errorArchivosAdjuntos}}</p>
         <button mat-stroked-button color="primary" (click)="refrescarArchivosAdjuntos()">
-          <mat-icon class="mr-2">refresh</mat-icon>
+          <span class="icon-font mr-2">refresh</span>
           <span>Reintentar</span>
         </button>
       </div>
@@ -1404,19 +1422,19 @@
           class="flex items-center justify-between p-4 rounded-lg bg-white border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all">
           <div class="flex items-center min-w-0">
             <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3 border border-blue-200">
-              <mat-icon class="text-blue-600">description</mat-icon>
+              <span class="icon-font text-blue-600">description</span>
             </div>
             <div class="min-w-0">
               <p class="font-noto-sans text-blue-900 truncate mb-1">{{archivo.nombre}}</p>
               <div class="flex flex-wrap text-xs text-gray-500">
                 <span class="flex items-center mr-4">
-                  <mat-icon class="text-blue-400 mr-1"
-                    style="font-size: 16px; width: 16px; height: 16px;">description</mat-icon>
+                  <span class="icon-font text-blue-400 mr-1"
+                    style="font-size: 16px; width: 16px; height: 16px;">description</span>
                   <span>{{archivo.tamano}}</span>
                 </span>
                 <span class="flex items-center">
-                  <mat-icon class="text-blue-400 mr-1"
-                    style="font-size: 16px; width: 16px; height: 16px;">calendar_today</mat-icon>
+                  <span class="icon-font text-blue-400 mr-1"
+                    style="font-size: 16px; width: 16px; height: 16px;">calendar_today</span>
                   <span>{{formatearFechaArchivo(archivo.ultima_modificacion)}}</span>
                 </span>
               </div>
@@ -1425,7 +1443,7 @@
           <div class="flex gap-2 flex-shrink-0">
             <button mat-icon-button class="bg-blue-50 hover:bg-blue-100 transition-all" matTooltip="Ver archivo"
               (click)="verArchivoPdf(archivo.nombre)">
-              <mat-icon class="text-blue-600">visibility</mat-icon>
+              <span class="icon-font text-blue-600">visibility</span>
             </button>
           </div>
         </div>
@@ -1436,7 +1454,7 @@
         class="flex flex-col items-center justify-center py-12 text-center">
         <div
           class="w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center border-2 border-amber-200 shadow-lg">
-          <mat-icon class="text-amber-600" style="font-size: 40px; width: 40px; height: 40px;">assignment_add</mat-icon>
+          <span class="icon-font text-amber-600" style="font-size: 40px; width: 40px; height: 40px;">assignment_add</span>
         </div>
         <h3 class="text-amber-800 mb-3 text-xl font-noto-sans">¡Asunto Listo para Trabajar!</h3>
         <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-md mb-4">
@@ -1446,22 +1464,22 @@
         </div>
         <div class="space-y-2 text-sm text-gray-600 max-w-lg mb-6">
           <div class="flex items-center justify-center">
-            <mat-icon class="text-green-500 mr-2 text-sm">check_circle</mat-icon>
+            <span class="icon-font text-green-500 mr-2 text-sm">check_circle</span>
             <span>Asunto correctamente asignado a tu bandeja</span>
           </div>
           <div class="flex items-center justify-center">
-            <mat-icon class="text-amber-500 mr-2 text-sm">schedule</mat-icon>
+            <span class="icon-font text-amber-500 mr-2 text-sm">schedule</span>
             <span>Próximo paso: Adjuntar documentos de trabajo</span>
           </div>
           <div class="flex items-center justify-center">
-            <mat-icon class="text-blue-500 mr-2 text-sm">trending_up</mat-icon>
+            <span class="icon-font text-blue-500 mr-2 text-sm">trending_up</span>
             <span>Una vez subidos, el asunto pasará a estado "EN PROCESO"</span>
           </div>
         </div>
         <button mat-flat-button color="primary"
           class="mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg"
           (click)="abrirSelectorArchivos()">
-          <mat-icon class="mr-2">file_upload</mat-icon>
+          <span class="icon-font mr-2">file_upload</span>
           <span>Comenzar - Subir Documentos</span>
         </button>
       </div>
@@ -1471,13 +1489,13 @@
         *ngIf="archivosAdjuntos.length === 0 && !cargandoArchivosAdjuntos && !errorArchivosAdjuntos && !esEstadoPendienteSinDocumentos"
         class="flex flex-col items-center justify-center py-12 text-center">
         <div class="w-20 h-20 mb-6 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
-          <mat-icon class="text-blue-400" style="font-size: 36px; width: 36px; height: 36px;">folder_open</mat-icon>
+          <span class="icon-font text-blue-400" style="font-size: 36px; width: 36px; height: 36px;">folder_open</span>
         </div>
         <p class="text-gray-700 mb-2 text-lg font-noto-sans">No hay documentos adjuntos</p>
         <p class="text-sm text-gray-500 max-w-sm">Los documentos que se adjunten a este asunto aparecerán en esta
           sección</p>
         <button mat-flat-button color="primary" class="mt-4" (click)="abrirSelectorArchivos()">
-          <mat-icon class="mr-2">attach_file</mat-icon>
+          <span class="icon-font mr-2">attach_file</span>
           <span>Adjuntar documentos</span>
         </button>
       </div>
@@ -1494,19 +1512,19 @@
       <div class="flex items-center">
         <div
           class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-          <mat-icon class="text-white">picture_as_pdf</mat-icon>
+          <span class="icon-font text-white">picture_as_pdf</span>
         </div>
         <h2 class="text-xl font-noto-sans truncate">{{nombrePdfActual}}</h2>
       </div>
       <div class="flex items-center gap-2">
         <button *ngIf="!cargandoPdf && !errorPdf" (click)="descargarPdfActual()"
           class="bg-white/10 hover:bg-white/20 text-white py-1 px-3 rounded flex items-center border border-white/30 transition-all">
-          <mat-icon class="mr-1">download</mat-icon>
+          <span class="icon-font mr-1">download</span>
           <span class="text-sm">Descargar</span>
         </button>
         <button (click)="cerrarModalPdf()"
           class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
-          <mat-icon>close</mat-icon>
+          <span class="icon-font">close</span>
         </button>
       </div>
     </div>
@@ -1524,8 +1542,8 @@
       <!-- Mensaje de error -->
       <div *ngIf="errorPdf && !cargandoPdf" class="h-full flex justify-center items-center">
         <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg max-w-md text-center">
-          <mat-icon class="text-red-500 text-4xl mb-2">error_outline</mat-icon>
-          <p class="text-lg font-noto-sans mb-2">Error al cargar el documento</p>
+          <span class="icon-font font-noto-sans text-red-500 text-4xl mb-2">error_outline</span>
+          <p class="text-lg font-medium mb-2">Error al cargar el documento</p>
           <p>{{errorPdf}}</p>
           <button mat-stroked-button color="warn" class="mt-4" (click)="cerrarModalPdf()">Cerrar</button>
         </div>
