@@ -7,7 +7,7 @@ import { environment } from '../../../../environments/environment';
 export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly urlBase = environment.baseUrl;
-  private readonly urlCatalogos ='http://localhost:8090/tlalcalli/api/v1/catalogo';
+  private readonly urlCatalogos ='https://balam.sat.gob.mx/tlalcalli/api/v1';
 
 private buildUrl(endpoint: string): string {
   return `${this.urlBase.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
@@ -163,7 +163,7 @@ getEstadisticosAtencion<T>(): Observable<HttpResponse<T>> {
   // CATÁLOGO GENERALES
 
 getGenerales<T>(): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/generales`;
+  const url = `${this.urlCatalogos}/catalogo/generales`;
 
   console.log('GET GENERALES:', url);
 
@@ -173,7 +173,7 @@ getGenerales<T>(): Observable<HttpResponse<T>> {
 }
 
 crearGeneral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/generales`;
+  const url = `${this.urlCatalogos}/catalogo/generales`;
 
   console.log('POST GENERAL:', url);
   console.log(body);
@@ -184,7 +184,7 @@ crearGeneral<T>(body: object): Observable<HttpResponse<T>> {
 }
 
 actualizarGeneral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/update_generales`;
+  const url = `${this.urlCatalogos}/catalogo/update_generales`;
 
   console.log('PUT GENERAL:', url);
   console.log(body);
@@ -195,7 +195,7 @@ actualizarGeneral<T>(body: object): Observable<HttpResponse<T>> {
 }
 
 eliminarGeneral<T>(id: number | string): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/generales/${id}`;
+  const url = `${this.urlCatalogos}/catalogo/generales/${id}`;
 
   console.log('DELETE GENERAL:', url);
 
@@ -210,7 +210,7 @@ eliminarGeneral<T>(id: number | string): Observable<HttpResponse<T>> {
 // CATÁLOGO CENTRALES
 
 getCentrales<T>(): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/central`;
+  const url = `${this.urlCatalogos}/catalogo/central`;
 
   console.log('GET CENTRALES:', url);
 
@@ -220,7 +220,7 @@ getCentrales<T>(): Observable<HttpResponse<T>> {
 }
 
 crearCentral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/central`;
+  const url = `${this.urlCatalogos}/catalogo/central`;
 
   console.log('POST CENTRAL:', url);
   console.log(body);
@@ -231,7 +231,7 @@ crearCentral<T>(body: object): Observable<HttpResponse<T>> {
 }
 
 actualizarCentral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/update_central`;
+  const url = `${this.urlCatalogos}/catalogo/update_central`;
 
   console.log('PUT CENTRAL:', url);
   console.log(body);
@@ -242,7 +242,7 @@ actualizarCentral<T>(body: object): Observable<HttpResponse<T>> {
 }
 
 eliminarCentral<T>(id: number | string): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/central/${id}`;
+  const url = `${this.urlCatalogos}/catalogo/central/${id}`;
 
   console.log('DELETE CENTRAL:', url);
 

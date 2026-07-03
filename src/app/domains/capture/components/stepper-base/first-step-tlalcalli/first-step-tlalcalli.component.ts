@@ -111,18 +111,13 @@ private cargarCatalogos(): void {
 }
 
 private cargarGenerales(): void {
-  const endpoint = 'catalogo/generales';
-  console.log('GET GENERALES URL FRONT:', this.apiService.baseUrl + '/' + endpoint);
-
   this.apiService.getGenerales<CatalogoGeneralResponse[]>().subscribe({
     next: (response: HttpResponse<CatalogoGeneralResponse[]>) => {
-      console.log('Generales:', response.body);
-
       const data = response.body ?? [];
 
-      this.generalesData = data;
+      this.generalesData = data.filter(item => !item.eliminado);
 
-      this.remitentesGenerales = data.map((item) => ({
+      this.remitentesGenerales = this.generalesData.map((item) => ({
         value: item.clave,
         label: `${item.clave} - ${item.nombre}`,
       }));
