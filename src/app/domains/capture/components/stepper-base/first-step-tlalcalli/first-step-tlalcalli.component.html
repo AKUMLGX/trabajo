@@ -320,46 +320,98 @@
           <p class="mt-1 text-xs font-noto-sans">Nivel de prioridad del requerimiento</p>
         </div>
 
-        <div class="border-t border-tlalcalli-light-muted pt-5">
-          <h3 class="mb-4 flex items-center gap-2 text-base font-noto-sans ">
-            Remitente (Área)
-          </h3>
+ <div class="border-t border-tlalcalli-light-muted pt-5">
+  <h3 class="mb-4 flex items-center gap-2 text-base font-noto-sans">
+    Remitente (Área)
+  </h3>
 
-          <div class="space-y-4">
-            <div>
-              <app-custom-select
-                label="Administración General"
-                [required]="true"
-                placeholder="Seleccione la Administración General..."
-                [options]="remitentesGenerales"
-                [errorMessage]="remitenteGeneralError"
-                formControlName="remitente_general">
-              </app-custom-select>
-            </div>
+  <div class="space-y-4">
 
-            @if (formulario.get('remitente_general')?.value) {
-              <div>
-                <app-custom-select
-                  label="Administración Central"
-                  placeholder="Seleccione una opción..."
-                  [options]="remitenteCentralOptions"
-                  [errorMessage]="remitenteCentralError"
-                  formControlName="remitente_central">
-                </app-custom-select>
-              </div>
+    <div class="flex items-end gap-2">
+      <div class="flex-1">
+        <app-custom-select
+          label="Administración General"
+          [required]="true"
+          placeholder="Seleccione la Administración General..."
+          [options]="remitentesGenerales"
+          [errorMessage]="remitenteGeneralError"
+          formControlName="remitente_general">
+        </app-custom-select>
+      </div>
 
-              <div>
-                <app-custom-form-field
-                  label="Identificador del Remitente"
-                  placeholder="Máximo 15 caracteres"
-                  [errorMessage]="remitenteIdentificadorError"
-                  formControlName="remitente_identificador"
-                  [maxlength]="15">
-                </app-custom-form-field>
-              </div>
-            }
-          </div>
+      <button
+        type="button"
+        (click)="agregarGeneral()"
+        class="rounded-lg bg-tlalcalli-primary px-3 py-2 text-xs font-noto-sans text-white">
+        Agregar
+      </button>
+
+      @if (formulario.get('remitente_general')?.value && !esGeneralPredefinido()) {
+        <button
+          type="button"
+          (click)="editarGeneral()"
+          class="rounded-lg bg-tlalcalli-lavender px-3 py-2 text-xs font-noto-sans text-white">
+          Editar
+        </button>
+
+        <button
+          type="button"
+          (click)="eliminarGeneralCatalogo()"
+          class="rounded-lg border border-red-500 px-3 py-2 text-xs font-noto-sans text-red-600">
+          Eliminar
+        </button>
+      }
+    </div>
+
+    @if (formulario.get('remitente_general')?.value) {
+      <div class="flex items-end gap-2">
+        <div class="flex-1">
+          <app-custom-select
+            label="Administración Central"
+            placeholder="Seleccione una opción..."
+            [options]="remitenteCentralOptions"
+            [errorMessage]="remitenteCentralError"
+            formControlName="remitente_central">
+          </app-custom-select>
         </div>
+
+        <button
+          type="button"
+          (click)="agregarCentral()"
+          class="rounded-lg bg-tlalcalli-primary px-3 py-2 text-xs font-noto-sans text-white">
+          Agregar
+        </button>
+
+        @if (formulario.get('remitente_central')?.value && !esCentralPredefinida()) {
+          <button
+            type="button"
+            (click)="editarCentral()"
+            class="rounded-lg bg-tlalcalli-lavender px-3 py-2 text-xs font-noto-sans text-white">
+            Editar
+          </button>
+
+          <button
+            type="button"
+            (click)="eliminarCentralCatalogo()"
+            class="rounded-lg border border-red-500 px-3 py-2 text-xs font-noto-sans text-red-600">
+            Eliminar
+          </button>
+        }
+      </div>
+
+      <div>
+        <app-custom-form-field
+          label="Identificador del Remitente"
+          placeholder="Máximo 15 caracteres"
+          [errorMessage]="remitenteIdentificadorError"
+          formControlName="remitente_identificador"
+          [maxlength]="15">
+        </app-custom-form-field>
+      </div>
+    }
+
+  </div>
+</div>
       </div>
     </section>
 

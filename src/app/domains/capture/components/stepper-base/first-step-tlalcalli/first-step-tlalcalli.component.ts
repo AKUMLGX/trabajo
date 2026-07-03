@@ -16,7 +16,8 @@ import { ConfirmacionModalComponent, ConfirmacionModalData } from '../confirmaci
 import { Subject, takeUntil, debounceTime, timer, switchMap, Subscription } from 'rxjs';
 import { inject } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
-import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGeneralResponse } from '../../../../interfaces/first-step-catalogos.interface';
+import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGeneralResponse, 
+CrearGeneralRequest, ActualizarGeneralRequest,CrearCentralRequest,ActualizarCentralRequest, MensajeCatalogoResponse } from '../../../../interfaces/first-step-catalogos.interface';
 import { HttpResponse } from '@angular/common/http';
 @Component({
   selector: 'app-first-step-tlalcalli',
@@ -49,6 +50,12 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   // Detección de caracteres problemáticos en oficio
   caracteresProblematicos: { caracter: string; posicion: number; sugerencia: string }[] = [];
   tieneCaracteresProblematicos: boolean = false;
+
+  generalesData: CatalogoGeneralResponse[] = [];
+  centralesData: CatalogoCentralResponse[] = [];
+
+  generalesCreadasPorUsuario: string[] = [];
+  centralesCreadasPorUsuario: string[] = [];
 
   private destroy$ = new Subject<void>();
 
@@ -88,6 +95,7 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   // tipoMedioRecepcionOptions: SelectOption[] = [];
   remitentesGenerales: SelectOption[] = [];
   centralesPorGeneral: Record<string, SelectOption[]> = {};
+  remitenteCentralOptions: SelectOption[] = [];
 
   tipoMedioRecepcionOptions: SelectOption[] = [
     { value: 'ATENTA_NOTA', label: 'Atenta nota' },
@@ -96,135 +104,6 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
     { value: 'CORREO_ELECTRONICO', label: 'Correo electrónico' }
   ];
 
-  // remitentesGenerales: SelectOption[] = [
-  //   { value: 'AGSC', label: 'AGSC - Administración General de Servicios Centrales' },
-  //   { value: 'AGP', label: 'AGP - Administración General de Planeación' },
-  //   { value: 'AGR', label: 'AGR - Administración General de Recaudación' },
-  //   { value: 'AGGC', label: 'AGGC - Administración General de Grandes Contribuyentes' },
-  //   { value: 'AGACE', label: 'AGACE - Administración General de Auditoría de Comercio Exterior' },
-  //   { value: 'AGAF', label: 'AGAF - Administración General de Auditoría Fiscal' },
-  //   { value: 'AGAJ', label: 'AGAJ - Administración General de Asuntos Jurídicos' },
-  //   { value: 'AGH', label: 'AGH - Administración General de Hidrocarburos' },
-  //   { value: 'AGSAC', label: 'AGSAC - Administración General de Servicios al Contribuyente' },
-  //   { value: 'AGJ', label: 'AGJ - Administración General Jurídica' },
-  //   { value: 'AGRS', label: 'AGRS - Administración General de Recursos y Servicios' },
-  //   { value: 'AGCTI', label: 'AGCTI - Administración General de Comunicaciones y Tecnologías de la Información' },
-  //   { value: 'AGE', label: 'AGE - Administración General de Evaluación' }
-  // ];
-
-  // centralesPorGeneral: { [key: string]: SelectOption[] } = {
-  //   'AGSC': [
-  //     { value: 'ACOP', label: 'ACOP - Administración Central de Operación de Padrones' },
-  //     { value: 'ACSTC', label: 'ACSTC - Administración Central de Servicios Tributarios al Contribuyente' },
-  //     { value: 'ACATF', label: 'ACATF - Administración Central de Análisis Técnico Fiscal' },
-  //     { value: 'ACGSTME', label: 'ACGSTME - Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos' }
-  //   ],
-  //   'AGP': [
-  //     { value: 'ACEAI', label: 'ACEAI - Administración Central de Estudios, Análisis e Información' },
-  //     { value: 'ACPVI', label: 'ACPVI - Administración Central de Proyectos y Vinculación Institucional' },
-  //     { value: 'ACMII', label: 'ACMII - Administración Central de Modelos de Integración de Información' }
-  //   ],
-  //   'AGR': [
-  //     { value: 'ACDP', label: 'ACDP - Administración Central de Declaraciones y Pagos' },
-  //     { value: 'ACPVC', label: 'ACPVC - Administración Central de Promoción y Vigilancia del Cumplimiento' },
-  //     { value: 'ACCC', label: 'ACCC - Administración Central de Cobro Coactivo' },
-  //     { value: 'ACCPG', label: 'ACCPG - Administración Central de Cobro Persuasivo y Garantías' },
-  //     { value: 'ACPEC', label: 'ACPEC - Administración Central de Planeación y Estrategias de Cobro' },
-  //     { value: 'ACPOEF', label: 'ACPOEF - Administración Central de Programas Operativos con Entidades Federativas' },
-  //     { value: 'ACN', label: 'ACN - Administración Central de Notificación' },
-  //     { value: 'ACAJR', label: 'ACAJR - Administración Central de Apoyo Jurídico de Recaudación' }
-  //   ],
-  //   'AGGC': [
-  //     { value: 'ACFSF', label: 'ACFSF - Administración Central de Fiscalización al Sector Financiero' },
-  //     { value: 'ACFGS', label: 'ACFGS - Administración Central de Fiscalización a Grupos de Sociedades' },
-  //     { value: 'ACPPFGC', label: 'ACPPFGC - Administración Central de Planeación y Programación de Fiscalización a Grandes Contribuyentes' },
-  //     { value: 'ACAJNI', label: 'ACAJNI - Administración Central de Apoyo Jurídico y Normatividad Internacional' },
-  //     { value: 'ACFGCD', label: 'ACFGCD - Administración Central de Fiscalización a Grandes Contribuyentes Diversos' },
-  //     { value: 'ACFPT', label: 'ACFPT - Administración Central de Fiscalización de Precios de Transferencia' },
-  //     { value: 'ACAJNGC', label: 'ACAJNGC - Administración Central de Apoyo Jurídico y Normatividad de Grandes Contribuyentes' },
-  //     { value: 'ACLCGC', label: 'ACLCGC - Administración Central de lo Contencioso de Grandes Contribuyentes' },
-  //     { value: 'ACCEGC', label: 'ACCEGC - Administración Central de Coordinación Estratégica de Grandes Contribuyentes' },
-  //     { value: 'ACIII', label: 'ACIII - Administración Central de Intercambio de Información Internacional' },
-  //     { value: 'ACDGC', label: 'ACDGC - Administración Central de Devoluciones de Grandes Contribuyentes' }
-  //   ],
-  //   'AGACE': [
-  //     { value: 'ACIACE', label: 'ACIACE - Administración Central de Investigación y Análisis de Comercio Exterior' },
-  //     { value: 'ACAOCE', label: 'ACAOCE - Administración Central de Auditoría de Operaciones de Comercio Exterior' },
-  //     { value: 'ACPPCE', label: 'ACPPCE - Administración Central de Planeación y Programación de Comercio Exterior' },
-  //     { value: 'ACCAAIACE', label: 'ACCAAIACE - Administración Central de Certificación y Asuntos Internacionales de Auditoría de Comercio Exterior' },
-  //     { value: 'ACCEACE', label: 'ACCEACE - Administración Central de Coordinación Estratégica de Auditoría de Comercio Exterior' },
-  //     { value: 'ACAJACE', label: 'ACAJACE - Administración Central de Apoyo Jurídico de Auditoría de Comercio Exterior' },
-  //     { value: 'ACOECE', label: 'ACOECE - Administración Central de Operaciones Especiales de Comercio Exterior' }
-  //   ],
-  //   'AGAF': [
-  //     { value: 'ACOFN', label: 'ACOFN - Administración Central de Operación de la Fiscalización Nacional' },
-  //     { value: 'ACAT', label: 'ACAT - Administración Central de Análisis Técnico' },
-  //     { value: 'ACPP', label: 'ACPP - Administración Central de Planeación y Programación' },
-  //     { value: 'ACVEEF', label: 'ACVEEF - Administración Central de Verificación y Evaluación de Entidades Federativas en Materia de Coordinación Fiscal' },
-  //     { value: 'ACFE', label: 'ACFE - Administración Central de Fiscalización Estratégica' },
-  //     { value: 'ACAJAF', label: 'ACAJAF - Administración Central de Apoyo Jurídico' },
-  //     { value: 'ACDC', label: 'ACDC - Administración Central de Devoluciones y Compensaciones' },
-  //     { value: 'ACAAJV', label: 'ACAAJV - Administración Central de Asuntos Jurídicos de Actividades Vulnerables' }
-  //   ],
-  //   'AGAJ': [
-  //     { value: 'ACOJ', label: 'ACOJ - Administración Central de Operación Jurídica' },
-  //     { value: 'ACAJ', label: 'ACAJ - Administración Central de Asuntos Jurídicos' }
-  //   ],
-  //   'AGH': [
-  //     { value: 'ACVH', label: 'ACVH - Administración Central de Verificación de Hidrocarburos' },
-  //     { value: 'ACFH', label: 'ACFH - Administración Central de Fiscalización de Hidrocarburos' },
-  //     { value: 'ACOH', label: 'ACOH - Administración Central de Operación de Hidrocarburos' }
-  //   ],
-  //   'AGSAC': [
-  //     { value: 'ACSTC', label: 'ACSTC - Administración Central de Servicios Tributarios al Contribuyente' },
-  //     { value: 'ACAJSC', label: 'ACAJSC - Administración Central de Apoyo Jurídico de Servicios al Contribuyente' },
-  //     { value: 'ACGSTME', label: 'ACGSTME - Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos' },
-  //     { value: 'ACOP', label: 'ACOP - Administración Central de Operación de Padrones' },
-  //     { value: 'ACCI', label: 'ACCI - Administración Central de Comunicación Institucional' },
-  //     { value: 'ACPIS', label: 'ACPIS - Administración Central de Programas Interinstitucionales de Servicios' },
-  //     { value: 'CNADSC', label: 'CNADSC - Coordinador Nacional de las Administraciones Desconcentradas de Servicios al Contribuyente' }
-  //   ],
-  //   'AGJ': [
-  //     { value: 'ACNII', label: 'ACNII - Administración Central de Normatividad en Impuestos Internos' },
-  //     { value: 'ACNCE', label: 'ACNCE - Administración Central de Normatividad en Comercio Exterior' },
-  //     { value: 'ACLC', label: 'ACLC - Administración Central de lo Contencioso' },
-  //     { value: 'ACAIJ', label: 'ACAIJ - Administración Central de Amparo e Instancias Judiciales' },
-  //     { value: 'ACAPE', label: 'ACAPE - Administración Central de Asuntos Penales y Especiales' },
-  //     { value: 'ACOJ', label: 'ACOJ - Administración Central de Operación Jurídica' }
-  //   ],
-  //   'AGRS': [
-  //     { value: 'ACRF', label: 'ACRF - Administración Central de Recursos Financieros' },
-  //     { value: 'ACCCAP', label: 'ACCCAP - Administración Central del Ciclo de Capital' },
-  //     { value: 'ACDB', label: 'ACDB - Administración Central de Destino de Bienes' },
-  //     { value: 'ACRM', label: 'ACRM - Administración Central de Recursos Materiales' },
-  //     { value: 'ACAJRS', label: 'ACAJRS - Administración Central de Apoyo Jurídico de Recursos y Servicios' },
-  //     { value: 'ACORS', label: 'ACORS - Administración Central de Operación de Recursos y Servicios' },
-  //     { value: 'ACCSI', label: 'ACCSI - Administración Central de Control y Seguridad Institucional' }
-  //   ],
-  //   'AGCTI': [
-  //     { value: 'ACPPI', label: 'ACPPI - Administración Central de Planeación y Programación Informática' },
-  //     { value: 'ACOST', label: 'ACOST - Administración Central de Operación y Servicios Tecnológicos' },
-  //     { value: 'ACSN', label: 'ACSN - Administración Central de Soluciones de Negocio' },
-  //     { value: 'ACTT', label: 'ACTT - Administración Central de Transformación Tecnológica' },
-  //     { value: 'ACDMA', label: 'ACDMA - Administración Central de Desarrollo y Mantenimiento de Aplicaciones' },
-  //     { value: 'ACSMYC', label: 'ACSMYC - Administración Central de Seguridad Monitoreo y Control' },
-  //     { value: 'ACJCTI', label: 'ACJCTI - Administración Central Jurídica en Comunicaciones y Tecnologías de la Información' },
-  //     { value: 'ACPT', label: 'ACPT - Administración Central de Proyectos Tecnológicos' }
-  //   ],
-  //   'AGE': [
-  //     { value: 'ACCE', label: 'ACCE - Administración Central de Coordinación Evaluatoria' },
-  //     { value: 'ACAER', label: 'ACAER - Administración Central de Análisis y Evaluación de Riesgos' },
-  //     { value: 'ACEC', label: 'ACEC - Administración Central de Evaluación de la Confiabilidad' },
-  //     { value: 'ACECE', label: 'ACECE - Administración Central de Evaluación de Comercio Exterior' },
-  //     { value: 'ACEII', label: 'ACEII - Administración Central de Evaluación de Impuestos Internos' },
-  //     { value: 'ACES', label: 'ACES - Administración Central de Evaluación de Seguimiento' },
-  //     { value: 'ACPE', label: 'ACPE - Administración Central de Procedimientos Especiales' },
-  //     { value: 'ACEPI', label: 'ACEPI - Administración Central de Evaluación de Procesos e Información' },
-  //     { value: 'CECTI', label: 'CECTI - Coordinador de Evaluación de Comunicaciones y Tecnologías de la Información' },
-  //     { value: 'CPP', label: 'CPP - Coordinador de Procedimientos Penales' }
-  //   ]
-  // };
-
 private cargarCatalogos(): void {
   this.cargarGenerales();
   this.cargarCentrales();
@@ -232,12 +111,16 @@ private cargarCatalogos(): void {
 }
 
 private cargarGenerales(): void {
-  this.apiService.getData<CatalogoGeneralResponse[]>('catalogo/generales').subscribe({
+  const endpoint = 'catalogo/generales';
+  console.log('GET GENERALES URL FRONT:', this.apiService.baseUrl + '/' + endpoint);
+
+  this.apiService.getGenerales<CatalogoGeneralResponse[]>().subscribe({
     next: (response: HttpResponse<CatalogoGeneralResponse[]>) => {
-      console.log('STATUS generales:', response.status);
       console.log('Generales:', response.body);
 
       const data = response.body ?? [];
+
+      this.generalesData = data;
 
       this.remitentesGenerales = data.map((item) => ({
         value: item.clave,
@@ -251,20 +134,23 @@ private cargarGenerales(): void {
 }
 
 private cargarCentrales(): void {
-  this.apiService.getData<CatalogoCentralResponse[]>('catalogo/central').subscribe({
+  this.apiService.getCentrales<CatalogoCentralResponse[]>().subscribe({
     next: (response: HttpResponse<CatalogoCentralResponse[]>) => {
-      console.log('STATUS centrales:', response.status);
-      console.log('Centrales:', response.body);
-
       const data = response.body ?? [];
 
-      this.centralesPorGeneral = data.reduce(
+      console.log('CENTRALES FRONT:', data);
+
+      this.centralesData = data.filter(item => !item.eliminado);
+
+      this.centralesPorGeneral = this.centralesData.reduce(
         (acc: Record<string, SelectOption[]>, item: CatalogoCentralResponse) => {
-          if (!acc[item.general_clave]) {
-            acc[item.general_clave] = [];
+          const generalClave = String(item.general_clave).trim();
+
+          if (!acc[generalClave]) {
+            acc[generalClave] = [];
           }
 
-          acc[item.general_clave].push({
+          acc[generalClave].push({
             value: item.clave,
             label: `${item.clave} - ${item.nombre}`,
           });
@@ -273,10 +159,371 @@ private cargarCentrales(): void {
         },
         {} as Record<string, SelectOption[]>
       );
+
+      this.actualizarOpcionesCentrales();
+
+      console.log('CENTRALES AGRUPADAS:', this.centralesPorGeneral);
+      console.log('OPCIONES CENTRAL:', this.remitenteCentralOptions);
     },
     error: (error: unknown) => {
       this.logger.error('Error al cargar centrales:', error);
     },
+  });
+}
+
+actualizarOpcionesCentrales(): void {
+  const generalSeleccionada = this.formulario.get('remitente_general')?.value;
+
+  this.remitenteCentralOptions = generalSeleccionada
+    ? this.centralesPorGeneral[generalSeleccionada] || []
+    : [];
+}
+
+esGeneralPredefinido(): boolean {
+  const general = this.obtenerGeneralSeleccionada();
+  return !!general && general.id >= 1 && general.id <= 13;
+}
+
+esCentralPredefinida(): boolean {
+  const central = this.obtenerCentralSeleccionada();
+  return !!central && central.id >= 1 && central.id <= 83;
+}
+
+private obtenerGeneralSeleccionada(): CatalogoGeneralResponse | null {
+  const clave = this.formulario.get('remitente_general')?.value;
+
+  return this.generalesData.find((item) => item.clave === clave) ?? null;
+}
+
+private obtenerCentralSeleccionada(): CatalogoCentralResponse | null {
+  const clave = this.formulario.get('remitente_central')?.value;
+  const generalClave = this.formulario.get('remitente_general')?.value;
+
+  return this.centralesData.find(
+    (item) => item.clave === clave && item.general_clave === generalClave
+  ) ?? null;
+}
+
+puedeEditarGeneral(): boolean {
+  const clave = this.formulario.get('remitente_general')?.value;
+  return this.generalesCreadasPorUsuario.includes(clave);
+}
+
+puedeEditarCentral(): boolean {
+  const clave = this.formulario.get('remitente_central')?.value;
+  const generalClave = this.formulario.get('remitente_general')?.value;
+
+  return this.centralesCreadasPorUsuario.includes(`${generalClave}|${clave}`);
+}
+
+agregarGeneral(): void {
+  const clave = prompt('Clave de la Administración General:')?.trim();
+  if (!clave) return;
+
+  const nombre = prompt('Nombre de la Administración General:')?.trim();
+  if (!nombre) return;
+
+  const body: CrearGeneralRequest = {
+    clave,
+    nombre
+  };
+
+  this.apiService.crearGeneral<MensajeCatalogoResponse>(body).subscribe({
+next: () => {
+  this.generalesCreadasPorUsuario.push(clave);
+
+  localStorage.setItem(
+    'generales_creadas_usuario',
+    JSON.stringify(this.generalesCreadasPorUsuario)
+  );
+
+  this.apiService.getGenerales<CatalogoGeneralResponse[]>().subscribe({
+    next: (response) => {
+      const data = response.body ?? [];
+
+      this.generalesData = data;
+
+      this.remitentesGenerales = data.map((item) => ({
+        value: item.clave,
+        label: `${item.clave} - ${item.nombre}`,
+      }));
+
+      this.formulario.patchValue({
+        remitente_general: clave,
+        remitente_central: ''
+      });
+    }
+  });
+
+  this.mostrarModalError(
+    'General creada',
+    'La Administración General fue creada correctamente.'
+  );
+},
+error: (error: unknown) => {
+  this.logger.error('Error al crear general:', error);
+  this.mostrarModalError('Error', 'No se pudo crear la Administración General.');
+}
+  });
+}
+
+editarGeneral(): void {
+  const general = this.obtenerGeneralSeleccionada();
+
+  if (!general) return;
+
+  if (this.esGeneralPredefinido()) {
+    this.mostrarModalError(
+      'Acción no permitida',
+      'No puedes editar una Administración General predefinida.'
+    );
+    return;
+  }
+
+  const clave = prompt('Nueva clave:', general.clave)?.trim();
+  if (!clave) return;
+
+  const nombre = prompt('Nuevo nombre:', general.nombre)?.trim();
+  if (!nombre) return;
+
+  const body: ActualizarGeneralRequest = {
+    id_aplicativo: general.id,
+    clave,
+    nombre
+  };
+
+  this.apiService.actualizarGeneral<MensajeCatalogoResponse>(body).subscribe({
+    next: () => {
+      this.cargarGenerales();
+      this.formulario.patchValue({
+        remitente_general: clave,
+        remitente_central: ''
+      });
+
+      this.mostrarModalError(
+        'General actualizada',
+        'La Administración General fue actualizada correctamente.'
+      );
+    },
+    error: (error) => {
+      this.logger.error('Error al actualizar general:', error);
+      this.mostrarModalError(
+        'Error',
+        'No se pudo actualizar la Administración General.'
+      );
+    }
+  });
+}
+
+eliminarGeneralCatalogo(): void {
+  const general = this.obtenerGeneralSeleccionada();
+
+  if (!general) return;
+
+  if (this.esGeneralPredefinido()) {
+    this.mostrarModalError(
+      'Acción no permitida',
+      'No puedes eliminar una Administración General predefinida.'
+    );
+    return;
+  }
+
+  const confirmar = confirm(`¿Seguro que deseas eliminar ${general.clave}?`);
+  if (!confirmar) return;
+
+  this.apiService.eliminarGeneral<MensajeCatalogoResponse>(general.id).subscribe({
+    next: () => {
+      this.formulario.patchValue({
+        remitente_general: '',
+        remitente_central: ''
+      });
+
+      this.cargarGenerales();
+      this.cargarCentrales();
+
+      this.mostrarModalError(
+        'General eliminada',
+        'La Administración General fue eliminada correctamente.'
+      );
+    },
+    error: (error) => {
+      this.logger.error('Error al eliminar general:', error);
+      this.mostrarModalError(
+        'Error',
+        'No se pudo eliminar la Administración General.'
+      );
+    }
+  });
+}
+
+agregarCentral(): void {
+  const generalClave = this.formulario.get('remitente_general')?.value;
+
+  if (!generalClave) {
+    this.mostrarModalError(
+      'Campo requerido',
+      'Primero selecciona una Administración General.'
+    );
+    return;
+  }
+
+  const clave = prompt('Clave de la Administración Central:')?.trim();
+  if (!clave) return;
+
+  const nombre = prompt('Nombre de la Administración Central:')?.trim();
+  if (!nombre) return;
+
+  const body: CrearCentralRequest = {
+    clave,
+    nombre,
+    general_clave: generalClave
+  };
+
+  this.apiService.crearCentral<MensajeCatalogoResponse>(body).subscribe({
+    next: () => {
+      this.centralesCreadasPorUsuario.push(`${generalClave}|${clave}`);
+
+      localStorage.setItem(
+        'centrales_creadas_usuario',
+        JSON.stringify(this.centralesCreadasPorUsuario)
+      );
+
+      this.apiService.getCentrales<CatalogoCentralResponse[]>().subscribe({
+        next: (response) => {
+          const data = response.body ?? [];
+
+          this.centralesData = data.filter(item => !item.eliminado);
+
+          this.centralesPorGeneral = this.centralesData.reduce(
+            (acc: Record<string, SelectOption[]>, item: CatalogoCentralResponse) => {
+              const generalClaveItem = String(item.general_clave).trim();
+
+              if (!acc[generalClaveItem]) {
+                acc[generalClaveItem] = [];
+              }
+
+              acc[generalClaveItem].push({
+                value: item.clave,
+                label: `${item.clave} - ${item.nombre}`,
+              });
+
+              return acc;
+            },
+            {} as Record<string, SelectOption[]>
+          );
+
+          this.actualizarOpcionesCentrales();
+
+          this.formulario.patchValue({
+            remitente_central: clave
+          });
+
+          this.mostrarModalError(
+            'Central creada',
+            'La Administración Central fue creada correctamente.'
+          );
+        },
+        error: (error: unknown) => {
+          this.logger.error('Error al recargar centrales:', error);
+        }
+      });
+    },
+    error: (error: unknown) => {
+      this.logger.error('Error al crear central:', error);
+      this.mostrarModalError(
+        'Error',
+        'No se pudo crear la Administración Central.'
+      );
+    }
+  });
+}
+
+
+
+editarCentral(): void {
+  const central = this.obtenerCentralSeleccionada();
+
+  if (!central) return;
+
+  if (this.esCentralPredefinida()) {
+    this.mostrarModalError(
+      'Acción no permitida',
+      'No puedes editar una Administración Central predefinida.'
+    );
+    return;
+  }
+
+  const clave = prompt('Nueva clave:', central.clave)?.trim();
+  if (!clave) return;
+
+  const nombre = prompt('Nuevo nombre:', central.nombre)?.trim();
+  if (!nombre) return;
+
+  const body: ActualizarCentralRequest = {
+    id_aplicativo: central.id,
+    clave,
+    nombre
+  };
+
+  this.apiService.actualizarCentral<MensajeCatalogoResponse>(body).subscribe({
+    next: () => {
+      this.cargarCentrales();
+
+      this.formulario.patchValue({
+        remitente_central: clave
+      });
+
+      this.mostrarModalError(
+        'Central actualizada',
+        'La Administración Central fue actualizada correctamente.'
+      );
+    },
+    error: (error) => {
+      this.logger.error('Error al actualizar central:', error);
+      this.mostrarModalError(
+        'Error',
+        'No se pudo actualizar la Administración Central.'
+      );
+    }
+  });
+}
+
+eliminarCentralCatalogo(): void {
+  const central = this.obtenerCentralSeleccionada();
+
+  if (!central) return;
+
+  if (this.esCentralPredefinida()) {
+    this.mostrarModalError(
+      'Acción no permitida',
+      'No puedes eliminar una Administración Central predefinida.'
+    );
+    return;
+  }
+
+  const confirmar = confirm(`¿Seguro que deseas eliminar ${central.clave}?`);
+  if (!confirmar) return;
+
+  this.apiService.eliminarCentral<MensajeCatalogoResponse>(central.id).subscribe({
+    next: () => {
+      this.formulario.patchValue({
+        remitente_central: ''
+      });
+
+      this.cargarCentrales();
+
+      this.mostrarModalError(
+        'Central eliminada',
+        'La Administración Central fue eliminada correctamente.'
+      );
+    },
+    error: (error) => {
+      this.logger.error('Error al eliminar central:', error);
+      this.mostrarModalError(
+        'Error',
+        'No se pudo eliminar la Administración Central.'
+      );
+    }
   });
 }
 
@@ -292,89 +539,13 @@ private cargarGeneralesConCentrales(): void {
   });
 }
 
-
-// private cargarTiposMedioRecepcion(): void {
-//   this.apiService
-//     .getData<TipoMedioRecepcionResponse[]>('catalogos/tipos-medio-recepcion')
-//     .subscribe({
-//       next: (response: HttpResponse<TipoMedioRecepcionResponse[]>) => {
-//         console.log('STATUS tipos:', response.status);
-
-//         const data = response.body ?? [];
-
-//         this.tipoMedioRecepcionOptions = data.map((item) => ({
-//           value: item.clave,
-//           label: item.descripcion,
-//         }));
-//       },
-//       error: (error: unknown) => {
-//         this.logger.error('Error al cargar tipos de medio de recepción:', error);
-//       },
-//     });
-// }
-
-// private cargarRemitentesGenerales(): void {
-//   this.apiService
-//     .getData<RemitenteGeneralResponse[]>('catalogos/remitentes-generales')
-//     .subscribe({
-//       next: (response: HttpResponse<RemitenteGeneralResponse[]>) => {
-//         console.log('STATUS generales:', response.status);
-
-//         const data = response.body ?? [];
-
-//         this.remitentesGenerales = data.map((item) => ({
-//           value: item.clave,
-//           label: `${item.clave} - ${item.descripcion}`,
-//         }));
-//       },
-//       error: (error: unknown) => {
-//         this.logger.error('Error al cargar remitentes generales:', error);
-//       },
-//     });
-// }
-
-// private cargarRemitentesCentrales(): void {
-//   this.apiService
-//     .getData<RemitenteCentralResponse[]>('catalogos/remitentes-centrales')
-//     .subscribe({
-//       next: (response: HttpResponse<RemitenteCentralResponse[]>) => {
-//         console.log('STATUS centrales:', response.status);
-
-//         const data = response.body ?? [];
-
-//         this.centralesPorGeneral = data.reduce(
-//           (
-//             acc: Record<string, SelectOption[]>,
-//             item: RemitenteCentralResponse
-//           ) => {
-//             if (!acc[item.claveGeneral]) {
-//               acc[item.claveGeneral] = [];
-//             }
-
-//             acc[item.claveGeneral].push({
-//               value: item.clave,
-//               label: `${item.clave} - ${item.descripcion}`,
-//             });
-
-//             return acc;
-//           },
-//           {} as Record<string, SelectOption[]>
-//         );
-//       },
-//       error: (error: unknown) => {
-//         this.logger.error('Error al cargar remitentes centrales:', error);
-//       },
-//     });
-// }
-
-  // Obtener las Centrales según la General seleccionada
-  get remitenteCentralOptions(): SelectOption[] {
-    const generalSeleccionada = this.formulario.get('remitente_general')?.value;
-    if (generalSeleccionada && this.centralesPorGeneral[generalSeleccionada]) {
-      return this.centralesPorGeneral[generalSeleccionada];
-    }
-    return [];
-  }
+  // get remitenteCentralOptions(): SelectOption[] {
+  //   const generalSeleccionada = this.formulario.get('remitente_general')?.value;
+  //   if (generalSeleccionada && this.centralesPorGeneral[generalSeleccionada]) {
+  //     return this.centralesPorGeneral[generalSeleccionada];
+  //   }
+  //   return [];
+  // }
 
   constructor(
     private fb: FormBuilder,
@@ -524,13 +695,10 @@ private cargarGeneralesConCentrales(): void {
 
     // Validar que al menos uno de los campos de remitente esté lleno
     // Limpiar remitente_central cuando cambia remitente_general
-    this.formulario.get('remitente_general')?.valueChanges.subscribe((general) => {
-      if (general) {
-        // Limpiar la central cuando cambia la general
-        this.formulario.patchValue({ remitente_central: '' }, { emitEvent: false });
-      }
-    });
-
+this.formulario.get('remitente_general')?.valueChanges.subscribe((general) => {
+  this.formulario.patchValue({ remitente_central: '' }, { emitEvent: false });
+  this.actualizarOpcionesCentrales();
+});
     // Emitir validez del formulario cuando cambia
     this.formulario.statusChanges.subscribe(() => {
       this.validezCambiada.emit(this.formulario.valid);
@@ -562,7 +730,16 @@ private cargarGeneralesConCentrales(): void {
 
     if (!expedienteActual) {
       this.cargarYAplicarSiguienteExpediente();
-    }}
+    }
+
+    this.generalesCreadasPorUsuario = JSON.parse(
+    localStorage.getItem('generales_creadas_usuario') || '[]'
+    );
+
+    this.centralesCreadasPorUsuario = JSON.parse(
+    localStorage.getItem('centrales_creadas_usuario') || '[]'
+    );
+}
 
   /**
    * Calcular progreso del formulario
@@ -951,20 +1128,11 @@ private cargarGeneralesConCentrales(): void {
 
     // Combinar: General + Central + Identificador
     // Orden: primero General, luego Central (si existe), luego Identificador (si existe)
-    const partes: string[] = [];
-    if (remitenteGeneral) partes.push(remitenteGeneral);
-    if (remitenteCentral) partes.push(remitenteCentral);
-    if (remitenteIdentificador && remitenteIdentificador.trim()) {
-      const identificadorLimpio = remitenteIdentificador.trim().substring(0, 10);
-      partes.push(identificadorLimpio);
-    }
+ let remitenteCompleto = remitenteIdentificador?.trim() || '';
 
-    let remitenteCompleto = partes.join('');
-
-    // El campo remitente_area en BD tiene límite, asegurar que no exceda
-    if (remitenteCompleto.length > 50) {
-      remitenteCompleto = remitenteCompleto.substring(0, 50);
-    }
+if (remitenteCompleto.length > 50) {
+  remitenteCompleto = remitenteCompleto.substring(0, 50);
+}
 
     // Construir objeto completo incluyendo campos deshabilitados
     const datosFormulario = {

@@ -7,6 +7,7 @@ import { environment } from '../../../../environments/environment';
 export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly urlBase = environment.baseUrl;
+  private readonly urlCatalogos ='http://localhost:8090/tlalcalli/api/v1/catalogo';
 
 private buildUrl(endpoint: string): string {
   return `${this.urlBase.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
@@ -153,5 +154,100 @@ getEstadisticosAtencion<T>(): Observable<HttpResponse<T>> {
     'https://balam.sat.gob.mx/tlalcalli/api/v1/atencion/estadisticos_atencion',
     { observe: 'response' }
   );
+  }
+
+
+
+
+
+  // CATÁLOGO GENERALES
+
+getGenerales<T>(): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/generales`;
+
+  console.log('GET GENERALES:', url);
+
+  return this.http.get<T>(url, {
+    observe: 'response'
+  });
+}
+
+crearGeneral<T>(body: object): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/generales`;
+
+  console.log('POST GENERAL:', url);
+  console.log(body);
+
+  return this.http.post<T>(url, body, {
+    observe: 'response'
+  });
+}
+
+actualizarGeneral<T>(body: object): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/update_generales`;
+
+  console.log('PUT GENERAL:', url);
+  console.log(body);
+
+  return this.http.put<T>(url, body, {
+    observe: 'response'
+  });
+}
+
+eliminarGeneral<T>(id: number | string): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/generales/${id}`;
+
+  console.log('DELETE GENERAL:', url);
+
+  return this.http.put<T>(url, {}, {
+    observe: 'response'
+  });
+}
+
+
+
+
+// CATÁLOGO CENTRALES
+
+getCentrales<T>(): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/central`;
+
+  console.log('GET CENTRALES:', url);
+
+  return this.http.get<T>(url, {
+    observe: 'response'
+  });
+}
+
+crearCentral<T>(body: object): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/central`;
+
+  console.log('POST CENTRAL:', url);
+  console.log(body);
+
+  return this.http.post<T>(url, body, {
+    observe: 'response'
+  });
+}
+
+actualizarCentral<T>(body: object): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/update_central`;
+
+  console.log('PUT CENTRAL:', url);
+  console.log(body);
+
+  return this.http.put<T>(url, body, {
+    observe: 'response'
+  });
+}
+
+eliminarCentral<T>(id: number | string): Observable<HttpResponse<T>> {
+  const url = `${this.urlCatalogos}/central/${id}`;
+
+  console.log('DELETE CENTRAL:', url);
+
+  return this.http.put<T>(url, {}, {
+    observe: 'response'
+  });
   }
 }

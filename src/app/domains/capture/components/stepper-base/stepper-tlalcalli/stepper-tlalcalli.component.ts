@@ -124,11 +124,11 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
     this.paso1Valido = valido;
   }
 
-  onPaso1Completado(datos: FormularioPaso1) {
-    this.datosPaso1 = datos;
-    this.transicionarPaso(1);
-    this.mostrarMensaje('Paso 1 completado correctamente', 'success');
-  }
+onPaso1Completado(datos: FormularioPaso1) {
+  this.datosPaso1 = datos;
+  this.transicionarPaso(1);
+  this.mostrarMensaje('Paso 1 completado correctamente', 'success');
+}
 
   onPaso1Siguiente() {
     if (this.paso1Component) {
