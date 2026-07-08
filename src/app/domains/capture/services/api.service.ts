@@ -8,6 +8,8 @@ export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly urlBase = environment.baseUrl;
   private readonly urlCatalogos ='https://balam.sat.gob.mx/tlalcalli/api/v1';
+  // private readonly urlCatalogos ='http://localhost:8090/tlalcalli/api/v1';
+
 
 private buildUrl(endpoint: string): string {
   return `${this.urlBase.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;

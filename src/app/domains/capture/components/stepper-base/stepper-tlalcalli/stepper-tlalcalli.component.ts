@@ -31,6 +31,8 @@ type Paso1TemporalExtra = FormularioPaso1 & {
   fecha_documento?: Date | string;
   dias_retraso?: number;
   fecha_requerimiento?: Date | string;
+  remitente_general?: string;
+  remitente_central?: string;
 };
 
 type Paso2TemporalExtra = FormularioPaso2 & {
@@ -338,9 +340,16 @@ onPaso1Completado(datos: FormularioPaso1) {
     }
   }
 
-  onPaso2Anterior(): void {
-    this.obtenerRegistroTemporal();
+onPaso2Anterior(): void {
+  if (this.paso2Component?.formulario) {
+    this.datosPaso2 = {
+      ...(this.datosPaso2 || {}),
+      ...this.paso2Component.formulario.getRawValue()
+    } as FormularioPaso2;
   }
+
+  this.insertarTemporal(true);
+}
 
   // Finalizar expediente
   async finalizarExpediente() {
@@ -451,6 +460,8 @@ private construirBodyTemporal(): TemporalInsertRequest {
     oficio: paso1.oficio || '',
     expediente: paso1.expediente || '',
     numero_entrada_central: paso1.numero_entrada_central || '',
+    remitente_general: paso1.remitente_general || '',
+    remitente_central: paso1.remitente_central || '',
     remitente_area: paso1.remitente_area || '',
     fecha_documento: this.formatearFechaParaApi(paso1.fecha_documento),
     fecha_recibido: this.formatearFechaParaApi(paso1.fecha_recibido),
@@ -569,7 +580,11 @@ private cargarRegistroTemporalEnFormulario(
     oficio: registro.oficio,
     expediente: registro.expediente,
     numero_entrada_central: registro.numero_entrada_central,
+
     remitente_area: registro.remitente_area,
+    remitente_general: registro.remitente_general,
+    remitente_central: registro.remitente_central,
+
 
     fecha_documento: this.convertirFechaApiADate(registro.fecha_documento),
     fecha_recibido: this.convertirFechaApiADate(registro.fecha_recibido),
@@ -811,36 +826,12 @@ private eliminarRegistroTemporal(): void {
    * Mantiene algunos datos del formulario anterior (remitente, tipo, etc.)
    * pero genera un nuevo número de expediente
    */
-  crearNuevoRegistro() {
-    this.isTransitioning = true;
+crearNuevoRegistro(): void {
+  if (!this.datosPaso1 || !this.datosPaso2) {
+    this.mostrarMensaje('No hay datos para reutilizar', 'warning');
+    return;
+  }
 
-    // Guardar datos que queremos precargar
-    const datosPrecargar = {
-      tipo_medio_recepcion: this.datosPaso1?.tipo_medio_recepcion,
-      remitente_general: (this.datosPaso1 as any)?.remitente_general,
-      remitente_central: (this.datosPaso1 as any)?.remitente_central,
-      prioridad: this.datosPaso1?.prioridad,
-      responsable:
-        this.datosPaso2?.responsable_fecha_asignacion || this.datosPaso2?.responsable
-    };
-
-    setTimeout(() => {
-      // Limpiar estado pero mantener referencia a datos precargados
-      this.datosPaso1 = null;
-      this.datosPaso2 = null;
-      this.documentoPasoFinal = null;
-      this.pasoActual = 0;
-      this.expedienteGuardado = false;
-      this.expedienteId = null;
-      this.paso1Valido = false;
-      this.isTransitioning = false;
-
-      // Precargar datos en el paso 1
-      if (this.paso1Component && datosPrecargar) {
-        this.paso1Component.precargarDatos?.(datosPrecargar);
-      }
-
-      this.mostrarMensaje('Nuevo registro - algunos datos fueron precargados', 'success');
-    }, 300);
+  this.insertarTemporal(true);
   }
 }

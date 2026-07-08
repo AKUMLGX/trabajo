@@ -31,6 +31,8 @@ export interface TemporalInsertRequest {
   documento_pdf_nombre: string;
   prioridad: string;
   fecha_requerimiento: string;
+  remitente_general?: string;
+  remitente_central?: string;
 }
 
 export interface TemporalInsertResponse {

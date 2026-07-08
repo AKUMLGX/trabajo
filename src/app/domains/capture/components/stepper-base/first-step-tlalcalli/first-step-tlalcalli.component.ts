@@ -1454,7 +1454,11 @@ precargarDatos(datos: any): void {
     this.siguienteExpediente = datos.expediente;
   }
 
-  const remitenteParseado = this.separarRemitenteArea(datos.remitente_area);
+  const remitenteParseado = {
+  general: datos.remitente_general || '',
+  central: datos.remitente_central || '',
+  identificador: datos.remitente_area || ''
+  };
 
   this.formulario.get('expediente')?.enable({ emitEvent: false });
   this.formulario.get('fecha_documento')?.enable({ emitEvent: false });
@@ -1467,7 +1471,7 @@ precargarDatos(datos: any): void {
       numero_entrada_central: datos.numero_entrada_central || '',
 
       remitente_general: remitenteParseado.general,
-      remitente_central: remitenteParseado.central,
+      remitente_central: '',
       remitente_identificador: remitenteParseado.identificador,
 
       fecha_documento: datos.fecha_documento || null,
@@ -1480,6 +1484,19 @@ precargarDatos(datos: any): void {
     },
     { emitEvent: true }
   );
+
+  this.actualizarOpcionesCentrales();
+
+  setTimeout(() => {
+    this.formulario.patchValue(
+    {
+      remitente_central: remitenteParseado.central
+    },
+    { emitEvent: false }
+  );
+
+  this.validezCambiada.emit(this.formulario.valid);
+  }, 100);
 
   this.formulario.get('expediente')?.disable({ emitEvent: false });
   this.formulario.get('fecha_documento')?.disable({ emitEvent: false });
