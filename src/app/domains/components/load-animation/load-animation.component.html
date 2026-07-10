@@ -1,3 +1,8 @@
-<div class="z-[10000] overlay" *ngIf="isLoading$ | async">
-  <img [src]="loaderGifSrc" alt="Cargando…" width="200" height="200" />
+<div class="overlay z-[10000]" *ngIf="isLoading$ | async">
+  <img
+    [src]="loaderGifSrc"
+    alt="Cargando..."
+    width="200"
+    height="200"
+  />
 </div>

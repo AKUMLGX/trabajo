@@ -3,19 +3,36 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LoadAnimationService {
-  public isLoading$ = new BehaviorSubject<boolean>(false);
-  count = 0;
+  private requests = 0;
+  private minTime = 800;
+  private startedAt = 0;
+
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  isLoading$ = this.isLoadingSubject.asObservable();
 
   show(): void {
-    this.count += 1;
-    this.isLoading$.next(true);
+    this.requests++;
+
+    if (this.requests === 1) {
+      this.startedAt = Date.now();
+      this.isLoadingSubject.next(true);
+    }
   }
 
   hide(): void {
-    this.count -= 1;
-    if (this.count <= 0) {
-      this.isLoading$.next(false);
-      this.count = 0;
+    this.requests--;
+
+    if (this.requests <= 0) {
+      this.requests = 0;
+
+      const elapsed = Date.now() - this.startedAt;
+      const remaining = Math.max(this.minTime - elapsed, 0);
+
+      setTimeout(() => {
+        if (this.requests === 0) {
+          this.isLoadingSubject.next(false);
+        }
+      }, remaining);
     }
   }
 }

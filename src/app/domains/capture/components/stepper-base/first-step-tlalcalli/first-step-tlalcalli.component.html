@@ -94,17 +94,17 @@
       Número
     </p>
 
-    <p class="font-sans text-2xl font-black leading-none text-black">
+    <p class="font-ubuntu-mono text-2xl font-black leading-none text-black">
       {{ formulario.get('expediente')?.value || 'EXP-2601-0001' }}
     </p>
   </div>
 
   <div>
-    <p class="mb-1 text-xs font-noto-sans font-noto-sans">
+    <p class="mb-1 text-xs font-noto-sans">
       Fecha de registro
     </p>
 
-    <p class="text-2xl font-black leading-none text-black">
+    <p class="text-2xl font-bold leading-none text-black">
       {{ formulario.get('fecha_documento')?.value | date:'dd/MM/yyyy' }}
     </p>
   </div>
@@ -177,7 +177,7 @@
         </div>
 
         <div>
-          <h2 class="m-0 text-2xl font-black text-white">Requerimiento</h2>
+          <h2 class="m-0 text-[24px] font-semibold text-white">Requerimiento</h2>
           <p class="mt-1 text-sm text-white/80">Complete la información del requerimiento</p>
         </div>
       </div>

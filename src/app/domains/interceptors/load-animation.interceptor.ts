@@ -9,23 +9,27 @@ import { Observable, finalize } from 'rxjs';
 import { LoadAnimationService } from '../services/load-animation.service';
 
 export const loadAnimationInterceptor: HttpInterceptorFn = (
-  request: HttpRequest<any>,
+  request: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
   const loadAnimationService = inject(LoadAnimationService);
-  
-  // Solo mostrar loader para peticiones críticas, no para todas
-  const skipLoader = request.headers.has('X-Skip-Loader') || 
-                    request.url.includes('listar_archivos') ||
-                    request.url.includes('get_atencion_por_administracion');
-  
+
+  console.log('INTERCEPTOR LOADER:', request.url);
+
+  const skipLoader =
+    request.headers.has('X-Skip-Loader') ||
+    request.url.includes('listar_archivos') ||
+    request.url.includes('get_atencion_por_administracion');
+
   if (!skipLoader) {
     loadAnimationService.show();
   }
-  
-  return next(request).pipe(finalize(() => {
-    if (!skipLoader) {
-      loadAnimationService.hide();
-    }
-  }));
+
+  return next(request).pipe(
+    finalize(() => {
+      if (!skipLoader) {
+        loadAnimationService.hide();
+      }
+    })
+  );
 };

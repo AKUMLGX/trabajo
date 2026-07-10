@@ -7,20 +7,18 @@ import { environment } from '../../../../environments/environment';
 export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly urlBase = environment.baseUrl;
-  private readonly urlCatalogos ='https://balam.sat.gob.mx/tlalcalli/api/v1';
+  private readonly urlCatalogos = 'https://balam.sat.gob.mx/tlalcalli/api/v1';
   // private readonly urlCatalogos ='http://localhost:8090/tlalcalli/api/v1';
 
+  private buildUrl(endpoint: string): string {
+    return `${this.urlBase.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
+  }
 
-private buildUrl(endpoint: string): string {
-  return `${this.urlBase.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
-}
-
-
-getData<T>(endpoint: string): Observable<HttpResponse<T>> {
-  return this.http.get<T>(this.buildUrl(endpoint), {
-    observe: 'response',
-  });
-}
+  getData<T>(endpoint: string): Observable<HttpResponse<T>> {
+    return this.http.get<T>(this.buildUrl(endpoint), {
+      observe: 'response',
+    });
+  }
 
   postData<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}`;
@@ -31,7 +29,7 @@ getData<T>(endpoint: string): Observable<HttpResponse<T>> {
 
   postDataForBase64(
     endpoint: string,
-    body: object
+    body: object,
   ): Observable<HttpResponse<string>> {
     const url = `${this.urlBase}/${endpoint}`;
     return this.http.post(url, body, {
@@ -43,7 +41,7 @@ getData<T>(endpoint: string): Observable<HttpResponse<T>> {
   putData<T>(
     endpoint: string,
     body: object,
-    id: number | string
+    id: number | string,
   ): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}/${id}`;
     return this.http.put<T>(url, body, {
@@ -53,7 +51,7 @@ getData<T>(endpoint: string): Observable<HttpResponse<T>> {
 
   patchData<T>(
     endpoint: string,
-    body: object = {}
+    body: object = {},
   ): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}`;
     return this.http.patch<T>(url, body, {
@@ -63,7 +61,7 @@ getData<T>(endpoint: string): Observable<HttpResponse<T>> {
 
   deleteData<T>(
     endpoint: string,
-    id: number | string
+    id: number | string,
   ): Observable<HttpResponse<T>> {
     const url = `${this.urlBase}/${endpoint}/${id}`;
     return this.http.delete<T>(url, {
@@ -89,167 +87,163 @@ getData<T>(endpoint: string): Observable<HttpResponse<T>> {
     return this.urlBase;
   }
 
-
   //ENDPOINTS MODULO DE CAPTURA STEPPER
   postTemporal<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
     return this.http.post<T>(this.buildUrl(endpoint), body, {
-    observe: 'response',
+      observe: 'response',
     });
   }
 
-  deleteTemporal<T>(endpoint: string,body: object): Observable<HttpResponse<T>> {
+  deleteTemporal<T>(
+    endpoint: string,
+    body: object,
+  ): Observable<HttpResponse<T>> {
     return this.http.delete<T>(this.buildUrl(endpoint), {
-    body,
-    observe: 'response',
+      body,
+      observe: 'response',
     });
   }
 
   //ENDPOINTS DE LOS APLICATIVOS, MODULO CENTRO DE CONTROL
   putDataBody<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
-  return this.http.put<T>(this.buildUrl(endpoint), body, {
-    observe: 'response',
+    return this.http.put<T>(this.buildUrl(endpoint), body, {
+      observe: 'response',
     });
   }
 
-updateAplicativo<T>(body: object): Observable<HttpResponse<T>> {
-  return this.http.put<T>(
-    this.buildUrl('catalogo/update_aplicativos'),
-    body,
-    { observe: 'response' }
-  );
-}
-
-deleteAplicativo<T>(id: number | string): Observable<HttpResponse<T>> {
-  return this.http.put<T>(
-    this.buildUrl(`catalogo/aplicativos/${id}`),
-    {},
-    { observe: 'response' }
-  );
-}
-
-
-
-// ENDPOINT ATENCIÓN TLALCALLI
-// crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
-//   return this.http.post<T>(
-//     this.buildUrl('atencion'),
-//     body,
-//     { observe: 'response' }
-//   );
-//   }
-crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
-
-  const url = 'https://balam.sat.gob.mx/tlalcalli/api/v1/atencion';
-
-  console.log('POST URL:', url);
-  console.log('BODY =>', body);
-
-  return this.http.post<T>(
-    url,
-    body,
-    { observe: 'response' }
-  );
-}
-
-getEstadisticosAtencion<T>(): Observable<HttpResponse<T>> {
-  return this.http.get<T>(
-    'https://balam.sat.gob.mx/tlalcalli/api/v1/atencion/estadisticos_atencion',
-    { observe: 'response' }
-  );
+  updateAplicativo<T>(body: object): Observable<HttpResponse<T>> {
+    return this.http.put<T>(
+      this.buildUrl('catalogo/update_aplicativos'),
+      body,
+      { observe: 'response' },
+    );
   }
 
+  deleteAplicativo<T>(id: number | string): Observable<HttpResponse<T>> {
+    return this.http.put<T>(
+      this.buildUrl(`catalogo/aplicativos/${id}`),
+      {},
+      { observe: 'response' },
+    );
+  }
 
+  // ENDPOINT ATENCIÓN TLALCALLI
+  // crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
+  //   return this.http.post<T>(
+  //     this.buildUrl('atencion'),
+  //     body,
+  //     { observe: 'response' }
+  //   );
+  //   }
+  crearAtencion<T>(body: object): Observable<HttpResponse<T>> {
+    const url = 'https://balam.sat.gob.mx/tlalcalli/api/v1/atencion';
 
+    console.log('POST URL:', url);
+    console.log('BODY =>', body);
 
+    return this.http.post<T>(url, body, { observe: 'response' });
+  }
+
+  getEstadisticosAtencion<T>(): Observable<HttpResponse<T>> {
+    return this.http.get<T>(
+      'https://balam.sat.gob.mx/tlalcalli/api/v1/atencion/estadisticos_atencion',
+      { observe: 'response' },
+    );
+  }
 
   // CATÁLOGO GENERALES
 
-getGenerales<T>(): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/generales`;
+  getGenerales<T>(): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/generales`;
 
-  console.log('GET GENERALES:', url);
+    console.log('GET GENERALES:', url);
 
-  return this.http.get<T>(url, {
-    observe: 'response'
-  });
-}
+    return this.http.get<T>(url, {
+      observe: 'response',
+    });
+  }
 
-crearGeneral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/generales`;
+  crearGeneral<T>(body: object): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/generales`;
 
-  console.log('POST GENERAL:', url);
-  console.log(body);
+    console.log('POST GENERAL:', url);
+    console.log(body);
 
-  return this.http.post<T>(url, body, {
-    observe: 'response'
-  });
-}
+    return this.http.post<T>(url, body, {
+      observe: 'response',
+    });
+  }
 
-actualizarGeneral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/update_generales`;
+  actualizarGeneral<T>(body: object): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/update_generales`;
 
-  console.log('PUT GENERAL:', url);
-  console.log(body);
+    console.log('PUT GENERAL:', url);
+    console.log(body);
 
-  return this.http.put<T>(url, body, {
-    observe: 'response'
-  });
-}
+    return this.http.put<T>(url, body, {
+      observe: 'response',
+    });
+  }
 
-eliminarGeneral<T>(id: number | string): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/generales/${id}`;
+  eliminarGeneral<T>(id: number | string): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/generales/${id}`;
 
-  console.log('DELETE GENERAL:', url);
+    console.log('DELETE GENERAL:', url);
 
-  return this.http.put<T>(url, {}, {
-    observe: 'response'
-  });
-}
+    return this.http.put<T>(
+      url,
+      {},
+      {
+        observe: 'response',
+      },
+    );
+  }
 
+  // CATÁLOGO CENTRALES
 
+  getCentrales<T>(): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/central`;
 
+    console.log('GET CENTRALES:', url);
 
-// CATÁLOGO CENTRALES
+    return this.http.get<T>(url, {
+      observe: 'response',
+    });
+  }
 
-getCentrales<T>(): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/central`;
+  crearCentral<T>(body: object): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/central`;
 
-  console.log('GET CENTRALES:', url);
+    console.log('POST CENTRAL:', url);
+    console.log(body);
 
-  return this.http.get<T>(url, {
-    observe: 'response'
-  });
-}
+    return this.http.post<T>(url, body, {
+      observe: 'response',
+    });
+  }
 
-crearCentral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/central`;
+  actualizarCentral<T>(body: object): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/update_central`;
 
-  console.log('POST CENTRAL:', url);
-  console.log(body);
+    console.log('PUT CENTRAL:', url);
+    console.log(body);
 
-  return this.http.post<T>(url, body, {
-    observe: 'response'
-  });
-}
+    return this.http.put<T>(url, body, {
+      observe: 'response',
+    });
+  }
 
-actualizarCentral<T>(body: object): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/update_central`;
+  eliminarCentral<T>(id: number | string): Observable<HttpResponse<T>> {
+    const url = `${this.urlCatalogos}/catalogo/central/${id}`;
 
-  console.log('PUT CENTRAL:', url);
-  console.log(body);
+    console.log('DELETE CENTRAL:', url);
 
-  return this.http.put<T>(url, body, {
-    observe: 'response'
-  });
-}
-
-eliminarCentral<T>(id: number | string): Observable<HttpResponse<T>> {
-  const url = `${this.urlCatalogos}/catalogo/central/${id}`;
-
-  console.log('DELETE CENTRAL:', url);
-
-  return this.http.put<T>(url, {}, {
-    observe: 'response'
-  });
+    return this.http.put<T>(
+      url,
+      {},
+      {
+        observe: 'response',
+      },
+    );
   }
 }
