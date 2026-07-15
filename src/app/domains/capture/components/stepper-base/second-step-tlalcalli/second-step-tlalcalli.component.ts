@@ -1,25 +1,30 @@
-import { Component, EventEmitter, Output, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field.component';
 import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
 import { LoggerService } from '../../../services/logger.service';
 import { FormHelperService } from '../../../services/form-helper.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
-
+import { ApiService } from '../../../services/api.service';
+import { HttpResponse } from '@angular/common/http';
+import { CatalogoResponsableResponse, CrearResponsableRequest, ActualizarResponsableRequest, MensajeResponsableResponse } from '../../../../interfaces/catalogos.interface';
+import { CustomModalComponent2 } from "../../../../responsables/components/atencion-modal/custom-modal/custom-modal/custom-modal.component";
 @Component({
   selector: 'app-second-step-tlalcalli',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    CustomFormFieldComponent,
-    CustomSelectComponent
-  ],
+    CustomSelectComponent,
+    CustomModalComponent2
+],
   templateUrl: './second-step-tlalcalli.component.html',
   styleUrl: './second-step-tlalcalli.component.css'
 })
 export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
+  private readonly apiService = inject(ApiService);
+
+
   @Input() datosPaso1: any = {};
   @Output() formularioCompletado = new EventEmitter<any>();
   @Output() siguientePaso = new EventEmitter<void>();
@@ -29,20 +34,25 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   formulario: FormGroup;
   private destroy$ = new Subject<void>();
 
-  // Progreso del formulario
   progresoFormulario = 0;
   camposCompletados = 0;
   camposTotales = 0;
 
-  // Opciones para el dropdown de responsables
-  opcionesResponsables: SelectOption[] = [
-    { value: 'Irma Guerrero', label: 'Irma Guerrero' },
-    { value: 'Héctor Sanchez', label: 'Héctor Sanchez' },
-    { value: 'Carlos Hernández', label: 'Carlos Hernández' }
-  ];
+  opcionesResponsables: SelectOption[] = [];
+  responsablesData: CatalogoResponsableResponse[] = [];
+
+  modalResponsableVisible = false;
+
+  modalResponsableTipo:
+  | 'crear'
+  | 'editar'
+  | 'eliminar'
+  | null = null;
+
+  responsableModalSeleccionado:
+  CatalogoResponsableResponse | null = null;
 
 
-  // Opciones para los selects
   opcionesEstatus: SelectOption[] = [
     { value: 'ASIGNADO', label: 'Asignado' },
     { value: 'PENDIENTE', label: 'Pendiente' },
@@ -51,7 +61,6 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     { value: 'REVISION_LEGAL', label: 'Revisión legal' }
   ];
 
-  // Opciones para prioridad del expediente (movido al Step 1)
 
 
 
@@ -68,36 +77,22 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     private logger: LoggerService,
     private formHelper: FormHelperService
   ) {
-    // Obtener fecha de hoy en formato YYYY-MM-DD
-    const hoy = this.formHelper.getFechaActual();
 
     this.formulario = this.fb.group({
-      // Campos de entrada
-      responsable: ['', [Validators.required, Validators.maxLength(100)]]
-      // prioridad movido al Step 1
-      // fecha_asignacion y estatus eliminados
-      // sistema_aplicativo movido al modal de atención en Centro de Control
+      responsable: [null, Validators.required] 
     });
   }
 
 
   ngOnInit() {
-    // Calcular campos totales
+    this.cargarResponsables();
     this.camposTotales = Object.keys(this.formulario.controls).length;
-
-    // Calcular progreso inicial
     this.calcularProgreso();
-
-    // Suscribirse a cambios para actualizar progreso y guardar borrador
     this.formulario.valueChanges
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(() => {
         this.calcularProgreso();
-        // this.guardarBorrador();
       });
-
-    // Cargar borrador si existe
-    // this.cargarBorrador();
   }
 
   ngOnDestroy() {
@@ -105,9 +100,6 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Calcular progreso del formulario
-   */
   calcularProgreso(): void {
     let completados = 0;
     Object.keys(this.formulario.controls).forEach(key => {
@@ -120,36 +112,8 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     this.progresoFormulario = Math.round((completados / this.camposTotales) * 100);
   }
 
-  /**
-   * Guardar borrador automáticamente
-   */
-  private guardarBorrador(): void {
-    // const datos = this.formulario.getRawValue();
-    // this.formHelper.guardarBorrador(2, datos);
-  }
+  private guardarBorrador(): void {}
 
-  /**
-   * Cargar borrador si existe
-   */
-  // private cargarBorrador(): void {
-  //   const borrador = this.formHelper.obtenerBorrador(2);
-  //   if (borrador) {
-  //     const datosCargar: any = {};
-  //     Object.keys(borrador).forEach(key => {
-  //       if (key !== 'documento_pdf_nombre') {
-  //         const control = this.formulario.get(key);
-  //         if (control && (!control.value || control.value === '')) {
-  //           datosCargar[key] = borrador[key];
-  //         }
-  //       }
-  //     });
-
-  //     if (Object.keys(datosCargar).length > 0) {
-  //       this.formulario.patchValue(datosCargar, { emitEvent: false });
-  //       this.logger.debug('Borrador Paso 2 cargado:', Object.keys(datosCargar).length, 'campos');
-  //     }
-  //   }
-  // }
 
   onSubmit() {
     this.logger.debug('Validando Paso 2 - Formulario válido:', this.formulario.valid);
@@ -190,7 +154,6 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     });
 
     if (camposInvalidos.length > 0) {
-      // Mostrar error con modal (se implementará después)
       const mensaje = `⚠️ PASO 2 - Faltan los siguientes campos:\n\n${camposInvalidos.map(c => `• ${c}`).join('\n')}`;
       alert(mensaje); // TODO: Reemplazar con modal
     }
@@ -200,55 +163,363 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     this.pasoAnterior.emit();
   }
 
-  // Getters para errores
-  get responsableError(): string | null {
-    const control = this.formulario.get('responsable');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-      if (control.errors['maxlength']) return 'Máximo 100 caracteres';
-    }
-    return null;
+get responsableError(): string | null {
+  const control = this.formulario.get('responsable');
+
+  if (control?.touched && control.hasError('required')) {
+    return 'Debe seleccionar un responsable';
   }
 
+  return null;
+}
 
-
-  // get prioridadError movido al Step 1
-
-  /**
-   * Reiniciar el formulario completamente - limpia todos los campos
-   * Se llama desde el stepper cuando el usuario quiere empezar en blanco
-   */
   reiniciarFormulario(): void {
     this.logger.debug('Reiniciando formulario del paso 2 completamente');
 
-    // Reset del formulario a valores iniciales
     this.formulario.reset({
-      responsable: ''
+      responsable: null
     });
 
-    // Limpiar borrador
-    // this.formHelper.limpiarBorrador(2);
-
-    // Recalcular progreso
     this.calcularProgreso();
 
     this.logger.debug('Formulario paso 2 reiniciado completamente');
   }
 
 
-
-  precargarDatos(datos: Partial<{ responsable: string }>): void {
+precargarDatos(
+  datos: Partial<{
+    responsable: string;
+  }>
+): void {
   this.formulario.patchValue(
     {
-      responsable: datos.responsable || ''
+      responsable: datos.responsable ?? ''
     },
-    { emitEvent: true }
+    {
+      emitEvent: true
+    }
   );
 
   this.calcularProgreso();
-  // this.guardarBorrador();
 
-  this.logger.debug('Datos precargados en paso 2:', datos);
+  this.logger.debug(
+    'Datos precargados en paso 2:',
+    datos
+  );
+}
+
+  private cargarResponsables(): void {
+  this.apiService
+    .getData<CatalogoResponsableResponse[]>(
+      'catalogo/responsables',
+      true
+    )
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (
+        response: HttpResponse<CatalogoResponsableResponse[]>
+      ) => {
+        const responsables = response.body ?? [];
+
+        console.log(
+          'CATÁLOGO RESPONSABLES:',
+          responsables
+        );
+
+        this.responsablesData = responsables;
+
+        this.opcionesResponsables = responsables.map(
+          (
+            responsable: CatalogoResponsableResponse
+          ): SelectOption => ({
+            value: responsable.id_aplicativo,
+            label: responsable.nombre
+          })
+        );
+      },
+      error: (error: unknown) => {
+        this.logger.error(
+          'Error al cargar responsables:',
+          error
+        );
+
+        this.responsablesData = [];
+        this.opcionesResponsables = [];
+      }
+    });
   }
+
+private crearResponsable(
+  nombre: string
+): void {
+  const nombreLimpio = nombre.trim();
+
+  if (!nombreLimpio) {
+    return;
+  }
+
+  const body: CrearResponsableRequest = {
+    nombre: nombreLimpio
+  };
+
+  this.apiService
+    .postData<MensajeResponsableResponse>(
+      'catalogo/responsables',
+      body,
+      true
+    )
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (
+        response: HttpResponse<MensajeResponsableResponse>
+      ) => {
+        this.logger.info(
+          response.body?.mensaje ??
+          'Responsable creado correctamente'
+        );
+
+        this.cerrarModalResponsable();
+        this.cargarResponsables();
+      },
+      error: (error: unknown) => {
+        this.logger.error(
+          'Error al crear responsable:',
+          error
+        );
+      }
+    });
+}
+
+private actualizarResponsable(
+  idAplicativo: number,
+  nombre: string
+): void {
+  const nombreLimpio = nombre.trim();
+
+  if (!idAplicativo || !nombreLimpio) {
+    return;
+  }
+
+  const body: ActualizarResponsableRequest = {
+    id_aplicativo: idAplicativo,
+    nombre: nombreLimpio
+  };
+
+  this.apiService
+    .putDataBody<MensajeResponsableResponse>(
+      'catalogo/update_responsables',
+      body,
+      true
+    )
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (
+        response: HttpResponse<MensajeResponsableResponse>
+      ) => {
+        this.logger.info(
+          response.body?.mensaje ??
+          'Responsable actualizado correctamente'
+        );
+
+        this.cerrarModalResponsable();
+        this.cargarResponsables();
+
+        this.formulario.patchValue(
+          {
+            responsable: idAplicativo
+          },
+          {
+            emitEvent: true
+          }
+        );
+      },
+      error: (error: unknown) => {
+        this.logger.error(
+          'Error al actualizar responsable:',
+          error
+        );
+      }
+    });
+}
+
+private eliminarResponsable(
+  idAplicativo: number
+): void {
+  if (!idAplicativo) {
+    return;
+  }
+
+  this.apiService
+    .putDataBody<MensajeResponsableResponse>(
+      `catalogo/responsables/${idAplicativo}`,
+      {},
+      true
+    )
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (
+        response: HttpResponse<MensajeResponsableResponse>
+      ) => {
+        this.logger.info(
+          response.body?.mensaje ??
+          'Responsable eliminado correctamente'
+        );
+
+        this.formulario.patchValue(
+          {
+            responsable: null
+          },
+          {
+            emitEvent: true
+          }
+        );
+
+        this.cerrarModalResponsable();
+        this.cargarResponsables();
+      },
+      error: (error: unknown) => {
+        this.logger.error(
+          'Error al eliminar responsable:',
+          error
+        );
+      }
+    });
+}
+
+  reactivarResponsable(idAplicativo: number): void {
+  if (!idAplicativo) {
+    this.logger.warn(
+      'El ID del responsable es obligatorio'
+    );
+    return;
+  }
+
+  this.apiService
+    .putDataB<MensajeResponsableResponse>(
+      `catalogo/act_responsables/${idAplicativo}`,
+      {},
+      true
+    )
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (
+        response: HttpResponse<MensajeResponsableResponse>
+      ) => {
+        this.logger.info(
+          response.body?.mensaje ??
+          'Responsable reactivado correctamente'
+        );
+
+        this.cargarResponsables();
+      },
+      error: (error: unknown) => {
+        this.logger.error(
+          'Error al reactivar responsable:',
+          error
+        );
+      }
+    });
+  }
+
+  private obtenerResponsableSeleccionado():
+  CatalogoResponsableResponse | null {
+  const idSeleccionado =
+    this.formulario.get('responsable')?.value;
+
+  if (!idSeleccionado) {
+    return null;
+  }
+
+  return this.responsablesData.find(
+    (responsable) =>
+      responsable.id_aplicativo ===
+      Number(idSeleccionado)
+  ) ?? null;
+  }
+
+  agregarResponsable(): void {
+  this.modalResponsableTipo = 'crear';
+  this.responsableModalSeleccionado = null;
+  this.modalResponsableVisible = true;
+  }
+
+  editarResponsableSeleccionado(): void {
+  const responsable =
+    this.obtenerResponsableSeleccionado();
+
+  if (!responsable) {
+    return;
+  }
+
+  this.modalResponsableTipo = 'editar';
+  this.responsableModalSeleccionado = responsable;
+  this.modalResponsableVisible = true;
+  }
+
+  eliminarResponsableSeleccionado(): void {
+  const responsable =
+    this.obtenerResponsableSeleccionado();
+
+  if (!responsable) {
+    return;
+  }
+
+  this.modalResponsableTipo = 'eliminar';
+  this.responsableModalSeleccionado = responsable;
+  this.modalResponsableVisible = true;
+  }
+
+ cerrarModalResponsable(): void {
+  this.modalResponsableVisible = false;
+  this.modalResponsableTipo = null;
+  this.responsableModalSeleccionado = null;
+}
+
+confirmarModalResponsable(
+  valor?: string | void
+): void {
+  if (this.modalResponsableTipo === 'crear') {
+    const nombre = String(valor ?? '').trim();
+
+    if (!nombre) {
+      return;
+    }
+
+    this.crearResponsable(nombre);
+    return;
+  }
+
+  if (this.modalResponsableTipo === 'editar') {
+    const responsable =
+      this.responsableModalSeleccionado;
+
+    const nombre = String(valor ?? '').trim();
+
+    if (!responsable || !nombre) {
+      return;
+    }
+
+    this.actualizarResponsable(
+      responsable.id_aplicativo,
+      nombre
+    );
+
+    return;
+  }
+
+  if (this.modalResponsableTipo === 'eliminar') {
+    const responsable =
+      this.responsableModalSeleccionado;
+
+    if (!responsable) {
+      return;
+    }
+
+    this.eliminarResponsable(
+      responsable.id_aplicativo
+    );
+  }
+}
+
 
 }

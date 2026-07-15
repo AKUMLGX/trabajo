@@ -1,9 +1,6 @@
 <div class="w-full bg-white py-8">
-  <!-- <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="mx-auto max-w-5xl space-y-8"> -->
       <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="w-full space-y-8">
 
-
-    <!-- <section class="mx-auto max-w-4xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"> -->
     <section class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
 
       <div class="mb-2 flex items-center justify-between">
@@ -37,7 +34,6 @@
       </div>
     </section>
 
-    <!-- <section class="mx-auto max-w-4xl rounded-xl border border-tlalcalli-light-muted bg-tlalcalli-light-lavender p-6 shadow-md"> -->
           <section class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
 
       <div class="mb-6 flex items-center gap-3 border-b border-tlalcalli-light-muted pb-4">
@@ -58,55 +54,72 @@
         </div>
       </div>
 
-      <!-- <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div class="relative">
-          <app-custom-form-field
-            label="Número"
-            [required]="true"
-            placeholder="EXP-2601-0001"
-            [errorMessage]="expedienteError"
-            formControlName="expediente">
-          </app-custom-form-field>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 
-          <div class="absolute right-2 top-9 rounded-lg border border-tlalcalli-success/40 bg-tlalcalli-success/10 px-3 py-1.5 text-xs font-noto-sans text-tlalcalli-success-muted">
-            Auto-generado
-          </div>
-        </div>
+  <div class="lg:col-span-1">
+    <label
+      for="expediente-generado"
+      class="mb-2 block text-sm font-noto-sans text-tlalcalli-dark">
+      Número de expediente
+    </label>
 
-        <div class="relative">
-          <app-custom-form-field
-            label="Fecha de Registro"
-            [required]="true"
-            type="date"
-            [errorMessage]="fechaDocumentoError"
-            formControlName="fecha_documento">
-          </app-custom-form-field>
+    <div class="relative">
+      <input
+        id="expediente-generado"
+        type="text"
+        formControlName="expediente"
+        readonly
+        class="h-[50px] w-full rounded-lg border border-tlalcalli-light-muted
+               bg-tlalcalli-light-lavender/40 px-4
+               font-ubuntu-mono text-xl font-bold text-black
+               outline-none transition
+               focus:border-tlalcalli-primary
+               focus:ring-2 focus:ring-tlalcalli-primary/20"
+      />
 
-          <div class="absolute right-2 top-9 rounded-lg border border-blue-300 bg-blue-50 px-3 py-1.5 text-xs font-noto-sans text-blue-700">
-            Auto-asignada
-          </div>
-        </div>
-      </div> -->
+      <div
+        class="pointer-events-none absolute inset-y-0 right-3
+               flex items-center text-tlalcalli-primary">
+        <span class="icon-font !text-[21px]">
+          lock
+        </span>
+      </div>
+    </div>
 
-      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-  <div>
-    <p class="mb-1 text-xs font-noto-sans font-noto-sans">
-      Número
-    </p>
+    @if (expedienteError) {
+      <p class="mt-1 text-xs text-red-600">
+        {{ expedienteError }}
+      </p>
+    }
+  </div>
 
-    <p class="font-ubuntu-mono text-2xl font-black leading-none text-black">
-      {{ formulario.get('expediente')?.value || 'EXP-2601-0001' }}
+  <div class="lg:col-span-1">
+    <app-custom-select
+      label="Mes del expediente"
+      [required]="true"
+      placeholder="Seleccione el mes..."
+      [options]="opcionesMeses"
+      formControlName="mes_expediente">
+    </app-custom-select>
+
+    <p class="mt-1 text-xs font-noto-sans text-gray-500">
+      El mes seleccionado actualizará el folio del expediente.
     </p>
   </div>
 
-  <div>
-    <p class="mb-1 text-xs font-noto-sans">
+  <div class="lg:col-span-1">
+    <p class="mb-2 text-sm font-noto-sans text-tlalcalli-dark">
       Fecha de registro
     </p>
 
-    <p class="text-2xl font-bold leading-none text-black">
-      {{ formulario.get('fecha_documento')?.value | date:'dd/MM/yyyy' }}
-    </p>
+    <div
+      class="flex h-[50px] items-center rounded-lg
+             border border-tlalcalli-light-muted
+             bg-gray-50 px-4">
+      <span class="text-xl font-bold text-black">
+        {{ formulario.get('fecha_documento')?.value | date:'dd/MM/yyyy' }}
+      </span>
+    </div>
   </div>
 
 </div>
@@ -114,7 +127,12 @@
       <div class="mt-4 rounded-r-lg border-l-4 border-tlalcalli-gold bg-tlalcalli-primary/10 p-3">
         <p class="text-xs font-noto-sans text-tlalcalli-primary">
           Estos campos se generan automáticamente y no pueden ser modificados manualmente.
-          El expediente se construye con el formato </p> <p class="text-xs font-sans text-tlalcalli-primary">EXP-AAMM-0001.</p>
+          El expediente se construye con el formato 
+              <!-- El número de expediente se genera automáticamente. Al seleccionar un mes,
+    se actualizará la sección AAMM del folio manteniendo el consecutivo asignado.
+    Formato: -->
+        </p> 
+          <p class="text-xs font-sans text-tlalcalli-primary">EXP-AAMM-0001.</p>
 
       </div>
     </section>
@@ -194,12 +212,24 @@
           </app-custom-select>
           <p class="mt-1 text-[16px] font-noto-sans">Tipo de medio de recepción</p>
         </div>
-
+        
+        <div>
+          <app-custom-select
+            label="Servicio"
+            [required]="true"
+            placeholder="Seleccione el servicio..."
+            [options]="opcionesServicio"
+            [errorMessage]="servicioError"
+            formControlName="servicio">
+          </app-custom-select>
+        <p class="mt-1 text-[16px] font-noto-sans">
+          Tipo de servicio solicitado
+        </p>
+        </div>
         <div
           [ngClass]="{
             'rounded-xl border-2 border-tlalcalli-warning bg-yellow-50 p-3': tieneCaracteresProblematicos
           }">
-<!-- <div class="mb-6 font-ubuntu-mono"> -->
   <div class="mb-6 font-noto-sans">
 
   <app-custom-form-field
@@ -402,10 +432,9 @@
       <div>
         <app-custom-form-field
           label="Identificador del Remitente"
-          placeholder="Máximo 15 caracteres"
+          placeholder="Ingrese el identificador"
           [errorMessage]="remitenteIdentificadorError"
-          formControlName="remitente_identificador"
-          [maxlength]="15">
+          formControlName="remitente_identificador">
         </app-custom-form-field>
       </div>
     }

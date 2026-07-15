@@ -285,7 +285,7 @@
 
 
 
-<app-custom-modal
+<app-custom-modal2
   [visible]="modalEliminarVisible"
   type="confirm"
   [title]="'¿Deseas eliminar &quot;' + (aplicativoSeleccionado?.nombre || '') + '&quot;?'"
@@ -293,9 +293,9 @@
   cancelText="Cancelar"
   (cancelClick)="cerrarModalAplicativo()"
   (confirm)="confirmarEliminacionAplicativo()">
-</app-custom-modal>
+</app-custom-modal2>
 
-<app-custom-modal
+<app-custom-modal2
   [visible]="modalEditarVisible"
   type="input"
   [inputValue]="aplicativoSeleccionado?.nombre || ''"
@@ -304,4 +304,4 @@
   cancelText="Cancelar"
   (cancelClick)="cerrarModalAplicativo()"
   (confirm)="confirmarEdicionAplicativo($event)">
-</app-custom-modal>
+</app-custom-modal2>

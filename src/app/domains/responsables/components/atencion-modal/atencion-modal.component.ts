@@ -19,7 +19,7 @@ import { AtencionEspecialistasComponent } from './atencion-especialistas/atencio
 import { AtencionFlujosComponent } from './atencion-flujos/atencion-flujos.component';
 import { ApiService } from '../../../capture/services/api.service';
 import { Aplicativo, CrearAplicativoDTO,ActualizarAplicativoDTO,MensajeResponse } from '../../../capture/interfaces/aplicativo.interface';
-import { CustomModalComponent } from './custom-modal/custom-modal/custom-modal.component';
+import { CustomModalComponent2 } from './custom-modal/custom-modal/custom-modal.component';
 export interface FormularioAtencion {
   tipoAccion: TipoAccion | '';
   tipoInsumo: string;
@@ -44,7 +44,7 @@ export interface FormularioAtencion {
     MatSnackBarModule,
     AtencionEspecialistasComponent,
     AtencionFlujosComponent,
-    CustomModalComponent
+    CustomModalComponent2
   ],
   templateUrl: './atencion-modal.component.html',
 })

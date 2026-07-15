@@ -572,7 +572,6 @@ next: (response) => {
     });
 }
 
-
 private cargarRegistroTemporalEnFormulario(
   registro: TemporalRegistroResponse
 ): void {
@@ -585,20 +584,26 @@ private cargarRegistroTemporalEnFormulario(
     remitente_general: registro.remitente_general,
     remitente_central: registro.remitente_central,
 
+    fecha_documento:
+      this.convertirFechaApiADate(registro.fecha_documento),
 
-    fecha_documento: this.convertirFechaApiADate(registro.fecha_documento),
-    fecha_recibido: this.convertirFechaApiADate(registro.fecha_recibido),
-    fecha_vencimiento: this.convertirFechaApiADate(registro.fecha_vencimiento),
-    fecha_requerimiento: this.convertirFechaApiADate(registro.fecha_requerimiento),
+    fecha_recibido:
+      this.convertirFechaApiADate(registro.fecha_recibido),
+
+    fecha_vencimiento:
+      this.convertirFechaApiADate(registro.fecha_vencimiento),
+
+    fecha_requerimiento:
+      this.convertirFechaApiADate(registro.fecha_requerimiento),
 
     referencia_asunto: registro.referencia_asunto,
     tipo_medio_recepcion: registro.tipo_medio_recepcion,
     prioridad: registro.prioridad
   };
 
-  const datosPaso2 = {
-    responsable: registro.responsable
-  };
+const datosPaso2: Partial<FormularioPaso2> = {
+  responsable: registro.responsable ?? ''
+};
 
   this.datosPaso1 = {
     ...(this.datosPaso1 || {}),
@@ -612,7 +617,8 @@ private cargarRegistroTemporalEnFormulario(
 
   this.documentoPasoFinal = {
     ...(this.documentoPasoFinal || {}),
-    documento_pdf_nombre: registro.documento_pdf_nombre
+    documento_pdf_nombre:
+      registro.documento_pdf_nombre
   };
 
   this.expedienteId = registro.id_expediente;
@@ -620,10 +626,17 @@ private cargarRegistroTemporalEnFormulario(
   this.paso2Valido = true;
 
   setTimeout(() => {
-    this.paso1Component?.precargarDatos?.(datosPaso1);
-    this.paso2Component?.precargarDatos?.(datosPaso2);
+    this.paso1Component?.precargarDatos?.(
+      datosPaso1
+    );
+
+    this.paso2Component?.precargarDatos?.(
+      datosPaso2
+    );
   }, 100);
 }
+
+
 private convertirFechaApiADate(fecha: string | null | undefined): Date | undefined {
   if (!fecha) return undefined;
 

@@ -1,16 +1,26 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+  OnChanges
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 export type CustomModalType = 'confirm' | 'input';
 
 @Component({
-  selector: 'app-custom-modal',
+  selector: 'app-custom-modal2',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
   templateUrl: './custom-modal.component.html',
 })
-export class CustomModalComponent {
+export class CustomModalComponent2 implements OnChanges {
   @Input() visible = false;
   @Input() type: CustomModalType = 'confirm';
 
@@ -19,18 +29,24 @@ export class CustomModalComponent {
   @Input() confirmText = 'Aceptar';
   @Input() cancelText = 'Cancelar';
   @Input() inputValue = '';
+
   valor = '';
 
-  @Output() cancelClick = new EventEmitter<void>();
-  @Output() confirm = new EventEmitter<string | void>();
+  @Output() cancelClick =
+    new EventEmitter<void>();
 
+  @Output() confirm =
+    new EventEmitter<string | void>();
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible'] && this.visible) {
-      this.valor = this.inputValue ?? '';
+    if (
+      changes['visible'] &&
+      this.visible
+    ) {
+      this.valor =
+        this.inputValue ?? '';
     }
   }
-
 
   onCancel(): void {
     this.valor = '';
@@ -39,7 +55,14 @@ export class CustomModalComponent {
 
   onConfirm(): void {
     if (this.type === 'input') {
-      this.confirm.emit(this.valor.trim());
+      const valorLimpio =
+        this.valor.trim();
+
+      if (!valorLimpio) {
+        return;
+      }
+
+      this.confirm.emit(valorLimpio);
       return;
     }
 
