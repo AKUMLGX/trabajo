@@ -26,6 +26,7 @@ import { RevisionFinalComponent } from './domains/assistance/pages/revision-fina
 import { ResponsablesPageComponent } from './domains/responsables/pages/responsables-page/responsables-page.component';
 import { DashboardPageComponent } from './domains/dashboard/pages/dashboard-page/dashboard-page.component';
 import { AtencionCierrePageComponent } from './domains/responsables/pages/atencion-cierre-page/atencion-cierre-page.component';
+import { PageNotFoundComponent } from './domains/auth/pages/page-not-found/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   { path: '', component: LoginPageComponent, pathMatch: 'full' },
@@ -34,7 +35,6 @@ export const routes: Routes = [
     component: LoginPageComponent,
   },
   {
-    // Ruta de callback OAuth: el IdP redirige aquí con ?code=...
     path: 'home',
     component: LoginPageComponent,
   },
@@ -147,11 +147,15 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardPageComponent
-      }
+      },
+      {
+        path: '**',
+        component: PageNotFoundComponent,
+      },
     ]
   },
-  // {
-  //     path: '**',
-  //     component: MainLayoutComponent
-  // },
+  {
+      path: '**',
+      component: PageNotFoundComponent
+  },
 ];
