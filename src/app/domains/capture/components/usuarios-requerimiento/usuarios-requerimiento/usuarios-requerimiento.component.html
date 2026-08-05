@@ -1,0 +1,272 @@
+<section
+  class="rounded-xl border border-tlalcalli-light-muted bg-white"
+>
+  <div
+    class="flex flex-col gap-4 border-b border-tlalcalli-light-muted px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div class="flex items-center gap-3">
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-primary text-white"
+      >
+        <span class="icon-font !text-[24px]">
+          group
+        </span>
+      </div>
+
+      <div>
+        <h3
+          class="m-0 text-base font-semibold text-tlalcalli-primary"
+        >
+          Usuarios solicitados
+        </h3>
+
+        <p
+          class="mt-1 text-xs font-noto-sans text-gray-500"
+        >
+          Registre servidores públicos, empresas o seleccione N/A.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="w-fit rounded-full bg-tlalcalli-primary/10 px-4 py-2 text-sm font-semibold text-tlalcalli-primary"
+    >
+      Total: {{ totalUsuarios }}
+    </div>
+  </div>
+
+  <div class="p-5">
+    <div
+      [formGroup]="formularioUsuario"
+      class="rounded-xl border border-tlalcalli-light-muted bg-tlalcalli-light-lavender/20 p-5"
+    >
+      <div
+        class="grid grid-cols-1 gap-5 lg:grid-cols-3"
+      >
+        <app-custom-select
+          label="Tipo de usuario"
+          [required]="true"
+          placeholder="Seleccione un tipo..."
+          [options]="opcionesTipoUsuario"
+          formControlName="tipo_usuario">
+        </app-custom-select>
+
+        <div>
+          <app-custom-form-field
+            label="Nombre o razón social"
+            [required]="tipoUsuarioSeleccionado !== 'NA'"
+            placeholder="Ingrese el nombre completo..."
+            formControlName="nombre">
+          </app-custom-form-field>
+
+          @if (
+            formularioUsuario.controls.nombre.touched &&
+            formularioUsuario.controls.nombre.hasError('required')
+          ) {
+            <p class="mt-1 text-xs text-red-600">
+              El nombre o razón social es obligatorio.
+            </p>
+          }
+
+          @if (
+            formularioUsuario.controls.nombre.touched &&
+            formularioUsuario.controls.nombre.hasError('maxlength')
+          ) {
+            <p class="mt-1 text-xs text-red-600">
+              Máximo 200 caracteres.
+            </p>
+          }
+        </div>
+
+        <div>
+          <app-custom-form-field
+            label="RFC"
+            placeholder="Ingrese el RFC..."
+            formControlName="rfc">
+          </app-custom-form-field>
+
+          @if (
+            formularioUsuario.controls.rfc.touched &&
+            formularioUsuario.controls.rfc.hasError('maxlength')
+          ) {
+            <p class="mt-1 text-xs text-red-600">
+              Máximo 13 caracteres.
+            </p>
+          }
+        </div>
+      </div>
+
+      <div
+        class="mt-5 flex flex-wrap justify-end gap-3"
+      >
+        @if (estaEditando) {
+          <button
+            type="button"
+            (click)="cancelarEdicionUsuario()"
+            [disabled]="deshabilitado"
+            class="rounded-lg border border-tlalcalli-primary bg-white px-5 py-2.5 text-sm font-noto-sans text-tlalcalli-primary transition hover:bg-tlalcalli-primary/5 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+        }
+
+        <button
+          type="button"
+          (click)="agregarUsuario()"
+          [disabled]="deshabilitado"
+          class="rounded-lg bg-tlalcalli-primary px-5 py-2.5 text-sm font-noto-sans text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {{
+            estaEditando
+              ? 'Guardar cambios'
+              : 'Agregar usuario'
+          }}
+        </button>
+      </div>
+    </div>
+
+    @if (hayUsuarios) {
+      <div class="mt-5 space-y-3">
+        <div
+          class="flex items-center justify-between"
+        >
+          <h4
+            class="m-0 text-sm font-semibold text-tlalcalli-dark"
+          >
+            Usuarios registrados
+          </h4>
+
+          <span
+            class="text-xs font-noto-sans text-gray-500"
+          >
+            {{ usuariosFormArray.length }}
+            registro(s)
+          </span>
+        </div>
+
+        @for (
+          usuario of usuariosRegistrados;
+          track usuario.id_temporal;
+          let indice = $index
+        ) {
+          <article
+            class="rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-sm"
+          >
+            <div
+              class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+            >
+              <div
+                class="flex min-w-0 items-start gap-3"
+              >
+                <div
+                  class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-tlalcalli-primary/10 text-tlalcalli-primary"
+                >
+                  <span class="icon-font !text-[22px]">
+                    {{
+                      usuario.tipo_usuario === 'EMPRESA'
+                        ? 'business'
+                        : usuario.tipo_usuario === 'NA'
+                          ? 'block'
+                          : 'person'
+                    }}
+                  </span>
+                </div>
+
+                <div class="min-w-0">
+                  <div
+                    class="flex flex-wrap items-center gap-2"
+                  >
+                    <p
+                      class="m-0 break-words text-sm font-semibold text-tlalcalli-dark"
+                    >
+                      {{ usuario.nombre }}
+                    </p>
+
+                    <span
+                      class="rounded-full bg-tlalcalli-primary/10 px-2.5 py-1 text-[11px] font-semibold text-tlalcalli-primary"
+                    >
+                      @switch (usuario.tipo_usuario) {
+                        @case ('SERVIDOR_PUBLICO') {
+                          Servidor público
+                        }
+
+                        @case ('EMPRESA') {
+                          Empresa
+                        }
+
+                        @default {
+                          N/A
+                        }
+                      }
+                    </span>
+                  </div>
+
+                  <p
+                    class="mt-1 text-xs font-noto-sans text-gray-500"
+                  >
+                    RFC:
+                    <span
+                      class="font-ubuntu-mono font-semibold text-gray-700"
+                    >
+                      {{ usuario.rfc || 'N/A' }}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="flex shrink-0 flex-wrap justify-end gap-2"
+              >
+                @if (
+                  usuario.tipo_usuario !== 'NA'
+                ) {
+                  <button
+                    type="button"
+                    (click)="editarUsuario(indice)"
+                    [disabled]="deshabilitado"
+                    class="rounded-lg bg-tlalcalli-lavender px-4 py-2 text-xs font-noto-sans text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Editar
+                  </button>
+                }
+
+                <button
+                  type="button"
+                  (click)="eliminarUsuario(indice)"
+                  [disabled]="deshabilitado"
+                  class="rounded-lg border border-red-500 px-4 py-2 text-xs font-noto-sans text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <div
+        class="mt-5 rounded-xl border border-dashed border-tlalcalli-light-muted bg-gray-50 px-6 py-8 text-center"
+      >
+        <div
+          class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-tlalcalli-primary/10 text-tlalcalli-primary"
+        >
+          <span class="icon-font !text-[26px]">
+            person_add
+          </span>
+        </div>
+
+        <p
+          class="mt-3 text-sm font-semibold text-tlalcalli-dark"
+        >
+          No se han registrado usuarios
+        </p>
+
+        <p
+          class="mt-1 text-xs font-noto-sans text-gray-500"
+        >
+          Agregue al menos un usuario o seleccione N/A.
+        </p>
+      </div>
+    }
+  </div>
+</section>

@@ -107,7 +107,7 @@
     </p>
   </div>
 
-  <div class="lg:col-span-1">
+  <!-- <div class="lg:col-span-1">
     <p class="mb-2 text-sm font-noto-sans text-tlalcalli-dark">
       Fecha de registro
     </p>
@@ -120,7 +120,7 @@
         {{ formulario.get('fecha_documento')?.value | date:'dd/MM/yyyy' }}
       </span>
     </div>
-  </div>
+  </div> -->
 
 </div>
 
@@ -159,7 +159,7 @@
 
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <app-custom-form-field
-          label="Número"
+          label="Oficio, Atenta Nota, Petición Interna."
           placeholder="2025-007"
           hint="Opcional"
           [errorMessage]="numeroEntradaError"
@@ -168,7 +168,7 @@
 
         <div>
           <app-custom-form-field
-            label="Fecha de Acuse"
+            label="Fecha de documento"
             [required]="true"
             type="date"
             [errorMessage]="fechaRecibidoError"
@@ -203,6 +203,19 @@
       <div class="space-y-6 bg-white p-6">
         <div>
           <app-custom-select
+            label="Servicio"
+            [required]="true"
+            placeholder="Seleccione el servicio..."
+            [options]="opcionesServicio"
+            [errorMessage]="servicioError"
+            formControlName="servicio">
+          </app-custom-select>
+        <!-- <p class="mt-1 text-[16px] font-noto-sans">
+          Tipo de servicio solicitado
+        </p> -->
+        </div>
+        <!-- <div>
+          <app-custom-select
             label="Tipo"
             [required]="true"
             placeholder="Seleccione el tipo de requerimiento..."
@@ -211,21 +224,23 @@
             formControlName="tipo_medio_recepcion">
           </app-custom-select>
           <p class="mt-1 text-[16px] font-noto-sans">Tipo de medio de recepción</p>
-        </div>
-        
-        <div>
-          <app-custom-select
-            label="Servicio"
-            [required]="true"
-            placeholder="Seleccione el servicio..."
-            [options]="opcionesServicio"
-            [errorMessage]="servicioError"
-            formControlName="servicio">
-          </app-custom-select>
-        <p class="mt-1 text-[16px] font-noto-sans">
-          Tipo de servicio solicitado
+        </div> -->
+
+        <!-- Usuarios solicitados -->
+      <div>
+        <app-usuarios-requerimiento
+        [usuarios]="formulario.get('usuarios')?.value || []"
+        [deshabilitado]="formulario.disabled"
+        (usuariosChange)="actualizarUsuarios($event)">
+        </app-usuarios-requerimiento>
+
+      @if (formulario.get('usuarios')?.touched &&formulario.get('usuarios')?.invalid) {
+        <p class="mt-2 text-xs font-noto-sans text-red-600">
+          Debe agregar al menos un usuario o seleccionar N/A.
         </p>
-        </div>
+        }
+      </div>
+        
         <div
           [ngClass]="{
             'rounded-xl border-2 border-tlalcalli-warning bg-yellow-50 p-3': tieneCaracteresProblematicos
@@ -233,7 +248,7 @@
   <div class="mb-6 font-noto-sans">
 
   <app-custom-form-field
-    label="Número"
+    label="No. de entrada"
     [required]="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'"
     placeholder="199 06 02 00 00 2025-01"
     [errorMessage]="oficioError"

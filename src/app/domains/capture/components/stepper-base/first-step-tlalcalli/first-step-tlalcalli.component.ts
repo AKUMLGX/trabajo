@@ -20,6 +20,8 @@ import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGene
 CrearGeneralRequest, ActualizarGeneralRequest,CrearCentralRequest,ActualizarCentralRequest, MensajeCatalogoResponse } from '../../../../interfaces/first-step-catalogos.interface';
 import { HttpResponse } from '@angular/common/http';
 import { CatalogoPrioridadResponse, CatalogoServicioResponse, CatalogoMesesResponse,ConsecutivoFechaRequest,ConsecutivoFechaResponse } from '../../../../interfaces/catalogos.interface';
+import { UsuarioRequerimiento} from '../../../../interfaces/usuarios-expediente.interface';
+import { UsuariosRequerimientoComponent } from '../../usuarios-requerimiento/usuarios-requerimiento/usuarios-requerimiento.component';
 @Component({
   selector: 'app-first-step-tlalcalli',
   standalone: true,
@@ -29,7 +31,8 @@ import { CatalogoPrioridadResponse, CatalogoServicioResponse, CatalogoMesesRespo
     CustomFormFieldComponent,
     CustomTextareaComponent,
     KeyboardNavigationDirective,
-    CustomSelectComponent
+    CustomSelectComponent,
+    UsuariosRequerimientoComponent
   ],
   templateUrl: './first-step-tlalcalli.component.html',
   styleUrl: './first-step-tlalcalli.component.css'
@@ -42,7 +45,7 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
   formulario: FormGroup;
   siguienteExpediente: string = '';
-  validandoOficio: boolean = false; // Indicador de validación en progreso
+  validandoOficio: boolean = false;
   errorOficioDuplicado = false; // Si el oficio ya existe en BD
   idOficioDuplicado: number | null = null; // ID del expediente con oficio duplicado
   buscandoExpedientes: boolean = false; // Indicador de búsqueda en progreso
@@ -70,9 +73,63 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
     'Área de Cobranza'
   ];
 
+  readonly opcionesModoExpediente: SelectOption[] = [
+  {
+    value: 'AUTOMATICO',
+    label: 'Automático'
+  },
+  {
+    value: 'MANUAL',
+    label: 'Manual / histórico'
+  }
+];
+
   get formularioValido(): boolean {
     return this.formulario.valid;
   }
+
+  get etiquetaDocumento(): string {
+  const tipo =
+    this.formulario.get(
+      'tipo_medio_recepcion'
+    )?.value;
+
+  switch (tipo) {
+    case 'ATENTA_NOTA':
+      return 'Atenta Nota';
+
+    case 'OFICIO':
+      return 'Oficio';
+
+    case 'REQUERIMIENTO_VERBAL':
+      return 'Petición Interna';
+
+    default:
+      return 'Oficio, Atenta Nota o Petición Interna';
+  }
+}
+
+get placeholderDocumento(): string {
+  const tipo =
+    this.formulario.get(
+      'tipo_medio_recepcion'
+    )?.value;
+
+  switch (tipo) {
+    case 'ATENTA_NOTA':
+      return 'Ingrese el número de Atenta Nota';
+
+    case 'OFICIO':
+      return 'Ingrese el número de Oficio';
+
+    case 'REQUERIMIENTO_VERBAL':
+      return 'Ingrese la referencia de la Petición Interna';
+
+    default:
+      return 'Ingrese el número o referencia';
+  }
+}
+
   progresoFormulario = 0;
   camposCompletados = 0;
   camposTotales = 0;
@@ -519,6 +576,32 @@ private cargarGeneralesConCentrales(): void {
   });
 }
 
+actualizarUsuarios(
+  usuarios: UsuarioRequerimiento[]
+): void {
+  const control =
+    this.formulario.get('usuarios');
+
+  control?.setValue(
+    usuarios,
+    {
+      emitEvent: true
+    }
+  );
+
+  control?.markAsTouched();
+  control?.markAsDirty();
+
+  control?.updateValueAndValidity({
+    emitEvent: true
+  });
+
+  this.calcularProgreso();
+  this.validezCambiada.emit(
+    this.formulario.valid
+  );
+}
+
   constructor(
     private fb: FormBuilder,
     private autocompleteService: ExpedienteAutocompleteService,
@@ -527,46 +610,115 @@ private cargarGeneralesConCentrales(): void {
     private logger: LoggerService,
     private formHelper: FormHelperService
   ) {
-    this.formulario = this.fb.group({
-      tipo_medio_recepcion: ['', [Validators.required]],
-      oficio: ['',
-        [
+this.formulario = this.fb.group({
+  tipo_medio_recepcion: ['', Validators.required],
+
+  oficio: [
+    '',
+    [
+      Validators.required,
+      Validators.maxLength(100)
+    ]
+  ],
+
+  modo_expediente: [
+    'AUTOMATICO',
+    Validators.required
+  ],
+
+  expediente: [
+    {
+      value: '',
+      disabled: false
+    },
+    [
+      Validators.required,
+      Validators.maxLength(50),
+      ExpedienteValidators.expedienteFormat()
+    ]
+  ],
+
+  mes_expediente: [
+    String(
+      new Date().getMonth() + 1
+    ).padStart(2, '0'),
+    Validators.required
+  ],
+
+  numero_entrada_central: [
+    '',
+    Validators.maxLength(100)
+  ],
+
+  remitente_general: [
+    '',
+    Validators.required
+  ],
+
+  remitente_central: [''],
+
+  remitente_identificador: [''],
+
+  fecha_documento: [
+    this.formHelper.getFechaActual(),
+    Validators.required
+  ],
+
+  fecha_recibido: [
+    this.formHelper.getFechaActual(),
+    Validators.required
+  ],
+
+  fecha_requerimiento: [
+    this.formHelper.getFechaActual(),
+    Validators.required
+  ],
+
+  referencia_asunto: [
+    '',
+    [
+      Validators.required,
+      Validators.maxLength(1000)
+    ]
+  ],
+
+  prioridad: [
+    1,
+    Validators.required
+  ],
+
+  servicio: [
+    null,
+    Validators.required
+  ],
+
+  plazo_vencimiento: [
+    null,
+    [
+      Validators.min(1),
+      Validators.max(999)
+    ]
+  ],
+
+  fecha_vencimiento: [
+    {
+      value: null,
+      disabled: true
+    }
+  ],
+
+  usuarios:
+    this.fb.control<UsuarioRequerimiento[]>(
+      [],
+      {
+        nonNullable: true,
+        validators: [
           Validators.required,
-          Validators.maxLength(100)
+          Validators.minLength(1)
         ]
-      ],
-      expediente: [{ value: '', disabled: false }, [
-        Validators.required,
-        Validators.maxLength(50),
-        ExpedienteValidators.expedienteFormat()
-      ]],
-      mes_expediente: [String(new Date().getMonth() + 1).padStart(2, '0'),
-        Validators.required
-      ],
-      numero_entrada_central: ['', [
-        Validators.maxLength(100)
-      ]],
-      remitente_general: ['', [Validators.required]], // Área General (obligatorio)
-      remitente_central: [''], // Área Central (opcional, depende de la General)
-      remitente_identificador: [''],
-      fecha_documento: [this.formHelper.getFechaActual(), [
-        Validators.required,
-      ]],
-      fecha_recibido: [this.formHelper.getFechaActual(), [
-        Validators.required,
-      ]],
-      fecha_requerimiento: [this.formHelper.getFechaActual(), [
-        Validators.required,
-      ]],
-      referencia_asunto: ['', [
-        Validators.required,
-        Validators.maxLength(1000)
-      ]],
-      fecha_vencimiento: [null, [
-      ]],
-      prioridad: [1, Validators.required],
-      servicio: [null, Validators.required]
-    });
+      }
+    )
+});
   }
 
 opcionesPrioridad: SelectOption[] = [];
@@ -575,17 +727,26 @@ opcionesMeses: SelectOption[] = [];
 
 ngOnInit(): void {
   this.cargarCatalogos();
-
-  this.formulario.get('fecha_documento')?.disable();
-
-this.formulario.get('mes_expediente')?.valueChanges
+  this.formulario
+  .get('mes_expediente')
+  ?.valueChanges
   .pipe(takeUntil(this.destroy$))
   .subscribe((mes: string | null) => {
-    if (mes) {
-      this.obtenerConsecutivoPorMes(mes);
+    const modo =
+      this.formulario.get(
+        'modo_expediente'
+      )?.value;
+
+    if (
+      modo === 'AUTOMATICO' &&
+      mes
+    ) {
+      this.obtenerConsecutivoPorMes(
+        mes
+      );
     }
   });
-
+  
   this.formulario.get('oficio')?.valueChanges
     .pipe(takeUntil(this.destroy$))
     .subscribe((valor) => {
@@ -608,37 +769,35 @@ this.formulario.get('mes_expediente')?.valueChanges
       }
     });
 
-  this.formulario.get('tipo_medio_recepcion')?.valueChanges
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((tipo) => {
-      if (!tipo) {
-        return;
-      }
-      this.aplicarValoresInicialesPorTipo(tipo);
-      const oficioControl = this.formulario.get('oficio');
-      if (tipo === 'REQUERIMIENTO_VERBAL') {
-        oficioControl?.disable();
-        oficioControl?.setValue('');
-        oficioControl?.clearValidators();
-        oficioControl?.updateValueAndValidity({
-          emitEvent: false
-        });
+this.formulario
+  .get('tipo_medio_recepcion')
+  ?.valueChanges
+  .pipe(takeUntil(this.destroy$))
+  .subscribe((tipo: string | null) => {
+    if (!tipo) {
+      return;
+    }
 
-        this.logger.debug(
-          'Campo oficio deshabilitado por Petición interna'
-        );
-      } else {
-        oficioControl?.enable();
-        oficioControl?.setValidators([
-          Validators.required
-        ]);
-        oficioControl?.updateValueAndValidity({
-          emitEvent: false
-        });
-        this.logger.debug('Campo oficio habilitado');
-      }
+    this.aplicarValoresInicialesPorTipo(
+      tipo
+    );
+
+    const oficioControl =
+      this.formulario.get('oficio');
+
+    oficioControl?.enable({
+      emitEvent: false
     });
 
+    oficioControl?.setValidators([
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
+
+    oficioControl?.updateValueAndValidity({
+      emitEvent: false
+    });
+  });
 
 
   this.formulario.get('remitente_general')?.valueChanges
@@ -678,13 +837,6 @@ this.formulario.get('mes_expediente')?.valueChanges
       this.guardarBorrador();
     });
 
-  // const expedienteActual =
-  //   this.formulario.get('expediente')?.value;
-
-  // if (!expedienteActual) {
-  //   this.cargarYAplicarSiguienteExpediente();
-  // }
-
   this.generalesCreadasPorUsuario = JSON.parse(
     localStorage.getItem(
       'generales_creadas_usuario'
@@ -696,6 +848,197 @@ this.formulario.get('mes_expediente')?.valueChanges
       'centrales_creadas_usuario'
     ) || '[]'
   );
+
+  this.formulario
+  .get('modo_expediente')
+  ?.valueChanges
+  .pipe(takeUntil(this.destroy$))
+  .subscribe((modo: string | null) => {
+    this.actualizarModoExpediente(
+      modo ?? 'AUTOMATICO'
+    );
+  });
+
+  this.actualizarModoExpediente(
+  this.formulario.get(
+    'modo_expediente'
+  )?.value ?? 'AUTOMATICO'
+);
+
+this.formulario
+  .get('fecha_recibido')
+  ?.valueChanges
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(() => {
+    this.actualizarFechaVencimiento();
+  });
+
+this.formulario
+  .get('plazo_vencimiento')
+  ?.valueChanges
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(() => {
+    this.actualizarFechaVencimiento();
+  });
+}
+
+private actualizarFechaVencimiento():
+  void {
+  const fechaRecepcion =
+    this.formulario.get(
+      'fecha_recibido'
+    )?.value;
+
+  const plazo =
+    Number(
+      this.formulario.get(
+        'plazo_vencimiento'
+      )?.value
+    );
+
+  const controlVencimiento =
+    this.formulario.get(
+      'fecha_vencimiento'
+    );
+
+  if (
+    !fechaRecepcion ||
+    !Number.isInteger(plazo) ||
+    plazo <= 0
+  ) {
+    controlVencimiento?.setValue(
+      null,
+      {
+        emitEvent: false
+      }
+    );
+
+    return;
+  }
+
+  const fechaCalculada =
+    this.sumarDiasHabiles(
+      fechaRecepcion,
+      plazo
+    );
+
+  controlVencimiento?.setValue(
+    fechaCalculada,
+    {
+      emitEvent: false
+    }
+  );
+}
+
+private sumarDiasHabiles(
+  fechaInicial: string,
+  diasHabiles: number
+): string | null {
+  const partes =
+    fechaInicial.split('-');
+
+  if (partes.length !== 3) {
+    return null;
+  }
+
+  const anio =
+    Number(partes[0]);
+
+  const mes =
+    Number(partes[1]);
+
+  const dia =
+    Number(partes[2]);
+
+  const fecha =
+    new Date(
+      anio,
+      mes - 1,
+      dia
+    );
+
+  if (
+    Number.isNaN(
+      fecha.getTime()
+    )
+  ) {
+    return null;
+  }
+
+  let diasAgregados = 0;
+
+  while (
+    diasAgregados < diasHabiles
+  ) {
+    fecha.setDate(
+      fecha.getDate() + 1
+    );
+
+    const diaSemana =
+      fecha.getDay();
+
+    const esFinDeSemana =
+      diaSemana === 0 ||
+      diaSemana === 6;
+
+    if (!esFinDeSemana) {
+      diasAgregados++;
+    }
+  }
+
+  const anioResultado =
+    fecha.getFullYear();
+
+  const mesResultado =
+    String(
+      fecha.getMonth() + 1
+    ).padStart(2, '0');
+
+  const diaResultado =
+    String(
+      fecha.getDate()
+    ).padStart(2, '0');
+
+  return `${anioResultado}-${mesResultado}-${diaResultado}`;
+}
+
+private actualizarModoExpediente(
+  modo: string
+): void {
+  const expedienteControl =
+    this.formulario.get('expediente');
+
+  const mesControl =
+    this.formulario.get('mes_expediente');
+
+  if (modo === 'MANUAL') {
+    expedienteControl?.enable({
+      emitEvent: false
+    });
+
+    mesControl?.disable({
+      emitEvent: false
+    });
+
+    return;
+  }
+
+  mesControl?.enable({
+    emitEvent: false
+  });
+
+  expedienteControl?.disable({
+    emitEvent: false
+  });
+
+  const mes =
+    mesControl?.value;
+
+  if (mes) {
+    this.obtenerConsecutivoPorMes(
+      String(mes)
+    );
+  }
 }
 
   calcularProgreso(): void {
@@ -913,75 +1256,124 @@ this.formulario.get('mes_expediente')?.valueChanges
     this.destroy$.complete();
   }
 
-  onSubmit() {
-    const tipoMedio = this.formulario.get('tipo_medio_recepcion')?.value;
-    const oficioControl = this.formulario.get('oficio');
-
-    if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
-      oficioControl?.enable({ emitEvent: false });
-    }
-
-    if (!this.formulario.valid) {
-      if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
-        oficioControl?.disable({ emitEvent: false });
-      }
-      this.marcarCamposInvalidos();
-      this.mostrarCamposInvalidos();
-      return;
-    }
-
-    if (tipoMedio === 'REQUERIMIENTO_VERBAL') {
-      oficioControl?.disable({ emitEvent: false });
-    }
-
-    this.continuarConFormulario();
+onSubmit(): void {
+  if (this.formulario.invalid) {
+    this.marcarCamposInvalidos();
+    this.mostrarCamposInvalidos();
+    return;
   }
 
-  private continuarConFormulario() {
-    const remitenteGeneral = this.formulario.get('remitente_general')?.value || '';
-    const remitenteCentral = this.formulario.get('remitente_central')?.value || '';
-    const remitenteIdentificador = this.formulario.get('remitente_identificador')?.value || '';
-
-    if (!remitenteGeneral) {
-      this.mostrarModalError(
-        'Campo incompleto',
-        'Remitente (Área) es obligatorio',
-        'Debe seleccionar una opción en "Generales"'
-      );
-      return;
-    }
-
- let remitenteCompleto = remitenteIdentificador?.trim() || '';
-
-if (remitenteCompleto.length > 50) {
-  remitenteCompleto = remitenteCompleto.substring(0, 50);
+  this.continuarConFormulario();
 }
-    const datosFormulario = {
-      ...this.formulario.getRawValue(), // getRawValue incluye campos deshabilitados
-      remitente_area: remitenteCompleto, // Reemplazar con el valor combinado
-      plazo_vencimiento_prioridad: this.construirPlazo()
-    };
 
-    this.logger.debug('Datos Paso 1 preparados para envío', {
-      remitente_general: remitenteGeneral,
-      remitente_central: remitenteCentral,
-      remitente_identificador: remitenteIdentificador,
-      remitente_area_final: remitenteCompleto
-    });
+private continuarConFormulario(): void {
+  const remitenteGeneral = this.formulario.get('remitente_general')?.value || '';
+  const remitenteCentral = this.formulario.get('remitente_central')?.value || '';
+  const remitenteIdentificador = this.formulario.get('remitente_identificador')?.value || '';
 
-    if (remitenteCompleto) {
+  if (!remitenteGeneral) {
+    this.mostrarModalError(
+      'Campo incompleto',
+      'Remitente (Área) es obligatorio',
+      'Debe seleccionar una opción en "Generales"'
+    );
+    return;
+  }
+
+  let remitenteCompleto = remitenteIdentificador?.trim() || '';
+
+  if (remitenteCompleto.length > 50) {
+    remitenteCompleto =
+      remitenteCompleto.substring(0, 50);
+  }
+
+  const valoresFormulario = this.formulario.getRawValue();
+
+  const usuariosPayload:
+    Array<{
+      tipo_usuario:
+        UsuarioRequerimiento['tipo_usuario'];
+      nombre: string;
+      rfc: string;
+    }> = valoresFormulario.usuarios.map(
+      (usuario: UsuarioRequerimiento) => ({
+        tipo_usuario: usuario.tipo_usuario,
+        nombre: usuario.nombre,
+        rfc: usuario.rfc
+      })
+    );
+
+  const datosFormulario = {
+    ...valoresFormulario,
+
+    usuarios: usuariosPayload,
+
+    remitente_area:
+      remitenteCompleto,
+
+    plazo_vencimiento_prioridad:
+      this.construirPlazo()
+  };
+
+  this.logger.debug(
+    'Datos Paso 1 preparados para envío',
+    {
+      remitente_general:
+        remitenteGeneral,
+
+      remitente_central:
+        remitenteCentral,
+
+      remitente_identificador:
+        remitenteIdentificador,
+
+      remitente_area_final:
+        remitenteCompleto,
+
+      usuarios:
+        usuariosPayload
     }
+  );
 
-    this.formularioCompletado.emit(datosFormulario);
-  }
+  this.formularioCompletado.emit(
+    datosFormulario
+  );
+}
 
-  private construirPlazo() {
-    return {
-      valor: 1, // Valor mínimo válido (la BD lo convertirá a NULL si es necesario)
-      unidad: 'dias', // Valor por defecto
-      es_urgente: false
-    };
-  }
+private construirPlazo(): {
+  valor: number | null;
+  unidad: 'dias_habiles';
+  es_urgente: boolean;
+} {
+  const plazo =
+    Number(
+      this.formulario.get(
+        'plazo_vencimiento'
+      )?.value
+    );
+
+  const prioridad =
+    Number(
+      this.formulario.get(
+        'prioridad'
+      )?.value
+    );
+
+  return {
+    valor:
+      Number.isInteger(plazo) &&
+      plazo > 0
+        ? plazo
+        : null,
+
+    unidad:
+      'dias_habiles',
+
+    es_urgente:
+      prioridad === 2 ||
+      prioridad === 3
+  };
+}
 
   private marcarCamposInvalidos() {
     Object.keys(this.formulario.controls).forEach(key => {
@@ -1207,22 +1599,29 @@ if (remitenteCompleto.length > 50) {
   reiniciarFormulario(): void {
     this.logger.debug('Reiniciando formulario del paso 1 completamente');
     this.formulario.reset({
-      tipo_medio_recepcion: '',
-      servicio: null,
-      oficio: '',
-      expediente: '',
-      mes_expediente:String(new Date().getMonth() + 1).padStart(2, '0'),
-      numero_entrada_central: '',
-      remitente_general: '',
-      remitente_central: '',
-      remitente_identificador: '',
-      fecha_documento: this.formHelper.getFechaActual(),
-      fecha_recibido: this.formHelper.getFechaActual(),
-      fecha_requerimiento: this.formHelper.getFechaActual(),
-      referencia_asunto: '',
-      fecha_vencimiento: null,
-      prioridad: 1
-    });
+    tipo_medio_recepcion: '',
+    modo_expediente: 'AUTOMATICO',
+    servicio: null,
+    usuarios: [],
+    oficio: '',
+    expediente: '',
+    mes_expediente:
+    String(
+      new Date().getMonth() + 1
+    ).padStart(2, '0'),
+
+    numero_entrada_central: '',
+    remitente_general: '',
+    remitente_central: '',
+    remitente_identificador: '',
+    fecha_documento: this.formHelper.getFechaActual(),
+    fecha_recibido: this.formHelper.getFechaActual(),
+    fecha_requerimiento: this.formHelper.getFechaActual(),
+    referencia_asunto: '',
+    prioridad: 1,
+    plazo_vencimiento: null,
+    fecha_vencimiento: null
+  });
 
     this.errorOficioDuplicado = false;
     this.idOficioDuplicado = null;
@@ -1232,65 +1631,185 @@ if (remitenteCompleto.length > 50) {
     this.cargarYAplicarSiguienteExpediente();
     this.calcularProgreso();
     this.logger.debug('Formulario reiniciado completamente');
+    this.actualizarModoExpediente('AUTOMATICO');
   }
 
 precargarDatos(datos: any): void {
-  this.logger.debug('Precargando datos temporales en paso 1:', datos);
+  this.logger.debug(
+    'Precargando datos temporales en paso 1:',
+    datos
+  );
 
   if (datos.expediente) {
-    this.siguienteExpediente = datos.expediente;
+    this.siguienteExpediente =
+      datos.expediente;
   }
 
   const remitenteParseado = {
-  general: datos.remitente_general || '',
-  central: datos.remitente_central || '',
-  identificador: datos.remitente_area || ''
+    general:
+      datos.remitente_general || '',
+
+    central:
+      datos.remitente_central || '',
+
+    identificador:
+      datos.remitente_area || ''
   };
 
-  this.formulario.get('expediente')?.enable({ emitEvent: false });
-  this.formulario.get('fecha_documento')?.enable({ emitEvent: false });
+  const usuariosPrecargados:
+    UsuarioRequerimiento[] =
+      Array.isArray(datos.usuarios)
+        ? datos.usuarios.map(
+            (
+              usuario:
+                Partial<UsuarioRequerimiento>
+            ): UsuarioRequerimiento => ({
+              id_temporal:
+                usuario.id_temporal ||
+                `${Date.now()}-${Math.random()
+                  .toString(36)
+                  .slice(2, 10)}`,
+
+              tipo_usuario:
+                usuario.tipo_usuario ??
+                'SERVIDOR_PUBLICO',
+
+              nombre:
+                usuario.nombre ?? '',
+
+              rfc:
+                usuario.rfc ?? ''
+            })
+          )
+        : [];
+
+  this.formulario
+    .get('expediente')
+    ?.enable({
+      emitEvent: false
+    });
+
+  this.formulario
+    .get('fecha_documento')
+    ?.enable({
+      emitEvent: false
+    });
 
   this.formulario.patchValue(
     {
-      tipo_medio_recepcion: datos.tipo_medio_recepcion || '',
-      servicio:datos.servicio ??datos.id_servicio ??null,
-      oficio: datos.oficio || '',
-      expediente: datos.expediente || '',
-      mes_expediente:datos.mes_expediente ||this.extraerMesExpediente(datos.expediente) ||String(new Date().getMonth() + 1).padStart(2, '0'),
-      numero_entrada_central: datos.numero_entrada_central || '',
+      tipo_medio_recepcion:
+        datos.tipo_medio_recepcion || '',
 
-      remitente_general: remitenteParseado.general,
-      remitente_central: '',
-      remitente_identificador: remitenteParseado.identificador,
+      servicio:
+        datos.servicio ??
+        datos.id_servicio ??
+        null,
 
-      fecha_documento: datos.fecha_documento || null,
-      fecha_recibido: datos.fecha_recibido || null,
-      fecha_requerimiento: datos.fecha_requerimiento || null,
-      fecha_vencimiento: datos.fecha_vencimiento || null,
+      usuarios:
+        usuariosPrecargados,
 
-      referencia_asunto: datos.referencia_asunto || '',
-      prioridad: datos.prioridad ?? datos.id_prioridad ?? 1    },
-    { emitEvent: true }
+      oficio:
+        datos.oficio || '',
+
+      expediente:
+        datos.expediente || '',
+
+      mes_expediente:
+        datos.mes_expediente ||
+        this.extraerMesExpediente(
+          datos.expediente
+        ) ||
+        String(
+          new Date().getMonth() + 1
+        ).padStart(2, '0'),
+
+      numero_entrada_central:
+        datos.numero_entrada_central || '',
+
+      remitente_general:
+        remitenteParseado.general,
+
+      remitente_central:
+        '',
+
+      remitente_identificador:
+        remitenteParseado.identificador,
+
+      fecha_documento:
+        datos.fecha_documento || null,
+
+      fecha_recibido:
+        datos.fecha_recibido || null,
+
+      fecha_requerimiento:
+        datos.fecha_requerimiento || null,
+
+      fecha_vencimiento:
+        datos.fecha_vencimiento || null,
+
+      referencia_asunto:
+        datos.referencia_asunto || '',
+
+      prioridad:
+        datos.prioridad ??
+        datos.id_prioridad ??
+        1,
+      modo_expediente:
+      datos.modo_expediente ??
+      'AUTOMATICO',
+
+      plazo_vencimiento:
+      datos.plazo_vencimiento ??
+      datos.plazo_vencimiento_prioridad?.valor ??
+      null,
+    },
+    {
+      emitEvent: true
+    }
   );
+
+  this.actualizarModoExpediente(
+  datos.modo_expediente ??
+  'AUTOMATICO');
+
+  this.actualizarFechaVencimiento();
 
   this.actualizarOpcionesCentrales();
 
   setTimeout(() => {
     this.formulario.patchValue(
-    {
-      remitente_central: remitenteParseado.central
-    },
-    { emitEvent: false }
-  );
+      {
+        remitente_central:
+          remitenteParseado.central
+      },
+      {
+        emitEvent: false
+      }
+    );
 
-  this.validezCambiada.emit(this.formulario.valid);
+    this.validezCambiada.emit(
+      this.formulario.valid
+    );
   }, 100);
 
-  this.formulario.get('expediente')?.disable({ emitEvent: false });
-  this.formulario.get('fecha_documento')?.disable({ emitEvent: false });
+  this.formulario
+    .get('expediente')
+    ?.disable({
+      emitEvent: false
+    });
+
+  this.formulario
+    .get('fecha_documento')
+    ?.disable({
+      emitEvent: false
+    });
+
   this.calcularProgreso();
-  this.validezCambiada.emit(this.formulario.valid);
-  }
+
+  this.validezCambiada.emit(
+    this.formulario.valid
+  );
+}
 
   private separarRemitenteArea(remitenteArea: string | null | undefined): {
   general: string;
@@ -1545,7 +2064,12 @@ if (mesSeleccionado) {
 }
   }
 
-private obtenerConsecutivoPorMes(claveMes: string | number): void {
+private obtenerConsecutivoPorMes(  claveMes: string | number): void {
+  const modo = this.formulario.get('modo_expediente')?.value;
+
+  if (modo !== 'AUTOMATICO') {
+    return;
+  }
   const claveFormateada = String(claveMes).padStart(2, '0');
 
   const body: ConsecutivoFechaRequest = {
