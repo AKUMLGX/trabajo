@@ -3,7 +3,7 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {} from '@angular/common/http';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FirstStepTlalcalliComponent } from '../first-step-tlalcalli/first-step-tlalcalli.component';
 import { SecondStepTlalcalliComponent } from '../second-step-tlalcalli/second-step-tlalcalli.component';
@@ -54,7 +54,6 @@ type Paso2TemporalExtra = FormularioPaso2 & {
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
     MatStepperModule,
     MatButtonModule,
     MatIconModule,

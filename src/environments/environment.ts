@@ -129,6 +129,7 @@ const env = (window as unknown as Window & { env: WindowEnv }).env;
 
 export const environment = {
   baseUrl: 'https://127.0.0.1/tlalcalli/api/v1/',
+  layoutUrl: env.layoutUrl,
 
   loginUrl: 'http://localhost:4200/login',
   logoutUrl: 'https://auth.dev.cloudb.sat.gob.mx/nidp/app/logout',
