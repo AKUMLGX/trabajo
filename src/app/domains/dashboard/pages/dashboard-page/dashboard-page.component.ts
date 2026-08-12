@@ -164,9 +164,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         fontSize: '13px',
         fontWeight: 500,
         markers: {
-          width: 12,
-          height: 12,
-          radius: 4
         }
       },
       stroke: {
@@ -378,9 +375,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         fontSize: '13px',
         fontWeight: 500,
         markers: {
-          width: 12,
-          height: 12,
-          radius: 4
         },
         formatter: (seriesName: string, opts: any) => {
           const idx = opts.seriesIndex;
