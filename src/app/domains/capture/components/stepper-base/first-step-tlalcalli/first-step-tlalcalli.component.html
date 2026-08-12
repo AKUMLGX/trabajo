@@ -1,20 +1,37 @@
 <div class="w-full bg-white py-8">
-      <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="w-full space-y-8">
-
-    <section class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
-
+  <form
+    [formGroup]="formulario"
+    (ngSubmit)="onSubmit()"
+    class="w-full space-y-8"
+  >
+    <section
+      class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"
+    >
       <div class="mb-2 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-tlalcalli-primary text-white">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-              </path>
+          <div
+            class="flex h-9 w-9 items-center justify-center rounded-lg bg-tlalcalli-primary text-white"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
             </svg>
           </div>
 
           <div>
-            <h4 class="text-sm font-noto-sans text-tlalcalli-dark">Progreso del Formulario</h4>
+            <h4 class="text-sm font-noto-sans text-tlalcalli-dark">
+              Progreso del Formulario
+            </h4>
+
             <p class="text-xs font-noto-sans">
               {{ camposCompletados }} de {{ camposTotales }} campos completados
             </p>
@@ -26,22 +43,37 @@
         </span>
       </div>
 
-      <div class="h-2.5 w-full overflow-hidden rounded-full bg-tlalcalli-light-base">
+      <div
+        class="h-2.5 w-full overflow-hidden rounded-full bg-tlalcalli-light-base"
+      >
         <div
           class="h-full rounded-full bg-tlalcalli-primary transition-all duration-500"
-          [style.width.%]="progresoFormulario">
-        </div>
+          [style.width.%]="progresoFormulario"
+        ></div>
       </div>
     </section>
 
-          <section class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md">
-
-      <div class="mb-6 flex items-center gap-3 border-b border-tlalcalli-light-muted pb-4">
-        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-primary text-white">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-            </path>
+    <section
+      class="mx-auto w-[80%] max-w-6xl rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"
+    >
+      <div
+        class="mb-6 flex items-center gap-3 border-b border-tlalcalli-light-muted pb-4"
+      >
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-primary text-white"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
           </svg>
         </div>
 
@@ -49,158 +81,262 @@
           Expediente
         </h3>
 
-        <div class="ml-auto flex items-center gap-2 rounded-full bg-tlalcalli-gold/25 px-3 py-1 text-xs font-noto-sans text-tlalcalli-primary">
-          Automático
+        <div
+          class="ml-auto flex items-center gap-2 rounded-full bg-tlalcalli-gold/25 px-3 py-1 text-xs font-noto-sans text-tlalcalli-primary"
+        >
+          {{
+            formulario.get('modo_expediente')?.value === 'MANUAL'
+              ? 'Manual'
+              : 'Automático'
+          }}
         </div>
       </div>
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div>
+          <app-custom-select
+            label="Modo de captura"
+            [required]="true"
+            placeholder="Seleccione el modo..."
+            [options]="opcionesModoExpediente"
+            formControlName="modo_expediente"
+          >
+          </app-custom-select>
 
-  <div class="lg:col-span-1">
-    <label
-      for="expediente-generado"
-      class="mb-2 block text-sm font-noto-sans text-tlalcalli-dark">
-      Número de expediente
-    </label>
+          <p class="mt-1 text-xs font-noto-sans text-gray-500">
+            Seleccione Manual para registrar expedientes históricos.
+          </p>
+        </div>
 
-    <div class="relative">
-      <input
-        id="expediente-generado"
-        type="text"
-        formControlName="expediente"
-        readonly
-        class="h-[50px] w-full rounded-lg border border-tlalcalli-light-muted
-               bg-tlalcalli-light-lavender/40 px-4
-               font-ubuntu-mono text-xl font-bold text-black
-               outline-none transition
-               focus:border-tlalcalli-primary
-               focus:ring-2 focus:ring-tlalcalli-primary/20"
-      />
+        <div>
+          <label
+            for="expediente-generado"
+            class="mb-2 block text-sm font-noto-sans text-tlalcalli-dark"
+          >
+            Número de expediente
+
+            <span class="text-red-600">*</span>
+          </label>
+
+          <div class="relative">
+            <input
+              id="expediente-generado"
+              type="text"
+              formControlName="expediente"
+              placeholder="EXP-2607-0001"
+              autocomplete="off"
+              class="h-[50px] w-full rounded-lg border border-tlalcalli-light-muted bg-white px-4 font-ubuntu-mono text-xl font-bold text-black outline-none transition placeholder:text-gray-400 focus:border-tlalcalli-primary focus:ring-2 focus:ring-tlalcalli-primary/20 disabled:cursor-not-allowed disabled:bg-tlalcalli-light-lavender/40"
+            />
+
+            @if (
+              formulario.get('modo_expediente')?.value === 'AUTOMATICO'
+            ) {
+              <div
+                class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-tlalcalli-primary"
+              >
+                <span class="icon-font !text-[21px]">
+                  lock
+                </span>
+              </div>
+            }
+          </div>
+
+          @if (expedienteError) {
+            <p class="mt-1 text-xs text-red-600">
+              {{ expedienteError }}
+            </p>
+          }
+        </div>
+
+        <div>
+          <app-custom-select
+            label="Mes del expediente"
+            [required]="
+              formulario.get('modo_expediente')?.value === 'AUTOMATICO'
+            "
+            placeholder="Seleccione el mes..."
+            [options]="opcionesMeses"
+            formControlName="mes_expediente"
+          >
+          </app-custom-select>
+
+          <p class="mt-1 text-xs font-noto-sans text-gray-500">
+            El mes se utiliza para generar el expediente automático.
+          </p>
+        </div>
+      </div>
 
       <div
-        class="pointer-events-none absolute inset-y-0 right-3
-               flex items-center text-tlalcalli-primary">
-        <span class="icon-font !text-[21px]">
-          lock
-        </span>
-      </div>
-    </div>
-
-    @if (expedienteError) {
-      <p class="mt-1 text-xs text-red-600">
-        {{ expedienteError }}
-      </p>
-    }
-  </div>
-
-  <div class="lg:col-span-1">
-    <app-custom-select
-      label="Mes del expediente"
-      [required]="true"
-      placeholder="Seleccione el mes..."
-      [options]="opcionesMeses"
-      formControlName="mes_expediente">
-    </app-custom-select>
-
-    <p class="mt-1 text-xs font-noto-sans text-gray-500">
-      El mes seleccionado actualizará el folio del expediente.
-    </p>
-  </div>
-
-  <!-- <div class="lg:col-span-1">
-    <p class="mb-2 text-sm font-noto-sans text-tlalcalli-dark">
-      Fecha de registro
-    </p>
-
-    <div
-      class="flex h-[50px] items-center rounded-lg
-             border border-tlalcalli-light-muted
-             bg-gray-50 px-4">
-      <span class="text-xl font-bold text-black">
-        {{ formulario.get('fecha_documento')?.value | date:'dd/MM/yyyy' }}
-      </span>
-    </div>
-  </div> -->
-
-</div>
-
-      <div class="mt-4 rounded-r-lg border-l-4 border-tlalcalli-gold bg-tlalcalli-primary/10 p-3">
-        <p class="text-xs font-noto-sans text-tlalcalli-primary">
-          Estos campos se generan automáticamente y no pueden ser modificados manualmente.
-          El expediente se construye con el formato 
-              <!-- El número de expediente se genera automáticamente. Al seleccionar un mes,
-    se actualizará la sección AAMM del folio manteniendo el consecutivo asignado.
-    Formato: -->
-        </p> 
-          <p class="text-xs font-sans text-tlalcalli-primary">EXP-AAMM-0001.</p>
-
+        class="mt-4 rounded-r-lg border-l-4 border-tlalcalli-gold bg-tlalcalli-primary/10 p-3"
+      >
+        @if (
+          formulario.get('modo_expediente')?.value === 'AUTOMATICO'
+        ) {
+          <p class="text-xs font-noto-sans text-tlalcalli-primary">
+            El expediente se genera automáticamente con el formato
+            <span class="font-ubuntu-mono font-bold">
+              EXP-AAMM-0001
+            </span>.
+          </p>
+        } @else {
+          <p class="text-xs font-noto-sans text-tlalcalli-primary">
+            El modo manual permite capturar expedientes históricos. Verifique
+            que el número tenga el formato correcto y no se encuentre
+            registrado previamente.
+          </p>
+        }
       </div>
     </section>
-    <!-- <section class="w-full rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"> -->
 
-    <section class= "mx-auto w-[80%] max-w-6xl rounded-xl border-tlalcalli-success/30 bg-tlalcalli-success/10 p-6 shadow-md">
-      <div class="mb-6 flex items-center gap-3 border-b border-tlalcalli-success/30 pb-4">
-        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-success text-white">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-            </path>
+    <section
+      class="mx-auto w-[80%] max-w-6xl overflow-hidden rounded-xl bg-tlalcalli-primary shadow-xl"
+    >
+      <div
+        class="flex items-center gap-4 border-b border-white/20 px-6 py-5"
+      >
+        <div
+          class="flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-white/15 text-white"
+        >
+          <svg
+            class="h-7 w-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.5"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
           </svg>
         </div>
 
-        <h3 class="text-lg font-noto-sans text-tlalcalli-success-muted">
-          Entrada
-        </h3>
+        <div>
+          <h2 class="m-0 text-[24px] font-semibold text-white">
+            Requerimiento
+          </h2>
 
-        <div class="ml-auto rounded-full border border-tlalcalli-warning/40 bg-tlalcalli-warning/10 px-3 py-1 text-xs font-noto-sans text-tlalcalli-warning-muted">
-          Manual
+          <p class="mt-1 text-sm text-white/80">
+            Complete la información del requerimiento
+          </p>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <app-custom-form-field
-          label="Oficio, Atenta Nota, Petición Interna."
-          placeholder="2025-007"
-          hint="Opcional"
-          [errorMessage]="numeroEntradaError"
-          formControlName="numero_entrada_central">
-        </app-custom-form-field>
+      <div class="space-y-7 bg-white p-6">
+        <!-- <div>
+          <app-custom-select
+            label="Tipo de requerimiento"
+            [required]="true"
+            placeholder="Seleccione el tipo de requerimiento..."
+            [options]="tipoMedioRecepcionOptions"
+            [errorMessage]="tipoMedioRecepcionError"
+            formControlName="tipo_medio_recepcion"
+          >
+          </app-custom-select>
+
+          <p class="mt-1 text-xs font-noto-sans text-gray-500">
+            Seleccione Oficio, Atenta Nota o Petición Interna.
+          </p>
+        </div> -->
 
         <div>
+          <app-usuarios-requerimiento
+            [usuarios]="formulario.get('usuarios')?.value || []"
+            [deshabilitado]="formulario.disabled"
+            (usuariosChange)="actualizarUsuarios($event)"
+          >
+          </app-usuarios-requerimiento>
+
+          @if (
+            formulario.get('usuarios')?.touched &&
+            formulario.get('usuarios')?.invalid
+          ) {
+            <p class="mt-2 text-xs font-noto-sans text-red-600">
+              Debe agregar al menos un usuario o seleccionar N/A.
+            </p>
+          }
+        </div>
+
+        <div
+          [ngClass]="{
+            'rounded-xl border-2 border-tlalcalli-warning bg-yellow-50 p-4':
+              tieneCaracteresProblematicos
+          }"
+        >
           <app-custom-form-field
-            label="Fecha de documento"
+            [label]="etiquetaDocumento"
             [required]="true"
-            type="date"
-            [errorMessage]="fechaRecibidoError"
-            formControlName="fecha_recibido">
+            [placeholder]="placeholderDocumento"
+            [errorMessage]="oficioError"
+            formControlName="oficio"
+            [appKeyboardNavigation]="true"
+            [actionOnCtrlEnter]="abrirModalBusqueda.bind(this)"
+            [skipOnEnter]="true"
+          >
           </app-custom-form-field>
 
-          <!-- <p class="mt-1 text-xs text-tlalcalli-success-muted">
-            Debe ser igual o posterior a la fecha del documento
-          </p> -->
+          <p class="mt-1 text-xs font-noto-sans text-gray-500">
+            Capture el número o referencia exactamente como aparece en el
+            documento.
+          </p>
+
+          <div class="mt-4 flex justify-end">
+            <button
+              type="button"
+              id="btn-buscar-oficio"
+              (click)="abrirModalBusqueda()"
+              [disabled]="
+                !formulario.get('oficio')?.value ||
+                formulario.get('oficio')?.invalid ||
+                buscandoExpedientes
+              "
+              class="flex min-w-[150px] items-center justify-center gap-2 rounded-xl bg-tlalcalli-lavender px-6 py-3 text-sm font-noto-sans text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              @if (!buscandoExpedientes) {
+                <svg
+                  class="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  ></path>
+                </svg>
+              } @else {
+                <svg
+                  class="h-5 w-5 animate-spin"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  ></path>
+                </svg>
+              }
+
+              <span>
+                {{ buscandoExpedientes ? 'Buscando...' : 'Buscar' }}
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
 
-        <!-- <section class="w-full rounded-xl border border-tlalcalli-light-muted bg-white p-4 shadow-md"> -->
-
-    <section class="mx-auto w-[80%] max-w-6xl rounded-xl bg-tlalcalli-primary shadow-xl">
-      <div class="flex items-center gap-4 border-b border-white/20 px-6 py-5">
-        <div class="flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-white/15 text-white">
-          <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-            </path>
-          </svg>
-        </div>
-
-        <div>
-          <h2 class="m-0 text-[24px] font-semibold text-white">Requerimiento</h2>
-          <p class="mt-1 text-sm text-white/80">Complete la información del requerimiento</p>
-        </div>
-      </div>
-
-      <div class="space-y-6 bg-white p-6">
         <div>
           <app-custom-select
             label="Servicio"
@@ -208,127 +344,179 @@
             placeholder="Seleccione el servicio..."
             [options]="opcionesServicio"
             [errorMessage]="servicioError"
-            formControlName="servicio">
+            formControlName="servicio"
+          >
           </app-custom-select>
-        <!-- <p class="mt-1 text-[16px] font-noto-sans">
-          Tipo de servicio solicitado
-        </p> -->
-        </div>
-        <!-- <div>
-          <app-custom-select
-            label="Tipo"
-            [required]="true"
-            placeholder="Seleccione el tipo de requerimiento..."
-            [options]="tipoMedioRecepcionOptions"
-            [errorMessage]="tipoMedioRecepcionError"
-            formControlName="tipo_medio_recepcion">
-          </app-custom-select>
-          <p class="mt-1 text-[16px] font-noto-sans">Tipo de medio de recepción</p>
-        </div> -->
 
-        <!-- Usuarios solicitados -->
-      <div>
-        <app-usuarios-requerimiento
-        [usuarios]="formulario.get('usuarios')?.value || []"
-        [deshabilitado]="formulario.disabled"
-        (usuariosChange)="actualizarUsuarios($event)">
-        </app-usuarios-requerimiento>
-
-      @if (formulario.get('usuarios')?.touched &&formulario.get('usuarios')?.invalid) {
-        <p class="mt-2 text-xs font-noto-sans text-red-600">
-          Debe agregar al menos un usuario o seleccionar N/A.
-        </p>
-        }
-      </div>
-        
-        <div
-          [ngClass]="{
-            'rounded-xl border-2 border-tlalcalli-warning bg-yellow-50 p-3': tieneCaracteresProblematicos
-          }">
-  <div class="mb-6 font-noto-sans">
-
-  <app-custom-form-field
-    label="No. de entrada"
-    [required]="formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL'"
-    placeholder="199 06 02 00 00 2025-01"
-    [errorMessage]="oficioError"
-    formControlName="oficio"
-    [appKeyboardNavigation]="true"
-    [actionOnCtrlEnter]="abrirModalBusqueda.bind(this)"
-    [skipOnEnter]="true">
-  </app-custom-form-field>
-</div>
-
-          <!-- @if (formulario.get('tipo_medio_recepcion')?.value !== 'REQUERIMIENTO_VERBAL') {
-            <p class="mt-1 text-xs font-noto-sans">Número de oficio</p>
-          } @else {
-            <p class="mt-1 text-xs font-semibold text-tlalcalli-warning-muted">
-              Campo deshabilitado para Requerimiento verbal
-            </p>
-          }
-
-          <p class="mt-2 flex items-center gap-1 text-xs text-blue-600">
-            Tenga cuidado: <strong class="font-sans text-orange-600">l</strong>,
-            <strong class="font-sans text-orange-600">I</strong>,
-            <strong class="font-sans text-orange-600">1</strong> y
-            <strong class="font-sans text-orange-600">O</strong>,
-            <strong class="font-sans text-orange-600">o</strong>,
-            <strong class="font-sans text-orange-600">0</strong> pueden parecerse
+          <p class="mt-1 text-xs font-noto-sans text-gray-500">
+            Tipo de servicio solicitado.
           </p>
+        </div>
 
-          @if (tieneCaracteresProblematicos && formulario.get('oficio')?.value) {
-            <div class="mt-2 rounded-lg border border-yellow-200 bg-yellow-50 p-2">
-              <p class="mb-1 text-xs font-semibold text-yellow-800">
-                Caracteres que pueden causar confusión detectados:
-              </p>
-
-              <ul class="ml-5 list-disc space-y-0.5 text-xs text-yellow-700">
-                @for (problema of caracteresProblematicos; track problema.posicion) {
-                  <li class="font-sans">
-                    Posición {{ problema.posicion }}:
-                    "{{ problema.caracter }}" puede confundirse con "{{ problema.sugerencia }}"
-                  </li>
-                }
-              </ul>
+        <div
+          class="rounded-xl border border-tlalcalli-light-muted bg-tlalcalli-light-lavender/20 p-5"
+        >
+          <div class="mb-5 flex items-center gap-3">
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-tlalcalli-primary text-white"
+            >
+              <span class="icon-font !text-[21px]">
+                input
+              </span>
             </div>
-          } -->
 
-          <div class="mt-4 flex justify-end">
-            <button
-              type="button"
-              id="btn-buscar-oficio"
-              (click)="abrirModalBusqueda()"
-              [disabled]="!formulario.get('oficio')?.value || formulario.get('oficio')?.invalid || buscandoExpedientes"
-              class="flex min-w-[150px] items-center justify-center gap-2 rounded-xl bg-tlalcalli-lavender px-6 py-3 text-sm font-noto-sans text-white disabled:cursor-not-allowed disabled:opacity-50">
-              @if (!buscandoExpedientes) {
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
-                  </path>
-                </svg>
-              } @else {
-                <svg class="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
-                  </path>
-                </svg>
-              }
+            <div>
+              <h3 class="m-0 text-base font-semibold text-tlalcalli-primary">
+                Datos de entrada
+              </h3>
 
-              <span>{{ buscandoExpedientes ? 'Buscando...' : 'Buscar' }}</span>
-            </button>
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Información de recepción del documento.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+              <app-custom-form-field
+                label="No. de entrada"
+                placeholder="2026-007"
+                hint="Opcional"
+                [errorMessage]="numeroEntradaError"
+                formControlName="numero_entrada_central"
+              >
+              </app-custom-form-field>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Número asignado al recibir el requerimiento.
+              </p>
+            </div>
+
+            <div>
+              <app-custom-form-field
+                label="Fecha del documento"
+                [required]="true"
+                type="date"
+                [errorMessage]="fechaDocumentoError"
+                formControlName="fecha_documento"
+              >
+              </app-custom-form-field>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Fecha indicada en el oficio, atenta nota o petición.
+              </p>
+            </div>
+
+            <div>
+              <app-custom-form-field
+                label="Fecha de recepción del documento"
+                [required]="true"
+                type="date"
+                [errorMessage]="fechaRecibidoError"
+                formControlName="fecha_recibido"
+              >
+              </app-custom-form-field>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Fecha en que el documento fue recibido.
+              </p>
+            </div>
+
+            <div>
+              <app-custom-form-field
+                label="Fecha del requerimiento"
+                [required]="true"
+                type="date"
+                [errorMessage]="fechaRequerimientoError"
+                formControlName="fecha_requerimiento"
+              >
+              </app-custom-form-field>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Fecha utilizada para el registro del requerimiento.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div>
-          <app-custom-form-field
-            label="Fecha"
-            [required]="true"
-            type="date"
-            [errorMessage]="fechaRequerimientoError"
-            formControlName="fecha_requerimiento">
-          </app-custom-form-field>
-          <p class="mt-1 text-xs font-noto-sans">Fecha del requerimiento</p>
+        <div
+          class="rounded-xl border border-tlalcalli-light-muted bg-white p-5 shadow-sm"
+        >
+          <div class="mb-5 flex items-center gap-3">
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-tlalcalli-primary text-white"
+            >
+              <span class="icon-font !text-[21px]">
+                schedule
+              </span>
+            </div>
+
+            <div>
+              <h3 class="m-0 text-base font-semibold text-tlalcalli-primary">
+                Prioridad y vencimiento
+              </h3>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Configure el plazo indicado en el requerimiento.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div>
+              <app-custom-select
+                label="Prioridad"
+                [required]="true"
+                placeholder="Seleccione la prioridad..."
+                [options]="opcionesPrioridad"
+                [errorMessage]="prioridadError"
+                formControlName="prioridad"
+              >
+              </app-custom-select>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Nivel de prioridad del requerimiento.
+              </p>
+            </div>
+
+            <div>
+              <app-custom-form-field
+                label="Plazo de vencimiento"
+                type="number"
+                placeholder="Ingrese los días hábiles"
+                formControlName="plazo_vencimiento"
+              >
+              </app-custom-form-field>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Capture únicamente el número de días hábiles.
+              </p>
+            </div>
+
+            <div>
+              <app-custom-form-field
+                label="Fecha de vencimiento"
+                type="date"
+                [errorMessage]="fechaVencimientoError"
+                formControlName="fecha_vencimiento"
+              >
+              </app-custom-form-field>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Se calcula automáticamente con la fecha de recepción y el plazo.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="mt-5 rounded-r-lg border-l-4 border-tlalcalli-gold bg-tlalcalli-primary/10 p-3"
+          >
+            <p class="text-xs font-noto-sans text-tlalcalli-primary">
+              El cálculo actual excluye sábados y domingos. Los días inhábiles
+              oficiales deberán incorporarse cuando el backend proporcione el
+              catálogo correspondiente.
+            </p>
+          </div>
         </div>
 
         <div>
@@ -338,127 +526,143 @@
             placeholder="Ingrese el asunto o referencia del requerimiento..."
             [errorMessage]="referenciaError"
             formControlName="referencia_asunto"
-            [rows]="3">
+            [rows]="3"
+          >
           </app-custom-textarea>
-          <p class="mt-1 text-xs font-noto-sans">Referencia o asunto del requerimiento</p>
+
+          <p class="mt-1 text-xs font-noto-sans text-gray-500">
+            Referencia o asunto del requerimiento.
+          </p>
         </div>
 
-        <div>
-          <app-custom-form-field
-            label="Fecha Vencimiento"
-            type="date"
-            [errorMessage]="fechaVencimientoError"
-            formControlName="fecha_vencimiento">
-          </app-custom-form-field>
-          <p class="mt-1 text-xs font-noto-sans">Fecha límite de vencimiento del requerimiento</p>
+        <div class="border-t border-tlalcalli-light-muted pt-6">
+          <div class="mb-5 flex items-center gap-3">
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-tlalcalli-primary text-white"
+            >
+              <span class="icon-font !text-[21px]">
+                account_balance
+              </span>
+            </div>
+
+            <div>
+              <h3 class="m-0 text-base font-semibold text-tlalcalli-primary">
+                Remitente (Área)
+              </h3>
+
+              <p class="mt-1 text-xs font-noto-sans text-gray-500">
+                Seleccione el área que envía el requerimiento.
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <div class="flex flex-col gap-3 xl:flex-row xl:items-end">
+              <div class="min-w-0 flex-1">
+                <app-custom-select
+                  label="Administración General"
+                  [required]="true"
+                  placeholder="Seleccione la Administración General..."
+                  [options]="remitentesGenerales"
+                  [errorMessage]="remitenteGeneralError"
+                  formControlName="remitente_general"
+                >
+                </app-custom-select>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  (click)="agregarGeneral()"
+                  class="rounded-lg bg-tlalcalli-primary px-3 py-2 text-xs font-noto-sans text-white transition hover:opacity-90"
+                >
+                  Agregar
+                </button>
+
+                @if (
+                  formulario.get('remitente_general')?.value &&
+                  !esGeneralPredefinido()
+                ) {
+                  <button
+                    type="button"
+                    (click)="editarGeneral()"
+                    class="rounded-lg bg-tlalcalli-lavender px-3 py-2 text-xs font-noto-sans text-white transition hover:opacity-90"
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="eliminarGeneralCatalogo()"
+                    class="rounded-lg border border-red-500 px-3 py-2 text-xs font-noto-sans text-red-600 transition hover:bg-red-50"
+                  >
+                    Eliminar
+                  </button>
+                }
+              </div>
+            </div>
+
+            @if (formulario.get('remitente_general')?.value) {
+              <div class="flex flex-col gap-3 xl:flex-row xl:items-end">
+                <div class="min-w-0 flex-1">
+                  <app-custom-select
+                    label="Administración Central"
+                    placeholder="Seleccione una opción..."
+                    [options]="remitenteCentralOptions"
+                    [errorMessage]="remitenteCentralError"
+                    formControlName="remitente_central"
+                  >
+                  </app-custom-select>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    (click)="agregarCentral()"
+                    class="rounded-lg bg-tlalcalli-primary px-3 py-2 text-xs font-noto-sans text-white transition hover:opacity-90"
+                  >
+                    Agregar
+                  </button>
+
+                  @if (
+                    formulario.get('remitente_central')?.value &&
+                    !esCentralPredefinida()
+                  ) {
+                    <button
+                      type="button"
+                      (click)="editarCentral()"
+                      class="rounded-lg bg-tlalcalli-lavender px-3 py-2 text-xs font-noto-sans text-white transition hover:opacity-90"
+                    >
+                      Editar
+                    </button>
+
+                    <button
+                      type="button"
+                      (click)="eliminarCentralCatalogo()"
+                      class="rounded-lg border border-red-500 px-3 py-2 text-xs font-noto-sans text-red-600 transition hover:bg-red-50"
+                    >
+                      Eliminar
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <app-custom-form-field
+                  label="Identificador del Remitente"
+                  placeholder="Ingrese el identificador"
+                  formControlName="remitente_identificador"
+                >
+                </app-custom-form-field>
+              </div>
+            }
+          </div>
         </div>
-
-        <div>
-          <app-custom-select
-            label="Prioridad"
-            [required]="true"
-            placeholder="Seleccione la prioridad..."
-            [options]="opcionesPrioridad"
-            [errorMessage]="prioridadError"
-            formControlName="prioridad">
-          </app-custom-select>
-          <p class="mt-1 text-xs font-noto-sans">Nivel de prioridad del requerimiento</p>
-        </div>
-
- <div class="border-t border-tlalcalli-light-muted pt-5">
-  <h3 class="mb-4 flex items-center gap-2 text-base font-noto-sans">
-    Remitente (Área)
-  </h3>
-
-  <div class="space-y-4">
-
-    <div class="flex items-end gap-2">
-      <div class="flex-1">
-        <app-custom-select
-          label="Administración General"
-          [required]="true"
-          placeholder="Seleccione la Administración General..."
-          [options]="remitentesGenerales"
-          [errorMessage]="remitenteGeneralError"
-          formControlName="remitente_general">
-        </app-custom-select>
-      </div>
-
-      <button
-        type="button"
-        (click)="agregarGeneral()"
-        class="rounded-lg bg-tlalcalli-primary px-3 py-2 text-xs font-noto-sans text-white">
-        Agregar
-      </button>
-
-      @if (formulario.get('remitente_general')?.value && !esGeneralPredefinido()) {
-        <button
-          type="button"
-          (click)="editarGeneral()"
-          class="rounded-lg bg-tlalcalli-lavender px-3 py-2 text-xs font-noto-sans text-white">
-          Editar
-        </button>
-
-        <button
-          type="button"
-          (click)="eliminarGeneralCatalogo()"
-          class="rounded-lg border border-red-500 px-3 py-2 text-xs font-noto-sans text-red-600">
-          Eliminar
-        </button>
-      }
-    </div>
-
-    @if (formulario.get('remitente_general')?.value) {
-      <div class="flex items-end gap-2">
-        <div class="flex-1">
-          <app-custom-select
-            label="Administración Central"
-            placeholder="Seleccione una opción..."
-            [options]="remitenteCentralOptions"
-            [errorMessage]="remitenteCentralError"
-            formControlName="remitente_central">
-          </app-custom-select>
-        </div>
-
-        <button
-          type="button"
-          (click)="agregarCentral()"
-          class="rounded-lg bg-tlalcalli-primary px-3 py-2 text-xs font-noto-sans text-white">
-          Agregar
-        </button>
-
-        @if (formulario.get('remitente_central')?.value && !esCentralPredefinida()) {
-          <button
-            type="button"
-            (click)="editarCentral()"
-            class="rounded-lg bg-tlalcalli-lavender px-3 py-2 text-xs font-noto-sans text-white">
-            Editar
-          </button>
-
-          <button
-            type="button"
-            (click)="eliminarCentralCatalogo()"
-            class="rounded-lg border border-red-500 px-3 py-2 text-xs font-noto-sans text-red-600">
-            Eliminar
-          </button>
-        }
-      </div>
-
-      <div>
-        <app-custom-form-field
-          label="Identificador del Remitente"
-          placeholder="Ingrese el identificador"
-          [errorMessage]="remitenteIdentificadorError"
-          formControlName="remitente_identificador">
-        </app-custom-form-field>
-      </div>
-    }
-
-  </div>
-</div>
       </div>
     </section>
 
-    <button type="submit" class="hidden">Enviar</button>
+    <button type="submit" class="hidden">
+      Enviar
+    </button>
   </form>
 </div>
