@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApexChart, ApexNonAxisChartSeries, ApexResponsive, ApexTooltip, NgApexchartsModule, ApexDataLabels, ApexAxisChartSeries } from 'ng-apexcharts';
@@ -13,13 +13,12 @@ import { EstadisticosRequest } from '../../../interfaces/estadisticosRequest.int
 @Component({
     selector: 'app-init-template',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        FormsModule,
-        NgApexchartsModule,
-        MatDialogModule,
-        NgxPaginationModule,
-    ],
+    ReactiveFormsModule,
+    FormsModule,
+    NgApexchartsModule,
+    MatDialogModule,
+    NgxPaginationModule
+],
     templateUrl: './init-template.component.html',
     styleUrl: './init-template.component.css'
 })

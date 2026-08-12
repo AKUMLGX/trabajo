@@ -6,7 +6,7 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 export type CustomModalType = 'confirm' | 'input';
@@ -14,9 +14,8 @@ export type CustomModalType = 'confirm' | 'input';
 @Component({
     selector: 'app-custom-modal2',
     imports: [
-        CommonModule,
-        FormsModule
-    ],
+    FormsModule
+],
     templateUrl: './custom-modal.component.html'
 })
 export class CustomModalComponent2 implements OnChanges {

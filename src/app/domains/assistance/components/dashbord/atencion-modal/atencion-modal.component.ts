@@ -3,7 +3,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AsuntoService } from '../../../../../domains/services/asunto.service';
 import { ArchivosAtencionService, ArchivoAdjunto } from '../../../../../domains/services/archivos-atencion.service';
 import { environment } from '../../../../../../environments/environment';
-import { CommonModule } from '@angular/common';
+
 
 // Interfaces
 interface ArchivoAtencion {
@@ -38,7 +38,7 @@ interface AsuntoPorAtencion {
     selector: 'app-atencion-modal',
     templateUrl: './atencion-modal.component.html',
     styleUrls: ['./atencion-modal.component.css'],
-    imports: [CommonModule]
+    imports: []
 })
 export class AtencionModalComponent implements OnInit, OnChanges {
   @ViewChild('pdfContainer') pdfContainer!: ElementRef;

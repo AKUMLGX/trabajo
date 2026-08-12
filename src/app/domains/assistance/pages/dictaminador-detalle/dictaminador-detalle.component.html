@@ -23,27 +23,28 @@
           <span
             [ngClass]="[asunto.plazo_atencion_original === 0 ? 'bg-red-600 text-white' : 'bg-green-600 font-noto-sans text-white', 'px-3 py-1.5 rounded-full flex items-center text-sm font-noto-sans font-medium shadow-md border border-white/30 backdrop-blur-sm']">
             <!-- <span class="icon-font text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' :
-              'check_circle'}}</span> -->
+          'check_circle'}}</span> -->
           <span class="icon-font font-noto-sans text-sm mr-1">{{asunto.plazo_atencion_original === 0 ? 'priority_high' : 'check_circle}}</span>
 
-            {{getPlazoAtencionText()}}
-          </span>
-          <span
-            [ngClass]="[getStatusClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
-            <!-- <span class="icon-font text-sm mr-1">{{getStatusIcon()}}</span> -->
-            <span class="icon-font text-sm mr-1">{{getStatusIcon()}}</span>
-            {{getStatusText()}}
-          </span>
-        </div>
+          {{getPlazoAtencionText()}}
+        </span>
+        <span
+          [ngClass]="[getStatusClass(), 'px-3 py-1.5 rounded-full flex items-center text-sm font-medium shadow-md border border-white/30 backdrop-blur-sm']">
+          <!-- <span class="icon-font text-sm mr-1">{{getStatusIcon()}}</span> -->
+          <span class="icon-font text-sm mr-1">{{getStatusIcon()}}</span>
+          {{getStatusText()}}
+        </span>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Contenido principal con diseño elegante -->
-  <div class="container mx-auto px-6 py-8">
+<!-- Contenido principal con diseño elegante -->
+<div class="container mx-auto px-6 py-8">
 
-    <!-- Banner de asunto rechazado -->
-    <div *ngIf="asunto.esRechazado"
+  <!-- Banner de asunto rechazado -->
+  @if (asunto.esRechazado) {
+    <div
       class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-lg shadow-md">
       <div class="flex items-start">
         <div class="flex-shrink-0">
@@ -53,211 +54,218 @@
         <div class="ml-3">
           <p class="text-lg font-noto-sans">Este asunto ha sido rechazado</p>
           <p class="mt-1">Rechazado por: <span class="font-noto-sans">{{asunto.rechazadoPor}}</span> el
-            {{asunto.fechaRechazo | date:'dd/MM/yyyy'}}</p>
-          <p class="mt-1">Motivo: <span class="font-noto-sans">{{asunto.motivoRechazo}}</span></p>
-          <button (click)="mostrarRevision()"
-            class="mt-2 bg-red-600 hover:bg-red-700 font-noto-sans text-white font-medium py-1 px-3 rounded text-sm flex items-center">
-            <!-- <span class="icon-font mr-1 text-sm">visibility</span> -->
-            <span class="icon-font mr-1 text-sm">visibility</span>
-            Ver detalles del rechazo
-          </button>
-        </div>
+        {{asunto.fechaRechazo | date:'dd/MM/yyyy'}}</p>
+        <p class="mt-1">Motivo: <span class="font-noto-sans">{{asunto.motivoRechazo}}</span></p>
+        <button (click)="mostrarRevision()"
+          class="mt-2 bg-red-600 hover:bg-red-700 font-noto-sans text-white font-medium py-1 px-3 rounded text-sm flex items-center">
+          <!-- <span class="icon-font mr-1 text-sm">visibility</span> -->
+          <span class="icon-font mr-1 text-sm">visibility</span>
+          Ver detalles del rechazo
+        </button>
       </div>
     </div>
+  </div>
+}
 
-    <!-- Tarjeta de información principal -->
-    <div class="bg-white rounded-xl shadow-2xl mb-8 overflow-hidden border border-[#d8cfc1]">
-      <div class="bg-gradient-to-r from-[#691C32]/95 to-[#8a2541]/95 p-6 relative">
-        <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('assets/images/pattern.png')]"></div>
-        <div class="flex items-center justify-between relative z-10">
-          <div class="flex items-center">
-            <div
-              class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-4 border border-white/30">
-              <!-- <span class="icon-font text-white">description</span> -->
-              <span class="icon-font text-white">description</span>
-            </div>
-            <div>
-              <h3 class="text-xl font-noto-sans text-white">{{asunto.oficio || 'No disponible'}}</h3>
-              <p class="text-sm text-white/90">Número de Oficio</p>
-              <!-- Personas relacionadas - diseño para múltiples -->
-              <div class="mt-2">
-                <p class="text-xs text-white/75 mb-1">Persona(s) relacionada(s):</p>
-                <div class="flex flex-wrap gap-1">
-                  <!-- Para un caso simple (una persona) -->
-                  <span *ngIf="asunto.personaRelacionada && !isMultiplePersonas()"
-                    class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
-                    {{asunto.personaRelacionada}}
-                  </span>
-                  <!-- Para múltiples personas (si se implementa en el futuro) -->
-                  <ng-container *ngIf="isMultiplePersonas()">
-                    <span *ngFor="let persona of getPersonasRelacionadas()"
-                      class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
-                      {{persona}}
-                    </span>
-                  </ng-container>
-                  <!-- Si no hay personas -->
-                  <span *ngIf="!asunto.personaRelacionada"
-                    class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/60 border border-white/20">
-                    No especificada
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/30 flex items-center">
-              <!-- <span class="icon-font text-white/90 mr-2">schedule</span> -->
-              <span class="icon-font text-white/90 mr-2">schedule</span>
-              <span class="text-sm font-noto-sans font-medium text-white">{{asunto.diasTranscurridos}} días transcurridos</span>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/30 flex items-center">
-              <!-- <span class="icon-font text-white/90 mr-2">calendar_today</span> -->
-              <span class="icon-font text-white/90 mr-2">calendar_today</span>
-              <span class="text-sm font-noto-sans font-medium text-white">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="p-8 bg-gradient-to-br from-white to-[#f9f7f3]">
-        <div class="grid grid-cols-3 gap-6">
-          <div class="col-span-2 space-y-6">
-            <!-- Título unificado: Datos Generales del Requerimiento -->
-            <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border border-slate-200 shadow-lg">
-              <div class="flex items-center mb-6">
-                <div
-                  class="w-12 h-12 rounded-full bg-slate-500/10 flex items-center justify-center mr-4 border border-slate-200">
-                  <!-- <span class="icon-font text-slate-600">assignment</span> -->
-                  <span class="icon-font text-slate-600">assignment</span>
-                </div>
-                <h3 class="text-xl font-noto-sans text-slate-800">Datos Generales del Requerimiento</h3>
-              </div>
-
-              <!-- Grid con información unificada (sin Estado y Plazo que ya están arriba) -->
-              <div class="grid grid-cols-2 gap-4">
-
-                <!-- Carpeta de Investigación -->
-                <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 flex items-center">
-                  <!-- <span class="icon-font text-amber-600 mr-3">insert_drive_file</span> -->
-                  <span class="icon-font text-amber-600 mr-3">insert_drive_file</span>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm text-gray-500 truncate">Carpeta de Investigación</p>
-                    <p class="font-noto-sans text-amber-800 truncate">{{asunto.carpetaInvestigacion}}</p>
-                  </div>
-                </div>
-
-                <!-- Número de Oficio -->
-                <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
-                  <!-- <span class="icon-font text-green-600 mr-3">article</span> -->
-                  <span class="icon-font text-green-600 mr-3">article</span>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm text-gray-500 truncate">Número de Oficio</p>
-                    <p class="font-noto-sans text-green-800 truncate">{{asunto.oficio || 'No disponible'}}</p>
-                  </div>
-                </div>
-
-                <!-- Folio Scanner -->
-                <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
-                  <!-- <span class="icon-font text-green-600 mr-3">qr_code</span> -->
-                  <span class="icon-font text-green-600 mr-3">qr_code</span>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm text-gray-500 truncate">Folio Scanner</p>
-                    <p class="font-noto-sans text-green-800 truncate">{{asunto.folioScanner || 'No disponible'}}</p>
-                  </div>
-                </div>
-
-                <!-- Autoridad Remitente -->
-                <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
-                  <!-- <span class="icon-font text-purple-600 mr-3">account_balance</span> -->
-                  <span class="icon-font text-purple-600 mr-3">account_balance</span>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm text-gray-500 truncate">Autoridad Remitente</p>
-                    <p class="font-noto-sans text-purple-800 truncate">{{asunto.autoridadRemitente || 'No disponible'}}</p>
-                  </div>
-                </div>
-
-                <!-- Turno Jefatura -->
-                <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
-                  <!-- <span class="icon-font text-purple-600 mr-3">call_split</span> -->
-                  <span class="icon-font text-purple-600 mr-3">split</span>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm text-gray-500 truncate">Turno Jefatura</p>
-                    <p class="font-noto-sans text-purple-800 truncate">{{asunto.turnoJefatura || 'No disponible'}}</p>
-                  </div>
-                </div>
-
-                <!-- Administración -->
-                <div class="p-4 rounded-lg bg-blue-50 border border-blue-200 flex items-center">
-                  <!-- <span class="icon-font text-blue-600 mr-3">business</span> -->
-                  <span class="icon-font text-blue-600 mr-3">business</span>
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm text-gray-500 truncate">Administración</p>
-                    <p class="font-noto-sans text-blue-800 truncate">{{getAdministracionText()}}</p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <!-- Acciones rápidas -->
-            <div
-              class="bg-gradient-to-br from-[#691C32]/5 to-[#8a2541]/10 rounded-xl p-6 border border-[#691C32]/20 shadow-lg">
-              <div class="flex items-center mb-4">
-                <div
-                  class="w-10 h-10 rounded-full bg-[#691C32]/10 flex items-center justify-center mr-3 border border-[#691C32]/20">
-                  <!-- <span class="icon-font text-[#691C32]">tune</span> -->
-                  <span class="icon-font text-[#691C32]">tune</span>
-                </div>
-                <h3 class="text-lg font-noto-sans text-[#691C32]">Acciones Rápidas</h3>
-              </div>
-              <div class="space-y-3">
-
-                <button mat-stroked-button
-                  class="w-full justify-start py-3 px-4 rounded-lg border-green-600 text-green-600 hover:bg-green-50 transition-all"
-                  (click)="confirmarFinalizacion()">
-                  <!-- <span class="icon-font mr-3">done_all</span> -->
-                  <span class="icon-font mr-3">done_all</span>
-                  <span>Finalizar y Enviar a Revisión</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-
-  <!-- Nueva sección para información capturada y editable por el abogado -->
-  <div class="bg-white rounded-xl shadow-2xl mb-8 overflow-hidden border border-[#d8cfc1]">
-    <div class="bg-gradient-to-r from-[#691C32]/95 to-[#8a2541]/95 p-5">
+<!-- Tarjeta de información principal -->
+<div class="bg-white rounded-xl shadow-2xl mb-8 overflow-hidden border border-[#d8cfc1]">
+  <div class="bg-gradient-to-r from-[#691C32]/95 to-[#8a2541]/95 p-6 relative">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('assets/images/pattern.png')]"></div>
+    <div class="flex items-center justify-between relative z-10">
       <div class="flex items-center">
         <div
-          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-            <span class="icon-font text-white">edit_note</span>
+          class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-4 border border-white/30">
+          <!-- <span class="icon-font text-white">description</span> -->
+          <span class="icon-font text-white">description</span>
         </div>
-        <h2 class="text-xl font-noto-sans text-white">Expediente</h2>
+        <div>
+          <h3 class="text-xl font-noto-sans text-white">{{asunto.oficio || 'No disponible'}}</h3>
+          <p class="text-sm text-white/90">Número de Oficio</p>
+          <!-- Personas relacionadas - diseño para múltiples -->
+          <div class="mt-2">
+            <p class="text-xs text-white/75 mb-1">Persona(s) relacionada(s):</p>
+            <div class="flex flex-wrap gap-1">
+              <!-- Para un caso simple (una persona) -->
+              @if (asunto.personaRelacionada && !isMultiplePersonas()) {
+                <span
+                  class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
+                  {{asunto.personaRelacionada}}
+                </span>
+              }
+              <!-- Para múltiples personas (si se implementa en el futuro) -->
+              @if (isMultiplePersonas()) {
+                @for (persona of getPersonasRelacionadas(); track persona) {
+                  <span
+                    class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/90 border border-white/20">
+                    {{persona}}
+                  </span>
+                }
+              }
+              <!-- Si no hay personas -->
+              @if (!asunto.personaRelacionada) {
+                <span
+                  class="inline-block bg-white/10 backdrop-blur-sm px-2 py-1 rounded text-xs text-white/60 border border-white/20">
+                  No especificada
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/30 flex items-center">
+          <!-- <span class="icon-font text-white/90 mr-2">schedule</span> -->
+          <span class="icon-font text-white/90 mr-2">schedule</span>
+          <span class="text-sm font-noto-sans font-medium text-white">{{asunto.diasTranscurridos}} días transcurridos</span>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/30 flex items-center">
+          <!-- <span class="icon-font text-white/90 mr-2">calendar_today</span> -->
+          <span class="icon-font text-white/90 mr-2">calendar_today</span>
+          <span class="text-sm font-noto-sans font-medium text-white">{{asunto.fechaRecepcion | date:'dd/MM/yyyy'}}</span>
+        </div>
       </div>
     </div>
-    <!-- Formularios  -->
+  </div>
 
-    <div class="p-6 bg-gradient-to-br from-white to-[#f9f7f3]">
-      <mat-dialog-content>
-        <div class="flex justify-center w-full">
-          <select
-            class=" bg-gray-50 border-[#691C32] text-center text-gray-900 focus:border-blue-500 mb-6 rounded-lg focus:ring-blue-500 block w-full p-2.5"
-            (change)="onSelectedOption($event)">
-            <option disabled selected value="">Selecciona un formulario</option>
-            <option value="selecionarFormularioOne"> Solicitud de Información </option>
-            <option value="selecionarFormularioTwo"> Respuesta Interna</option>
-            <option value="selecionarFormularioThree"> Respuesta a FGR</option>
-          </select>
+  <div class="p-8 bg-gradient-to-br from-white to-[#f9f7f3]">
+    <div class="grid grid-cols-3 gap-6">
+      <div class="col-span-2 space-y-6">
+        <!-- Título unificado: Datos Generales del Requerimiento -->
+        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border border-slate-200 shadow-lg">
+          <div class="flex items-center mb-6">
+            <div
+              class="w-12 h-12 rounded-full bg-slate-500/10 flex items-center justify-center mr-4 border border-slate-200">
+              <!-- <span class="icon-font text-slate-600">assignment</span> -->
+              <span class="icon-font text-slate-600">assignment</span>
+            </div>
+            <h3 class="text-xl font-noto-sans text-slate-800">Datos Generales del Requerimiento</h3>
+          </div>
+
+          <!-- Grid con información unificada (sin Estado y Plazo que ya están arriba) -->
+          <div class="grid grid-cols-2 gap-4">
+
+            <!-- Carpeta de Investigación -->
+            <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 flex items-center">
+              <!-- <span class="icon-font text-amber-600 mr-3">insert_drive_file</span> -->
+              <span class="icon-font text-amber-600 mr-3">insert_drive_file</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-gray-500 truncate">Carpeta de Investigación</p>
+                <p class="font-noto-sans text-amber-800 truncate">{{asunto.carpetaInvestigacion}}</p>
+              </div>
+            </div>
+
+            <!-- Número de Oficio -->
+            <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
+              <!-- <span class="icon-font text-green-600 mr-3">article</span> -->
+              <span class="icon-font text-green-600 mr-3">article</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-gray-500 truncate">Número de Oficio</p>
+                <p class="font-noto-sans text-green-800 truncate">{{asunto.oficio || 'No disponible'}}</p>
+              </div>
+            </div>
+
+            <!-- Folio Scanner -->
+            <div class="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center">
+              <!-- <span class="icon-font text-green-600 mr-3">qr_code</span> -->
+              <span class="icon-font text-green-600 mr-3">qr_code</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-gray-500 truncate">Folio Scanner</p>
+                <p class="font-noto-sans text-green-800 truncate">{{asunto.folioScanner || 'No disponible'}}</p>
+              </div>
+            </div>
+
+            <!-- Autoridad Remitente -->
+            <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
+              <!-- <span class="icon-font text-purple-600 mr-3">account_balance</span> -->
+              <span class="icon-font text-purple-600 mr-3">account_balance</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-gray-500 truncate">Autoridad Remitente</p>
+                <p class="font-noto-sans text-purple-800 truncate">{{asunto.autoridadRemitente || 'No disponible'}}</p>
+              </div>
+            </div>
+
+            <!-- Turno Jefatura -->
+            <div class="p-4 rounded-lg bg-purple-50 border border-purple-200 flex items-center">
+              <!-- <span class="icon-font text-purple-600 mr-3">call_split</span> -->
+              <span class="icon-font text-purple-600 mr-3">split</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-gray-500 truncate">Turno Jefatura</p>
+                <p class="font-noto-sans text-purple-800 truncate">{{asunto.turnoJefatura || 'No disponible'}}</p>
+              </div>
+            </div>
+
+            <!-- Administración -->
+            <div class="p-4 rounded-lg bg-blue-50 border border-blue-200 flex items-center">
+              <!-- <span class="icon-font text-blue-600 mr-3">business</span> -->
+              <span class="icon-font text-blue-600 mr-3">business</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-gray-500 truncate">Administración</p>
+                <p class="font-noto-sans text-blue-800 truncate">{{getAdministracionText()}}</p>
+              </div>
+            </div>
+
+          </div>
         </div>
-      </mat-dialog-content>
+      </div>
 
-      @if (selecionarFormulario === "selecionarFormularioOne") {
+      <div>
+        <!-- Acciones rápidas -->
+        <div
+          class="bg-gradient-to-br from-[#691C32]/5 to-[#8a2541]/10 rounded-xl p-6 border border-[#691C32]/20 shadow-lg">
+          <div class="flex items-center mb-4">
+            <div
+              class="w-10 h-10 rounded-full bg-[#691C32]/10 flex items-center justify-center mr-3 border border-[#691C32]/20">
+              <!-- <span class="icon-font text-[#691C32]">tune</span> -->
+              <span class="icon-font text-[#691C32]">tune</span>
+            </div>
+            <h3 class="text-lg font-noto-sans text-[#691C32]">Acciones Rápidas</h3>
+          </div>
+          <div class="space-y-3">
+
+            <button mat-stroked-button
+              class="w-full justify-start py-3 px-4 rounded-lg border-green-600 text-green-600 hover:bg-green-50 transition-all"
+              (click)="confirmarFinalizacion()">
+              <!-- <span class="icon-font mr-3">done_all</span> -->
+              <span class="icon-font mr-3">done_all</span>
+              <span>Finalizar y Enviar a Revisión</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Nueva sección para información capturada y editable por el abogado -->
+<div class="bg-white rounded-xl shadow-2xl mb-8 overflow-hidden border border-[#d8cfc1]">
+  <div class="bg-gradient-to-r from-[#691C32]/95 to-[#8a2541]/95 p-5">
+    <div class="flex items-center">
+      <div
+        class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+        <span class="icon-font text-white">edit_note</span>
+      </div>
+      <h2 class="text-xl font-noto-sans text-white">Expediente</h2>
+    </div>
+  </div>
+  <!-- Formularios  -->
+
+  <div class="p-6 bg-gradient-to-br from-white to-[#f9f7f3]">
+    <mat-dialog-content>
+      <div class="flex justify-center w-full">
+        <select
+          class=" bg-gray-50 border-[#691C32] text-center text-gray-900 focus:border-blue-500 mb-6 rounded-lg focus:ring-blue-500 block w-full p-2.5"
+          (change)="onSelectedOption($event)">
+          <option disabled selected value="">Selecciona un formulario</option>
+          <option value="selecionarFormularioOne"> Solicitud de Información </option>
+          <option value="selecionarFormularioTwo"> Respuesta Interna</option>
+          <option value="selecionarFormularioThree"> Respuesta a FGR</option>
+        </select>
+      </div>
+    </mat-dialog-content>
+
+    @if (selecionarFormulario === "selecionarFormularioOne") {
 
       <form [formGroup]="formSolicitudDeInformacion" class="space-y-8">
 
@@ -316,28 +324,28 @@
                 <input type="text" formControlName="oficio"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400"
                   placeholder="Ej: SAT/001/2025">
-                <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <span class="icon-font text-blue-400 text-lg">article</span>
+                  <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                    <span class="icon-font text-blue-400 text-lg">article</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Área solicitada -->
-            <div class="col-span-1">
-              <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
-                <span class="icon-font text-blue-600 mr-2 text-lg">business</span>
-                Área a quien se solicita información *
-              </label>
-              <div class="relative">
-                <select type="text" formControlName="autoridad_remitente"
-                  class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 appearance-none">
+              <!-- Área solicitada -->
+              <div class="col-span-1">
+                <label class="text-sm font-semibold text-blue-700  mb-3 flex items-center">
+                  <span class="icon-font text-blue-600 mr-2 text-lg">business</span>
+                  Área a quien se solicita información *
+                </label>
+                <div class="relative">
+                  <select type="text" formControlName="autoridad_remitente"
+                    class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 appearance-none">
                   <option value="">Seleccionar área...</option>
                   <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
                   <option value="ACSTC">Administración Central de Servicios Tributarios al Contribuyente (ACSTC)
                   </option>
                   <option value="ACATF">Administración Central de Análisis Técnico Fiscal (ACATF)</option>
                   <option value="ACGSTME">Administración Central de Gestión, Servicios y Trámites con Medios
-                    Electrónicos (ACGSTME)</option>
+                  Electrónicos (ACGSTME)</option>
                   <option value="AGP">Administración General de Planeación (AGP)</option>
                   <option value="AGR">Administración General de Recaudación (AGR)</option>
                   <option value="ACOJ">Administración Central de Operación Jurídica (ACOJ)</option>
@@ -362,7 +370,7 @@
               <div class="relative">
                 <textarea formControlName="descripcion" rows="4"
                   class="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800 placeholder-gray-400 resize-none"
-                  placeholder="Describa brevemente la información solicitada..."></textarea>
+                placeholder="Describa brevemente la información solicitada..."></textarea>
                 <div class="absolute left-4 top-4">
                   <span class="icon-font text-blue-400 text-lg">notes</span>
                 </div>
@@ -372,7 +380,7 @@
             <!-- Adjuntar archivo -->
             <div class="col-span-2">
               <label class="text-sm font-noto-sans text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta emitida
-                *</label>
+              *</label>
               <div
                 class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
                 <input type="file" formControlName="documento_escaneado" (change)="onFileChangedSolicitudInterna($event)" accept=".pdf">
@@ -387,43 +395,43 @@
           <div class="text-sm text-gray-600 flex items-center">
             @if(
               (formSolicitudDeInformacion.controls['folio_scanner'].invalid && (formSolicitudDeInformacion.controls['folio_scanner'].dirty || formSolicitudDeInformacion.controls['folio_scanner'].touched))
-             ||(formSolicitudDeInformacion.controls['fecha_atencion'].invalid && (formSolicitudDeInformacion.controls['fecha_atencion'].dirty || formSolicitudDeInformacion.controls['fecha_atencion'].touched))
-             ||(formSolicitudDeInformacion.controls['oficio'].invalid && (formSolicitudDeInformacion.controls['oficio'].dirty || formSolicitudDeInformacion.controls['oficio'].touched))
-             ||(formSolicitudDeInformacion.controls['autoridad_remitente'].invalid && (formSolicitudDeInformacion.controls['autoridad_remitente'].dirty || formSolicitudDeInformacion.controls['autoridad_remitente'].touched))
-             ||(formSolicitudDeInformacion.controls['descripcion'].invalid && (formSolicitudDeInformacion.controls['descripcion'].dirty || formSolicitudDeInformacion.controls['descripcion'].touched))
-             ||(formSolicitudDeInformacion.controls['documento_escaneado'].invalid && (formSolicitudDeInformacion.controls['documento_escaneado'].dirty || formSolicitudDeInformacion.controls['documento_escaneado'].touched))
-            ){
-                @if (
-                     (formSolicitudDeInformacion.get('folio_scanner')?.errors?.['required'])
-                    || (formSolicitudDeInformacion.get('fecha_atencion')?.errors?.['required'])
-                    || (formSolicitudDeInformacion.get('oficio')?.errors?.['required'])
-                    || (formSolicitudDeInformacion.get('autoridad_remitente')?.errors?.['required'])
-                    || (formSolicitudDeInformacion.get('descripcion')?.errors?.['required'])
-                    || (formSolicitudDeInformacion.get('documento_escaneado')?.errors?.['required'])
+              ||(formSolicitudDeInformacion.controls['fecha_atencion'].invalid && (formSolicitudDeInformacion.controls['fecha_atencion'].dirty || formSolicitudDeInformacion.controls['fecha_atencion'].touched))
+              ||(formSolicitudDeInformacion.controls['oficio'].invalid && (formSolicitudDeInformacion.controls['oficio'].dirty || formSolicitudDeInformacion.controls['oficio'].touched))
+              ||(formSolicitudDeInformacion.controls['autoridad_remitente'].invalid && (formSolicitudDeInformacion.controls['autoridad_remitente'].dirty || formSolicitudDeInformacion.controls['autoridad_remitente'].touched))
+              ||(formSolicitudDeInformacion.controls['descripcion'].invalid && (formSolicitudDeInformacion.controls['descripcion'].dirty || formSolicitudDeInformacion.controls['descripcion'].touched))
+              ||(formSolicitudDeInformacion.controls['documento_escaneado'].invalid && (formSolicitudDeInformacion.controls['documento_escaneado'].dirty || formSolicitudDeInformacion.controls['documento_escaneado'].touched))
+              ){
+              @if (
+                (formSolicitudDeInformacion.get('folio_scanner')?.errors?.['required'])
+                || (formSolicitudDeInformacion.get('fecha_atencion')?.errors?.['required'])
+                || (formSolicitudDeInformacion.get('oficio')?.errors?.['required'])
+                || (formSolicitudDeInformacion.get('autoridad_remitente')?.errors?.['required'])
+                || (formSolicitudDeInformacion.get('descripcion')?.errors?.['required'])
+                || (formSolicitudDeInformacion.get('documento_escaneado')?.errors?.['required'])
 
                 ) {
-                    <div class="text-wine text-base p-3 flex gap-3">
-                                        <span>REQUERIDO</span>
-                                        <span class="icon-font">error</span>
-                                    </div>
-                }
+                <div class="text-wine text-base p-3 flex gap-3">
+                  <span>REQUERIDO</span>
+                  <span class="icon-font">error</span>
+                </div>
+              }
             }
           </div>
-      <div class="flex gap-4">
-        <button [disabled]="!formSolicitudDeInformacion.valid"
-          [ngClass]="formSolicitudDeInformacion.valid ? 'next-button ': 'next-button-disabled'"
-          (click)="requestformSolicitudDeInformacion()"
+          <div class="flex gap-4">
+            <button [disabled]="!formSolicitudDeInformacion.valid"
+              [ngClass]="formSolicitudDeInformacion.valid ? 'next-button ': 'next-button-disabled'"
+              (click)="requestformSolicitudDeInformacion()"
 
-       >
-   <span class="icon-font mr-3">save</span>
-          Guardar expediente
-        </button>
-      </div>
+              >
+              <span class="icon-font mr-3">save</span>
+              Guardar expediente
+            </button>
+          </div>
         </div>
       </form>
-      }
+    }
 
-      @if (selecionarFormulario === "selecionarFormularioTwo") {
+    @if (selecionarFormulario === "selecionarFormularioTwo") {
       <form [formGroup]="formRespuestaInterna" class="space-y-8">
         <!-- SECCIÓN 2: RESPUESTA INTERNA -->
         <div
@@ -457,23 +465,23 @@
             <!-- Número de oficio o atenta nota -->
             <div class="col-span-1">
               <label class="text-sm font-noto-sans text-gray-700 block mb-2">Número de oficio o atenta nota (cuando
-                aplique)</label>
+              aplique)</label>
               <input type="text" formControlName="oficio"
                 class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
                 placeholder="Ej: AGAFF/002/2025">
-            </div>
+              </div>
 
-            <!-- Área que responde -->
-            <div class="col-span-1">
-              <label class="text-sm font-noto-sans text-gray-700 block mb-2">Área que responde *</label>
-              <select type="text"  formControlName="autoridad_remitente"
-                class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
+              <!-- Área que responde -->
+              <div class="col-span-1">
+                <label class="text-sm font-noto-sans text-gray-700 block mb-2">Área que responde *</label>
+                <select type="text"  formControlName="autoridad_remitente"
+                  class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white">
                 <option value="">Seleccionar área...</option>
                 <option value="ACOP">Administración Central de Operación de Padrones (ACOP)</option>
                 <option value="ACSTC">Administración Central de Servicios Tributarios al Contribuyente (ACSTC)</option>
                 <option value="ACATF">Administración Central de Análisis Técnico Fiscal (ACATF)</option>
                 <option value="ACGSTME">Administración Central de Gestión, Servicios y Trámites con Medios Electrónicos
-                  (ACGSTME)</option>
+                (ACGSTME)</option>
                 <option value="AGP">Administración General de Planeación (AGP)</option>
                 <option value="AGR">Administración General de Recaudación (AGR)</option>
                 <option value="ACOJ">Administración Central de Operación Jurídica (ACOJ)</option>
@@ -487,7 +495,7 @@
               <label class="text-sm font-noto-sans text-gray-700 block mb-2">Breve descripción de la respuesta *</label>
               <textarea formControlName="descripcion" rows="3"
                 class="w-full p-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all bg-white"
-                placeholder="Describa brevemente el contenido de la respuesta recibida..."></textarea>
+              placeholder="Describa brevemente el contenido de la respuesta recibida..."></textarea>
             </div>
 
             <!-- Adjuntar archivo de respuesta -->
@@ -496,53 +504,55 @@
               <div
                 class="border-2 border-dashed border-green-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
                 <input type="file" formControlName="documento_escaneado" (change)="onFileChangedRespuestaInterna($event)" accept=".pdf">
-                <div class="text-xs text-gray-500 mt-2" *ngIf="archivoPrefill">Archivo encontrado: {{archivoPrefill}}</div>
+                @if (archivoPrefill) {
+                  <div class="text-xs text-gray-500 mt-2">Archivo encontrado: {{archivoPrefill}}</div>
+                }
               </div>
             </div>
           </div>
         </div>
 
         <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-                    <div class="text-sm text-gray-600 flex items-center">
+          <div class="text-sm text-gray-600 flex items-center">
             @if(
               (formRespuestaInterna.controls['folio_scanner'].invalid && (formRespuestaInterna.controls['folio_scanner'].dirty || formRespuestaInterna.controls['folio_scanner'].touched))
-             ||(formRespuestaInterna.controls['fecha_atencion'].invalid && (formRespuestaInterna.controls['fecha_atencion'].dirty || formRespuestaInterna.controls['fecha_atencion'].touched))
-             ||(formRespuestaInterna.controls['oficio'].invalid && (formRespuestaInterna.controls['oficio'].dirty || formRespuestaInterna.controls['oficio'].touched))
-             ||(formRespuestaInterna.controls['autoridad_remitente'].invalid && (formRespuestaInterna.controls['autoridad_remitente'].dirty || formRespuestaInterna.controls['autoridad_remitente'].touched))
-             ||(formRespuestaInterna.controls['descripcion'].invalid && (formRespuestaInterna.controls['descripcion'].dirty || formRespuestaInterna.controls['descripcion'].touched))
-             ||(formRespuestaInterna.controls['documento_escaneado'].invalid && (formRespuestaInterna.controls['documento_escaneado'].dirty || formRespuestaInterna.controls['documento_escaneado'].touched))
-            ){
-                @if (
-                     (formRespuestaInterna.get('folio_scanner')?.errors?.['required'])
-                    || (formRespuestaInterna.get('fecha_atencion')?.errors?.['required'])
-                    || (formRespuestaInterna.get('oficio')?.errors?.['required'])
-                    || (formRespuestaInterna.get('autoridad_remitente')?.errors?.['required'])
-                    || (formRespuestaInterna.get('descripcion')?.errors?.['required'])
-                    || (formRespuestaInterna.get('documento_escaneado')?.errors?.['required'])
+              ||(formRespuestaInterna.controls['fecha_atencion'].invalid && (formRespuestaInterna.controls['fecha_atencion'].dirty || formRespuestaInterna.controls['fecha_atencion'].touched))
+              ||(formRespuestaInterna.controls['oficio'].invalid && (formRespuestaInterna.controls['oficio'].dirty || formRespuestaInterna.controls['oficio'].touched))
+              ||(formRespuestaInterna.controls['autoridad_remitente'].invalid && (formRespuestaInterna.controls['autoridad_remitente'].dirty || formRespuestaInterna.controls['autoridad_remitente'].touched))
+              ||(formRespuestaInterna.controls['descripcion'].invalid && (formRespuestaInterna.controls['descripcion'].dirty || formRespuestaInterna.controls['descripcion'].touched))
+              ||(formRespuestaInterna.controls['documento_escaneado'].invalid && (formRespuestaInterna.controls['documento_escaneado'].dirty || formRespuestaInterna.controls['documento_escaneado'].touched))
+              ){
+              @if (
+                (formRespuestaInterna.get('folio_scanner')?.errors?.['required'])
+                || (formRespuestaInterna.get('fecha_atencion')?.errors?.['required'])
+                || (formRespuestaInterna.get('oficio')?.errors?.['required'])
+                || (formRespuestaInterna.get('autoridad_remitente')?.errors?.['required'])
+                || (formRespuestaInterna.get('descripcion')?.errors?.['required'])
+                || (formRespuestaInterna.get('documento_escaneado')?.errors?.['required'])
 
                 ) {
-                    <div class="text-wine text-base p-3 flex gap-3">
-                                        <span>REQUERIDO</span>
-                                        <span class="icon-font">error</span>
-                                    </div>
-                }
+                <div class="text-wine text-base p-3 flex gap-3">
+                  <span>REQUERIDO</span>
+                  <span class="icon-font">error</span>
+                </div>
+              }
             }
           </div>
           <div class="flex gap-4">
 
-    <button [disabled]="!formRespuestaInterna.valid"
-          [ngClass]="formRespuestaInterna.valid ? 'next-button ': 'next-button-disabled'"
-          (click)="requestformRespuestaInterna()"
+            <button [disabled]="!formRespuestaInterna.valid"
+              [ngClass]="formRespuestaInterna.valid ? 'next-button ': 'next-button-disabled'"
+              (click)="requestformRespuestaInterna()"
 
-       >
-   <span class="icon-font mr-3">save</span>
-          Guardar expediente
-        </button>
+              >
+              <span class="icon-font mr-3">save</span>
+              Guardar expediente
+            </button>
           </div>
         </div>
       </form>
-      }
-      @if (selecionarFormulario === "selecionarFormularioThree") {
+    }
+    @if (selecionarFormulario === "selecionarFormularioThree") {
       <form [formGroup]="formRespuestaAFGR" class="space-y-8">
 
         <!-- SECCIÓN 3: RESPUESTA A FGR -->
@@ -571,91 +581,93 @@
               <input type="text" formControlName="oficio"
                 class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white"
                 placeholder="Ej: SAT/RES/001/2025">
-            </div>
-
-            <!-- Fecha del acuse de entrega -->
-            <div class="col-span-1">
-              <label class="text-sm font-noto-sans text-gray-700 block mb-2">Fecha del acuse de entrega del oficio a FGR
-                *</label>
-              <input type="date" formControlName="fecha_atencion"
-                class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white">
-            </div>
-
-
-            <!-- Estado de atención -->
-            <div class="col-span-2">
-              <label class="text-sm font-noto-sans text-gray-700 block mb-2">Estado de atención *</label>
-              <div class="flex gap-4">
-                <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="atencion" value="PARCIAL" formControlName="atencion"
-                    [checked]="formRespuestaAFGR.get('atencion')?.value === 'PARCIAL'"
-                    class="mr-2 text-purple-600 focus:ring-purple-500">
-                  <span class="text-sm font-noto-sans text-gray-700">Parcial</span>
-                </label>
-                <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="atencion" value="TOTAL" formControlName="atencion"
-                    [checked]="formRespuestaAFGR.get('atencion')?.value === 'TOTAL'"
-                    class="mr-2 text-purple-600 focus:ring-purple-500">
-                  <span class="text-sm font-noto-sans text-gray-700">Total</span>
-                </label>
               </div>
-              <p class="text-xs text-gray-500 mt-1">Esta selección no afectará el estado general del asunto hasta que
+
+              <!-- Fecha del acuse de entrega -->
+              <div class="col-span-1">
+                <label class="text-sm font-noto-sans text-gray-700 block mb-2">Fecha del acuse de entrega del oficio a FGR
+                *</label>
+                <input type="date" formControlName="fecha_atencion"
+                  class="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white">
+              </div>
+
+
+              <!-- Estado de atención -->
+              <div class="col-span-2">
+                <label class="text-sm font-noto-sans text-gray-700 block mb-2">Estado de atención *</label>
+                <div class="flex gap-4">
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="atencion" value="PARCIAL" formControlName="atencion"
+                      [checked]="formRespuestaAFGR.get('atencion')?.value === 'PARCIAL'"
+                      class="mr-2 text-purple-600 focus:ring-purple-500">
+                    <span class="text-sm font-noto-sans text-gray-700">Parcial</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="atencion" value="TOTAL" formControlName="atencion"
+                      [checked]="formRespuestaAFGR.get('atencion')?.value === 'TOTAL'"
+                      class="mr-2 text-purple-600 focus:ring-purple-500">
+                    <span class="text-sm font-noto-sans text-gray-700">Total</span>
+                  </label>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Esta selección no afectará el estado general del asunto hasta que
                 sea aprobado por un usuario Akamba 2</p>
-            </div>
+              </div>
 
-            <!-- Adjuntar archivo de respuesta emitida -->
-            <div class="col-span-2">
-              <label class="text-sm font-noto-sans text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta emitida
+              <!-- Adjuntar archivo de respuesta emitida -->
+              <div class="col-span-2">
+                <label class="text-sm font-noto-sans text-gray-700 block mb-2">Adjuntar archivo PDF de la respuesta emitida
                 *</label>
-              <div
-                class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
-                <input type="file" formControlName="documento_escaneado"  (change)="onFileChangedRespuestaFGR($event)"  accept=".pdf">
-                <div class="text-xs text-gray-500 mt-2" *ngIf="archivoPrefill">Archivo encontrado: {{archivoPrefill}}</div>
+                <div
+                  class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors">
+                  <input type="file" formControlName="documento_escaneado"  (change)="onFileChangedRespuestaFGR($event)"  accept=".pdf">
+                  @if (archivoPrefill) {
+                    <div class="text-xs text-gray-500 mt-2">Archivo encontrado: {{archivoPrefill}}</div>
+                  }
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-           <div class="text-sm text-gray-600 flex items-center">
-            @if(
-              (formRespuestaAFGR.controls['folio_scanner'].invalid && (formRespuestaAFGR.controls['folio_scanner'].dirty || formRespuestaAFGR.controls['folio_scanner'].touched))
-             ||(formRespuestaAFGR.controls['fecha_atencion'].invalid && (formRespuestaAFGR.controls['fecha_atencion'].dirty || formRespuestaAFGR.controls['fecha_atencion'].touched))
-             ||(formRespuestaAFGR.controls['oficio'].invalid && (formRespuestaAFGR.controls['oficio'].dirty || formRespuestaAFGR.controls['oficio'].touched))
-             ||(formRespuestaAFGR.controls['autoridad_remitente'].invalid && (formRespuestaAFGR.controls['autoridad_remitente'].dirty || formRespuestaAFGR.controls['autoridad_remitente'].touched))
-             ||(formRespuestaAFGR.controls['descripcion'].invalid && (formRespuestaAFGR.controls['descripcion'].dirty || formRespuestaAFGR.controls['descripcion'].touched))
-             ||(formRespuestaAFGR.controls['documento_escaneado'].invalid && (formRespuestaAFGR.controls['documento_escaneado'].dirty || formRespuestaAFGR.controls['documento_escaneado'].touched))
-            ){
+          <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+            <div class="text-sm text-gray-600 flex items-center">
+              @if(
+                (formRespuestaAFGR.controls['folio_scanner'].invalid && (formRespuestaAFGR.controls['folio_scanner'].dirty || formRespuestaAFGR.controls['folio_scanner'].touched))
+                ||(formRespuestaAFGR.controls['fecha_atencion'].invalid && (formRespuestaAFGR.controls['fecha_atencion'].dirty || formRespuestaAFGR.controls['fecha_atencion'].touched))
+                ||(formRespuestaAFGR.controls['oficio'].invalid && (formRespuestaAFGR.controls['oficio'].dirty || formRespuestaAFGR.controls['oficio'].touched))
+                ||(formRespuestaAFGR.controls['autoridad_remitente'].invalid && (formRespuestaAFGR.controls['autoridad_remitente'].dirty || formRespuestaAFGR.controls['autoridad_remitente'].touched))
+                ||(formRespuestaAFGR.controls['descripcion'].invalid && (formRespuestaAFGR.controls['descripcion'].dirty || formRespuestaAFGR.controls['descripcion'].touched))
+                ||(formRespuestaAFGR.controls['documento_escaneado'].invalid && (formRespuestaAFGR.controls['documento_escaneado'].dirty || formRespuestaAFGR.controls['documento_escaneado'].touched))
+                ){
                 @if (
-                     (formRespuestaAFGR.get('folio_scanner')?.errors?.['required'])
-                    || (formRespuestaAFGR.get('fecha_atencion')?.errors?.['required'])
-                    || (formRespuestaAFGR.get('oficio')?.errors?.['required'])
-                    || (formRespuestaAFGR.get('autoridad_remitente')?.errors?.['required'])
-                    || (formRespuestaAFGR.get('descripcion')?.errors?.['required'])
-                    || (formRespuestaAFGR.get('documento_escaneado')?.errors?.['required'])
+                  (formRespuestaAFGR.get('folio_scanner')?.errors?.['required'])
+                  || (formRespuestaAFGR.get('fecha_atencion')?.errors?.['required'])
+                  || (formRespuestaAFGR.get('oficio')?.errors?.['required'])
+                  || (formRespuestaAFGR.get('autoridad_remitente')?.errors?.['required'])
+                  || (formRespuestaAFGR.get('descripcion')?.errors?.['required'])
+                  || (formRespuestaAFGR.get('documento_escaneado')?.errors?.['required'])
 
-                ) {
-                    <div class="text-wine text-base p-3 flex gap-3">
-                                        <span>REQUERIDO</span>
-                                        <span class="icon-font">error</span>
-                                    </div>
+                  ) {
+                  <div class="text-wine text-base p-3 flex gap-3">
+                    <span>REQUERIDO</span>
+                    <span class="icon-font">error</span>
+                  </div>
                 }
-            }
-          </div>
-          <div class="flex gap-4">
-      <div class="flex gap-4">
-        <button [disabled]="!formRespuestaAFGR.valid"
-          [ngClass]="formRespuestaAFGR.valid ? 'next-button ': 'next-button-disabled'"
-          (click)="requestformRespuestaAFGR()"
+              }
+            </div>
+            <div class="flex gap-4">
+              <div class="flex gap-4">
+                <button [disabled]="!formRespuestaAFGR.valid"
+                  [ngClass]="formRespuestaAFGR.valid ? 'next-button ': 'next-button-disabled'"
+                  (click)="requestformRespuestaAFGR()"
 
-       >
-   <span class="icon-font mr-3">save</span>
-          Guardar expediente
-        </button>
-      </div>
+                  >
+                  <span class="icon-font mr-3">save</span>
+                  Guardar expediente
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
 
       }
     </div>
@@ -665,256 +677,252 @@
   <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border border-indigo-200 shadow-lg mb-6">
 
     <!-- MODAL AGREGAR ÁREA -->
-    <div *ngIf="mostrarModalAgregarArea" class="fixed inset-0 z-[10600] flex items-center justify-center">
-      <!-- Backdrop -->
-      <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalAgregarArea()"></div>
-
-      <!-- Modal Content -->
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-2xl p-6">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
-              <span class="icon-font mr-3">add_business</span>
-              Agregar Área de Seguimiento
-            </h3>
-            <button (click)="cerrarModalAgregarArea()" class="text-white hover:text-indigo-200 transition-colors">
-              <span class="icon-font">close</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="p-6">
-          <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
-              <span class="icon-font text-indigo-600 mr-2">business</span>
-              Seleccionar Área SAT
-            </label>
-            <select [(ngModel)]="areaSeleccionadaParaAgregar"
-              class="w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800"
-              [disabled]="areasDisponiblesBackend.length === 0">
-              <option value="">
-                {{areasDisponiblesBackend.length === 0 ? '-- No hay áreas disponibles --' : '-- Selecciona un área --'}}
-              </option>
-              <option *ngFor="let area of areasDisponiblesBackend" [value]="area.area">
-                {{area.area}} - {{area.descripcion_area}}
-              </option>
-            </select>
-
-            <!-- Mensaje cuando no hay áreas disponibles -->
-            <div *ngIf="areasDisponiblesBackend.length === 0"
-              class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-              <div class="flex items-center">
-                <span class="icon-font text-yellow-600 mr-2">info</span>
-                <p class="text-sm font-noto-sans text-yellow-800 font-medium">
-                  No hay áreas disponibles para agregar
-                </p>
-              </div>
-              <p class="text-xs text-yellow-700 mt-1 ml-7">
-                Verifica la conexión con el backend o contacta al administrador.
-              </p>
-            </div>
-
-            <!-- Descripción del área seleccionada -->
-            <div *ngIf="areaSeleccionadaParaAgregar" class="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
-              <p class="text-sm text-indigo-800 font-noto-sans">
-                {{getAreaPorCodigo(areaSeleccionadaParaAgregar)?.descripcion_area}}
-              </p>
+    @if (mostrarModalAgregarArea) {
+      <div class="fixed inset-0 z-[10600] flex items-center justify-center">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalAgregarArea()"></div>
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
+          <!-- Header -->
+          <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-2xl p-6">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
+                <span class="icon-font mr-3">add_business</span>
+                Agregar Área de Seguimiento
+              </h3>
+              <button (click)="cerrarModalAgregarArea()" class="text-white hover:text-indigo-200 transition-colors">
+                <span class="icon-font">close</span>
+              </button>
             </div>
           </div>
-
-          <!-- Información adicional -->
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <div class="flex items-start">
-              <span class="icon-font text-blue-600 mr-2 mt-0.5">info</span>
-              <div class="text-sm text-blue-800">
-                <p class="font-noto-sans mb-1">Al agregar esta área podrás:</p>
-                <ul class="list-disc list-inside space-y-1 text-xs">
-                  <li>Marcar cuando envíes la solicitud</li>
-                  <li>Registrar respuestas recibidas</li>
-                  <li>Controlar recordatorios</li>
-                  <li>Hacer seguimiento completo</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-          <button (click)="cerrarModalAgregarArea()"
-            class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-noto-sans">
-            Cancelar
-          </button>
-          <button (click)="confirmarAgregarArea()" [disabled]="!areaSeleccionadaParaAgregar"
-            class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 font-noto-sans text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
-            <span class="icon-font mr-2">add</span>
-            Agregar Área
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- MODAL EDITAR ÁREA DESHABILITADO -->
-    <div *ngIf="false"
-      class="fixed inset-0 z-[10600] flex items-center justify-center">
-      <!-- Backdrop -->
-      <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEditarArea()"></div>
-
-      <!-- Modal Content -->
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 transform transition-all">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-2xl p-6">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
-              <span class="icon-font mr-3">edit</span>
-              Editar Seguimiento
-            </h3>
-            <button (click)="cerrarModalEditarArea()" class="text-white hover:text-blue-200 transition-colors">
-              <span class="icon-font">close</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="p-6 max-h-96 overflow-y-auto">
-          <!-- Información del área -->
-          <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <div class="flex items-center mb-2">
-              <span class="icon-font text-blue-600 mr-2">business</span>
-              <span class="font-semibold text-blue-800"></span>
-            </div>
-            <p class="text-sm text-blue-700"></p>
-          </div>
-
-          <!-- Solicitud Enviada -->
-          <div class="mb-6">
-            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-              <span class="icon-font text-indigo-600 mr-2 text-sm">send</span>
-              Solicitud Enviada
-            </h4>
-            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
-          </div>
-
-          <!-- Respuesta Recibida -->
-          <div class="mb-6" *ngIf="false">
-            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-              <span class="icon-font text-green-600 mr-2 text-sm">reply</span>
-              Respuesta Recibida
-            </h4>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
-
-              <div class="pl-7">
-                <label class="block text-xs font-noto-sans text-gray-600 mb-1">Tipo de respuesta:</label>
-                <div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Recordatorio -->
-          <div class="mb-6" *ngIf="false">
-            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-              <span class="icon-font text-yellow-600 mr-2 text-sm">schedule_send</span>
-              Recordatorio
-            </h4>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
-
-              <!-- Respuesta a recordatorio -->
-              <div class="pl-7"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="p-6"></div>
-      </div>
-    </div>
-
-    <!-- MODAL CONFIRMAR ELIMINACIÓN DESHABILITADO -->
-    <div *ngIf="false"
-      class="fixed inset-0 z-[10600] flex items-center justify-center">
-      <!-- Backdrop -->
-      <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEliminar()"></div>
-
-      <!-- Modal Content -->
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl p-6">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
-              <span class="icon-font mr-3">delete_forever</span>
-              Eliminar Área del Seguimiento
-            </h3>
-            <button (click)="cerrarModalEliminar()" class="text-white hover:text-red-200 transition-colors">
-              <span class="icon-font">close</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="p-6">
-          <div class="text-center mb-6">
-            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-              <span class="icon-font text-red-600 text-2xl">warning</span>
-            </div>
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">¿Estás seguro?</h4>
-            <p class="text-gray-600 mb-4">
-              Esta acción eliminará permanentemente el seguimiento del área:
-            </p>
-
-            <!-- Información del área a eliminar -->
-            <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
-              <div class="flex items-center mb-2">
-                <span class="icon-font text-red-600 mr-2">business</span>
-                <span class="font-semibold text-red-800"></span>
-              </div>
-              <p class="text-sm text-red-700"></p>
-
-              <!-- Estado actual -->
-              <div class="mt-3 pt-3 border-t border-red-200">
-                <div class="grid grid-cols-2 gap-2 text-xs">
+          <!-- Content -->
+          <div class="p-6">
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                <span class="icon-font text-indigo-600 mr-2">business</span>
+                Seleccionar Área SAT
+              </label>
+              <select [(ngModel)]="areaSeleccionadaParaAgregar"
+                class="w-full p-4 rounded-xl border-2 border-gray-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all bg-white shadow-sm hover:shadow-md text-gray-800"
+                [disabled]="areasDisponiblesBackend.length === 0">
+                <option value="">
+                  {{areasDisponiblesBackend.length === 0 ? '-- No hay áreas disponibles --' : '-- Selecciona un área --'}}
+                </option>
+                @for (area of areasDisponiblesBackend; track area) {
+                  <option [value]="area.area">
+                    {{area.area}} - {{area.descripcion_area}}
+                  </option>
+                }
+              </select>
+              <!-- Mensaje cuando no hay áreas disponibles -->
+              @if (areasDisponiblesBackend.length === 0) {
+                <div
+                  class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
                   <div class="flex items-center">
-                    <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
-                    <span class="text-red-500">Solicitud</span>
+                    <span class="icon-font text-yellow-600 mr-2">info</span>
+                    <p class="text-sm font-noto-sans text-yellow-800 font-medium">
+                      No hay áreas disponibles para agregar
+                    </p>
                   </div>
-                  <div class="flex items-center">
-                    <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
-                    <span class="text-red-500">Respuesta</span>
-                  </div>
-                  <div class="flex items-center">
-                    <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
-                    <span class="text-red-500">Recordatorio</span>
-                  </div>
-                  <div class="text-xs">
-                    <span class="px-2 py-1 rounded text-xs bg-gray-100 text-gray-600">Pendiente</span>
-                  </div>
+                  <p class="text-xs text-yellow-700 mt-1 ml-7">
+                    Verifica la conexión con el backend o contacta al administrador.
+                  </p>
+                </div>
+              }
+              <!-- Descripción del área seleccionada -->
+              @if (areaSeleccionadaParaAgregar) {
+                <div class="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                  <p class="text-sm text-indigo-800 font-noto-sans">
+                    {{getAreaPorCodigo(areaSeleccionadaParaAgregar)?.descripcion_area}}
+                  </p>
+                </div>
+              }
+            </div>
+            <!-- Información adicional -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div class="flex items-start">
+                <span class="icon-font text-blue-600 mr-2 mt-0.5">info</span>
+                <div class="text-sm text-blue-800">
+                  <p class="font-noto-sans mb-1">Al agregar esta área podrás:</p>
+                  <ul class="list-disc list-inside space-y-1 text-xs">
+                    <li>Marcar cuando envíes la solicitud</li>
+                    <li>Registrar respuestas recibidas</li>
+                    <li>Controlar recordatorios</li>
+                    <li>Hacer seguimiento completo</li>
+                  </ul>
                 </div>
               </div>
             </div>
-
-            <p class="text-sm text-gray-500 mt-4">
-              Todo el historial de seguimiento de esta área se perderá.
-            </p>
+          </div>
+          <!-- Actions -->
+          <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+            <button (click)="cerrarModalAgregarArea()"
+              class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-noto-sans">
+              Cancelar
+            </button>
+            <button (click)="confirmarAgregarArea()" [disabled]="!areaSeleccionadaParaAgregar"
+              class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 font-noto-sans text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+              <span class="icon-font mr-2">add</span>
+              Agregar Área
+            </button>
           </div>
         </div>
+      </div>
+    }
 
-        <!-- Actions -->
-        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-          <button (click)="cerrarModalEliminar()"
-            class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-noto-sans">
-            Cancelar
-          </button>
-          <button (click)="confirmarEliminarArea()"
-            class="px-6 py-3 font-noto-sans bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-medium shadow-lg flex items-center">
-            <span class="icon-font mr-2">delete</span>
-            Eliminar Área
-          </button>
+    <!-- MODAL EDITAR ÁREA DESHABILITADO -->
+    @if (false) {
+      <div
+        class="fixed inset-0 z-[10600] flex items-center justify-center">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEditarArea()"></div>
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 transform transition-all">
+          <!-- Header -->
+          <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-2xl p-6">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
+                <span class="icon-font mr-3">edit</span>
+                Editar Seguimiento
+              </h3>
+              <button (click)="cerrarModalEditarArea()" class="text-white hover:text-blue-200 transition-colors">
+                <span class="icon-font">close</span>
+              </button>
+            </div>
+          </div>
+          <!-- Content -->
+          <div class="p-6 max-h-96 overflow-y-auto">
+            <!-- Información del área -->
+            <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div class="flex items-center mb-2">
+                <span class="icon-font text-blue-600 mr-2">business</span>
+                <span class="font-semibold text-blue-800"></span>
+              </div>
+              <p class="text-sm text-blue-700"></p>
+            </div>
+            <!-- Solicitud Enviada -->
+            <div class="mb-6">
+              <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                <span class="icon-font text-indigo-600 mr-2 text-sm">send</span>
+                Solicitud Enviada
+              </h4>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
+            </div>
+            <!-- Respuesta Recibida -->
+            @if (false) {
+              <div class="mb-6">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                  <span class="icon-font text-green-600 mr-2 text-sm">reply</span>
+                  Respuesta Recibida
+                </h4>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
+                  <div class="pl-7">
+                    <label class="block text-xs font-noto-sans text-gray-600 mb-1">Tipo de respuesta:</label>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+            }
+            <!-- Recordatorio -->
+            @if (false) {
+              <div class="mb-6">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                  <span class="icon-font text-yellow-600 mr-2 text-sm">schedule_send</span>
+                  Recordatorio
+                </h4>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"></div>
+                  <!-- Respuesta a recordatorio -->
+                  <div class="pl-7"></div>
+                </div>
+              </div>
+            }
+          </div>
+          <!-- Actions -->
+          <div class="p-6"></div>
         </div>
       </div>
-    </div>
+    }
+
+    <!-- MODAL CONFIRMAR ELIMINACIÓN DESHABILITADO -->
+    @if (false) {
+      <div
+        class="fixed inset-0 z-[10600] flex items-center justify-center">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" (click)="cerrarModalEliminar()"></div>
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
+          <!-- Header -->
+          <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl p-6">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-noto-sans font-bold text-white flex items-center">
+                <span class="icon-font mr-3">delete_forever</span>
+                Eliminar Área del Seguimiento
+              </h3>
+              <button (click)="cerrarModalEliminar()" class="text-white hover:text-red-200 transition-colors">
+                <span class="icon-font">close</span>
+              </button>
+            </div>
+          </div>
+          <!-- Content -->
+          <div class="p-6">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                <span class="icon-font text-red-600 text-2xl">warning</span>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">¿Estás seguro?</h4>
+              <p class="text-gray-600 mb-4">
+                Esta acción eliminará permanentemente el seguimiento del área:
+              </p>
+              <!-- Información del área a eliminar -->
+              <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
+                <div class="flex items-center mb-2">
+                  <span class="icon-font text-red-600 mr-2">business</span>
+                  <span class="font-semibold text-red-800"></span>
+                </div>
+                <p class="text-sm text-red-700"></p>
+                <!-- Estado actual -->
+                <div class="mt-3 pt-3 border-t border-red-200">
+                  <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="flex items-center">
+                      <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
+                      <span class="text-red-500">Solicitud</span>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
+                      <span class="text-red-500">Respuesta</span>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="icon-font text-red-500 mr-1 text-sm">radio_button_unchecked</span>
+                      <span class="text-red-500">Recordatorio</span>
+                    </div>
+                    <div class="text-xs">
+                      <span class="px-2 py-1 rounded text-xs bg-gray-100 text-gray-600">Pendiente</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mt-4">
+                Todo el historial de seguimiento de esta área se perderá.
+              </p>
+            </div>
+          </div>
+          <!-- Actions -->
+          <div class="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+            <button (click)="cerrarModalEliminar()"
+              class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-noto-sans">
+              Cancelar
+            </button>
+            <button (click)="confirmarEliminarArea()"
+              class="px-6 py-3 font-noto-sans bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-medium shadow-lg flex items-center">
+              <span class="icon-font mr-2">delete</span>
+              Eliminar Área
+            </button>
+          </div>
+        </div>
+      </div>
+    }
 
     <div class="flex items-center justify-between mb-6">
       <div class="flex items-center">
@@ -926,9 +934,11 @@
           <h3 class="text-xl font-noto-sans text-indigo-800">Control de Seguimiento por Áreas</h3>
           <p class="text-sm text-indigo-600">
             {{seguimientoAreas.length}} área{{seguimientoAreas.length !== 1 ? 's' : ''}} en seguimiento
-            <span *ngIf="areasDisponiblesBackend.length > 0" class="ml-2 text-indigo-500">
-              • {{areasDisponiblesBackend.length}} disponible{{areasDisponiblesBackend.length !== 1 ? 's' : ''}} para agregar
-            </span>
+            @if (areasDisponiblesBackend.length > 0) {
+              <span class="ml-2 text-indigo-500">
+                • {{areasDisponiblesBackend.length}} disponible{{areasDisponiblesBackend.length !== 1 ? 's' : ''}} para agregar
+              </span>
+            }
           </p>
         </div>
       </div>
@@ -937,7 +947,7 @@
           <p>{{getEstadisticasSeguimiento().areasContactadas}} de {{seguimientoAreas.length}} contactadas</p>
           <p>{{getEstadisticasSeguimiento().respuestasCompletas}}
             respuesta{{getEstadisticasSeguimiento().respuestasCompletas !== 1 ? 's' : ''}}
-            completa{{getEstadisticasSeguimiento().respuestasCompletas !== 1 ? 's' : ''}}</p>
+          completa{{getEstadisticasSeguimiento().respuestasCompletas !== 1 ? 's' : ''}}</p>
         </div>
         <button
           class="bg-indigo-600 hover:bg-indigo-700 text-white font-noto-sans py-2 px-4 rounded-lg transition-colors flex items-center text-sm shadow-md hover:shadow-lg"
@@ -952,100 +962,101 @@
     </div>
 
     <!-- FORMULARIO TIPO EXCEL PARA AGREGAR NUEVA ÁREA -->
-    <div *ngIf="mostrarFormularioNuevaArea" class="bg-white rounded-lg shadow-sm border border-green-200 overflow-hidden mb-6">
-      <div class="bg-green-50 px-4 py-2 border-b border-green-200">
-        <h4 class="text-sm font-noto-sans font-medium text-green-800 flex items-center">
-          <span class="icon-font mr-2 text-sm">add_circle</span>
-          Agregar Nueva Área de Seguimiento
-        </h4>
-      </div>
-      <div class="p-4">
-        <div class="grid grid-cols-8 gap-3 items-end">
-          <!-- Área (obligatorio) -->
-          <div class="col-span-2">
-            <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Área Solicitada *</label>
-            <select [(ngModel)]="nuevaAreaForm.area"
-                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-              <option value="">Seleccionar área...</option>
-              <option *ngFor="let area of getAreasDisponiblesParaFormulario()" [value]="area.area">
-                {{area.area}} - {{area.descripcion_area}}
-              </option>
-            </select>
-          </div>
-
-          <!-- Estado Respuesta (opcional) -->
-          <div>
-            <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Estado</label>
-            <select [(ngModel)]="nuevaAreaForm.id_estado_respuesta"
-                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-              <option [value]="undefined">N/A</option>
-              <option [value]="1">Pendiente</option>
-              <option [value]="2">En Proceso</option>
-              <option [value]="3">Completado</option>
-            </select>
-          </div>
-
-          <!-- Fecha Solicitud (requerida) -->
-          <div>
-            <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Fecha Solicitud *</label>
-            <input type="date"
-                   [(ngModel)]="nuevaAreaForm.fecha_solicitud"
-                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-          </div>
-
-          <!-- Fecha Respuesta (opcional) -->
-          <div>
-            <label class="block text-xs font-noto-sans text-gray-700 mb-1">Fecha Respuesta</label>
-            <input type="date"
-                   [(ngModel)]="nuevaAreaForm.fecha_respuesta"
-                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-          </div>
-
-          <!-- Fecha Recordatorio Envío (opcional) -->
-          <div>
-            <label class="block text-xs font-noto-sans text-gray-700 mb-1">Recordatorio Envío</label>
-            <input type="date"
-                   [(ngModel)]="nuevaAreaForm.fecha_recordatorio_envio"
-                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-          </div>
-
-          <!-- Fecha Recordatorio Respuesta (opcional) -->
-          <div>
-            <label class="block text-xs font-noto-sans font-medium text-gray-700 mb-1">Recordatorio Respuesta</label>
-            <input type="date"
-                   [(ngModel)]="nuevaAreaForm.fecha_recordatorio_respuesta"
-                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-          </div>
-
-          <!-- Observaciones (opcional) -->
-          <div>
-            <label class="block text-xs font-noto-sans font-medium text-gray-700 mb-1">Observaciones</label>
-            <input type="text"
-                   [(ngModel)]="nuevaAreaForm.observaciones"
-                   placeholder="Opcional..."
-                   class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-          </div>
-
-          <!-- Acciones -->
-          <div class="flex gap-2">
-            <button
-              (click)="guardarNuevaArea()"
-              [disabled]="!nuevaAreaForm.area || guardandoNuevaArea"
-              class="bg-green-600 font-noto-sans hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
-              <span *ngIf="!guardandoNuevaArea" class="icon-font mr-1 text-sm">save</span>
-              <div *ngIf="guardandoNuevaArea" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1"></div>
-              {{guardandoNuevaArea ? 'Guardando...' : 'Guardar'}}
-            </button>
-            <button
-              (click)="cancelarNuevaArea()"
-              [disabled]="guardandoNuevaArea"
-              class="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-noto-sans transition-colors">
-              Cancelar
-            </button>
+    @if (mostrarFormularioNuevaArea) {
+      <div class="bg-white rounded-lg shadow-sm border border-green-200 overflow-hidden mb-6">
+        <div class="bg-green-50 px-4 py-2 border-b border-green-200">
+          <h4 class="text-sm font-noto-sans font-medium text-green-800 flex items-center">
+            <span class="icon-font mr-2 text-sm">add_circle</span>
+            Agregar Nueva Área de Seguimiento
+          </h4>
+        </div>
+        <div class="p-4">
+          <div class="grid grid-cols-8 gap-3 items-end">
+            <!-- Área (obligatorio) -->
+            <div class="col-span-2">
+              <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Área Solicitada *</label>
+              <select [(ngModel)]="nuevaAreaForm.area"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="">Seleccionar área...</option>
+                @for (area of getAreasDisponiblesParaFormulario(); track area) {
+                  <option [value]="area.area">
+                    {{area.area}} - {{area.descripcion_area}}
+                  </option>
+                }
+              </select>
+            </div>
+            <!-- Estado Respuesta (opcional) -->
+            <div>
+              <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Estado</label>
+              <select [(ngModel)]="nuevaAreaForm.id_estado_respuesta"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                <option [value]="undefined">N/A</option>
+                <option [value]="1">Pendiente</option>
+                <option [value]="2">En Proceso</option>
+                <option [value]="3">Completado</option>
+              </select>
+            </div>
+            <!-- Fecha Solicitud (requerida) -->
+            <div>
+              <label class="block font-noto-sans text-xs font-medium text-gray-700 mb-1">Fecha Solicitud *</label>
+              <input type="date"
+                [(ngModel)]="nuevaAreaForm.fecha_solicitud"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <!-- Fecha Respuesta (opcional) -->
+            <div>
+              <label class="block text-xs font-noto-sans text-gray-700 mb-1">Fecha Respuesta</label>
+              <input type="date"
+                [(ngModel)]="nuevaAreaForm.fecha_respuesta"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <!-- Fecha Recordatorio Envío (opcional) -->
+            <div>
+              <label class="block text-xs font-noto-sans text-gray-700 mb-1">Recordatorio Envío</label>
+              <input type="date"
+                [(ngModel)]="nuevaAreaForm.fecha_recordatorio_envio"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <!-- Fecha Recordatorio Respuesta (opcional) -->
+            <div>
+              <label class="block text-xs font-noto-sans font-medium text-gray-700 mb-1">Recordatorio Respuesta</label>
+              <input type="date"
+                [(ngModel)]="nuevaAreaForm.fecha_recordatorio_respuesta"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <!-- Observaciones (opcional) -->
+            <div>
+              <label class="block text-xs font-noto-sans font-medium text-gray-700 mb-1">Observaciones</label>
+              <input type="text"
+                [(ngModel)]="nuevaAreaForm.observaciones"
+                placeholder="Opcional..."
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <!-- Acciones -->
+            <div class="flex gap-2">
+              <button
+                (click)="guardarNuevaArea()"
+                [disabled]="!nuevaAreaForm.area || guardandoNuevaArea"
+                class="bg-green-600 font-noto-sans hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                @if (!guardandoNuevaArea) {
+                  <span class="icon-font mr-1 text-sm">save</span>
+                }
+                @if (guardandoNuevaArea) {
+                  <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1"></div>
+                }
+                {{guardandoNuevaArea ? 'Guardando...' : 'Guardar'}}
+              </button>
+              <button
+                (click)="cancelarNuevaArea()"
+                [disabled]="guardandoNuevaArea"
+                class="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-noto-sans transition-colors">
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    }
 
     <!-- Tabla de seguimiento -->
     <div class="bg-white rounded-lg shadow-sm border border-indigo-200 overflow-hidden">
@@ -1064,10 +1075,11 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let area of seguimientoAreas" class="hover:bg-gray-50 transition-colors">
-              <!-- Área -->
-              <td class="px-4 py-4">
-                <div class="flex items-center">
+            @for (area of seguimientoAreas; track area) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <!-- Área -->
+                <td class="px-4 py-4">
+                  <div class="flex items-center">
                   <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" [ngClass]="{
                            'bg-blue-100': area.tipoRespuesta === 'completa',
                            'bg-yellow-100': area.tipoRespuesta === 'parcial',
@@ -1078,59 +1090,54 @@
                                   'text-yellow-600': area.tipoRespuesta === 'parcial',
                                   'text-gray-600': area.tipoRespuesta === 'pendiente'
                                 }">business</span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-noto-sans text-gray-900">{{area.area}}</p>
+                      <p class="text-xs text-gray-500">{{area.nombreCompleto}}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p class="text-sm font-noto-sans text-gray-900">{{area.area}}</p>
-                    <p class="text-xs text-gray-500">{{area.nombreCompleto}}</p>
-                  </div>
-                </div>
-              </td>
-
-              <!-- Solicitud Enviada -->
-              <td class="px-4 py-4 text-center">
-                <span class="text-sm" [ngClass]="area.solicitudEnviada ? 'text-gray-700' : 'text-gray-500'">
-                  {{area.fechaSolicitud || 'Pendiente'}}
-                </span>
-              </td>
-
-              <!-- Respuesta Recibida -->
-              <td class="px-4 py-4 text-center">
-                <span class="text-sm" [ngClass]="area.respuestaRecibida ? 'text-gray-700' : 'text-gray-500'">
-                  {{area.fechaRespuesta || (area.solicitudEnviada ? 'Pendiente' : 'N/A')}}
-                </span>
-              </td>
-
-              <!-- Tipo de Respuesta -->
-              <td class="px-4 py-4 text-center">
-                <span class="text-xs rounded-full px-2 py-1 font-noto-sans"
+                </td>
+                <!-- Solicitud Enviada -->
+                <td class="px-4 py-4 text-center">
+                  <span class="text-sm" [ngClass]="area.solicitudEnviada ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaSolicitud || 'Pendiente'}}
+                  </span>
+                </td>
+                <!-- Respuesta Recibida -->
+                <td class="px-4 py-4 text-center">
+                  <span class="text-sm" [ngClass]="area.respuestaRecibida ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaRespuesta || (area.solicitudEnviada ? 'Pendiente' : 'N/A')}}
+                  </span>
+                </td>
+                <!-- Tipo de Respuesta -->
+                <td class="px-4 py-4 text-center">
+                  <span class="text-xs rounded-full px-2 py-1 font-noto-sans"
                   [ngClass]="{
                              'bg-green-100 text-green-800': area.tipoRespuesta === 'completa',
                              'bg-yellow-100 text-yellow-800': area.tipoRespuesta === 'parcial',
                              'bg-gray-100 text-gray-500': area.tipoRespuesta === 'pendiente'
                            }">
-                  {{area.tipoRespuesta | titlecase}}
-                </span>
-              </td>
-
-              <!-- Recordatorio Enviado -->
-              <td class="px-4 py-4 text-center">
-                <span class="text-sm" [ngClass]="area.recordatorioEnviado ? 'text-gray-700' : 'text-gray-500'">
-                  {{area.fechaRecordatorio || (area.solicitudEnviada ? 'N/A' : 'N/A')}}
-                </span>
-              </td>
-
-              <!-- Respuesta a Recordatorio -->
-              <td class="px-4 py-4 text-center">
-                <span class="text-sm" [ngClass]="area.respuestaRecordatorio ? 'text-gray-700' : 'text-gray-500'">
-                  {{area.fechaRespuestaRecordatorio || (area.recordatorioEnviado ? 'Pendiente' : 'N/A')}}
-                </span>
-              </td>
-
-              <!-- Acciones -->
-              <td class="px-4 py-4 text-center">
-                <span class="text-sm text-gray-700">{{area.observaciones || '—'}}</span>
-              </td>
-            </tr>
+                    {{area.tipoRespuesta | titlecase}}
+                  </span>
+                </td>
+                <!-- Recordatorio Enviado -->
+                <td class="px-4 py-4 text-center">
+                  <span class="text-sm" [ngClass]="area.recordatorioEnviado ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaRecordatorio || (area.solicitudEnviada ? 'N/A' : 'N/A')}}
+                  </span>
+                </td>
+                <!-- Respuesta a Recordatorio -->
+                <td class="px-4 py-4 text-center">
+                  <span class="text-sm" [ngClass]="area.respuestaRecordatorio ? 'text-gray-700' : 'text-gray-500'">
+                    {{area.fechaRespuestaRecordatorio || (area.recordatorioEnviado ? 'Pendiente' : 'N/A')}}
+                  </span>
+                </td>
+                <!-- Acciones -->
+                <td class="px-4 py-4 text-center">
+                  <span class="text-sm text-gray-700">{{area.observaciones || '—'}}</span>
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -1161,213 +1168,223 @@
 </div>
 
 <!-- Notificación flotante para mensajes de estado -->
-<div *ngIf="mostrarMensajeEstado"
-  [ngClass]="{'bg-green-600': tipoMensajeEstado === 'success', 'bg-red-600': tipoMensajeEstado === 'error'}"
-  class="fixed top-5 right-5 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center animate-fadeIn">
-  <svg *ngIf="tipoMensajeEstado === 'success'" class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-    viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-  <svg *ngIf="tipoMensajeEstado === 'error'" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-  <span>{{mensajeEstado}}</span>
-  <button (click)="mostrarMensajeEstado = false" class="ml-4 hover:bg-white/20 p-1 rounded-full">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  </button>
-</div>
+@if (mostrarMensajeEstado) {
+  <div
+    [ngClass]="{'bg-green-600': tipoMensajeEstado === 'success', 'bg-red-600': tipoMensajeEstado === 'error'}"
+    class="fixed top-5 right-5 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center animate-fadeIn">
+    @if (tipoMensajeEstado === 'success') {
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    }
+    @if (tipoMensajeEstado === 'error') {
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    }
+    <span>{{mensajeEstado}}</span>
+    <button (click)="mostrarMensajeEstado = false" class="ml-4 hover:bg-white/20 p-1 rounded-full">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+}
 
 <!-- Modal de confirmación para finalizar y enviar a revisión -->
-<div *ngIf="mostrarModalConfirmacion"
-  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
-  <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-zoomIn">
-    <!-- Encabezado del modal -->
-    <div class="bg-gradient-to-r from-green-600 to-green-700 p-5 text-white">
-      <div class="flex items-center">
-        <div
-          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
+@if (mostrarModalConfirmacion) {
+  <div
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-zoomIn">
+      <!-- Encabezado del modal -->
+      <div class="bg-gradient-to-r from-green-600 to-green-700 p-5 text-white">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-noto-sans">Finalizar y enviar a revisión</h2>
         </div>
-        <h2 class="text-xl font-noto-sans">Finalizar y enviar a revisión</h2>
       </div>
-    </div>
-
-    <!-- Contenido del modal -->
-    <div class="p-6">
-      <div class="mb-5 text-center">
-        <div
-          class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
-          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-noto-sans text-gray-800 mb-2">¿Está seguro que desea finalizar este dictamen y enviarlo a
+      <!-- Contenido del modal -->
+      <div class="p-6">
+        <div class="mb-5 text-center">
+          <div
+            class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-noto-sans text-gray-800 mb-2">¿Está seguro que desea finalizar este dictamen y enviarlo a
           revisión?</h3>
-        <p class="text-gray-600">Esta acción no se puede deshacer. El asunto será enviado para su revisión por el
+          <p class="text-gray-600">Esta acción no se puede deshacer. El asunto será enviado para su revisión por el
           asignador.</p>
-      </div>
-
-      <!-- Detalles del documento -->
-      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
-        <div class="flex items-center mb-2">
-          <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span class="text-sm font-noto-sans text-gray-700">Información del asunto</span>
         </div>
-        <div class="space-y-1 text-sm">
-          <p><span class="font-noto-sans">Folio:</span> {{asunto.folio}}</p>
-          <p><span class="font-noto-sans">Carpeta de Investigación:</span> {{asunto.carpetaInvestigacion}}</p>
-          <p><span class="font-noto-sans">Persona relacionada:</span> {{asunto.personaRelacionada}}</p>
+        <!-- Detalles del documento -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
+          <div class="flex items-center mb-2">
+            <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-sm font-noto-sans text-gray-700">Información del asunto</span>
+          </div>
+          <div class="space-y-1 text-sm">
+            <p><span class="font-noto-sans">Folio:</span> {{asunto.folio}}</p>
+            <p><span class="font-noto-sans">Carpeta de Investigación:</span> {{asunto.carpetaInvestigacion}}</p>
+            <p><span class="font-noto-sans">Persona relacionada:</span> {{asunto.personaRelacionada}}</p>
+          </div>
         </div>
-      </div>
-
-      <!-- Botones de acción -->
-      <div class="flex justify-end gap-3">
-        <button (click)="cancelarFinalizacion()"
-          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
-          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          Cancelar
-        </button>
-
-        <button (click)="confirmarYFinalizar()"
-          class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
-          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          Confirmar y finalizar
-        </button>
+        <!-- Botones de acción -->
+        <div class="flex justify-end gap-3">
+          <button (click)="cancelarFinalizacion()"
+            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Cancelar
+          </button>
+          <button (click)="confirmarYFinalizar()"
+            class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Confirmar y finalizar
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+}
 
 <!-- Modal de confirmación para aprobación -->
-<div *ngIf="mostrarModalAprobacion"
-  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
-  <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-zoomIn">
-    <!-- Encabezado del modal -->
-    <div class="bg-gradient-to-r from-green-600 to-green-700 p-5 text-white">
-      <div class="flex items-center">
-        <div
-          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <h2 class="text-xl font-noto-sans">Confirmar aprobación</h2>
-      </div>
-    </div>
-
-    <!-- Contenido del modal -->
-    <div class="p-6">
-      <div class="mb-5 text-center">
-        <div
-          class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
-          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-noto-sans text-gray-800 mb-2">¿Está seguro que desea aprobar este documento?</h3>
-        <p class="text-gray-600">El documento será aprobado y enviado al solicitante. Esta acción no se puede deshacer.
-        </p>
-      </div>
-
-      <!-- Detalles del documento -->
-      <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
-        <div class="flex items-center mb-2">
-          <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span class="text-sm font-noto-sans text-gray-700">Información del documento</span>
-        </div>
-        <div class="space-y-1 text-sm">
-          <p><span class="font-noto-sans">Folio:</span> {{asuntoEnRevision?.folio}}</p>
-          <p><span class="font-noto-sans">Autor:</span> {{asuntoEnRevision?.dictaminador}}</p>
-          <p><span class="font-noto-sans">Fecha:</span> {{asuntoEnRevision?.fecha}}</p>
+@if (mostrarModalAprobacion) {
+  <div
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-zoomIn">
+      <!-- Encabezado del modal -->
+      <div class="bg-gradient-to-r from-green-600 to-green-700 p-5 text-white">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-noto-sans">Confirmar aprobación</h2>
         </div>
       </div>
-
-      <!-- Botones de acción -->
-      <div class="flex justify-end gap-3">
-        <button (click)="cancelarAprobacion()"
-          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
-          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          Cancelar
-        </button>
-
-        <button (click)="aprobarDictamen()"
-          class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
-          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          Confirmar aprobación
-        </button>
+      <!-- Contenido del modal -->
+      <div class="p-6">
+        <div class="mb-5 text-center">
+          <div
+            class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 border border-green-200 shadow-md">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-noto-sans text-gray-800 mb-2">¿Está seguro que desea aprobar este documento?</h3>
+          <p class="text-gray-600">El documento será aprobado y enviado al solicitante. Esta acción no se puede deshacer.
+          </p>
+        </div>
+        <!-- Detalles del documento -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-5">
+          <div class="flex items-center mb-2">
+            <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-sm font-noto-sans text-gray-700">Información del documento</span>
+          </div>
+          <div class="space-y-1 text-sm">
+            <p><span class="font-noto-sans">Folio:</span> {{asuntoEnRevision?.folio}}</p>
+            <p><span class="font-noto-sans">Autor:</span> {{asuntoEnRevision?.dictaminador}}</p>
+            <p><span class="font-noto-sans">Fecha:</span> {{asuntoEnRevision?.fecha}}</p>
+          </div>
+        </div>
+        <!-- Botones de acción -->
+        <div class="flex justify-end gap-3">
+          <button (click)="cancelarAprobacion()"
+            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Cancelar
+          </button>
+          <button (click)="aprobarDictamen()"
+            class="px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-md hover:from-green-700 hover:to-green-800 transition-colors shadow-sm flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Confirmar aprobación
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+}
 
 <!-- Input oculto para seleccionar archivos -->
 <input type="file" #fileInput style="display: none" multiple accept="application/pdf"
   (change)="onArchivosSeleccionados($event)" />
 
 <!-- Modal para confirmar la subida de archivos -->
-<div *ngIf="mostrarModalArchivos"
-  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 transform transition-all">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-noto-sans text-[#691C32]">Confirmar subida de archivos</h3>
-      <button (click)="cancelarSubidaArchivos()" class="text-gray-500 hover:text-gray-700">
-        <span class="icon-font">close</span>
-      </button>
-    </div>
-
-    <div class="mb-6">
-      <p class="text-gray-700 mb-4">Se subirán los siguientes archivos:</p>
-      <ul class="bg-gray-50 rounded-lg p-3 max-h-60 overflow-y-auto">
-        <li *ngFor="let archivo of archivosSeleccionados"
-          class="flex items-center py-2 border-b border-gray-100 last:border-0">
-          <span class="icon-font text-[#691C32] mr-2">picture_as_pdf</span>
-          <span class="flex-1 truncate">{{archivo.name}}</span>
-          <span class="text-sm text-gray-500">{{(archivo.size / 1024).toFixed(1)}} KB</span>
-        </li>
-      </ul>
-      <p class="text-sm text-gray-500 mt-2">* Todos los archivos deben estar en formato PDF</p>
-    </div>
-
-    <div class="flex justify-end gap-3">
-      <button mat-stroked-button class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700"
-        (click)="cancelarSubidaArchivos()">
-        Cancelar
-      </button>
-      <button mat-flat-button class="px-4 py-2 rounded-lg bg-[#691C32] text-white flex items-center"
-        [disabled]="cargandoArchivos" (click)="subirArchivos()">
-        <span *ngIf="!cargandoArchivos" class="icon-font mr-1">cloud_upload</span>
-        <span *ngIf="!cargandoArchivos">Subir Archivos</span>
-        <div *ngIf="cargandoArchivos" class="flex items-center">
-          <div class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-          <span>Subiendo...</span>
-        </div>
-      </button>
+@if (mostrarModalArchivos) {
+  <div
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-noto-sans text-[#691C32]">Confirmar subida de archivos</h3>
+        <button (click)="cancelarSubidaArchivos()" class="text-gray-500 hover:text-gray-700">
+          <span class="icon-font">close</span>
+        </button>
+      </div>
+      <div class="mb-6">
+        <p class="text-gray-700 mb-4">Se subirán los siguientes archivos:</p>
+        <ul class="bg-gray-50 rounded-lg p-3 max-h-60 overflow-y-auto">
+          @for (archivo of archivosSeleccionados; track archivo) {
+            <li
+              class="flex items-center py-2 border-b border-gray-100 last:border-0">
+              <span class="icon-font text-[#691C32] mr-2">picture_as_pdf</span>
+              <span class="flex-1 truncate">{{archivo.name}}</span>
+              <span class="text-sm text-gray-500">{{(archivo.size / 1024).toFixed(1)}} KB</span>
+            </li>
+          }
+        </ul>
+        <p class="text-sm text-gray-500 mt-2">* Todos los archivos deben estar en formato PDF</p>
+      </div>
+      <div class="flex justify-end gap-3">
+        <button mat-stroked-button class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700"
+          (click)="cancelarSubidaArchivos()">
+          Cancelar
+        </button>
+        <button mat-flat-button class="px-4 py-2 rounded-lg bg-[#691C32] text-white flex items-center"
+          [disabled]="cargandoArchivos" (click)="subirArchivos()">
+          @if (!cargandoArchivos) {
+            <span class="icon-font mr-1">cloud_upload</span>
+          }
+          @if (!cargandoArchivos) {
+            <span>Subir Archivos</span>
+          }
+          @if (cargandoArchivos) {
+            <div class="flex items-center">
+              <div class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+              <span>Subiendo...</span>
+            </div>
+          }
+        </button>
+      </div>
     </div>
   </div>
-</div>
+}
 
 <!-- Sección para Documentos Adjuntos -->
 <div class="container mx-auto px-6 pb-8">
@@ -1400,158 +1417,176 @@
 
     <div class="p-6 bg-gradient-to-br from-white to-[#f9f7f3]">
       <!-- Spinner de carga -->
-      <div *ngIf="cargandoArchivosAdjuntos" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      @if (cargandoArchivosAdjuntos) {
+        <div class="flex justify-center items-center py-12">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      }
 
       <!-- Mensaje de error -->
-      <div *ngIf="errorArchivosAdjuntos && !cargandoArchivosAdjuntos" class="py-8 text-center">
-        <div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
-          <span class="icon-font text-red-600">error_outline</span>
+      @if (errorArchivosAdjuntos && !cargandoArchivosAdjuntos) {
+        <div class="py-8 text-center">
+          <div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+            <span class="icon-font text-red-600">error_outline</span>
+          </div>
+          <p class="text-red-600 mb-2">{{errorArchivosAdjuntos}}</p>
+          <button mat-stroked-button color="primary" (click)="refrescarArchivosAdjuntos()">
+            <span class="icon-font mr-2">refresh</span>
+            <span>Reintentar</span>
+          </button>
         </div>
-        <p class="text-red-600 mb-2">{{errorArchivosAdjuntos}}</p>
-        <button mat-stroked-button color="primary" (click)="refrescarArchivosAdjuntos()">
-          <span class="icon-font mr-2">refresh</span>
-          <span>Reintentar</span>
-        </button>
-      </div>
+      }
 
       <!-- Lista de archivos -->
-      <div *ngIf="archivosAdjuntos.length > 0 && !cargandoArchivosAdjuntos" class="space-y-3">
-        <div *ngFor="let archivo of archivosAdjuntos"
-          class="flex items-center justify-between p-4 rounded-lg bg-white border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all">
-          <div class="flex items-center min-w-0">
-            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3 border border-blue-200">
-              <span class="icon-font text-blue-600">description</span>
-            </div>
-            <div class="min-w-0">
-              <p class="font-noto-sans text-blue-900 truncate mb-1">{{archivo.nombre}}</p>
-              <div class="flex flex-wrap text-xs text-gray-500">
-                <span class="flex items-center mr-4">
-                  <span class="icon-font text-blue-400 mr-1"
-                    style="font-size: 16px; width: 16px; height: 16px;">description</span>
-                  <span>{{archivo.tamano}}</span>
-                </span>
-                <span class="flex items-center">
-                  <span class="icon-font text-blue-400 mr-1"
-                    style="font-size: 16px; width: 16px; height: 16px;">calendar_today</span>
-                  <span>{{formatearFechaArchivo(archivo.ultima_modificacion)}}</span>
-                </span>
+      @if (archivosAdjuntos.length > 0 && !cargandoArchivosAdjuntos) {
+        <div class="space-y-3">
+          @for (archivo of archivosAdjuntos; track archivo) {
+            <div
+              class="flex items-center justify-between p-4 rounded-lg bg-white border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all">
+              <div class="flex items-center min-w-0">
+                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3 border border-blue-200">
+                  <span class="icon-font text-blue-600">description</span>
+                </div>
+                <div class="min-w-0">
+                  <p class="font-noto-sans text-blue-900 truncate mb-1">{{archivo.nombre}}</p>
+                  <div class="flex flex-wrap text-xs text-gray-500">
+                    <span class="flex items-center mr-4">
+                      <span class="icon-font text-blue-400 mr-1"
+                      style="font-size: 16px; width: 16px; height: 16px;">description</span>
+                      <span>{{archivo.tamano}}</span>
+                    </span>
+                    <span class="flex items-center">
+                      <span class="icon-font text-blue-400 mr-1"
+                      style="font-size: 16px; width: 16px; height: 16px;">calendar_today</span>
+                      <span>{{formatearFechaArchivo(archivo.ultima_modificacion)}}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2 flex-shrink-0">
+                <button mat-icon-button class="bg-blue-50 hover:bg-blue-100 transition-all" matTooltip="Ver archivo"
+                  (click)="verArchivoPdf(archivo.nombre)">
+                  <span class="icon-font text-blue-600">visibility</span>
+                </button>
               </div>
             </div>
-          </div>
-          <div class="flex gap-2 flex-shrink-0">
-            <button mat-icon-button class="bg-blue-50 hover:bg-blue-100 transition-all" matTooltip="Ver archivo"
-              (click)="verArchivoPdf(archivo.nombre)">
-              <span class="icon-font text-blue-600">visibility</span>
-            </button>
-          </div>
+          }
         </div>
-      </div>
+      }
 
       <!-- Estado vacío motivacional para asuntos PENDIENTES -->
-      <div *ngIf="esEstadoPendienteSinDocumentos && !cargandoArchivosAdjuntos"
-        class="flex flex-col items-center justify-center py-12 text-center">
+      @if (esEstadoPendienteSinDocumentos && !cargandoArchivosAdjuntos) {
         <div
-          class="w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center border-2 border-amber-200 shadow-lg">
-          <span class="icon-font text-amber-600" style="font-size: 40px; width: 40px; height: 40px;">assignment_add</span>
-        </div>
-        <h3 class="text-amber-800 mb-3 text-xl font-noto-sans">¡Asunto Listo para Trabajar!</h3>
-        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-md mb-4">
-          <p class="text-amber-700 mb-2 font-noto-sans">📋 Estado: PENDIENTE</p>
-          <p class="text-sm text-amber-600">Este asunto está asignado y esperando que subas los documentos necesarios
+          class="flex flex-col items-center justify-center py-12 text-center">
+          <div
+            class="w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center border-2 border-amber-200 shadow-lg">
+            <span class="icon-font text-amber-600" style="font-size: 40px; width: 40px; height: 40px;">assignment_add</span>
+          </div>
+          <h3 class="text-amber-800 mb-3 text-xl font-noto-sans">¡Asunto Listo para Trabajar!</h3>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-md mb-4">
+            <p class="text-amber-700 mb-2 font-noto-sans">📋 Estado: PENDIENTE</p>
+            <p class="text-sm text-amber-600">Este asunto está asignado y esperando que subas los documentos necesarios
             para iniciar su procesamiento.</p>
+          </div>
+          <div class="space-y-2 text-sm text-gray-600 max-w-lg mb-6">
+            <div class="flex items-center justify-center">
+              <span class="icon-font text-green-500 mr-2 text-sm">check_circle</span>
+              <span>Asunto correctamente asignado a tu bandeja</span>
+            </div>
+            <div class="flex items-center justify-center">
+              <span class="icon-font text-amber-500 mr-2 text-sm">schedule</span>
+              <span>Próximo paso: Adjuntar documentos de trabajo</span>
+            </div>
+            <div class="flex items-center justify-center">
+              <span class="icon-font text-blue-500 mr-2 text-sm">trending_up</span>
+              <span>Una vez subidos, el asunto pasará a estado "EN PROCESO"</span>
+            </div>
+          </div>
+          <button mat-flat-button color="primary"
+            class="mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg"
+            (click)="abrirSelectorArchivos()">
+            <span class="icon-font mr-2">file_upload</span>
+            <span>Comenzar - Subir Documentos</span>
+          </button>
         </div>
-        <div class="space-y-2 text-sm text-gray-600 max-w-lg mb-6">
-          <div class="flex items-center justify-center">
-            <span class="icon-font text-green-500 mr-2 text-sm">check_circle</span>
-            <span>Asunto correctamente asignado a tu bandeja</span>
-          </div>
-          <div class="flex items-center justify-center">
-            <span class="icon-font text-amber-500 mr-2 text-sm">schedule</span>
-            <span>Próximo paso: Adjuntar documentos de trabajo</span>
-          </div>
-          <div class="flex items-center justify-center">
-            <span class="icon-font text-blue-500 mr-2 text-sm">trending_up</span>
-            <span>Una vez subidos, el asunto pasará a estado "EN PROCESO"</span>
-          </div>
-        </div>
-        <button mat-flat-button color="primary"
-          class="mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg"
-          (click)="abrirSelectorArchivos()">
-          <span class="icon-font mr-2">file_upload</span>
-          <span>Comenzar - Subir Documentos</span>
-        </button>
-      </div>
+      }
 
       <!-- Estado vacío genérico para otros casos -->
-      <div
-        *ngIf="archivosAdjuntos.length === 0 && !cargandoArchivosAdjuntos && !errorArchivosAdjuntos && !esEstadoPendienteSinDocumentos"
-        class="flex flex-col items-center justify-center py-12 text-center">
-        <div class="w-20 h-20 mb-6 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
-          <span class="icon-font text-blue-400" style="font-size: 36px; width: 36px; height: 36px;">folder_open</span>
-        </div>
-        <p class="text-gray-700 mb-2 text-lg font-noto-sans">No hay documentos adjuntos</p>
-        <p class="text-sm text-gray-500 max-w-sm">Los documentos que se adjunten a este asunto aparecerán en esta
+      @if (archivosAdjuntos.length === 0 && !cargandoArchivosAdjuntos && !errorArchivosAdjuntos && !esEstadoPendienteSinDocumentos) {
+        <div
+          class="flex flex-col items-center justify-center py-12 text-center">
+          <div class="w-20 h-20 mb-6 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
+            <span class="icon-font text-blue-400" style="font-size: 36px; width: 36px; height: 36px;">folder_open</span>
+          </div>
+          <p class="text-gray-700 mb-2 text-lg font-noto-sans">No hay documentos adjuntos</p>
+          <p class="text-sm text-gray-500 max-w-sm">Los documentos que se adjunten a este asunto aparecerán en esta
           sección</p>
-        <button mat-flat-button color="primary" class="mt-4" (click)="abrirSelectorArchivos()">
-          <span class="icon-font mr-2">attach_file</span>
-          <span>Adjuntar documentos</span>
-        </button>
-      </div>
+          <button mat-flat-button color="primary" class="mt-4" (click)="abrirSelectorArchivos()">
+            <span class="icon-font mr-2">attach_file</span>
+            <span>Adjuntar documentos</span>
+          </button>
+        </div>
+      }
     </div>
   </div>
 </div>
 
 <!-- Modal para visualizar PDFs -->
-<div *ngIf="mostrarModalPdf"
-  class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
-  <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[80vh] overflow-hidden animate-zoomIn">
-    <!-- Encabezado del modal -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-4 text-white flex justify-between items-center">
-      <div class="flex items-center">
-        <div
-          class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
-          <span class="icon-font text-white">picture_as_pdf</span>
+@if (mostrarModalPdf) {
+  <div
+    class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-auto font-['Noto_Sans'] animate-fadeIn">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[80vh] overflow-hidden animate-zoomIn">
+      <!-- Encabezado del modal -->
+      <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-4 text-white flex justify-between items-center">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mr-3 border border-white/30">
+            <span class="icon-font text-white">picture_as_pdf</span>
+          </div>
+          <h2 class="text-xl font-noto-sans truncate">{{nombrePdfActual}}</h2>
         </div>
-        <h2 class="text-xl font-noto-sans truncate">{{nombrePdfActual}}</h2>
-      </div>
-      <div class="flex items-center gap-2">
-        <button *ngIf="!cargandoPdf && !errorPdf" (click)="descargarPdfActual()"
-          class="bg-white/10 hover:bg-white/20 text-white py-1 px-3 rounded flex items-center border border-white/30 transition-all">
-          <span class="icon-font mr-1">download</span>
-          <span class="text-sm">Descargar</span>
-        </button>
-        <button (click)="cerrarModalPdf()"
-          class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
-          <span class="icon-font">close</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Contenido del PDF -->
-    <div class="h-full bg-gray-800 overflow-auto">
-      <!-- Spinner de carga -->
-      <div *ngIf="cargandoPdf" class="h-full flex justify-center items-center">
-        <div class="flex flex-col items-center">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-          <p class="text-white text-lg">Cargando documento...</p>
+        <div class="flex items-center gap-2">
+          @if (!cargandoPdf && !errorPdf) {
+            <button (click)="descargarPdfActual()"
+              class="bg-white/10 hover:bg-white/20 text-white py-1 px-3 rounded flex items-center border border-white/30 transition-all">
+              <span class="icon-font mr-1">download</span>
+              <span class="text-sm">Descargar</span>
+            </button>
+          }
+          <button (click)="cerrarModalPdf()"
+            class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white/10 transition-all">
+            <span class="icon-font">close</span>
+          </button>
         </div>
       </div>
-
-      <!-- Mensaje de error -->
-      <div *ngIf="errorPdf && !cargandoPdf" class="h-full flex justify-center items-center">
-        <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg max-w-md text-center">
-          <span class="icon-font font-noto-sans text-red-500 text-4xl mb-2">error_outline</span>
-          <p class="text-lg font-medium mb-2">Error al cargar el documento</p>
-          <p>{{errorPdf}}</p>
-          <button mat-stroked-button color="warn" class="mt-4" (click)="cerrarModalPdf()">Cerrar</button>
-        </div>
+      <!-- Contenido del PDF -->
+      <div class="h-full bg-gray-800 overflow-auto">
+        <!-- Spinner de carga -->
+        @if (cargandoPdf) {
+          <div class="h-full flex justify-center items-center">
+            <div class="flex flex-col items-center">
+              <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+              <p class="text-white text-lg">Cargando documento...</p>
+            </div>
+          </div>
+        }
+        <!-- Mensaje de error -->
+        @if (errorPdf && !cargandoPdf) {
+          <div class="h-full flex justify-center items-center">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg max-w-md text-center">
+              <span class="icon-font font-noto-sans text-red-500 text-4xl mb-2">error_outline</span>
+              <p class="text-lg font-medium mb-2">Error al cargar el documento</p>
+              <p>{{errorPdf}}</p>
+              <button mat-stroked-button color="warn" class="mt-4" (click)="cerrarModalPdf()">Cerrar</button>
+            </div>
+          </div>
+        }
+        <!-- PDF -->
+        @if (!cargandoPdf && !errorPdf) {
+          <iframe [src]="sanitizeUrl(urlPdfActual)" class="w-full h-full"
+          frameborder="0"></iframe>
+        }
       </div>
-
-      <!-- PDF -->
-      <iframe *ngIf="!cargandoPdf && !errorPdf" [src]="sanitizeUrl(urlPdfActual)" class="w-full h-full"
-        frameborder="0"></iframe>
     </div>
   </div>
-</div>
+}

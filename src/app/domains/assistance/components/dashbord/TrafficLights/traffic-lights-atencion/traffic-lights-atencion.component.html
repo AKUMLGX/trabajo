@@ -1,17 +1,17 @@
 @if (mostrarGrafico){
-<div class="h-max w-auto text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto">
-  <div class=" py-1 bg-blueGray-50 ">
-    <div class="w-auto lg:w-12/12  h-auto mx-auto mt-2">
-      <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
-        <div class="flex justify-end">
-          <button [routerLink]="['/layout/assistance']"
-            class=" hover:bg-gray-600 rounded-lg active:bg-gray-400 focus:outline-none focus:ring ">
-            <!-- <mat-icon>close</mat-icon> -->
-            <span class="icon-font">close</span>
-          </button>
-        </div>
+  <div class="h-max w-auto text-3xl border-2 rounded-lg  bg-[#D9BCA3]/30  border-rojo-Akamba overflow-auto">
+    <div class=" py-1 bg-blueGray-50 ">
+      <div class="w-auto lg:w-12/12  h-auto mx-auto mt-2">
+        <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
+          <div class="flex justify-end">
+            <button [routerLink]="['/layout/assistance']"
+              class=" hover:bg-gray-600 rounded-lg active:bg-gray-400 focus:outline-none focus:ring ">
+              <!-- <mat-icon>close</mat-icon> -->
+              <span class="icon-font">close</span>
+            </button>
+          </div>
 
-        <!-- <div class="flex justify-center items-center h-full mb-14">
+          <!-- <div class="flex justify-center items-center h-full mb-14">
           <div class="bg-white shadow-md rounded-lg overflow-hidden ">
             <div class="py-6 px-4">
 
@@ -50,122 +50,127 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700
                       hover:bg-gray-50 dark:hover:bg-gray-600" *ngFor="let fechaObj of fechas; let i = index ">
                       @if (fechaObj.visible ) {
-                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.folio_interno}} </td>
-                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.oficio}}</td>
-                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.persona_relacionada}}</td>
-                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.caprte_investigacion}}</td>
-                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.autoridad_solicitante}}</td>
-                      <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{fechaObj.fecha| date}}</td>
+                        <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.folio_interno}} </td>
+                        <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.oficio}}</td>
+                        <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.persona_relacionada}}</td>
+                        <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.caprte_investigacion}}</td>
+                        <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{dato.autoridad_solicitante}}</td>
+                        <td class="font-montserrat font-semibold text-black text-center" [ngClass]="colorGrafica(fechaObj.fecha,numero)">{{fechaObj.fecha| date}}</td>
 
                       <td><button class=" text-xs  font-noto-sans text-center text-white bg-blue-400 rounded-lg
                           hover:bg-blue-800 focus:ring-4 focus:outline-none
                           focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
                           (click)="seleccionarFila(dato)" (click)="mostrarComponente()" (click)="responder(i)">Responder
                           <mat-icon>reply</mat-icon></button></td>
-                      }
+                        }
 
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div> -->
-        <div class="flex justify-center items-center mb-8 text-xl mt-8 uppercase font-noto-sans font-montserrat  ">Grafico
-          de Calor </div>
-        <section class="py-1 bg-blueGray-50">
-          <div class="w-full lg:w-12/12 mx-auto mt-2">
-            <div
-              class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
-              <div class="flex-auto px-4 lg:px-10 py-10">
-                <table class="w-auto border-collapse bg-white">
-                  <thead>
-                    <tr>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center"> Folio
-                        Interno </th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center"> Oficio
-                      </th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">
-                        Persona Relacionada </th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">
-                        Carpeta de investigación </th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">
-                        Autoridad Solicitante</th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-justify"></th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-justify"></th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-justify"></th>
-                    </tr>
-                  </thead>
-                  <tbody *ngFor="let dato of  datos ">
-                    <tr class=" hover:bg-gray-50 dark:hover:bg-gray-600"
-                      *ngFor="let fechaObj of fechas; let i = index ">
-                      @if (fechaObj.visible ) {
-                      <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="text-sm leading-5 text-wine text-center"> {{dato.folio_interno}} </div>
-                      </td>
-                      <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="text-sm leading-5 text-wine text-center"> {{dato.oficio}}</div>
-                      </td>
-                      <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="text-sm leading-5 text-wine text-center">{{dato.persona_relacionada}}</div>
-                      </td>
-                      <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="text-sm leading-5 text-wine text-center">{{dato.caprte_investigacion}}</div>
-                      </td>
-                      <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="text-sm leading-5 text-wine text-center"> {{dato.autoridad_solicitante}}</div>
-                      </td>
-                      <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                        <div class="text-sm leading-5 text-wine text-center">{{fechaObj.fecha| date}}</div>
-                      </td>
-
-                      <td [ngClass]="colorGrafica(fechaObj.fecha,0)"> </td>
-                      <!-- <td><div [ngClass]="colorGrafica(fechaObj.fecha,0)"></div></td> -->
-                      <td><button class=" text-xs  font-noto-sans text-center text-white bg-blue-400 rounded-lg
-                              hover:bg-blue-800 focus:ring-4 focus:outline-none
-                              focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
-                          (click)="seleccionarFila(dato)" (click)="mostrarComponente()" (click)="responder(i)">Responder
-                          <!-- <mat-icon>reply</mat-icon> -->
-                          <span class="icon-font">reply</span>
-                        </button></td>
-                      }
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans mb-8">
-                <div>
-                  <nav class="relative z-0 inline-flex shadow-sm">
-                    <button (click)="null"
-                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-noto-sans text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                      aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
-                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                          clip-rule="evenodd" />
-                      </svg>
-                    </button>
-                    <button (click)="null"
-                      class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-noto-sans text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                      aria-label="Next">
-                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                          clip-rule="evenodd" />
-                      </svg>
-                    </button>
-                  </nav>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </div> -->
+          <div class="flex justify-center items-center mb-8 text-xl mt-8 uppercase font-noto-sans font-montserrat  ">Grafico
+          de Calor </div>
+          <section class="py-1 bg-blueGray-50">
+            <div class="w-full lg:w-12/12 mx-auto mt-2">
+              <div
+                class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
+                <div class="flex-auto px-4 lg:px-10 py-10">
+                  <table class="w-auto border-collapse bg-white">
+                    <thead>
+                      <tr>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center"> Folio
+                        Interno </th>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center"> Oficio
+                        </th>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">
+                        Persona Relacionada </th>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">
+                        Carpeta de investigación </th>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">
+                        Autoridad Solicitante</th>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-justify"></th>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-justify"></th>
+                        <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-justify"></th>
+                      </tr>
+                    </thead>
+                    @for (dato of  datos ; track dato) {
+                      <tbody>
+                        @for (fechaObj of fechas; track fechaObj; let i = $index) {
+                          <tr class=" hover:bg-gray-50 dark:hover:bg-gray-600"
+                            >
+                            @if (fechaObj.visible ) {
+                              <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                <div class="text-sm leading-5 text-wine text-center"> {{dato.folio_interno}} </div>
+                              </td>
+                              <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                <div class="text-sm leading-5 text-wine text-center"> {{dato.oficio}}</div>
+                              </td>
+                              <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                <div class="text-sm leading-5 text-wine text-center">{{dato.persona_relacionada}}</div>
+                              </td>
+                              <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                <div class="text-sm leading-5 text-wine text-center">{{dato.caprte_investigacion}}</div>
+                              </td>
+                              <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                <div class="text-sm leading-5 text-wine text-center"> {{dato.autoridad_solicitante}}</div>
+                              </td>
+                              <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                                <div class="text-sm leading-5 text-wine text-center">{{fechaObj.fecha| date}}</div>
+                              </td>
+                              <td [ngClass]="colorGrafica(fechaObj.fecha,0)"> </td>
+                              <!-- <td><div [ngClass]="colorGrafica(fechaObj.fecha,0)"></div></td> -->
+                      <td><button class=" text-xs  font-noto-sans text-center text-white bg-blue-400 rounded-lg
+                              hover:bg-blue-800 focus:ring-4 focus:outline-none
+                              focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
+                                (click)="seleccionarFila(dato)" (click)="mostrarComponente()" (click)="responder(i)">Responder
+                                <!-- <mat-icon>reply</mat-icon> -->
+                                <span class="icon-font">reply</span>
+                              </button></td>
+                            }
+                          </tr>
+                        }
+                      </tbody>
+                    }
+                  </table>
+                </div>
+                <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans mb-8">
+                  <div>
+                    <nav class="relative z-0 inline-flex shadow-sm">
+                      <button (click)="null"
+                        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-noto-sans text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                        aria-label="Previous" v-on:click.prevent="changePage(pagination.current_page - 1)">
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                      <button (click)="null"
+                        class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-noto-sans text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                        aria-label="Next">
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   </div>
-</div>
 }
 <!-- Respuesta-Folio -->
 <div class="h-max w-auto text-3xl border-2 rounded-lg  bg-white border-rojo-Akamba overflow-auto">
-  <app-reply *ngIf="filaSeleccionada" [datosFolio]="filaSeleccionada" />
+  @if (filaSeleccionada) {
+    <app-reply [datosFolio]="filaSeleccionada" />
+  }
 </div>

@@ -4,11 +4,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators, ReactiveFor
 import { SelectOption, CustomSelectComponent } from '../../stepper-base/custom-select/custom-select.component';
 import { Subject, takeUntil } from 'rxjs';
 import { CustomFormFieldComponent } from "../../stepper-base/custom-form-field/custom-form-field.component";
-import { CommonModule } from '@angular/common';
+
 
 @Component({
     selector: 'app-usuarios-requerimiento',
-    imports: [CustomFormFieldComponent, CustomSelectComponent, ReactiveFormsModule, CommonModule],
+    imports: [CustomFormFieldComponent, CustomSelectComponent, ReactiveFormsModule],
     templateUrl: './usuarios-requerimiento.component.html'
 })
 export class UsuariosRequerimientoComponent implements OnInit, OnChanges, OnDestroy {

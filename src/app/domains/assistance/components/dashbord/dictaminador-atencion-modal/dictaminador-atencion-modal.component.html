@@ -1,199 +1,202 @@
 <!-- Modal Principal -->
-<div *ngIf="mostrarModal" class="modal-overlay">
-  <!-- Backdrop -->
-  <div class="modal-backdrop" (click)="onCerrarModal()"></div>
-
-  <!-- Modal Content -->
-  <div class="modal-container">
-
-    <!-- Header del Modal -->
-    <div class="modal-header">
-      <div class="modal-header-content">
-        <div class="modal-title-section">
-          <!-- <mat-icon class="modal-title-icon">assignment</mat-icon> -->
-          <span class="icon-font">assignment</span>
-          <div>
-            <h2 class="modal-title">Finalizar Atención de Asunto</h2>
-            <p class="modal-subtitle">{{asunto?.folio || 'N/A'}} - {{asunto?.personaRelacionada || 'N/A'}}</p>
-          </div>
-        </div>
-        <button class="modal-close-btn" (click)="onCerrarModal()" type="button">
-          <!-- <mat-icon>close</mat-icon> -->
-          <span class="icon-font">close</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Contenido del Modal -->
-    <div class="modal-body">
-
-      <!-- Tabs -->
-      <div class="mb-4 border-b">
-        <div class="flex gap-2">
-          <button type="button" class="px-3 py-2 text-sm" [class.border-b-2]="pestanaActiva==='detalles'" (click)="cambiarPestana('detalles')">Detalles</button>
-          <button type="button" class="px-3 py-2 text-sm" [class.border-b-2]="pestanaActiva==='documentos'" (click)="cambiarPestana('documentos')">Documentos</button>
-        </div>
-      </div>
-
-      <!-- Información del Asunto -->
-      <div *ngIf="pestanaActiva==='detalles'" class="asunto-info-section">
-        <h3 class="section-title">
-          <mat-icon class="section-icon">info</mat-icon>
-          Información del Asunto
-        </h3>
-        <div class="info-grid">
-          <div class="info-item">
-            <span class="info-label">Folio:</span>
-            <span class="info-value">{{asunto?.folio || 'N/A'}}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Carpeta de Investigación:</span>
-            <span class="info-value">{{asunto?.carpetaInvestigacion || 'N/A'}}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Persona Relacionada:</span>
-            <span class="info-value">{{asunto?.personaRelacionada || 'N/A'}}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Fecha de Recepción:</span>
-            <span class="info-value">{{formatearFecha(asunto?.fechaRecepcion?.toString() || '')}}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Datos de Respuesta a FGR -->
-      <div *ngIf="pestanaActiva==='detalles'" class="respuesta-fgr-section">
-        <h3 class="section-title">
-          <!-- <mat-icon class="section-icon">gavel</mat-icon> -->
-          <span class="icon-font">gravel</span>
-
-          Respuesta a FGR
-        </h3>
-
-        <div *ngIf="(datosRespuestaFGR || asunto?.datosRespuestaFGR) as datos" class="respuesta-content">
-
-          <!-- Grid de datos principales -->
-          <div class="respuesta-grid">
-            <div class="respuesta-item">
-              <span class="respuesta-label">Folio Interno:</span>
-              <span class="respuesta-value">{{datos.folioInterno}}</span>
-            </div>
-
-            <div class="respuesta-item">
-              <span class="respuesta-label">Número de Oficio:</span>
-              <span class="respuesta-value">{{datos.numeroOficio}}</span>
-            </div>
-
-            <div class="respuesta-item">
-              <span class="respuesta-label">Fecha Acuse Entrega FGR:</span>
-              <span class="respuesta-value">{{formatearFecha(datos.fechaAcuseEntrega)}}</span>
-            </div>
-
-            <div class="respuesta-item">
-              <span class="respuesta-label">Oficio FGR que se Atiende:</span>
-              <span class="respuesta-value">{{datos.numeroOficioFGRAtiende}}</span>
+@if (mostrarModal) {
+  <div class="modal-overlay">
+    <!-- Backdrop -->
+    <div class="modal-backdrop" (click)="onCerrarModal()"></div>
+    <!-- Modal Content -->
+    <div class="modal-container">
+      <!-- Header del Modal -->
+      <div class="modal-header">
+        <div class="modal-header-content">
+          <div class="modal-title-section">
+            <!-- <mat-icon class="modal-title-icon">assignment</mat-icon> -->
+            <span class="icon-font">assignment</span>
+            <div>
+              <h2 class="modal-title">Finalizar Atención de Asunto</h2>
+              <p class="modal-subtitle">{{asunto?.folio || 'N/A'}} - {{asunto?.personaRelacionada || 'N/A'}}</p>
             </div>
           </div>
-
-          <!-- Estado de Atención -->
-          <div class="estado-atencion">
-            <span class="respuesta-label">Estado de Atención:</span>
-            <div class="estado-badge">
-              <!-- <mat-icon [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</mat-icon> -->
-              <span class="icon-font" [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</span>
-              <span [class]="obtenerClaseEstadoAtencion()">
-                {{(datos.estadoAtencion || 'total') === 'total' ? 'Atención Total' : 'Atención Parcial'}}
-              </span>
-            </div>
-          </div>
-
-
-
-
-
-        </div>
-
-        <!-- Mensaje cuando no hay datos -->
-        <div *ngIf="!asunto?.datosRespuestaFGR && !obtenerDatosEjemplo()" class="no-datos-message">
-          <!-- <mat-icon class="warning-icon">info</mat-icon> -->
-          <span class="icon-font warning-icon">info</span>
-
-          <p>No se han registrado datos de respuesta a FGR para este asunto.</p>
-          <p class="warning-text">Complete el expediente antes de finalizar la atención.</p>
-        </div>
-      </div>
-
-      <!-- Documentos -->
-      <div *ngIf="pestanaActiva==='documentos'" class="respuesta-fgr-section">
-        <h3 class="section-title">
-          <!-- <mat-icon class="section-icon">folder</mat-icon> -->
-          <span class="icon-font">folder</span>
-          Documentos
-        </h3>
-
-        <!-- Acciones de lista -->
-        <div class="flex items-center justify-between mb-3">
-          <span class="text-sm text-gray-600">{{archivos.length || 0}} documento(s)</span>
-          <button class="btn-visualizar-pdf" type="button" (click)="recargarArchivos()">
-            <!-- <mat-icon>refresh</mat-icon> -->
-          <span class="icon-font">refresh</span>
-            <span>Recargar</span>
+          <button class="modal-close-btn" (click)="onCerrarModal()" type="button">
+            <!-- <mat-icon>close</mat-icon> -->
+            <span class="icon-font">close</span>
           </button>
         </div>
-
-        <!-- Lista / estados -->
-        <div *ngIf="cargandoArchivos" class="text-sm text-gray-500">Cargando documentos…</div>
-        <div *ngIf="!cargandoArchivos && (!archivos || archivos.length===0)" class="text-sm text-gray-500">No hay documentos disponibles</div>
-
-        <div class="grid grid-cols-3 gap-4" *ngIf="!cargandoArchivos && archivos && archivos.length>0">
-          <div class="col-span-1 border rounded p-2 max-h-64 overflow-auto">
-            <div *ngFor="let a of archivos; let i=index" (click)="seleccionarArchivo(a)" class="px-2 py-1 rounded cursor-pointer hover:bg-gray-50" [class.bg-red-50]="pdfActual===a">
-              <!-- <mat-icon class="mr-1 text-red-600">picture_as_pdf</mat-icon> -->
-              <span class="icon-font text-red-600">picture_as_pdf</span>
-              <span class="text-sm">{{a.nombre}}</span>
-            </div>
-          </div>
-          <div class="col-span-2 border rounded p-2 min-h-[320px] flex items-center justify-center">
-            <div *ngIf="pdfCargando" class="text-sm text-gray-500">Cargando PDF…</div>
-            <div *ngIf="pdfError" class="text-sm text-red-600">Error al cargar PDF</div>
-            <iframe *ngIf="!pdfCargando && !pdfError && pdfUrl" [src]="pdfUrl" class="w-full h-[480px] border-0"></iframe>
-            <div *ngIf="!pdfCargando && !pdfError && !pdfUrl" class="text-sm text-gray-500">Selecciona un documento</div>
+      </div>
+      <!-- Contenido del Modal -->
+      <div class="modal-body">
+        <!-- Tabs -->
+        <div class="mb-4 border-b">
+          <div class="flex gap-2">
+            <button type="button" class="px-3 py-2 text-sm" [class.border-b-2]="pestanaActiva==='detalles'" (click)="cambiarPestana('detalles')">Detalles</button>
+            <button type="button" class="px-3 py-2 text-sm" [class.border-b-2]="pestanaActiva==='documentos'" (click)="cambiarPestana('documentos')">Documentos</button>
           </div>
         </div>
+        <!-- Información del Asunto -->
+        @if (pestanaActiva==='detalles') {
+          <div class="asunto-info-section">
+            <h3 class="section-title">
+              <mat-icon class="section-icon">info</mat-icon>
+              Información del Asunto
+            </h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Folio:</span>
+                <span class="info-value">{{asunto?.folio || 'N/A'}}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Carpeta de Investigación:</span>
+                <span class="info-value">{{asunto?.carpetaInvestigacion || 'N/A'}}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Persona Relacionada:</span>
+                <span class="info-value">{{asunto?.personaRelacionada || 'N/A'}}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Fecha de Recepción:</span>
+                <span class="info-value">{{formatearFecha(asunto?.fechaRecepcion?.toString() || '')}}</span>
+              </div>
+            </div>
+          </div>
+        }
+        <!-- Datos de Respuesta a FGR -->
+        @if (pestanaActiva==='detalles') {
+          <div class="respuesta-fgr-section">
+            <h3 class="section-title">
+              <!-- <mat-icon class="section-icon">gavel</mat-icon> -->
+              <span class="icon-font">gravel</span>
+              Respuesta a FGR
+            </h3>
+            @if ((datosRespuestaFGR || asunto?.datosRespuestaFGR); as datos) {
+              <div class="respuesta-content">
+                <!-- Grid de datos principales -->
+                <div class="respuesta-grid">
+                  <div class="respuesta-item">
+                    <span class="respuesta-label">Folio Interno:</span>
+                    <span class="respuesta-value">{{datos.folioInterno}}</span>
+                  </div>
+                  <div class="respuesta-item">
+                    <span class="respuesta-label">Número de Oficio:</span>
+                    <span class="respuesta-value">{{datos.numeroOficio}}</span>
+                  </div>
+                  <div class="respuesta-item">
+                    <span class="respuesta-label">Fecha Acuse Entrega FGR:</span>
+                    <span class="respuesta-value">{{formatearFecha(datos.fechaAcuseEntrega)}}</span>
+                  </div>
+                  <div class="respuesta-item">
+                    <span class="respuesta-label">Oficio FGR que se Atiende:</span>
+                    <span class="respuesta-value">{{datos.numeroOficioFGRAtiende}}</span>
+                  </div>
+                </div>
+                <!-- Estado de Atención -->
+                <div class="estado-atencion">
+                  <span class="respuesta-label">Estado de Atención:</span>
+                  <div class="estado-badge">
+                    <!-- <mat-icon [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</mat-icon> -->
+                    <span class="icon-font" [class]="obtenerClaseEstadoAtencion()">{{obtenerIconoEstadoAtencion()}}</span>
+                    <span [class]="obtenerClaseEstadoAtencion()">
+                      {{(datos.estadoAtencion || 'total') === 'total' ? 'Atención Total' : 'Atención Parcial'}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            }
+            <!-- Mensaje cuando no hay datos -->
+            @if (!asunto?.datosRespuestaFGR && !obtenerDatosEjemplo()) {
+              <div class="no-datos-message">
+                <!-- <mat-icon class="warning-icon">info</mat-icon> -->
+                <span class="icon-font warning-icon">info</span>
+                <p>No se han registrado datos de respuesta a FGR para este asunto.</p>
+                <p class="warning-text">Complete el expediente antes de finalizar la atención.</p>
+              </div>
+            }
+          </div>
+        }
+        <!-- Documentos -->
+        @if (pestanaActiva==='documentos') {
+          <div class="respuesta-fgr-section">
+            <h3 class="section-title">
+              <!-- <mat-icon class="section-icon">folder</mat-icon> -->
+              <span class="icon-font">folder</span>
+              Documentos
+            </h3>
+            <!-- Acciones de lista -->
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm text-gray-600">{{archivos.length || 0}} documento(s)</span>
+              <button class="btn-visualizar-pdf" type="button" (click)="recargarArchivos()">
+                <!-- <mat-icon>refresh</mat-icon> -->
+                <span class="icon-font">refresh</span>
+                <span>Recargar</span>
+              </button>
+            </div>
+            <!-- Lista / estados -->
+            @if (cargandoArchivos) {
+              <div class="text-sm text-gray-500">Cargando documentos…</div>
+            }
+            @if (!cargandoArchivos && (!archivos || archivos.length===0)) {
+              <div class="text-sm text-gray-500">No hay documentos disponibles</div>
+            }
+            @if (!cargandoArchivos && archivos && archivos.length>0) {
+              <div class="grid grid-cols-3 gap-4">
+                <div class="col-span-1 border rounded p-2 max-h-64 overflow-auto">
+                  @for (a of archivos; track a; let i = $index) {
+                    <div (click)="seleccionarArchivo(a)" class="px-2 py-1 rounded cursor-pointer hover:bg-gray-50" [class.bg-red-50]="pdfActual===a">
+                      <!-- <mat-icon class="mr-1 text-red-600">picture_as_pdf</mat-icon> -->
+                      <span class="icon-font text-red-600">picture_as_pdf</span>
+                      <span class="text-sm">{{a.nombre}}</span>
+                    </div>
+                  }
+                </div>
+                <div class="col-span-2 border rounded p-2 min-h-[320px] flex items-center justify-center">
+                  @if (pdfCargando) {
+                    <div class="text-sm text-gray-500">Cargando PDF…</div>
+                  }
+                  @if (pdfError) {
+                    <div class="text-sm text-red-600">Error al cargar PDF</div>
+                  }
+                  @if (!pdfCargando && !pdfError && pdfUrl) {
+                    <iframe [src]="pdfUrl" class="w-full h-[480px] border-0"></iframe>
+                  }
+                  @if (!pdfCargando && !pdfError && !pdfUrl) {
+                    <div class="text-sm text-gray-500">Selecciona un documento</div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
       </div>
-
-    </div>
-
-    <!-- Footer del Modal -->
-    <div class="modal-footer">
-      <div class="footer-info">
-        <!-- <mat-icon class="info-icon">info</mat-icon> -->
+      <!-- Footer del Modal -->
+      <div class="modal-footer">
+        <div class="footer-info">
+          <!-- <mat-icon class="info-icon">info</mat-icon> -->
           <span class="icon-font info-icon">info</span>
-        <span>Al finalizar, el asunto será enviado a revisión y no podrá modificarse.</span>
-      </div>
-      <div class="footer-actions">
-        <button class="btn-cancelar" (click)="onCerrarModal()" type="button">
-          <!-- <mat-icon>close</mat-icon> -->
-          <span class="icon-font">close</span>
-          <span>Cancelar</span>
-        </button>
-        <button class="btn-finalizar"
-                (click)="onFinalizarYEnviarRevision()"
-                [disabled]="procesandoFinalizacion"
-                type="button">
-          <!-- <mat-icon *ngIf="!procesandoFinalizacion">check_circle</mat-icon> -->
-          <span class="icon-font" *ngIf="!procesandoFinalizacion">check_circle</span>
-
-          <!-- <mat-icon *ngIf="procesandoFinalizacion" class="spinner">refresh</mat-icon> -->
-          <span class="icon-font spinner" *ngIf="procesandoFinalizacion">refresh</span>
-
-          <span>{{procesandoFinalizacion ? 'Enviando...' : 'Finalizar y enviar a revisión'}}</span>
-        </button>
+          <span>Al finalizar, el asunto será enviado a revisión y no podrá modificarse.</span>
+        </div>
+        <div class="footer-actions">
+          <button class="btn-cancelar" (click)="onCerrarModal()" type="button">
+            <!-- <mat-icon>close</mat-icon> -->
+            <span class="icon-font">close</span>
+            <span>Cancelar</span>
+          </button>
+          <button class="btn-finalizar"
+            (click)="onFinalizarYEnviarRevision()"
+            [disabled]="procesandoFinalizacion"
+            type="button">
+            <!-- <mat-icon *ngIf="!procesandoFinalizacion">check_circle</mat-icon> -->
+            @if (!procesandoFinalizacion) {
+              <span class="icon-font">check_circle</span>
+            }
+            <!-- <mat-icon *ngIf="procesandoFinalizacion" class="spinner">refresh</mat-icon> -->
+            @if (procesandoFinalizacion) {
+              <span class="icon-font spinner">refresh</span>
+            }
+            <span>{{procesandoFinalizacion ? 'Enviando...' : 'Finalizar y enviar a revisión'}}</span>
+          </button>
+        </div>
       </div>
     </div>
-
   </div>
-</div>
+}
 
 <!-- Modal Visor PDF - YA NO SE USA, SE REEMPLAZÓ POR APARTADO DOCUMENTOS -->
 <!--

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Component, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -17,7 +17,7 @@ import { SharedDataFormService } from '../../../shared/services/shared-data-form
 
 @Component({
     selector: 'app-tracking-form',
-    imports: [ReactiveFormsModule, MatIcon, MatListModule, CommonModule, MatInputModule, MatFormFieldModule, FormsModule, MatDialogModule],
+    imports: [ReactiveFormsModule, MatIcon, MatListModule, MatInputModule, MatFormFieldModule, FormsModule, MatDialogModule],
     templateUrl: './tracking-form.component.html',
     styleUrl: './tracking-form.component.css',
     animations: [

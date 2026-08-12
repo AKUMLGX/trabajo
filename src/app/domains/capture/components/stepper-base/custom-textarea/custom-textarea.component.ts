@@ -1,15 +1,17 @@
 import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
     selector: 'app-custom-textarea',
-    imports: [CommonModule],
+    imports: [],
     template: `
     <div class="custom-textarea" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage" [class.disabled]="disabled">
       <label class="custom-label" [for]="fieldId">
         {{ label }}
-        <span *ngIf="required" class="text-red-500 font-noto-sans ml-1">*</span>
+        @if (required) {
+          <span class="text-red-500 font-noto-sans ml-1">*</span>
+        }
       </label>
       <div class="textarea-container">
         <textarea
@@ -26,10 +28,14 @@ import { CommonModule } from '@angular/common';
         <div class="textarea-border"></div>
         <div class="textarea-highlight"></div>
       </div>
-      <div class="hint-text" *ngIf="hint && !errorMessage">{{ hint }}</div>
-      <div class="error-text" *ngIf="errorMessage">{{ errorMessage }}</div>
+      @if (hint && !errorMessage) {
+        <div class="hint-text">{{ hint }}</div>
+      }
+      @if (errorMessage) {
+        <div class="error-text">{{ errorMessage }}</div>
+      }
     </div>
-  `,
+    `,
     styleUrls: ['./custom-textarea.component.css'],
     providers: [
         {

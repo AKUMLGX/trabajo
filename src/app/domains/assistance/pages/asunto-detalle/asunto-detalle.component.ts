@@ -1,5 +1,5 @@
 import { Component, OnInit, NO_ERRORS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ interface Documento {
 
 @Component({
     selector: 'app-asunto-detalle',
-    imports: [CommonModule, RouterModule, FormsModule, NgxExtendedPdfViewerModule],
+    imports: [RouterModule, FormsModule, NgxExtendedPdfViewerModule],
     schemas: [NO_ERRORS_SCHEMA],
     templateUrl: './asunto-detalle.component.html',
     styleUrls: ['./asunto-detalle.component.css']

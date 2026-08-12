@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { MatIconModule } from '@angular/material/icon'; 
@@ -20,7 +20,7 @@ interface AsuntoTramite {
 
 @Component({
     selector: 'app-tramite-page',
-    imports: [CommonModule, FormsModule, MatIconModule, RouterModule],
+    imports: [FormsModule, MatIconModule, RouterModule],
     templateUrl: './tramite-page.component.html'
 })
 export class TramitePageComponent implements OnInit {

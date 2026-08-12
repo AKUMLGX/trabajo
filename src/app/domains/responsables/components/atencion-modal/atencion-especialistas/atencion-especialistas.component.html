@@ -5,8 +5,12 @@
       <div
         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md"
         [ngClass]="seleccionados.length > 0 ? 'bg-tlalcalli-primary' : 'bg-[#7a006e]'">
-        <span class="icon-font" *ngIf="seleccionados.length > 0">check</span>
-        <span *ngIf="seleccionados.length === 0" class="font-black">1</span>
+        @if (seleccionados.length > 0) {
+          <span class="icon-font">check</span>
+        }
+        @if (seleccionados.length === 0) {
+          <span class="font-black">1</span>
+        }
       </div>
 
       <div>
@@ -20,11 +24,12 @@
       </div>
     </div>
 
-    <span
-      *ngIf="seleccionados.length > 0"
-      class="rounded-full bg-tlalcalli-primary px-4 py-2 text-sm font-black text-white">
-      {{ seleccionados.length }} asignado(s)
-    </span>
+    @if (seleccionados.length > 0) {
+      <span
+        class="rounded-full bg-tlalcalli-primary px-4 py-2 text-sm font-black text-white">
+        {{ seleccionados.length }} asignado(s)
+      </span>
+    }
   </div>
 
   <div class="border-t border-gray-200 pt-5">
@@ -37,26 +42,26 @@
     </div>
 
     <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
-      <button
-        type="button"
-        *ngFor="let esp of externos"
-        (click)="toggle(esp.codigo)"
-        class="relative flex h-[78px] items-center gap-4 rounded-xl border-2 bg-white px-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      @for (esp of externos; track esp) {
+        <button
+          type="button"
+          (click)="toggle(esp.codigo)"
+          class="relative flex h-[78px] items-center gap-4 rounded-xl border-2 bg-white px-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
         [ngClass]="seleccionado(esp.codigo)
           ? 'border-emerald-500 bg-emerald-500'
           : 'border-gray-200'">
-
-        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-tlalcalli-primary text-sm font-black text-white">
-          {{ esp.nombre_completo.charAt(0) }}
-        </div>
-
-        <div class="min-w-0 flex-1">
-          <span class="block truncate text-base font-black text-gray-700">{{ esp.nombre_completo }}</span>
-          <span class="mt-1 block truncate text-xs font-noto-sans text-gray-400">Especialista Externo</span>
-        </div>
-
-        <span class="icon-font" *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</span>
-      </button>
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-tlalcalli-primary text-sm font-black text-white">
+            {{ esp.nombre_completo.charAt(0) }}
+          </div>
+          <div class="min-w-0 flex-1">
+            <span class="block truncate text-base font-black text-gray-700">{{ esp.nombre_completo }}</span>
+            <span class="mt-1 block truncate text-xs font-noto-sans text-gray-400">Especialista Externo</span>
+          </div>
+          @if (seleccionado(esp.codigo)) {
+            <span class="icon-font" class="text-emerald-500">check_circle</span>
+          }
+        </button>
+      }
     </div>
   </div>
 
@@ -70,26 +75,26 @@
     </div>
 
     <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
-      <button
-        type="button"
-        *ngFor="let esp of internos"
-        (click)="toggle(esp.codigo)"
-        class="relative flex h-[78px] items-center gap-4 rounded-xl border-2 bg-white px-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      @for (esp of internos; track esp) {
+        <button
+          type="button"
+          (click)="toggle(esp.codigo)"
+          class="relative flex h-[78px] items-center gap-4 rounded-xl border-2 bg-white px-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
         [ngClass]="seleccionado(esp.codigo)
           ? 'border-emerald-500 bg-emerald-500'
           : 'border-gray-200'">
-
-        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500 text-sm font-black text-white">
-          {{ esp.nombre_completo.charAt(0) }}
-        </div>
-
-        <div class="min-w-0 flex-1">
-          <span class="block truncate text-base font-black text-gray-700">{{ esp.nombre_completo }}</span>
-          <span class="mt-1 block truncate text-xs font-noto-sans text-gray-400">Especialista Interno</span>
-        </div>
-
-        <span class="icon-font" *ngIf="seleccionado(esp.codigo)" class="text-emerald-500">check_circle</span>
-      </button>
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500 text-sm font-black text-white">
+            {{ esp.nombre_completo.charAt(0) }}
+          </div>
+          <div class="min-w-0 flex-1">
+            <span class="block truncate text-base font-black text-gray-700">{{ esp.nombre_completo }}</span>
+            <span class="mt-1 block truncate text-xs font-noto-sans text-gray-400">Especialista Interno</span>
+          </div>
+          @if (seleccionado(esp.codigo)) {
+            <span class="icon-font" class="text-emerald-500">check_circle</span>
+          }
+        </button>
+      }
     </div>
   </div>
 </div>

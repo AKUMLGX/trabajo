@@ -25,7 +25,7 @@
           [class.text-gray-500]="pestanaActual !== 'asignados'"
           [class.hover:text-gray-700]="pestanaActual !== 'asignados'"
           [class.hover:border-gray-300]="pestanaActual !== 'asignados'"
-        >
+          >
           Asuntos Asignados
         </button>
       </li>
@@ -34,340 +34,352 @@
   </div>
 
   <!-- SECCIÓN DE ASUNTOS ASIGNADOS -->
-  <div *ngIf="pestanaActual === 'asignados'">
-    <!-- Panel de estadísticas -->
-    <div class="grid grid-cols-5 gap-4 mb-6">
-      <!-- Total Asignados -->
-      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
-        <div class="bg-blue-50 rounded-full p-2 mr-3">
-          <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
+  @if (pestanaActual === 'asignados') {
+    <div>
+      <!-- Panel de estadísticas -->
+      <div class="grid grid-cols-5 gap-4 mb-6">
+        <!-- Total Asignados -->
+        <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-blue-50 rounded-full p-2 mr-3">
+            <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Asuntos Asignados</p>
+            <p class="text-xl font-semibold">{{estadisticas.totalAsignados}}</p>
+          </div>
         </div>
-        <div>
-                          <p class="text-sm text-gray-500">Asuntos Asignados</p>
-          <p class="text-xl font-semibold">{{estadisticas.totalAsignados}}</p>
+        <!-- Pendientes -->
+        <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-yellow-50 rounded-full p-2 mr-3">
+            <svg class="w-6 h-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Pendientes</p>
+            <p class="text-xl font-semibold">{{estadisticas.pendientes}}</p>
+          </div>
         </div>
-      </div>
-
-      <!-- Pendientes -->
-      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
-        <div class="bg-yellow-50 rounded-full p-2 mr-3">
-          <svg class="w-6 h-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+        <!-- En Proceso -->
+        <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-blue-50 rounded-full p-2 mr-3">
+            <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">En Proceso</p>
+            <p class="text-xl font-semibold">{{estadisticas.enProceso}}</p>
+          </div>
         </div>
-        <div>
-          <p class="text-sm text-gray-500">Pendientes</p>
-          <p class="text-xl font-semibold">{{estadisticas.pendientes}}</p>
+        <!-- Completados -->
+        <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-green-50 rounded-full p-2 mr-3">
+            <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Completados</p>
+            <p class="text-xl font-semibold">{{estadisticas.completados}}</p>
+          </div>
         </div>
-      </div>
-
-      <!-- En Proceso -->
-      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
-        <div class="bg-blue-50 rounded-full p-2 mr-3">
-          <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-sm text-gray-500">En Proceso</p>
-          <p class="text-xl font-semibold">{{estadisticas.enProceso}}</p>
-        </div>
-      </div>
-
-      <!-- Completados -->
-      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
-        <div class="bg-green-50 rounded-full p-2 mr-3">
-          <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-sm text-gray-500">Completados</p>
-          <p class="text-xl font-semibold">{{estadisticas.completados}}</p>
-        </div>
-      </div>
-
-      <!-- Prioridad Alta -->
-      <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
-        <div class="bg-red-50 rounded-full p-2 mr-3">
-          <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-sm text-gray-500">Prioridad Alta</p>
-          <p class="text-xl font-semibold">{{estadisticas.prioridadAlta}}</p>
+        <!-- Prioridad Alta -->
+        <div class="bg-white rounded-lg p-4 flex items-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-red-50 rounded-full p-2 mr-3">
+            <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Prioridad Alta</p>
+            <p class="text-xl font-semibold">{{estadisticas.prioridadAlta}}</p>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Controles de vista (filtros eliminados por solicitud) -->
-    <div class="flex justify-end items-center mb-6">
-      <div class="flex gap-2">
-        <button (click)="cambiarVista('tarjetas')"
-                class="p-1.5 rounded hover:bg-gray-100">
-          <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tarjetas'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-        </button>
-        <button (click)="cambiarVista('tabla')"
-                class="p-1.5 rounded hover:bg-gray-100">
-          <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tabla'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-        </button>
+      <!-- Controles de vista (filtros eliminados por solicitud) -->
+      <div class="flex justify-end items-center mb-6">
+        <div class="flex gap-2">
+          <button (click)="cambiarVista('tarjetas')"
+            class="p-1.5 rounded hover:bg-gray-100">
+            <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tarjetas'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          </button>
+          <button (click)="cambiarVista('tabla')"
+            class="p-1.5 rounded hover:bg-gray-100">
+            <svg class="w-5 h-5" [class.text-[#691C32]]="vistaActual === 'tabla'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </div>
       </div>
-    </div>
-
-    <!-- Lista de Asuntos -->
-    <!-- Vista de Tarjetas -->
-    <div *ngIf="vistaActual === 'tarjetas'" class="grid grid-cols-3 gap-4">
-      <div *ngFor="let asunto of asuntosFiltrados" class="bg-white rounded-lg overflow-hidden shadow">
-        <!-- Barra de prioridad -->
+      <!-- Lista de Asuntos -->
+      <!-- Vista de Tarjetas -->
+      @if (vistaActual === 'tarjetas') {
+        <div class="grid grid-cols-3 gap-4">
+          @for (asunto of asuntosFiltrados; track asunto) {
+            <div class="bg-white rounded-lg overflow-hidden shadow">
+              <!-- Barra de prioridad -->
         <div [ngClass]="{
           'bg-green-500': asunto['PRIORIDAD COLOR'] === 'verde',
           'bg-yellow-500': asunto['PRIORIDAD COLOR'] === 'amarillo',
           'bg-red-500': asunto['PRIORIDAD COLOR'] === 'rojo'
         }" class="h-2"></div>
-        <div class="p-4">
-          <div class="mb-2 flex justify-between items-center">
-            <h3 class="text-lg font-noto-sans">{{asunto['FOLIO INTERNO']}}</h3>
-            <span class="text-xs font-noto-sans uppercase"
+              <div class="p-4">
+                <div class="mb-2 flex justify-between items-center">
+                  <h3 class="text-lg font-noto-sans">{{asunto['FOLIO INTERNO']}}</h3>
+                  <span class="text-xs font-noto-sans uppercase"
                      [ngClass]="{
                 'text-green-600': asunto['PRIORIDAD COLOR'] === 'verde',
                 'text-yellow-600': asunto['PRIORIDAD COLOR'] === 'amarillo',
                 'text-red-600': asunto['PRIORIDAD COLOR'] === 'rojo'
                       }">
-              {{asunto['PRIORIDAD']}}
-                </span>
-              </div>
-          <!-- Observaciones (solo si existen) -->
-          <div *ngIf="asunto['OBSERVACIONES'] && asunto['OBSERVACIONES'].length > 0" class="mb-3">
-            <p class="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded px-2 py-1">
-              {{ asunto['OBSERVACIONES'] }}
-            </p>
-          </div>
-          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-            <div><span class="font-semibold text-gray-500">Carpeta:</span> {{asunto['CARPETA INVESTIGACION']}}</div>
-            <div><span class="font-semibold text-gray-500">Persona:</span> {{asunto['PERSONA RELACIONADA']}}</div>
-            <div><span class="font-semibold text-gray-500">Recepción:</span> {{asunto['FECHA RECEPCION'] | date:'dd/MM/yyyy'}}</div>
-            <div><span class="font-semibold text-gray-500">Días:</span> {{asunto['DIAS TRANSCURRIDOS']}}</div>
-            <div><span class="font-semibold text-gray-500">Atención:</span> {{asunto['ESTADO ATENCION']}}</div>
-            <div><span class="font-semibold text-gray-500">Oficio:</span> {{asunto['OFICIO']}}</div>
-            <div><span class="font-semibold text-gray-500">Turno Jefatura:</span> {{asunto['TURNO JEFATURA']}}</div>
-            <div><span class="font-semibold text-gray-500">Folio Scanner:</span> {{asunto['FOLIO SCANNER']}}</div>
-            <div><span class="font-semibold text-gray-500">Autoridad Remitente:</span> {{asunto['AUTORIDAD REMITENTE']}}</div>
-            <div><span class="font-semibold text-gray-500">Tipo Documento:</span> {{asunto['TIPO DOCUMENTO']}}</div>
-            <div><span class="font-semibold text-gray-500">Plazo Atención:</span> {{asunto['PLAZO ATENCION']}}</div>
-            <div><span class="font-semibold text-gray-500">Dictaminador:</span> {{asunto['DICTAMINADOR']}}</div>
-            <!-- Observaciones como parte del grid de información -->
-            <div *ngIf="asunto['OBSERVACIONES']" class="col-span-2">
-              <span class="font-semibold text-gray-500">Observaciones:</span>
-              <span class="text-red-700 font-semibold">{{asunto['OBSERVACIONES']}}</span>
-            </div>
-            </div>
-            <div class="flex gap-2 mt-4">
-            <button
-              class="flex-1 border border-[#691C32] text-[#691C32] px-4 py-2 rounded text-sm"
-              (click)="verDetalle(asunto['ID_ASUNTO'])">
-                Ver Detalle
-              </button>
-            <button class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm"
-                    (click)="abrirModalAtencionDictaminador(asunto)">Atender</button>
-            <button class="flex-1 bg-yellow-100 text-yellow-900 border border-yellow-300 px-4 py-2 rounded text-sm"
-                    (click)="abrirModalReasignar(asunto)">Reasignar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-<!-- Modal de Atención del Dictaminador -->
-<app-dictaminador-atencion-modal
-  [mostrarModal]="mostrarModalAtencionDictaminador"
-  [asunto]="asuntoParaAtencion"
-  [idReq]="asuntoParaAtencion?.id_asignacion"
-  (cerrarModal)="cerrarModalAtencionDictaminador()"
-  (finalizarAtencion)="finalizarAtencionAsunto($event)">
-</app-dictaminador-atencion-modal>
-
-    <!-- Vista de Tabla -->
-    <div *ngIf="vistaActual === 'tabla'" class="bg-white rounded-lg overflow-x-auto">
-      <table class="min-w-full min-w-[1200px]">
-        <thead class="bg-[#691C32] text-white">
-          <tr>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Folio / Expediente</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Persona Relacionada</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Fecha Recepción</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Días Transcurridos</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Estado Atención</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Prioridad</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Oficio</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Turno Jefatura</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Folio Scanner</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Autoridad Remitente</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Tipo Documento</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Plazo Atención</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Dictaminador</th>
-            <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Observaciones</th>
-            <th class="px-4 py-3 text-right text-xs font-noto-sans uppercase tracking-wider sticky right-0 bg-[#691C32] z-10">Acciones</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-          <tr *ngFor="let asunto of asuntosFiltrados">
-            <td class="px-4 py-3">{{asunto['FOLIO INTERNO']}}<br><span class="text-xs text-gray-500">{{asunto['CARPETA INVESTIGACION']}}</span></td>
-            <td class="px-4 py-3">{{asunto['PERSONA RELACIONADA']}}</td>
-            <td class="px-4 py-3">{{asunto['FECHA RECEPCION'] | date:'dd/MM/yyyy'}}</td>
-            <td class="px-4 py-3">{{asunto['DIAS TRANSCURRIDOS']}}</td>
-            <td class="px-4 py-3">{{asunto['ESTADO ATENCION']}}</td>
-            <td class="px-4 py-3">{{asunto['PRIORIDAD']}}</td>
-            <td class="px-4 py-3">{{asunto['OFICIO']}}</td>
-            <td class="px-4 py-3">{{asunto['TURNO JEFATURA']}}</td>
-            <td class="px-4 py-3">{{asunto['FOLIO SCANNER']}}</td>
-            <td class="px-4 py-3">{{asunto['AUTORIDAD REMITENTE']}}</td>
-            <td class="px-4 py-3">{{asunto['TIPO DOCUMENTO']}}</td>
-            <td class="px-4 py-3">{{asunto['PLAZO ATENCION']}}</td>
-            <td class="px-4 py-3">{{asunto['DICTAMINADOR']}}</td>
-            <td class="px-4 py-3">
-              <span *ngIf="asunto['OBSERVACIONES'] && asunto['OBSERVACIONES'].length > 0"
-                    class="text-xs text-red-700 bg-red-50 border border-red-200 rounded px-2 py-1 max-w-[320px] inline-block truncate"
-                    [attr.title]="asunto['OBSERVACIONES']">
-                {{asunto['OBSERVACIONES']}}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-right sticky right-0 bg-white z-10">
-              <div class="flex justify-end gap-2">
-                <!-- Acciones: Atender y Ver Detalle -->
-                <div class="hidden md:flex gap-2">
-                  <button class="bg-[#691C32] text-white px-3 py-1 rounded text-xs" (click)="abrirModalAtencionDictaminador(asunto)">Atender</button>
-                  <button class="border border-[#691C32] text-[#691C32] px-3 py-1 rounded text-xs flex items-center" (click)="verDetalle(asunto['ID_ASUNTO'])">Ver Detalle</button>
-                  <button class="border border-yellow-300 text-yellow-900 px-3 py-1 rounded text-xs flex items-center bg-yellow-100" (click)="abrirModalReasignar(asunto)">Reasignar</button>
+                    {{asunto['PRIORIDAD']}}
+                  </span>
                 </div>
-                <!-- Menú compacto en pantallas pequeñas -->
-                <div class="relative md:hidden">
-                  <button class="border border-[#691C32] text-[#691C32] px-2 py-1 rounded text-xs" (click)="asunto._menu = !asunto._menu">⋮</button>
-                  <div *ngIf="asunto._menu" class="absolute right-0 mt-1 w-32 bg-white border rounded shadow z-20">
-                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="abrirModalAtencionDictaminador(asunto); asunto._menu=false">Atender</button>
-                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="verDetalle(asunto['ID_ASUNTO']); asunto._menu=false">Ver Detalle</button>
-                    <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="abrirModalReasignar(asunto); asunto._menu=false">Reasignar</button>
+                <!-- Observaciones (solo si existen) -->
+                @if (asunto['OBSERVACIONES'] && asunto['OBSERVACIONES'].length > 0) {
+                  <div class="mb-3">
+                    <p class="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded px-2 py-1">
+                      {{ asunto['OBSERVACIONES'] }}
+                    </p>
                   </div>
+                }
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                  <div><span class="font-semibold text-gray-500">Carpeta:</span> {{asunto['CARPETA INVESTIGACION']}}</div>
+                  <div><span class="font-semibold text-gray-500">Persona:</span> {{asunto['PERSONA RELACIONADA']}}</div>
+                  <div><span class="font-semibold text-gray-500">Recepción:</span> {{asunto['FECHA RECEPCION'] | date:'dd/MM/yyyy'}}</div>
+                  <div><span class="font-semibold text-gray-500">Días:</span> {{asunto['DIAS TRANSCURRIDOS']}}</div>
+                  <div><span class="font-semibold text-gray-500">Atención:</span> {{asunto['ESTADO ATENCION']}}</div>
+                  <div><span class="font-semibold text-gray-500">Oficio:</span> {{asunto['OFICIO']}}</div>
+                  <div><span class="font-semibold text-gray-500">Turno Jefatura:</span> {{asunto['TURNO JEFATURA']}}</div>
+                  <div><span class="font-semibold text-gray-500">Folio Scanner:</span> {{asunto['FOLIO SCANNER']}}</div>
+                  <div><span class="font-semibold text-gray-500">Autoridad Remitente:</span> {{asunto['AUTORIDAD REMITENTE']}}</div>
+                  <div><span class="font-semibold text-gray-500">Tipo Documento:</span> {{asunto['TIPO DOCUMENTO']}}</div>
+                  <div><span class="font-semibold text-gray-500">Plazo Atención:</span> {{asunto['PLAZO ATENCION']}}</div>
+                  <div><span class="font-semibold text-gray-500">Dictaminador:</span> {{asunto['DICTAMINADOR']}}</div>
+                  <!-- Observaciones como parte del grid de información -->
+                  @if (asunto['OBSERVACIONES']) {
+                    <div class="col-span-2">
+                      <span class="font-semibold text-gray-500">Observaciones:</span>
+                      <span class="text-red-700 font-semibold">{{asunto['OBSERVACIONES']}}</span>
+                    </div>
+                  }
+                </div>
+                <div class="flex gap-2 mt-4">
+                  <button
+                    class="flex-1 border border-[#691C32] text-[#691C32] px-4 py-2 rounded text-sm"
+                    (click)="verDetalle(asunto['ID_ASUNTO'])">
+                    Ver Detalle
+                  </button>
+                  <button class="flex-1 bg-[#691C32] text-white px-4 py-2 rounded text-sm"
+                  (click)="abrirModalAtencionDictaminador(asunto)">Atender</button>
+                  <button class="flex-1 bg-yellow-100 text-yellow-900 border border-yellow-300 px-4 py-2 rounded text-sm"
+                  (click)="abrirModalReasignar(asunto)">Reasignar</button>
                 </div>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          }
+        </div>
+      }
+      <!-- Modal de Atención del Dictaminador -->
+      <app-dictaminador-atencion-modal
+        [mostrarModal]="mostrarModalAtencionDictaminador"
+        [asunto]="asuntoParaAtencion"
+        [idReq]="asuntoParaAtencion?.id_asignacion"
+        (cerrarModal)="cerrarModalAtencionDictaminador()"
+        (finalizarAtencion)="finalizarAtencionAsunto($event)">
+      </app-dictaminador-atencion-modal>
+      <!-- Vista de Tabla -->
+      @if (vistaActual === 'tabla') {
+        <div class="bg-white rounded-lg overflow-x-auto">
+          <table class="min-w-full min-w-[1200px]">
+            <thead class="bg-[#691C32] text-white">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Folio / Expediente</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Persona Relacionada</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Fecha Recepción</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Días Transcurridos</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Estado Atención</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Prioridad</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Oficio</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Turno Jefatura</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Folio Scanner</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Autoridad Remitente</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Tipo Documento</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Plazo Atención</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Dictaminador</th>
+                <th class="px-4 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Observaciones</th>
+                <th class="px-4 py-3 text-right text-xs font-noto-sans uppercase tracking-wider sticky right-0 bg-[#691C32] z-10">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              @for (asunto of asuntosFiltrados; track asunto) {
+                <tr>
+                  <td class="px-4 py-3">{{asunto['FOLIO INTERNO']}}<br><span class="text-xs text-gray-500">{{asunto['CARPETA INVESTIGACION']}}</span></td>
+                  <td class="px-4 py-3">{{asunto['PERSONA RELACIONADA']}}</td>
+                  <td class="px-4 py-3">{{asunto['FECHA RECEPCION'] | date:'dd/MM/yyyy'}}</td>
+                  <td class="px-4 py-3">{{asunto['DIAS TRANSCURRIDOS']}}</td>
+                  <td class="px-4 py-3">{{asunto['ESTADO ATENCION']}}</td>
+                  <td class="px-4 py-3">{{asunto['PRIORIDAD']}}</td>
+                  <td class="px-4 py-3">{{asunto['OFICIO']}}</td>
+                  <td class="px-4 py-3">{{asunto['TURNO JEFATURA']}}</td>
+                  <td class="px-4 py-3">{{asunto['FOLIO SCANNER']}}</td>
+                  <td class="px-4 py-3">{{asunto['AUTORIDAD REMITENTE']}}</td>
+                  <td class="px-4 py-3">{{asunto['TIPO DOCUMENTO']}}</td>
+                  <td class="px-4 py-3">{{asunto['PLAZO ATENCION']}}</td>
+                  <td class="px-4 py-3">{{asunto['DICTAMINADOR']}}</td>
+                  <td class="px-4 py-3">
+                    @if (asunto['OBSERVACIONES'] && asunto['OBSERVACIONES'].length > 0) {
+                      <span
+                        class="text-xs text-red-700 bg-red-50 border border-red-200 rounded px-2 py-1 max-w-[320px] inline-block truncate"
+                        [attr.title]="asunto['OBSERVACIONES']">
+                        {{asunto['OBSERVACIONES']}}
+                      </span>
+                    }
+                  </td>
+                  <td class="px-4 py-3 text-right sticky right-0 bg-white z-10">
+                    <div class="flex justify-end gap-2">
+                      <!-- Acciones: Atender y Ver Detalle -->
+                      <div class="hidden md:flex gap-2">
+                        <button class="bg-[#691C32] text-white px-3 py-1 rounded text-xs" (click)="abrirModalAtencionDictaminador(asunto)">Atender</button>
+                        <button class="border border-[#691C32] text-[#691C32] px-3 py-1 rounded text-xs flex items-center" (click)="verDetalle(asunto['ID_ASUNTO'])">Ver Detalle</button>
+                        <button class="border border-yellow-300 text-yellow-900 px-3 py-1 rounded text-xs flex items-center bg-yellow-100" (click)="abrirModalReasignar(asunto)">Reasignar</button>
+                      </div>
+                      <!-- Menú compacto en pantallas pequeñas -->
+                      <div class="relative md:hidden">
+                        <button class="border border-[#691C32] text-[#691C32] px-2 py-1 rounded text-xs" (click)="asunto._menu = !asunto._menu">⋮</button>
+                        @if (asunto._menu) {
+                          <div class="absolute right-0 mt-1 w-32 bg-white border rounded shadow z-20">
+                            <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="abrirModalAtencionDictaminador(asunto); asunto._menu=false">Atender</button>
+                            <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="verDetalle(asunto['ID_ASUNTO']); asunto._menu=false">Ver Detalle</button>
+                            <button class="block w-full text-left px-3 py-1 text-sm hover:bg-gray-50" (click)="abrirModalReasignar(asunto); asunto._menu=false">Reasignar</button>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
     </div>
-  </div>
+  }
 
   <!-- Sección de Asuntos Rechazados eliminada por solicitud -->
 </div>
 
 <!-- Modal de Atención -->
-<div *ngIf="mostrarFormularioAtencion" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg w-[600px] max-h-[80vh] overflow-y-auto">
-    <!-- Encabezado del modal -->
-    <div class="bg-[#691C32] text-white px-6 py-4 rounded-t-lg flex justify-between items-center">
-      <h2 class="text-lg font-noto-sans">Atender Asunto</h2>
-      <button (click)="cerrarFormularioAtencion()" class="text-white hover:text-gray-200">
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Contenido del formulario -->
-    <div class="p-6">
-      <form [formGroup]="formularioAtencion" (ngSubmit)="guardarAtencion()">
-        <!-- Información del asunto -->
-        <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <p class="text-sm text-gray-500">Folio</p>
-              <p class="font-noto-sans">{{asuntoSeleccionado?.folio}}</p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-500">Persona Relacionada</p>
-              <p class="font-noto-sans">{{asuntoSeleccionado?.personaRelacionada}}</p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-500">Fecha Recepción</p>
-              <p class="font-noto-sans">{{asuntoSeleccionado?.fechaRecepcion | date:'dd/MM/yyyy'}}</p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-500">Fecha Límite</p>
-              <p class="font-noto-sans">{{asuntoSeleccionado?.fechaLimite | date:'dd/MM/yyyy'}}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Observaciones -->
-        <div class="mb-6">
-          <label class="block text-sm font-noto-sans text-gray-700 mb-2">
-            Observaciones
-          </label>
-          <textarea formControlName="observaciones" rows="5"
-                    class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#691C32]"
-                    placeholder="Ingrese sus observaciones sobre la atención del asunto..."></textarea>
-        </div>
-
-        <!-- Documentos adjuntos -->
-        <div class="mb-8">
-          <label class="block text-sm font-noto-sans text-gray-700 mb-2">
-            Documentos Adjuntos
-          </label>
-          <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
-            <input type="file" multiple class="hidden" #fileInput
-                   (change)="onFileSelected($event)">
-            <div class="mb-2">
-              <svg class="w-10 h-10 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h7.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <button type="button" (click)="fileInput.click()"
-                    class="text-[#691C32] hover:text-[#4a1423] text-sm font-noto-sans">
-              Seleccionar archivos
-            </button>
-            <p class="text-xs text-gray-500 mt-1">
-              Formatos permitidos: PDF, DOC, DOCX (Máx. 10MB)
-            </p>
-          </div>
-          <!-- Lista de archivos seleccionados -->
-          <div *ngIf="archivosSeleccionados.length > 0" class="mt-4 border rounded-lg overflow-hidden">
-            <div *ngFor="let archivo of archivosSeleccionados"
-                 class="flex items-center justify-between py-2 px-3 border-b last:border-b-0 hover:bg-gray-50">
-              <div class="flex items-center">
-                <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span class="text-sm text-gray-700">{{archivo.name}}</span>
+@if (mostrarFormularioAtencion) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg w-[600px] max-h-[80vh] overflow-y-auto">
+      <!-- Encabezado del modal -->
+      <div class="bg-[#691C32] text-white px-6 py-4 rounded-t-lg flex justify-between items-center">
+        <h2 class="text-lg font-noto-sans">Atender Asunto</h2>
+        <button (click)="cerrarFormularioAtencion()" class="text-white hover:text-gray-200">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <!-- Contenido del formulario -->
+      <div class="p-6">
+        <form [formGroup]="formularioAtencion" (ngSubmit)="guardarAtencion()">
+          <!-- Información del asunto -->
+          <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">Folio</p>
+                <p class="font-noto-sans">{{asuntoSeleccionado?.folio}}</p>
               </div>
-              <button type="button" (click)="eliminarArchivo(archivo)"
-                      class="text-red-600 hover:text-red-800">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <div>
+                <p class="text-sm text-gray-500">Persona Relacionada</p>
+                <p class="font-noto-sans">{{asuntoSeleccionado?.personaRelacionada}}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Fecha Recepción</p>
+                <p class="font-noto-sans">{{asuntoSeleccionado?.fechaRecepcion | date:'dd/MM/yyyy'}}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Fecha Límite</p>
+                <p class="font-noto-sans">{{asuntoSeleccionado?.fechaLimite | date:'dd/MM/yyyy'}}</p>
+              </div>
             </div>
           </div>
-        </div>
-
-        <!-- Botones de acción -->
-        <div class="flex justify-end gap-3">
-          <button type="button" (click)="cerrarFormularioAtencion()"
-                  class="px-5 py-2 border border-gray-300 rounded-md text-sm font-noto-sans text-gray-700 hover:bg-gray-50 transition-colors">
-            Cancelar
-          </button>
-          <button type="submit"
-                  class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-noto-sans hover:bg-[#4a1423] transition-colors shadow-sm">
-            Guardar Atención
-          </button>
-        </div>
-      </form>
+          <!-- Observaciones -->
+          <div class="mb-6">
+            <label class="block text-sm font-noto-sans text-gray-700 mb-2">
+              Observaciones
+            </label>
+            <textarea formControlName="observaciones" rows="5"
+              class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#691C32]"
+            placeholder="Ingrese sus observaciones sobre la atención del asunto..."></textarea>
+          </div>
+          <!-- Documentos adjuntos -->
+          <div class="mb-8">
+            <label class="block text-sm font-noto-sans text-gray-700 mb-2">
+              Documentos Adjuntos
+            </label>
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
+              <input type="file" multiple class="hidden" #fileInput
+                (change)="onFileSelected($event)">
+              <div class="mb-2">
+                <svg class="w-10 h-10 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h7.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <button type="button" (click)="fileInput.click()"
+                class="text-[#691C32] hover:text-[#4a1423] text-sm font-noto-sans">
+                Seleccionar archivos
+              </button>
+              <p class="text-xs text-gray-500 mt-1">
+                Formatos permitidos: PDF, DOC, DOCX (Máx. 10MB)
+              </p>
+            </div>
+            <!-- Lista de archivos seleccionados -->
+            @if (archivosSeleccionados.length > 0) {
+              <div class="mt-4 border rounded-lg overflow-hidden">
+                @for (archivo of archivosSeleccionados; track archivo) {
+                  <div
+                    class="flex items-center justify-between py-2 px-3 border-b last:border-b-0 hover:bg-gray-50">
+                    <div class="flex items-center">
+                      <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span class="text-sm text-gray-700">{{archivo.name}}</span>
+                    </div>
+                    <button type="button" (click)="eliminarArchivo(archivo)"
+                      class="text-red-600 hover:text-red-800">
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <!-- Botones de acción -->
+          <div class="flex justify-end gap-3">
+            <button type="button" (click)="cerrarFormularioAtencion()"
+              class="px-5 py-2 border border-gray-300 rounded-md text-sm font-noto-sans text-gray-700 hover:bg-gray-50 transition-colors">
+              Cancelar
+            </button>
+            <button type="submit"
+              class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-noto-sans hover:bg-[#4a1423] transition-colors shadow-sm">
+              Guardar Atención
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
+}
 
 <!-- Modal de Detalles de Rechazo eliminado por solicitud -->
 
@@ -380,59 +392,59 @@
 </app-dictaminador-atencion-modal>
 
 <!-- Modal de Reasignación -->
-<div *ngIf="mostrarModalReasignar" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10500] p-4">
-  <div class="bg-white rounded-lg shadow-xl w-[600px] max-w-[95vw] overflow-hidden">
-    <!-- Header -->
-    <div class="bg-[#691C32] text-white py-3 px-5 flex items-center justify-between">
-      <h2 class="text-lg font-semibold flex items-center">
-        <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-        </svg>
-        Reasignar asunto
-      </h2>
-      <button (click)="cerrarModalReasignar()" class="text-white hover:text-gray-200">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Body -->
-    <div class="p-5 space-y-5">
-      <div class="bg-blue-50 border border-blue-200 rounded p-4 text-sm">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <span class="text-gray-600 font-noto-sans">Folio:</span>
-            <span class="ml-2 text-gray-800">{{asuntoParaReasignar?.folio}}</span>
+@if (mostrarModalReasignar) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10500] p-4">
+    <div class="bg-white rounded-lg shadow-xl w-[600px] max-w-[95vw] overflow-hidden">
+      <!-- Header -->
+      <div class="bg-[#691C32] text-white py-3 px-5 flex items-center justify-between">
+        <h2 class="text-lg font-semibold flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+          </svg>
+          Reasignar asunto
+        </h2>
+        <button (click)="cerrarModalReasignar()" class="text-white hover:text-gray-200">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <!-- Body -->
+      <div class="p-5 space-y-5">
+        <div class="bg-blue-50 border border-blue-200 rounded p-4 text-sm">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="text-gray-600 font-noto-sans">Folio:</span>
+              <span class="ml-2 text-gray-800">{{asuntoParaReasignar?.folio}}</span>
+            </div>
+            <div>
+              <span class="text-gray-600 font-noto-sans">ID Asignación:</span>
+              <span class="ml-2 text-gray-800">{{asuntoParaReasignar?.id_asignacion}}</span>
+            </div>
           </div>
-          <div>
-            <span class="text-gray-600 font-noto-sans">ID Asignación:</span>
-            <span class="ml-2 text-gray-800">{{asuntoParaReasignar?.id_asignacion}}</span>
+        </div>
+        <div>
+          <label class="block text-sm font-noto-sans text-gray-700 mb-2">Seleccione dictaminador</label>
+          <div class="relative">
+            <select [(ngModel)]="abogadoSeleccionado" class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
+              <option value="" disabled selected>Seleccione un dictaminador...</option>
+              @for (user of usuariosAsignar; track user) {
+                <option [value]="user.rfc">{{user.nombre}}</option>
+              }
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
-
-      <div>
-        <label class="block text-sm font-noto-sans text-gray-700 mb-2">Seleccione dictaminador</label>
-        <div class="relative">
-          <select [(ngModel)]="abogadoSeleccionado" class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32]">
-            <option value="" disabled selected>Seleccione un dictaminador...</option>
-            <option *ngFor="let user of usuariosAsignar" [value]="user.rfc">{{user.nombre}}</option>
-          </select>
-          <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-        </div>
+      <!-- Footer -->
+      <div class="bg-gray-50 px-5 py-4 flex justify-end gap-3 border-t">
+        <button (click)="cerrarModalReasignar()" class="px-5 py-2 border border-gray-300 rounded-md text-sm font-noto-sans text-gray-700 hover:bg-gray-50">Cancelar</button>
+        <button (click)="confirmarReasignacion()" [disabled]="!abogadoSeleccionado" class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-noto-sans hover:bg-[#8B1D3C] disabled:opacity-50">Reasignar</button>
       </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="bg-gray-50 px-5 py-4 flex justify-end gap-3 border-t">
-      <button (click)="cerrarModalReasignar()" class="px-5 py-2 border border-gray-300 rounded-md text-sm font-noto-sans text-gray-700 hover:bg-gray-50">Cancelar</button>
-      <button (click)="confirmarReasignacion()" [disabled]="!abogadoSeleccionado" class="px-5 py-2 bg-[#691C32] text-white rounded-md text-sm font-noto-sans hover:bg-[#8B1D3C] disabled:opacity-50">Reasignar</button>
     </div>
   </div>
-
-</div>
+}

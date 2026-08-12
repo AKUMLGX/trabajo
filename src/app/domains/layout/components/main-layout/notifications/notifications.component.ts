@@ -5,23 +5,22 @@ import { MatIconModule  } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+
 import { PendientesPorAcusarComponent } from './pendientes-por-acusar/pendientes-por-acusar.component';
 import { ValidadorDeRespuestasComponent } from './validador-de-respuestas/validador-de-respuestas.component';
 
 @Component({
     selector: 'app-notifications',
     imports: [
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
-        MatSidenavModule,
-        MatDialogModule,
-        RouterModule,
-        CommonModule,
-        PendientesPorAcusarComponent,
-        ValidadorDeRespuestasComponent,
-    ],
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatDialogModule,
+    RouterModule,
+    PendientesPorAcusarComponent,
+    ValidadorDeRespuestasComponent
+],
     templateUrl: './notifications.component.html',
     styleUrl: './notifications.component.css'
 })

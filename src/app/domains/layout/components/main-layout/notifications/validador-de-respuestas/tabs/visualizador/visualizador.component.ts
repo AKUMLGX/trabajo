@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,7 +9,7 @@ export interface VisualizadorDetalle {
 
 @Component({
     selector: 'app-visualizador',
-    imports: [MatIconModule, CommonModule],
+    imports: [MatIconModule],
     templateUrl: './visualizador.component.html',
     styleUrl: './visualizador.component.css'
 })

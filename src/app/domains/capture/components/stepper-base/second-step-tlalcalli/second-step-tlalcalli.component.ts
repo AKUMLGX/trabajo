@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
 import { LoggerService } from '../../../services/logger.service';
 import { FormHelperService } from '../../../services/form-helper.service';
@@ -12,11 +12,10 @@ import { CustomModalComponent2 } from "../../../../responsables/components/atenc
 @Component({
     selector: 'app-second-step-tlalcalli',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        CustomSelectComponent,
-        CustomModalComponent2
-    ],
+    ReactiveFormsModule,
+    CustomSelectComponent,
+    CustomModalComponent2
+],
     templateUrl: './second-step-tlalcalli.component.html',
     styleUrl: './second-step-tlalcalli.component.css'
 })

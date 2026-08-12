@@ -31,8 +31,8 @@ export class MsgReaderComponent implements OnInit {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);
-      const msgReader = new MsgReader(byteArray);
-      const fileData = msgReader.getFileData();
+      const buffer = byteArray.buffer.slice(byteArray.byteOffset,byteArray.byteOffset + byteArray.byteLength);
+      const msgReader = new MsgReader(buffer);      const fileData = msgReader.getFileData();
       if (!fileData.error) {
         this.senderName = fileData.senderName;
         this.senderEmail = fileData.senderSmtpAddress !== null &&

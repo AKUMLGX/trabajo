@@ -11,7 +11,9 @@
 
     {{ label }}
 
-    <span *ngIf="required" class="ml-1 font-noto-sans text-red-500">*</span>
+    @if (required) {
+      <span class="ml-1 font-noto-sans text-red-500">*</span>
+    }
   </label>
 
   <div class="relative w-full overflow-visible rounded-2xl">
@@ -35,13 +37,14 @@
         {{ placeholder }}
       </option>
 
-      <option
-        *ngFor="let option of options"
-        [value]="option.value"
-        [selected]="option.value == value"
-        [disabled]="option.disabled">
-        {{ option.label }}
-      </option>
+      @for (option of options; track option) {
+        <option
+          [value]="option.value"
+          [selected]="option.value == value"
+          [disabled]="option.disabled">
+          {{ option.label }}
+        </option>
+      }
     </select>
 
     <div
@@ -74,19 +77,21 @@
 
   </div>
 
-  <div
-    *ngIf="hint && !errorMessage"
-    class="mt-2 text-[13px] font-noto-sans italic text-gray-500"
+  @if (hint && !errorMessage) {
+    <div
+      class="mt-2 text-[13px] font-noto-sans italic text-gray-500"
     [ngClass]="{
       'font-semibold text-tlalcalli-primary': isFocused
     }">
-    {{ hint }}
-  </div>
+      {{ hint }}
+    </div>
+  }
 
-  <div
-    *ngIf="errorMessage"
-    class="mt-2 text-[13px] font-noto-sans text-red-500">
-    {{ errorMessage }}
-  </div>
+  @if (errorMessage) {
+    <div
+      class="mt-2 text-[13px] font-noto-sans text-red-500">
+      {{ errorMessage }}
+    </div>
+  }
 
 </div>

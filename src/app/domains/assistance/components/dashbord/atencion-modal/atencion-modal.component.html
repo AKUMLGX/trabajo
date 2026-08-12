@@ -1,305 +1,312 @@
 <!-- Modal principal -->
-<div *ngIf="mostrarModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <!-- Fondo oscurecido -->
-  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-
-  <!-- Contenedor del modal -->
-  <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-    <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-6xl">
-      <!-- Encabezado del modal -->
-      <div class="bg-gradient-to-r from-[#691C32] to-[#8B1538] px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center">
-          <svg class="h-6 w-6 text-white mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <h3 class="text-lg font-noto-sans text-white" id="modal-title">
-            Detalle del Asunto {{asunto?.folio_interno}}
-          </h3>
-        </div>
-        <button type="button" (click)="cerrarModal()" class="text-white hover:text-gray-200 focus:outline-none">
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Pestañas de navegación -->
-      <div class="border-b border-gray-200">
-        <nav class="flex -mb-px" aria-label="Tabs">
-          <button
-            (click)="cambiarPestana('detalles')"
-            [class.text-[#691C32]]="pestanaActiva === 'detalles'"
-            [class.border-[#691C32]]="pestanaActiva === 'detalles'"
-            [class.border-b-2]="pestanaActiva === 'detalles'"
-            [class.text-gray-500]="pestanaActiva !== 'detalles'"
-            class="w-1/2 py-4 px-1 text-center border-b-2 font-noto-sans text-sm transition-colors duration-200"
-          >
-            <div class="flex items-center justify-center">
-              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Detalles del Asunto
-            </div>
-          </button>
-          <button
-            (click)="cambiarPestana('documentos')"
-            [class.text-[#691C32]]="pestanaActiva === 'documentos'"
-            [class.border-[#691C32]]="pestanaActiva === 'documentos'"
-            [class.border-b-2]="pestanaActiva === 'documentos'"
-            [class.text-gray-500]="pestanaActiva !== 'documentos'"
-            class="w-1/2 py-4 px-1 text-center border-b-2 font-noto-sans text-sm transition-colors duration-200"
-          >
-            <div class="flex items-center justify-center">
-              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-              Documentos
-              <span class="ml-2 bg-[#691C32] text-white text-xs font-noto-sans px-2.5 py-0.5 rounded-full">
-                {{archivos.length || 0}}
-              </span>
-            </div>
-          </button>
-        </nav>
-      </div>
-
-      <!-- Contenido del modal -->
-      <div class="bg-gray-50 px-6 py-4 max-h-[70vh] overflow-y-auto">
-        <!-- Pestaña de Detalles -->
-        <div *ngIf="pestanaActiva === 'detalles'" class="animate-fadeIn">
-          <div class="bg-white shadow rounded-lg p-6 mb-6">
-            <h4 class="text-lg font-noto-sans text-gray-900 mb-4 border-b pb-2">Información del Asunto</h4>
-
-            <div class="grid grid-cols-2 gap-6">
-              <div>
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Folio Interno</p>
-                  <p class="text-base font-semibold">{{asunto?.folio_interno || 'N/A'}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Folio Scanner</p>
-                  <p class="text-base">{{asunto?.folio_scanner || 'N/A'}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Carpeta de Investigación</p>
-                  <p class="text-base">{{asunto?.carpeta_investigacion || 'N/A'}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Oficio</p>
-                  <p class="text-base">{{asunto?.oficio || 'N/A'}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Persona Relacionada</p>
-                  <p class="text-base">{{asunto?.persona_relacionada || 'N/A'}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Turno Jefatura</p>
-                  <p class="text-base">{{asunto?.turno_jefatura || 'N/A'}}</p>
-                </div>
-              </div>
-
-              <div>
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Fecha de Recepción</p>
-                  <p class="text-base">{{formatearFecha(asunto?.fecha_recepcion)}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Autoridad Remitente</p>
-                  <p class="text-base">{{asunto?.autoridad_remitente || 'N/A'}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Administración</p>
-                  <p class="text-base">{{getAdministracionTexto()}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Tipo de Atención</p>
-                  <p class="text-base">{{getTipoAtencion()}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Tipo de Documento</p>
-                  <p class="text-base">{{getTipoDocumento()}}</p>
-                </div>
-
-                <div class="mb-4">
-                  <p class="text-sm font-noto-sans text-gray-500">Plazo de Atención</p>
-                  <p class="text-base">
-                    <span *ngIf="isPlazoUrgente()" class="bg-red-100 text-red-800 text-xs font-noto-sans px-2.5 py-0.5 rounded-full">Urgente</span>
-                    <span *ngIf="!isPlazoUrgente()">{{getPlazoAtencionTexto()}}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
+@if (mostrarModal) {
+  <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Fondo oscurecido -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    <!-- Contenedor del modal -->
+    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+      <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-6xl">
+        <!-- Encabezado del modal -->
+        <div class="bg-gradient-to-r from-[#691C32] to-[#8B1538] px-6 py-4 flex justify-between items-center">
+          <div class="flex items-center">
+            <svg class="h-6 w-6 text-white mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 class="text-lg font-noto-sans text-white" id="modal-title">
+              Detalle del Asunto {{asunto?.folio_interno}}
+            </h3>
           </div>
+          <button type="button" (click)="cerrarModal()" class="text-white hover:text-gray-200 focus:outline-none">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-
-        <!-- Pestaña de Documentos -->
-        <div *ngIf="pestanaActiva === 'documentos'" class="animate-fadeIn">
-          <div class="grid grid-cols-3 gap-6">
-            <!-- Lista de documentos -->
-            <div class="col-span-1 bg-white shadow rounded-lg p-4 max-h-[60vh] overflow-y-auto">
-              <div class="flex justify-between items-center mb-4 border-b pb-2">
-                <h4 class="text-lg font-noto-sans text-gray-900">Documentos</h4>
-                <button
-                  (click)="recargarArchivos()"
-                  class="text-[#691C32] hover:text-[#5a1729] p-1 rounded-full hover:bg-gray-100 transition-colors"
-                  title="Recargar documentos">
-                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                </button>
-              </div>
-
-
-
-              <!-- Cargando -->
-              <div *ngIf="cargandoArchivos" class="text-center py-8">
-                <div class="w-12 h-12 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p class="text-gray-500">Cargando documentos...</p>
-                <p class="text-xs text-gray-400 mt-1">Folio: {{ asunto?.folio_interno }}</p>
-              </div>
-
-              <!-- Sin documentos -->
-              <div *ngIf="!cargandoArchivos && (!archivos || archivos.length === 0)" class="text-center py-8">
-                <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        <!-- Pestañas de navegación -->
+        <div class="border-b border-gray-200">
+          <nav class="flex -mb-px" aria-label="Tabs">
+            <button
+              (click)="cambiarPestana('detalles')"
+              [class.text-[#691C32]]="pestanaActiva === 'detalles'"
+              [class.border-[#691C32]]="pestanaActiva === 'detalles'"
+              [class.border-b-2]="pestanaActiva === 'detalles'"
+              [class.text-gray-500]="pestanaActiva !== 'detalles'"
+              class="w-1/2 py-4 px-1 text-center border-b-2 font-noto-sans text-sm transition-colors duration-200"
+              >
+              <div class="flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p class="text-gray-500 font-noto-sans">No hay documentos disponibles</p>
-                <p class="text-xs text-gray-400 mt-2">
-                  Folio: {{ asunto?.folio_interno || 'Sin folio' }}
-                </p>
-                <button
-                  (click)="recargarArchivos()"
-                  class="mt-3 text-[#691C32] hover:text-[#5a1729] text-sm underline">
-                  Intentar recargar
-                </button>
+                Detalles del Asunto
               </div>
-
-              <!-- Lista de archivos -->
-              <div *ngIf="!cargandoArchivos && archivos && archivos.length > 0">
-                <p class="text-sm text-green-600 font-noto-sans mb-3">
-                  ✅ {{ archivos.length }} documento{{ archivos.length > 1 ? 's' : '' }} encontrado{{ archivos.length > 1 ? 's' : '' }}
-                </p>
-                <ul class="space-y-2">
-                  <li *ngFor="let archivo of archivos; let i = index"
-                    (click)="seleccionarArchivo(archivo)"
-                    [class.bg-red-50]="pdfActual === archivo"
-                    [class.border-[#691C32]]="pdfActual === archivo"
-                      [class.border-2]="pdfActual === archivo"
-                    class="p-3 border rounded-md hover:bg-red-50 cursor-pointer transition-colors">
-                  <div class="flex items-center">
-                      <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-noto-sans text-gray-900 truncate" [title]="archivo.nombre">
-                        {{archivo.nombre}}
-                      </p>
-                        <div class="flex items-center justify-between mt-1">
-                      <p class="text-xs text-gray-500">
-                            📁 {{archivo.tamano}}
-                          </p>
-                          <p class="text-xs text-gray-400" *ngIf="archivo.ultima_modificacion">
-                            {{archivo.ultima_modificacion}}
+            </button>
+            <button
+              (click)="cambiarPestana('documentos')"
+              [class.text-[#691C32]]="pestanaActiva === 'documentos'"
+              [class.border-[#691C32]]="pestanaActiva === 'documentos'"
+              [class.border-b-2]="pestanaActiva === 'documentos'"
+              [class.text-gray-500]="pestanaActiva !== 'documentos'"
+              class="w-1/2 py-4 px-1 text-center border-b-2 font-noto-sans text-sm transition-colors duration-200"
+              >
+              <div class="flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                Documentos
+                <span class="ml-2 bg-[#691C32] text-white text-xs font-noto-sans px-2.5 py-0.5 rounded-full">
+                  {{archivos.length || 0}}
+                </span>
+              </div>
+            </button>
+          </nav>
+        </div>
+        <!-- Contenido del modal -->
+        <div class="bg-gray-50 px-6 py-4 max-h-[70vh] overflow-y-auto">
+          <!-- Pestaña de Detalles -->
+          @if (pestanaActiva === 'detalles') {
+            <div class="animate-fadeIn">
+              <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h4 class="text-lg font-noto-sans text-gray-900 mb-4 border-b pb-2">Información del Asunto</h4>
+                <div class="grid grid-cols-2 gap-6">
+                  <div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Folio Interno</p>
+                      <p class="text-base font-semibold">{{asunto?.folio_interno || 'N/A'}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Folio Scanner</p>
+                      <p class="text-base">{{asunto?.folio_scanner || 'N/A'}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Carpeta de Investigación</p>
+                      <p class="text-base">{{asunto?.carpeta_investigacion || 'N/A'}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Oficio</p>
+                      <p class="text-base">{{asunto?.oficio || 'N/A'}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Persona Relacionada</p>
+                      <p class="text-base">{{asunto?.persona_relacionada || 'N/A'}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Turno Jefatura</p>
+                      <p class="text-base">{{asunto?.turno_jefatura || 'N/A'}}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Fecha de Recepción</p>
+                      <p class="text-base">{{formatearFecha(asunto?.fecha_recepcion)}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Autoridad Remitente</p>
+                      <p class="text-base">{{asunto?.autoridad_remitente || 'N/A'}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Administración</p>
+                      <p class="text-base">{{getAdministracionTexto()}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Tipo de Atención</p>
+                      <p class="text-base">{{getTipoAtencion()}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Tipo de Documento</p>
+                      <p class="text-base">{{getTipoDocumento()}}</p>
+                    </div>
+                    <div class="mb-4">
+                      <p class="text-sm font-noto-sans text-gray-500">Plazo de Atención</p>
+                      <p class="text-base">
+                        @if (isPlazoUrgente()) {
+                          <span class="bg-red-100 text-red-800 text-xs font-noto-sans px-2.5 py-0.5 rounded-full">Urgente</span>
+                        }
+                        @if (!isPlazoUrgente()) {
+                          <span>{{getPlazoAtencionTexto()}}</span>
+                        }
                       </p>
                     </div>
-                      </div>
-                      <div class="ml-2 flex-shrink-0">
-                    <span *ngIf="pdfActual === archivo" class="inline-flex items-center rounded-full bg-[#691C32] px-2.5 py-0.5 text-xs font-noto-sans text-white">
-                      Actual
-                    </span>
-                        <span *ngIf="pdfActual !== archivo" class="text-xs text-gray-400">
-                          #{{i + 1}}
-                        </span>
-                      </div>
                   </div>
-                </li>
-              </ul>
+                </div>
               </div>
             </div>
-
-            <!-- Visor de PDF -->
-            <div class="col-span-2 bg-white shadow rounded-lg p-4 flex flex-col">
-              <div class="flex justify-between items-center mb-4 border-b pb-2">
-                <h4 class="text-lg font-noto-sans text-gray-900">Visor de Documentos</h4>
-                <button *ngIf="pdfActual"
+          }
+          <!-- Pestaña de Documentos -->
+          @if (pestanaActiva === 'documentos') {
+            <div class="animate-fadeIn">
+              <div class="grid grid-cols-3 gap-6">
+                <!-- Lista de documentos -->
+                <div class="col-span-1 bg-white shadow rounded-lg p-4 max-h-[60vh] overflow-y-auto">
+                  <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h4 class="text-lg font-noto-sans text-gray-900">Documentos</h4>
+                    <button
+                      (click)="recargarArchivos()"
+                      class="text-[#691C32] hover:text-[#5a1729] p-1 rounded-full hover:bg-gray-100 transition-colors"
+                      title="Recargar documentos">
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- Cargando -->
+                  @if (cargandoArchivos) {
+                    <div class="text-center py-8">
+                      <div class="w-12 h-12 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                      <p class="text-gray-500">Cargando documentos...</p>
+                      <p class="text-xs text-gray-400 mt-1">Folio: {{ asunto?.folio_interno }}</p>
+                    </div>
+                  }
+                  <!-- Sin documentos -->
+                  @if (!cargandoArchivos && (!archivos || archivos.length === 0)) {
+                    <div class="text-center py-8">
+                      <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                      <p class="text-gray-500 font-noto-sans">No hay documentos disponibles</p>
+                      <p class="text-xs text-gray-400 mt-2">
+                        Folio: {{ asunto?.folio_interno || 'Sin folio' }}
+                      </p>
+                      <button
+                        (click)="recargarArchivos()"
+                        class="mt-3 text-[#691C32] hover:text-[#5a1729] text-sm underline">
+                        Intentar recargar
+                      </button>
+                    </div>
+                  }
+                  <!-- Lista de archivos -->
+                  @if (!cargandoArchivos && archivos && archivos.length > 0) {
+                    <div>
+                      <p class="text-sm text-green-600 font-noto-sans mb-3">
+                        ✅ {{ archivos.length }} documento{{ archivos.length > 1 ? 's' : '' }} encontrado{{ archivos.length > 1 ? 's' : '' }}
+                      </p>
+                      <ul class="space-y-2">
+                        @for (archivo of archivos; track archivo; let i = $index) {
+                          <li
+                            (click)="seleccionarArchivo(archivo)"
+                            [class.bg-red-50]="pdfActual === archivo"
+                            [class.border-[#691C32]]="pdfActual === archivo"
+                            [class.border-2]="pdfActual === archivo"
+                            class="p-3 border rounded-md hover:bg-red-50 cursor-pointer transition-colors">
+                            <div class="flex items-center">
+                              <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                              </svg>
+                              <div class="flex-1 min-w-0">
+                                <p class="text-sm font-noto-sans text-gray-900 truncate" [title]="archivo.nombre">
+                                  {{archivo.nombre}}
+                                </p>
+                                <div class="flex items-center justify-between mt-1">
+                                  <p class="text-xs text-gray-500">
+                                    📁 {{archivo.tamano}}
+                                  </p>
+                                  @if (archivo.ultima_modificacion) {
+                                    <p class="text-xs text-gray-400">
+                                      {{archivo.ultima_modificacion}}
+                                    </p>
+                                  }
+                                </div>
+                              </div>
+                              <div class="ml-2 flex-shrink-0">
+                                @if (pdfActual === archivo) {
+                                  <span class="inline-flex items-center rounded-full bg-[#691C32] px-2.5 py-0.5 text-xs font-noto-sans text-white">
+                                    Actual
+                                  </span>
+                                }
+                                @if (pdfActual !== archivo) {
+                                  <span class="text-xs text-gray-400">
+                                    #{{i + 1}}
+                                  </span>
+                                }
+                              </div>
+                            </div>
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  }
+                </div>
+                <!-- Visor de PDF -->
+                <div class="col-span-2 bg-white shadow rounded-lg p-4 flex flex-col">
+                  <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h4 class="text-lg font-noto-sans text-gray-900">Visor de Documentos</h4>
+                    @if (pdfActual) {
+                      <button
                         (click)="descargarPdf()"
                         class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-noto-sans rounded text-white bg-[#691C32] hover:bg-[#5a1729] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#691C32]">
-                  <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  Descargar
-                </button>
-              </div>
-
-              <!-- Sin documento seleccionado -->
-              <div *ngIf="!pdfActual" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
-                <div class="text-center p-6">
-                  <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  <p class="text-lg font-noto-sans text-gray-500">Seleccione un documento para visualizar</p>
-                  <p class="text-sm text-gray-400 mt-2">Haga clic en un documento de la lista para verlo aquí</p>
+                        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Descargar
+                      </button>
+                    }
+                  </div>
+                  <!-- Sin documento seleccionado -->
+                  @if (!pdfActual) {
+                    <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                      <div class="text-center p-6">
+                        <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p class="text-lg font-noto-sans text-gray-500">Seleccione un documento para visualizar</p>
+                        <p class="text-sm text-gray-400 mt-2">Haga clic en un documento de la lista para verlo aquí</p>
+                      </div>
+                    </div>
+                  }
+                  <!-- Cargando PDF -->
+                  @if (pdfActual && pdfCargando) {
+                    <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                      <div class="text-center">
+                        <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                        <p class="text-gray-500">Cargando documento...</p>
+                      </div>
+                    </div>
+                  }
+                  <!-- Error al cargar PDF -->
+                  @if (pdfActual && pdfError) {
+                    <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
+                      <div class="text-center p-6">
+                        <svg class="w-16 h-16 mx-auto text-red-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p class="text-lg font-noto-sans text-red-500">Error al cargar el documento</p>
+                        <p class="text-sm text-gray-500 mt-2">No se pudo cargar el documento seleccionado</p>
+                      </div>
+                    </div>
+                  }
+                  <!-- PDF cargado -->
+                  @if (pdfActual && !pdfCargando && !pdfError) {
+                    <div class="flex-1 bg-gray-50 rounded-lg overflow-hidden">
+                      <div #pdfContainer class="w-full h-full"></div>
+                    </div>
+                  }
                 </div>
-              </div>
-
-              <!-- Cargando PDF -->
-              <div *ngIf="pdfActual && pdfCargando" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
-                <div class="text-center">
-                  <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <p class="text-gray-500">Cargando documento...</p>
-                </div>
-              </div>
-
-              <!-- Error al cargar PDF -->
-              <div *ngIf="pdfActual && pdfError" class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg">
-                <div class="text-center p-6">
-                  <svg class="w-16 h-16 mx-auto text-red-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                  <p class="text-lg font-noto-sans text-red-500">Error al cargar el documento</p>
-                  <p class="text-sm text-gray-500 mt-2">No se pudo cargar el documento seleccionado</p>
-                </div>
-              </div>
-
-              <!-- PDF cargado -->
-              <div *ngIf="pdfActual && !pdfCargando && !pdfError" class="flex-1 bg-gray-50 rounded-lg overflow-hidden">
-                <div #pdfContainer class="w-full h-full"></div>
               </div>
             </div>
-          </div>
+          }
         </div>
-      </div>
-
-      <!-- Pie del modal -->
-      <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
-        <button
-          type="button"
-          (click)="cerrarModal()"
-          class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-noto-sans text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:ring-offset-2"
-        >
-          Cerrar
-        </button>
+        <!-- Pie del modal -->
+        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t">
+          <button
+            type="button"
+            (click)="cerrarModal()"
+            class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-noto-sans text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:ring-offset-2"
+            >
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+}
 
 <!-- Estilos adicionales -->
 <style>
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-  .animate-fadeIn {
-    animation: fadeIn 0.3s ease-out;
-  }
+.animate-fadeIn {
+animation: fadeIn 0.3s ease-out;
+}
 </style>

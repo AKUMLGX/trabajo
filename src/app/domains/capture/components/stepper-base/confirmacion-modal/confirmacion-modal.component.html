@@ -3,10 +3,18 @@
   <div class="modal-header" [class]="'header-' + tipo">
     <div class="header-content">
       <div class="header-icon">
-        <span *ngIf="tipo === 'success'" class="icon-font icon-success">check_circle</span>
-        <span *ngIf="tipo === 'info'" class="icon-font icon-info">info</span>
-        <span *ngIf="tipo === 'warning'" class="icon-font icon-warning">warning</span>
-        <span *ngIf="tipo === 'error'" class="icon-font icon-error">error</span>
+        @if (tipo === 'success') {
+          <span class="icon-font icon-success">check_circle</span>
+        }
+        @if (tipo === 'info') {
+          <span class="icon-font icon-info">info</span>
+        }
+        @if (tipo === 'warning') {
+          <span class="icon-font icon-warning">warning</span>
+        }
+        @if (tipo === 'error') {
+          <span class="icon-font icon-error">error</span>
+        }
       </div>
       <div class="header-text">
         <h2 class="modal-title">{{ titulo }}</h2>
@@ -21,7 +29,9 @@
   <div class="modal-content">
     <div class="mensaje-container">
       <p class="mensaje-principal">{{ mensaje }}</p>
-      <p *ngIf="detalle" class="mensaje-detalle">{{ detalle }}</p>
+      @if (detalle) {
+        <p class="mensaje-detalle">{{ detalle }}</p>
+      }
     </div>
   </div>
 

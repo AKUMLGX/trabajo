@@ -1,240 +1,242 @@
 <!-- =====================================================
-     PANEL ESTADÍSTICO - Diseño Premium Institucional
-     ===================================================== -->
+PANEL ESTADÍSTICO - Diseño Premium Institucional
+===================================================== -->
 <div class="estadisticos-container">
   <!-- Header del panel -->
   <div class="panel-header">
     @if (!mostrarChart) {
-    <div class="header-content">
-      <div class="header-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-        </svg>
-      </div>
-      <div class="header-text">
-        <h1>Panel Estadístico</h1>
-        <p>Consulta y análisis de datos del sistema</p>
-      </div>
-    </div>
-    }
-    @if (mostrarChart) {
-    <div class="header-with-back">
       <div class="header-content">
-        <div class="header-icon small">
+        <div class="header-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
           </svg>
         </div>
-        <h1>Resultados Estadísticos</h1>
-    </div>
-      <button class="back-btn" (click)="goBack()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-        </svg>
-        <span>Volver</span>
-      </button>
-    </div>
+        <div class="header-text">
+          <h1>Panel Estadístico</h1>
+          <p>Consulta y análisis de datos del sistema</p>
+        </div>
+      </div>
+    }
+    @if (mostrarChart) {
+      <div class="header-with-back">
+        <div class="header-content">
+          <div class="header-icon small">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h1>Resultados Estadísticos</h1>
+        </div>
+        <button class="back-btn" (click)="goBack()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          <span>Volver</span>
+        </button>
+      </div>
     }
   </div>
 
   <!-- Formulario de consulta -->
   @if (!mostrarChart) {
-  <div class="query-section">
-    <div class="query-card">
-      <div class="card-header">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2"/>
-            <path d="M16 2v4M8 2v4M3 10h18"/>
-          </svg>
+    <div class="query-section">
+      <div class="query-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+          </div>
+          <h3>Selecciona el rango de fechas</h3>
         </div>
-        <h3>Selecciona el rango de fechas</h3>
+
+        <form class="date-form" [formGroup]="repotByDay">
+          <div class="date-field">
+            <label>
+              <span class="label-icon">📅</span>
+              Fecha Inicial
+            </label>
+            <input type="date" formControlName="fecha_inicial" class="date-input" lang="es-MX">
+          </div>
+
+          <div class="date-field">
+            <label>
+              <span class="label-icon">📅</span>
+              Fecha Final
+            </label>
+            <input type="date" formControlName="fecha_final" class="date-input" lang="es-MX">
+          </div>
+        </form>
+
+        <div class="action-area">
+          <button
+            class="consultar-btn"
+            (click)="tableApertura()"
+            (click)="tableSecondPices()"
+            (click)="estadisticosReport()"
+            (click)="estaditicasPorDia()"
+            [disabled]="!repotByDay.valid"
+            [class.disabled]="!repotByDay.valid">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <span>Consultar Estadísticas</span>
+          </button>
+        </div>
       </div>
-      
-      <form class="date-form" [formGroup]="repotByDay">
-        <div class="date-field">
-          <label>
-            <span class="label-icon">📅</span>
-            Fecha Inicial
-          </label>
-          <input type="date" formControlName="fecha_inicial" class="date-input" lang="es-MX">
+
+      <!-- Decoración -->
+      <div class="decoration-area">
+        <div class="deco-card card-1">
+          <div class="deco-icon">📊</div>
+          <span>Gráficas</span>
         </div>
-        
-        <div class="date-field">
-          <label>
-            <span class="label-icon">📅</span>
-            Fecha Final
-      </label>
-          <input type="date" formControlName="fecha_final" class="date-input" lang="es-MX">
+        <div class="deco-card card-2">
+          <div class="deco-icon">📈</div>
+          <span>Tendencias</span>
         </div>
-      </form>
-      
-      <div class="action-area">
-        <button 
-          class="consultar-btn" 
-          (click)="tableApertura()" 
-          (click)="tableSecondPices()" 
-          (click)="estadisticosReport()" 
-          (click)="estaditicasPorDia()" 
-          [disabled]="!repotByDay.valid"
-          [class.disabled]="!repotByDay.valid">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="M21 21l-4.35-4.35"/>
-          </svg>
-          <span>Consultar Estadísticas</span>
-        </button>
+        <div class="deco-card card-3">
+          <div class="deco-icon">📋</div>
+          <span>Reportes</span>
+        </div>
       </div>
     </div>
-    
-    <!-- Decoración -->
-    <div class="decoration-area">
-      <div class="deco-card card-1">
-        <div class="deco-icon">📊</div>
-        <span>Gráficas</span>
-      </div>
-      <div class="deco-card card-2">
-        <div class="deco-icon">📈</div>
-        <span>Tendencias</span>
-      </div>
-      <div class="deco-card card-3">
-        <div class="deco-icon">📋</div>
-        <span>Reportes</span>
-      </div>
-    </div>
-  </div>
   }
 
   <!-- Resultados -->
   @if (mostrarChart) {
-  <mat-dialog-content class="results-section">
-    <!-- Selectores -->
-    <div class="selectors-row">
-      <div class="selector-wrapper">
-        <label>Tipo de Reporte</label>
-        <select class="custom-select" (change)="onSelectedOption($event)">
-          <option disabled selected value="">Selecciona una opción</option>
-          <option value="requerimiento_">📄 Requerimiento</option>
-          <option value="respuesta">📝 Respuesta Interna</option>
-          <option value="respuestaFGR">🏛️ Respuesta a FGR</option>
-        </select>
-      </div>
-      
+    <mat-dialog-content class="results-section">
+      <!-- Selectores -->
+      <div class="selectors-row">
+        <div class="selector-wrapper">
+          <label>Tipo de Reporte</label>
+          <select class="custom-select" (change)="onSelectedOption($event)">
+            <option disabled selected value="">Selecciona una opción</option>
+            <option value="requerimiento_">📄 Requerimiento</option>
+            <option value="respuesta">📝 Respuesta Interna</option>
+            <option value="respuestaFGR">🏛️ Respuesta a FGR</option>
+          </select>
+        </div>
+
         @if (selecionarOpcion === 'requerimiento_') {
-      <div class="selector-wrapper">
-        <label>Filtrar por</label>
-        <select class="custom-select" (change)="onSelectedOptionSe($event)">
-        <option disabled selected value="">Selecciona una opción</option>
-          <option value="Requerimiento">📊 TODOS</option>
-          <option value="aperturas">📂 APERTURAS</option>
-          <option value="segundas_Piezas">📑 SEGUNDAS PIEZAS</option>
-      </select>
-      </div>
-    }
-      </div>
-
-    <!-- Contenido de resultados -->
-    @if (selecionarOpcion2 === "Requerimiento") {
-    <div class="results-content">
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>📊 Porcentaje de Atención</h3>
-          <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
-        </div>
-        <div class="total-badge">
-          <span class="total-label">Total de Requerimientos</span>
-          <span class="total-value">{{documento_respuesta_requerimiento}}</span>
-        </div>
-        <div class="chart-container">
-        <apx-chart [series]="series_requerimiento" [chart]="chart" [responsive]="responsive" [labels]="labels"
-          [colors]="colors" [dataLabels]="dataLabels">
-        </apx-chart>
-      </div>
-    </div>
-
-      <!-- Tabla de datos -->
-      <div class="table-card">
-        <div class="table-header">
-          <h3>📋 Conteo por Día</h3>
-    </div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Día</th>
-                <th>Número de Conteo</th>
-                <th>Total</th>
-                <th>Parcial</th>
-                <th>En Trámite</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (item of pages[pageSelected-1]; track $index) {
-              <tr>
-                <td>{{item.fecha_recepcion}}</td>
-                <td>{{item.total_requerimientos}}</td>
-                <td class="success">{{item.total_estatus}}</td>
-                <td class="warning">{{item.parcial_estatus}}</td>
-                <td class="info">{{item.en_tramite_estatus}}</td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-        
-        <div class="table-footer">
-          <div class="total-count">
-            Total de días: <strong>{{totalDeConteo}}</strong>
+          <div class="selector-wrapper">
+            <label>Filtrar por</label>
+            <select class="custom-select" (change)="onSelectedOptionSe($event)">
+              <option disabled selected value="">Selecciona una opción</option>
+              <option value="Requerimiento">📊 TODOS</option>
+              <option value="aperturas">📂 APERTURAS</option>
+              <option value="segundas_Piezas">📑 SEGUNDAS PIEZAS</option>
+            </select>
           </div>
-            @if (pages.length > 0) {
-          <div class="pagination-wrapper">
-            <ul>
-              <li *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }"></li>
-            </ul>
-              <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
-                [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
-            </div>
-            }
-          <p class="results-info">
-            Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
-            <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length }}</strong>
-            de <strong>{{ documents.length }}</strong> resultados
-          </p>
-        </div>
+        }
       </div>
 
-      <div class="download-section">
-        <button class="download-btn" (click)="getDownloadExcelRequerimientos()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-            <polyline points="7,10 12,15 17,10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Descargar Requerimientos
-        </button>
-    </div>
-    </div>
-    }
-    @else if (selecionarOpcion === "respuesta") {
-    <div class="results-content centered">
-      <div class="info-card">
-        <div class="info-icon">📝</div>
-        <h3>Respuestas Internas</h3>
-        <p class="date-range">{{fecha_Incial}} - {{fecha_Final}}</p>
-        <div class="total-display">
-          <span class="total-number">{{documento_respuesta_Interna}}</span>
-          <span class="total-text">Total de respuestas</span>
+      <!-- Contenido de resultados -->
+      @if (selecionarOpcion2 === "Requerimiento") {
+        <div class="results-content">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>📊 Porcentaje de Atención</h3>
+              <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
+            </div>
+            <div class="total-badge">
+              <span class="total-label">Total de Requerimientos</span>
+              <span class="total-value">{{documento_respuesta_requerimiento}}</span>
+            </div>
+            <div class="chart-container">
+              <apx-chart [series]="series_requerimiento" [chart]="chart" [responsive]="responsive" [labels]="labels"
+                [colors]="colors" [dataLabels]="dataLabels">
+              </apx-chart>
+            </div>
+          </div>
+
+          <!-- Tabla de datos -->
+          <div class="table-card">
+            <div class="table-header">
+              <h3>📋 Conteo por Día</h3>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Día</th>
+                    <th>Número de Conteo</th>
+                    <th>Total</th>
+                    <th>Parcial</th>
+                    <th>En Trámite</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of pages[pageSelected-1]; track $index) {
+                    <tr>
+                      <td>{{item.fecha_recepcion}}</td>
+                      <td>{{item.total_requerimientos}}</td>
+                      <td class="success">{{item.total_estatus}}</td>
+                      <td class="warning">{{item.parcial_estatus}}</td>
+                      <td class="info">{{item.en_tramite_estatus}}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer">
+              <div class="total-count">
+                Total de días: <strong>{{totalDeConteo}}</strong>
+              </div>
+              @if (pages.length > 0) {
+                <div class="pagination-wrapper">
+                  <ul>
+                    @for (document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }; track document) {
+                      <li></li>
+                    }
+                  </ul>
+                  <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+                  [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
+                </div>
+              }
+              <p class="results-info">
+                Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
+                <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length }}</strong>
+                de <strong>{{ documents.length }}</strong> resultados
+              </p>
+            </div>
+          </div>
+
+          <div class="download-section">
+            <button class="download-btn" (click)="getDownloadExcelRequerimientos()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Descargar Requerimientos
+            </button>
+          </div>
         </div>
-        <button class="download-btn" (click)="getDownloadExcelRespuestaInterna()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-            <polyline points="7,10 12,15 17,10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Descargar Respuesta Interna
-        </button>
+      }
+      @else if (selecionarOpcion === "respuesta") {
+      <div class="results-content centered">
+        <div class="info-card">
+          <div class="info-icon">📝</div>
+          <h3>Respuestas Internas</h3>
+          <p class="date-range">{{fecha_Incial}} - {{fecha_Final}}</p>
+          <div class="total-display">
+            <span class="total-number">{{documento_respuesta_Interna}}</span>
+            <span class="total-text">Total de respuestas</span>
+          </div>
+          <button class="download-btn" (click)="getDownloadExcelRespuestaInterna()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7,10 12,15 17,10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Descargar Respuesta Interna
+          </button>
+        </div>
       </div>
-    </div>
     }
     @else if (selecionarOpcion === "respuestaFGR") {
     <div class="results-content">
@@ -248,9 +250,9 @@
           <span class="total-value">{{documento_respuesta_FGR}}</span>
         </div>
         <div class="chart-container">
-        <apx-chart [series]="series_respuesta_FGR" [chart]="chart" [responsive]="responsive" [labels]="labels"
-          [colors]="colors" [dataLabels]="dataLabels">
-        </apx-chart>
+          <apx-chart [series]="series_respuesta_FGR" [chart]="chart" [responsive]="responsive" [labels]="labels"
+            [colors]="colors" [dataLabels]="dataLabels">
+          </apx-chart>
         </div>
         <div class="download-section inline">
           <button class="download-btn" (click)="getDownloadExcelRespuestaFGR()">
@@ -264,42 +266,42 @@
         </div>
       </div>
     </div>
-    }
-     @else if (selecionarOpcion2 === "segundas_Piezas") {
-    <div class="results-content">
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>📑 Segundas Piezas</h3>
-          <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
-        </div>
-        <div class="total-badge">
-          <span class="total-label">Total Segunda Pieza</span>
-          <span class="total-value">{{documento_segunda_pieza}}</span>
-        </div>
-        <div class="chart-container">
+  }
+  @else if (selecionarOpcion2 === "segundas_Piezas") {
+  <div class="results-content">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>📑 Segundas Piezas</h3>
+        <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
+      </div>
+      <div class="total-badge">
+        <span class="total-label">Total Segunda Pieza</span>
+        <span class="total-value">{{documento_segunda_pieza}}</span>
+      </div>
+      <div class="chart-container">
         <apx-chart [series]="series_segundapieza" [chart]="chart" [responsive]="responsive" [labels]="labels"
           [colors]="colors" [dataLabels]="dataLabels">
         </apx-chart>
       </div>
     </div>
 
-      <div class="table-card">
-        <div class="table-header">
-          <h3>📋 Conteo por Día - Segunda Pieza</h3>
-    </div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Día</th>
-                <th>Número de Conteo</th>
-                <th>Total</th>
-                <th>Parcial</th>
-                <th>En Trámite</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (item of pagesSegundaPieza[pageSelected-1]; track $index) {
+    <div class="table-card">
+      <div class="table-header">
+        <h3>📋 Conteo por Día - Segunda Pieza</h3>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Día</th>
+              <th>Número de Conteo</th>
+              <th>Total</th>
+              <th>Parcial</th>
+              <th>En Trámite</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of pagesSegundaPieza[pageSelected-1]; track $index) {
               <tr>
                 <td>{{item.fecha_recepcion}}</td>
                 <td>{{item.total_requerimientos}}</td>
@@ -307,110 +309,114 @@
                 <td class="warning">{{item.parcial_estatus}}</td>
                 <td class="info">{{item.en_tramite_estatus}}</td>
               </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-        <div class="table-footer">
-          <div class="total-count">Total: <strong>{{totalDeConteoSegundaPieza}}</strong></div>
-            @if (pagesSegundaPieza.length > 0) {
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <div class="total-count">Total: <strong>{{totalDeConteoSegundaPieza}}</strong></div>
+        @if (pagesSegundaPieza.length > 0) {
           <div class="pagination-wrapper">
             <ul>
-              <li *ngFor="let document of documentsSegundaPieza | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }"></li>
+              @for (document of documentsSegundaPieza | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }; track document) {
+                <li></li>
+              }
             </ul>
             <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel" [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
           </div>
-          }
-          <p class="results-info">
-            Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
-            <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsSegundaPieza.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documentsSegundaPieza.length }}</strong>
-            de <strong>{{ documentsSegundaPieza.length }}</strong>
-          </p>
-        </div>
-      </div>
-      <div class="download-section">
-        <button class="download-btn" (click)="getDownloadExcelSegundaPieza()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Descargar Segunda Pieza
-        </button>
-    </div>
-    </div>
-    }
-    @else if (selecionarOpcion2 === "aperturas") {
-    <div class="results-content">
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>📂 Aperturas</h3>
-          <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
-        </div>
-        <div class="total-badge">
-          <span class="total-label">Total de Aperturas</span>
-          <span class="total-value">{{documento_apertura}}</span>
-        </div>
-        <div class="chart-container">
-        <apx-chart [series]="series_aperturas" [chart]="chart" [responsive]="responsive" [labels]="labels"
-          [colors]="colors" [dataLabels]="dataLabels">
-        </apx-chart>
+        }
+        <p class="results-info">
+          Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
+          <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsSegundaPieza.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documentsSegundaPieza.length }}</strong>
+          de <strong>{{ documentsSegundaPieza.length }}</strong>
+        </p>
       </div>
     </div>
+    <div class="download-section">
+      <button class="download-btn" (click)="getDownloadExcelSegundaPieza()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar Segunda Pieza
+      </button>
+    </div>
+  </div>
+}
+@else if (selecionarOpcion2 === "aperturas") {
+<div class="results-content">
+  <div class="chart-card">
+    <div class="chart-header">
+      <h3>📂 Aperturas</h3>
+      <span class="date-range">{{fecha_Incial}} - {{fecha_Final}}</span>
+    </div>
+    <div class="total-badge">
+      <span class="total-label">Total de Aperturas</span>
+      <span class="total-value">{{documento_apertura}}</span>
+    </div>
+    <div class="chart-container">
+      <apx-chart [series]="series_aperturas" [chart]="chart" [responsive]="responsive" [labels]="labels"
+        [colors]="colors" [dataLabels]="dataLabels">
+      </apx-chart>
+    </div>
+  </div>
 
-      <div class="table-card">
-        <div class="table-header">
-          <h3>📋 Conteo por Día - Aperturas</h3>
+  <div class="table-card">
+    <div class="table-header">
+      <h3>📋 Conteo por Día - Aperturas</h3>
     </div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Día</th>
-                <th>Número de Conteo</th>
-                <th>Total</th>
-                <th>Parcial</th>
-                <th>En Trámite</th>
-              </tr>
-            </thead>
-            <tbody>
-            @for (item of pagesAperturas[pageSelected-1]; track $index) {
-              <tr>
-                <td>{{item.fecha_recepcion}}</td>
-                <td>{{item.total_requerimientos}}</td>
-                <td class="success">{{item.total_estatus}}</td>
-                <td class="warning">{{item.parcial_estatus}}</td>
-                <td class="info">{{item.en_tramite_estatus}}</td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-        <div class="table-footer">
-          <div class="total-count">Total: <strong>{{totalDeConteoAperturas}}</strong></div>
-            @if (pagesAperturas.length > 0) {
-          <div class="pagination-wrapper">
-            <ul>
-              <li *ngFor="let document of documentsApertura | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }"></li>
-            </ul>
-            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel" [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
-          </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Día</th>
+            <th>Número de Conteo</th>
+            <th>Total</th>
+            <th>Parcial</th>
+            <th>En Trámite</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of pagesAperturas[pageSelected-1]; track $index) {
+            <tr>
+              <td>{{item.fecha_recepcion}}</td>
+              <td>{{item.total_requerimientos}}</td>
+              <td class="success">{{item.total_estatus}}</td>
+              <td class="warning">{{item.parcial_estatus}}</td>
+              <td class="info">{{item.en_tramite_estatus}}</td>
+            </tr>
           }
-          <p class="results-info">
-            Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
-            <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsApertura.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documentsApertura.length }}</strong>
-            de <strong>{{ documentsApertura.length }}</strong>
-          </p>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-footer">
+      <div class="total-count">Total: <strong>{{totalDeConteoAperturas}}</strong></div>
+      @if (pagesAperturas.length > 0) {
+        <div class="pagination-wrapper">
+          <ul>
+            @for (document of documentsApertura | paginate: { itemsPerPage: itemsPerPage, currentPage: pageSelected }; track document) {
+              <li></li>
+            }
+          </ul>
+          <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel" [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
         </div>
-      </div>
-      <div class="download-section">
-        <button class="download-btn" (click)="getDownloadExcelApertura()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Descargar Aperturas
-        </button>
+      }
+      <p class="results-info">
+        Mostrando <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong> a
+        <strong>{{ (pageSelected - 1) * itemsPerPage + itemsPerPage < documentsApertura.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documentsApertura.length }}</strong>
+        de <strong>{{ documentsApertura.length }}</strong>
+      </p>
     </div>
-    </div>
-    }
-  </mat-dialog-content>
-  }
+  </div>
+  <div class="download-section">
+    <button class="download-btn" (click)="getDownloadExcelApertura()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Descargar Aperturas
+    </button>
+  </div>
+</div>
+}
+</mat-dialog-content>
+}
 </div>

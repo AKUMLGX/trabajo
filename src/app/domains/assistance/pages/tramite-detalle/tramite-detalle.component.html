@@ -67,11 +67,11 @@
               <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Folio Interno
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Carpeta de
-                Investigación</th>
+              Investigación</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Número de Oficio
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Persona
-                relacionada</th>
+              relacionada</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Plazo Atención
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-noto-sans uppercase tracking-wider">Fecha Recepcion
@@ -80,55 +80,57 @@
             </tr>
           </thead>
           @for (asunto of (filteredDataMul$ |async)?.slice((pageSelected-1)*itemsPerPage,pageSelected*itemsPerPage);
-          track $index) {
-          <tbody class="bg-white divide-y divide-gray-200">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.folio_interno}}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.carpeta_investigacion}}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.oficio}}</td>
-            <td class="px-6 py-4  max-w-[250px] truncate whitespace-nowrap overflow-hidden  text-sm text-gray-500">
-              <label title="{{ asunto.persona_relacionada }}" class="block truncate cursor-pointer">
-                {{ asunto.persona_relacionada }}
-              </label>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.plazo_atencion | plazo}}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.fecha_recepcion }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center">
-              <div class="flex justify-center space-x-2">
-                <button (click)="abrirModalPDF(templatePDF)"
-                  (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)" title="Ver PDF">
-                  <span class="icon-font">remove_red_eye</span>
-                </button>
-                <button (click)="descargarPdf(asunto.folio_interno, asunto.documento_escaneado)" title="Descargar PDF">
-                  <span class="icon-font">download</span>
-                </button>
-              </div>
-            </td>
-            <ng-template #sinResultados>
-              <tr>
-                <td colspan="7" class="px-6 py-6 text-center text-sm text-gray-500 bg-gray-50">
-                  No se encontraron asuntos que coincidan con los filtros seleccionados
-                </td>
-              </tr>
-            </ng-template>
-          </tbody>
+            track $index) {
+            <tbody class="bg-white divide-y divide-gray-200">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.folio_interno}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.carpeta_investigacion}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.oficio}}</td>
+              <td class="px-6 py-4  max-w-[250px] truncate whitespace-nowrap overflow-hidden  text-sm text-gray-500">
+                <label title="{{ asunto.persona_relacionada }}" class="block truncate cursor-pointer">
+                  {{ asunto.persona_relacionada }}
+                </label>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.plazo_atencion | plazo}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.fecha_recepcion }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <div class="flex justify-center space-x-2">
+                  <button (click)="abrirModalPDF(templatePDF)"
+                    (click)="openPdfViewer(asunto.folio_interno, asunto.documento_escaneado)" title="Ver PDF">
+                    <span class="icon-font">remove_red_eye</span>
+                  </button>
+                  <button (click)="descargarPdf(asunto.folio_interno, asunto.documento_escaneado)" title="Descargar PDF">
+                    <span class="icon-font">download</span>
+                  </button>
+                </div>
+              </td>
+              <ng-template #sinResultados>
+                <tr>
+                  <td colspan="7" class="px-6 py-6 text-center text-sm text-gray-500 bg-gray-50">
+                    No se encontraron asuntos que coincidan con los filtros seleccionados
+                  </td>
+                </tr>
+              </ng-template>
+            </tbody>
           }
         </table>
       </div>
       <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
         <div>
           @if (pages.length>0) {
-          <ul>
-            <li *ngFor="let  document of allData
-            | paginate
-                                : {
-                                    itemsPerPage: itemsPerPage,
-                                    currentPage: pageSelected
-                                  } "></li>
-          </ul>
-          <div class="has-text-centered">
-            <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
+            <ul>
+              @for ( document of allData
+                | paginate
+                : {
+                itemsPerPage: itemsPerPage,
+                currentPage: pageSelected
+                } ; track  document) {
+                <li></li>
+              }
+            </ul>
+            <div class="has-text-centered">
+              <pagination-controls (pageChange)="pageSelected = $event" [nextLabel]="labelsPaginator.nextLabel"
               [previousLabel]="labelsPaginator.previousLabel"></pagination-controls>
-          </div>
+            </div>
           }
         </div>
       </div>
@@ -137,14 +139,14 @@
           Mostrando
           <span class="font-noto-sans">{{
             (pageSelected - 1) * itemsPerPage + 1
-            }}</span>
+          }}</span>
           a
           <span class="font-noto-sans">{{
             (pageSelected - 1) * itemsPerPage + itemsPerPage < allData.length ? (pageSelected - 1) * itemsPerPage +
-              itemsPerPage : allData.length }}</span>
-              de
-              <span class="font-noto-sans">{{ allData.length }}</span>
-              resultados
+          itemsPerPage : allData.length }}</span>
+          de
+          <span class="font-noto-sans">{{ allData.length }}</span>
+          resultados
         </p>
       </div>
     </div>
@@ -152,18 +154,18 @@
 
   <ng-template #templatePDF>
     @if (visualizarPdf) {
-    <div class="p-6 w-[800px] h-[750px]">
-      <div class="p-6  bg-white rounded shadow-xl">
-        <app-pdf-viewer [mostrarBotonCerrar]="false"></app-pdf-viewer>
-      </div>
-      <div class="flex justify-center mb-4">
+      <div class="p-6 w-[800px] h-[750px]">
+        <div class="p-6  bg-white rounded shadow-xl">
+          <app-pdf-viewer [mostrarBotonCerrar]="false"></app-pdf-viewer>
+        </div>
+        <div class="flex justify-center mb-4">
         <button mat-dialog-close (click)="cerrarVisualizadorPdf()" class=" bg-wine text-white active:bg-pink-600 font-noto-sans
         uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none
         focus:outline-none mr-1 ease-linear transition-all duration-150">
-          Cerrar
-        </button>
+            Cerrar
+          </button>
+        </div>
       </div>
-    </div>
     }
   </ng-template>
 </div>

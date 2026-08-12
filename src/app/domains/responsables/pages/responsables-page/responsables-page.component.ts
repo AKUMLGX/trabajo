@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ResponsablesTableComponent } from '../../components/responsables-table/responsables-table.component';
 
 @Component({
     selector: 'app-responsables-page',
     imports: [
-        CommonModule,
-        ResponsablesTableComponent
-    ],
+    ResponsablesTableComponent
+],
     templateUrl: './responsables-page.component.html',
     styleUrl: './responsables-page.component.css'
 })

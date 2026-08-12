@@ -28,9 +28,9 @@
 
         <!-- Urgente -->
         <div class="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-4 border border-red-200 cursor-pointer hover:shadow-md transition-all duration-200"
-             (click)="aplicarFiltroPrioridad('urgente')"
-             [class.ring-2]="filtroActivo === 'urgente'"
-             [class.ring-red-500]="filtroActivo === 'urgente'">
+          (click)="aplicarFiltroPrioridad('urgente')"
+          [class.ring-2]="filtroActivo === 'urgente'"
+          [class.ring-red-500]="filtroActivo === 'urgente'">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-noto-sans text-red-700">Urgentes</p>
@@ -45,21 +45,25 @@
 
         <!-- Crítico con subtotal de plazo -->
         <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg p-4 border border-red-200 cursor-pointer hover:shadow-md transition-all duration-200"
-             (click)="aplicarFiltroPrioridad('critico')"
-             [class.ring-2]="filtroActivo === 'critico'"
-             [class.ring-red-400]="filtroActivo === 'critico'">
+          (click)="aplicarFiltroPrioridad('critico')"
+          [class.ring-2]="filtroActivo === 'critico'"
+          [class.ring-red-400]="filtroActivo === 'critico'">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-noto-sans text-red-600">Críticos</p>
               <p class="text-2xl font-noto-sans text-red-800">{{contadores.critico}}</p>
               <p class="text-xs text-red-500">
                 > 15 días •
-                <span *ngIf="contadores.criticoConPlazo > 0" class="text-orange-600 font-semibold">
-                  {{contadores.criticoConPlazo}}⏱️ con plazo
-                </span>
-                <span *ngIf="contadores.criticoConPlazo === 0" class="text-gray-500">
-                  sin plazos
-                </span>
+                @if (contadores.criticoConPlazo > 0) {
+                  <span class="text-orange-600 font-semibold">
+                    {{contadores.criticoConPlazo}}⏱️ con plazo
+                  </span>
+                }
+                @if (contadores.criticoConPlazo === 0) {
+                  <span class="text-gray-500">
+                    sin plazos
+                  </span>
+                }
               </p>
             </div>
             <div class="w-10 h-10 bg-red-200 rounded-full flex items-center justify-center">
@@ -70,21 +74,25 @@
 
         <!-- Normal con subtotal de plazo -->
         <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-4 border border-yellow-200 cursor-pointer hover:shadow-md transition-all duration-200"
-             (click)="aplicarFiltroPrioridad('normal')"
-             [class.ring-2]="filtroActivo === 'normal'"
-             [class.ring-yellow-500]="filtroActivo === 'normal'">
+          (click)="aplicarFiltroPrioridad('normal')"
+          [class.ring-2]="filtroActivo === 'normal'"
+          [class.ring-yellow-500]="filtroActivo === 'normal'">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-noto-sans text-yellow-700">Normales</p>
               <p class="text-2xl font-noto-sans text-yellow-900">{{contadores.normal}}</p>
               <p class="text-xs text-yellow-600">
                 5-15 días •
-                <span *ngIf="contadores.normalConPlazo > 0" class="text-orange-600 font-semibold">
-                  {{contadores.normalConPlazo}}⏱️ con plazo
-                </span>
-                <span *ngIf="contadores.normalConPlazo === 0" class="text-gray-500">
-                  sin plazos
-                </span>
+                @if (contadores.normalConPlazo > 0) {
+                  <span class="text-orange-600 font-semibold">
+                    {{contadores.normalConPlazo}}⏱️ con plazo
+                  </span>
+                }
+                @if (contadores.normalConPlazo === 0) {
+                  <span class="text-gray-500">
+                    sin plazos
+                  </span>
+                }
               </p>
             </div>
             <div class="w-10 h-10 bg-yellow-200 rounded-full flex items-center justify-center">
@@ -95,21 +103,25 @@
 
         <!-- Reciente con subtotal de plazo -->
         <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border border-green-200 cursor-pointer hover:shadow-md transition-all duration-200"
-             (click)="aplicarFiltroPrioridad('reciente')"
-             [class.ring-2]="filtroActivo === 'reciente'"
-             [class.ring-green-500]="filtroActivo === 'reciente'">
+          (click)="aplicarFiltroPrioridad('reciente')"
+          [class.ring-2]="filtroActivo === 'reciente'"
+          [class.ring-green-500]="filtroActivo === 'reciente'">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-noto-sans text-green-700">Recientes</p>
               <p class="text-2xl font-noto-sans text-green-900">{{contadores.reciente}}</p>
               <p class="text-xs text-green-600">
                 < 4 días •
-                <span *ngIf="contadores.recienteConPlazo > 0" class="text-orange-600 font-semibold">
-                  {{contadores.recienteConPlazo}}⏱️ con plazo
-                </span>
-                <span *ngIf="contadores.recienteConPlazo === 0" class="text-gray-500">
-                  sin plazos
-                </span>
+                @if (contadores.recienteConPlazo > 0) {
+                  <span class="text-orange-600 font-semibold">
+                    {{contadores.recienteConPlazo}}⏱️ con plazo
+                  </span>
+                }
+                @if (contadores.recienteConPlazo === 0) {
+                  <span class="text-gray-500">
+                    sin plazos
+                  </span>
+                }
               </p>
             </div>
             <div class="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
@@ -126,72 +138,78 @@
           <span class="text-sm font-noto-sans text-gray-700 mr-2">Filtros rápidos:</span>
 
           <button (click)="aplicarFiltroPrioridad('todos')"
-                  [class.bg-[#691C32]]="filtroActivo === 'todos'"
-                  [class.text-white]="filtroActivo === 'todos'"
-                  [class.bg-gray-100]="filtroActivo !== 'todos'"
-                  [class.text-gray-700]="filtroActivo !== 'todos'"
-                  class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
+            [class.bg-[#691C32]]="filtroActivo === 'todos'"
+            [class.text-white]="filtroActivo === 'todos'"
+            [class.bg-gray-100]="filtroActivo !== 'todos'"
+            [class.text-gray-700]="filtroActivo !== 'todos'"
+            class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
             Todos ({{contadores.total}})
           </button>
 
           <button (click)="aplicarFiltroPrioridad('urgente')"
-                  [class.bg-red-500]="filtroActivo === 'urgente'"
-                  [class.text-white]="filtroActivo === 'urgente'"
-                  [class.bg-red-100]="filtroActivo !== 'urgente'"
-                  [class.text-red-700]="filtroActivo !== 'urgente'"
-                  class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
+            [class.bg-red-500]="filtroActivo === 'urgente'"
+            [class.text-white]="filtroActivo === 'urgente'"
+            [class.bg-red-100]="filtroActivo !== 'urgente'"
+            [class.text-red-700]="filtroActivo !== 'urgente'"
+            class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
             🚨 Urgentes ({{contadores.urgente}})
           </button>
 
 
 
           <button (click)="aplicarFiltroPrioridad('critico')"
-                  [class.bg-red-500]="filtroActivo === 'critico'"
-                  [class.text-white]="filtroActivo === 'critico'"
-                  [class.bg-red-100]="filtroActivo !== 'critico'"
-                  [class.text-red-700]="filtroActivo !== 'critico'"
-                  class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
-            🔴 Críticos ({{contadores.critico}}<span *ngIf="contadores.criticoConPlazo > 0" class="text-orange-300">•{{contadores.criticoConPlazo}}⏱️</span>)
+            [class.bg-red-500]="filtroActivo === 'critico'"
+            [class.text-white]="filtroActivo === 'critico'"
+            [class.bg-red-100]="filtroActivo !== 'critico'"
+            [class.text-red-700]="filtroActivo !== 'critico'"
+            class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
+            🔴 Críticos ({{contadores.critico}}@if (contadores.criticoConPlazo > 0) {
+            <span class="text-orange-300">•{{contadores.criticoConPlazo}}⏱️</span>
+            })
           </button>
 
           <button (click)="aplicarFiltroPrioridad('normal')"
-                  [class.bg-yellow-500]="filtroActivo === 'normal'"
-                  [class.text-white]="filtroActivo === 'normal'"
-                  [class.bg-yellow-100]="filtroActivo !== 'normal'"
-                  [class.text-yellow-700]="filtroActivo !== 'normal'"
-                  class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
-            🟡 Normales ({{contadores.normal}}<span *ngIf="contadores.normalConPlazo > 0" class="text-orange-300">•{{contadores.normalConPlazo}}⏱️</span>)
+            [class.bg-yellow-500]="filtroActivo === 'normal'"
+            [class.text-white]="filtroActivo === 'normal'"
+            [class.bg-yellow-100]="filtroActivo !== 'normal'"
+            [class.text-yellow-700]="filtroActivo !== 'normal'"
+            class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
+            🟡 Normales ({{contadores.normal}}@if (contadores.normalConPlazo > 0) {
+            <span class="text-orange-300">•{{contadores.normalConPlazo}}⏱️</span>
+            })
           </button>
 
           <button (click)="aplicarFiltroPrioridad('reciente')"
-                  [class.bg-green-500]="filtroActivo === 'reciente'"
-                  [class.text-white]="filtroActivo === 'reciente'"
-                  [class.bg-green-100]="filtroActivo !== 'reciente'"
-                  [class.text-green-700]="filtroActivo !== 'reciente'"
-                  class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
-            🟢 Recientes ({{contadores.reciente}}<span *ngIf="contadores.recienteConPlazo > 0" class="text-orange-300">•{{contadores.recienteConPlazo}}⏱️</span>)
+            [class.bg-green-500]="filtroActivo === 'reciente'"
+            [class.text-white]="filtroActivo === 'reciente'"
+            [class.bg-green-100]="filtroActivo !== 'reciente'"
+            [class.text-green-700]="filtroActivo !== 'reciente'"
+            class="px-3 py-1.5 rounded-full text-xs font-noto-sans transition-all duration-200 hover:shadow-sm">
+            🟢 Recientes ({{contadores.reciente}}@if (contadores.recienteConPlazo > 0) {
+            <span class="text-orange-300">•{{contadores.recienteConPlazo}}⏱️</span>
+            })
           </button>
         </div>
 
         <!-- Toggle vista agrupada y búsqueda -->
         <div class="flex items-center gap-4">
           <!-- Búsqueda -->
-      <div class="relative">
-        <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-gray-500">
-          <!-- <mat-icon>search</mat-icon> -->
-          <span class="icon-font">search</span>
-        </span>
-        <input type="text" [(ngModel)]="searchText" (ngModelChange)="onDearchChange($event)"
-          placeholder="Buscar por persona relacionada"
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-gray-500">
+              <!-- <mat-icon>search</mat-icon> -->
+              <span class="icon-font">search</span>
+            </span>
+            <input type="text" [(ngModel)]="searchText" (ngModelChange)="onDearchChange($event)"
+              placeholder="Buscar por persona relacionada"
               class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#691C32] w-64">
           </div>
 
           <!-- Toggle vista -->
           <button (click)="toggleVistaAgrupacion()"
-                  class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-noto-sans">
+            class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-noto-sans">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    [attr.d]="mostrarAgrupacion ? 'M4 6h16M4 10h16M4 14h16M4 18h16' : 'M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0 0h2a2 2 0 002-2V7a2 2 0 00-2-2H9z'" />
+                [attr.d]="mostrarAgrupacion ? 'M4 6h16M4 10h16M4 14h16M4 18h16' : 'M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0 0h2a2 2 0 002-2V7a2 2 0 00-2-2H9z'" />
             </svg>
             {{mostrarAgrupacion ? 'Vista Lista' : 'Vista Agrupada'}}
           </button>
@@ -200,404 +218,404 @@
     </div>
 
     <!-- 📋 VISTA AGRUPADA POR PRIORIDADES -->
-    <div *ngIf="mostrarAgrupacion" class="space-y-4 mb-6">
-      <ng-container *ngFor="let grupo of ['urgente', 'critico', 'normal', 'reciente']">
-        <div *ngIf="obtenerDatosAgrupados()[grupo].length > 0"
-             [class]="'bg-white rounded-lg shadow-lg border overflow-hidden ' + getConfiguracionPrioridad(grupo).borderColor">
-
-          <!-- Header del grupo -->
-          <div [class]="'p-4 cursor-pointer hover:bg-opacity-80 transition-colors ' + getConfiguracionPrioridad(grupo).bgColor"
-               (click)="toggleSeccion(grupo)">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <span class="text-xl">{{getConfiguracionPrioridad(grupo).icono}}</span>
-                <div>
-                  <h3 [class]="'font-noto-sans text-lg ' + getConfiguracionPrioridad(grupo).color">
-                    {{getConfiguracionPrioridad(grupo).titulo}}
-                  </h3>
-                  <p class="text-sm text-gray-600">
-                    {{getConfiguracionPrioridad(grupo).descripcion}} • {{obtenerDatosAgrupados()[grupo].length}} casos
-                  </p>
+    @if (mostrarAgrupacion) {
+      <div class="space-y-4 mb-6">
+        @for (grupo of ['urgente', 'critico', 'normal', 'reciente']; track grupo) {
+          @if (obtenerDatosAgrupados()[grupo].length > 0) {
+            <div
+              [class]="'bg-white rounded-lg shadow-lg border overflow-hidden ' + getConfiguracionPrioridad(grupo).borderColor">
+              <!-- Header del grupo -->
+              <div [class]="'p-4 cursor-pointer hover:bg-opacity-80 transition-colors ' + getConfiguracionPrioridad(grupo).bgColor"
+                (click)="toggleSeccion(grupo)">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-3">
+                    <span class="text-xl">{{getConfiguracionPrioridad(grupo).icono}}</span>
+                    <div>
+                      <h3 [class]="'font-noto-sans text-lg ' + getConfiguracionPrioridad(grupo).color">
+                        {{getConfiguracionPrioridad(grupo).titulo}}
+                      </h3>
+                      <p class="text-sm text-gray-600">
+                        {{getConfiguracionPrioridad(grupo).descripcion}} • {{obtenerDatosAgrupados()[grupo].length}} casos
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <!-- Contador -->
+                    <span [class]="'px-3 py-1 rounded-full text-sm font-noto-sans ' + getConfiguracionPrioridad(grupo).bgColor + ' ' + getConfiguracionPrioridad(grupo).color">
+                      {{obtenerDatosAgrupados()[grupo].length}}
+                    </span>
+                    <!-- Icono colapsar/expandir -->
+                    <svg class="w-5 h-5 transform transition-transform duration-200 text-gray-500"
+                      [class.rotate-180]="isSeccionColapsada(grupo)"
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
                 </div>
               </div>
-
-              <div class="flex items-center space-x-3">
-                <!-- Contador -->
-                <span [class]="'px-3 py-1 rounded-full text-sm font-noto-sans ' + getConfiguracionPrioridad(grupo).bgColor + ' ' + getConfiguracionPrioridad(grupo).color">
-                  {{obtenerDatosAgrupados()[grupo].length}}
-                </span>
-
-                <!-- Icono colapsar/expandir -->
-                <svg class="w-5 h-5 transform transition-transform duration-200 text-gray-500"
-                     [class.rotate-180]="isSeccionColapsada(grupo)"
-                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <!-- Contenido del grupo -->
-          <div *ngIf="!isSeccionColapsada(grupo)" class="border-t border-gray-200">
-            <div class="overflow-x-auto">
-              <table class="w-full min-w-[900px]">
-                <thead>
-                  <tr class="bg-gray-50 border-b border-gray-200">
-                    <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Ind.</th>
-                    <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Folio Interno</th>
-                    <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Carpeta de Investigación</th>
-                    <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Oficio</th>
-                    <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider min-w-[250px]">Persona Relacionada</th>
-                    <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Fecha Recepción</th>
-                    <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Plazo de Atención</th>
-                    <th class="py-3 px-4 text-center text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                  <tr *ngFor="let asunto of obtenerDatosAgrupados()[grupo]"
+              <!-- Contenido del grupo -->
+              @if (!isSeccionColapsada(grupo)) {
+                <div class="border-t border-gray-200">
+                  <div class="overflow-x-auto">
+                    <table class="w-full min-w-[900px]">
+                      <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                          <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Ind.</th>
+                          <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Folio Interno</th>
+                          <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Carpeta de Investigación</th>
+                          <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Oficio</th>
+                          <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider min-w-[250px]">Persona Relacionada</th>
+                          <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Fecha Recepción</th>
+                          <th class="py-3 px-4 text-left text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Plazo de Atención</th>
+                          <th class="py-3 px-4 text-center text-xs font-noto-sans text-gray-500 uppercase tracking-wider">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200">
+                        @for (asunto of obtenerDatosAgrupados()[grupo]; track asunto) {
+                          <tr
                       [class]="'hover:bg-gray-50 transition-colors group ' +
                                (tienePlazo(asunto) ? 'border-l-4 border-orange-300 bg-orange-25' : '')">
-
-                    <!-- Semáforo -->
-                    <td class="py-3 px-4 relative">
-                      <div class="flex items-center justify-center">
-                        <div [class]="'w-4 h-4 rounded-full shadow-md transform transition-all duration-200 group-hover:scale-110 ' + getColorSemaforo(asunto)"
-                             [title]="getDescripcionPrioridad(asunto)">
-                        </div>
-                        <div *ngIf="asunto.plazo_atencion === 0"
-                             class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping">
-                        </div>
-                      </div>
-                    </td>
-
-                    <!-- Datos de la fila -->
-                    <td class="py-3 px-4 text-sm text-gray-900">{{asunto.folio_interno}}</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">{{asunto.carpeta_investigacion}}</td>
-                    <td class="py-3 px-4 text-sm text-gray-900">{{asunto.oficio}}</td>
-
-                    <!-- Persona relacionada con manejo de texto largo -->
-                    <td class="py-3 px-4 min-w-[250px] max-w-[300px]">
-                      <div class="relative">
-                        <div class="break-words text-sm text-gray-900">
-                          <span [innerHTML]="isTextoExpandido(asunto.folio_interno) ? asunto.persona_relacionada : truncarTexto(asunto.persona_relacionada, 60)"></span>
-                        </div>
-
-                        <button *ngIf="necesitaTruncado(asunto.persona_relacionada, 60)"
-                                (click)="toggleTextoExpandido(asunto.folio_interno)"
-                                class="inline-flex items-center mt-1 text-xs text-blue-600 hover:text-blue-800 transition-colors">
-                          <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  [attr.d]="isTextoExpandido(asunto.folio_interno) ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'" />
-                          </svg>
-                          {{isTextoExpandido(asunto.folio_interno) ? 'Ver menos' : 'Ver más'}}
-                        </button>
-                      </div>
-                    </td>
-
-                    <td class="py-3 px-4 text-sm text-gray-900">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
-
-                    <!-- Plazo con badges híbridos -->
-                    <td class="py-3 px-4">
-                      <div class="flex flex-col items-start space-y-1">
+                            <!-- Semáforo -->
+                            <td class="py-3 px-4 relative">
+                              <div class="flex items-center justify-center">
+                                <div [class]="'w-4 h-4 rounded-full shadow-md transform transition-all duration-200 group-hover:scale-110 ' + getColorSemaforo(asunto)"
+                                  [title]="getDescripcionPrioridad(asunto)">
+                                </div>
+                                @if (asunto.plazo_atencion === 0) {
+                                  <div
+                                    class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping">
+                                  </div>
+                                }
+                              </div>
+                            </td>
+                            <!-- Datos de la fila -->
+                            <td class="py-3 px-4 text-sm text-gray-900">{{asunto.folio_interno}}</td>
+                            <td class="py-3 px-4 text-sm text-gray-900">{{asunto.carpeta_investigacion}}</td>
+                            <td class="py-3 px-4 text-sm text-gray-900">{{asunto.oficio}}</td>
+                            <!-- Persona relacionada con manejo de texto largo -->
+                            <td class="py-3 px-4 min-w-[250px] max-w-[300px]">
+                              <div class="relative">
+                                <div class="break-words text-sm text-gray-900">
+                                  <span [innerHTML]="isTextoExpandido(asunto.folio_interno) ? asunto.persona_relacionada : truncarTexto(asunto.persona_relacionada, 60)"></span>
+                                </div>
+                                @if (necesitaTruncado(asunto.persona_relacionada, 60)) {
+                                  <button
+                                    (click)="toggleTextoExpandido(asunto.folio_interno)"
+                                    class="inline-flex items-center mt-1 text-xs text-blue-600 hover:text-blue-800 transition-colors">
+                                    <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        [attr.d]="isTextoExpandido(asunto.folio_interno) ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'" />
+                                    </svg>
+                                    {{isTextoExpandido(asunto.folio_interno) ? 'Ver menos' : 'Ver más'}}
+                                  </button>
+                                }
+                              </div>
+                            </td>
+                            <td class="py-3 px-4 text-sm text-gray-900">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
+                            <!-- Plazo con badges híbridos -->
+                            <td class="py-3 px-4">
+                              <div class="flex flex-col items-start space-y-1">
                         <span [class]="'px-2 py-1 rounded-full text-xs font-noto-sans ' +
                                       (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800 animate-pulse border border-red-300' :
                                        asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800 border border-gray-300' :
                                        'bg-blue-100 text-blue-800 border border-blue-300')">
-                          {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
-                        </span>
-
-                        <!-- Badge principal por antigüedad -->
-                        <span [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePrioridad(asunto).clase">
-                          {{getBadgePrioridad(asunto).texto}}
-                        </span>
-
-                        <!-- Badge secundario para plazo (si aplica) -->
-                        <span *ngIf="getBadgePlazo(asunto)"
-                              [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePlazo(asunto)!.clase">
-                          {{getBadgePlazo(asunto)!.texto}}
-                        </span>
-                      </div>
-                    </td>
-
-                    <!-- Acciones -->
-                    <td class="py-3 px-4">
-                      <div class="flex items-center justify-center gap-1">
-                        <!-- Botón Detalle -->
-                        <button (click)="abrirModalDetalle(this.templateDetalle, asunto)"
-                          class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
-                          title="Ver detalle">
-                          <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </button>
-
-                        <!-- 🆕 Botón Ver PDF (ojo verde) -->
+                                  {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
+                                </span>
+                                <!-- Badge principal por antigüedad -->
+                                <span [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePrioridad(asunto).clase">
+                                  {{getBadgePrioridad(asunto).texto}}
+                                </span>
+                                <!-- Badge secundario para plazo (si aplica) -->
+                                @if (getBadgePlazo(asunto)) {
+                                  <span
+                                    [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePlazo(asunto)!.clase">
+                                    {{getBadgePlazo(asunto)!.texto}}
+                                  </span>
+                                }
+                              </div>
+                            </td>
+                            <!-- Acciones -->
+                            <td class="py-3 px-4">
+                              <div class="flex items-center justify-center gap-1">
+                                <!-- Botón Detalle -->
+                                <button (click)="abrirModalDetalle(this.templateDetalle, asunto)"
+                                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
+                                  title="Ver detalle">
+                                  <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                </button>
+                                <!-- 🆕 Botón Ver PDF (ojo verde) -->
                         <button class="group relative inline-flex items-center justify-center p-2 rounded-lg
                            bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md" title="Ver documento"
-                          (click)="abrirModalPDF(templatePDF)"
-                          (click)="openPdfViewer(asunto.folio_interno, asunto.folio_scanner)">
-                          <!-- <mat-icon>remove_red_eye</mat-icon> -->
-                          <span class="icon-font">remove_red_eye</span>
-                        </button>
-
-                        <!-- Botón Asignar -->
-                        <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
-                          class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-[#691C32] hover:bg-[#8B1D3C] transition-all duration-200 hover:shadow-md"
-                          title="Asignar">
-                          <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                                  (click)="abrirModalPDF(templatePDF)"
+                                  (click)="openPdfViewer(asunto.folio_interno, asunto.folio_scanner)">
+                                  <!-- <mat-icon>remove_red_eye</mat-icon> -->
+                                  <span class="icon-font">remove_red_eye</span>
+                                </button>
+                                <!-- Botón Asignar -->
+                                <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
+                                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-[#691C32] hover:bg-[#8B1D3C] transition-all duration-200 hover:shadow-md"
+                                  title="Asignar">
+                                  <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              }
             </div>
+          }
+        }
+        <!-- Mensaje si no hay datos -->
+        @if (allData.length === 0) {
+          <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-noto-sans text-gray-900 mb-2">No hay asuntos por asignar</h3>
+            <p class="text-gray-500">Todos los asuntos han sido procesados o no hay datos disponibles.</p>
           </div>
-        </div>
-      </ng-container>
-
-      <!-- Mensaje si no hay datos -->
-      <div *ngIf="allData.length === 0" class="bg-white rounded-lg shadow-lg p-8 text-center">
-        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-          <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-noto-sans text-gray-900 mb-2">No hay asuntos por asignar</h3>
-        <p class="text-gray-500">Todos los asuntos han sido procesados o no hay datos disponibles.</p>
+        }
       </div>
-    </div>
+    }
 
     <!-- 📱 VISTA DE LISTA TRADICIONAL (CONTROLES DE SCROLL HORIZONTAL MODERNO) -->
-    <div *ngIf="!mostrarAgrupacion" class="bg-white rounded-lg shadow-lg overflow-hidden">
-      <!-- Botones de scroll horizontal superiores -->
-      <div *ngIf="scrollHorizontalVisible" class="flex items-center justify-between bg-gray-50 border-b px-4 py-2">
-        <div class="flex items-center space-x-2">
-          <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-          </svg>
-          <span class="text-sm text-gray-600">Desplaza horizontalmente para ver más campos</span>
-        </div>
-        <div class="flex space-x-2">
-          <button (click)="scrollHorizontal('left')"
-                  class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
-            <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button (click)="scrollHorizontal('right')"
-                  class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
-            <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Contenedor con scroll horizontal -->
-      <div class="tabla-scroll overflow-x-auto">
-        <table class="w-full min-w-[900px]">
-        <thead>
-          <tr class="bg-[#691C32] text-white">
-              <th class="py-2 px-3 text-left whitespace-nowrap">Ind.</th>
-              <th class="py-2 px-3 text-left whitespace-nowrap">Folio Interno</th>
-              <th class="py-2 px-3 text-left whitespace-nowrap">Carpeta de Investigación</th>
-              <th class="py-2 px-3 text-left whitespace-nowrap">Oficio</th>
-              <th class="py-2 px-3 text-left whitespace-nowrap min-w-[250px]">Persona Relacionada</th>
-              <th class="py-2 px-3 text-left whitespace-nowrap">Fecha Recepción</th>
-              <th class="py-2 px-3 text-left whitespace-nowrap">Plazo de Atención</th>
-              <th class="py-2 px-3 text-center whitespace-nowrap">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let asunto of asuntosPaginados"
+    @if (!mostrarAgrupacion) {
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Botones de scroll horizontal superiores -->
+        @if (scrollHorizontalVisible) {
+          <div class="flex items-center justify-between bg-gray-50 border-b px-4 py-2">
+            <div class="flex items-center space-x-2">
+              <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+              </svg>
+              <span class="text-sm text-gray-600">Desplaza horizontalmente para ver más campos</span>
+            </div>
+            <div class="flex space-x-2">
+              <button (click)="scrollHorizontal('left')"
+                class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
+                <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button (click)="scrollHorizontal('right')"
+                class="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 transition-colors shadow-sm">
+                <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+        <!-- Contenedor con scroll horizontal -->
+        <div class="tabla-scroll overflow-x-auto">
+          <table class="w-full min-w-[900px]">
+            <thead>
+              <tr class="bg-[#691C32] text-white">
+                <th class="py-2 px-3 text-left whitespace-nowrap">Ind.</th>
+                <th class="py-2 px-3 text-left whitespace-nowrap">Folio Interno</th>
+                <th class="py-2 px-3 text-left whitespace-nowrap">Carpeta de Investigación</th>
+                <th class="py-2 px-3 text-left whitespace-nowrap">Oficio</th>
+                <th class="py-2 px-3 text-left whitespace-nowrap min-w-[250px]">Persona Relacionada</th>
+                <th class="py-2 px-3 text-left whitespace-nowrap">Fecha Recepción</th>
+                <th class="py-2 px-3 text-left whitespace-nowrap">Plazo de Atención</th>
+                <th class="py-2 px-3 text-center whitespace-nowrap">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (asunto of asuntosPaginados; track asunto) {
+                <tr
                 [class]="'border-b hover:bg-gray-50 even:bg-gray-50 transition-colors group ' +
                          (tienePlazo(asunto) ? 'border-l-4 border-orange-300' : '')">
-              <!-- 🚦 SEMÁFORO MEJORADO CON PRIORIDAD VISUAL -->
-              <td class="py-2 px-3 relative">
-                <div class="flex items-center justify-center">
-                  <div [class]="'w-4 h-4 rounded-full shadow-md transform transition-all duration-200 group-hover:scale-110 ' + getColorSemaforo(asunto)"
-                       [title]="getDescripcionPrioridad(asunto)">
-                  </div>
-                  <!-- 🚨 Indicador especial para URGENTE -->
-                  <div *ngIf="asunto.plazo_atencion === 0"
-                       class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping">
-                  </div>
-                </div>
-              </td>
-              <td class="py-2 px-3 whitespace-nowrap">{{asunto.folio_interno}}</td>
-              <td class="py-2 px-3 whitespace-nowrap">{{asunto.carpeta_investigacion}}</td>
-              <td class="py-2 px-3 whitespace-nowrap">{{asunto.oficio}}</td>
-              <!-- 📝 CELDA CON MANEJO DE TEXTO LARGO -->
-              <td class="py-2 px-3 min-w-[250px] max-w-[300px]">
-                <div class="relative">
-                  <div class="break-words">
-                    <span [innerHTML]="isTextoExpandido(asunto.folio_interno) ? asunto.persona_relacionada : truncarTexto(asunto.persona_relacionada, 60)"></span>
-                  </div>
-
-                  <!-- Botón expandir/contraer para textos largos -->
-                  <button *ngIf="necesitaTruncado(asunto.persona_relacionada, 60)"
+                  <!-- 🚦 SEMÁFORO MEJORADO CON PRIORIDAD VISUAL -->
+                  <td class="py-2 px-3 relative">
+                    <div class="flex items-center justify-center">
+                      <div [class]="'w-4 h-4 rounded-full shadow-md transform transition-all duration-200 group-hover:scale-110 ' + getColorSemaforo(asunto)"
+                        [title]="getDescripcionPrioridad(asunto)">
+                      </div>
+                      <!-- 🚨 Indicador especial para URGENTE -->
+                      @if (asunto.plazo_atencion === 0) {
+                        <div
+                          class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping">
+                        </div>
+                      }
+                    </div>
+                  </td>
+                  <td class="py-2 px-3 whitespace-nowrap">{{asunto.folio_interno}}</td>
+                  <td class="py-2 px-3 whitespace-nowrap">{{asunto.carpeta_investigacion}}</td>
+                  <td class="py-2 px-3 whitespace-nowrap">{{asunto.oficio}}</td>
+                  <!-- 📝 CELDA CON MANEJO DE TEXTO LARGO -->
+                  <td class="py-2 px-3 min-w-[250px] max-w-[300px]">
+                    <div class="relative">
+                      <div class="break-words">
+                        <span [innerHTML]="isTextoExpandido(asunto.folio_interno) ? asunto.persona_relacionada : truncarTexto(asunto.persona_relacionada, 60)"></span>
+                      </div>
+                      <!-- Botón expandir/contraer para textos largos -->
+                      @if (necesitaTruncado(asunto.persona_relacionada, 60)) {
+                        <button
                           (click)="toggleTextoExpandido(asunto.folio_interno)"
                           class="inline-flex items-center mt-1 text-xs text-blue-600 hover:text-blue-800 transition-colors">
-                    <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            [attr.d]="isTextoExpandido(asunto.folio_interno) ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'" />
-                    </svg>
-                    {{isTextoExpandido(asunto.folio_interno) ? 'Ver menos' : 'Ver más'}}
-                  </button>
-
-                  <!-- Tooltip para mostrar texto completo en hover -->
-                  <div *ngIf="necesitaTruncado(asunto.persona_relacionada, 60) && !isTextoExpandido(asunto.folio_interno)"
-                       class="absolute bottom-full left-0 mb-2 w-80 max-w-md p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
-                    <div class="break-words">{{asunto.persona_relacionada}}</div>
-                    <div class="absolute top-full left-4 w-2 h-2 bg-gray-900 transform rotate-45"></div>
-                  </div>
-                </div>
-            </td>
-              <td class="py-2 px-3 whitespace-nowrap">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
-              <!-- 🎯 PLAZO ATENCIÓN HÍBRIDO -->
-              <td class="py-2 px-3 whitespace-nowrap">
-                <div class="flex flex-col items-start space-y-1">
-                  <!-- Badge principal de plazo -->
+                          <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              [attr.d]="isTextoExpandido(asunto.folio_interno) ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'" />
+                          </svg>
+                          {{isTextoExpandido(asunto.folio_interno) ? 'Ver menos' : 'Ver más'}}
+                        </button>
+                      }
+                      <!-- Tooltip para mostrar texto completo en hover -->
+                      @if (necesitaTruncado(asunto.persona_relacionada, 60) && !isTextoExpandido(asunto.folio_interno)) {
+                        <div
+                          class="absolute bottom-full left-0 mb-2 w-80 max-w-md p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
+                          <div class="break-words">{{asunto.persona_relacionada}}</div>
+                          <div class="absolute top-full left-4 w-2 h-2 bg-gray-900 transform rotate-45"></div>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                  <td class="py-2 px-3 whitespace-nowrap">{{formatearFechaRecepcion(asunto.fecha_recepcion)}}</td>
+                  <!-- 🎯 PLAZO ATENCIÓN HÍBRIDO -->
+                  <td class="py-2 px-3 whitespace-nowrap">
+                    <div class="flex flex-col items-start space-y-1">
+                      <!-- Badge principal de plazo -->
               <span [class]="'px-2 py-1 rounded-full text-xs font-noto-sans ' +
                                 (asunto.plazo_atencion === 0 ? 'bg-red-100 text-red-800 animate-pulse border border-red-300' :
                                  asunto.plazo_atencion === null ? 'bg-gray-100 text-gray-800 border border-gray-300' :
                                  'bg-blue-100 text-blue-800 border border-blue-300')">
-                {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
-              </span>
-
-                  <!-- Badge de prioridad por antigüedad -->
-                  <span [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePrioridad(asunto).clase">
-                    {{getBadgePrioridad(asunto).texto}}
-                  </span>
-
-                  <!-- Badge secundario para plazo (si aplica) -->
-                  <span *ngIf="getBadgePlazo(asunto)"
-                        [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePlazo(asunto)!.clase">
-                    {{getBadgePlazo(asunto)!.texto}}
-                  </span>
-                </div>
-            </td>
-
-
-
-              <td class="py-3 px-3 whitespace-nowrap">
-              <div class="flex items-center justify-center gap-1">
-                <!-- Botón Detalle -->
-                <button (click)="abrirModalDetalle(templateDetalle, asunto)"
-                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
-                  title="Ver detalle">
-                  <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Detalle
-                  </span>
-                </button>
-
-                <!-- 🆕 Botón Ver PDF (ojo verde) -->
+                        {{getDescripcionPlazoAtencion(asunto.plazo_atencion)}}
+                      </span>
+                      <!-- Badge de prioridad por antigüedad -->
+                      <span [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePrioridad(asunto).clase">
+                        {{getBadgePrioridad(asunto).texto}}
+                      </span>
+                      <!-- Badge secundario para plazo (si aplica) -->
+                      @if (getBadgePlazo(asunto)) {
+                        <span
+                          [class]="'px-2 py-0.5 rounded text-xs font-noto-sans ' + getBadgePlazo(asunto)!.clase">
+                          {{getBadgePlazo(asunto)!.texto}}
+                        </span>
+                      }
+                    </div>
+                  </td>
+                  <td class="py-3 px-3 whitespace-nowrap">
+                    <div class="flex items-center justify-center gap-1">
+                      <!-- Botón Detalle -->
+                      <button (click)="abrirModalDetalle(templateDetalle, asunto)"
+                        class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 transition-all duration-200 hover:shadow-md"
+                        title="Ver detalle">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                          Detalle
+                        </span>
+                      </button>
+                      <!-- 🆕 Botón Ver PDF (ojo verde) -->
                 <button class="group relative inline-flex items-center justify-center p-2 rounded-lg
                    bg-green-50 hover:bg-green-100 transition-all duration-200 hover:shadow-md" title="Ver documento"
-                  (click)="abrirModalPDF(templatePDF)"
-                  (click)="openPdfViewer(asunto.folio_interno, asunto.folio_scanner)">
-                  <!-- <mat-icon>remove_red_eye</mat-icon> -->
-                  <span class="icon-font">remove_red_eye</span>
-                </button>
-
-                <!-- Botón Asignar -->
-                <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
-                  class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-[#691C32] hover:bg-[#8B1D3C] transition-all duration-200 hover:shadow-md"
-                  title="Asignar">
-                  <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                  </svg>
-                  <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Asignar
-                  </span>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-
-      <!-- Paginador elegante (solo en vista de lista) -->
-      <div class="p-4 bg-gray-50 border-t">
-        <div class="flex items-center justify-between">
-          <div class="text-sm text-gray-700">
-            Mostrando <span class="font-semibold">{{startIndex + 1}}</span> a <span class="font-semibold">{{endIndex}}</span> de <span class="font-semibold">{{totalAsuntos}}</span> resultados
-            <span *ngIf="filtroActivo !== 'todos'" class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-              Filtro: {{filtroActivo}}
-            </span>
-          </div>
-
-          <div class="flex items-center space-x-2">
-            <!-- Botón Primera página -->
-            <button
-              (click)="irAPagina(1)"
-              [disabled]="currentPage === 1"
-              class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
-              </svg>
-            </button>
-
-            <!-- Botón Anterior -->
-            <button
-              (click)="irAPagina(currentPage - 1)"
-              [disabled]="currentPage === 1"
-              class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
-              </svg>
-            </button>
-
-            <!-- Números de página -->
-            <div class="hidden md:flex items-center space-x-1">
+                        (click)="abrirModalPDF(templatePDF)"
+                        (click)="openPdfViewer(asunto.folio_interno, asunto.folio_scanner)">
+                        <!-- <mat-icon>remove_red_eye</mat-icon> -->
+                        <span class="icon-font">remove_red_eye</span>
+                      </button>
+                      <!-- Botón Asignar -->
+                      <button (click)="abrirModalAsignacion(templeteAsignacion, asunto)"
+                        class="group relative inline-flex items-center justify-center p-2 rounded-lg bg-[#691C32] hover:bg-[#8B1D3C] transition-all duration-200 hover:shadow-md"
+                        title="Asignar">
+                        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                          Asignar
+                        </span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <!-- Paginador elegante (solo en vista de lista) -->
+        <div class="p-4 bg-gray-50 border-t">
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+              Mostrando <span class="font-semibold">{{startIndex + 1}}</span> a <span class="font-semibold">{{endIndex}}</span> de <span class="font-semibold">{{totalAsuntos}}</span> resultados
+              @if (filtroActivo !== 'todos') {
+                <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                  Filtro: {{filtroActivo}}
+                </span>
+              }
+            </div>
+            <div class="flex items-center space-x-2">
+              <!-- Botón Primera página -->
               <button
-                *ngFor="let page of getPageNumbers()"
-                (click)="irAPagina(page)"
-                [class.bg-[#691C32]]="page === currentPage"
-                [class.text-white]="page === currentPage"
-                [class.bg-white]="page !== currentPage"
-                [class.text-gray-700]="page !== currentPage"
-                [class.hover:bg-gray-50]="page !== currentPage"
-                class="relative inline-flex items-center px-4 py-2 text-sm font-noto-sans border border-gray-300 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] transition-colors">
-                {{page}}
+                (click)="irAPagina(1)"
+                [disabled]="currentPage === 1"
+                class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <!-- Botón Anterior -->
+              <button
+                (click)="irAPagina(currentPage - 1)"
+                [disabled]="currentPage === 1"
+                class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <!-- Números de página -->
+              <div class="hidden md:flex items-center space-x-1">
+                @for (page of getPageNumbers(); track page) {
+                  <button
+                    (click)="irAPagina(page)"
+                    [class.bg-[#691C32]]="page === currentPage"
+                    [class.text-white]="page === currentPage"
+                    [class.bg-white]="page !== currentPage"
+                    [class.text-gray-700]="page !== currentPage"
+                    [class.hover:bg-gray-50]="page !== currentPage"
+                    class="relative inline-flex items-center px-4 py-2 text-sm font-noto-sans border border-gray-300 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] transition-colors">
+                    {{page}}
+                  </button>
+                }
+              </div>
+              <!-- Página actual en móvil -->
+              <span class="md:hidden px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300">
+                Página {{currentPage}} de {{totalPages}}
+              </span>
+              <!-- Botón Siguiente -->
+              <button
+                (click)="irAPagina(currentPage + 1)"
+                [disabled]="currentPage === totalPages"
+                class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <!-- Botón Última página -->
+              <button
+                (click)="irAPagina(totalPages)"
+                [disabled]="currentPage === totalPages"
+                class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414 1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0zm-6 0a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 111.414 1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                </svg>
               </button>
             </div>
-
-            <!-- Página actual en móvil -->
-            <span class="md:hidden px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300">
-              Página {{currentPage}} de {{totalPages}}
-            </span>
-
-            <!-- Botón Siguiente -->
-            <button
-              (click)="irAPagina(currentPage + 1)"
-              [disabled]="currentPage === totalPages"
-              class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-              </svg>
-            </button>
-
-            <!-- Botón Última página -->
-            <button
-              (click)="irAPagina(totalPages)"
-              [disabled]="currentPage === totalPages"
-              class="relative inline-flex items-center px-2 py-2 text-gray-400 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#691C32] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414 1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0zm-6 0a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 111.414 1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-              </svg>
-            </button>
           </div>
         </div>
       </div>
-    </div>
+    }
 
     <!-- 🎯 INDICADORES DE PRIORIDAD ÚNICOS -->
     <div class="mt-6 bg-white rounded-lg shadow-md p-4 border border-gray-200">
@@ -673,9 +691,9 @@
             <div>
               <span class="text-gray-600 font-noto-sans">Antigüedad:</span>
               <span class="ml-2 font-semibold"
-                    [class.text-green-600]="itemDeFilaSelecionada!.plazo_atencion < 5"
-                    [class.text-yellow-600]="itemDeFilaSelecionada!.plazo_atencion >= 5 && itemDeFilaSelecionada!.plazo_atencion <= 15"
-                    [class.text-red-600]="itemDeFilaSelecionada!.plazo_atencion > 15">
+                [class.text-green-600]="itemDeFilaSelecionada!.plazo_atencion < 5"
+                [class.text-yellow-600]="itemDeFilaSelecionada!.plazo_atencion >= 5 && itemDeFilaSelecionada!.plazo_atencion <= 15"
+                [class.text-red-600]="itemDeFilaSelecionada!.plazo_atencion > 15">
                 {{itemDeFilaSelecionada.plazo_atencion}} días
               </span>
             </div>
@@ -691,13 +709,13 @@
 
             <!-- Radio button para asignar a abogado -->
             <div class="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                 [ngClass]="{'bg-red-50': tipoAccion === 'asignar', 'border-red-300': tipoAccion === 'asignar'}">
+              [ngClass]="{'bg-red-50': tipoAccion === 'asignar', 'border-red-300': tipoAccion === 'asignar'}">
               <input type="radio"
-                     id="asignar-abogado"
-                     name="tipoAccion"
-                     value="asignar"
-                     [(ngModel)]="tipoAccion"
-                     class="mt-1 text-red-600 focus:ring-red-500">
+                id="asignar-abogado"
+                name="tipoAccion"
+                value="asignar"
+                [(ngModel)]="tipoAccion"
+                class="mt-1 text-red-600 focus:ring-red-500">
               <div class="flex-1">
                 <label for="asignar-abogado" class="block text-sm font-noto-sans text-gray-900 cursor-pointer">
                   Asignar a abogado de esta administración
@@ -712,27 +730,29 @@
           </div>
 
           <!-- Dropdown de abogados (solo cuando se selecciona "asignar") -->
-          <div *ngIf="tipoAccion === 'asignar'" class="space-y-3">
-            <label class="block text-sm font-noto-sans text-gray-700">
-              Seleccione un abogado para asignar
-            </label>
-            <div class="relative">
-              <select [(ngModel)]="abogadoSeleccionado"
-                    class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white transition-colors">
-                <option value="" disabled selected>Seleccione un abogado...</option>
-                @for (user of usuariosAsignar; track user.rfc;) {
-                  <option [value]="user.rfc" >
-                    {{user.nombre}}
-                  </option>
-                }
-              </select>
-              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
+          @if (tipoAccion === 'asignar') {
+            <div class="space-y-3">
+              <label class="block text-sm font-noto-sans text-gray-700">
+                Seleccione un abogado para asignar
+              </label>
+              <div class="relative">
+                <select [(ngModel)]="abogadoSeleccionado"
+                  class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#691C32] focus:border-[#691C32] appearance-none bg-white transition-colors">
+                  <option value="" disabled selected>Seleccione un abogado...</option>
+                  @for (user of usuariosAsignar; track user.rfc;) {
+                    <option [value]="user.rfc" >
+                      {{user.nombre}}
+                    </option>
+                  }
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
+          }
 
 
 
@@ -941,34 +961,40 @@
         <div class="flex-1 p-4">
           <div class="bg-white rounded-lg shadow-sm border border-gray-200 h-full">
             <!-- Indicador de carga -->
-            <div *ngIf="pdfCargando" class="h-full flex flex-col items-center justify-center">
-              <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
-              <p class="mt-4 text-gray-600">Cargando documento...</p>
-            </div>
+            @if (pdfCargando) {
+              <div class="h-full flex flex-col items-center justify-center">
+                <div class="w-16 h-16 border-4 border-[#691C32] border-t-transparent rounded-full animate-spin"></div>
+                <p class="mt-4 text-gray-600">Cargando documento...</p>
+              </div>
+            }
 
             <!-- Error al cargar PDF -->
-            <div *ngIf="pdfError" class="h-full flex flex-col items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <p class="text-red-600 font-noto-sans">Error al cargar el documento</p>
-              <p class="text-gray-500 text-sm mt-2">No se pudo encontrar el archivo PDF</p>
-            </div>
+            @if (pdfError) {
+              <div class="h-full flex flex-col items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p class="text-red-600 font-noto-sans">Error al cargar el documento</p>
+                <p class="text-gray-500 text-sm mt-2">No se pudo encontrar el archivo PDF</p>
+              </div>
+            }
 
             <!-- PDF Viewer -->
-            <div *ngIf="!pdfCargando && !pdfError && pdfUrl" class="h-full">
-              <iframe
-                [src]="pdfUrl"
-                style="width: 100%; height: 100%; border: none;"
-                type="application/pdf">
-                <p class="text-center py-10 text-gray-500">
-                  Tu navegador no puede mostrar este PDF.
-                  <a [href]="pdfUrl" class="text-[#691C32] hover:underline" target="_blank">
-                    Haz clic aquí para abrirlo en otra ventana
-                  </a>
-                </p>
-              </iframe>
-            </div>
+            @if (!pdfCargando && !pdfError && pdfUrl) {
+              <div class="h-full">
+                <iframe
+                  [src]="pdfUrl"
+                  style="width: 100%; height: 100%; border: none;"
+                  type="application/pdf">
+                  <p class="text-center py-10 text-gray-500">
+                    Tu navegador no puede mostrar este PDF.
+                    <a [href]="pdfUrl" class="text-[#691C32] hover:underline" target="_blank">
+                      Haz clic aquí para abrirlo en otra ventana
+                    </a>
+                  </p>
+                </iframe>
+              </div>
+            }
           </div>
         </div>
 

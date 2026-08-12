@@ -27,25 +27,25 @@
           <div class="mb-4">
             <label class="block text-sm font-noto-sans text-gray-700 mb-1">Folio Interno:</label>
             <input type="text" [value]="asunto.folioInterno"
-                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+              class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
           </div>
 
           <div class="mb-4">
             <label class="block text-sm font-noto-sans text-gray-700 mb-1">Oficio:</label>
             <input type="text" [value]="asunto.oficio"
-                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+              class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
           </div>
 
           <div class="mb-4">
             <label class="block text-sm font-noto-sans text-gray-700 mb-1">Fecha de Recepción:</label>
             <input type="text" [value]="asunto.fechaRecepcion"
-                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+              class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
           </div>
 
           <div class="mb-4">
             <label class="block text-sm font-noto-sans text-gray-700 mb-1">Dictaminador Asignado:</label>
             <input type="text" [value]="asunto.dictaminadorAsignado"
-                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+              class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
           </div>
         </div>
 
@@ -54,19 +54,19 @@
           <div class="mb-4">
             <label class="block text-sm font-noto-sans text-gray-700 mb-1">Carpeta de Investigación:</label>
             <input type="text" [value]="asunto.carpetaInvestigacion"
-                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+              class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
           </div>
 
           <div class="mb-4">
             <label class="block text-sm font-noto-sans text-gray-700 mb-1">Documento:</label>
             <input type="text" [value]="asunto.documento"
-                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+              class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
           </div>
 
           <div class="mb-4">
             <label class="block text-sm font-noto-sans text-gray-700 mb-1">Plazo de Atención (días):</label>
             <input type="text" [value]="asunto.plazoAtencion"
-                   class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
+              class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700" readonly>
           </div>
         </div>
 
@@ -74,7 +74,7 @@
         <div class="col-span-2">
           <label class="block text-sm font-noto-sans text-gray-700 mb-1">Observaciones:</label>
           <textarea [value]="asunto.observaciones" rows="4"
-                    class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 resize-none" readonly></textarea>
+          class="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 resize-none" readonly></textarea>
         </div>
       </div>
     </div>
@@ -96,28 +96,32 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let documento of documentos; let i = index"
+            @for (documento of documentos; track documento; let i = $index) {
+              <tr
                 [class]="i % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ documento.nombre }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ documento.fechaCarga }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-center">
-                <div class="flex justify-center space-x-2">
-                  <button (click)="verDocumento(documento.nombre)"
-                          class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-noto-sans rounded shadow-sm text-white bg-[#691C32] hover:bg-[#4a1423] focus:outline-none">
-                    Ver
-                  </button>
-                  <button (click)="descargarDocumento(documento.nombre)"
-                          class="inline-flex items-center px-3 py-1 border border-[#691C32] text-xs font-noto-sans rounded shadow-sm text-[#691C32] bg-white hover:bg-gray-50 focus:outline-none">
-                    Descargar
-                  </button>
-                </div>
-              </td>
-            </tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ documento.nombre }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ documento.fechaCarga }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <div class="flex justify-center space-x-2">
+                    <button (click)="verDocumento(documento.nombre)"
+                      class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-noto-sans rounded shadow-sm text-white bg-[#691C32] hover:bg-[#4a1423] focus:outline-none">
+                      Ver
+                    </button>
+                    <button (click)="descargarDocumento(documento.nombre)"
+                      class="inline-flex items-center px-3 py-1 border border-[#691C32] text-xs font-noto-sans rounded shadow-sm text-[#691C32] bg-white hover:bg-gray-50 focus:outline-none">
+                      Descargar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
 
             <!-- Mensaje si no hay documentos -->
-            <tr *ngIf="documentos.length === 0">
-              <td colspan="3" class="px-6 py-8 text-center text-sm text-gray-500">No hay documentos asociados a este asunto</td>
-            </tr>
+            @if (documentos.length === 0) {
+              <tr>
+                <td colspan="3" class="px-6 py-8 text-center text-sm text-gray-500">No hay documentos asociados a este asunto</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -125,34 +129,36 @@
   </div>
 
   <!-- Modal de visor de PDF -->
-  <div *ngIf="mostrarPDFViewer" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-xl w-11/12 h-5/6 max-w-screen-xl">
-      <!-- Encabezado del modal -->
-      <div class="flex justify-between items-center p-4 border-b">
-        <h3 class="text-lg font-semibold text-[#691C32]">{{ pdfTitulo }}</h3>
-        <button (click)="cerrarPDFViewer()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-
-      <!-- Controles del visor -->
-      <div class="flex justify-between items-center p-2 bg-gray-100">
-        <div>
-          <span class="text-sm p-1">Visualizando documento</span>
-        </div>
-        <div>
-          <button (click)="descargarDocumento(pdfTitulo)" class="inline-flex items-center px-3 py-1 border border-[#691C32] text-xs font-noto-sans rounded shadow-sm text-[#691C32] bg-white hover:bg-gray-50 focus:outline-none">
-            Descargar
+  @if (mostrarPDFViewer) {
+    <div class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-xl w-11/12 h-5/6 max-w-screen-xl">
+        <!-- Encabezado del modal -->
+        <div class="flex justify-between items-center p-4 border-b">
+          <h3 class="text-lg font-semibold text-[#691C32]">{{ pdfTitulo }}</h3>
+          <button (click)="cerrarPDFViewer()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
           </button>
         </div>
-      </div>
-
-      <!-- Visor de PDF usando iframe -->
-      <div class="h-full p-2">
-        <iframe *ngIf="pdfUrl" [src]="pdfUrl" style="width: 100%; height: 80vh;" frameborder="0"></iframe>
+        <!-- Controles del visor -->
+        <div class="flex justify-between items-center p-2 bg-gray-100">
+          <div>
+            <span class="text-sm p-1">Visualizando documento</span>
+          </div>
+          <div>
+            <button (click)="descargarDocumento(pdfTitulo)" class="inline-flex items-center px-3 py-1 border border-[#691C32] text-xs font-noto-sans rounded shadow-sm text-[#691C32] bg-white hover:bg-gray-50 focus:outline-none">
+              Descargar
+            </button>
+          </div>
+        </div>
+        <!-- Visor de PDF usando iframe -->
+        <div class="h-full p-2">
+          @if (pdfUrl) {
+            <iframe [src]="pdfUrl" style="width: 100%; height: 80vh;" frameborder="0"></iframe>
+          }
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>

@@ -14,7 +14,7 @@
             class="h-9 text-white px-3 rounded-md flex items-center"
             style="background-color: #691C32;"
             routerLink="/akamba/assistance"
-          >
+            >
             <span class="icon-font text-white">arrow_back</span>
             <span class="ms-1">Regresar</span>
           </button>
@@ -34,7 +34,7 @@
                 [(ngModel)]="filtroFolio"
                 class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="Buscar por folio..."
-              />
+                />
             </div>
 
             <!-- Filtro por dictaminador -->
@@ -46,7 +46,7 @@
                 [(ngModel)]="filtroDictaminador"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="Buscar por dictaminador..."
-              />
+                />
             </div>
 
             <!-- Filtro por fecha inicio -->
@@ -57,7 +57,7 @@
                 id="filtroFechaInicio"
                 [(ngModel)]="filtroFechaInicio"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
+                />
             </div>
 
             <!-- Filtro por fecha fin -->
@@ -68,7 +68,7 @@
                 id="filtroFechaFin"
                 [(ngModel)]="filtroFechaFin"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
+                />
             </div>
           </div>
 
@@ -77,14 +77,14 @@
             <button
               (click)="limpiarFiltros()"
               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
+              >
               Limpiar
             </button>
             <button
               (click)="aplicarFiltros()"
               class="px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               style="background-color: #691C32;"
-            >
+              >
               Aplicar
             </button>
           </div>
@@ -97,7 +97,7 @@
             <button
               (click)="exportarExcel()"
               class="flex items-center px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            >
+              >
               <span class="icon-font mr-1">save_alt</span>
               <span>Exportar a Excel</span>
             </button>
@@ -119,35 +119,39 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr *ngFor="let asunto of asuntosPaginados" class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-noto-sans text-gray-900">{{ asunto.folio }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.tipoFolio }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.status }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.fechaRecepcion }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.dictaminador }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.autoridad }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.observaciones }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-noto-sans">
-                    <button class="text-indigo-600 hover:text-indigo-900 mr-2">
-                      <span class="icon-font text-indigo-600">visibility</span>
-                    </button>
-                    <button class="text-blue-600 hover:text-blue-900 mr-2">
-                      <span class="icon-font text-blue-600">picture_as_pdf</span>
-                    </button>
-                    <button class="text-green-600 hover:text-green-900">
-                      <span class="icon-font text-green-600">download</span>
-                    </button>
-                          </td>
-                      </tr>
+                @for (asunto of asuntosPaginados; track asunto) {
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-noto-sans text-gray-900">{{ asunto.folio }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.tipoFolio }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.status }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.fechaRecepcion }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.dictaminador }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.autoridad }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asunto.observaciones }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-noto-sans">
+                      <button class="text-indigo-600 hover:text-indigo-900 mr-2">
+                        <span class="icon-font text-indigo-600">visibility</span>
+                      </button>
+                      <button class="text-blue-600 hover:text-blue-900 mr-2">
+                        <span class="icon-font text-blue-600">picture_as_pdf</span>
+                      </button>
+                      <button class="text-green-600 hover:text-green-900">
+                        <span class="icon-font text-green-600">download</span>
+                      </button>
+                    </td>
+                  </tr>
+                }
 
                 <!-- Mensaje cuando no hay resultados -->
-                <tr *ngIf="asuntosPaginados.length === 0">
-                  <td colspan="8" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                    No se encontraron resultados
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
+                @if (asuntosPaginados.length === 0) {
+                  <tr>
+                    <td colspan="8" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                      No se encontraron resultados
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           </div>
 
           <!-- Paginación -->
@@ -158,7 +162,7 @@
                 (click)="cambiarPagina(paginaActual - 1)"
                 class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-noto-sans rounded-md text-gray-700 bg-white hover:bg-gray-50"
                 [class.opacity-50]="paginaActual === 1"
-              >
+                >
                 Anterior
               </button>
               <button
@@ -166,7 +170,7 @@
                 (click)="cambiarPagina(paginaActual + 1)"
                 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-noto-sans rounded-md text-gray-700 bg-white hover:bg-gray-50"
                 [class.opacity-50]="paginaActual === totalPaginas || totalPaginas === 0"
-              >
+                >
                 Siguiente
               </button>
             </div>
@@ -184,20 +188,20 @@
                     (click)="cambiarPagina(paginaActual - 1)"
                     class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-noto-sans text-gray-500 hover:bg-gray-50"
                     [class.opacity-50]="paginaActual === 1"
-                  >
+                    >
                     <span class="sr-only">Anterior</span>
                     <span class="icon-font">chevron_left</span>
                   </button>
 
                   <!-- Páginas -->
-                  <ng-container *ngFor="let pagina of [].constructor(totalPaginas); let i = index">
+                  @for (pagina of [].constructor(totalPaginas); track pagina; let i = $index) {
                     <button
                       (click)="cambiarPagina(i + 1)"
                       [class]="paginaActual === i + 1 ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-noto-sans' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-noto-sans'"
-                    >
+                      >
                       {{ i + 1 }}
                     </button>
-                  </ng-container>
+                  }
 
                   <!-- Botón siguiente -->
                   <button
@@ -205,7 +209,7 @@
                     (click)="cambiarPagina(paginaActual + 1)"
                     class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-noto-sans text-gray-500 hover:bg-gray-50"
                     [class.opacity-50]="paginaActual === totalPaginas || totalPaginas === 0"
-                  >
+                    >
                     <span class="sr-only">Siguiente</span>
                     <span class="icon-font">chevron_right</span>
                   </button>

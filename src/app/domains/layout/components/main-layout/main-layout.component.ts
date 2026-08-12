@@ -10,7 +10,7 @@ import { NavbarContentInfoComponent } from './navbar-content/navbar-content-info
 import { RouterModule } from '@angular/router';
 import { ModalService } from './../../../shared/services/modal.service';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+
 import { NotificationsComponent } from './notifications/notifications.component';
 import { Oauth2Service } from '../../../services/ouath2.service';
 import { Oauth2Code, UsuarioCompleto } from '../../../interfaces/oauth2.interfaces';
@@ -23,21 +23,19 @@ import { PermissionsService } from '../../../services/permissions.service';
 @Component({
     selector: 'app-main-layout',
     imports: [
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
-        MatSidenavModule,
-        MatDialogModule,
-        MatTooltipModule,
-        CustomSidenavComponent,
-        NavbarContentComponent,
-        NavbarContentInfoComponent,
-        //LoadAnimationComponent,
-        RouterModule,
-        CommonModule,
-        NotificationsComponent,
-        UserProfileComponent,
-    ],
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatDialogModule,
+    MatTooltipModule,
+    CustomSidenavComponent,
+    NavbarContentComponent,
+    NavbarContentInfoComponent,
+    RouterModule,
+    NotificationsComponent,
+    UserProfileComponent
+],
     templateUrl: './main-layout.component.html',
     styleUrl: './main-layout.component.css'
 })

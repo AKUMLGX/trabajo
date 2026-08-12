@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,11 +31,10 @@ export interface PreConfirmacionModalData {
 @Component({
     selector: 'app-pre-confirmacion-modal',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule
+],
     template: `
     <div class="pre-confirmacion-modal">
       <!-- Header Premium -->
@@ -45,64 +44,82 @@ export interface PreConfirmacionModalData {
         </div>
         <div class="header-content">
           <div class="header-title">{{ titulo }}</div>
-          <div class="header-subtitle" *ngIf="subtitulo">{{ subtitulo }}</div>
+          @if (subtitulo) {
+            <div class="header-subtitle">{{ subtitulo }}</div>
+          }
         </div>
         <button class="close-btn" (click)="cancelar()">
           <span class="icon-font">close</span>
         </button>
       </div>
-
+    
       <!-- Expediente Destacado -->
-      <div class="expediente-banner" *ngIf="expediente">
-        <span class="icon-font">folder_special</span>
-        <div class="expediente-info">
-          <span class="expediente-label">Expediente a registrar</span>
-          <span class="expediente-numero">{{ expediente }}</span>
+      @if (expediente) {
+        <div class="expediente-banner">
+          <span class="icon-font">folder_special</span>
+          <div class="expediente-info">
+            <span class="expediente-label">Expediente a registrar</span>
+            <span class="expediente-numero">{{ expediente }}</span>
+          </div>
+          <div class="expediente-check">
+            <span class="icon-font">check_circle</span>
+          </div>
         </div>
-        <div class="expediente-check">
-          <span class="icon-font">check_circle</span>
-        </div>
-      </div>
-
+      }
+    
       <!-- Contenido por secciones -->
       <div class="modal-content">
         <!-- Secciones agrupadas -->
-        <div *ngFor="let seccion of secciones" class="seccion">
-          <div class="seccion-header">
-            <span class="icon-font">{{ seccion.icono }}</span>
-            <span>{{ seccion.titulo }}</span>
-          </div>
-          <div class="seccion-campos">
-            <div *ngFor="let campo of seccion.campos"
-                 class="campo-row"
-                 [class.campo-destacado]="campo.tipo === 'destacado'"
-                 [class.campo-prioridad]="campo.tipo === 'prioridad'">
-              <div class="campo-icono" *ngIf="campo.icono">
-                <span class="icon-font">{{ campo.icono }}</span>
-              </div>
-              <div class="campo-etiqueta">{{ campo.etiqueta }}</div>
-              <div class="campo-valor"
-                   [class.prioridad-urgente]="campo.prioridadColor === 'red'"
-                   [class.prioridad-alta]="campo.prioridadColor === 'orange'"
-                   [class.prioridad-media]="campo.prioridadColor === 'yellow'"
-                   [class.prioridad-baja]="campo.prioridadColor === 'green'">
-                <span *ngIf="campo.tipo === 'prioridad'" class="prioridad-badge" [class]="'badge-' + campo.prioridadColor">
-                  {{ campo.valor || 'N/A' }}
-                </span>
-                <span *ngIf="campo.tipo !== 'prioridad'">{{ campo.valor || 'N/A' }}</span>
-              </div>
+        @for (seccion of secciones; track seccion) {
+          <div class="seccion">
+            <div class="seccion-header">
+              <span class="icon-font">{{ seccion.icono }}</span>
+              <span>{{ seccion.titulo }}</span>
+            </div>
+            <div class="seccion-campos">
+              @for (campo of seccion.campos; track campo) {
+                <div
+                  class="campo-row"
+                  [class.campo-destacado]="campo.tipo === 'destacado'"
+                  [class.campo-prioridad]="campo.tipo === 'prioridad'">
+                  @if (campo.icono) {
+                    <div class="campo-icono">
+                      <span class="icon-font">{{ campo.icono }}</span>
+                    </div>
+                  }
+                  <div class="campo-etiqueta">{{ campo.etiqueta }}</div>
+                  <div class="campo-valor"
+                    [class.prioridad-urgente]="campo.prioridadColor === 'red'"
+                    [class.prioridad-alta]="campo.prioridadColor === 'orange'"
+                    [class.prioridad-media]="campo.prioridadColor === 'yellow'"
+                    [class.prioridad-baja]="campo.prioridadColor === 'green'">
+                    @if (campo.tipo === 'prioridad') {
+                      <span class="prioridad-badge" [class]="'badge-' + campo.prioridadColor">
+                        {{ campo.valor || 'N/A' }}
+                      </span>
+                    }
+                    @if (campo.tipo !== 'prioridad') {
+                      <span>{{ campo.valor || 'N/A' }}</span>
+                    }
+                  </div>
+                </div>
+              }
             </div>
           </div>
-        </div>
-
+        }
+    
         <!-- Campos sin sección (compatibilidad) -->
-        <div *ngIf="campos && campos.length > 0" class="campos-legacy">
-          <div *ngFor="let campo of campos" class="campo-item">
-            <span class="campo-etiqueta">{{ campo.etiqueta }}:</span>
-            <span class="campo-valor">{{ campo.valor || 'N/A' }}</span>
+        @if (campos && campos.length > 0) {
+          <div class="campos-legacy">
+            @for (campo of campos; track campo) {
+              <div class="campo-item">
+                <span class="campo-etiqueta">{{ campo.etiqueta }}:</span>
+                <span class="campo-valor">{{ campo.valor || 'N/A' }}</span>
+              </div>
+            }
           </div>
-        </div>
-
+        }
+    
         <!-- Advertencia -->
         <div class="advertencia">
           <div class="advertencia-icono">
@@ -114,7 +131,7 @@ export interface PreConfirmacionModalData {
           </div>
         </div>
       </div>
-
+    
       <!-- Footer con botones mejorados -->
       <div class="modal-footer">
         <button class="btn-cancelar" (click)="cancelar()">
@@ -127,7 +144,7 @@ export interface PreConfirmacionModalData {
         </button>
       </div>
     </div>
-  `,
+    `,
     styles: [`
 .pre-confirmacion-modal {
   width: 900px;

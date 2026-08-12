@@ -10,7 +10,9 @@
 
     {{ label }}
 
-    <span *ngIf="required" class="ml-1 font-noto-sans text-red-500">*</span>
+    @if (required) {
+      <span class="ml-1 font-noto-sans text-red-500">*</span>
+    }
   </label>
 
   <div
@@ -41,28 +43,32 @@
         'border-red-500 bg-red-50 shadow-[0_0_0_6px_rgba(239,68,68,0.10),0_8px_25px_rgba(239,68,68,0.15)]': errorMessage,
         'pr-[60px]': enableAutocomplete && datalistOptions && datalistOptions.length > 0
       }"
-    />
+      />
 
-    <datalist *ngIf="datalistOptions && datalistOptions.length > 0" [id]="fieldId + '-list'">
-      <option *ngFor="let option of datalistOptions" [value]="option"></option>
-    </datalist>
+    @if (datalistOptions && datalistOptions.length > 0) {
+      <datalist [id]="fieldId + '-list'">
+        @for (option of datalistOptions; track option) {
+          <option [value]="option"></option>
+        }
+      </datalist>
+    }
 
-    <button
-      *ngIf="enableAutocomplete && datalistOptions && datalistOptions.length > 0"
-      type="button"
-      class="absolute right-[18px] top-1/2 flex -translate-y-1/2 items-center justify-center rounded-xl border-2 border-tlalcalli-primary/25 bg-tlalcalli-primary/10 px-2 py-1.5 text-tlalcalli-primary transition hover:border-tlalcalli-primary/40 hover:bg-tlalcalli-primary/15"
-      (mousedown)="toggleOptions($event)"
-      aria-label="Mostrar opciones">
-
-      <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
-        <path
-          d="M1 1.5L7 6.5L13 1.5"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round" />
-      </svg>
-    </button>
+    @if (enableAutocomplete && datalistOptions && datalistOptions.length > 0) {
+      <button
+        type="button"
+        class="absolute right-[18px] top-1/2 flex -translate-y-1/2 items-center justify-center rounded-xl border-2 border-tlalcalli-primary/25 bg-tlalcalli-primary/10 px-2 py-1.5 text-tlalcalli-primary transition hover:border-tlalcalli-primary/40 hover:bg-tlalcalli-primary/15"
+        (mousedown)="toggleOptions($event)"
+        aria-label="Mostrar opciones">
+        <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+          <path
+            d="M1 1.5L7 6.5L13 1.5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+    }
 
     <div
       class="pointer-events-none absolute bottom-0 left-0 h-[3px] rounded-full transition-all duration-300"
@@ -74,34 +80,37 @@
     </div>
   </div>
 
-  <div
-    *ngIf="enableAutocomplete && showOptions && filteredOptions.length > 0"
-    class="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[220px] overflow-y-auto rounded-2xl border border-tlalcalli-primary/25 bg-white/95 p-1.5 shadow-[0_20px_40px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-
+  @if (enableAutocomplete && showOptions && filteredOptions.length > 0) {
     <div
-      *ngFor="let option of filteredOptions; let idx = index"
-      class="mb-1 flex cursor-pointer items-center rounded-xl px-3.5 py-3 text-sm font-semibold text-gray-700 transition last:mb-0 hover:translate-x-1 hover:bg-tlalcalli-primary/10 hover:text-tlalcalli-primary"
+      class="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[220px] overflow-y-auto rounded-2xl border border-tlalcalli-primary/25 bg-white/95 p-1.5 shadow-[0_20px_40px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+      @for (option of filteredOptions; track option; let idx = $index) {
+        <div
+          class="mb-1 flex cursor-pointer items-center rounded-xl px-3.5 py-3 text-sm font-semibold text-gray-700 transition last:mb-0 hover:translate-x-1 hover:bg-tlalcalli-primary/10 hover:text-tlalcalli-primary"
       [ngClass]="{
         'translate-x-1 bg-tlalcalli-primary/10 text-tlalcalli-primary': idx === highlightedIndex
       }"
-      (mousedown)="selectOption(option, $event)">
-      {{ option }}
+          (mousedown)="selectOption(option, $event)">
+          {{ option }}
+        </div>
+      }
     </div>
-  </div>
+  }
 
-  <div
-    *ngIf="hint && !errorMessage"
-    class="mt-2 text-[13px] font-noto-sans italic text-gray-500"
+  @if (hint && !errorMessage) {
+    <div
+      class="mt-2 text-[13px] font-noto-sans italic text-gray-500"
     [ngClass]="{
       'font-semibold text-tlalcalli-primary': isFocused
     }">
-    {{ hint }}
-  </div>
+      {{ hint }}
+    </div>
+  }
 
-  <div
-    *ngIf="errorMessage"
-    class="mt-2 text-[13px] font-noto-sans text-red-500">
-    {{ errorMessage }}
-  </div>
+  @if (errorMessage) {
+    <div
+      class="mt-2 text-[13px] font-noto-sans text-red-500">
+      {{ errorMessage }}
+    </div>
+  }
 
 </div>

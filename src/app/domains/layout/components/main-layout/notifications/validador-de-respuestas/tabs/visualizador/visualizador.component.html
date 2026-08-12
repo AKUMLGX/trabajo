@@ -3,22 +3,23 @@
     <div class="w-auto lg:w-12/12  h-auto mx-auto mt-2">
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0  ">
         <!-- <div class="flex justify-center items-center mb-8 text-xl mt-8 uppercase font-noto-sans font-montserrat  ">Grafico
-          de Calor </div> -->
-        <section class="py-1 bg-blueGray-50">
-          <div class="w-full lg:w-12/12 mx-auto mt-2">
-            <div
-              class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
-              <div class="flex-auto px-4 lg:px-10 py-10">
-                <table class="w-auto border-collapse bg-white">
-                  <thead>
-                    <tr >
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">Descripcion</th>
-                      <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center"></th>
-                    </tr>
-                  </thead>
-                  <tbody  >
+      de Calor </div> -->
+      <section class="py-1 bg-blueGray-50">
+        <div class="w-full lg:w-12/12 mx-auto mt-2">
+          <div
+            class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-[#691C32] border-2">
+            <div class="flex-auto px-4 lg:px-10 py-10">
+              <table class="w-auto border-collapse bg-white">
+                <thead>
+                  <tr >
+                    <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center">Descripcion</th>
+                    <th class="table-head-item font-montserrat sm:text-xs md:text-base mt-2 ml-2 text-center"></th>
+                  </tr>
+                </thead>
+                <tbody  >
+                  @for (item of datosVisualidaor; track item) {
                     <tr class=" hover:bg-gray-50 dark:hover:bg-gray-600"
-                    *ngFor="let item of datosVisualidaor">
+                      >
                       <td class="font-montserrat px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                         <div class="text-sm leading-5 text-wine text-center"> {{item.descripcion}} </div>
                       </td>
@@ -27,13 +28,14 @@
                         </span> </div>
                       </td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
+                  }
+                </tbody>
+              </table>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   </div>
+</div>
 </div>

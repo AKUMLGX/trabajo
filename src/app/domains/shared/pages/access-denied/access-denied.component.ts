@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-access-denied',
-    imports: [CommonModule, MatIconModule, MatButtonModule],
+    imports: [MatIconModule, MatButtonModule],
     template: `
     <div class="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center p-4">
       <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -32,11 +32,10 @@ interface AsuntoDictaminador {
 @Component({
     selector: 'app-dictaminador-atencion-modal',
     imports: [
-        CommonModule,
-        MatIconModule,
-        MatButtonModule,
-        MatSnackBarModule
-    ],
+    MatIconModule,
+    MatButtonModule,
+    MatSnackBarModule
+],
     templateUrl: './dictaminador-atencion-modal.component.html',
     styleUrl: './dictaminador-atencion-modal.component.css'
 })

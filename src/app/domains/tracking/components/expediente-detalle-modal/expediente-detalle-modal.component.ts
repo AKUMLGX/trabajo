@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,12 +10,11 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 @Component({
     selector: 'app-expediente-detalle-modal',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        PdfViewerModule
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    PdfViewerModule
+],
     templateUrl: './expediente-detalle-modal.component.html',
     styleUrl: './expediente-detalle-modal.component.css'
 })

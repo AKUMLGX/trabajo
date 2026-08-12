@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../../../../../environments/environment';
@@ -7,10 +7,9 @@ import { environment } from '../../../../../../../environments/environment';
 @Component({
     selector: 'app-pendientes-por-acusar',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatIconModule,
-    ],
+    MatDialogModule,
+    MatIconModule
+],
     templateUrl: './pendientes-por-acusar.component.html',
     styleUrl: './pendientes-por-acusar.component.css'
 })

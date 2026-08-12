@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,7 @@ interface Documento {
 
 @Component({
     selector: 'app-asunto-parcial',
-    imports: [CommonModule, RouterModule, FormsModule],
+    imports: [RouterModule, FormsModule],
     templateUrl: './asunto-parcial.component.html',
     styleUrls: ['./asunto-parcial.component.css']
 })
