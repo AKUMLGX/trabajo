@@ -6,7 +6,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './domains/interceptors/auth.interceptor';
 import { loadAnimationInterceptor } from './domains/interceptors/load-animation.interceptor';
-// import { errorInterceptor } from './domains/interceptors/error.interceptor';
+import { errorInterceptor } from './domains/interceptors/error.interceptor';
 import { successfullInterceptor } from './domains/interceptors/successful.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -16,8 +16,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         authInterceptor,
-        // loadAnimationInterceptor,
-        // errorInterceptor,
+        loadAnimationInterceptor,
+        errorInterceptor,
         successfullInterceptor
       ])
     ),
