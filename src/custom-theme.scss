@@ -83,14 +83,14 @@ $tlalcalli-gold: (
 );
 
 // Define the palettes
-$tlalcalli-primary: mat.define-palette($tlalcalli-purple, 500, 400, 700);
-$tlalcalli-accent: mat.define-palette($tlalcalli-gold, 500, 400, 700);
+$tlalcalli-primary: mat.m2-define-palette($tlalcalli-purple, 500, 400, 700);
+$tlalcalli-accent: mat.m2-define-palette($tlalcalli-gold, 500, 400, 700);
 
 // The warn palette is optional (defaults to red).
-$tlalcalli-warn: mat.define-palette(mat.$red-palette);
+$tlalcalli-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
 // Create the theme object
-$tlalcalli-theme: mat.define-light-theme((
+$tlalcalli-theme: mat.m2-define-light-theme((
   color: (
     primary: $tlalcalli-primary,
     accent: $tlalcalli-accent,
