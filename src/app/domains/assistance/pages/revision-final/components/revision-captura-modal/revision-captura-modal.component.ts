@@ -100,28 +100,27 @@ export interface CorreccionAsunto {
 }
 
 @Component({
-  selector: 'app-revision-captura-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatIconModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatCheckboxModule,
-    MatSnackBarModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    MatChipsModule
-  ],
-  templateUrl: './revision-captura-modal.component.html',
-  styleUrls: ['./revision-captura-modal.component.css']
+    selector: 'app-revision-captura-modal',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatIconModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatSnackBarModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        MatChipsModule
+    ],
+    templateUrl: './revision-captura-modal.component.html',
+    styleUrls: ['./revision-captura-modal.component.css']
 })
 export class RevisionCapturaModalComponent implements OnInit, OnChanges {
   

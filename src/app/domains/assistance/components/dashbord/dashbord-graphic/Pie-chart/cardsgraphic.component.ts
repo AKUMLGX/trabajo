@@ -3,11 +3,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { GraficaAtencionService } from '../../../../../services/grafica-atencion.service';
 
 @Component({
-  selector: 'app-cardsgraphic',
-  standalone: true,
-  imports: [NgxChartsModule],
-  templateUrl: './cardsgraphic.component.html',
-  styleUrl: './cardsgraphic.component.css'
+    selector: 'app-cardsgraphic',
+    imports: [NgxChartsModule],
+    templateUrl: './cardsgraphic.component.html',
+    styleUrl: './cardsgraphic.component.css'
 })
 export class CardsgraphicComponent {
 

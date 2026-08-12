@@ -34,19 +34,18 @@ export interface FormularioAtencion {
 }
 
 @Component({
-  selector: 'app-atencion-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatDialogModule,
-    MatIconModule,
-    MatSnackBarModule,
-    AtencionEspecialistasComponent,
-    AtencionFlujosComponent,
-    CustomModalComponent2
-  ],
-  templateUrl: './atencion-modal.component.html',
+    selector: 'app-atencion-modal',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatDialogModule,
+        MatIconModule,
+        MatSnackBarModule,
+        AtencionEspecialistasComponent,
+        AtencionFlujosComponent,
+        CustomModalComponent2
+    ],
+    templateUrl: './atencion-modal.component.html'
 })
 export class AtencionModalComponent implements OnInit {
   expediente: ExpedienteTlalcalli;

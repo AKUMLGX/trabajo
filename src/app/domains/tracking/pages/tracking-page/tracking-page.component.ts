@@ -6,16 +6,15 @@ import { Router, RouterModule } from '@angular/router';
 import { AsuntoService } from '../../../services/asunto.service';
 
 @Component({
-  selector: 'app-tracking-page',
-  standalone: true,
-  imports: [
-    InitTemplateComponent,
-    TrackingComponentsModule,
-    PdfViewerComponent,
-    RouterModule,
-  ],
-  templateUrl: './tracking-page.component.html',
-  styleUrl: './tracking-page.component.css',
+    selector: 'app-tracking-page',
+    imports: [
+        InitTemplateComponent,
+        TrackingComponentsModule,
+        PdfViewerComponent,
+        RouterModule,
+    ],
+    templateUrl: './tracking-page.component.html',
+    styleUrl: './tracking-page.component.css'
 })
 export class TrackingPageComponent implements OnInit {
 

@@ -3,11 +3,10 @@ import MsgReader, { FieldsData } from '@kenjiuno/msgreader';
 import { FileService } from '../../services/file.service';
 
 @Component({
-  selector: 'app-msg-reader',
-  standalone: true,
-  imports: [],
-  templateUrl: './msg-reader.component.html',
-  styleUrl: './msg-reader.component.css',
+    selector: 'app-msg-reader',
+    imports: [],
+    templateUrl: './msg-reader.component.html',
+    styleUrl: './msg-reader.component.css'
 })
 export class MsgReaderComponent implements OnInit {
 

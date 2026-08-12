@@ -23,19 +23,18 @@ import { CatalogoPrioridadResponse, CatalogoServicioResponse, CatalogoMesesRespo
 import { UsuarioRequerimiento} from '../../../../interfaces/usuarios-expediente.interface';
 import { UsuariosRequerimientoComponent } from '../../usuarios-requerimiento/usuarios-requerimiento/usuarios-requerimiento.component';
 @Component({
-  selector: 'app-first-step-tlalcalli',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CustomFormFieldComponent,
-    CustomTextareaComponent,
-    KeyboardNavigationDirective,
-    CustomSelectComponent,
-    UsuariosRequerimientoComponent
-  ],
-  templateUrl: './first-step-tlalcalli.component.html',
-  styleUrl: './first-step-tlalcalli.component.css'
+    selector: 'app-first-step-tlalcalli',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        CustomFormFieldComponent,
+        CustomTextareaComponent,
+        KeyboardNavigationDirective,
+        CustomSelectComponent,
+        UsuariosRequerimientoComponent
+    ],
+    templateUrl: './first-step-tlalcalli.component.html',
+    styleUrl: './first-step-tlalcalli.component.css'
 })
 export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   @Output() formularioCompletado = new EventEmitter<any>();

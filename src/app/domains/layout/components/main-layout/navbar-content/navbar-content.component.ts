@@ -3,11 +3,10 @@ import { MatIconModule  } from '@angular/material/icon';
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
-  selector: 'app-navbar-content',
-  standalone: true,
-  imports: [MatIconModule],
-  templateUrl: './navbar-content.component.html',
-  styleUrl: './navbar-content.component.css'
+    selector: 'app-navbar-content',
+    imports: [MatIconModule],
+    templateUrl: './navbar-content.component.html',
+    styleUrl: './navbar-content.component.css'
 })
 export class NavbarContentComponent {
 

@@ -6,11 +6,10 @@ import { VisualizadorComponent } from './tabs/visualizador/visualizador.componen
 import { RespuestaComponent } from './tabs/respuesta/respuesta.component';
 
 @Component({
-  selector: 'app-validador-de-respuestas',
-  standalone: true,
-  imports: [MatTabsModule,MatTabContent,RequerimientosComponent,MatIconModule,VisualizadorComponent,RespuestaComponent ],
-  templateUrl: './validador-de-respuestas.component.html',
-  styleUrl: './validador-de-respuestas.component.css'
+    selector: 'app-validador-de-respuestas',
+    imports: [MatTabsModule, MatTabContent, RequerimientosComponent, MatIconModule, VisualizadorComponent, RespuestaComponent],
+    templateUrl: './validador-de-respuestas.component.html',
+    styleUrl: './validador-de-respuestas.component.css'
 })
 export class ValidadorDeRespuestasComponent {
 

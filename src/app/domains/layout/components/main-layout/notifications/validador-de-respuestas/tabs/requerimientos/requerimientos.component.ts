@@ -8,11 +8,10 @@ export interface DataBeforeSubmit {
 }
 
 @Component({
-  selector: 'app-requerimientos',
-  standalone: true,
-  imports: [MatDialogModule],
-  templateUrl: './requerimientos.component.html',
-  styleUrl: './requerimientos.component.css'
+    selector: 'app-requerimientos',
+    imports: [MatDialogModule],
+    templateUrl: './requerimientos.component.html',
+    styleUrl: './requerimientos.component.css'
 })
 export class RequerimientosComponent {
 

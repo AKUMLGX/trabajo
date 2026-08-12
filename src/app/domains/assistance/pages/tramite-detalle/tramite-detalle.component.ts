@@ -17,18 +17,17 @@ import { MatDialog, } from '@angular/material/dialog';
 import { PlazoPipe } from '../../../shared/components/plazo.pipe';
 
 @Component({
-  selector: 'app-tramite-detalle',
-  standalone: true,
-  imports: [CommonModule,
-    RouterModule,
-    FormsModule,
-    NgxPaginationModule,
-    PdfViewerComponent,
-    MatIconModule,
-    PlazoPipe,
-  ],
-  templateUrl: './tramite-detalle.component.html',
-  styleUrls: ['./tramite-detalle.component.css']
+    selector: 'app-tramite-detalle',
+    imports: [CommonModule,
+        RouterModule,
+        FormsModule,
+        NgxPaginationModule,
+        PdfViewerComponent,
+        MatIconModule,
+        PlazoPipe,
+    ],
+    templateUrl: './tramite-detalle.component.html',
+    styleUrls: ['./tramite-detalle.component.css']
 })
 export class TramiteDetalleComponent implements OnInit {
 

@@ -2,11 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-navbar-content-info',
-  standalone: true,
-  imports: [],
-  templateUrl: './navbar-content-info.component.html',
-  styleUrl: './navbar-content-info.component.css'
+    selector: 'app-navbar-content-info',
+    imports: [],
+    templateUrl: './navbar-content-info.component.html',
+    styleUrl: './navbar-content-info.component.css'
 })
 export class NavbarContentInfoComponent implements OnInit, OnDestroy {
   path = '';

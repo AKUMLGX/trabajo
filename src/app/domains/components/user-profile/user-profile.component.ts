@@ -11,19 +11,18 @@ import { UserService } from '../../services/user.service';
 import { UsuarioCompleto } from '../../interfaces/oauth2.interfaces';
 
 @Component({
-  selector: 'app-user-profile',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatChipsModule,
-    MatBadgeModule,
-    MatDividerModule,
-    MatProgressBarModule
-  ],
-  templateUrl: './user-profile.component.html',
-  styleUrl: './user-profile.component.css'
+    selector: 'app-user-profile',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatIconModule,
+        MatChipsModule,
+        MatBadgeModule,
+        MatDividerModule,
+        MatProgressBarModule
+    ],
+    templateUrl: './user-profile.component.html',
+    styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
   @Input() compact = false; // Para diferentes variaciones del componente

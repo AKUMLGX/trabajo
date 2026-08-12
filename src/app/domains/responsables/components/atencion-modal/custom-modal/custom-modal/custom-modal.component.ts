@@ -12,13 +12,12 @@ import { FormsModule } from '@angular/forms';
 export type CustomModalType = 'confirm' | 'input';
 
 @Component({
-  selector: 'app-custom-modal2',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
-  templateUrl: './custom-modal.component.html',
+    selector: 'app-custom-modal2',
+    imports: [
+        CommonModule,
+        FormsModule
+    ],
+    templateUrl: './custom-modal.component.html'
 })
 export class CustomModalComponent2 implements OnChanges {
   @Input() visible = false;

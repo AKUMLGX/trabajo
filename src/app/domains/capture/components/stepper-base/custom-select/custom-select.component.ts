@@ -9,17 +9,16 @@ export interface SelectOption {
 }
 
 @Component({
-  selector: 'app-custom-select',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './custom-select.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomSelectComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-custom-select',
+    imports: [CommonModule],
+    templateUrl: './custom-select.component.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => CustomSelectComponent),
+            multi: true
+        }
+    ]
 })
 export class CustomSelectComponent implements ControlValueAccessor {
   @Input() label: string = '';

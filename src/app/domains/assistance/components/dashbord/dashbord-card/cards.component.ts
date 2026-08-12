@@ -28,30 +28,28 @@ import { AtencionModalComponent } from '../atencion-modal/atencion-modal.compone
 
 
 @Component({
-  selector: 'app-cards',
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatCardModule,
-    RouterModule,
-    // RouterOutlet,
-    CommonModule,
-    // CardsgraphicComponent,
-    // GraphicAdministracionComponent,
-    // TrafficLightsAtencionComponent,
-    NgxExtendedPdfViewerModule,
-    FormsModule,
-    SafePipe,
-    // RechazadosTableComponent,
-    // RechazadosGestionComponent,
-    RevisionModalComponent,
-    NgxPaginationModule,
-    AtencionModalComponent,
-
-  ],
-  templateUrl: './cards.component.html',
-  styleUrls: ['./cards.component.css'],
-  styles: [`
+    selector: 'app-cards',
+    imports: [
+        MatIconModule,
+        MatCardModule,
+        RouterModule,
+        // RouterOutlet,
+        CommonModule,
+        // CardsgraphicComponent,
+        // GraphicAdministracionComponent,
+        // TrafficLightsAtencionComponent,
+        NgxExtendedPdfViewerModule,
+        FormsModule,
+        SafePipe,
+        // RechazadosTableComponent,
+        // RechazadosGestionComponent,
+        RevisionModalComponent,
+        NgxPaginationModule,
+        AtencionModalComponent,
+    ],
+    templateUrl: './cards.component.html',
+    styleUrls: ['./cards.component.css'],
+    styles: [`
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }

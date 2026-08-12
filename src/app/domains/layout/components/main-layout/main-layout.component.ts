@@ -21,26 +21,25 @@ import { Subject, takeUntil } from 'rxjs';
 import { PermissionsService } from '../../../services/permissions.service';
 
 @Component({
-  selector: 'app-main-layout',
-  standalone: true,
-  imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatDialogModule,
-    MatTooltipModule,
-    CustomSidenavComponent,
-    NavbarContentComponent,
-    NavbarContentInfoComponent,
-    //LoadAnimationComponent,
-    RouterModule,
-    CommonModule,
-    NotificationsComponent,
-    UserProfileComponent,
-  ],
-  templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.css',
+    selector: 'app-main-layout',
+    imports: [
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatDialogModule,
+        MatTooltipModule,
+        CustomSidenavComponent,
+        NavbarContentComponent,
+        NavbarContentInfoComponent,
+        //LoadAnimationComponent,
+        RouterModule,
+        CommonModule,
+        NotificationsComponent,
+        UserProfileComponent,
+    ],
+    templateUrl: './main-layout.component.html',
+    styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {
 

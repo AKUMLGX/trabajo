@@ -29,15 +29,14 @@ export interface PreConfirmacionModalData {
 }
 
 @Component({
-  selector: 'app-pre-confirmacion-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule
-  ],
-  template: `
+    selector: 'app-pre-confirmacion-modal',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule
+    ],
+    template: `
     <div class="pre-confirmacion-modal">
       <!-- Header Premium -->
       <div class="modal-header">
@@ -129,7 +128,7 @@ export interface PreConfirmacionModalData {
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
 .pre-confirmacion-modal {
   width: 900px;
   max-width: 95vw;

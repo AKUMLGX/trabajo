@@ -12,12 +12,11 @@ interface Documento {
 }
 
 @Component({
-  selector: 'app-asunto-detalle',
-  standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, NgxExtendedPdfViewerModule],
-  schemas: [NO_ERRORS_SCHEMA],
-  templateUrl: './asunto-detalle.component.html',
-  styleUrls: ['./asunto-detalle.component.css']
+    selector: 'app-asunto-detalle',
+    imports: [CommonModule, RouterModule, FormsModule, NgxExtendedPdfViewerModule],
+    schemas: [NO_ERRORS_SCHEMA],
+    templateUrl: './asunto-detalle.component.html',
+    styleUrls: ['./asunto-detalle.component.css']
 })
 export class AsuntoDetalleComponent implements OnInit {
   asuntoId = '';

@@ -13,16 +13,15 @@ export interface ConfirmacionModalData {
 }
 
 @Component({
-  selector: 'app-confirmacion-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule
-  ],
-  templateUrl: './confirmacion-modal.component.html',
-  styleUrl: './confirmacion-modal.component.css'
+    selector: 'app-confirmacion-modal',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule
+    ],
+    templateUrl: './confirmacion-modal.component.html',
+    styleUrl: './confirmacion-modal.component.css'
 })
 export class ConfirmacionModalComponent {
   titulo: string;

@@ -16,25 +16,22 @@ import { FormsModule } from '@angular/forms';
 import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
 
 @Component({
-  selector: 'app-tracking-form',
-  standalone: true,
-  imports: [ReactiveFormsModule, MatIcon, MatListModule, CommonModule, MatInputModule, MatFormFieldModule, FormsModule, MatDialogModule],
-  templateUrl: './tracking-form.component.html',
-
-  styleUrl: './tracking-form.component.css',
-  animations: [
-    dynamicHeight,
-    trigger('fadeInOut', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.35)' }),
-        animate('400ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
-      ]),
-      transition(':leave', [
-        animate('300ms ease-in', style({ opacity: 0, transform: 'scale(0.35)' })),
-      ]),
-    ]),
-  ],
-
+    selector: 'app-tracking-form',
+    imports: [ReactiveFormsModule, MatIcon, MatListModule, CommonModule, MatInputModule, MatFormFieldModule, FormsModule, MatDialogModule],
+    templateUrl: './tracking-form.component.html',
+    styleUrl: './tracking-form.component.css',
+    animations: [
+        dynamicHeight,
+        trigger('fadeInOut', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'scale(0.35)' }),
+                animate('400ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
+            ]),
+            transition(':leave', [
+                animate('300ms ease-in', style({ opacity: 0, transform: 'scale(0.35)' })),
+            ]),
+        ]),
+    ]
 })
 export class TrackingFormComponent implements OnInit, AfterViewInit {
   // Formulario adaptado para campos de Tlalcalli - Solo campos principales de captura

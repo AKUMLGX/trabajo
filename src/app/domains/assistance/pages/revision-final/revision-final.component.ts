@@ -89,29 +89,28 @@ interface AsuntoCapturado {
 }
 
 @Component({
-  selector: 'app-revision-final',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTabsModule,
-    MatCardModule,
-    MatChipsModule,
-    FormsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSortModule,
-    MatSelectModule,
-    MatTooltipModule,
-    MatDialogModule,
-    RevisionDetalleModalComponent,
-    RevisionCapturaModalComponent
-  ],
-  templateUrl: './revision-final.component.html',
-  styleUrls: ['./revision-final.component.css']
+    selector: 'app-revision-final',
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTabsModule,
+        MatCardModule,
+        MatChipsModule,
+        FormsModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSortModule,
+        MatSelectModule,
+        MatTooltipModule,
+        MatDialogModule,
+        RevisionDetalleModalComponent,
+        RevisionCapturaModalComponent
+    ],
+    templateUrl: './revision-final.component.html',
+    styleUrls: ['./revision-final.component.css']
 })
 export class RevisionFinalComponent implements OnInit {
 

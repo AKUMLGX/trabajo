@@ -7,10 +7,9 @@ import { CustomFormFieldComponent } from "../../stepper-base/custom-form-field/c
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-usuarios-requerimiento',
-  standalone: true,
-  imports: [CustomFormFieldComponent, CustomSelectComponent, ReactiveFormsModule, CommonModule],
-  templateUrl: './usuarios-requerimiento.component.html',
+    selector: 'app-usuarios-requerimiento',
+    imports: [CustomFormFieldComponent, CustomSelectComponent, ReactiveFormsModule, CommonModule],
+    templateUrl: './usuarios-requerimiento.component.html'
 })
 export class UsuariosRequerimientoComponent implements OnInit, OnChanges, OnDestroy {
 

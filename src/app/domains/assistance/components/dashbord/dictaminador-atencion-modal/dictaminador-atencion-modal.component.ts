@@ -30,16 +30,15 @@ interface AsuntoDictaminador {
 }
 
 @Component({
-  selector: 'app-dictaminador-atencion-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './dictaminador-atencion-modal.component.html',
-  styleUrl: './dictaminador-atencion-modal.component.css'
+    selector: 'app-dictaminador-atencion-modal',
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './dictaminador-atencion-modal.component.html',
+    styleUrl: './dictaminador-atencion-modal.component.css'
 })
 export class DictaminadorAtencionModalComponent implements OnInit, OnChanges {
   @Input() mostrarModal = false;

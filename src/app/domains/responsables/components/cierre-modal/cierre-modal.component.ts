@@ -20,24 +20,23 @@ export interface CierreModalData {
 }
 
 @Component({
-  selector: 'app-cierre-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './cierre-modal.component.html',
-  styleUrl: './cierre-modal.component.css'
+    selector: 'app-cierre-modal',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './cierre-modal.component.html',
+    styleUrl: './cierre-modal.component.css'
 })
 export class CierreModalComponent implements OnInit {
   formulario: FormGroup;

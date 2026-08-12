@@ -89,22 +89,20 @@ interface AsuntoDictaminador {
 }
 
 @Component({
-  selector: 'app-dictaminador-detalle',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    MatSnackBarModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatDialogModule,
-
-  ],
-  templateUrl: './dictaminador-detalle.component.html',
-  styleUrl: './dictaminador-detalle.component.css'
+    selector: 'app-dictaminador-detalle',
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatProgressBarModule,
+        MatTooltipModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatDialogModule,
+    ],
+    templateUrl: './dictaminador-detalle.component.html',
+    styleUrl: './dictaminador-detalle.component.css'
 })
 export class DictaminadorDetalleComponent implements OnInit {
   asunto: AsuntoDictaminador = {

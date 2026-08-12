@@ -11,11 +11,10 @@ export interface DataBeforeSubmit {
 }
 
 @Component({
-  selector: 'app-info-table-reply',
-  standalone: true,
-  imports: [MatDialogModule, MatTableModule],
-  templateUrl: './info-table-reply.component.html',
-  styleUrl: './info-table-reply.component.css'
+    selector: 'app-info-table-reply',
+    imports: [MatDialogModule, MatTableModule],
+    templateUrl: './info-table-reply.component.html',
+    styleUrl: './info-table-reply.component.css'
 })
 export class InfotableReplyComponent {
 

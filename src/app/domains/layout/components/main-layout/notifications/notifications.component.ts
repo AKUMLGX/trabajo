@@ -10,21 +10,20 @@ import { PendientesPorAcusarComponent } from './pendientes-por-acusar/pendientes
 import { ValidadorDeRespuestasComponent } from './validador-de-respuestas/validador-de-respuestas.component';
 
 @Component({
-  selector: 'app-notifications',
-  standalone: true,
-  imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatDialogModule,
-    RouterModule,
-    CommonModule,
-    PendientesPorAcusarComponent,
-    ValidadorDeRespuestasComponent,
-  ],
-  templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.css'
+    selector: 'app-notifications',
+    imports: [
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatDialogModule,
+        RouterModule,
+        CommonModule,
+        PendientesPorAcusarComponent,
+        ValidadorDeRespuestasComponent,
+    ],
+    templateUrl: './notifications.component.html',
+    styleUrl: './notifications.component.css'
 })
 export class NotificationsComponent {
 

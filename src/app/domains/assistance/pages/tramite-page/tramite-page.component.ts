@@ -19,10 +19,9 @@ interface AsuntoTramite {
 }
 
 @Component({
-  selector: 'app-tramite-page',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, RouterModule],
-  templateUrl: './tramite-page.component.html'
+    selector: 'app-tramite-page',
+    imports: [CommonModule, FormsModule, MatIconModule, RouterModule],
+    templateUrl: './tramite-page.component.html'
 })
 export class TramitePageComponent implements OnInit {
   // Año actual

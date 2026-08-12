@@ -31,19 +31,18 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-dashboard-page',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    RouterModule,
-    NgApexchartsModule,
-    FolioCardsComponent
-  ],
-  templateUrl: './dashboard-page.component.html',
-  styleUrl: './dashboard-page.component.css'
+    selector: 'app-dashboard-page',
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        RouterModule,
+        NgApexchartsModule,
+        FolioCardsComponent
+    ],
+    templateUrl: './dashboard-page.component.html',
+    styleUrl: './dashboard-page.component.css'
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {
   @ViewChild('chartEstatus') chartEstatus!: ChartComponent;
@@ -115,7 +114,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         fontFamily: 'Montserrat, sans-serif',
         animations: {
           enabled: true,
-          easing: 'easeinout',
           speed: 800
         },
         dropShadow: {
@@ -196,7 +194,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         toolbar: { show: false },
         animations: {
           enabled: true,
-          easing: 'easeinout',
           speed: 800
         }
       },
@@ -275,7 +272,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         zoom: { enabled: false },
         animations: {
           enabled: true,
-          easing: 'easeinout',
           speed: 800
         }
       },
@@ -343,7 +339,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         fontFamily: 'Montserrat, sans-serif',
         animations: {
           enabled: true,
-          easing: 'easeinout',
           speed: 800
         }
       },
@@ -412,7 +407,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           toolbar: { show: false },
           animations: {
             enabled: true,
-            easing: 'easeinout',
             speed: 800
           }
         },

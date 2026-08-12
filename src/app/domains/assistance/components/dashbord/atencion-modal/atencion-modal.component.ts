@@ -35,11 +35,10 @@ interface AsuntoPorAtencion {
 }
 
 @Component({
-  selector: 'app-atencion-modal',
-  templateUrl: './atencion-modal.component.html',
-  styleUrls: ['./atencion-modal.component.css'],
-  standalone: true,
-  imports: [CommonModule]
+    selector: 'app-atencion-modal',
+    templateUrl: './atencion-modal.component.html',
+    styleUrls: ['./atencion-modal.component.css'],
+    imports: [CommonModule]
 })
 export class AtencionModalComponent implements OnInit, OnChanges {
   @ViewChild('pdfContainer') pdfContainer!: ElementRef;

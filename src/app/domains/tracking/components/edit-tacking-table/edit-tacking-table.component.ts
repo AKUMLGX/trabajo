@@ -14,19 +14,17 @@ import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
-  selector: 'app-edit-tacking-table',
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    MatTableModule,
-    ReactiveFormsModule,
-    FormsModule,
-    CommonModule,
-
-    MatIcon,
-  ],
-  templateUrl: './edit-tacking-table.component.html',
-  styleUrl: './edit-tacking-table.component.css'
+    selector: 'app-edit-tacking-table',
+    imports: [
+        MatDialogModule,
+        MatTableModule,
+        ReactiveFormsModule,
+        FormsModule,
+        CommonModule,
+        MatIcon,
+    ],
+    templateUrl: './edit-tacking-table.component.html',
+    styleUrl: './edit-tacking-table.component.css'
 })
 export class EditTackingTableComponent implements OnInit {
   constructor(private fb: FormBuilder,

@@ -11,11 +11,10 @@ interface Documento {
 }
 
 @Component({
-  selector: 'app-asunto-parcial',
-  standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './asunto-parcial.component.html',
-  styleUrls: ['./asunto-parcial.component.css']
+    selector: 'app-asunto-parcial',
+    imports: [CommonModule, RouterModule, FormsModule],
+    templateUrl: './asunto-parcial.component.html',
+    styleUrls: ['./asunto-parcial.component.css']
 })
 export class AsuntoParcialComponent implements OnInit {
   asuntoId = '';

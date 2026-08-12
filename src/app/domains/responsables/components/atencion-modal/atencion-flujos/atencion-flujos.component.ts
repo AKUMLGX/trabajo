@@ -6,10 +6,9 @@ import { AtencionEspecialistasComponent } from '../atencion-especialistas/atenci
 import { FormularioAtencion } from '../atencion-modal.component';
 import { FormsModule } from '@angular/forms';
 @Component({
-  selector: 'app-atencion-flujos',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, AtencionEspecialistasComponent],
-  templateUrl: './atencion-flujos.component.html'
+    selector: 'app-atencion-flujos',
+    imports: [CommonModule, FormsModule, MatIconModule, AtencionEspecialistasComponent],
+    templateUrl: './atencion-flujos.component.html'
 })
 export class AtencionFlujosComponent {
   @Input() catalogos!: CatalogosAtencion;

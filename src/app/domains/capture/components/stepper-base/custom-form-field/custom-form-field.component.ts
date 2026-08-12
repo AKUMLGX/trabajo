@@ -4,72 +4,70 @@ import { CommonModule } from '@angular/common';
 import { KeyboardNavigationDirective } from '../../../directives/keyboard-navigation.directive';
 
 @Component({
-  selector: 'app-custom-form-field',
-  standalone: true,
-  imports: [CommonModule, KeyboardNavigationDirective],
-  templateUrl: './custom-form-field.component.html',
-  styleUrls: ['./custom-form-field.component.css'],
-  providers: [{provide: NG_VALUE_ACCESSOR,useExisting: forwardRef(() => CustomFormFieldComponent),multi: true}]
-  // template: `
-  //   <div class="custom-form-field" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage">
-  //     <label class="custom-label" [for]="fieldId">
-  //       {{ label }}
-  //       <span *ngIf="required" class="text-red-500 font-noto-sans ml-1">*</span>
-  //     </label>
-  //     <div class="input-container">
-  //       <input
-  //         #inputElement
-  //         [id]="fieldId"
-  //         [type]="type"
-  //         [placeholder]="placeholder"
-  //         [value]="value"
-  //         [disabled]="disabled"
-  //         [attr.maxlength]="maxlength"
-  //         [attr.list]="datalistOptions && datalistOptions.length > 0 ? fieldId + '-list' : null"
-  //         [class.with-dropdown]="enableAutocomplete && datalistOptions && datalistOptions.length > 0"
-  //         (input)="onInput($event)"
-  //         (focus)="onFocus()"
-  //         (blur)="onBlur()"
-  //         (keydown)="onKeyDown($event)"
-  //         [appKeyboardNavigation]="true"
-  //         [skipOnEnter]="enableAutocomplete && showOptions"
-  //         class="custom-input"
-  //       />
-  //       <datalist *ngIf="datalistOptions && datalistOptions.length > 0" [id]="fieldId + '-list'">
-  //         <option *ngFor="let option of datalistOptions" [value]="option"></option>
-  //       </datalist>
-  //       <button
-  //         *ngIf="enableAutocomplete && datalistOptions && datalistOptions.length > 0"
-  //         type="button"
-  //         class="autocomplete-toggle"
-  //         (mousedown)="toggleOptions($event)"
-  //         aria-label="Mostrar opciones"
-  //       >
-  //         <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
-  //           <path d="M1 1.5L7 6.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-  //         </svg>
-  //       </button>
-  //       <div class="input-border"></div>
-  //       <div class="input-highlight"></div>
-  //     </div>
-  //     <div
-  //       class="autocomplete-panel"
-  //       *ngIf="enableAutocomplete && showOptions && filteredOptions.length > 0"
-  //     >
-  //       <div
-  //         class="autocomplete-option"
-  //         *ngFor="let option of filteredOptions; let idx = index"
-  //         [class.active]="idx === highlightedIndex"
-  //         (mousedown)="selectOption(option, $event)"
-  //       >
-  //         {{ option }}
-  //       </div>
-  //     </div>
-  //     <div class="hint-text" *ngIf="hint && !errorMessage">{{ hint }}</div>
-  //     <div class="error-text" *ngIf="errorMessage">{{ errorMessage }}</div>
-  //   </div>
-  // `,
-
+    selector: 'app-custom-form-field',
+    imports: [CommonModule, KeyboardNavigationDirective],
+    templateUrl: './custom-form-field.component.html',
+    styleUrls: ['./custom-form-field.component.css'],
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomFormFieldComponent), multi: true }]
+    // template: `
+    //   <div class="custom-form-field" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage">
+    //     <label class="custom-label" [for]="fieldId">
+    //       {{ label }}
+    //       <span *ngIf="required" class="text-red-500 font-noto-sans ml-1">*</span>
+    //     </label>
+    //     <div class="input-container">
+    //       <input
+    //         #inputElement
+    //         [id]="fieldId"
+    //         [type]="type"
+    //         [placeholder]="placeholder"
+    //         [value]="value"
+    //         [disabled]="disabled"
+    //         [attr.maxlength]="maxlength"
+    //         [attr.list]="datalistOptions && datalistOptions.length > 0 ? fieldId + '-list' : null"
+    //         [class.with-dropdown]="enableAutocomplete && datalistOptions && datalistOptions.length > 0"
+    //         (input)="onInput($event)"
+    //         (focus)="onFocus()"
+    //         (blur)="onBlur()"
+    //         (keydown)="onKeyDown($event)"
+    //         [appKeyboardNavigation]="true"
+    //         [skipOnEnter]="enableAutocomplete && showOptions"
+    //         class="custom-input"
+    //       />
+    //       <datalist *ngIf="datalistOptions && datalistOptions.length > 0" [id]="fieldId + '-list'">
+    //         <option *ngFor="let option of datalistOptions" [value]="option"></option>
+    //       </datalist>
+    //       <button
+    //         *ngIf="enableAutocomplete && datalistOptions && datalistOptions.length > 0"
+    //         type="button"
+    //         class="autocomplete-toggle"
+    //         (mousedown)="toggleOptions($event)"
+    //         aria-label="Mostrar opciones"
+    //       >
+    //         <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+    //           <path d="M1 1.5L7 6.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    //         </svg>
+    //       </button>
+    //       <div class="input-border"></div>
+    //       <div class="input-highlight"></div>
+    //     </div>
+    //     <div
+    //       class="autocomplete-panel"
+    //       *ngIf="enableAutocomplete && showOptions && filteredOptions.length > 0"
+    //     >
+    //       <div
+    //         class="autocomplete-option"
+    //         *ngFor="let option of filteredOptions; let idx = index"
+    //         [class.active]="idx === highlightedIndex"
+    //         (mousedown)="selectOption(option, $event)"
+    //       >
+    //         {{ option }}
+    //       </div>
+    //     </div>
+    //     <div class="hint-text" *ngIf="hint && !errorMessage">{{ hint }}</div>
+    //     <div class="error-text" *ngIf="errorMessage">{{ errorMessage }}</div>
+    //   </div>
+    // `,
 })
 export class CustomFormFieldComponent implements ControlValueAccessor {
   @Input() label: string = '';

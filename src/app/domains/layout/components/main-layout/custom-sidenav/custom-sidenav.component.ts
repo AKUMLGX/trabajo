@@ -10,11 +10,10 @@ import { PermissionsService } from '../../../../services/permissions.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-custom-sidenav',
-  standalone: true,
-  imports: [MatListModule, MatIconModule, RouterLink, RouterModule, NgClass, CommonModule],
-  templateUrl: './custom-sidenav.component.html',
-  styleUrl: './custom-sidenav.component.css',
+    selector: 'app-custom-sidenav',
+    imports: [MatListModule, MatIconModule, RouterLink, RouterModule, NgClass, CommonModule],
+    templateUrl: './custom-sidenav.component.html',
+    styleUrl: './custom-sidenav.component.css'
 })
 export class CustomSidenavComponent implements OnInit, OnDestroy {
   // sideNavCollapsed = signal(false);

@@ -3,10 +3,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-custom-textarea',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'app-custom-textarea',
+    imports: [CommonModule],
+    template: `
     <div class="custom-textarea" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage" [class.disabled]="disabled">
       <label class="custom-label" [for]="fieldId">
         {{ label }}
@@ -31,14 +30,14 @@ import { CommonModule } from '@angular/common';
       <div class="error-text" *ngIf="errorMessage">{{ errorMessage }}</div>
     </div>
   `,
-  styleUrls: ['./custom-textarea.component.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomTextareaComponent),
-      multi: true
-    }
-  ]
+    styleUrls: ['./custom-textarea.component.css'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => CustomTextareaComponent),
+            multi: true
+        }
+    ]
 })
 export class CustomTextareaComponent implements ControlValueAccessor {
   @Input() label: string = '';

@@ -5,10 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-access-denied',
-  standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
-  template: `
+    selector: 'app-access-denied',
+    imports: [CommonModule, MatIconModule, MatButtonModule],
+    template: `
     <div class="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center p-4">
       <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
 
@@ -57,7 +56,7 @@ import { Router } from '@angular/router';
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     :host {
       display: block;
       height: 100vh;

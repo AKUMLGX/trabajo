@@ -38,27 +38,26 @@ interface DialogData {
 }
 
 @Component({
-  selector: 'app-revision-detalle-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule,
-    MatTabsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatRadioModule,
-    NgxExtendedPdfViewerModule
-  ],
-  schemas: [NO_ERRORS_SCHEMA],
-  templateUrl: './revision-detalle-modal.component.html',
-  styleUrls: ['./revision-detalle-modal.component.css']
+    selector: 'app-revision-detalle-modal',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule,
+        MatDividerModule,
+        MatTabsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatChipsModule,
+        MatRadioModule,
+        NgxExtendedPdfViewerModule
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+    templateUrl: './revision-detalle-modal.component.html',
+    styleUrls: ['./revision-detalle-modal.component.css']
 })
 export class RevisionDetalleModalComponent implements OnInit {
   asunto: Asunto;

@@ -8,17 +8,16 @@ import { FileService } from '../../../../domains/services/file.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
-  selector: 'app-expediente-detalle-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    PdfViewerModule
-  ],
-  templateUrl: './expediente-detalle-modal.component.html',
-  styleUrl: './expediente-detalle-modal.component.css'
+    selector: 'app-expediente-detalle-modal',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule,
+        PdfViewerModule
+    ],
+    templateUrl: './expediente-detalle-modal.component.html',
+    styleUrl: './expediente-detalle-modal.component.css'
 })
 export class ExpedienteDetalleModalComponent implements OnInit {
   expediente: ExpedienteTlalcalli;

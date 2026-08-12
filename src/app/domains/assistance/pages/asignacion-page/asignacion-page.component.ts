@@ -19,21 +19,20 @@ import { ArchivosAtencionService } from '../../../services/archivos-atencion.ser
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-asignacion-page',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxPaginationModule,
-    PdfViewerComponent,
-  ],
-  templateUrl: './asignacion-page.component.html',
-  // src\app\domains\assistance\pages\asignacion-page\asignacion-page.component.html
-  styles: [`
+    selector: 'app-asignacion-page',
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxPaginationModule,
+        PdfViewerComponent,
+    ],
+    templateUrl: './asignacion-page.component.html',
+    // src\app\domains\assistance\pages\asignacion-page\asignacion-page.component.html
+    styles: [`
     :host {
       display: block;
       height: 100%;

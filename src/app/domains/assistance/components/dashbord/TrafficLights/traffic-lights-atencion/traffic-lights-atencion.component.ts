@@ -9,11 +9,10 @@ import { ReaplyComponent } from './reaply/reply.component';
 
 
 @Component({
-  selector: 'app-traffic-lights-atencion',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, RouterModule, ReaplyComponent,],
-  templateUrl: './traffic-lights-atencion.component.html',
-  styleUrl: './traffic-lights-atencion.component.css'
+    selector: 'app-traffic-lights-atencion',
+    imports: [CommonModule, FormsModule, MatIconModule, RouterModule, ReaplyComponent,],
+    templateUrl: './traffic-lights-atencion.component.html',
+    styleUrl: './traffic-lights-atencion.component.css'
 })
 
 export class TrafficLightsAtencionComponent {

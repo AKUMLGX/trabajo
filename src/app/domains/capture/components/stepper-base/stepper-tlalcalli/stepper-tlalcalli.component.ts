@@ -50,21 +50,20 @@ type Paso2TemporalExtra = FormularioPaso2 & {
   fecha_vencimiento_35_dias?: Date | string;
 };
 @Component({
-  selector: 'app-stepper-tlalcalli',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatTooltipModule,
-    FirstStepTlalcalliComponent,
-    SecondStepTlalcalliComponent
-  ],
-  templateUrl: './stepper-tlalcalli.component.html',
-  styleUrls: ['./stepper-tlalcalli.component.css', './stepper-tlalcalli-global.css']
+    selector: 'app-stepper-tlalcalli',
+    imports: [
+        CommonModule,
+        MatStepperModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatTooltipModule,
+        FirstStepTlalcalliComponent,
+        SecondStepTlalcalliComponent
+    ],
+    templateUrl: './stepper-tlalcalli.component.html',
+    styleUrls: ['./stepper-tlalcalli.component.css', './stepper-tlalcalli-global.css']
 })
 export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   @ViewChild(MatStepper) stepper!: MatStepper;

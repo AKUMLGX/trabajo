@@ -8,11 +8,10 @@ export interface VisualizadorDetalle {
 }
 
 @Component({
-  selector: 'app-visualizador',
-  standalone: true,
-  imports: [MatIconModule,CommonModule],
-  templateUrl: './visualizador.component.html',
-  styleUrl: './visualizador.component.css'
+    selector: 'app-visualizador',
+    imports: [MatIconModule, CommonModule],
+    templateUrl: './visualizador.component.html',
+    styleUrl: './visualizador.component.css'
 })
 export class VisualizadorComponent {
 

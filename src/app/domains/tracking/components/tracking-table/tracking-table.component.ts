@@ -17,24 +17,22 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ExpedienteDetalleModalComponent } from '../expediente-detalle-modal/expediente-detalle-modal.component';
 
 @Component({
-  selector: 'app-tracking-table',
-  standalone: true,
-  imports: [
-    PdfViewerModule,
-    MatIcon,
-    NgxPaginationModule,
-    CommonModule,
-    MatDialogModule,
-    EditTackingTableComponent,
-    PdfViewerComponent,
-    MsgReaderComponent,
-  ],
-
-  templateUrl: './tracking-table.component.html',
-  styleUrl: './tracking-table.component.css',
-  schemas:[
-    CUSTOM_ELEMENTS_SCHEMA
-  ]
+    selector: 'app-tracking-table',
+    imports: [
+        PdfViewerModule,
+        MatIcon,
+        NgxPaginationModule,
+        CommonModule,
+        MatDialogModule,
+        EditTackingTableComponent,
+        PdfViewerComponent,
+        MsgReaderComponent,
+    ],
+    templateUrl: './tracking-table.component.html',
+    styleUrl: './tracking-table.component.css',
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+    ]
 })
 
 

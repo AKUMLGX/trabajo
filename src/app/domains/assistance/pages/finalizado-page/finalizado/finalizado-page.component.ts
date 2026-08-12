@@ -16,16 +16,15 @@ import { PdfViewerComponent } from './../../../../components/pdf-viewer/pdf-view
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-finalizado',
-  standalone: true,
-  imports: [RouterModule,
-    MatIconModule,
-    CommonModule,
-    FormsModule,
-    NgxPaginationModule,
-    MatButtonModule,
-    PdfViewerComponent,],
-  templateUrl: './finalizado-page.component.html'
+    selector: 'app-finalizado',
+    imports: [RouterModule,
+        MatIconModule,
+        CommonModule,
+        FormsModule,
+        NgxPaginationModule,
+        MatButtonModule,
+        PdfViewerComponent,],
+    templateUrl: './finalizado-page.component.html'
 })
 export class FinalizadoComponent implements OnInit {
 

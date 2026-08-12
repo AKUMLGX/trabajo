@@ -4,11 +4,10 @@ import { TemplateModalData } from '../../models/template-modal-data.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-custom-modal-with-template',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './custom-modal-with-template.component.html',
-  styleUrl: './custom-modal-with-template.component.css'
+    selector: 'app-custom-modal-with-template',
+    imports: [CommonModule],
+    templateUrl: './custom-modal-with-template.component.html',
+    styleUrl: './custom-modal-with-template.component.css'
 })
 export class CustomModalWithTemplateComponent {
 

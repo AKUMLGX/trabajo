@@ -7,11 +7,10 @@ import { ArchivosAtencionService } from '../../../../services/archivos-atencion.
 import { DictaminadorBandejaService } from '../../../../services/dictaminador-bandeja.service';
 
 @Component({
-  selector: 'app-revision-modal',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SafePipe],
-  templateUrl: './revision-modal.component.html',
-  styleUrls: ['./revision-modal.component.css']
+    selector: 'app-revision-modal',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, SafePipe],
+    templateUrl: './revision-modal.component.html',
+    styleUrls: ['./revision-modal.component.css']
 })
 export class RevisionModalComponent implements OnInit {
   @Input() mostrarModal = false;

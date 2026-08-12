@@ -5,15 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../../../../../environments/environment';
 
 @Component({
-  selector: 'app-pendientes-por-acusar',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatIconModule,
-  ],
-  templateUrl: './pendientes-por-acusar.component.html',
-  styleUrl: './pendientes-por-acusar.component.css'
+    selector: 'app-pendientes-por-acusar',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatIconModule,
+    ],
+    templateUrl: './pendientes-por-acusar.component.html',
+    styleUrl: './pendientes-por-acusar.component.css'
 })
 export class PendientesPorAcusarComponent {
 

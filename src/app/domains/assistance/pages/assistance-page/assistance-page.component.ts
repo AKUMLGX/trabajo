@@ -7,11 +7,10 @@ import { TramitePageComponent } from '../tramite-page/tramite-page.component';
 
 
 @Component({
-  selector: 'app-assistance-page',
-  standalone: true,
-  imports: [InitTemplateComponent,CardsComponent,RouterModule,TramitePageComponent],
-  templateUrl: './assistance-page.component.html',
-  styleUrl: './assistance-page.component.css',
+    selector: 'app-assistance-page',
+    imports: [InitTemplateComponent, CardsComponent, RouterModule, TramitePageComponent],
+    templateUrl: './assistance-page.component.html',
+    styleUrl: './assistance-page.component.css'
 })
 export class AssistancePageComponent {
 

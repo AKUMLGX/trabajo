@@ -63,11 +63,10 @@ const DOCUMENTO_DESCRIPCION: Record<number, string> = {
 };
 
 @Component({
-  selector: 'app-dictaminador-page',
-  standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, DictaminadorAtencionModalComponent],
-  templateUrl: './dictaminador-page.component.html',
-  styleUrl: './dictaminador-page.component.css'
+    selector: 'app-dictaminador-page',
+    imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, DictaminadorAtencionModalComponent],
+    templateUrl: './dictaminador-page.component.html',
+    styleUrl: './dictaminador-page.component.css'
 })
 export class DictaminadorPageComponent implements OnInit {
   // Propiedad para el número de administración

@@ -47,23 +47,22 @@ export interface AtencionCierreItem {
 }
 
 @Component({
-  selector: 'app-atencion-cierre-table',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatTooltipModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  templateUrl: './atencion-cierre-table.component.html',
-  styleUrl: './atencion-cierre-table.component.css'
+    selector: 'app-atencion-cierre-table',
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatTooltipModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    templateUrl: './atencion-cierre-table.component.html',
+    styleUrl: './atencion-cierre-table.component.css'
 })
 export class AtencionCierreTableComponent implements OnInit {
   // Datos cargados del backend

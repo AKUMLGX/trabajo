@@ -3,10 +3,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CatEspecialista } from '../../../services/atencion.service';
 @Component({
-  selector: 'app-atencion-especialistas',
-  standalone: true,
-  imports: [CommonModule, MatIconModule],
-  templateUrl: './atencion-especialistas.component.html'
+    selector: 'app-atencion-especialistas',
+    imports: [CommonModule, MatIconModule],
+    templateUrl: './atencion-especialistas.component.html'
 })
 export class AtencionEspecialistasComponent {
   @Input() externos: CatEspecialista[] = [];

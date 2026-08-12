@@ -11,18 +11,17 @@ import { EstadisticasDiarias } from '../../../interfaces/estadisticosTableRespon
 import { EstadisticosRequest } from '../../../interfaces/estadisticosRequest.interface';
 
 @Component({
-  selector: 'app-init-template',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    NgApexchartsModule,
-    MatDialogModule,
-    NgxPaginationModule,
-  ],
-  templateUrl: './init-template.component.html',
-  styleUrl: './init-template.component.css'
+    selector: 'app-init-template',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        NgApexchartsModule,
+        MatDialogModule,
+        NgxPaginationModule,
+    ],
+    templateUrl: './init-template.component.html',
+    styleUrl: './init-template.component.css'
 })
 export class InitTemplateComponent {
 

@@ -4,11 +4,10 @@ import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-successful-dialog',
-  standalone: true,
-  imports: [MatDialogModule],
-  templateUrl: './successful-dialog.component.html',
-  styleUrl: './successful-dialog.component.css'
+    selector: 'app-successful-dialog',
+    imports: [MatDialogModule],
+    templateUrl: './successful-dialog.component.html',
+    styleUrl: './successful-dialog.component.css'
 })
 export class SuccessfulDialogComponent {
 

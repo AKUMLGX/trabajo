@@ -19,18 +19,17 @@ import { PdfViewerComponent } from "../../../components/pdf-viewer/pdf-viewer.co
 import { PlazoPipe } from '../../../shared/components/plazo.pipe';
 
 @Component({
-  selector: 'app-parcial-detalle',
-  standalone: true,
-  imports: [CommonModule,
-    RouterModule,
-    FormsModule,
-    NgxPaginationModule,
-    MatIconModule,
-    MatButtonModule,
-    PdfViewerComponent,
-    PlazoPipe,],
-  templateUrl: './parcial-detalle.component.html',
-  styleUrls: ['./parcial-detalle.component.css']
+    selector: 'app-parcial-detalle',
+    imports: [CommonModule,
+        RouterModule,
+        FormsModule,
+        NgxPaginationModule,
+        MatIconModule,
+        MatButtonModule,
+        PdfViewerComponent,
+        PlazoPipe,],
+    templateUrl: './parcial-detalle.component.html',
+    styleUrls: ['./parcial-detalle.component.css']
 })
 export class ParcialDetalleComponent implements OnInit {
 

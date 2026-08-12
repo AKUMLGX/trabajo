@@ -36,15 +36,14 @@ interface DetalleCompleto {
 }
 
 @Component({
-  selector: 'app-detalle-atencion-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule
-  ],
-  templateUrl: './detalle-atencion-modal.component.html'
+    selector: 'app-detalle-atencion-modal',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule
+    ],
+    templateUrl: './detalle-atencion-modal.component.html'
 })
 
 export class DetalleAtencionModalComponent implements OnInit {

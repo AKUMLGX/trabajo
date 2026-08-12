@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
-  selector: 'app-graphic-administracion',
-  standalone: true,
-  imports: [NgxChartsModule],
-  templateUrl: './graphic-administracion.component.html',
-  styleUrl: './graphic-administracion.component.css'
+    selector: 'app-graphic-administracion',
+    imports: [NgxChartsModule],
+    templateUrl: './graphic-administracion.component.html',
+    styleUrl: './graphic-administracion.component.css'
 })
 export class GraphicAdministracionComponent {
 

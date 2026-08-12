@@ -33,20 +33,19 @@ interface Datos {
 
 
 @Component({
-  selector: 'app-reply',
-  standalone: true,
-  imports: [
-    TrafficLightsAtencionComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    MatTable,
-    MatDialogModule,
-    CommonModule,
-    MatIcon,
-    InfotableReplyComponent
-  ],
-  templateUrl: './reply.component.html',
-  styleUrl: './reply.component.css'
+    selector: 'app-reply',
+    imports: [
+        TrafficLightsAtencionComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        MatTable,
+        MatDialogModule,
+        CommonModule,
+        MatIcon,
+        InfotableReplyComponent
+    ],
+    templateUrl: './reply.component.html',
+    styleUrl: './reply.component.css'
 })
 
 export class ReaplyComponent implements OnInit {

@@ -10,16 +10,15 @@ import { HttpResponse } from '@angular/common/http';
 import { CatalogoResponsableResponse, CrearResponsableRequest, ActualizarResponsableRequest, MensajeResponsableResponse } from '../../../../interfaces/catalogos.interface';
 import { CustomModalComponent2 } from "../../../../responsables/components/atencion-modal/custom-modal/custom-modal/custom-modal.component";
 @Component({
-  selector: 'app-second-step-tlalcalli',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CustomSelectComponent,
-    CustomModalComponent2
-],
-  templateUrl: './second-step-tlalcalli.component.html',
-  styleUrl: './second-step-tlalcalli.component.css'
+    selector: 'app-second-step-tlalcalli',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        CustomSelectComponent,
+        CustomModalComponent2
+    ],
+    templateUrl: './second-step-tlalcalli.component.html',
+    styleUrl: './second-step-tlalcalli.component.css'
 })
 export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);

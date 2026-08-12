@@ -5,11 +5,10 @@ import { AsuntoService } from '../../services/asunto.service';
 
 
 @Component({
-  selector: 'app-pdf-viewer',
-  standalone: true,
-  imports: [PdfViewerModule],
-  templateUrl: './pdf-viewer.component.html',
-  styleUrl: './pdf-viewer.component.css',
+    selector: 'app-pdf-viewer',
+    imports: [PdfViewerModule],
+    templateUrl: './pdf-viewer.component.html',
+    styleUrl: './pdf-viewer.component.css'
 })
 export class PdfViewerComponent implements OnInit {
   pdfUrl = '';

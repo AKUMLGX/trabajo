@@ -27,16 +27,15 @@ export interface ExpedientesModalData {
 }
 
 @Component({
-  selector: 'app-expedientes-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule
-  ],
-  templateUrl: './expedientes-modal.component.html',
-  styleUrl: './expedientes-modal.component.css'
+    selector: 'app-expedientes-modal',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule
+    ],
+    templateUrl: './expedientes-modal.component.html',
+    styleUrl: './expedientes-modal.component.css'
 })
 export class ExpedientesModalComponent {
   oficio: string;

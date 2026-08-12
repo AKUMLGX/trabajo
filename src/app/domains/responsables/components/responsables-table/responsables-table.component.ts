@@ -36,18 +36,17 @@ export interface SemaforoPrioridad {
 }
 
 @Component({
-  selector: 'app-responsables-table',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatIcon,
-    MatSlideToggleModule,
-    NgxPaginationModule
-  ],
-  templateUrl: './responsables-table.component.html',
-  styleUrl: './responsables-table.component.css',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    selector: 'app-responsables-table',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatIcon,
+        MatSlideToggleModule,
+        NgxPaginationModule
+    ],
+    templateUrl: './responsables-table.component.html',
+    styleUrl: './responsables-table.component.css',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ResponsablesTableComponent implements OnInit {
   // Referencia a Math para usar en el template

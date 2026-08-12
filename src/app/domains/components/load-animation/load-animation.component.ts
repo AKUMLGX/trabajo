@@ -4,11 +4,10 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-load-animation',
-  standalone: true,
-  imports: [AsyncPipe, CommonModule],
-  templateUrl: './load-animation.component.html',
-  styleUrl: './load-animation.component.css',
+    selector: 'app-load-animation',
+    imports: [AsyncPipe, CommonModule],
+    templateUrl: './load-animation.component.html',
+    styleUrl: './load-animation.component.css'
 })
 export class LoadAnimationComponent {
   private readonly loadAnimationService = inject(LoadAnimationService);
