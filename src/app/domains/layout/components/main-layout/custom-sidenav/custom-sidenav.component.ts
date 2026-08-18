@@ -60,7 +60,7 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
         });
         menuItems.push({
           icon: 'analytics',
-          label: 'Seguimiento',
+          label: 'Consulta',
           route: '/layout/tracking',
         });
 
