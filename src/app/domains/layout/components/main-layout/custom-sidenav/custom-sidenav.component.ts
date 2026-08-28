@@ -64,32 +64,26 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
           route: '/layout/tracking',
         });
 
-        // No mostrar en menú: atención clásica, dictaminador, reportes, revisión final (requerimiento de negocio).
+        menuItems.push({
+          icon: 'pending_actions',
+          label: 'Centro de control',
+          route: '/layout/responsables',
+        });
 
-        // Centro de Control de Expedientes - Disponible para todos los usuarios autenticados
-        // El backend filtra automáticamente por el responsable del JWT
-        // Incluye el semáforo de atención (72h desde captura)
-        // menuItems.push({
-        //   icon: 'pending_actions',
-        //   label: 'Centro de control',
-        //   route: '/layout/responsables',
-        // });
+        // Bandeja de Atención/Cierre - Última parte del flujo
+        menuItems.push({
+          icon: 'check_circle',
+          label: 'Atención / cierre',
+          route: '/layout/atencion-cierre',
+        });
 
-        // // Bandeja de Atención/Cierre - Última parte del flujo
-        // menuItems.push({
-        //   icon: 'check_circle',
-        //   label: 'Atención / cierre',
-        //   route: '/layout/atencion-cierre',
-        // });
+        // Dashboard de Estadísticas - Vista ejecutiva para administradores
+        menuItems.push({
+          icon: 'insights',
+          label: 'Panel Estadístico',
+          route: '/layout/dashboard',
+        });
 
-        // // Dashboard de Estadísticas - Vista ejecutiva para administradores
-        // menuItems.push({
-        //   icon: 'insights',
-        //   label: 'Panel Estadístico',
-        //   route: '/layout/dashboard',
-        // });
-
-        // Si no hay bandejas disponibles, mostrar mensaje
         if (menuItems.length === 0) {
           menuItems.push({
             icon: 'warning',
