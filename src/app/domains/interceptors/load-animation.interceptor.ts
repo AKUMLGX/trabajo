@@ -14,7 +14,9 @@ export const loadAnimationInterceptor: HttpInterceptorFn = (
   const skipLoader =
     request.headers.has('X-Skip-Loader') ||
     request.url.includes('listar_archivos') ||
-    request.url.includes('get_atencion_por_administracion');
+    request.url.includes('get_atencion_por_administracion') ||
+    request.url.includes('por-oficio') ||
+    request.url.includes('validar-oficio');
 
   if (!skipLoader) {
     loadAnimationService.show();

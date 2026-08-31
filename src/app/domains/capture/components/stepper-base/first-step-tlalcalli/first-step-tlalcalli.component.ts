@@ -13,7 +13,7 @@ import { FormHelperService } from '../../../services/form-helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExpedientesModalComponent, ExpedientesModalData } from '../expedientes-modal/expedientes-modal.component';
 import { ConfirmacionModalComponent, ConfirmacionModalData } from '../confirmacion-modal/confirmacion-modal.component';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { inject } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGeneralResponse, 
@@ -747,13 +747,18 @@ ngOnInit(): void {
   });
   
   this.formulario.get('oficio')?.valueChanges
-    .pipe(takeUntil(this.destroy$))
+    .pipe(
+      debounceTime(600),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    )
     .subscribe((valor) => {
       this.errorOficioDuplicado = false;
       this.idOficioDuplicado = null;
 
-      if (valor && valor.trim()) {
-        this.verificarYActualizarExpedientePorOficio(valor.trim());
+      const oficio = valor?.trim();
+      if (oficio && oficio.length >= 3) {
+        this.verificarYActualizarExpedientePorOficio(oficio);
       }
     });
 
