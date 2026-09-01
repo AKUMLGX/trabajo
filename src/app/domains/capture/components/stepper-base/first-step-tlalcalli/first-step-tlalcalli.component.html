@@ -108,33 +108,32 @@
           </p>
         </div>
 
-        <div>
+        <div class="relative mb-7 w-full">
           <label
             for="expediente-generado"
-            class="mb-2 block text-sm font-noto-sans text-tlalcalli-dark"
+            class="mb-2.5 block text-[15px] font-noto-sans tracking-wide text-gray-800"
           >
             Número de expediente
-
-            <span class="text-red-600">*</span>
+            <span class="ml-1 font-noto-sans text-red-500">*</span>
           </label>
 
-          <div class="relative">
+          <div class="relative w-full overflow-visible rounded-2xl">
             <input
               id="expediente-generado"
               type="text"
               formControlName="expediente"
               placeholder="EXP-2607-0001"
               autocomplete="off"
-              class="h-[50px] w-full rounded-lg border border-tlalcalli-light-muted bg-white px-4 font-ubuntu-mono text-xl font-bold text-black outline-none transition placeholder:text-gray-400 focus:border-tlalcalli-primary focus:ring-2 focus:ring-tlalcalli-primary/20 disabled:cursor-not-allowed disabled:bg-tlalcalli-light-lavender/40"
+              class="w-full rounded-2xl border-2 px-6 py-4 pr-[60px] font-ubuntu-mono text-base font-bold tracking-wide text-gray-800 outline-none transition-all duration-300 placeholder:font-noto-sans placeholder:font-normal placeholder:italic placeholder:text-gray-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:opacity-70 border-transparent bg-gradient-to-br from-white to-slate-50 shadow-[0_4px_6px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] hover:border-tlalcalli-primary/20 hover:from-white hover:to-slate-100 hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)] focus:border-tlalcalli-primary focus:bg-white focus:shadow-[0_0_0_6px_rgba(48,38,76,0.10),0_8px_25px_rgba(0,0,0,0.15)]"
             />
 
             @if (
               formulario.get('modo_expediente')?.value === 'AUTOMATICO'
             ) {
               <div
-                class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-tlalcalli-primary"
+                class="pointer-events-none absolute right-5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-gray-800 text-white shadow"
               >
-                <span class="icon-font !text-[21px]">
+                <span class="icon-font !text-[14px]">
                   lock
                 </span>
               </div>
@@ -142,10 +141,14 @@
           </div>
 
           @if (expedienteError) {
-            <p class="mt-1 text-xs text-red-600">
+            <p class="mt-2 text-[13px] font-noto-sans text-red-500">
               {{ expedienteError }}
             </p>
           }
+
+          <p class="mt-1 text-xs font-noto-sans text-transparent select-none" aria-hidden="true">
+            &nbsp;
+          </p>
         </div>
 
         <div>
