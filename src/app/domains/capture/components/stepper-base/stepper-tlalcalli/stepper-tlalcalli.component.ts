@@ -492,9 +492,28 @@ private construirBodyTemporal(): TemporalInsertRequest {
     fecha_vencimiento_35_dias: this.formatearFechaParaApi(paso2.fecha_vencimiento_35_dias),
 
     documento_pdf_nombre: this.documentoPasoFinal?.documento_pdf_nombre || '',
-    prioridad: paso1.prioridad || '',
+    prioridad: this.prioridadComoTextoPaso1(paso1.prioridad) ?? '',
     fecha_requerimiento: this.formatearFechaParaApi(paso1.fecha_requerimiento)
   };
+}
+
+private prioridadComoTextoPaso1(prioridad: unknown): string | null {
+  if (prioridad === null || prioridad === undefined || prioridad === '') {
+    return null;
+  }
+
+  if (typeof prioridad === 'string') {
+    return prioridad;
+  }
+
+  const id = Number(prioridad);
+  const etiquetas: Record<number, string> = {
+    1: 'Normal',
+    2: 'Urgente',
+    3: 'Extra urgente',
+  };
+
+  return etiquetas[id] ?? String(id);
 }
 
 private formatearFechaParaApi(fecha: Date | string | null | undefined): string {

@@ -125,8 +125,15 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
 
     this.logger.debug('Paso 2 válido - Continuando');
     const valores = this.formulario.getRawValue();
+    const responsableSeleccionado = this.responsablesData.find(
+      (responsable) => responsable.id_aplicativo === valores.responsable
+    );
+
     this.formularioCompletado.emit({
       ...valores,
+      responsable:
+        responsableSeleccionado?.nombre ??
+        (valores.responsable != null ? String(valores.responsable) : ''),
       campos_pospuestos: this.camposDocumentosPendientes
     });
   }

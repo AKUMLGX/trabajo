@@ -143,7 +143,7 @@ export class ExpedienteTlalcalliService {
       plazo_vencimiento_prioridad: paso1.plazo_vencimiento_prioridad,
 
       // Paso 2: Seguimiento
-      responsable: paso2.responsable,
+      responsable: this.comoTexto(paso2.responsable),
       fecha_asignacion: null, // Campo eliminado - usar null o fecha actual por defecto
       sistema_aplicativo: null, // Campo movido al modal de atención en Centro de Control
       estatus: null, // Campo eliminado - usar null o valor por defecto
@@ -174,7 +174,7 @@ export class ExpedienteTlalcalliService {
       campos_documentos_pospuestos: paso3.campos_pospuestos || [],
 
       // Prioridad del expediente (asignada en captura - movida al Step 1)
-      prioridad: paso1.prioridad || 'MEDIA'
+      prioridad: this.prioridadComoTexto(paso1.prioridad)
     };
 
     const formData = new FormData();
@@ -216,6 +216,33 @@ export class ExpedienteTlalcalliService {
 
     // Valor por defecto si no coincide
     return 'CARPETA_GENERAL';
+  }
+
+  private comoTexto(valor: unknown): string {
+    if (valor === null || valor === undefined) {
+      return '';
+    }
+
+    return String(valor);
+  }
+
+  private prioridadComoTexto(prioridad: unknown): string | null {
+    if (prioridad === null || prioridad === undefined || prioridad === '') {
+      return null;
+    }
+
+    if (typeof prioridad === 'string') {
+      return prioridad;
+    }
+
+    const id = Number(prioridad);
+    const etiquetas: Record<number, string> = {
+      1: 'Normal',
+      2: 'Urgente',
+      3: 'Extra urgente',
+    };
+
+    return etiquetas[id] ?? String(id);
   }
 
   /**
