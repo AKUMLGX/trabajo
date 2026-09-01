@@ -610,7 +610,7 @@ actualizarUsuarios(
     private formHelper: FormHelperService
   ) {
 this.formulario = this.fb.group({
-  tipo_medio_recepcion: ['', Validators.required],
+  tipo_medio_recepcion: ['OFICIO', Validators.required],
 
   oficio: [
     '',
@@ -1049,7 +1049,14 @@ private actualizarModoExpediente(
     let completados = 0;
     Object.keys(this.formulario.controls).forEach(key => {
       const control = this.formulario.get(key);
-      if (control && control.value !== null && control.value !== '' && control.value !== false) {
+      const value = control?.value;
+      const tieneValor =
+        value !== null &&
+        value !== '' &&
+        value !== false &&
+        !(Array.isArray(value) && value.length === 0);
+
+      if (control && tieneValor) {
         completados++;
       }
     });
@@ -1388,6 +1395,16 @@ private construirPlazo(): {
   }
 
   private mostrarCamposInvalidos() {
+    const etiquetas: Record<string, string> = {
+      tipo_medio_recepcion: 'Tipo de requerimiento',
+      oficio: 'Oficio / Atenta nota / Petición interna',
+      servicio: 'Servicio',
+      usuarios: 'Usuarios solicitados',
+      remitente_general: 'Administración General',
+      referencia_asunto: 'Asunto',
+      plazo_vencimiento: 'Plazo de vencimiento',
+    };
+
     const camposInvalidos: string[] = [];
     Object.keys(this.formulario.controls).forEach(key => {
       const control = this.formulario.get(key);
@@ -1395,15 +1412,15 @@ private construirPlazo(): {
         this.logger.debug(`Campo inválido: ${key}`, {
           errors: control.errors
         });
-        camposInvalidos.push(key);
+        camposInvalidos.push(etiquetas[key] ?? key);
       }
     });
 
     if (camposInvalidos.length > 0) {
       this.mostrarModalError(
         'Formulario incompleto',
-        'Faltan campos obligatorios',
-        `Los siguientes campos son requeridos:\n\n${camposInvalidos.map(c => `• ${c}`).join('\n')}`
+        'Faltan campos obligatorios o hay valores inválidos',
+        `Revise:\n\n${camposInvalidos.map(c => `• ${c}`).join('\n')}`
       );
     }
   }
@@ -1596,6 +1613,19 @@ private construirPlazo(): {
     return null;
   }
 
+  get plazoVencimientoError(): string | null {
+    const control = this.formulario.get('plazo_vencimiento');
+    if (control && control.invalid && control.touched) {
+      if (control.hasError('min')) {
+        return 'El plazo debe ser al menos 1 día hábil';
+      }
+      if (control.hasError('max')) {
+        return 'El plazo no puede ser mayor a 999 días hábiles';
+      }
+    }
+    return null;
+  }
+
   get puedeAvanzar(): boolean {
     return this.formulario.valid;
   }
@@ -1603,7 +1633,7 @@ private construirPlazo(): {
   reiniciarFormulario(): void {
     this.logger.debug('Reiniciando formulario del paso 1 completamente');
     this.formulario.reset({
-    tipo_medio_recepcion: '',
+    tipo_medio_recepcion: 'OFICIO',
     modo_expediente: 'AUTOMATICO',
     servicio: null,
     usuarios: [],
@@ -1702,7 +1732,7 @@ precargarDatos(datos: any): void {
   this.formulario.patchValue(
     {
       tipo_medio_recepcion:
-        datos.tipo_medio_recepcion || '',
+        datos.tipo_medio_recepcion || 'OFICIO',
 
       servicio:
         datos.servicio ??
