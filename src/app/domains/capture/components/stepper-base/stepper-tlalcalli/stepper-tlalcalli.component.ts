@@ -33,6 +33,21 @@ type Paso1TemporalExtra = FormularioPaso1 & {
   fecha_requerimiento?: Date | string;
   remitente_general?: string;
   remitente_central?: string;
+  remitente_identificador?: string;
+  modo_expediente?: string;
+  mes_expediente?: string;
+  servicio?: number | string | null;
+  plazo_vencimiento?: number | string | null;
+  plazo_vencimiento_prioridad?: {
+    valor: number | null;
+    unidad: string;
+    es_urgente: boolean;
+  };
+  usuarios?: Array<{
+    tipo_usuario: string;
+    nombre: string;
+    rfc: string;
+  }>;
 };
 
 type Paso2TemporalExtra = FormularioPaso2 & {
@@ -442,8 +457,6 @@ private insertarTemporal(regresarAPaso1: boolean = false): void {
 }
 
 private construirBodyTemporal(): TemporalInsertRequest {
-  const ahora = new Date().toISOString();
-
   const paso1 = this.datosPaso1 as Paso1TemporalExtra;
   const paso2 = this.datosPaso2 as Paso2TemporalExtra;
 
@@ -452,68 +465,69 @@ private construirBodyTemporal(): TemporalInsertRequest {
     paso2.responsable ||
     '';
 
+  const plazo =
+    Number(
+      paso1.plazo_vencimiento ??
+      paso1.plazo_vencimiento_prioridad?.valor ??
+      0
+    );
+
+  const usuarios = (paso1.usuarios ?? []).map((usuario) => ({
+    tipo_usuario: usuario.tipo_usuario,
+    nombre: usuario.nombre,
+    rfc: usuario.rfc
+  }));
+
   return {
     id_expediente: this.expedienteId ?? 0,
-
-    oficio: paso1.oficio || '',
+    modo_expediente: paso1.modo_expediente || 'AUTOMATICO',
     expediente: paso1.expediente || '',
+    mes_expediente: String(paso1.mes_expediente ?? ''),
+    tipo_medio_recepcion: paso1.tipo_medio_recepcion || '',
+    oficio: paso1.oficio || '',
+    servicio: Number(paso1.servicio ?? 0),
     numero_entrada_central: paso1.numero_entrada_central || '',
     remitente_general: paso1.remitente_general || '',
     remitente_central: paso1.remitente_central || '',
+    remitente_identificador: paso1.remitente_identificador || '',
     remitente_area: paso1.remitente_area || '',
     fecha_documento: this.formatearFechaParaApi(paso1.fecha_documento),
     fecha_recibido: this.formatearFechaParaApi(paso1.fecha_recibido),
-    referencia_asunto: paso1.referencia_asunto || '',
+    fecha_requerimiento: this.formatearFechaParaApi(paso1.fecha_requerimiento),
+    prioridad: this.prioridadComoNumero(paso1.prioridad) ?? 1,
+    plazo_vencimiento_dias_habiles: Number.isFinite(plazo) && plazo > 0 ? plazo : 0,
     fecha_vencimiento: this.formatearFechaParaApi(paso1.fecha_vencimiento),
-
-    dias_retraso: paso1.dias_retraso || 0,
+    referencia_asunto: paso1.referencia_asunto || '',
+    usuarios,
     responsable,
-    fecha_asignacion: this.formatearFechaParaApi(paso2.fecha_asignacion),
-
     sistema_aplicativo: paso2.sistema_aplicativo || '',
-    woos: paso2.woos || '',
-    estatus: paso2.estatus || 'En revisión',
-    ubicacion: paso2.ubicacion || '',
-    tipo_respuesta: paso2.tipo_respuesta || '',
-    tipo_documento: paso2.tipo_documento || '',
-
-    expediente_fisico_digital: paso2.expediente_fisico_digital || '',
-
-    fecha_creacion: ahora,
-    fecha_actualizacion: ahora,
-    usuario_creacion: 'admin',
-    usuario_actualizacion: 'admin',
-
-    tipo_medio_recepcion: paso1.tipo_medio_recepcion || '',
-    tiene_fecha_atencion_inicial: !!paso2.fecha_atencion_inicial,
-    fecha_atencion_inicial: this.formatearFechaParaApi(paso2.fecha_atencion_inicial),
-    fecha_estimada_atencion: this.formatearFechaParaApi(paso2.fecha_estimada_atencion),
-    fecha_atencion_realizada: this.formatearFechaParaApi(paso2.fecha_atencion_realizada),
-    fecha_vencimiento_35_dias: this.formatearFechaParaApi(paso2.fecha_vencimiento_35_dias),
-
     documento_pdf_nombre: this.documentoPasoFinal?.documento_pdf_nombre || '',
-    prioridad: this.prioridadComoTextoPaso1(paso1.prioridad) ?? '',
-    fecha_requerimiento: this.formatearFechaParaApi(paso1.fecha_requerimiento)
+    expediente_fisico_digital: paso2.expediente_fisico_digital || 'DIGITAL'
   };
 }
 
-private prioridadComoTextoPaso1(prioridad: unknown): string | null {
+private prioridadComoNumero(prioridad: unknown): number | null {
   if (prioridad === null || prioridad === undefined || prioridad === '') {
     return null;
   }
 
-  if (typeof prioridad === 'string') {
+  if (typeof prioridad === 'number' && Number.isFinite(prioridad)) {
     return prioridad;
   }
 
-  const id = Number(prioridad);
-  const etiquetas: Record<number, string> = {
-    1: 'Normal',
-    2: 'Urgente',
-    3: 'Extra urgente',
+  const texto = String(prioridad).trim().toLowerCase();
+  const porEtiqueta: Record<string, number> = {
+    normal: 1,
+    urgente: 2,
+    'extra urgente': 3,
   };
 
-  return etiquetas[id] ?? String(id);
+  if (porEtiqueta[texto] !== undefined) {
+    return porEtiqueta[texto];
+  }
+
+  const id = Number(prioridad);
+  return Number.isFinite(id) ? id : null;
 }
 
 private formatearFechaParaApi(fecha: Date | string | null | undefined): string {
@@ -595,32 +609,38 @@ private cargarRegistroTemporalEnFormulario(
   const datosPaso1 = {
     oficio: registro.oficio,
     expediente: registro.expediente,
-    numero_entrada_central: registro.numero_entrada_central,
-
+    numero_entrada_central: registro.numero_central,
     remitente_area: registro.remitente_area,
     remitente_general: registro.remitente_general,
     remitente_central: registro.remitente_central,
-
+    remitente_identificador: registro.remitente_identificador,
+    modo_expediente: registro.modo_expediente ?? 'AUTOMATICO',
+    mes_expediente: registro.mes_expediente,
+    servicio: registro.servicio,
+    plazo_vencimiento: registro.dias_vencimiento,
+    plazo_vencimiento_prioridad: {
+      valor: registro.dias_vencimiento,
+      unidad: 'dias_habiles' as const,
+      es_urgente: registro.prioridad === 2 || registro.prioridad === 3
+    },
+    usuarios: registro.usuarios ?? [],
     fecha_documento:
       this.convertirFechaApiADate(registro.fecha_documento),
-
     fecha_recibido:
       this.convertirFechaApiADate(registro.fecha_recibido),
-
     fecha_vencimiento:
       this.convertirFechaApiADate(registro.fecha_vencimiento),
-
     fecha_requerimiento:
       this.convertirFechaApiADate(registro.fecha_requerimiento),
-
     referencia_asunto: registro.referencia_asunto,
     tipo_medio_recepcion: registro.tipo_medio_recepcion,
     prioridad: registro.prioridad
   };
 
-const datosPaso2: Partial<FormularioPaso2> = {
-  responsable: registro.responsable ?? ''
-};
+  const datosPaso2: Partial<FormularioPaso2> = {
+    responsable: registro.responsable ?? '',
+    sistema_aplicativo: registro.sistema_aplicativo ?? ''
+  };
 
   this.datosPaso1 = {
     ...(this.datosPaso1 || {}),
@@ -635,7 +655,7 @@ const datosPaso2: Partial<FormularioPaso2> = {
   this.documentoPasoFinal = {
     ...(this.documentoPasoFinal || {}),
     documento_pdf_nombre:
-      registro.documento_pdf_nombre
+      registro.documento_pdf_nombre ?? undefined
   };
 
   this.expedienteId = registro.id_expediente;
