@@ -7,8 +7,7 @@ import { environment } from '../../../../environments/environment';
 export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly urlBase = environment.baseUrl;
-  private readonly urlCatalogos = 'https://balam.sat.gob.mx/tlalcalli/api/v1';
-  // private readonly urlCatalogos =' http://10.100.101.97:8090/tlalcalli/api/v1';
+  private readonly urlCatalogos = environment.baseUrl.replace(/\/$/, '');
 
  private buildUrl(endpoint: string, useCatalogos = false): string {
   const base = useCatalogos ? this.urlCatalogos : this.urlBase;
