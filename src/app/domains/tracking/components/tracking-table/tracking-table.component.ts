@@ -261,9 +261,11 @@ export class TrackingTableComponent implements OnInit {
     
     // Abrir modal con el detalle del expediente
     this.dialog.open(ExpedienteDetalleModalComponent, {
-      width: '90vw',
-      maxWidth: '1000px',
-      maxHeight: '90vh',
+      width: '96vw',
+      maxWidth: '1400px',
+      height: '92vh',
+      maxHeight: '92vh',
+      panelClass: 'expediente-detalle-dialog',
       data: { expediente: expediente },
       disableClose: false
     });

@@ -1,19 +1,25 @@
 import { Component, EventEmitter, Output, Input, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
+import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
 import { LoggerService } from '../../../services/logger.service';
 import { FormHelperService } from '../../../services/form-helper.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import { HttpResponse } from '@angular/common/http';
 import { CatalogoResponsableResponse, CrearResponsableRequest, ActualizarResponsableRequest, MensajeResponsableResponse } from '../../../../interfaces/catalogos.interface';
+import { Aplicativo } from '../../../interfaces/aplicativo.interface';
+import { CatalogoReworkItem } from '../../../interfaces/expediente-rework.interface';
 import { CustomModalComponent2 } from "../../../../responsables/components/atencion-modal/custom-modal/custom-modal/custom-modal.component";
 @Component({
     selector: 'app-second-step-tlalcalli',
     imports: [
+    CommonModule,
     ReactiveFormsModule,
     CustomSelectComponent,
+    CustomTextareaComponent,
     CustomModalComponent2
 ],
     templateUrl: './second-step-tlalcalli.component.html',
@@ -38,6 +44,9 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
 
   opcionesResponsables: SelectOption[] = [];
   responsablesData: CatalogoResponsableResponse[] = [];
+  opcionesAplicativos: SelectOption[] = [];
+  opcionesEstatus: SelectOption[] = [];
+  catalogoEstatus: CatalogoReworkItem[] = [];
 
   modalResponsableVisible = false;
 
@@ -51,17 +60,11 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   CatalogoResponsableResponse | null = null;
 
 
-  opcionesEstatus: SelectOption[] = [
-    { value: 'ASIGNADO', label: 'Asignado' },
-    { value: 'PENDIENTE', label: 'Pendiente' },
-    { value: 'ATENCION_PARCIAL', label: 'Atención parcial' },
-    { value: 'ATENCION_TOTAL', label: 'Atención total' },
-    { value: 'REVISION_LEGAL', label: 'Revisión legal' }
-  ];
+  opcionesUbicacion: SelectOption[] = [];
 
-
-
-
+  pdfSeleccionado: File | null = null;
+  pdfNombreMostrado = '';
+  pdfError: string | null = null;
   readonly camposDocumentosPendientes = [
     'tipo_documento',
     'anexos',
@@ -77,13 +80,20 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   ) {
 
     this.formulario = this.fb.group({
-      responsable: [null, Validators.required] 
+      responsable: [null, Validators.required],
+      sistema_aplicativo: ['', Validators.required],
+      status: [null, Validators.required],
+      observaciones_estatus: [''],
+      ubicacion: [null, Validators.required]
     });
   }
 
 
   ngOnInit() {
     this.cargarResponsables();
+    this.cargarAplicativos();
+    this.cargarEstatus();
+    this.cargarUbicacion();
     this.camposTotales = Object.keys(this.formulario.controls).length;
     this.calcularProgreso();
     this.formulario.valueChanges
@@ -129,13 +139,53 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
       (responsable) => responsable.id_aplicativo === valores.responsable
     );
 
+    const statusSeleccionado = this.catalogoEstatus.find(
+      (item) => item.id_exp === Number(valores.status)
+    );
+
     this.formularioCompletado.emit({
       ...valores,
       responsable:
         responsableSeleccionado?.nombre ??
         (valores.responsable != null ? String(valores.responsable) : ''),
+      status_descripcion: statusSeleccionado?.descripcion ?? '',
+      documento_pdf: this.pdfSeleccionado,
+      documento_pdf_nombre: this.pdfNombreMostrado || undefined,
       campos_pospuestos: this.camposDocumentosPendientes
     });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files.length > 0 ? input.files[0] : null;
+
+    if (!file) {
+      this.limpiarArchivo();
+      return;
+    }
+
+    if (file.type !== 'application/pdf') {
+      this.pdfError = 'Sólo se aceptan archivos PDF';
+      this.pdfSeleccionado = null;
+      this.pdfNombreMostrado = '';
+      return;
+    }
+
+    this.pdfSeleccionado = file;
+    this.pdfNombreMostrado = file.name;
+    this.pdfError = null;
+  }
+
+  limpiarArchivo(): void {
+    this.pdfSeleccionado = null;
+    this.pdfNombreMostrado = '';
+    this.pdfError = null;
+  }
+
+  precargarPdfNombre(nombre?: string): void {
+    if (nombre) {
+      this.pdfNombreMostrado = nombre;
+    }
   }
 
   private marcarCamposInvalidos() {
@@ -178,11 +228,129 @@ get responsableError(): string | null {
   return null;
 }
 
+get sistemaAplicativoError(): string | null {
+  const control = this.formulario.get('sistema_aplicativo');
+
+  if (control?.touched && control.hasError('required')) {
+    return 'Debe seleccionar un aplicativo o sistema';
+  }
+
+  return null;
+}
+
+get estatusError(): string | null {
+  const control = this.formulario.get('status');
+
+  if (control?.touched && control.hasError('required')) {
+    return 'Debe seleccionar un estatus';
+  }
+
+  return null;
+}
+
+get ubicacionError(): string | null {
+  const control = this.formulario.get('ubicacion');
+
+  if (control?.touched && control.hasError('required')) {
+    return 'Debe seleccionar una ubicación';
+  }
+
+  return null;
+}
+
+private cargarEstatus(): void {
+  this.apiService
+    .getData<CatalogoReworkItem[]>('catalogo/getCat/3', true)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (response: HttpResponse<CatalogoReworkItem[]>) => {
+        const estatus = response.body ?? [];
+        this.catalogoEstatus = estatus;
+        this.opcionesEstatus = estatus.map(
+          (item): SelectOption => ({
+            value: item.id_exp,
+            label: item.descripcion
+          })
+        );
+
+        if (!this.formulario.get('status')?.value) {
+          this.formulario.patchValue(
+            { status: this.obtenerStatusPorDefecto() },
+            { emitEvent: false }
+          );
+        }
+
+        this.calcularProgreso();
+      },
+      error: (error: unknown) => {
+        this.logger.error('Error al cargar estatus:', error);
+        this.catalogoEstatus = [];
+        this.opcionesEstatus = [];
+      }
+    });
+}
+
+private obtenerStatusPorDefecto(): number | null {
+  const pendiente = this.catalogoEstatus.find((item) => {
+    const texto = item.descripcion.trim().toUpperCase();
+    return texto === 'PENDIENTE' || texto === 'PEDIENTE';
+  });
+
+  return pendiente?.id_exp ?? this.catalogoEstatus[0]?.id_exp ?? null;
+}
+
+private cargarUbicacion(): void {
+  this.apiService
+    .getData<CatalogoReworkItem[]>('catalogo/getCat/6', true)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (response: HttpResponse<CatalogoReworkItem[]>) => {
+        const ubicaciones = response.body ?? [];
+
+        this.opcionesUbicacion = ubicaciones.map(
+          (item): SelectOption => ({
+            value: item.id_exp,
+            label: item.descripcion
+          })
+        );
+
+        if (!this.formulario.get('ubicacion')?.value) {
+          this.formulario.patchValue(
+            { ubicacion: this.obtenerUbicacionPorDefecto() },
+            { emitEvent: false }
+          );
+        }
+
+        this.calcularProgreso();
+      },
+      error: (error: unknown) => {
+        this.logger.error('Error al cargar ubicación:', error);
+        this.opcionesUbicacion = [
+          { value: 1, label: 'Carpeta general' },
+          { value: 2, label: 'Individual' }
+        ];
+        this.formulario.patchValue({ ubicacion: 1 }, { emitEvent: false });
+      }
+    });
+}
+
+private obtenerUbicacionPorDefecto(): number | null {
+  const general = this.opcionesUbicacion.find((item) =>
+    String(item.label).toLowerCase().includes('general')
+  );
+
+  return (general?.value as number) ?? (this.opcionesUbicacion[0]?.value as number) ?? null;
+}
+
   reiniciarFormulario(): void {
     this.logger.debug('Reiniciando formulario del paso 2 completamente');
 
     this.formulario.reset({
-      responsable: null
+      responsable: null,
+      sistema_aplicativo: '',
+      status: this.obtenerStatusPorDefecto(),
+      observaciones_estatus: '',
+      ubicacion: this.obtenerUbicacionPorDefecto()
     });
 
     this.calcularProgreso();
@@ -194,11 +362,20 @@ get responsableError(): string | null {
 precargarDatos(
   datos: Partial<{
     responsable: string;
+    sistema_aplicativo: string;
+    status: number;
+    status_descripcion: string;
+    observaciones_estatus: string;
+    ubicacion: number;
   }>
 ): void {
   this.formulario.patchValue(
     {
-      responsable: datos.responsable ?? ''
+      responsable: datos.responsable ?? '',
+      sistema_aplicativo: datos.sistema_aplicativo ?? '',
+      status: datos.status ?? this.obtenerStatusPorDefecto(),
+      observaciones_estatus: datos.observaciones_estatus ?? '',
+      ubicacion: datos.ubicacion ?? this.obtenerUbicacionPorDefecto()
     },
     {
       emitEvent: true
@@ -212,6 +389,28 @@ precargarDatos(
     datos
   );
 }
+
+  private cargarAplicativos(): void {
+    this.apiService
+      .getData<Aplicativo[]>('catalogo/aplicativos', true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: HttpResponse<Aplicativo[]>) => {
+          const aplicativos = response.body ?? [];
+
+          this.opcionesAplicativos = aplicativos.map(
+            (aplicativo): SelectOption => ({
+              value: aplicativo.nombre,
+              label: aplicativo.nombre
+            })
+          );
+        },
+        error: (error: unknown) => {
+          this.logger.error('Error al cargar aplicativos:', error);
+          this.opcionesAplicativos = [];
+        }
+      });
+  }
 
   private cargarResponsables(): void {
   this.apiService

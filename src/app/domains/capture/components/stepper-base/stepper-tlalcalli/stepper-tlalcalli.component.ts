@@ -9,7 +9,6 @@ import { FirstStepTlalcalliComponent } from '../first-step-tlalcalli/first-step-
 import { SecondStepTlalcalliComponent } from '../second-step-tlalcalli/second-step-tlalcalli.component';
 import { PreConfirmacionModalComponent, CampoResumen, SeccionResumen } from '../pre-confirmacion-modal/pre-confirmacion-modal.component';
 import { ExpedienteTlalcalliService } from '../../../services/expediente-tlalcalli.service';
-import { PdfGeneratorService } from '../../../services/pdf-generator.service';
 import { LoggerService } from '../../../services/logger.service';
 import {
   FormularioPaso1,
@@ -20,6 +19,7 @@ import {
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiService } from '../../../services/api.service';
+import { firstValueFrom } from 'rxjs';
 import { TemporalInsertRequest } from '../../../interfaces/temporal.interface';
 import { TemporalInsertResponse } from '../../../interfaces/temporal.interface';
 import { TemporalRegistroRequest, TemporalRegistroResponse, TemporalEliminaRequest, TemporalEliminaResponse } from '../../../interfaces/temporal.interface';
@@ -30,7 +30,6 @@ type Paso1TemporalExtra = FormularioPaso1 & {
   numero_entrada_central?: string;
   fecha_documento?: Date | string;
   dias_retraso?: number;
-  fecha_requerimiento?: Date | string;
   remitente_general?: string;
   remitente_central?: string;
   remitente_identificador?: string;
@@ -99,7 +98,6 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
 
   constructor(
     private expedienteService: ExpedienteTlalcalliService,
-    private pdfService: PdfGeneratorService,
     private snackBar: MatSnackBar,
     private logger: LoggerService,
     private dialog: MatDialog,
@@ -158,11 +156,11 @@ onPaso1Completado(datos: FormularioPaso1) {
       return;
     }
 
-    const { documento_pdf, campos_pospuestos, ...seguimiento } = datos;
+    const { campos_pospuestos, documento_pdf, documento_pdf_nombre, ...seguimiento } = datos;
     this.datosPaso2 = seguimiento as FormularioPaso2;
     this.documentoPasoFinal = {
-      documento_pdf: documento_pdf as File | undefined,
-      documento_pdf_nombre: documento_pdf ? (documento_pdf as File).name : undefined,
+      documento_pdf: documento_pdf ?? null,
+      documento_pdf_nombre: documento_pdf?.name ?? documento_pdf_nombre,
       campos_pospuestos: campos_pospuestos || []
     };
 
@@ -236,7 +234,7 @@ onPaso1Completado(datos: FormularioPaso1) {
       if (this.datosPaso1.referencia_asunto) {
         const asunto = this.datosPaso1.referencia_asunto;
         camposRequerimiento.push({
-          etiqueta: 'Asunto',
+          etiqueta: 'Asunto/Referencia',
           valor: asunto.length > 80 ? asunto.substring(0, 80) + '...' : asunto,
           icono: 'subject'
         });
@@ -304,6 +302,39 @@ onPaso1Completado(datos: FormularioPaso1) {
         });
       }
 
+      if (this.datosPaso2.sistema_aplicativo) {
+        camposAsignacion.push({
+          etiqueta: 'Aplicativo / Sistema',
+          valor: this.datosPaso2.sistema_aplicativo,
+          icono: 'computer'
+        });
+      }
+
+      if (this.datosPaso2.status_descripcion || this.datosPaso2.estatus) {
+        camposAsignacion.push({
+          etiqueta: 'Estatus',
+          valor: this.datosPaso2.status_descripcion || String(this.datosPaso2.estatus),
+          icono: 'flag'
+        });
+      }
+
+      if (this.datosPaso2.ubicacion) {
+        camposAsignacion.push({
+          etiqueta: 'Ubicación',
+          valor: this.formatearUbicacionResumen(this.datosPaso2.ubicacion),
+          icono: 'folder'
+        });
+      }
+
+      if (this.datosPaso2.observaciones_estatus) {
+        const observaciones = this.datosPaso2.observaciones_estatus;
+        camposAsignacion.push({
+          etiqueta: 'Observaciones del estatus',
+          valor: observaciones.length > 80 ? observaciones.substring(0, 80) + '...' : observaciones,
+          icono: 'notes'
+        });
+      }
+
       if (camposAsignacion.length > 0) {
         secciones.push({
           titulo: 'Asignación',
@@ -314,6 +345,15 @@ onPaso1Completado(datos: FormularioPaso1) {
     }
 
     return secciones;
+  }
+
+  private formatearUbicacionResumen(ubicacion: string | number): string {
+    const mapa: Record<string, string> = {
+      '1': 'Carpeta general',
+      '2': 'Individual'
+    };
+
+    return mapa[String(ubicacion)] || String(ubicacion);
   }
 
   private formatearTipoMedio(tipo: string): string {
@@ -366,40 +406,61 @@ onPaso2Anterior(): void {
 
   // Finalizar expediente
   async finalizarExpediente() {
-    if (!this.datosPaso1 || !this.datosPaso2 || !this.documentoPasoFinal) {
+    if (!this.datosPaso1 || !this.datosPaso2) {
       this.mostrarMensaje('Faltan datos en el formulario', 'error');
       return;
     }
 
-    // PDF ya no es requerido
-
     this.guardando = true;
 
     try {
-      const expediente = await this.expedienteService
-        .crearExpedienteDesdePasos(
-          this.datosPaso1,
-          this.datosPaso2,
-          this.documentoPasoFinal
-        )
-        .toPromise();
-
-      this.expedienteId = expediente?.id_expediente || null;
-      this.expedienteGuardado = true;
-      console.log('UUID antes de eliminar temporal:',localStorage.getItem('uuid_temporal_expediente'));
-      this.eliminarRegistroTemporal();
-      this.transicionarPaso(2);
-      this.mostrarMensaje('Expediente guardado exitosamente', 'success');
-
-      this.pdfService.generarPDFExpediente(
-        this.datosPaso1,
-        this.datosPaso2,
-        this.documentoPasoFinal,
-        this.expedienteId || undefined
+      const respuesta = await firstValueFrom(
+        this.expedienteService.crearExpedienteReworkInicial(this.datosPaso1, this.datosPaso2)
       );
 
-      this.mostrarResumenExpediente(expediente);
-    } catch (error: any) {
+      this.expedienteId = respuesta?.id_expediente ?? null;
+      this.expedienteGuardado = true;
+
+      const pdfFile = this.documentoPasoFinal?.documento_pdf;
+      if (this.expedienteId && pdfFile instanceof File) {
+        try {
+          const pdfResp = await firstValueFrom(
+            this.expedienteService.cargarPdfRework(this.expedienteId, pdfFile)
+          );
+
+          const sinEspacio =
+            pdfResp.mensaje?.toLowerCase().includes('espacio suficiente') ?? false;
+
+          if (sinEspacio || !pdfResp.id) {
+            this.mostrarMensaje(
+              pdfResp.mensaje || 'El expediente se guardó, pero no se pudo adjuntar el PDF.',
+              'warning',
+              6000
+            );
+          } else {
+            this.documentoPasoFinal = {
+              ...(this.documentoPasoFinal || {}),
+              documento_pdf_nombre: pdfFile.name,
+            };
+            this.mostrarMensaje(pdfResp.mensaje || 'PDF cargado correctamente', 'success');
+          }
+        } catch (pdfError: unknown) {
+          console.error('Error al cargar PDF rework:', pdfError);
+          this.mostrarMensaje(
+            'Expediente guardado, pero falló la carga del PDF. Intente adjuntarlo después.',
+            'warning',
+            6000
+          );
+        }
+      }
+
+      console.log('UUID antes de eliminar temporal:', localStorage.getItem('uuid_temporal_expediente'));
+      this.eliminarRegistroTemporal();
+      this.transicionarPaso(2);
+      if (!pdfFile) {
+        this.mostrarMensaje(respuesta?.mensaje || 'Expediente guardado exitosamente', 'success');
+      }
+    } catch (error: unknown) {
       this.manejarError(error);
     } finally {
       this.guardando = false;
@@ -493,7 +554,9 @@ private construirBodyTemporal(): TemporalInsertRequest {
     remitente_area: paso1.remitente_area || '',
     fecha_documento: this.formatearFechaParaApi(paso1.fecha_documento),
     fecha_recibido: this.formatearFechaParaApi(paso1.fecha_recibido),
-    fecha_requerimiento: this.formatearFechaParaApi(paso1.fecha_requerimiento),
+    fecha_requerimiento: this.formatearFechaParaApi(
+      paso1.fecha_recibido ?? paso1.fecha_documento
+    ),
     prioridad: this.prioridadComoNumero(paso1.prioridad) ?? 1,
     plazo_vencimiento_dias_habiles: Number.isFinite(plazo) && plazo > 0 ? plazo : 0,
     fecha_vencimiento: this.formatearFechaParaApi(paso1.fecha_vencimiento),
@@ -630,8 +693,6 @@ private cargarRegistroTemporalEnFormulario(
       this.convertirFechaApiADate(registro.fecha_recibido),
     fecha_vencimiento:
       this.convertirFechaApiADate(registro.fecha_vencimiento),
-    fecha_requerimiento:
-      this.convertirFechaApiADate(registro.fecha_requerimiento),
     referencia_asunto: registro.referencia_asunto,
     tipo_medio_recepcion: registro.tipo_medio_recepcion,
     prioridad: registro.prioridad
@@ -668,8 +729,11 @@ private cargarRegistroTemporalEnFormulario(
     );
 
     this.paso2Component?.precargarDatos?.(
-      datosPaso2
+      datosPaso2 as Parameters<SecondStepTlalcalliComponent['precargarDatos']>[0]
     );
+    if (this.documentoPasoFinal?.documento_pdf_nombre) {
+      this.paso2Component?.precargarPdfNombre?.(this.documentoPasoFinal.documento_pdf_nombre);
+    }
   }, 100);
 }
 
@@ -815,36 +879,6 @@ private eliminarRegistroTemporal(): void {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 200);
   }
-
-  // regenerarPDF() {
-  //   if (this.datosPaso1 && this.datosPaso2 && this.documentoPasoFinal) {
-  //     this.pdfService.generarPDFExpediente(
-  //       this.datosPaso1,
-  //       this.datosPaso2,
-  //       this.documentoPasoFinal,
-  //       this.expedienteId || undefined
-  //     );
-  //     this.mostrarMensaje('PDF generado nuevamente', 'success', 3000);
-  //   } else {
-  //     this.mostrarMensaje('⚠️ No hay datos para generar el PDF', 'warning', 3000);
-  //   }
-  // }
-
-  regenerarPDF() {
-  if (this.datosPaso1 && this.datosPaso2) {
-    this.pdfService.generarPDFExpediente(
-      this.datosPaso1,
-      this.datosPaso2,
-      this.documentoPasoFinal ?? {},
-      this.expedienteId || undefined
-    );
-
-    this.mostrarMensaje('PDF generado nuevamente', 'success', 3000);
-  } else {
-    this.mostrarMensaje('⚠️ No hay datos para generar el PDF', 'warning', 3000);
-  }
-}
-
 
   reiniciarFormulario() {
     this.isTransitioning = true;

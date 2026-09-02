@@ -655,10 +655,11 @@ export class ResponsablesTableComponent implements OnInit {
    */
   verDetalleExpediente(expediente: ExpedienteTlalcalli): void {
     const dialogRef = this.dialog.open(ExpedienteDetalleModalComponent, {
-      width: '900px',
-      maxWidth: '95vw',
-      maxHeight: '90vh',
-      panelClass: 'expediente-modal-panel',
+      width: '96vw',
+      maxWidth: '1400px',
+      height: '92vh',
+      maxHeight: '92vh',
+      panelClass: 'expediente-detalle-dialog',
       data: { expediente }
     });
 

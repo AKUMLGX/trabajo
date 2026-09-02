@@ -1,287 +1,280 @@
-<div class="flex h-full w-full flex-col overflow-hidden bg-white">
+<div class="detalle-modal">
 
-  <div class="relative shrink-0 overflow-hidden bg-gradient-to-br from-[#34005b] via-[#3e0065] to-[#5c1a7a] px-7 py-6 text-white">
-
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_10%_30%,rgba(214,174,103,0.15)_0%,transparent_50%),radial-gradient(circle_at_90%_70%,rgba(255,255,255,0.08)_0%,transparent_50%)]">
-    </div>
-
-    <div class="absolute left-0 top-0 h-[3px] w-full bg-gradient-to-r from-transparent via-[#d6ae67] to-transparent">
-    </div>
-
-    <div class="relative z-[1] flex items-start justify-between gap-4">
-
-      <div class="flex-1">
-        <h2 class="m-0 text-[26px] font-noto-sans leading-tight text-white">
-          Detalle del Expediente
-        </h2>
-
-        @if (expediente?.expediente) {
-          <p class="mt-2 inline-block rounded-md bg-white/10 px-3 py-1 font-sans text-[13px] text-white/75">
-            {{ expediente.expediente }}
-          </p>
+  <header class="detalle-header">
+    <div class="detalle-header-main">
+      <p class="detalle-eyebrow">Expediente 360</p>
+      <div class="detalle-titulo-row">
+        <h2>{{ detalle?.expediente || data.expediente.expediente || 'Expediente' }}</h2>
+        @if (detalle) {
+          <span class="chip chip-estatus">{{ detalle.estatus }}</span>
+          <span class="chip chip-prioridad">{{ detalle.prioridad }}</span>
         }
       </div>
-
-      <!-- <div class="flex items-center gap-3">
-        <button
-          class="flex h-11 w-11 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white backdrop-blur transition duration-300 hover:scale-105 hover:border-[#d6ae67]/50 hover:bg-white/20"
-          (click)="cerrar()">
-
-          <span class="icon-font !h-[22px] !w-[22px] !text-[22px]">
-            close
-          </span>
-        </button>
-
-      </div> -->
+      @if (detalle && detalle.oficio !== 'N/A') {
+        <span class="detalle-badge">Oficio: {{ detalle.oficio }}</span>
+      }
+      @if (detalle?.asunto) {
+        <p class="detalle-asunto">{{ detalle!.asunto }}</p>
+      }
     </div>
-  </div>
+    <button type="button" class="btn-icono" (click)="cerrar()" aria-label="Cerrar">✕</button>
+  </header>
 
-  <div class="flex-1 overflow-y-auto bg-gradient-to-br from-[#f8f9fc] via-[#f0f2f8] to-[#e8edf5] p-7">
+  @if (cargando) {
+    <div class="detalle-estado">
+      <div class="spinner"></div>
+      <p>Cargando información del expediente...</p>
+    </div>
+  } @else if (errorCarga || !detalle) {
+    <div class="detalle-estado">
+      <p>No se pudo cargar el detalle del expediente.</p>
+    </div>
+  } @else {
 
-    <div class="mb-5 overflow-hidden rounded-[18px] border border-[#34005b]/10 border-l-4 border-l-[#34005b] bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+    <div class="detalle-split">
 
-      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
-        <span class="icon-font text-[#d6ae67]">description</span>
-
-        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
-          Requerimiento
-        </h3>
-      </div>
-
-      <div class="p-6">
-        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Tipo
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ formatearTipoMedioRecepcion(expediente.tipo_medio_recepcion) || 'N/A' }}
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Número
-            </span>
-
-            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-sans text-sm font-semibold text-[#1a1a1a]">
-              {{ expediente.oficio || 'N/A' }}
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Fecha
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ formatearFecha(expediente.fecha_requerimiento) }}
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Remitente(Área)
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ expediente.remitente_area || 'N/A' }}
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1 md:col-span-2">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Asunto
-            </span>
-
-            <span class="whitespace-pre-wrap text-sm font-noto-sans text-[#1a1a1a]">
-              {{ expediente.referencia_asunto || 'N/A' }}
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Nivel de Prioridad
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#34005b]">
-              {{ expediente.prioridad || 'N/A' }}
-            </span>
-          </div>
-
+      <!-- Columna izquierda: toda la información capturada -->
+      <aside class="detalle-panel detalle-panel-datos">
+        <div class="panel-datos-titulo">
+          <h3>Información del expediente</h3>
         </div>
-      </div>
-    </div>
 
-    <div class="mb-5 overflow-hidden rounded-[18px] border border-[#34005b]/10 border-l-4 border-l-[#34005b] bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+        <div class="panel-datos-scroll">
+          <section class="detalle-seccion">
+            <div class="detalle-grid">
+              <div class="campo-detalle">
+                <span class="label">Expediente</span>
+                <span class="valor valor-destacado">{{ detalle.expediente }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Oficio</span>
+                <span class="valor">{{ detalle.oficio }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Tipo de medio de recepción</span>
+                <span class="valor">{{ detalle.tipo_medio_recepcion }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Servicio</span>
+                <span class="valor">{{ detalle.servicio }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Número entrada central</span>
+                <span class="valor">{{ detalle.numero_entrada_central }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Remitente</span>
+                <span class="valor">{{ detalle.remitente }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Fecha del documento</span>
+                <span class="valor">{{ detalle.fecha_documento }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Fecha de recepción</span>
+                <span class="valor">{{ detalle.fecha_recepcion }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Fecha de vencimiento</span>
+                <span class="valor">{{ detalle.fecha_vencimiento }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Prioridad</span>
+                <span class="valor">{{ detalle.prioridad }}</span>
+              </div>
+              <div class="campo-detalle campo-completo">
+                <span class="label">Asunto / Referencia</span>
+                <span class="valor valor-multilinea">{{ detalle.asunto }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Sistema / Aplicativo</span>
+                <span class="valor">{{ detalle.aplicativos }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Responsable</span>
+                <span class="valor">{{ detalle.responsable }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Estatus</span>
+                <span class="valor">{{ detalle.estatus }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Ubicación</span>
+                <span class="valor">{{ detalle.ubicacion }}</span>
+              </div>
+              <div class="campo-detalle campo-completo">
+                <span class="label">Observaciones</span>
+                <span class="valor valor-multilinea">{{ detalle.observaciones }}</span>
+              </div>
+            </div>
+          </section>
 
-      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
-        <span class="icon-font text-[#d6ae67]">folder</span>
-
-        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
-          Expediente
-        </h3>
-      </div>
-
-      <div class="p-6">
-        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Número de Expediente
-            </span>
-
-            <span class="rounded-xl border border-[#34005b]/10 bg-[#f8f9fc] px-4 py-2 font-sans text-sm font-noto-sans text-[#34005b]">
-              {{ expediente.expediente || 'N/A' }}
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Fecha del Documento
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ formatearFecha(expediente.fecha_documento) }}
-            </span>
-          </div>
-
+          <section class="detalle-seccion">
+            <h4 class="subseccion-titulo">Usuarios del requerimiento</h4>
+            @if (detalle.usuarios.length === 0) {
+              <p class="sin-datos">Sin usuarios registrados</p>
+            } @else {
+              <div class="tabla-usuarios">
+                <div class="tabla-usuarios-head">
+                  <span>Nombre</span>
+                  <span>RFC</span>
+                  <span>Tipo</span>
+                </div>
+                @for (usuario of detalle.usuarios; track $index) {
+                  <div class="tabla-usuarios-row">
+                    <span>{{ usuario.nombre || 'N/A' }}</span>
+                    <span>{{ usuario.rfc || 'N/A' }}</span>
+                    <span>{{ usuario.tipo_usuario || 'N/A' }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </section>
         </div>
-      </div>
-    </div>
+      </aside>
 
-    <div class="mb-5 overflow-hidden rounded-[18px] border border-emerald-500/10 border-l-4 border-l-emerald-500 bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
-
-      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-emerald-500/5 px-6 py-4">
-        <span class="icon-font text-emerald-500">input</span>
-
-
-        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
-          Entrada
-        </h3>
-      </div>
-
-      <div class="p-6">
-        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Número
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ expediente.numero_entrada_central || 'N/A' }}
-            </span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Fecha de Acuse
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ formatearFecha(expediente.fecha_recibido) }}
-            </span>
-          </div>
-
+      <!-- Columna derecha: documentos -->
+      <main class="detalle-panel detalle-panel-docs">
+        <div class="docs-toolbar">
+          <nav class="tabs-docs" aria-label="Documentos del expediente">
+            <button type="button" [class.activo]="tabDocs === 'inicial'" (click)="cambiarTabDocs('inicial')">
+              Oficio inicial
+            </button>
+            <button type="button" [class.activo]="tabDocs === 'adjuntos'" (click)="cambiarTabDocs('adjuntos')">
+              Oficios adjuntos
+              @if (oficiosAdjuntos.length > 0) {
+                <span class="badge-count">{{ oficiosAdjuntos.length }}</span>
+              }
+            </button>
+          </nav>
+          <button type="button" class="btn-agregar-oficio" (click)="toggleFormularioOficio()">
+            + Agregar oficio
+          </button>
         </div>
-      </div>
-    </div>
 
-    <div class="mb-5 overflow-hidden rounded-[18px] border border-[#34005b]/10 border-l-4 border-l-[#34005b] bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
-
-      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
-        <span class="icon-font text-tlalcalli-gold">assignment_ind</span>
-
-        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
-          Asignación
-        </h3>
-      </div>
-
-      <div class="p-6">
-        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Responsable
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#34005b]">
-              {{ expediente.responsable || 'N/A' }}
-            </span>
+        @if (mostrarFormularioOficio) {
+          <div class="form-oficio-adjunto">
+            <h4>Nuevo oficio adjunto</h4>
+            @if (mensajeOficioApi) {
+              <p class="aviso-api">{{ mensajeOficioApi }}</p>
+            }
+            <div class="form-oficio-grid">
+              <label>
+                <span>Tipo de oficio</span>
+                <select [(ngModel)]="nuevoOficio.tipo">
+                  <option value="SOLICITUD_INFO">Solicitud de información</option>
+                  <option value="COMISION_APOYO">Comisión de apoyo</option>
+                  <option value="OTRO">Otro</option>
+                </select>
+              </label>
+              <label>
+                <span>Número de oficio</span>
+                <input type="text" [(ngModel)]="nuevoOficio.num_oficio" placeholder="Ej. COM-2026-001" />
+              </label>
+              <label>
+                <span>Fecha del documento</span>
+                <input type="date" [(ngModel)]="nuevoOficio.fecha_documento" />
+              </label>
+              <label class="span-completo">
+                <span>Descripción breve</span>
+                <input type="text" [(ngModel)]="nuevoOficio.descripcion" placeholder="Opcional" />
+              </label>
+              <label class="span-completo">
+                <span>Archivo PDF</span>
+                <input type="file" accept="application/pdf,.pdf" (change)="onArchivoOficioSeleccionado($event)" />
+                @if (nuevoOficio.nombre_archivo) {
+                  <small class="archivo-seleccionado">{{ nuevoOficio.nombre_archivo }}</small>
+                }
+              </label>
+            </div>
+            <div class="form-oficio-acciones">
+              <button type="button" class="btn-secundario" (click)="cancelarFormularioOficio()">Cancelar</button>
+              <button type="button" class="btn-primario" (click)="guardarOficioAdjunto()" [disabled]="guardandoOficio">
+                {{ guardandoOficio ? 'Guardando...' : 'Guardar oficio' }}
+              </button>
+            </div>
           </div>
+        }
 
+        <div class="docs-lista">
+          @if (tabDocs === 'inicial') {
+            @if (detalle.tiene_pdf) {
+              <button
+                type="button"
+                class="doc-item"
+                [class.doc-item-activo]="documentoActivo === 'inicial'"
+                (click)="seleccionarDocumentoInicial()">
+                <span class="doc-icono">📄</span>
+                <span class="doc-info">
+                  <strong>{{ detalle.documento_pdf_nombre }}</strong>
+                  <small>Oficio inicial · Captura</small>
+                </span>
+              </button>
+            } @else {
+              <div class="docs-vacio">
+                <span class="pdf-icono">📄</span>
+                <p>Sin oficio inicial adjunto</p>
+                <small>El PDF de captura aparecerá aquí cuando esté disponible.</small>
+              </div>
+            }
+          }
+
+          @if (tabDocs === 'adjuntos') {
+            @if (oficiosAdjuntos.length === 0) {
+              <div class="docs-vacio">
+                <span class="pdf-icono">📎</span>
+                <p>Sin oficios adjuntos</p>
+                <small>Use «Agregar oficio» para anexar documentación al expediente.</small>
+              </div>
+            } @else {
+              @for (oficio of oficiosAdjuntos; track $index) {
+                <button
+                  type="button"
+                  class="doc-item"
+                  [class.doc-item-activo]="documentoActivo === $index"
+                  (click)="seleccionarOficioAdjunto($index)">
+                  <span class="doc-icono">📎</span>
+                  <span class="doc-info">
+                    <strong>{{ oficio.num_oficio }}</strong>
+                    <small>{{ etiquetaTipoOficio(oficio.tipo) }} · {{ oficio.nombre_archivo }}</small>
+                  </span>
+                </button>
+              }
+            }
+          }
         </div>
-      </div>
+
+        <div class="visor-pdf-panel">
+          @if (cargandoPdf) {
+            <div class="visor-estado">
+              <div class="spinner"></div>
+              <p>Cargando documento...</p>
+            </div>
+          } @else if (mostrarPdf && pdfUrl) {
+            <div class="pdf-viewer-wrap">
+              <div class="visor-acciones">
+                <button type="button" class="btn-secundario" (click)="descargarDocumentoActivo()">Descargar</button>
+              </div>
+              <pdf-viewer
+                [src]="pdfUrl"
+                [render-text]="true"
+                [original-size]="false"
+                style="width: 100%; height: 100%;">
+              </pdf-viewer>
+            </div>
+          } @else {
+            <div class="visor-estado">
+              <span class="pdf-icono">👁</span>
+              <p>Seleccione un documento de la lista para visualizarlo</p>
+            </div>
+          }
+        </div>
+      </main>
     </div>
 
-    <div class="mb-5 overflow-hidden rounded-[18px] border border-[#34005b]/10 border-l-4 border-l-[#34005b] bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
+    <footer class="detalle-footer">
+      <button type="button" class="btn-cerrar" (click)="cerrar()">Cerrar</button>
+    </footer>
+  }
 
-      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-[#34005b]/5 px-6 py-4">
-        <span class="icon-font text-tlalcalli-gold">computer</span>
-
-        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
-          Sistema y Seguimiento
-        </h3>
-      </div>
-
-      <div class="p-6">
-        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Sistema / Aplicativo
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ expediente.sistema_aplicativo || 'N/A' }}
-            </span>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-5 overflow-hidden rounded-[18px] border border-emerald-500/10 border-l-4 border-l-emerald-500 bg-white shadow-[0_4px_20px_rgba(52,0,91,0.06)]">
-
-      <div class="flex items-center gap-3 border-b border-[#34005b]/10 bg-emerald-500/5 px-6 py-4">
-        <span class="icon-font text-emerald-500">input</span>
-
-        <h3 class="text-sm font-noto-sans uppercase tracking-wide text-[#34005b]">
-          Estado
-        </h3>
-      </div>
-
-      <div class="p-6">
-        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-          <div class="flex flex-col gap-1">
-            <span class="text-[11px] font-noto-sans uppercase tracking-wide text-[#3e0065]">
-              Estatus
-            </span>
-
-            <span class="text-sm font-noto-sans text-[#1a1a1a]">
-              {{ expediente.estatus || 'N/A' }}
-            </span>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="flex shrink-0 justify-end gap-4 border-t-2 border-[#34005b]/10 bg-white px-7 py-5">
-
-    <button
-      class="rounded-xl bg-gradient-to-br from-[#34005b] to-[#3e0065] px-8 py-3.5 text-sm font-noto-sans text-white shadow-[0_6px_20px_rgba(52,0,91,0.35)] transition duration-300 hover:-translate-y-1 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]"
-      (click)="cerrar()">
-
-      Cerrar
-    </button>
-
-  </div>
 </div>
-

@@ -1,19 +1,10 @@
-/* :host ::ng-deep .has-problematic-chars .custom-input,
-:host ::ng-deep app-custom-form-field[formcontrolname="oficio"] .custom-input {
-  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
-  font-size: 16px;
-  letter-spacing: 0.05em;
+:host .expediente-input {
+  min-height: 58px;
 }
 
-:host ::ng-deep .has-problematic-chars .input-container {
-  border: 2px solid #fbbf24 !important;
-  border-radius: 12px;
-  background: #fffbeb;
+:host .expediente-input:disabled {
+  opacity: 1;
+  color: #111827;
+  -webkit-text-fill-color: #111827;
+  font-weight: 700;
 }
-
-:host ::ng-deep .has-problematic-chars .custom-input:focus {
-  border-color: #f59e0b !important;
-  box-shadow: 
-    0 0 0 4px rgba(245, 158, 11, 0.1),
-    0 4px 12px rgba(245, 158, 11, 0.15) !important;
-} */

@@ -83,9 +83,13 @@ export interface FormularioPaso2 {
   responsable_fecha_asignacion?: string; // Ej: "N/A" (flujos legacy)
   woos?: string; // Ej: "REQS00002058748"
   numero_solicitudes_reales?: number; // Número de solicitudes
-  observaciones?: string; // Ej: "059 Víctor 2025"
-  estatus?: string; // Ej: "ATENDIDO"
-  ubicacion_carpeta?: string; // Ej: "Carpeta General - 1"
+  observaciones?: string;
+  observaciones_estatus?: string;
+  status?: number;
+  status_descripcion?: string;
+  estatus?: string;
+  ubicacion?: number | string;
+  ubicacion_carpeta?: string;
   respuesta_total_parcial?: string; // Ej: "Total", "Parcial", "Sin Respuesta"
   referencia_respuesta?: string; // Ej: "102 06 00 00 00 2025-059"
   fecha_notificacion?: Date; // Fecha de notificación

@@ -1,281 +1,246 @@
-import { trigger, style, transition, animate, } from '@angular/animations';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Component, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { trigger, style, transition, animate } from '@angular/animations';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { HttpResponse } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
 
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+
 import { dynamicHeight } from '../../../shared/animacion/dynamicHeight.trigger';
-import { AsuntoService } from '../../../services/asunto.service';
 import { ExpedienteTlalcalliService } from '../../../../domains/capture/services/expediente-tlalcalli.service';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
+import { ApiService } from '../../../../domains/capture/services/api.service';
+import { CatalogoResponsableResponse } from '../../../../domains/interfaces/catalogos.interface';
+import { CatalogoReworkItem } from '../../../../domains/capture/interfaces/expediente-rework.interface';
+
+interface OpcionSelect {
+  value: number;
+  label: string;
+}
 
 @Component({
-    selector: 'app-tracking-form',
-    imports: [ReactiveFormsModule, MatIcon, MatListModule, MatInputModule, MatFormFieldModule, FormsModule, MatDialogModule],
-    templateUrl: './tracking-form.component.html',
-    styleUrl: './tracking-form.component.css',
-    animations: [
-        dynamicHeight,
-        trigger('fadeInOut', [
-            transition(':enter', [
-                style({ opacity: 0, transform: 'scale(0.35)' }),
-                animate('400ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
-            ]),
-            transition(':leave', [
-                animate('300ms ease-in', style({ opacity: 0, transform: 'scale(0.35)' })),
-            ]),
-        ]),
-    ]
+  selector: 'app-tracking-form',
+  imports: [CommonModule, ReactiveFormsModule, MatListModule],
+  templateUrl: './tracking-form.component.html',
+  styleUrl: './tracking-form.component.css',
+  animations: [
+    dynamicHeight,
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.35)' }),
+        animate('400ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0, transform: 'scale(0.35)' })),
+      ]),
+    ]),
+  ],
 })
-export class TrackingFormComponent implements OnInit, AfterViewInit {
-  // Formulario adaptado para campos de Tlalcalli - Solo campos principales de captura
+export class TrackingFormComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+
   public consultForm: FormGroup = this.fb.group({
-    oficio: new FormControl(''),
     expediente: new FormControl(''),
-    tipo_medio_recepcion: new FormControl(''),
-    remitente_area: new FormControl(''),
-    numero_entrada_central: new FormControl(''),
-    responsable: new FormControl(''),
-    prioridad: new FormControl(''),
+    oficio: new FormControl(''),
+    prioridad: new FormControl<number | ''>(''),
+    status: new FormControl<number | ''>(''),
+    responsable: new FormControl<number | ''>(''),
     fecha_creacion_desde: new FormControl(''),
     fecha_creacion_hasta: new FormControl(''),
-    tipoBusqueda: new FormControl('Nuevos'),
   });
 
-  public fecha_inicial = new FormControl('');
-  public administracion = new FormControl('');
-  public formato = new FormControl('xlsx');
-  public fecha_final = new FormControl('');
+  opcionesPrioridad: OpcionSelect[] = [];
+  opcionesEstatus: OpcionSelect[] = [];
+  opcionesResponsables: OpcionSelect[] = [];
 
-  public fechaActual = '2018-11-11';
+  private catalogoPrioridad: CatalogoReworkItem[] = [];
+  private catalogoEstatus: CatalogoReworkItem[] = [];
+  private catalogoResponsables: CatalogoResponsableResponse[] = [];
 
-  input_one = 0
-  input_two = 0
-
-
-  selecionarOpcion = ''
-
-  @ViewChild('InputFormulario') InputFormulario!: ElementRef<HTMLButtonElement>;
   showCoincidencias: Record<string, boolean> = {};
-  campoValor: Record<string, any> = {};
-  // Campos adaptados para Tlalcalli - Solo campos principales de captura
-  campos: string[] = ["oficio", "expediente", "remitente_area", "responsable", "prioridad"]
+  coincidencias: string[] = [];
+  nombreCampoAutocomplete = '';
+
   constructor(
     private fb: FormBuilder,
-    private asuntoService: AsuntoService,
     private expedienteService: ExpedienteTlalcalliService,
-    private shareData: SharedDataFormService,
+    private apiService: ApiService,
     private route: ActivatedRoute
-  ) {
-    // Campos adaptados para Tlalcalli - Solo campos principales de captura
-    this.campoValor = {
-      oficio: '',
-      expediente: '',
-      tipo_medio_recepcion: '',
-      remitente_area: '',
-      numero_entrada_central: '',
-      responsable: '',
-      prioridad: '',
-      fecha_creacion_desde: '',
-      fecha_creacion_hasta: '',
-    };
+  ) {}
 
-    const date = new Date();
-    const year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
-    const month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
-    const day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
-    this.fechaActual = `${year}-${month}-${day}`;
-    this.fecha_inicial.setValue(this.fechaActual);
-    this.fecha_final.setValue(this.fechaActual)
-  }
-  coincidencias: string[] = [];
-  nombre_campo_input = "";
-  mostrar_coincidencias?: boolean;
+  ngOnInit(): void {
+    this.cargarCatalogos();
 
-
-  public downloadByFolioScan: FormGroup = this.fb.group({
-    input_one: [null, [Validators.required]],
-    input_two: [null, [Validators.required]]
-  })
-
-
-  DetectInput(entering: boolean, campo: string): void {
-    this.showCoincidencias[campo] = entering;
-    if (!entering) {
-      this.cleanCoincidencias();
-    }
-  }
-  cleanCoincidencias(): void {
-    this.coincidencias = [];
-  }
-  onSave(): void {
-    console.log('🔍 [TrackingForm] onSave ejecutado');
-    console.log('🔍 [TrackingForm] Formulario actual:', this.consultForm.value);
-    // Usar el servicio de expedientes Tlalcalli en lugar de AsuntoService
-    this.expedienteService.consultarExpedientes(this.consultForm.value).subscribe({
-      next: (expedientes) => {
-        console.log('✅ Expedientes encontrados:', expedientes);
-        // Emitir los resultados para que la tabla los muestre
-        this.expedienteService.expedientesConsultados.emit(expedientes);
-      },
-      error: (error) => {
-        console.error('❌ Error al consultar expedientes:', error);
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params['expediente']) {
+        this.consultForm.patchValue({ expediente: params['expediente'] });
+        setTimeout(() => this.onSave(), 600);
+      } else if (params['oficio']) {
+        this.consultForm.patchValue({ oficio: params['oficio'] });
+        setTimeout(() => this.onSave(), 600);
       }
     });
   }
 
-  // Datos adaptados para Tlalcalli - Solo campos principales de captura
-  formData = {
-    oficio: "",
-    expediente: "",
-    tipo_medio_recepcion: "",
-    remitente_area: "",
-    numero_entrada_central: "",
-    responsable: "",
-    prioridad: "",
-    fecha_creacion_desde: "",
-    fecha_creacion_hasta: ""
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  sendDatos():void{
-    this.shareData.updateFormData(this.formData)
-  }
-
-
-  getValueInput(): void {
-    this.coincidencias = [];
-    this.nombre_campo_input = document.activeElement?.getAttribute('formControlName') ?? '';
-    if (!this.nombre_campo_input || !this.consultForm.contains(this.nombre_campo_input)) {
-      return;
-    }
-    const fomulario_control = this.consultForm.get(this.nombre_campo_input);
-    if (!fomulario_control || fomulario_control.value === undefined) {
-      return;
-    }
-    const valor_input = fomulario_control.value;
-    // Mapear nombres de campos de formulario a nombres de BD
-    if (this.nombre_campo_input === "tipoMedioRecepcion") {
-      this.nombre_campo_input = "tipo_medio_recepcion";
-    } else if (this.nombre_campo_input === "remitenteArea") {
-      this.nombre_campo_input = "remitente_area";
-    } else if (this.nombre_campo_input === "numeroEntradaCentral") {
-      this.nombre_campo_input = "numero_entrada_central";
-    }
-    // Usar el servicio de expedientes Tlalcalli para autocompletado
-    this.expedienteService.autocompletadoCampo(valor_input, this.nombre_campo_input.replace(/([A-Z])/g, '_$1').toLowerCase()).subscribe((coincidencias: string[]) => {
-      this.coincidencias = coincidencias.slice(0, 5);
+  onSave(): void {
+    this.expedienteService.consultarExpedientes(this.construirFiltrosConsulta()).subscribe({
+      next: (expedientes) => {
+        this.expedienteService.expedientesConsultados.emit(expedientes);
+      },
+      error: (error) => {
+        console.error('Error al consultar expedientes:', error);
+      },
     });
   }
 
-  descargarAcuse(): void {
-    if (this.fecha_inicial.value && this.fecha_final.value)
-      this.asuntoService.generateAcuse(this.fecha_inicial.value, this.fecha_final.value, this.administracion.value, this.formato.value);
+  limpiarFiltros(): void {
+    this.consultForm.reset({
+      expediente: '',
+      oficio: '',
+      prioridad: '',
+      status: '',
+      responsable: '',
+      fecha_creacion_desde: '',
+      fecha_creacion_hasta: '',
+    });
+    this.coincidencias = [];
   }
 
-  descargarAcuseFolio(): void {
-    const folioOne = this.downloadByFolioScan.get("input_one")?.value;
-    const folioTwo = this.downloadByFolioScan.get("input_two")?.value;
-    this.input_one = folioOne
-    this.input_two = folioTwo
-    if (this.input_one && this.input_two) {
+  private construirFiltrosConsulta(): Record<string, unknown> {
+    const form = this.consultForm.getRawValue();
 
-      this.asuntoService.generateAcuseFolioScan(this.input_one,
-        this.input_two, this.administracion.value, this.formato.value)
+    return {
+      expediente: form.expediente?.trim() || undefined,
+      oficio: form.oficio?.trim() || undefined,
+      prioridad: this.obtenerPrioridadLegacy(form.prioridad),
+      estatus: this.obtenerDescripcionCatalogo(this.catalogoEstatus, form.status),
+      responsable: this.obtenerNombreResponsable(form.responsable),
+      fecha_creacion_desde: form.fecha_creacion_desde || undefined,
+      fecha_creacion_hasta: form.fecha_creacion_hasta || undefined,
+    };
+  }
+
+  private obtenerPrioridadLegacy(idPrioridad: number | ''): string | undefined {
+    if (!idPrioridad) {
+      return undefined;
+    }
+
+    const item = this.catalogoPrioridad.find((p) => p.id_exp === idPrioridad);
+    if (!item) {
+      return undefined;
+    }
+
+    if (item.descripcion.toLowerCase().startsWith('extra urgente')) {
+      return 'Extra urgente';
+    }
+
+    return item.descripcion.split('(')[0].trim();
+  }
+
+  private obtenerDescripcionCatalogo(
+    catalogo: CatalogoReworkItem[],
+    id: number | ''
+  ): string | undefined {
+    if (!id) {
+      return undefined;
+    }
+
+    return catalogo.find((item) => item.id_exp === id)?.descripcion;
+  }
+
+  private obtenerNombreResponsable(id: number | ''): string | undefined {
+    if (!id) {
+      return undefined;
+    }
+
+    return this.catalogoResponsables.find((r) => r.id_aplicativo === id)?.nombre;
+  }
+
+  onAutocompleteInput(campo: 'expediente' | 'oficio'): void {
+    this.nombreCampoAutocomplete = campo;
+    const valor = this.consultForm.get(campo)?.value?.toString().trim() ?? '';
+
+    if (!valor) {
+      this.coincidencias = [];
+      return;
+    }
+
+    this.expedienteService.autocompletadoCampo(valor, campo).subscribe({
+      next: (coincidencias) => {
+        this.coincidencias = coincidencias.slice(0, 5);
+      },
+    });
+  }
+
+  detectInput(entering: boolean, campo: string): void {
+    this.showCoincidencias[campo] = entering;
+    if (!entering) {
+      this.coincidencias = [];
     }
   }
 
   selectCoincidencia(coincidencia: string): void {
-    const formControl = this.consultForm.get(this.nombre_campo_input);
-    if (formControl) {
-      formControl.setValue(coincidencia);
-    } else {
-      console.error(`Error: No se pudo encontrar el control del formulario para '${this.nombre_campo_input}'.`);
+    this.consultForm.get(this.nombreCampoAutocomplete)?.setValue(coincidencia);
+    this.coincidencias = [];
+  }
+
+  private cargarCatalogos(): void {
+    this.cargarCatalogoGetCat(2, (items) => {
+      this.catalogoPrioridad = items;
+      this.opcionesPrioridad = items.map((item) => ({
+        value: item.id_exp,
+        label: this.etiquetaCortaPrioridad(item.descripcion),
+      }));
+    });
+
+    this.cargarCatalogoGetCat(3, (items) => {
+      this.catalogoEstatus = items;
+      this.opcionesEstatus = items.map((item) => ({
+        value: item.id_exp,
+        label: item.descripcion,
+      }));
+    });
+
+    this.apiService
+      .getData<CatalogoResponsableResponse[]>('catalogo/responsables', true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: HttpResponse<CatalogoResponsableResponse[]>) => {
+          this.catalogoResponsables = response.body ?? [];
+          this.opcionesResponsables = this.catalogoResponsables.map((item) => ({
+            value: item.id_aplicativo,
+            label: item.nombre,
+          }));
+        },
+      });
+  }
+
+  private etiquetaCortaPrioridad(descripcion: string): string {
+    if (descripcion.toLowerCase().startsWith('extra urgente')) {
+      return 'Extra urgente';
     }
-    this.cleanCoincidencias();
+
+    return descripcion.split('(')[0].trim();
   }
 
-  getToday(): string {
-    return new Date().toISOString().split('T')[0]
-  }
-
-  onSelectedOption(event: Event) {
-    const target = event.target as HTMLSelectElement
-    this.selecionarOpcion = target.value
-  }
-
-  ngOnInit(): void {
-    console.log('🔍 [TrackingForm] ngOnInit ejecutado');
-    
-    // Verificar si hay parámetro oficio en la URL
-    this.route.queryParams.subscribe(params => {
-      console.log('🔍 [TrackingForm] QueryParams recibidos:', params);
-      const oficio = params['oficio'];
-      const folio = params['folio'] || params['folio_interno'] || params['folioInterno'];
-      
-      if (oficio) {
-        console.log('🔍 [TrackingForm] Oficio detectado en URL:', oficio);
-        
-        // Llenar el campo oficio
-        this.consultForm.patchValue({
-          oficio: oficio
-        });
-        
-        console.log('🔍 [TrackingForm] Campo oficio llenado:', this.consultForm.get('oficio')?.value);
-
-        // Ejecutar la búsqueda automáticamente después de un delay más largo
-        setTimeout(() => {
-          console.log('🔍 [TrackingForm] Ejecutando búsqueda automática...');
-          this.onSave();
-        }, 2000); // Aumentar el tiempo para asegurar que el formulario esté listo
-      } else {
-        console.log('🔍 [TrackingForm] No se encontró parámetro oficio en la URL');
-      }
-    });
-  }
-
-  ngAfterViewInit(): void {
-    console.log('🔍 [TrackingForm] ngAfterViewInit ejecutado');
-    
-    // Verificar si hay parámetro oficio en la URL después de que el DOM esté listo
-    this.route.queryParams.subscribe(params => {
-      const oficio = params['oficio'];
-      // Buscar por expediente si viene en la URL
-      const expediente = params['expediente'];
-      
-      if (expediente) {
-        console.log('🔍 [TrackingForm] ngAfterViewInit - Expediente detectado:', expediente);
-        setTimeout(() => {
-          this.consultForm.patchValue({ expediente: expediente });
-          this.formData.expediente = expediente;
-          setTimeout(() => {
-            console.log('🔍 [TrackingForm] ngAfterViewInit - Ejecutando búsqueda por expediente...');
-            this.onSave();
-          }, 600);
-        }, 300);
-      } else if (oficio) {
-        console.log('🔍 [TrackingForm] ngAfterViewInit - Oficio detectado:', oficio);
-        
-        // Llenar el campo oficio usando setTimeout para asegurar que el DOM esté listo
-        setTimeout(() => {
-          this.consultForm.patchValue({
-            oficio: oficio
-          });
-          
-          console.log('🔍 [TrackingForm] ngAfterViewInit - Campo oficio llenado:', this.consultForm.get('oficio')?.value);
-          
-          // Ejecutar la búsqueda automáticamente
-          setTimeout(() => {
-            console.log('🔍 [TrackingForm] ngAfterViewInit - Ejecutando búsqueda...');
-            this.onSave();
-          }, 1000);
-        }, 500);
-      }
-    });
+  private cargarCatalogoGetCat(
+    numero: number,
+    onSuccess: (items: CatalogoReworkItem[]) => void
+  ): void {
+    this.apiService
+      .getData<CatalogoReworkItem[]>(`catalogo/getCat/${numero}`, true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: HttpResponse<CatalogoReworkItem[]>) => {
+          onSuccess(response.body ?? []);
+        },
+        error: () => onSuccess([]),
+      });
   }
 }

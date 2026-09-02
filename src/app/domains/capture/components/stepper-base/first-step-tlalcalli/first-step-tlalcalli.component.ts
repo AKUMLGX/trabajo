@@ -49,6 +49,7 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   idOficioDuplicado: number | null = null; // ID del expediente con oficio duplicado
   buscandoExpedientes: boolean = false; // Indicador de búsqueda en progreso
   modalAbierto: boolean = false; // Indicador si el modal está abierto
+  expedienteFocused = false;
 
   caracteresProblematicos: { caracter: string; posicion: number; sugerencia: string }[] = [];
   tieneCaracteresProblematicos: boolean = false;
@@ -664,11 +665,6 @@ this.formulario = this.fb.group({
   ],
 
   fecha_recibido: [
-    this.formHelper.getFechaActual(),
-    Validators.required
-  ],
-
-  fecha_requerimiento: [
     this.formHelper.getFechaActual(),
     Validators.required
   ],
@@ -1401,7 +1397,7 @@ private construirPlazo(): {
       servicio: 'Servicio',
       usuarios: 'Usuarios solicitados',
       remitente_general: 'Administración General',
-      referencia_asunto: 'Asunto',
+      referencia_asunto: 'Asunto/Referencia',
       plazo_vencimiento: 'Plazo de vencimiento',
     };
 
@@ -1578,15 +1574,6 @@ private construirPlazo(): {
     return null;
   }
 
-  get fechaRequerimientoError(): string | null {
-    const control = this.formulario.get('fecha_requerimiento');
-    if (control?.touched && control?.errors) {
-      if (control.errors['required']) return 'Obligatorio';
-      if (control.errors['futureDate']) return control.errors['futureDate'].message;
-    }
-    return null;
-  }
-
   get fechaVencimientoError(): string | null {
     const control = this.formulario.get('fecha_vencimiento');
     if (control?.touched && control?.errors) {
@@ -1650,7 +1637,6 @@ private construirPlazo(): {
     remitente_identificador: '',
     fecha_documento: this.formHelper.getFechaActual(),
     fecha_recibido: this.formHelper.getFechaActual(),
-    fecha_requerimiento: this.formHelper.getFechaActual(),
     referencia_asunto: '',
     prioridad: 1,
     plazo_vencimiento: null,
@@ -1774,9 +1760,6 @@ precargarDatos(datos: any): void {
 
       fecha_recibido:
         datos.fecha_recibido || null,
-
-      fecha_requerimiento:
-        datos.fecha_requerimiento || null,
 
       fecha_vencimiento:
         datos.fecha_vencimiento || null,

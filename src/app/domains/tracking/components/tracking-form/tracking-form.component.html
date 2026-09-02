@@ -1,246 +1,110 @@
-<section class="bg-tlalcalli-light-cream px-4 py-4">
-  <div class="mx-auto w-full">
-    <div class="overflow-hidden rounded-2xl bg-white shadow-sm">
-
-      <div class="px-4 py-6 lg:px-10">
-        <form [formGroup]="consultForm" (ngSubmit)="onSave(); sendDatos()">
-
-          <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-
-            <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-sans tracking-wide text-tlalcalli-primary">
-                Expediente
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold" title="Número de expediente">
-                  help_outline
-                </span>
-              </label>
-
-              <input
-                [(ngModel)]="formData.expediente"
-                type="text"
-                placeholder="Exp.001-2025"
-                formControlName="expediente"
-                [(ngModel)]="campoValor['expediente']"
-                (ngModelChange)="getValueInput()"
-                (mouseenter)="DetectInput(true, 'expediente')"
-                (mouseleave)="DetectInput(false, 'expediente')"
-                #InputFormulario
-                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-
-              @if (showCoincidencias['expediente'] && coincidencias.length > 0) {
-                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
-                  @for (coincidencia of coincidencias; track coincidencia) {
-                    <mat-list-item
-                      (click)="selectCoincidencia(coincidencia)"
-                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-noto-sans hover:text-tlalcalli-primary">
-                      {{ coincidencia }}
-                    </mat-list-item>
-                  }
-                </mat-list>
-              }
-            </div>
-
-            <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-noto-sans tracking-wide text-tlalcalli-primary">
-                Tipo de medio de recepción
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold" title="Medio por el cual se recibió">
-                  help_outline
-                </span>
-              </label>
-
-              <input
-                [(ngModel)]="formData.tipo_medio_recepcion"
-                type="text"
-                placeholder="ATENTA_NOTA, OFICIO, etc."
-                formControlName="tipo_medio_recepcion"
-                [(ngModel)]="campoValor['tipoMedioRecepcion']"
-                (ngModelChange)="getValueInput()"
-                (mouseenter)="DetectInput(true, 'tipoMedioRecepcion')"
-                (mouseleave)="DetectInput(false, 'tipoMedioRecepcion')"
-                #InputFormulario
-                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-
-              @if (showCoincidencias['tipoMedioRecepcion'] && coincidencias.length > 0) {
-                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
-                  @for (coincidencia of coincidencias; track coincidencia) {
-                    <mat-list-item
-                      (click)="selectCoincidencia(coincidencia)"
-                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-noto-sans hover:text-tlalcalli-primary">
-                      {{ coincidencia }}
-                    </mat-list-item>
-                  }
-                </mat-list>
-              }
-            </div>
-
-            <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-noto-sans tracking-wide text-tlalcalli-primary">
-                Oficio
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold" title="Número de oficio asignado">
-                  help_outline
-                </span>
-              </label>
-
-              <input
-                [(ngModel)]="formData.oficio"
-                type="text"
-                placeholder="Oficio"
-                formControlName="oficio"
-                [(ngModel)]="campoValor['oficio']"
-                (ngModelChange)="getValueInput()"
-                (mouseenter)="DetectInput(true, 'oficio')"
-                (mouseleave)="DetectInput(false, 'oficio')"
-                #InputFormulario
-                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-
-              @if (showCoincidencias['oficio'] && coincidencias.length > 0) {
-                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
-                  @for (coincidencia of coincidencias; track coincidencia) {
-                    <mat-list-item
-                      (click)="selectCoincidencia(coincidencia)"
-                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-noto-sans hover:text-tlalcalli-primary">
-                      {{ coincidencia }}
-                    </mat-list-item>
-                  }
-                </mat-list>
-              }
-            </div>
-
-            <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-noto-sans tracking-wide text-tlalcalli-primary">
-                Remitente Área
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold" title="Área que remite el requerimiento">
-                  help_outline
-                </span>
-              </label>
-
-              <input
-                [(ngModel)]="formData.remitente_area"
-                type="text"
-                placeholder="Remitente área"
-                formControlName="remitente_area"
-                [(ngModel)]="campoValor['remitenteArea']"
-                (ngModelChange)="getValueInput()"
-                (mouseenter)="DetectInput(true, 'remitenteArea')"
-                (mouseleave)="DetectInput(false, 'remitenteArea')"
-                #InputFormulario
-                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-
-              @if (showCoincidencias['remitenteArea'] && coincidencias.length > 0) {
-                <mat-list class="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border-2 border-tlalcalli-primary bg-white p-1 shadow-lg">
-                  @for (coincidencia of coincidencias; track coincidencia) {
-                    <mat-list-item
-                      (click)="selectCoincidencia(coincidencia)"
-                      class="cursor-pointer border-b border-tlalcalli-primary/10 text-center text-sm text-tlalcalli-dark hover:bg-tlalcalli-light-lavender hover:font-noto-sans hover:text-tlalcalli-primary">
-                      {{ coincidencia }}
-                    </mat-list-item>
-                  }
-                </mat-list>
-              }
-            </div>
-
-            <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-noto-sans tracking-wide text-tlalcalli-primary">
-                Número entrada central
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold">
-                  help_outline
-                </span>
-              </label>
-
-              <input
-                [(ngModel)]="formData.numero_entrada_central"
-                type="text"
-                placeholder="Número entrada central"
-                formControlName="numero_entrada_central"
-                [(ngModel)]="campoValor['numeroEntradaCentral']"
-                (ngModelChange)="getValueInput()"
-                (mouseenter)="DetectInput(true, 'numeroEntradaCentral')"
-                (mouseleave)="DetectInput(false, 'numeroEntradaCentral')"
-                #InputFormulario
-                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-            </div>
-
-            <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-noto-sans tracking-wide text-tlalcalli-primary">
-                Responsable
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold">
-                  help_outline
-                </span>
-              </label>
-
-              <input
-                [(ngModel)]="formData.responsable"
-                type="text"
-                placeholder="Responsable"
-                formControlName="responsable"
-                [(ngModel)]="campoValor['responsable']"
-                (ngModelChange)="getValueInput()"
-                (mouseenter)="DetectInput(true, 'responsable')"
-                (mouseleave)="DetectInput(false, 'responsable')"
-                #InputFormulario
-                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-            </div>
-
-            <div class="relative">
-              <label class="mb-2 flex items-center gap-1 text-xs font-noto-sans tracking-wide text-tlalcalli-primary">
-                Prioridad
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold">
-                  help_outline
-                </span>
-              </label>
-
-              <input
-                [(ngModel)]="formData.prioridad"
-                type="text"
-                placeholder="URGENTE, ALTA, MEDIA, BAJA"
-                formControlName="prioridad"
-                [(ngModel)]="campoValor['prioridad']"
-                (ngModelChange)="getValueInput()"
-                (mouseenter)="DetectInput(true, 'prioridad')"
-                (mouseleave)="DetectInput(false, 'prioridad')"
-                #InputFormulario
-                class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-            </div>
-
-            <div>
-              <label class="mb-2 flex items-center gap-1 text-xs font-noto-sans tracking-wide text-tlalcalli-primary">
-                Fecha de registro
-                <span class="icon-font !h-4 !w-4 !text-base !text-tlalcalli-gold">
-                  help_outline
-                </span>
-              </label>
-
-              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <input
-                  [(ngModel)]="formData.fecha_creacion_desde"
-                  type="date"
-                  formControlName="fecha_creacion_desde"
-                  class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-
-                <input
-                  [(ngModel)]="formData.fecha_creacion_hasta"
-                  type="date"
-                  formControlName="fecha_creacion_hasta"
-                  class="w-full rounded-xl border-2 border-tlalcalli-primary/15 bg-white px-4 py-3.5 text-sm font-noto-sans text-tlalcalli-dark outline-none transition focus:border-tlalcalli-gold focus:ring-4 focus:ring-tlalcalli-gold/20" />
-              </div>
-            </div>
-
-          </div>
-
-          <div class="mt-8 flex justify-end">
-            <button
-              type="submit"
-              class="inline-flex h-[42px] items-center justify-center rounded-xl bg-tlalcalli-primary px-6 text-sm font-noto-sans text-white shadow-sm transition hover:bg-tlalcalli-deep">
-              <svg class="mr-2 h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              Buscar
-            </button>
-          </div>
-
-        </form>
+<section class="bandeja-busqueda">
+  <div class="bandeja-card">
+    <div class="bandeja-header">
+      <div>
+        <h2 class="bandeja-titulo">Buscar expediente</h2>
+        <p class="bandeja-subtitulo">Use uno o más criterios para localizar un registro.</p>
       </div>
     </div>
+
+    <form [formGroup]="consultForm" (ngSubmit)="onSave()" class="bandeja-form">
+
+      <div class="bandeja-grid">
+
+        <div class="campo relative">
+          <label for="expediente">Expediente</label>
+          <input
+            id="expediente"
+            type="text"
+            placeholder="EXP-2509-0001"
+            formControlName="expediente"
+            (input)="onAutocompleteInput('expediente')"
+            (focus)="detectInput(true, 'expediente')"
+            (blur)="detectInput(false, 'expediente')"
+            class="input-bandeja" />
+          @if (showCoincidencias['expediente'] && coincidencias.length > 0) {
+            <ul class="sugerencias">
+              @for (coincidencia of coincidencias; track coincidencia) {
+                <li (mousedown)="selectCoincidencia(coincidencia)">{{ coincidencia }}</li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="campo relative">
+          <label for="oficio">Oficio</label>
+          <input
+            id="oficio"
+            type="text"
+            placeholder="Número de oficio"
+            formControlName="oficio"
+            (input)="onAutocompleteInput('oficio')"
+            (focus)="detectInput(true, 'oficio')"
+            (blur)="detectInput(false, 'oficio')"
+            class="input-bandeja" />
+          @if (showCoincidencias['oficio'] && coincidencias.length > 0) {
+            <ul class="sugerencias">
+              @for (coincidencia of coincidencias; track coincidencia) {
+                <li (mousedown)="selectCoincidencia(coincidencia)">{{ coincidencia }}</li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="prioridad">Prioridad</label>
+          <select id="prioridad" formControlName="prioridad" class="input-bandeja">
+            <option value="">Todas</option>
+            @for (opcion of opcionesPrioridad; track opcion.value) {
+              <option [value]="opcion.value">{{ opcion.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="status">Estatus</label>
+          <select id="status" formControlName="status" class="input-bandeja">
+            <option value="">Todos</option>
+            @for (opcion of opcionesEstatus; track opcion.value) {
+              <option [value]="opcion.value">{{ opcion.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="responsable">Responsable</label>
+          <select id="responsable" formControlName="responsable" class="input-bandeja">
+            <option value="">Todos</option>
+            @for (opcion of opcionesResponsables; track opcion.value) {
+              <option [value]="opcion.value">{{ opcion.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="campo campo-fechas">
+          <label>Fecha de registro</label>
+          <div class="fechas-rango">
+            <input type="date" formControlName="fecha_creacion_desde" class="input-bandeja" aria-label="Desde" />
+            <span class="fechas-separador">a</span>
+            <input type="date" formControlName="fecha_creacion_hasta" class="input-bandeja" aria-label="Hasta" />
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bandeja-acciones">
+        <button type="button" class="btn-limpiar" (click)="limpiarFiltros()">
+          Limpiar
+        </button>
+        <button type="submit" class="btn-buscar">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Buscar
+        </button>
+      </div>
+
+    </form>
   </div>
 </section>

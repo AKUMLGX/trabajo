@@ -124,7 +124,19 @@
               formControlName="expediente"
               placeholder="EXP-2607-0001"
               autocomplete="off"
-              class="w-full rounded-2xl border-2 px-6 py-4 pr-[60px] font-ubuntu-mono text-base font-bold tracking-wide text-gray-800 outline-none transition-all duration-300 placeholder:font-noto-sans placeholder:font-normal placeholder:italic placeholder:text-gray-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:opacity-70 border-transparent bg-gradient-to-br from-white to-slate-50 shadow-[0_4px_6px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] hover:border-tlalcalli-primary/20 hover:from-white hover:to-slate-100 hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)] focus:border-tlalcalli-primary focus:bg-white focus:shadow-[0_0_0_6px_rgba(48,38,76,0.10),0_8px_25px_rgba(0,0,0,0.15)]"
+              class="expediente-input w-full appearance-none rounded-2xl border-2 px-6 py-4 pr-[60px] text-base font-ubuntu-mono font-bold tracking-wide text-gray-900 outline-none transition-all duration-300 placeholder:font-noto-sans placeholder:font-normal placeholder:italic placeholder:text-gray-400 disabled:cursor-not-allowed"
+              [ngClass]="{
+                'border-transparent bg-gradient-to-br from-white to-slate-50 shadow-[0_4px_6px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)]':
+                  formulario.get('modo_expediente')?.value === 'AUTOMATICO' && !expedienteError,
+                'border-transparent bg-gradient-to-br from-white to-slate-50 shadow-[0_4px_6px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] hover:border-tlalcalli-primary/20 hover:from-white hover:to-slate-100 hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)]':
+                  formulario.get('modo_expediente')?.value === 'MANUAL' && !expedienteError,
+                'border-tlalcalli-primary bg-white shadow-[0_0_0_6px_rgba(48,38,76,0.10),0_8px_25px_rgba(0,0,0,0.15)]':
+                  formulario.get('modo_expediente')?.value === 'MANUAL' && expedienteFocused && !expedienteError,
+                'border-red-500 bg-red-50 shadow-[0_0_0_6px_rgba(239,68,68,0.10),0_8px_25px_rgba(239,68,68,0.15)]':
+                  !!expedienteError
+              }"
+              (focus)="expedienteFocused = true"
+              (blur)="expedienteFocused = false"
             />
 
             @if (
@@ -133,7 +145,7 @@
               <div
                 class="pointer-events-none absolute right-5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-gray-800 text-white shadow"
               >
-                <span class="icon-font !text-[14px]">
+                <span class="icon-font !text-[12px]">
                   lock
                 </span>
               </div>
@@ -424,21 +436,6 @@
                 Fecha en que el documento fue recibido.
               </p>
             </div>
-
-            <div>
-              <app-custom-form-field
-                label="Fecha del requerimiento"
-                [required]="true"
-                type="date"
-                [errorMessage]="fechaRequerimientoError"
-                formControlName="fecha_requerimiento"
-              >
-              </app-custom-form-field>
-
-              <p class="mt-1 text-xs font-noto-sans text-gray-500">
-                Fecha utilizada para el registro del requerimiento.
-              </p>
-            </div>
           </div>
         </div>
 
@@ -525,7 +522,7 @@
 
         <div>
           <app-custom-textarea
-            label="Asunto"
+            label="Asunto/Referencia"
             [required]="true"
             placeholder="Ingrese el asunto o referencia del requerimiento..."
             [errorMessage]="referenciaError"

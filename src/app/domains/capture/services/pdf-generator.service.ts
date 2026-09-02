@@ -346,10 +346,6 @@ export class PdfGeneratorService {
         <div class="campo-valor">${paso1.remitente_area || 'N/A'}</div>
       </div>
       <div class="campo">
-        <div class="campo-label">Fecha del Requerimiento</div>
-        <div class="campo-valor">${this.formatearFecha(paso1.fecha_requerimiento)}</div>
-      </div>
-      <div class="campo">
         <div class="campo-label">Fecha de Acuse</div>
         <div class="campo-valor">${this.formatearFecha(paso1.fecha_recibido)}</div>
       </div>

@@ -317,3 +317,14 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
     @apply font-noto-sans;
   }
 }
+
+.expediente-detalle-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.expediente-detalle-dialog .mat-mdc-dialog-surface {
+  overflow: hidden;
+  border-radius: 1rem;
+}

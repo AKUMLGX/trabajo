@@ -53,6 +53,10 @@
                         Oficio
                       </th>
 
+                      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white min-w-[220px]">
+                        Asunto
+                      </th>
+
                       <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
                         Remitente
                       </th>
@@ -93,6 +97,14 @@
                         <td class="px-4 py-4 text-center align-middle">
                           <div class="whitespace-normal break-words text-sm text-gray-700">
                             {{ expediente.oficio || '-' }}
+                          </div>
+                        </td>
+
+                        <td class="px-4 py-4 text-center align-middle">
+                          <div
+                            class="mx-auto max-w-xs whitespace-normal break-words text-sm text-gray-700 line-clamp-2"
+                            [title]="expediente.referencia_asunto || ''">
+                            {{ expediente.referencia_asunto || '-' }}
                           </div>
                         </td>
 

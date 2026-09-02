@@ -177,6 +177,10 @@
                   <p><strong>Oficio:</strong> {{ datosPaso1?.oficio || 'N/A' }}</p>
                   <p><strong>Remitente:</strong> {{ datosPaso1?.remitente_area || 'N/A' }}</p>
                   <p><strong>Prioridad:</strong> {{ datosPaso1?.prioridad || 'Normal' }}</p>
+                  <p><strong>Responsable:</strong> {{ datosPaso2?.responsable || 'N/A' }}</p>
+                  <p><strong>Aplicativo:</strong> {{ datosPaso2?.sistema_aplicativo || 'N/A' }}</p>
+                  <p><strong>Estatus:</strong> {{ datosPaso2?.status_descripcion || datosPaso2?.estatus || 'N/A' }}</p>
+                  <p><strong>Ubicación:</strong> {{ datosPaso2?.ubicacion === 2 ? 'Individual' : 'Carpeta general' }}</p>
                   <p class="md:col-span-2">
                     <strong>Asunto:</strong>
                     {{ (datosPaso1?.referencia_asunto | slice:0:120) || 'N/A' }}
@@ -186,13 +190,6 @@
               </div>
 
               <div class="mt-6 flex flex-wrap justify-center gap-3">
-                <button
-                  type="button"
-                  (click)="regenerarPDF()"
-                  class="rounded-xl bg-tlalcalli-primary px-6 py-3 text-sm font-noto-sans text-white">
-                  Descargar Acuse PDF
-                </button>
-
                 <button
                   type="button"
                   (click)="crearNuevoRegistro()"
