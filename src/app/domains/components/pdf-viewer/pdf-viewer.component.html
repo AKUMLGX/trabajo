@@ -14,9 +14,15 @@
             [render-text]="true"
             [original-size]="false"
             [show-all]="true"
+            (error)="onErrorVisor($event)"
             style="width: 100%; height: 80vh"
           ></pdf-viewer>
         </div>
+        @if (errorVisor) {
+          <p class="text-center text-sm text-red-700 mt-2">
+            No se pudo mostrar el PDF: {{ errorVisor }}
+          </p>
+        }
       </div>
     </div>
      @if(mostrarBotonCerrar){
@@ -28,6 +34,10 @@
      }
   </div>
 </section>
+} @else if (errorVisor) {
+  <div class="flex justify-center items-center text-base mt-8">
+    <p class="text-center text-red-700">No se pudo mostrar el PDF: {{ errorVisor }}</p>
+  </div>
 } @else {
   <div class="flex justify-center items-center text-xl mt-8">
     <p>Cargando PDF...</p>

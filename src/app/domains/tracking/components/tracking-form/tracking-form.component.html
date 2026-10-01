@@ -1,110 +1,61 @@
-<section class="bandeja-busqueda">
-  <div class="bandeja-card">
-    <div class="bandeja-header">
-      <div>
-        <h2 class="bandeja-titulo">Buscar expediente</h2>
-        <p class="bandeja-subtitulo">Use uno o más criterios para localizar un registro.</p>
-      </div>
+<section class="tl-card p-5 md:p-6">
+  <div class="tl-section-title mb-5">
+    <span class="tl-section-icon"><span class="icon-font !text-[22px]">search</span></span>
+    <div>
+      <h2 class="tl-section-heading">Buscar expediente</h2>
+      <p class="tl-section-subtitle">Expediente y oficio filtran al escribir. Prioridad, estatus y responsable se aplican al elegirlos.</p>
     </div>
+  </div>
 
-    <form [formGroup]="consultForm" (ngSubmit)="onSave()" class="bandeja-form">
-
-      <div class="bandeja-grid">
-
-        <div class="campo relative">
-          <label for="expediente">Expediente</label>
-          <input
-            id="expediente"
-            type="text"
-            placeholder="EXP-2509-0001"
-            formControlName="expediente"
-            (input)="onAutocompleteInput('expediente')"
-            (focus)="detectInput(true, 'expediente')"
-            (blur)="detectInput(false, 'expediente')"
-            class="input-bandeja" />
-          @if (showCoincidencias['expediente'] && coincidencias.length > 0) {
-            <ul class="sugerencias">
-              @for (coincidencia of coincidencias; track coincidencia) {
-                <li (mousedown)="selectCoincidencia(coincidencia)">{{ coincidencia }}</li>
-              }
-            </ul>
-          }
-        </div>
-
-        <div class="campo relative">
-          <label for="oficio">Oficio</label>
-          <input
-            id="oficio"
-            type="text"
-            placeholder="Número de oficio"
-            formControlName="oficio"
-            (input)="onAutocompleteInput('oficio')"
-            (focus)="detectInput(true, 'oficio')"
-            (blur)="detectInput(false, 'oficio')"
-            class="input-bandeja" />
-          @if (showCoincidencias['oficio'] && coincidencias.length > 0) {
-            <ul class="sugerencias">
-              @for (coincidencia of coincidencias; track coincidencia) {
-                <li (mousedown)="selectCoincidencia(coincidencia)">{{ coincidencia }}</li>
-              }
-            </ul>
-          }
-        </div>
-
-        <div class="campo">
-          <label for="prioridad">Prioridad</label>
-          <select id="prioridad" formControlName="prioridad" class="input-bandeja">
-            <option value="">Todas</option>
-            @for (opcion of opcionesPrioridad; track opcion.value) {
-              <option [value]="opcion.value">{{ opcion.label }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="status">Estatus</label>
-          <select id="status" formControlName="status" class="input-bandeja">
-            <option value="">Todos</option>
-            @for (opcion of opcionesEstatus; track opcion.value) {
-              <option [value]="opcion.value">{{ opcion.label }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="responsable">Responsable</label>
-          <select id="responsable" formControlName="responsable" class="input-bandeja">
-            <option value="">Todos</option>
-            @for (opcion of opcionesResponsables; track opcion.value) {
-              <option [value]="opcion.value">{{ opcion.label }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="campo campo-fechas">
-          <label>Fecha de registro</label>
-          <div class="fechas-rango">
-            <input type="date" formControlName="fecha_creacion_desde" class="input-bandeja" aria-label="Desde" />
-            <span class="fechas-separador">a</span>
-            <input type="date" formControlName="fecha_creacion_hasta" class="input-bandeja" aria-label="Hasta" />
-          </div>
-        </div>
-
+  <form [formGroup]="consultForm" (ngSubmit)="onSave()">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div>
+        <label for="expediente" class="tl-label">Expediente</label>
+        <input id="expediente" type="text" placeholder="EXP-2509-0001" formControlName="expediente" autocomplete="off" class="tl-input" />
       </div>
 
-      <div class="bandeja-acciones">
-        <button type="button" class="btn-limpiar" (click)="limpiarFiltros()">
-          Limpiar
-        </button>
-        <button type="submit" class="btn-buscar">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+      <div>
+        <label for="oficio" class="tl-label">Oficio</label>
+        <input id="oficio" type="text" placeholder="Número de oficio" formControlName="oficio" autocomplete="off" class="tl-input" />
+      </div>
+
+      <div>
+        <label for="prioridad" class="tl-label">Prioridad</label>
+        <select id="prioridad" formControlName="prioridad" class="tl-select">
+          <option [ngValue]="''">Todas</option>
+          @for (opcion of opcionesPrioridad; track opcion.value) {
+            <option [ngValue]="opcion.value">{{ opcion.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="status" class="tl-label">Estatus</label>
+        <select id="status" formControlName="status" class="tl-select">
+          <option [ngValue]="''">Todos</option>
+          @for (opcion of opcionesEstatus; track opcion.value) {
+            <option [ngValue]="opcion.value">{{ opcion.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="responsable" class="tl-label">Responsable</label>
+        <select id="responsable" formControlName="responsable" class="tl-select">
+          <option [ngValue]="''">Todos</option>
+          @for (opcion of opcionesResponsables; track opcion.value) {
+            <option [ngValue]="opcion.value">{{ opcion.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="flex items-end justify-end gap-3">
+        <button type="button" class="tl-btn-secondary" (click)="limpiarFiltros()">Limpiar</button>
+        <button type="submit" class="tl-btn-primary">
+          <span class="icon-font !text-[18px]">search</span>
           Buscar
         </button>
       </div>
-
-    </form>
-  </div>
+    </div>
+  </form>
 </section>

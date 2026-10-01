@@ -1,117 +1,152 @@
-<div class="min-h-[calc(100vh-68px)] bg-tlalcalli-light-cream px-5 pb-8 pt-4">
+<div class="relative min-h-full bg-tlalcalli-light-cream">
 
-  <header class="rounded-t-none bg-tlalcalli-primary px-7 pb-16 pt-9">
-    <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-      <div class="flex items-center gap-4">
-        <div class="h-[54px] w-[54px] rounded-xl bg-tlalcalli-lavender"></div>
-
+  <header class="tl-page-header">
+    <div class="tl-page-header-inner">
+      <div class="flex items-center gap-5">
+        <div class="tl-page-icon">
+          <span class="icon-font !text-[32px]">insights</span>
+        </div>
         <div>
-          <h1 class="m-0 text-[28px] font-noto-sans leading-none text-white">
-            Panel de estadísticas
-          </h1>
-          <p class="mt-2 text-sm font-noto-sans text-white">
-            Vista ejecutiva del estado de expedientes
-          </p>
+          <h1 class="tl-page-title">Panel Estadístico</h1>
+          <p class="tl-page-subtitle">Visión ejecutiva de Captura, Consulta, Seguimiento y Cierre</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
-        <div class="flex h-[48px] items-center gap-3 rounded-xl bg-tlalcalli-lavender px-4 text-white">
-          <div class="h-7 w-7 bg-tlalcalli-light-base"></div>
-          <span class="text-sm font-noto-sans">
-            Actualizado: {{ ultimaActualizacion | date:'HH:mm:ss' }}
-          </span>
-        </div>
-
-        <button
-          class="flex h-[54px] w-[54px] items-center justify-center rounded-xl bg-tlalcalli-lavender text-white disabled:opacity-50"
-          (click)="refrescar()"
-          [disabled]="cargando"
-          matTooltip="Actualizar datos">
-          <span class="icon-font" [ngClass]="{ 'animate-spin': cargando }">refresh</span>
+        @if (panel(); as p) {
+          <div class="tl-page-chip">
+            <span class="icon-font !text-[22px] text-tlalcalli-gold">update</span>
+            <span class="font-noto-sans text-sm text-white">Actualizado: {{ p.generado | date:'HH:mm:ss' }}</span>
+          </div>
+        }
+        <button type="button" class="tl-modal-close h-12 w-12" (click)="refrescar()" [disabled]="cargando()" matTooltip="Actualizar datos">
+          <span class="icon-font !text-[22px]" [ngClass]="{ 'animate-spin': cargando() }">refresh</span>
         </button>
       </div>
     </div>
   </header>
 
-  @if (cargando && !dashboard) {
-    <div class="flex min-h-[420px] flex-col items-center justify-center text-tlalcalli-primary">
-      <mat-spinner diameter="50"></mat-spinner>
-      <p class="mt-5 text-base font-noto-sans">Cargando estadísticas...</p>
-    </div>
-  }
+  <main class="tl-page-body">
 
-  @if (dashboard) {
-    <main class="-mt-10">
+    @if (cargando() && !panel()) {
+      <section class="tl-card tl-empty min-h-[320px]">
+        <div class="tl-spinner"></div>
+        <p class="mt-4 font-noto-sans text-sm text-tlalcalli-gray">Reuniendo información de las bandejas...</p>
+      </section>
+    }
 
-      <section class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          <div class="rounded-xl bg-white p-5">
-          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-teal-muted"></div>
-          <span class="block text-4xl font-black leading-none text-black">{{ dashboard.generales.total_expedientes }}</span>
-          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Total expedientes</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-teal-muted px-3 py-1 text-[11px] font-noto-sans text-white">Sistema</span>
+    @if (error() && !cargando() && !panel()) {
+      <section class="tl-card tl-empty min-h-[320px]">
+        <span class="tl-empty-icon bg-tlalcalli-error/10 text-tlalcalli-error-muted"><span class="icon-font !text-[30px]">error_outline</span></span>
+        <p class="m-0 font-noto-sans text-base font-semibold text-tlalcalli-deep">{{ error() }}</p>
+        <button type="button" (click)="refrescar()" class="tl-btn-secondary mt-4">
+          <span class="icon-font !text-[18px]">refresh</span>
+          Reintentar
+        </button>
+      </section>
+    }
+
+    @if (panel(); as p) {
+      @let k = p.kpis;
+
+      <app-dashboard-reportes-bar [panel]="p" [puedeExportar]="puedeExportar()" />
+
+      @if (p.origen === 'estadisticas') {
+        <div class="tl-card flex items-start gap-3 border-l-4 border-l-tlalcalli-warning bg-tlalcalli-warning/10 p-4">
+          <span class="icon-font !text-[22px] text-tlalcalli-warning-muted">info</span>
+          <p class="m-0 font-noto-sans text-sm text-tlalcalli-dark">
+            El listado de las bandejas no devolvió expedientes; se muestran los datos del servicio de estadísticas.
+          </p>
+        </div>
+      }
+
+      <app-dashboard-bandeja-cards [panel]="p" />
+
+      <section class="flex flex-col gap-4">
+        <div class="tl-section-title">
+          <span class="tl-section-icon bg-white"><span class="icon-font !text-[22px]">monitoring</span></span>
+          <div>
+            <h2 class="tl-section-heading">Indicadores generales</h2>
+            <p class="tl-section-subtitle">Semáforo con las mismas reglas de la bandeja de Seguimiento (límite de 72 h desde la captura)</p>
+          </div>
         </div>
 
-        <div class="rounded-xl bg-white p-5">
-          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-purple-muted"></div>
-          <span class="block text-4xl font-black leading-none text-black">
-            {{ dashboard.generales.asignados + dashboard.generales.pendientes }}
-          </span>
-          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Por atender</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-purple-muted px-3 py-1 text-[11px] font-noto-sans text-white">
-            {{ ((dashboard.generales.asignados + dashboard.generales.pendientes) / dashboard.generales.total_expedientes * 100).toFixed(0) }}%
-          </span>
-        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div class="tl-stat">
+            <span class="tl-stat-accent bg-tlalcalli-primary"></span>
+            <div class="flex items-center justify-between">
+              <span class="tl-stat-label">Total expedientes</span>
+              <span class="tl-stat-icon bg-tlalcalli-light-lavender text-tlalcalli-primary"><span class="icon-font !text-[22px]">folder_copy</span></span>
+            </div>
+            <span class="tl-stat-value mt-3 text-tlalcalli-primary">{{ k.total }}</span>
+            <span class="tl-chip tl-chip-primary mt-3 w-fit">{{ k.responsables }} responsable(s)</span>
+          </div>
 
-        <div class="rounded-xl bg-white p-5">
-          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-orange-muted"></div>
-          <span class="block text-4xl font-black leading-none text-black">
-            {{ dashboard.generales.en_atencion + dashboard.generales.atendidos_total }}
-          </span>
-          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Atendidos</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-orange-muted px-3 py-1 text-[11px] font-noto-sans text-white">
-            {{ ((dashboard.generales.en_atencion + dashboard.generales.atendidos_total) / dashboard.generales.total_expedientes * 100).toFixed(0) }}%
-          </span>
-        </div>
+          <div class="tl-stat">
+            <span class="tl-stat-accent bg-tlalcalli-lavender"></span>
+            <div class="flex items-center justify-between">
+              <span class="tl-stat-label">Por atender</span>
+              <span class="tl-stat-icon bg-tlalcalli-light-lavender text-tlalcalli-purple-muted"><span class="icon-font !text-[22px]">pending_actions</span></span>
+            </div>
+            <span class="tl-stat-value mt-3 text-tlalcalli-purple-muted">{{ k.porAtender }}</span>
+            <span class="tl-chip tl-chip-primary mt-3 w-fit">{{ porcentaje(k.porAtender, k.total) }} del total</span>
+          </div>
 
-        <div class="rounded-xl bg-white p-5">
-          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-error"></div>
-          <span class="block text-4xl font-black leading-none text-black">
-            {{ dashboard.semaforo.urgente + dashboard.semaforo.vencido }}
-          </span>
-          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Críticos</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-error px-3 py-1 text-[11px] font-noto-sans text-white">Urgente</span>
-        </div>
+          <div class="tl-stat">
+            <span class="tl-stat-accent bg-tlalcalli-success"></span>
+            <div class="flex items-center justify-between">
+              <span class="tl-stat-label">Atendidos</span>
+              <span class="tl-stat-icon bg-tlalcalli-success/10 text-tlalcalli-success-muted"><span class="icon-font !text-[22px]">task_alt</span></span>
+            </div>
+            <span class="tl-stat-value mt-3 text-tlalcalli-success-muted">{{ k.atendidos }}</span>
+            <span class="tl-chip tl-chip-success mt-3 w-fit">{{ porcentaje(k.atendidos, k.total) }} del total</span>
+          </div>
 
-        <div class="rounded-xl bg-white p-5">
-          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-gold"></div>
-          <span class="block text-4xl font-black leading-none text-black">{{ dashboard.generales.responsables_activos }}</span>
-          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Responsables</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-gold px-3 py-1 text-[11px] font-noto-sans text-white">Activos</span>
-        </div>
+          <div class="tl-stat">
+            <span class="tl-stat-accent bg-tlalcalli-warning"></span>
+            <div class="flex items-center justify-between">
+              <span class="tl-stat-label">24-48 h</span>
+              <span class="tl-stat-icon bg-tlalcalli-warning/15 text-tlalcalli-warning-muted"><span class="icon-font !text-[22px]">schedule</span></span>
+            </div>
+            <span class="tl-stat-value mt-3 text-tlalcalli-warning-muted">{{ k.semaforo.atencion }}</span>
+            <span class="tl-chip tl-chip-warning mt-3 w-fit">Requieren atención</span>
+          </div>
 
-        <div class="rounded-xl bg-white p-5">
-          <div class="mb-5 h-9 w-9 rounded-lg bg-tlalcalli-wine"></div>
-          <span class="block text-4xl font-black leading-none text-black">{{ formatearHoras(dashboard.generales.promedio_horas_atencion) }}</span>
-          <span class="mt-2 block text-xs font-noto-sans font-noto-sans">Tiempo promedio</span>
-          <span class="mt-4 inline-flex rounded-full bg-tlalcalli-wine px-3 py-1 text-[11px] font-noto-sans text-white">En sistema</span>
+          <div class="tl-stat">
+            <span class="tl-stat-accent bg-tlalcalli-error"></span>
+            <div class="flex items-center justify-between">
+              <span class="tl-stat-label">Críticos</span>
+              <span class="tl-stat-icon bg-tlalcalli-error/10 text-tlalcalli-error-muted"><span class="icon-font !text-[22px]">priority_high</span></span>
+            </div>
+            <span class="tl-stat-value mt-3 text-tlalcalli-error-muted">{{ k.criticos }}</span>
+            <span class="tl-chip tl-chip-error mt-3 w-fit">Urgentes y vencidos</span>
+          </div>
+
+          <div class="tl-stat">
+            <span class="tl-stat-accent bg-tlalcalli-gold"></span>
+            <div class="flex items-center justify-between">
+              <span class="tl-stat-label">Tiempo promedio</span>
+              <span class="tl-stat-icon bg-tlalcalli-gold/15 text-tlalcalli-dark-gold"><span class="icon-font !text-[22px]">timelapse</span></span>
+            </div>
+            <span class="tl-stat-value mt-3 text-tlalcalli-dark-gold">{{ formatearHoras(k.promedioHorasPendientes) }}</span>
+            <span class="tl-chip mt-3 w-fit bg-tlalcalli-gold/15 text-tlalcalli-dark-gold">Pendientes desde captura</span>
+          </div>
         </div>
       </section>
 
-      <section class="mb-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
-
-        <div class="overflow-hidden rounded-xl bg-white">
-          <div class="flex items-center gap-3 bg-tlalcalli-light-base px-5 py-4">
-            <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-            <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
-              Distribución por estatus
-            </h3>
+      <section class="grid grid-cols-1 gap-5 xl:grid-cols-2">
+        <div class="tl-card overflow-hidden">
+          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">donut_large</span></span>
+              <h3 class="tl-section-heading">Distribución por estatus</h3>
+            </div>
+            <a routerLink="/layout/tracking" class="tl-chip tl-chip-neutral no-underline hover:bg-tlalcalli-light-lavender">Ver en Consulta</a>
           </div>
-
           <div class="flex min-h-[300px] items-center justify-center p-6">
-            @if (chartEstatusOptions) {
+            @if (p.graficas.porEstatus.length > 0) {
               <apx-chart
-                #chartEstatus
+                class="w-full"
                 [series]="chartEstatusOptions.series!"
                 [chart]="chartEstatusOptions.chart!"
                 [labels]="chartEstatusOptions.labels!"
@@ -122,71 +157,49 @@
                 [stroke]="chartEstatusOptions.stroke!"
                 [responsive]="chartEstatusOptions.responsive!">
               </apx-chart>
+            } @else {
+              <div class="tl-empty py-8">
+                <span class="tl-empty-icon"><span class="icon-font !text-[28px]">donut_large</span></span>
+                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin expedientes para distribuir</p>
+              </div>
             }
           </div>
         </div>
 
-        <div class="overflow-hidden rounded-xl bg-white">
-          <div class="flex items-center justify-between gap-3 bg-tlalcalli-light-base px-5 py-4">
-            <div class="flex items-center gap-3">
-              <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-              <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
-                Semáforo de prioridades
-              </h3>
+        <div class="tl-card overflow-hidden">
+          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">traffic</span></span>
+              <h3 class="tl-section-heading">Semáforo de atención</h3>
             </div>
-            <span class="text-[11px] font-noto-sans font-noto-sans">
-              Basado en tiempo transcurrido
-            </span>
+            <a routerLink="/layout/responsables" class="tl-chip tl-chip-neutral no-underline hover:bg-tlalcalli-light-lavender">Ver en Seguimiento</a>
           </div>
-
           <div class="flex min-h-[300px] items-center justify-center p-6">
-            @if (chartSemaforoOptions) {
-              <apx-chart
-                #chartSemaforo
-                [series]="chartSemaforoOptions.series!"
-                [chart]="chartSemaforoOptions.chart!"
-                [plotOptions]="chartSemaforoOptions.plotOptions!"
-                [colors]="chartSemaforoOptions.colors!"
-                [labels]="chartSemaforoOptions.labels!"
-                [legend]="chartSemaforoOptions.legend!"
-                [responsive]="chartSemaforoOptions.responsive!">
-              </apx-chart>
-            }
-          </div>
-
-          <div class="flex flex-wrap justify-center gap-5 px-6 pb-6">
-            <div class="flex items-center gap-2 text-xs font-noto-sans font-noto-sans">
-              <span class="h-3 w-3 rounded-full bg-tlalcalli-success"></span>
-              En tiempo
-            </div>
-            <div class="flex items-center gap-2 text-xs font-noto-sans font-noto-sans">
-              <span class="h-3 w-3 rounded-full bg-tlalcalli-warning"></span>
-              Atención
-            </div>
-            <div class="flex items-center gap-2 text-xs font-noto-sans font-noto-sans">
-              <span class="h-3 w-3 rounded-full bg-tlalcalli-error"></span>
-              Urgente
-            </div>
+            <apx-chart
+              class="w-full"
+              [series]="chartSemaforoOptions.series!"
+              [chart]="chartSemaforoOptions.chart!"
+              [plotOptions]="chartSemaforoOptions.plotOptions!"
+              [colors]="chartSemaforoOptions.colors!"
+              [labels]="chartSemaforoOptions.labels!"
+              [legend]="chartSemaforoOptions.legend!"
+              [responsive]="chartSemaforoOptions.responsive!">
+            </apx-chart>
           </div>
         </div>
-      </section>
 
-      <section class="mb-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
-        <div class="overflow-hidden rounded-xl bg-white">
-          <div class="flex items-center justify-between bg-tlalcalli-light-base px-5 py-4">
-            <div class="flex items-center gap-3">
-              <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-              <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
-                Tendencia semanal
-              </h3>
+        <div class="tl-card overflow-hidden">
+          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">show_chart</span></span>
+              <h3 class="tl-section-heading">Tendencia semanal</h3>
             </div>
-            <span class="text-[11px] font-noto-sans font-noto-sans">Últimas 4 semanas</span>
+            <span class="tl-chip tl-chip-neutral">{{ tendenciaConAtendidos ? 'Capturados vs. atendidos' : 'Capturados' }}, últimas 4 semanas</span>
           </div>
-
           <div class="flex min-h-[300px] items-center justify-center p-6">
-            @if (chartTendenciaOptions && dashboard.tendencia_semanal.length > 0) {
+            @if (p.graficas.tendencia.length > 0) {
               <apx-chart
-                #chartTendencia
+                class="w-full"
                 [series]="chartTendenciaOptions.series!"
                 [chart]="chartTendenciaOptions.chart!"
                 [xaxis]="chartTendenciaOptions.xaxis!"
@@ -200,26 +213,26 @@
                 [tooltip]="chartTendenciaOptions.tooltip!">
               </apx-chart>
             } @else {
-              <p class="text-sm font-noto-sans font-noto-sans">Sin datos de tendencia disponibles</p>
+              <div class="tl-empty py-8">
+                <span class="tl-empty-icon"><span class="icon-font !text-[28px]">show_chart</span></span>
+                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin datos de tendencia disponibles</p>
+              </div>
             }
           </div>
         </div>
 
-        <div class="overflow-hidden rounded-xl bg-white">
-          <div class="flex items-center justify-between bg-tlalcalli-light-base px-5 py-4">
-            <div class="flex items-center gap-3">
-              <!-- <span class="h-4 w-4 rounded bg-tlalcalli-primary"></span> -->
-              <h3 class="m-0 text-base font-noto-sans text-tlalcalli-primary">
-                Carga por responsable
-              </h3>
+        <div class="tl-card overflow-hidden">
+          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">bar_chart</span></span>
+              <h3 class="tl-section-heading">Carga por responsable</h3>
             </div>
-            <span class="text-[11px] font-noto-sans font-noto-sans">Top 6</span>
+            <span class="tl-chip tl-chip-neutral">Top 6 de {{ k.responsables }}</span>
           </div>
-
           <div class="flex min-h-[300px] items-center justify-center p-6">
-            @if (chartResponsablesOptions && dashboard.por_responsable.length > 0) {
+            @if (p.graficas.porResponsable.length > 0) {
               <apx-chart
-                #chartResponsables
+                class="w-full"
                 [series]="chartResponsablesOptions.series!"
                 [chart]="chartResponsablesOptions.chart!"
                 [xaxis]="chartResponsablesOptions.xaxis!"
@@ -233,26 +246,50 @@
                 [tooltip]="chartResponsablesOptions.tooltip!">
               </apx-chart>
             } @else {
-              <p class="text-sm font-noto-sans font-noto-sans">Sin datos de responsables</p>
+              <div class="tl-empty py-8">
+                <span class="tl-empty-icon"><span class="icon-font !text-[28px]">groups</span></span>
+                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin datos de responsables</p>
+              </div>
             }
           </div>
         </div>
       </section>
 
-    </main>
-  }
+      <section class="tl-card overflow-hidden">
+        <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+          <div class="tl-section-title">
+            <span class="tl-section-icon"><span class="icon-font !text-[22px]">category</span></span>
+            <div>
+              <h3 class="tl-section-heading">Acciones por tipo</h3>
+              <p class="tl-section-subtitle">Acciones de atención registradas y cuántas son urgentes</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex min-h-[260px] items-center justify-center p-6">
+          @if (chartTipoAccionOptions) {
+            <apx-chart
+              class="w-full"
+              [series]="chartTipoAccionOptions.series!"
+              [chart]="chartTipoAccionOptions.chart!"
+              [xaxis]="chartTipoAccionOptions.xaxis!"
+              [yaxis]="chartTipoAccionOptions.yaxis!"
+              [plotOptions]="chartTipoAccionOptions.plotOptions!"
+              [colors]="chartTipoAccionOptions.colors!"
+              [dataLabels]="chartTipoAccionOptions.dataLabels!"
+              [legend]="chartTipoAccionOptions.legend!"
+              [grid]="chartTipoAccionOptions.grid!">
+            </apx-chart>
+          } @else {
+            <div class="tl-empty py-8">
+              <span class="tl-empty-icon"><span class="icon-font !text-[28px]">category</span></span>
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Aún no hay acciones de atención registradas</p>
+            </div>
+          }
+        </div>
+      </section>
 
-  @if (error && !cargando) {
-    <div class="flex min-h-[420px] flex-col items-center justify-center text-tlalcalli-primary">
-      <span class="icon-font !h-[72px] !w-[72px] !text-[72px]">error_outline</span>
-      <p class="mt-5 text-base font-noto-sans font-bold">{{ error }}</p>
-      <button
-        (click)="refrescar()"
-        class="mt-5 rounded-xl border border-tlalcalli-primary px-7 py-3 text-sm font-noto-sans text-tlalcalli-primary">
-        Reintentar
-      </button>
-    </div>
-  }
+      <app-dashboard-criticos-alertas [panel]="p" />
+    }
 
-  <app-folio-cards [folios]="foliosCards"></app-folio-cards>
+  </main>
 </div>

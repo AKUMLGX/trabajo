@@ -4,9 +4,15 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { Subject, takeUntil } from 'rxjs';
-
-import { MatListModule } from '@angular/material/list';
+import {
+  Subject,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  merge,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 
 import { dynamicHeight } from '../../../shared/animacion/dynamicHeight.trigger';
 import { ExpedienteTlalcalliService } from '../../../../domains/capture/services/expediente-tlalcalli.service';
@@ -21,9 +27,8 @@ interface OpcionSelect {
 
 @Component({
   selector: 'app-tracking-form',
-  imports: [CommonModule, ReactiveFormsModule, MatListModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tracking-form.component.html',
-  styleUrl: './tracking-form.component.css',
   animations: [
     dynamicHeight,
     trigger('fadeInOut', [
@@ -46,8 +51,6 @@ export class TrackingFormComponent implements OnInit, OnDestroy {
     prioridad: new FormControl<number | ''>(''),
     status: new FormControl<number | ''>(''),
     responsable: new FormControl<number | ''>(''),
-    fecha_creacion_desde: new FormControl(''),
-    fecha_creacion_hasta: new FormControl(''),
   });
 
   opcionesPrioridad: OpcionSelect[] = [];
@@ -58,10 +61,6 @@ export class TrackingFormComponent implements OnInit, OnDestroy {
   private catalogoEstatus: CatalogoReworkItem[] = [];
   private catalogoResponsables: CatalogoResponsableResponse[] = [];
 
-  showCoincidencias: Record<string, boolean> = {};
-  coincidencias: string[] = [];
-  nombreCampoAutocomplete = '';
-
   constructor(
     private fb: FormBuilder,
     private expedienteService: ExpedienteTlalcalliService,
@@ -71,13 +70,14 @@ export class TrackingFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarCatalogos();
+    this.suscribirFiltroTextoEnVivo();
 
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (params['expediente']) {
-        this.consultForm.patchValue({ expediente: params['expediente'] });
+        this.consultForm.patchValue({ expediente: params['expediente'] }, { emitEvent: false });
         setTimeout(() => this.onSave(), 600);
       } else if (params['oficio']) {
-        this.consultForm.patchValue({ oficio: params['oficio'] });
+        this.consultForm.patchValue({ oficio: params['oficio'] }, { emitEvent: false });
         setTimeout(() => this.onSave(), 600);
       }
     });
@@ -89,6 +89,59 @@ export class TrackingFormComponent implements OnInit, OnDestroy {
   }
 
   onSave(): void {
+    this.consultarYEmitir();
+  }
+
+  limpiarFiltros(): void {
+    this.consultForm.reset(
+      {
+        expediente: '',
+        oficio: '',
+        prioridad: '',
+        status: '',
+        responsable: '',
+      },
+      { emitEvent: false }
+    );
+    this.consultarYEmitir();
+  }
+
+  /**
+   * Expediente y oficio filtran al escribir (debounce 400 ms).
+   * Prioridad, estatus y responsable filtran al cambiar el select.
+   */
+  private suscribirFiltroTextoEnVivo(): void {
+    const controles = [
+      this.consultForm.get('expediente'),
+      this.consultForm.get('oficio'),
+      this.consultForm.get('prioridad'),
+      this.consultForm.get('status'),
+      this.consultForm.get('responsable'),
+    ].filter((ctrl) => !!ctrl);
+
+    if (!controles.length) {
+      return;
+    }
+
+    merge(...controles.map((ctrl) => ctrl!.valueChanges))
+      .pipe(
+        debounceTime(400),
+        map(() => JSON.stringify(this.construirFiltrosConsulta())),
+        distinctUntilChanged(),
+        switchMap(() => this.expedienteService.consultarExpedientes(this.construirFiltrosConsulta())),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (expedientes) => {
+          this.expedienteService.expedientesConsultados.emit(expedientes);
+        },
+        error: (error) => {
+          console.error('Error al consultar expedientes:', error);
+        },
+      });
+  }
+
+  private consultarYEmitir(): void {
     this.expedienteService.consultarExpedientes(this.construirFiltrosConsulta()).subscribe({
       next: (expedientes) => {
         this.expedienteService.expedientesConsultados.emit(expedientes);
@@ -99,39 +152,38 @@ export class TrackingFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  limpiarFiltros(): void {
-    this.consultForm.reset({
-      expediente: '',
-      oficio: '',
-      prioridad: '',
-      status: '',
-      responsable: '',
-      fecha_creacion_desde: '',
-      fecha_creacion_hasta: '',
-    });
-    this.coincidencias = [];
-  }
-
   private construirFiltrosConsulta(): Record<string, unknown> {
     const form = this.consultForm.getRawValue();
+    const prioridadId = this.comoIdCatalogo(form.prioridad);
+    const estatusId = this.comoIdCatalogo(form.status);
 
     return {
-      expediente: form.expediente?.trim() || undefined,
-      oficio: form.oficio?.trim() || undefined,
-      prioridad: this.obtenerPrioridadLegacy(form.prioridad),
-      estatus: this.obtenerDescripcionCatalogo(this.catalogoEstatus, form.status),
-      responsable: this.obtenerNombreResponsable(form.responsable),
-      fecha_creacion_desde: form.fecha_creacion_desde || undefined,
-      fecha_creacion_hasta: form.fecha_creacion_hasta || undefined,
+      expediente: String(form.expediente ?? '').trim(),
+      oficio: String(form.oficio ?? '').trim(),
+      prioridad: this.obtenerPrioridadLegacy(prioridadId ?? ''),
+      prioridad_id: prioridadId ?? 0,
+      estatus: this.obtenerDescripcionCatalogo(this.catalogoEstatus, estatusId ?? ''),
+      estatus_id: estatusId ?? 0,
+      responsable: this.obtenerNombreResponsable(form.responsable) ?? '',
     };
   }
 
+  /** El <select> con [value] entrega string; el catálogo trae number. */
+  private comoIdCatalogo(valor: number | string | '' | null | undefined): number | null {
+    if (valor === '' || valor === null || valor === undefined) {
+      return null;
+    }
+    const n = Number(valor);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+
   private obtenerPrioridadLegacy(idPrioridad: number | ''): string | undefined {
-    if (!idPrioridad) {
+    const id = this.comoIdCatalogo(idPrioridad);
+    if (id == null) {
       return undefined;
     }
 
-    const item = this.catalogoPrioridad.find((p) => p.id_exp === idPrioridad);
+    const item = this.catalogoPrioridad.find((p) => Number(p.id_exp) === id);
     if (!item) {
       return undefined;
     }
@@ -147,47 +199,21 @@ export class TrackingFormComponent implements OnInit, OnDestroy {
     catalogo: CatalogoReworkItem[],
     id: number | ''
   ): string | undefined {
-    if (!id) {
+    const idNum = this.comoIdCatalogo(id);
+    if (idNum == null) {
       return undefined;
     }
 
-    return catalogo.find((item) => item.id_exp === id)?.descripcion;
+    return catalogo.find((item) => Number(item.id_exp) === idNum)?.descripcion;
   }
 
-  private obtenerNombreResponsable(id: number | ''): string | undefined {
-    if (!id) {
+  private obtenerNombreResponsable(id: number | string | '' | null | undefined): string | undefined {
+    const idNum = this.comoIdCatalogo(id);
+    if (idNum == null) {
       return undefined;
     }
 
-    return this.catalogoResponsables.find((r) => r.id_aplicativo === id)?.nombre;
-  }
-
-  onAutocompleteInput(campo: 'expediente' | 'oficio'): void {
-    this.nombreCampoAutocomplete = campo;
-    const valor = this.consultForm.get(campo)?.value?.toString().trim() ?? '';
-
-    if (!valor) {
-      this.coincidencias = [];
-      return;
-    }
-
-    this.expedienteService.autocompletadoCampo(valor, campo).subscribe({
-      next: (coincidencias) => {
-        this.coincidencias = coincidencias.slice(0, 5);
-      },
-    });
-  }
-
-  detectInput(entering: boolean, campo: string): void {
-    this.showCoincidencias[campo] = entering;
-    if (!entering) {
-      this.coincidencias = [];
-    }
-  }
-
-  selectCoincidencia(coincidencia: string): void {
-    this.consultForm.get(this.nombreCampoAutocomplete)?.setValue(coincidencia);
-    this.coincidencias = [];
+    return this.catalogoResponsables.find((r) => Number(r.id_aplicativo) === idNum)?.nombre;
   }
 
   private cargarCatalogos(): void {

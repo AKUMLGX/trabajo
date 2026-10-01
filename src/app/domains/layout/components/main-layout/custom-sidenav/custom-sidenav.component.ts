@@ -66,7 +66,7 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
 
         menuItems.push({
           icon: 'pending_actions',
-          label: 'Centro de control',
+          label: 'Seguimiento y Asignación',
           route: '/layout/responsables',
         });
 

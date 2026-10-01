@@ -4,10 +4,9 @@ import { LoginPageComponent } from './domains/auth/pages/login-page/login-page.c
 import { MainLayoutComponent } from './domains/layout/components/main-layout/main-layout.component';
 import { CapturePageComponent } from './domains/capture/pages/capture-page/capture-page.component';
 import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tracking-page.component';
-import { ReportsPageComponent } from './domains/reports/pages/reports-page/reports-page.component';
 import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
 import { loginGuard } from './domains/guards/login.guard';
-import { capturaGuard, atencionGuard, dictaminadorGuard, seguimientoGuard, reportesGuard, revisionFinalGuard } from './domains/guards/bandeja.guard';
+import { capturaGuard, atencionGuard, dictaminadorGuard, seguimientoGuard, revisionFinalGuard } from './domains/guards/bandeja.guard';
 import { AccessDeniedComponent } from './domains/shared/pages/access-denied/access-denied.component';
 import { PdfViewerComponent } from './domains/components/pdf-viewer/pdf-viewer.component';
 import { TramitePageComponent } from './domains/assistance/pages/tramite-page/tramite-page.component';
@@ -92,8 +91,8 @@ export const routes: Routes = [
       },
       {
         path: 'reports',
-        component: ReportsPageComponent,
-        canActivate: [reportesGuard]
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
       },
       {
         path: 'asignacion',
@@ -112,10 +111,6 @@ export const routes: Routes = [
             component: MsgReaderComponent
           }
         ],
-      },
-      {
-        path: 'reports',
-        component: ReportsPageComponent,
       },
       {
         path: 'dictaminador',

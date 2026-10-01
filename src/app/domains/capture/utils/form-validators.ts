@@ -131,6 +131,32 @@ export class ExpedienteValidators {
   }
 
   /**
+   * Validar que fecha_vencimiento >= fecha_recibido
+   * Este validador debe aplicarse al campo fecha_vencimiento
+   */
+  static fechaVencimientoValida(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const parent = control.parent;
+      if (!parent || !control.value) return null;
+
+      const fechaRecepcion = parent.get('fecha_recibido')?.value;
+      if (!fechaRecepcion) return null;
+
+      const fechaVencimiento = new Date(control.value);
+      const fechaRecibido = new Date(fechaRecepcion);
+
+      fechaVencimiento.setHours(0, 0, 0, 0);
+      fechaRecibido.setHours(0, 0, 0, 0);
+
+      return fechaVencimiento >= fechaRecibido ? null : {
+        fechaVencimientoInvalida: {
+          message: 'La fecha de vencimiento debe ser igual o posterior a la fecha de recepción'
+        }
+      };
+    };
+  }
+
+  /**
    * Validar rango de números (min-max)
    */
   static numberRange(min: number, max: number): ValidatorFn {
@@ -167,6 +193,23 @@ export class ExpedienteValidators {
           message: 'Solo se permiten números'
         }
       };
+    };
+  }
+
+  /** Servidor público o empresa: basta con nombre o RFC. N/A no aplica. */
+  static alMenosNombreORfc(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const tipo = control.get('tipo_usuario')?.value;
+      if (tipo === 'NA') {
+        return null;
+      }
+
+      const nombre = String(control.get('nombre')?.value ?? '').trim();
+      const rfc = String(control.get('rfc')?.value ?? '').trim();
+
+      return nombre || rfc
+        ? null
+        : { alMenosNombreORfc: true };
     };
   }
 }

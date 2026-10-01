@@ -1,0 +1,108 @@
+<form
+  class="expediente-edit-form"
+  [class.expediente-edit-form--modal]="enModal"
+  [formGroup]="formulario"
+  (ngSubmit)="onGuardar()">
+  @if (!enModal) {
+    <header class="flex items-start justify-between gap-3 border-b border-tlalcalli-light-base px-5 py-4">
+      <div class="tl-section-title">
+        <span class="tl-section-icon"><span class="icon-font !text-[20px]">edit_document</span></span>
+        <div>
+          <h4 class="tl-section-heading">Editar expediente</h4>
+          <p class="tl-section-subtitle">Actualice los campos de seguimiento del expediente</p>
+        </div>
+      </div>
+      <span class="tl-chip tl-chip-warning">Modo edición</span>
+    </header>
+  }
+
+  <div class="edit-form-scroll">
+    <section class="edit-form-seccion">
+      <div class="tl-section-title mb-4">
+        <span class="tl-section-icon !h-8 !w-8 !rounded-lg"><span class="icon-font !text-[18px]">info</span></span>
+        <h5 class="tl-section-heading !text-sm">Datos generales</h5>
+      </div>
+      <div class="detalle-grid">
+        <div class="campo-detalle">
+          <app-custom-select
+            label="Servicio"
+            formControlName="servicio"
+            [options]="opcionesServicio"
+            [required]="true">
+          </app-custom-select>
+        </div>
+
+        <div class="campo-detalle">
+          <app-custom-form-field
+            label="No. de entrada"
+            formControlName="numero_entrada_central">
+          </app-custom-form-field>
+        </div>
+      </div>
+    </section>
+
+    <section class="edit-form-seccion">
+      <div class="tl-section-title mb-4">
+        <span class="tl-section-icon !h-8 !w-8 !rounded-lg"><span class="icon-font !text-[18px]">track_changes</span></span>
+        <h5 class="tl-section-heading !text-sm">Seguimiento</h5>
+      </div>
+      <div class="detalle-grid">
+        <div class="campo-detalle campo-detalle--completo">
+          <span class="tl-label">Usuarios</span>
+          <div class="rounded-xl border border-tlalcalli-light-base bg-white p-2">
+            <app-usuarios-requerimiento
+              [usuarios]="usuarios"
+              (usuariosChange)="onUsuariosChange($event)">
+            </app-usuarios-requerimiento>
+          </div>
+        </div>
+
+        <div class="campo-detalle campo-detalle--completo">
+          <app-sistema-aplicativo-autocomplete
+            label="Aplicativo/Sistema"
+            formControlName="aplicativos"
+            [required]="true"
+            [multiple]="true"
+            placeholder="Busca o escribe un aplicativo o sistema"
+            hint="Seleccione uno o varios del catálogo, o escriba uno nuevo y presione Enter">
+          </app-sistema-aplicativo-autocomplete>
+        </div>
+
+        <div class="campo-detalle campo-detalle--completo">
+          <app-responsables-multi-select
+            label="Personal responsable"
+            formControlName="responsable"
+            [opciones]="opcionesResponsables"
+            [required]="true">
+          </app-responsables-multi-select>
+        </div>
+
+        <div class="campo-detalle">
+          <app-custom-select
+            label="Estatus"
+            formControlName="status"
+            [options]="opcionesEstatus"
+            [required]="true">
+          </app-custom-select>
+        </div>
+
+        <div class="campo-detalle campo-detalle--completo">
+          <app-custom-textarea
+            label="Observaciones del estatus"
+            formControlName="observaciones"
+            [rows]="2">
+          </app-custom-textarea>
+        </div>
+
+        <div class="campo-detalle">
+          <app-custom-select
+            label="Ubicación"
+            formControlName="ubicacion"
+            [options]="opcionesUbicacion"
+            [required]="true">
+          </app-custom-select>
+        </div>
+      </div>
+    </section>
+  </div>
+</form>

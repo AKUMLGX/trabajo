@@ -6,59 +6,43 @@ import { NgClass } from '@angular/common';
     selector: 'app-custom-textarea',
     imports: [NgClass],
     template: `
-    <div class="relative mb-7 w-full">
+    <div class="tl-field">
       <label
         [for]="fieldId"
-        class="mb-2.5 block text-[15px] font-noto-sans tracking-wide text-gray-800 transition-colors duration-300"
+        class="tl-label transition-colors"
         [ngClass]="{
-          'text-tlalcalli-primary': isFocused && !errorMessage,
-          'text-red-500': errorMessage,
-          'text-gray-400': disabled
+          '!text-tlalcalli-primary': isFocused && !errorMessage,
+          '!text-tlalcalli-error-muted': errorMessage,
+          '!text-tlalcalli-gray': disabled
         }">
         {{ label }}
         @if (required) {
-          <span class="ml-1 font-noto-sans text-red-500">*</span>
+          <span class="ml-0.5 text-tlalcalli-error">*</span>
         }
       </label>
 
-      <div class="relative w-full overflow-visible rounded-2xl">
-        <textarea
-          [id]="fieldId"
-          [placeholder]="placeholder"
-          [value]="value"
-          [disabled]="disabled"
-          [rows]="rows"
-          (input)="onInput($event)"
-          (focus)="onFocus()"
-          (blur)="onBlur()"
-          class="w-full resize-y rounded-2xl border-2 px-6 py-4 text-base font-noto-sans tracking-wide text-gray-800 outline-none transition-all duration-300 placeholder:font-normal placeholder:italic placeholder:text-gray-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:opacity-70"
-          [ngClass]="{
-            'border-transparent bg-gradient-to-br from-white to-slate-50 shadow-[0_4px_6px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] hover:border-tlalcalli-primary/20 hover:from-white hover:to-slate-100 hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)]': !isFocused && !errorMessage && !disabled,
-            'border-tlalcalli-primary bg-white shadow-[0_0_0_6px_rgba(48,38,76,0.10),0_8px_25px_rgba(0,0,0,0.15)]': isFocused && !errorMessage,
-            'border-red-500 bg-red-50 shadow-[0_0_0_6px_rgba(239,68,68,0.10),0_8px_25px_rgba(239,68,68,0.15)]': errorMessage
-          }"
-        ></textarea>
-
-        <div
-          class="pointer-events-none absolute bottom-0 left-0 h-[3px] rounded-full transition-all duration-300"
-          [ngClass]="{
-            'w-full bg-tlalcalli-primary shadow-[0_0_8px_rgba(48,38,76,0.30)]': isFocused && !errorMessage,
-            'w-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.30)]': errorMessage,
-            'w-0': !isFocused && !errorMessage
-          }">
-        </div>
-      </div>
+      <textarea
+        [id]="fieldId"
+        [placeholder]="placeholder"
+        [value]="value"
+        [disabled]="disabled"
+        [rows]="rows"
+        (input)="onInput($event)"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        class="tl-input !h-auto min-h-[96px] resize-y py-3 leading-relaxed"
+        [ngClass]="{
+          '!border-tlalcalli-error bg-tlalcalli-error/[0.03] focus:!ring-tlalcalli-error/10': errorMessage
+        }"
+      ></textarea>
 
       @if (hint && !errorMessage) {
-        <div
-          class="mt-2 text-[13px] font-noto-sans italic text-gray-500"
-          [ngClass]="{ 'font-semibold text-tlalcalli-primary': isFocused }">
-          {{ hint }}
-        </div>
+        <div class="tl-field-hint">{{ hint }}</div>
       }
 
       @if (errorMessage) {
-        <div class="mt-2 text-[13px] font-noto-sans text-red-500">
+        <div class="tl-field-error">
+          <span class="icon-font !text-[14px]">error</span>
           {{ errorMessage }}
         </div>
       }

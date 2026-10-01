@@ -6,8 +6,10 @@ import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.comp
 import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
 import { KeyboardNavigationDirective } from '../../../directives/keyboard-navigation.directive';
 import { ExpedienteValidators } from '../../../utils/form-validators';
+import { DateUtils } from '../../../utils/date-utils';
 import { ExpedienteAutocompleteService } from '../../../services/expediente-autocomplete.service';
 import { ExpedienteTlalcalliService } from '../../../services/expediente-tlalcalli.service';
+import { TemporalExpedienteService } from '../../../services/temporal-expediente.service';
 import { LoggerService } from '../../../services/logger.service';
 import { FormHelperService } from '../../../services/form-helper.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,9 +21,7 @@ import { ApiService } from '../../../services/api.service';
 import { CatalogoGeneralesCentralResponse, CatalogoCentralResponse, CatalogoGeneralResponse, 
 CrearGeneralRequest, ActualizarGeneralRequest,CrearCentralRequest,ActualizarCentralRequest, MensajeCatalogoResponse } from '../../../../interfaces/first-step-catalogos.interface';
 import { HttpResponse } from '@angular/common/http';
-import { CatalogoPrioridadResponse, CatalogoServicioResponse, CatalogoMesesResponse,ConsecutivoFechaRequest,ConsecutivoFechaResponse } from '../../../../interfaces/catalogos.interface';
-import { UsuarioRequerimiento} from '../../../../interfaces/usuarios-expediente.interface';
-import { UsuariosRequerimientoComponent } from '../../usuarios-requerimiento/usuarios-requerimiento/usuarios-requerimiento.component';
+import { CatalogoPrioridadResponse, CatalogoServicioResponse, ConsecutivoAnualResponse } from '../../../../interfaces/catalogos.interface';
 @Component({
     selector: 'app-first-step-tlalcalli',
     imports: [
@@ -30,8 +30,7 @@ import { UsuariosRequerimientoComponent } from '../../usuarios-requerimiento/usu
         CustomFormFieldComponent,
         CustomTextareaComponent,
         KeyboardNavigationDirective,
-        CustomSelectComponent,
-        UsuariosRequerimientoComponent
+        CustomSelectComponent
     ],
     templateUrl: './first-step-tlalcalli.component.html',
     styleUrl: './first-step-tlalcalli.component.css'
@@ -42,6 +41,7 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   @Output() validezCambiada = new EventEmitter<boolean>();
 
   private readonly apiService = inject(ApiService);
+  private readonly temporalService = inject(TemporalExpedienteService);
   formulario: FormGroup;
   siguienteExpediente: string = '';
   validandoOficio: boolean = false;
@@ -49,7 +49,10 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
   idOficioDuplicado: number | null = null; // ID del expediente con oficio duplicado
   buscandoExpedientes: boolean = false; // Indicador de búsqueda en progreso
   modalAbierto: boolean = false; // Indicador si el modal está abierto
-  expedienteFocused = false;
+  private guardandoBorradorTemporal = false;
+  private restableciendoFormulario = false;
+  private sincronizandoVencimiento = false;
+  private skipAutoSaveUntil = 0;
 
   caracteresProblematicos: { caracter: string; posicion: number; sugerencia: string }[] = [];
   tieneCaracteresProblematicos: boolean = false;
@@ -72,17 +75,6 @@ export class FirstStepTlalcalliComponent implements OnInit, OnDestroy {
     'Subdirección de Recursos',
     'Área de Cobranza'
   ];
-
-  readonly opcionesModoExpediente: SelectOption[] = [
-  {
-    value: 'AUTOMATICO',
-    label: 'Automático'
-  },
-  {
-    value: 'MANUAL',
-    label: 'Manual / histórico'
-  }
-];
 
   get formularioValido(): boolean {
     return this.formulario.valid;
@@ -151,7 +143,6 @@ private cargarCatalogos(): void {
   this.cargarGeneralesConCentrales();
   this.cargarPrioridades();
   this.cargarServicios();
-  this.cargarMeses();
 }
 
 private cargarGenerales(): void {
@@ -576,32 +567,6 @@ private cargarGeneralesConCentrales(): void {
   });
 }
 
-actualizarUsuarios(
-  usuarios: UsuarioRequerimiento[]
-): void {
-  const control =
-    this.formulario.get('usuarios');
-
-  control?.setValue(
-    usuarios,
-    {
-      emitEvent: true
-    }
-  );
-
-  control?.markAsTouched();
-  control?.markAsDirty();
-
-  control?.updateValueAndValidity({
-    emitEvent: true
-  });
-
-  this.calcularProgreso();
-  this.validezCambiada.emit(
-    this.formulario.valid
-  );
-}
-
   constructor(
     private fb: FormBuilder,
     private autocompleteService: ExpedienteAutocompleteService,
@@ -629,7 +594,7 @@ this.formulario = this.fb.group({
   expediente: [
     {
       value: '',
-      disabled: false
+      disabled: true
     },
     [
       Validators.required,
@@ -696,51 +661,18 @@ this.formulario = this.fb.group({
   ],
 
   fecha_vencimiento: [
-    {
-      value: null,
-      disabled: true
-    }
-  ],
-
-  usuarios:
-    this.fb.control<UsuarioRequerimiento[]>(
-      [],
-      {
-        nonNullable: true,
-        validators: [
-          Validators.required,
-          Validators.minLength(1)
-        ]
-      }
-    )
+    null,
+    [ExpedienteValidators.fechaVencimientoValida()]
+  ]
 });
   }
 
 opcionesPrioridad: SelectOption[] = [];
 opcionesServicio: SelectOption[] = [];
-opcionesMeses: SelectOption[] = [];
 
 ngOnInit(): void {
+  this.skipAutoSaveUntil = Date.now() + 2000;
   this.cargarCatalogos();
-  this.formulario
-  .get('mes_expediente')
-  ?.valueChanges
-  .pipe(takeUntil(this.destroy$))
-  .subscribe((mes: string | null) => {
-    const modo =
-      this.formulario.get(
-        'modo_expediente'
-      )?.value;
-
-    if (
-      modo === 'AUTOMATICO' &&
-      mes
-    ) {
-      this.obtenerConsecutivoPorMes(
-        mes
-      );
-    }
-  });
   
   this.formulario.get('oficio')?.valueChanges
     .pipe(
@@ -821,15 +753,14 @@ this.formulario
     });
 
   this.validezCambiada.emit(this.formulario.valid);
-  this.camposTotales = Object.keys(
-    this.formulario.controls
-  ).length;
-
   this.calcularProgreso();
 
   this.formulario.valueChanges
     .pipe(
-      debounceTime(300),
+      debounceTime(1000),
+      distinctUntilChanged(
+        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+      ),
       takeUntil(this.destroy$)
     )
     .subscribe(() => {
@@ -849,28 +780,14 @@ this.formulario
     ) || '[]'
   );
 
-  this.formulario
-  .get('modo_expediente')
-  ?.valueChanges
-  .pipe(takeUntil(this.destroy$))
-  .subscribe((modo: string | null) => {
-    this.actualizarModoExpediente(
-      modo ?? 'AUTOMATICO'
-    );
-  });
-
-  this.actualizarModoExpediente(
-  this.formulario.get(
-    'modo_expediente'
-  )?.value ?? 'AUTOMATICO'
-);
+  this.fijarExpedienteAutomatico();
 
 this.formulario
   .get('fecha_recibido')
   ?.valueChanges
   .pipe(takeUntil(this.destroy$))
   .subscribe(() => {
-    this.actualizarFechaVencimiento();
+    this.sincronizarVencimiento('recepcion');
   });
 
 this.formulario
@@ -878,64 +795,106 @@ this.formulario
   ?.valueChanges
   .pipe(takeUntil(this.destroy$))
   .subscribe(() => {
-    this.actualizarFechaVencimiento();
+    this.sincronizarVencimiento('plazo');
+  });
+
+this.formulario
+  .get('fecha_vencimiento')
+  ?.valueChanges
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(() => {
+    this.sincronizarVencimiento('fecha');
   });
 }
 
-private actualizarFechaVencimiento():
-  void {
-  const fechaRecepcion =
-    this.formulario.get(
-      'fecha_recibido'
-    )?.value;
-
-  const plazo =
-    Number(
-      this.formulario.get(
-        'plazo_vencimiento'
-      )?.value
-    );
-
-  const controlVencimiento =
-    this.formulario.get(
-      'fecha_vencimiento'
-    );
-
-  if (
-    !fechaRecepcion ||
-    !Number.isInteger(plazo) ||
-    plazo <= 0
-  ) {
-    controlVencimiento?.setValue(
-      null,
-      {
-        emitEvent: false
-      }
-    );
-
+private sincronizarVencimiento(
+  origen: 'plazo' | 'fecha' | 'recepcion'
+): void {
+  if (this.sincronizandoVencimiento) {
     return;
   }
 
-  const fechaCalculada =
-    this.sumarDiasHabiles(
-      fechaRecepcion,
-      plazo
-    );
+  const fechaRecepcion =
+    this.formulario.get('fecha_recibido')?.value;
 
-  controlVencimiento?.setValue(
-    fechaCalculada,
-    {
-      emitEvent: false
-    }
+  const plazo = Number(
+    this.formulario.get('plazo_vencimiento')?.value
   );
+
+  const fechaVencimiento =
+    this.formulario.get('fecha_vencimiento')?.value;
+
+  const plazoValido =
+    Number.isInteger(plazo) && plazo > 0;
+
+  this.sincronizandoVencimiento = true;
+
+  try {
+    if (origen === 'plazo' || origen === 'recepcion') {
+      if (fechaRecepcion && plazoValido) {
+        const fechaCalculada = this.sumarDiasHabiles(
+          fechaRecepcion,
+          plazo
+        );
+
+        this.formulario.get('fecha_vencimiento')?.setValue(
+          fechaCalculada,
+          { emitEvent: false }
+        );
+      } else if (
+        origen === 'recepcion' &&
+        fechaRecepcion &&
+        fechaVencimiento
+      ) {
+        this.actualizarPlazoDesdeFechas(
+          fechaRecepcion,
+          fechaVencimiento
+        );
+      }
+    } else if (origen === 'fecha') {
+      if (fechaRecepcion && fechaVencimiento) {
+        this.actualizarPlazoDesdeFechas(
+          fechaRecepcion,
+          fechaVencimiento
+        );
+      }
+    }
+
+    this.formulario.get('fecha_vencimiento')?.updateValueAndValidity({
+      emitEvent: false
+    });
+  } finally {
+    this.sincronizandoVencimiento = false;
+  }
+}
+
+private actualizarPlazoDesdeFechas(
+  fechaRecepcion: Date | string | null | undefined,
+  fechaVencimiento: Date | string | null | undefined
+): void {
+  const plazoCalculado = DateUtils.contarDiasHabilesDesdeRecepcion(
+    fechaRecepcion,
+    fechaVencimiento
+  );
+
+  if (plazoCalculado != null && plazoCalculado > 0) {
+    this.formulario.get('plazo_vencimiento')?.setValue(
+      plazoCalculado,
+      { emitEvent: false }
+    );
+  }
 }
 
 private sumarDiasHabiles(
-  fechaInicial: string,
+  fechaInicial: Date | string | null | undefined,
   diasHabiles: number
 ): string | null {
-  const partes =
-    fechaInicial.split('-');
+  const fechaIso = DateUtils.toInputDate(fechaInicial);
+  if (!fechaIso) {
+    return null;
+  }
+
+  const partes = fechaIso.split('-');
 
   if (partes.length !== 3) {
     return null;
@@ -1002,65 +961,103 @@ private sumarDiasHabiles(
   return `${anioResultado}-${mesResultado}-${diaResultado}`;
 }
 
-private actualizarModoExpediente(
-  modo: string
-): void {
-  const expedienteControl =
-    this.formulario.get('expediente');
-
-  const mesControl =
-    this.formulario.get('mes_expediente');
-
-  if (modo === 'MANUAL') {
-    expedienteControl?.enable({
-      emitEvent: false
-    });
-
-    mesControl?.disable({
-      emitEvent: false
-    });
-
-    return;
-  }
-
-  mesControl?.enable({
-    emitEvent: false
-  });
-
-  expedienteControl?.disable({
-    emitEvent: false
-  });
-
-  const mes =
-    mesControl?.value;
-
-  if (mes) {
-    this.obtenerConsecutivoPorMes(
-      String(mes)
-    );
-  }
+private fijarExpedienteAutomatico(): void {
+  this.formulario.get('modo_expediente')?.setValue('AUTOMATICO', { emitEvent: false });
+  this.formulario.get('expediente')?.disable({ emitEvent: false });
+  this.obtenerConsecutivoAnual();
+  this.calcularProgreso();
 }
 
   calcularProgreso(): void {
-    let completados = 0;
-    Object.keys(this.formulario.controls).forEach(key => {
-      const control = this.formulario.get(key);
-      const value = control?.value;
-      const tieneValor =
+    const tieneValor = (key: string): boolean => {
+      const value = this.formulario.get(key)?.value;
+      return (
         value !== null &&
-        value !== '' &&
-        value !== false &&
-        !(Array.isArray(value) && value.length === 0);
+        value !== undefined &&
+        String(value).trim() !== '' &&
+        value !== false
+      );
+    };
 
-      if (control && tieneValor) {
-        completados++;
-      }
-    });
+    const campos: boolean[] = [
+      tieneValor('oficio'),
+      tieneValor('servicio'),
+      tieneValor('numero_entrada_central'),
+      tieneValor('remitente_general'),
+      tieneValor('fecha_documento'),
+      tieneValor('fecha_recibido'),
+      tieneValor('prioridad'),
+      tieneValor('plazo_vencimiento') || tieneValor('fecha_vencimiento'),
+      tieneValor('fecha_vencimiento'),
+      tieneValor('referencia_asunto'),
+    ];
+
+    const totales = campos.length;
+    const completados = campos.filter(Boolean).length;
+
+    this.camposTotales = totales;
     this.camposCompletados = completados;
-    this.progresoFormulario = Math.round((completados / this.camposTotales) * 100);
+    this.progresoFormulario =
+      totales > 0 ? Math.round((completados / totales) * 100) : 0;
   }
 
-  private guardarBorrador(): void {}
+  private guardarBorrador(): void {
+    if (
+      this.restableciendoFormulario ||
+      Date.now() < this.skipAutoSaveUntil ||
+      !this.temporalService.isAutoGuardadoPermitido()
+    ) {
+      return;
+    }
+
+    const expediente = this.formulario.get('expediente')?.value?.trim();
+    const oficio = this.formulario.get('oficio')?.value?.trim();
+
+    if (!expediente || !oficio || this.guardandoBorradorTemporal) {
+      return;
+    }
+
+    const paso1 = this.obtenerDatosPaso1ParaTemporal();
+    const paso2Defaults = {
+      responsable: '',
+      sistema_aplicativo: '',
+      status: 0,
+      ubicacion: 1,
+      observaciones_estatus: '',
+    };
+
+    this.guardandoBorradorTemporal = true;
+
+    this.temporalService.autoGuardarBorrador(paso1, paso2Defaults).subscribe({
+      next: (uuid) => {
+        this.guardandoBorradorTemporal = false;
+        if (uuid) {
+          this.logger.debug('Borrador temporal auto-guardado', uuid);
+        }
+      },
+      error: (error) => {
+        this.guardandoBorradorTemporal = false;
+        this.logger.debug('Auto-guardado temporal omitido o falló', error);
+      },
+    });
+  }
+
+  private obtenerDatosPaso1ParaTemporal(): Record<string, unknown> {
+    const remitenteIdentificador =
+      this.formulario.get('remitente_identificador')?.value?.trim() || '';
+    const remitenteArea =
+      remitenteIdentificador.length > 50
+        ? remitenteIdentificador.substring(0, 50)
+        : remitenteIdentificador;
+    const valoresFormulario = this.formulario.getRawValue();
+
+    return {
+      ...valoresFormulario,
+      expediente: valoresFormulario.expediente,
+      remitente_area: remitenteArea,
+      plazo_vencimiento_prioridad: this.construirPlazo(),
+    };
+  }
 
   cargarYAplicarSiguienteExpediente() {
     const oficioActual = this.formulario.get('oficio')?.value;
@@ -1072,7 +1069,6 @@ private actualizarModoExpediente(
           expediente: siguiente
         });
         this.formulario.get('expediente')?.disable();
-        this.formulario.get('fecha_documento')?.disable();
         this.logger.debug('Expediente auto-cargado y bloqueado:', siguiente);
 
         if (oficioActual && oficioActual.trim()) {
@@ -1095,7 +1091,6 @@ private actualizarModoExpediente(
           expediente: expedienteExistente
         });
         this.formulario.get('expediente')?.disable();
-        this.formulario.get('fecha_documento')?.disable();
       },
       error: (err) => {
         this.logger.debug('Oficio nuevo, se generará expediente nuevo al guardar');
@@ -1296,24 +1291,8 @@ private continuarConFormulario(): void {
 
   const valoresFormulario = this.formulario.getRawValue();
 
-  const usuariosPayload:
-    Array<{
-      tipo_usuario:
-        UsuarioRequerimiento['tipo_usuario'];
-      nombre: string;
-      rfc: string;
-    }> = valoresFormulario.usuarios.map(
-      (usuario: UsuarioRequerimiento) => ({
-        tipo_usuario: usuario.tipo_usuario,
-        nombre: usuario.nombre,
-        rfc: usuario.rfc
-      })
-    );
-
   const datosFormulario = {
     ...valoresFormulario,
-
-    usuarios: usuariosPayload,
 
     remitente_area:
       remitenteCompleto,
@@ -1335,10 +1314,7 @@ private continuarConFormulario(): void {
         remitenteIdentificador,
 
       remitente_area_final:
-        remitenteCompleto,
-
-      usuarios:
-        usuariosPayload
+        remitenteCompleto
     }
   );
 
@@ -1395,10 +1371,10 @@ private construirPlazo(): {
       tipo_medio_recepcion: 'Tipo de requerimiento',
       oficio: 'Oficio / Atenta nota / Petición interna',
       servicio: 'Servicio',
-      usuarios: 'Usuarios solicitados',
       remitente_general: 'Administración General',
       referencia_asunto: 'Asunto/Referencia',
-      plazo_vencimiento: 'Plazo de vencimiento',
+      plazo_vencimiento: 'Plazo de vencimiento (días hábiles)',
+      fecha_vencimiento: 'Fecha de vencimiento',
     };
 
     const camposInvalidos: string[] = [];
@@ -1577,6 +1553,9 @@ private construirPlazo(): {
   get fechaVencimientoError(): string | null {
     const control = this.formulario.get('fecha_vencimiento');
     if (control?.touched && control?.errors) {
+      if (control.errors['fechaVencimientoInvalida']) {
+        return control.errors['fechaVencimientoInvalida'].message;
+      }
       if (control.errors['futureDate']) return control.errors['futureDate'].message;
     }
     return null;
@@ -1617,44 +1596,75 @@ private construirPlazo(): {
     return this.formulario.valid;
   }
 
-  reiniciarFormulario(): void {
-    this.logger.debug('Reiniciando formulario del paso 1 completamente');
-    this.formulario.reset({
-    tipo_medio_recepcion: 'OFICIO',
-    modo_expediente: 'AUTOMATICO',
-    servicio: null,
-    usuarios: [],
-    oficio: '',
-    expediente: '',
-    mes_expediente:
-    String(
-      new Date().getMonth() + 1
-    ).padStart(2, '0'),
+  resetearFormulario(): void {
+    this.restableciendoFormulario = true;
+    this.skipAutoSaveUntil = Date.now() + 2000;
+    this.guardandoBorradorTemporal = false;
+    this.sincronizandoVencimiento = false;
+    this.siguienteExpediente = '';
+    this.validandoOficio = false;
+    this.buscandoExpedientes = false;
+    this.modalAbierto = false;
 
-    numero_entrada_central: '',
-    remitente_general: '',
-    remitente_central: '',
-    remitente_identificador: '',
-    fecha_documento: this.formHelper.getFechaActual(),
-    fecha_recibido: this.formHelper.getFechaActual(),
-    referencia_asunto: '',
-    prioridad: 1,
-    plazo_vencimiento: null,
-    fecha_vencimiento: null
-  });
+    this.formulario.reset({
+      tipo_medio_recepcion: 'OFICIO',
+      modo_expediente: 'AUTOMATICO',
+      servicio: null,
+      oficio: '',
+      expediente: '',
+      mes_expediente: String(new Date().getMonth() + 1).padStart(2, '0'),
+      numero_entrada_central: '',
+      remitente_general: '',
+      remitente_central: '',
+      remitente_identificador: '',
+      fecha_documento: this.formHelper.getFechaActual(),
+      fecha_recibido: this.formHelper.getFechaActual(),
+      referencia_asunto: '',
+      prioridad: 1,
+      plazo_vencimiento: null,
+      fecha_vencimiento: null,
+    }, { emitEvent: false });
 
     this.errorOficioDuplicado = false;
     this.idOficioDuplicado = null;
     this.caracteresProblematicos = [];
     this.tieneCaracteresProblematicos = false;
-    this.formulario.get('fecha_documento')?.disable();
-    this.cargarYAplicarSiguienteExpediente();
+    this.formulario.markAsPristine();
+    this.formulario.markAsUntouched();
     this.calcularProgreso();
-    this.logger.debug('Formulario reiniciado completamente');
-    this.actualizarModoExpediente('AUTOMATICO');
+    this.validezCambiada.emit(this.formulario.valid);
+    this.fijarExpedienteAutomatico();
+    this.restableciendoFormulario = false;
+  }
+
+  reiniciarFormulario(): void {
+    this.resetearFormulario();
+  }
+
+  private tieneDatosPrecargaNoVacios(datos: unknown): boolean {
+    if (!datos || typeof datos !== 'object') {
+      return false;
+    }
+
+    const registro = datos as Record<string, unknown>;
+    const texto = (valor: unknown): string => String(valor ?? '').trim();
+
+    return (
+      texto(registro['oficio']).length > 0 ||
+      texto(registro['expediente']).length > 0 ||
+      texto(registro['referencia_asunto']).length > 0 ||
+      texto(registro['numero_entrada_central']).length > 0 ||
+      texto(registro['servicio']).length > 0
+    );
   }
 
 precargarDatos(datos: any): void {
+  if (!this.tieneDatosPrecargaNoVacios(datos)) {
+    return;
+  }
+
+  this.restableciendoFormulario = true;
+  this.skipAutoSaveUntil = Date.now() + 2000;
   this.logger.debug(
     'Precargando datos temporales en paso 1:',
     datos
@@ -1676,41 +1686,8 @@ precargarDatos(datos: any): void {
       datos.remitente_area || ''
   };
 
-  const usuariosPrecargados:
-    UsuarioRequerimiento[] =
-      Array.isArray(datos.usuarios)
-        ? datos.usuarios.map(
-            (
-              usuario:
-                Partial<UsuarioRequerimiento>
-            ): UsuarioRequerimiento => ({
-              id_temporal:
-                usuario.id_temporal ||
-                `${Date.now()}-${Math.random()
-                  .toString(36)
-                  .slice(2, 10)}`,
-
-              tipo_usuario:
-                usuario.tipo_usuario ??
-                'SERVIDOR_PUBLICO',
-
-              nombre:
-                usuario.nombre ?? '',
-
-              rfc:
-                usuario.rfc ?? ''
-            })
-          )
-        : [];
-
   this.formulario
     .get('expediente')
-    ?.enable({
-      emitEvent: false
-    });
-
-  this.formulario
-    .get('fecha_documento')
     ?.enable({
       emitEvent: false
     });
@@ -1724,9 +1701,6 @@ precargarDatos(datos: any): void {
         datos.servicio ??
         datos.id_servicio ??
         null,
-
-      usuarios:
-        usuariosPrecargados,
 
       oficio:
         datos.oficio || '',
@@ -1756,13 +1730,13 @@ precargarDatos(datos: any): void {
         remitenteParseado.identificador,
 
       fecha_documento:
-        datos.fecha_documento || null,
+        DateUtils.toInputDate(datos.fecha_documento),
 
       fecha_recibido:
-        datos.fecha_recibido || null,
+        DateUtils.toInputDate(datos.fecha_recibido),
 
       fecha_vencimiento:
-        datos.fecha_vencimiento || null,
+        DateUtils.toInputDate(datos.fecha_vencimiento),
 
       referencia_asunto:
         datos.referencia_asunto || '',
@@ -1771,9 +1745,7 @@ precargarDatos(datos: any): void {
         datos.prioridad ??
         datos.id_prioridad ??
         1,
-      modo_expediente:
-      datos.modo_expediente ??
-      'AUTOMATICO',
+      modo_expediente: 'AUTOMATICO',
 
       plazo_vencimiento:
       datos.plazo_vencimiento ??
@@ -1781,15 +1753,21 @@ precargarDatos(datos: any): void {
       null,
     },
     {
-      emitEvent: true
+      emitEvent: false
     }
   );
 
-  this.actualizarModoExpediente(
-  datos.modo_expediente ??
-  'AUTOMATICO');
+  this.fijarExpedienteAutomatico();
 
-  this.actualizarFechaVencimiento();
+  const plazoPrecargado =
+    datos.plazo_vencimiento ??
+    datos.plazo_vencimiento_prioridad?.valor;
+
+  if (plazoPrecargado) {
+    this.sincronizarVencimiento('plazo');
+  } else if (datos.fecha_vencimiento) {
+    this.sincronizarVencimiento('fecha');
+  }
 
   this.actualizarOpcionesCentrales();
 
@@ -1815,17 +1793,13 @@ precargarDatos(datos: any): void {
       emitEvent: false
     });
 
-  this.formulario
-    .get('fecha_documento')
-    ?.disable({
-      emitEvent: false
-    });
-
   this.calcularProgreso();
 
   this.validezCambiada.emit(
     this.formulario.valid
   );
+
+  this.restableciendoFormulario = false;
 }
 
   private separarRemitenteArea(remitenteArea: string | null | undefined): {
@@ -1970,191 +1944,53 @@ private cargarPrioridades(): void {
     });
   }
 
-  private actualizarExpedientePorMes(mes: string): void {
-  const expedienteActual =
-    this.formulario.get('expediente')?.value ||
-    this.siguienteExpediente;
-
-  if (!expedienteActual) {
-    return;
-  }
-
-  const mesFormateado = String(mes).padStart(2, '0');
-  const anioActual = String(
-    new Date().getFullYear()
-  ).slice(-2);
-
-  const coincidencia = expedienteActual.match(
-    /^EXP-\d{4}-(\d{4})$/i
-  );
-
-  if (!coincidencia) {
-    this.logger.warn(
-      'No se pudo actualizar el mes porque el expediente no tiene el formato esperado:',
-      expedienteActual
-    );
-    return;
-  }
-
-  const consecutivo = coincidencia[1];
-
-  const expedienteActualizado =
-    `EXP-${anioActual}${mesFormateado}-${consecutivo}`;
-
-  this.siguienteExpediente = expedienteActualizado;
-
-  this.formulario.patchValue(
-    {
-      expediente: expedienteActualizado
-    },
-    {
-      emitEvent: false
-    }
-  );
-
-  this.logger.debug(
-    'Expediente actualizado por mes:',
-    expedienteActualizado
-  );
-}
-
-private cargarMeses(): void {
-  this.apiService
-    .getData<CatalogoMesesResponse>(
-      'catalogo/meses',
-      true
-    )
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (
-        response: HttpResponse<CatalogoMesesResponse>
-      ) => {
-        const meses = response.body?.data ?? [];
-
-        console.log('CATÁLOGO MESES:', meses);
-
-        this.opcionesMeses = meses.map(
-          (mes): SelectOption => ({
-            value: mes.clave,
-            label: mes.descripcion
-          })
-        );
-
-        const mesActual =
-          this.formulario.get('mes_expediente')?.value;
-
-        if (!mesActual) {
-          const mesDelSistema = String(
-            new Date().getMonth() + 1
-          ).padStart(2, '0');
-
-          const existeMesActual = meses.some(
-            (mes) => mes.clave === mesDelSistema
-          );
-
-          if (existeMesActual) {
-            this.formulario.patchValue(
-              {
-                mes_expediente: mesDelSistema
-              },
-              {
-                emitEvent: false
-              }
-            );
-          }
-        }
-      },
-      error: (error: unknown) => {
-        this.logger.error(
-          'Error al cargar el catálogo de meses:',
-          error
-        );
-
-        this.opcionesMeses = [];
-      }
-    });
-    const mesSeleccionado =
-  this.formulario.get('mes_expediente')?.value;
-
-if (mesSeleccionado) {
-  this.obtenerConsecutivoPorMes(mesSeleccionado);
-}
-  }
-
-private obtenerConsecutivoPorMes(  claveMes: string | number): void {
+private obtenerConsecutivoAnual(): void {
   const modo = this.formulario.get('modo_expediente')?.value;
 
   if (modo !== 'AUTOMATICO') {
     return;
   }
-  const claveFormateada = String(claveMes).padStart(2, '0');
-
-  const body: ConsecutivoFechaRequest = {
-    clave: claveFormateada
-  };
-
-  console.log('BODY CONSECUTIVO FECHA:', body);
 
   this.apiService
-    .putDataBody<ConsecutivoFechaResponse>(
-      'expediente/consecutivo_fecha',
-      body,
-      true
-    )
+    .getData<ConsecutivoAnualResponse>('expediente/consecutivo', true)
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (
-        response: HttpResponse<ConsecutivoFechaResponse>
-      ) => {
-        const consecutivo = response.body?.data;
+      next: (response: HttpResponse<ConsecutivoAnualResponse>) => {
+        const expediente = this.normalizarFolioAnual(response.body?.data);
 
-        if (
-          consecutivo === null ||
-          consecutivo === undefined
-        ) {
-          this.logger.error(
-            'El endpoint no devolvió un consecutivo válido'
-          );
+        if (!expediente) {
+          this.logger.error('El endpoint no devolvió un consecutivo anual válido');
           return;
         }
 
-        const anio = String(
-          new Date().getFullYear()
-        ).slice(-2);
-
-        const consecutivoFormateado = String(
-          consecutivo
-        ).padStart(4, '0');
-
-        const expediente =
-          `EXP-${anio}${claveFormateada}-${consecutivoFormateado}`;
-
         this.siguienteExpediente = expediente;
-
-        this.formulario.patchValue(
-          {
-            expediente
-          },
-          {
-            emitEvent: false
-          }
-        );
-
-        this.formulario
-          .get('expediente')
-          ?.disable({ emitEvent: false });
-
-        this.logger.debug(
-          'Expediente actualizado:',
-          expediente
-        );
+        this.formulario.patchValue({ expediente }, { emitEvent: false });
+        this.formulario.get('expediente')?.disable({ emitEvent: false });
+        this.logger.debug('Expediente anual actualizado:', expediente);
+        this.calcularProgreso();
       },
       error: (error: unknown) => {
-        this.logger.error(
-          'Error al obtener el consecutivo por mes:',
-          error
-        );
-      }
+        this.logger.error('Error al obtener el consecutivo anual:', error);
+      },
     });
+}
+
+/** Max devuelve `EXP-2609-1`; se rellena el consecutivo a 4 dígitos. */
+private normalizarFolioAnual(valor: string | null | undefined): string | null {
+  const bruto = String(valor ?? '').trim();
+  const partes = bruto.split('-');
+
+  if (partes.length < 3 || partes[0].toUpperCase() !== 'EXP') {
+    return null;
   }
+
+  const anio = partes[1];
+  const consecutivo = Number.parseInt(partes[2], 10);
+
+  if (!anio || Number.isNaN(consecutivo) || consecutivo < 1) {
+    return null;
+  }
+
+  return `EXP-${anio}-${String(consecutivo).padStart(4, '0')}`;
+}
 }

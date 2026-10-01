@@ -7,7 +7,6 @@ import { KeyboardNavigationDirective } from '../../../directives/keyboard-naviga
     selector: 'app-custom-form-field',
     imports: [CommonModule, KeyboardNavigationDirective],
     templateUrl: './custom-form-field.component.html',
-    styleUrls: ['./custom-form-field.component.css'],
     providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomFormFieldComponent), multi: true }]
     // template: `
     //   <div class="custom-form-field" [class.focused]="isFocused" [class.has-value]="hasValue" [class.error]="errorMessage">

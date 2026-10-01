@@ -1,0 +1,7 @@
+.rms-select ::ng-deep > app-custom-select > .tl-field {
+  margin-bottom: 0;
+}
+
+.rms-select ::ng-deep > app-custom-select > .tl-field > label {
+  display: none;
+}

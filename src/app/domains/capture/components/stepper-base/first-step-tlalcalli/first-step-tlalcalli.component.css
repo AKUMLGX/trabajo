@@ -1,10 +1,6 @@
-:host .expediente-input {
-  min-height: 58px;
-}
-
 :host .expediente-input:disabled {
   opacity: 1;
-  color: #111827;
-  -webkit-text-fill-color: #111827;
-  font-weight: 700;
+  color: #230142;
+  -webkit-text-fill-color: #230142;
+  background-color: #f9f5fb;
 }

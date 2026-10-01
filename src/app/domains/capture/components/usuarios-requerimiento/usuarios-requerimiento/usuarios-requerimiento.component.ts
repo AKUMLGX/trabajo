@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators, ReactiveFor
 import { SelectOption, CustomSelectComponent } from '../../stepper-base/custom-select/custom-select.component';
 import { Subject, takeUntil } from 'rxjs';
 import { CustomFormFieldComponent } from "../../stepper-base/custom-form-field/custom-form-field.component";
+import { ExpedienteValidators } from '../../../utils/form-validators';
 
 
 @Component({
@@ -57,7 +58,6 @@ export class UsuariosRequerimientoComponent implements OnInit, OnChanges, OnDest
         {
           nonNullable: true,
           validators: [
-            Validators.required,
             Validators.maxLength(200)
           ]
         }
@@ -73,6 +73,8 @@ export class UsuariosRequerimientoComponent implements OnInit, OnChanges, OnDest
           ]
         }
       )
+  }, {
+    validators: [ExpedienteValidators.alMenosNombreORfc()]
   });
 
   readonly usuariosFormArray:
@@ -420,14 +422,20 @@ export class UsuariosRequerimientoComponent implements OnInit, OnChanges, OnDest
           return true;
         }
 
-        return (
+        if (
+          nombre &&
+          usuario.nombre &&
           usuario.nombre
             .trim()
             .toLowerCase() ===
           nombre
             .trim()
             .toLowerCase()
-        );
+        ) {
+          return true;
+        }
+
+        return false;
       }
     );
   }
@@ -477,7 +485,6 @@ export class UsuariosRequerimientoComponent implements OnInit, OnChanges, OnDest
       });
 
       nombreControl.setValidators([
-        Validators.required,
         Validators.maxLength(200)
       ]);
 
@@ -521,8 +528,7 @@ export class UsuariosRequerimientoComponent implements OnInit, OnChanges, OnDest
       ],
 
       nombre: [
-        usuario.nombre,
-        Validators.required
+        usuario.nombre
       ],
 
       rfc: [

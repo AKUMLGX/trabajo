@@ -191,6 +191,12 @@ export const environment = {
       return v === true || v === 'true' || v === 1 || v === '1';
     })(),
 
+    devCentroControlSoloMiBandeja: (() => {
+      const env = (window as { [key: string]: any })['env'];
+      const v = env?.['devCentroControlSoloMiBandeja'];
+      return v === true || v === 'true' || v === 1 || v === '1';
+    })(),
+
 };
 
 

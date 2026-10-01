@@ -222,7 +222,7 @@ export class PermissionsService {
       atencion: '/layout/assistance',
       dictaminador: '/layout/dictaminador',
       seguimiento: '/layout/tracking',
-      reportes: '/layout/reports',
+      reportes: '/layout/dashboard',
       revisionFinal: '/layout/revision-final'
     };
     return routes[bandeja] || '/layout';

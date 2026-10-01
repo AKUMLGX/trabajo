@@ -1,0 +1,52 @@
+<div class="tl-modal edicion-modal">
+
+  <header class="tl-modal-header !py-5">
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex min-w-0 items-center gap-4">
+        <span class="tl-modal-icon"><span class="icon-font !text-[24px]">edit_document</span></span>
+        <div class="min-w-0">
+          <h2 class="m-0 font-noto-sans text-lg font-semibold leading-tight">Editar expediente</h2>
+          <p class="m-0 mt-0.5 break-words font-noto-sans text-xs text-white/75">{{ subtituloExpediente() }}</p>
+        </div>
+      </div>
+      <button type="button" class="tl-modal-close" (click)="cancelar()" aria-label="Cerrar">
+        <span class="icon-font !text-[20px]">close</span>
+      </button>
+    </div>
+  </header>
+
+  @if (cargando) {
+    <div class="flex flex-col items-center justify-center gap-3.5 px-6 py-12 text-center font-noto-sans text-sm text-tlalcalli-dark-muted">
+      <div class="tl-spinner"></div>
+      <p class="m-0">Cargando información del expediente...</p>
+    </div>
+  } @else if (errorCarga || !detalle) {
+    <div class="flex flex-col items-center justify-center gap-3.5 px-6 py-12 text-center font-noto-sans text-sm text-tlalcalli-dark-muted">
+      <span class="tl-empty-icon !mb-0 bg-tlalcalli-error/10 text-tlalcalli-error-muted"><span class="icon-font !text-[28px]">error</span></span>
+      <p class="m-0">No se pudo cargar el detalle del expediente.</p>
+    </div>
+  } @else {
+    <div class="tl-modal-body !px-6 !py-5">
+      @if (mensajeApi) {
+        <p class="m-0 mb-4 rounded-xl bg-tlalcalli-warning/10 px-4 py-3 font-noto-sans text-sm text-tlalcalli-warning-muted">{{ mensajeApi }}</p>
+      }
+      <app-expediente-captura-edit-form
+        #formEditExpediente
+        [detalle]="detalle"
+        [enModal]="true"
+        (guardar)="onGuardarExpediente($event)">
+      </app-expediente-captura-edit-form>
+    </div>
+
+    <footer class="tl-modal-footer">
+      <button type="button" class="tl-btn-secondary" (click)="cancelar()" [disabled]="guardando">
+        Cancelar
+      </button>
+      <button type="button" class="tl-btn-primary" (click)="solicitarGuardado()" [disabled]="guardando">
+        <span class="icon-font !text-[18px]">save</span>
+        {{ guardando ? 'Guardando…' : 'Guardar' }}
+      </button>
+    </footer>
+  }
+
+</div>

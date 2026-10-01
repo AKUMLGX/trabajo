@@ -9,10 +9,10 @@ export const loadAnimationInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<unknown>> => {
   const loadAnimationService = inject(LoadAnimationService);
 
-  console.log('INTERCEPTOR LOADER:', request.url);
-
   const skipLoader =
     request.headers.has('X-Skip-Loader') ||
+    request.url.includes('temporal/') ||
+    request.url.includes('catalogo/aplicativos') ||
     request.url.includes('listar_archivos') ||
     request.url.includes('get_atencion_por_administracion') ||
     request.url.includes('por-oficio') ||

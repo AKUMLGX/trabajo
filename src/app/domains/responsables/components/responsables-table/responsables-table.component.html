@@ -1,501 +1,342 @@
-<section class="rounded-[24px] bg-white px-5 py-7 md:px-6">
-  <div class="mb-7 flex items-center gap-3">
-    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-tlalcalli-primary text-white"></div>
+<div class="flex flex-col gap-5">
 
-    <div>
-      <h2 class="m-0 text-xl font-noto-sans leading-none text-tlalcalli-primary">
-        Semáforo de atención
-      </h2>
-      <p class="mt-1 text-xs font-noto-sans text-tlalcalli-primary">
-        Tiempo transcurrido desde la captura del asunto (límite: 72 hrs.)
-      </p>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-    <div
-      class="min-h-[208px] cursor-pointer rounded-xl bg-tlalcalli-success p-7 text-white transition hover:scale-[1.01]"
-      [ngClass]="{ 'ring-4 ring-tlalcalli-success/25': filtroPrioridad === 'EN_TIEMPO' }"
-      (click)="filtroPrioridad = 'EN_TIEMPO'; aplicarFiltros()">
-
-      <div class="flex h-full flex-col justify-end">
-        <span class="text-sm font-noto-sans uppercase">En tiempo</span>
-        <span class="mt-2 text-5xl font-black leading-none">{{ estadisticasSemaforo.en_tiempo }}</span>
-        <span class="mt-4 text-xs font-noto-sans">0-24 h transcurridas</span>
-
-        <div class="mt-2 h-1.5 w-full rounded-full bg-black/30">
-          <div class="h-full w-[33%] rounded-full bg-white"></div>
+  <section class="tl-card p-5 md:p-6">
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <div class="tl-section-title">
+        <span class="tl-section-icon"><span class="icon-font !text-[22px]">traffic</span></span>
+        <div>
+          <h2 class="tl-section-heading">Semáforo de atención</h2>
+          <p class="tl-section-subtitle">Tiempo transcurrido desde la captura del asunto (límite: 72 h)</p>
         </div>
-
-        <span class="mt-2 text-xs font-noto-sans">Todo bien</span>
       </div>
-    </div>
-
-    <div
-      class="min-h-[208px] cursor-pointer rounded-xl bg-tlalcalli-warning p-7 text-tlalcalli-warning-muted transition hover:scale-[1.01]"
-      [ngClass]="{ 'ring-4 ring-tlalcalli-warning/25': filtroPrioridad === 'ATENCION' }"
-      (click)="filtroPrioridad = 'ATENCION'; aplicarFiltros()">
-
-      <div class="flex h-full flex-col justify-end">
-        <span class="text-sm font-noto-sans uppercase">Atención</span>
-        <span class="mt-2 text-5xl font-black leading-none">{{ estadisticasSemaforo.atencion }}</span>
-        <span class="mt-4 text-xs font-noto-sans">24-48 h transcurridas</span>
-
-        <div class="mt-2 h-1.5 w-full rounded-full bg-black/30">
-          <div class="h-full w-[66%] rounded-full bg-white"></div>
-        </div>
-
-        <span class="mt-2 text-xs font-noto-sans">Prestar atención</span>
-      </div>
-    </div>
-
-    <div
-      class="min-h-[208px] cursor-pointer rounded-xl bg-tlalcalli-error p-7 text-white transition hover:scale-[1.01]"
-      [ngClass]="{ 'ring-4 ring-tlalcalli-error/25': filtroPrioridad === 'URGENTE' }"
-      (click)="filtroPrioridad = 'URGENTE'; aplicarFiltros()">
-
-      <div class="flex h-full flex-col justify-end">
-        <span class="text-sm font-noto-sans uppercase">Urgente</span>
-        <span class="mt-2 text-5xl font-black leading-none">{{ estadisticasSemaforo.urgente }}</span>
-        <span class="mt-4 text-xs font-noto-sans">48-72 h transcurridas</span>
-
-        <div class="mt-2 h-1.5 w-full rounded-full bg-black/30">
-          <div class="h-full w-[90%] rounded-full bg-white"></div>
-        </div>
-
-        <span class="mt-2 text-xs font-noto-sans">¡Atender ya!</span>
-      </div>
-    </div>
-
-    <div
-      class="min-h-[208px] cursor-pointer rounded-xl bg-tlalcalli-dark p-7 text-white transition hover:scale-[1.01]"
-      [ngClass]="{ 'ring-4 ring-tlalcalli-dark/25': filtroPrioridad === 'VENCIDO' }"
-      (click)="filtroPrioridad = 'VENCIDO'; aplicarFiltros()">
-
-      <div class="flex h-full flex-col justify-end">
-        <span class="text-sm font-noto-sans uppercase">Vencido</span>
-        <span class="mt-2 text-5xl font-black leading-none">{{ estadisticasSemaforo.vencido }}</span>
-        <span class="mt-4 text-xs font-noto-sans">+72 h transcurridas</span>
-
-        <div class="mt-2 h-1.5 w-full rounded-full bg-white">
-          <div class="h-full w-full rounded-full bg-white"></div>
-        </div>
-
-        <span class="mt-2 text-xs font-noto-sans">Límite excedido</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="my-4 rounded-[20px] bg-white px-5 py-7 md:px-6">
-  <div class="flex flex-col gap-5 lg:flex-row lg:items-center">
-    <div class="relative flex-1">
-      <input
-        type="text"
-        [(ngModel)]="filtros.oficio"
-        (keyup.enter)="aplicarFiltros()"
-        placeholder="Buscar por oficio, expediente o asunto..."
-        class="h-[58px] w-full rounded-xl border border-tlalcalli-primary bg-tlalcalli-light-cream px-8 text-center text-sm text-tlalcalli-dark outline-none placeholder:text-tlalcalli-light-muted focus:ring-2 focus:ring-tlalcalli-primary/20" />
-    </div>
-
-    <select
-      [(ngModel)]="filtros.estatus"
-      (change)="aplicarFiltros()"
-      class="h-[58px] min-w-[168px] rounded-xl border border-tlalcalli-primary bg-tlalcalli-light-cream px-5 text-sm font-semibold text-tlalcalli-primary outline-none focus:ring-2 focus:ring-tlalcalli-primary/20">
-      @for (opcion of opcionesEstatus; track opcion.value) {
-        <option [value]="opcion.value">{{ opcion.label }}</option>
+      @if (filtroPrioridad) {
+        <button type="button" (click)="filtroPrioridad = ''; aplicarFiltros()" class="tl-btn-secondary tl-btn-sm">
+          <span class="icon-font !text-[16px]">filter_alt_off</span>
+          Quitar filtro
+        </button>
       }
-    </select>
-
-    <button
-      (click)="limpiarFiltros()"
-      class="h-[58px] min-w-[116px] rounded-xl border border-tlalcalli-primary bg-tlalcalli-light-cream px-7 text-sm font-noto-sans text-tlalcalli-primary transition hover:bg-white">
-      Limpiar
-    </button>
-
-    <button
-      (click)="aplicarFiltros()"
-      class="h-[58px] min-w-[116px] rounded-xl bg-tlalcalli-primary px-7 text-sm font-noto-sans text-tlalcalli-gold transition hover:bg-tlalcalli-deep">
-      Buscar
-    </button>
-  </div>
-</section>
-
-<section class="mb-4 rounded-[20px] bg-white px-5 py-8 md:px-6">
-  <div class="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-    <div class="flex items-center gap-3">
-      <div class="h-14 w-14 rounded-xl bg-tlalcalli-primary"></div>
-
-      <div>
-        <span class="block text-[10px] font-noto-sans uppercase tracking-wide font-noto-sans">
-          Responsable
-        </span>
-        <span class="block text-base font-noto-sans text-black">
-          {{ responsable || 'Sin asignar' }}
-        </span>
-      </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:min-w-[520px]">
-      <div class="text-center">
-        <span class="block text-3xl font-black leading-none text-black">
-          {{ estadisticas.total || expedientes.length }}
-        </span>
-        <span class="mt-2 block text-[10px] font-noto-sans uppercase font-noto-sans">
-          Total asignados
-        </span>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <button type="button" class="tl-stat tl-stat-clickable"
+        [ngClass]="{ 'ring-2 ring-tlalcalli-success': filtroPrioridad === 'EN_TIEMPO' }"
+        (click)="filtroPrioridad = 'EN_TIEMPO'; aplicarFiltros()">
+        <span class="tl-stat-accent bg-tlalcalli-success"></span>
+        <div class="flex items-center justify-between">
+          <span class="tl-stat-label">En tiempo</span>
+          <span class="tl-stat-icon bg-tlalcalli-success/10 text-tlalcalli-success-muted"><span class="icon-font !text-[22px]">schedule</span></span>
+        </div>
+        <span class="tl-stat-value mt-3 text-tlalcalli-success-muted">{{ estadisticasSemaforo.en_tiempo }}</span>
+        <div class="tl-progress mt-4"><div class="h-full w-1/3 rounded-full bg-tlalcalli-success"></div></div>
+        <span class="tl-stat-caption mt-2">0-24 h transcurridas</span>
+      </button>
+
+      <div class="tl-stat">
+        <span class="tl-stat-accent bg-tlalcalli-lavender"></span>
+        <div class="flex items-center justify-between">
+          <span class="tl-stat-label">Tiempo promedio</span>
+          <span class="tl-stat-icon bg-tlalcalli-light-lavender text-tlalcalli-primary"><span class="icon-font !text-[22px]">timelapse</span></span>
+        </div>
+        <span class="tl-stat-value mt-3 text-tlalcalli-primary">{{ formatearPromedioHoras(promedioHorasPendientes) }}</span>
+        <div class="tl-progress mt-4">
+          <div class="h-full rounded-full bg-tlalcalli-lavender" [style.width.%]="Math.min(100, (promedioHorasPendientes / 72) * 100)"></div>
+        </div>
+        <span class="tl-stat-caption mt-2">Asuntos por atender, desde la captura</span>
       </div>
 
-      <div class="text-center">
-        <span class="block text-3xl font-black leading-none text-tlalcalli-success">
-          {{ estadisticasSemaforo.en_tiempo }}
-        </span>
-        <span class="mt-2 block text-[10px] font-noto-sans uppercase font-noto-sans">
-          En tiempo
-        </span>
-        <span class="mt-1 block text-xs font-noto-sans">0-24 h</span>
-      </div>
+      <button type="button" class="tl-stat tl-stat-clickable"
+        [ngClass]="{ 'ring-2 ring-tlalcalli-error': filtroPrioridad === 'URGENTE' }"
+        (click)="filtroPrioridad = 'URGENTE'; aplicarFiltros()">
+        <span class="tl-stat-accent bg-tlalcalli-error"></span>
+        <div class="flex items-center justify-between">
+          <span class="tl-stat-label">Urgente</span>
+          <span class="tl-stat-icon bg-tlalcalli-error/10 text-tlalcalli-error-muted"><span class="icon-font !text-[22px]">priority_high</span></span>
+        </div>
+        <span class="tl-stat-value mt-3 text-tlalcalli-error-muted">{{ estadisticasSemaforo.urgente }}</span>
+        <div class="tl-progress mt-4"><div class="h-full w-[90%] rounded-full bg-tlalcalli-error"></div></div>
+        <span class="tl-stat-caption mt-2">48-72 h transcurridas</span>
+      </button>
 
-      <div class="text-center">
-        <span class="block text-3xl font-black leading-none text-tlalcalli-warning">
-          {{ estadisticasSemaforo.atencion }}
-        </span>
-        <span class="mt-2 block text-[10px] font-noto-sans uppercase font-noto-sans">
-          Por atender
-        </span>
-        <span class="mt-1 block text-xs font-noto-sans">24-48 h</span>
-      </div>
-
-      <div class="text-center">
-        <span class="block text-3xl font-black leading-none text-tlalcalli-error">
-          {{ estadisticasSemaforo.urgente + estadisticasSemaforo.vencido }}
-        </span>
-        <span class="mt-2 block text-[10px] font-noto-sans uppercase font-noto-sans">
-          Críticos
-        </span>
-        <span class="mt-1 block text-xs font-noto-sans">48-72 h / Vencidos</span>
-      </div>
+      <button type="button" class="tl-stat tl-stat-clickable"
+        [ngClass]="{ 'ring-2 ring-tlalcalli-dark': filtroPrioridad === 'VENCIDO' }"
+        (click)="filtroPrioridad = 'VENCIDO'; aplicarFiltros()">
+        <span class="tl-stat-accent bg-tlalcalli-dark"></span>
+        <div class="flex items-center justify-between">
+          <span class="tl-stat-label">Vencido</span>
+          <span class="tl-stat-icon bg-tlalcalli-dark/10 text-tlalcalli-dark"><span class="icon-font !text-[22px]">event_busy</span></span>
+        </div>
+        <span class="tl-stat-value mt-3 text-tlalcalli-dark">{{ estadisticasSemaforo.vencido }}</span>
+        <div class="tl-progress mt-4"><div class="h-full w-full rounded-full bg-tlalcalli-dark"></div></div>
+        <span class="tl-stat-caption mt-2">Más de 72 h, límite excedido</span>
+      </button>
     </div>
-  </div>
-</section>
-
-@if (cargando) {
-  <section class="flex flex-col items-center justify-center rounded-[20px] bg-white p-20">
-    <div class="h-12 w-12 animate-spin rounded-full border-4 border-tlalcalli-light-base border-t-tlalcalli-primary"></div>
-    <p class="mt-5 text-sm font-noto-sans">Cargando expedientes...</p>
   </section>
-}
 
-@if (!cargando && mostrarTabla) {
-  <section class="overflow-hidden rounded-[20px] bg-white px-5 py-6 md:px-6">
-    <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      <div class="flex flex-wrap items-center gap-3">
-        <h3 class="m-0 text-base font-noto-sans text-black">Expedientes</h3>
-
-        <span class="rounded-full bg-tlalcalli-lavender px-3 py-1 text-xs font-noto-sans text-white">
-          {{ expedientes.length }} registro(s)
-        </span>
-
-        @if (filtroPrioridad) {
-          <span class="flex items-center gap-2 rounded-full bg-tlalcalli-light-cream px-3 py-1 text-xs font-noto-sans text-tlalcalli-primary">
-            {{ filtroPrioridad }}
-            <button type="button" (click)="filtroPrioridad = ''; aplicarFiltros()" class="text-base leading-none">×</button>
-          </span>
-        }
+  <section class="tl-card p-5 md:p-6">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
+      <div class="tl-search flex-1">
+        <span class="icon-font tl-search-icon">search</span>
+        <input type="text" [(ngModel)]="filtros.oficio" (keyup.enter)="aplicarFiltros()"
+          placeholder="Buscar por oficio, expediente o asunto..." class="tl-input pl-11" />
       </div>
 
-<div class="flex w-full max-w-[330px] shrink-0 rounded-lg border-4 border-tlalcalli-lavender bg-tlalcalli-lavender overflow-hidden">
-  <button
-    type="button"
-    class="flex h-10 flex-1 items-center justify-center gap-3 rounded-md px-4 text-sm font-noto-sans transition"
-    [ngClass]="vistaActual === 'pendientes'
-      ? 'bg-white text-tlalcalli-primary'
-      : 'bg-white/20 text-white'"
-    (click)="cambiarVista('pendientes')">
-    Por atender
-    <span
-      class="flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-sm font-black"
-      [ngClass]="vistaActual === 'pendientes'
-        ? 'bg-tlalcalli-lavender text-white'
-        : 'bg-white/25 text-white'">
-      {{ contadorPendientes }}
-    </span>
-  </button>
-
-  <button
-    type="button"
-    class="flex h-10 flex-1 items-center justify-center gap-3 rounded-md px-4 text-sm font-noto-sans transition"
-    [ngClass]="vistaActual === 'atendidos'
-      ? 'bg-white text-tlalcalli-primary'
-      : 'bg-white/20 text-white'"
-    (click)="cambiarVista('atendidos')">
-    Atendidos
-    <span
-      class="flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-sm font-black"
-      [ngClass]="vistaActual === 'atendidos'
-        ? 'bg-tlalcalli-success text-white'
-        : 'bg-white/25 text-white'">
-      {{ contadorAtendidos }}
-    </span>
-  </button>
-</div>
-    </div>
-
-    <div class="w-full overflow-hidden">
-      <table class="w-full table-fixed border-collapse">
-        <thead>
-          <tr class="bg-tlalcalli-light-lavender">
-            @if (vistaActual === 'pendientes') {
-              <th class="w-[12%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Prioridad</th>
-              <th class="w-[13%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Expediente</th>
-              <th class="w-[11%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Oficio</th>
-              <th class="w-[16%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Remitente</th>
-              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Asunto</th>
-              <th class="w-[12%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Estatus</th>
-              <th class="w-[11%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Tiempo</th>
-              <th class="w-[10%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Acciones</th>
-            } @else {
-              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Expediente</th>
-              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Tipo Atención</th>
-              <th class="w-[12%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Prioridad</th>
-              <th class="w-[22%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Especialistas</th>
-              <th class="w-[13%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">F. Entrega</th>
-              <th class="w-[15%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Notas</th>
-              <th class="w-[8%] px-2 py-4 text-center text-[11px] font-black uppercase tracking-wide font-noto-sans">Acciones</th>
-            }
-          </tr>
-        </thead>
-
-        <tbody>
-          @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-
-            @if (vistaActual === 'pendientes') {
-              <tr class="border-b border-tlalcalli-light-base bg-white">
-                <td class="px-2 py-7 text-center">
-                  <div
-                    class="inline-flex min-w-[104px] justify-center rounded-md border px-4 py-2 text-center"
-                    [ngClass]="{
-                      'border-tlalcalli-success bg-tlalcalli-success/20 text-tlalcalli-success-muted': calcularSemaforo(expediente).nivel === 'EN_TIEMPO',
-                      'border-tlalcalli-warning bg-tlalcalli-warning/20 text-tlalcalli-warning-muted': calcularSemaforo(expediente).nivel === 'ATENCION',
-                      'border-tlalcalli-error bg-tlalcalli-error/20 text-tlalcalli-error-muted': calcularSemaforo(expediente).nivel === 'URGENTE',
-                      'border-tlalcalli-dark bg-tlalcalli-dark/15 text-tlalcalli-dark': calcularSemaforo(expediente).nivel === 'VENCIDO'
-                    }">
-                    <div>
-                      <span class="block text-xs font-noto-sans">{{ calcularSemaforo(expediente).label }}</span>
-                      <span class="block text-xs font-noto-sans">{{ calcularSemaforo(expediente).horasTranscurridas }} h</span>
-                    </div>
-                  </div>
-                </td>
-
-                <!-- <td class="px-2 py-7 text-center text-sm font-ubuntu-mono font-black text-black"> -->
-                                  <td class="px-2 py-7 text-center text-sm font-noto-sans font-black text-black">
-
-                  {{ expediente.expediente || '-' }}
-                </td>
-
-                <td class="px-2 py-7 text-center text-xs font-noto-sans font-noto-sans">
-                  {{ expediente.oficio || '-' }}
-                </td>
-
-                <td class="px-2 py-7 text-center text-xs font-noto-sans font-noto-sans">
-                  <span class="mx-auto block max-w-[130px] truncate" [title]="expediente.referencia_asunto || ''">                  </span>
-                </td>
-
-                <td class="px-2 py-7 text-center text-xs font-noto-sans font-noto-sans">
-                  <span class="block max-w-[170px] truncate" [title]="expediente.referencia_asunto || ''">
-                    {{ expediente.referencia_asunto ? (expediente.referencia_asunto.length > 40 ? (expediente.referencia_asunto | slice:0:40) + '...' : expediente.referencia_asunto) : '-' }}
-                  </span>
-                </td>
-
-                <td class="px-2 py-7 text-center">
-                  <span class="rounded-md bg-tlalcalli-light-lavender px-4 py-2 text-xs font-noto-sans text-tlalcalli-primary">
-                    {{ expediente.estatus === 'ASIGNADO' ? 'Asignado' :
-                      expediente.estatus === 'PENDIENTE' ? 'Pendiente' :
-                      expediente.estatus === 'ATENCION_PARCIAL' ? 'Parcial' :
-                      expediente.estatus === 'ATENCION_TOTAL' ? 'Atendido' :
-                      expediente.estatus === 'REVISION_LEGAL' ? 'Revisión' : expediente.estatus || '-' }}
-                  </span>
-                </td>
-
-                <td class="px-2 py-7 text-center">
-                  <div class="mx-auto w-[88px]">
-                    <div class="h-1.5 rounded bg-tlalcalli-light-base">
-                      <div
-                        class="h-full rounded bg-tlalcalli-success"
-                        [style.width.%]="calcularSemaforo(expediente).nivel === 'VENCIDO' ? 100 : calcularSemaforo(expediente).porcentaje"
-                        [ngClass]="{
-                          'bg-tlalcalli-success': calcularSemaforo(expediente).nivel === 'EN_TIEMPO',
-                          'bg-tlalcalli-warning': calcularSemaforo(expediente).nivel === 'ATENCION',
-                          'bg-tlalcalli-error': calcularSemaforo(expediente).nivel === 'URGENTE',
-                          'bg-tlalcalli-dark': calcularSemaforo(expediente).nivel === 'VENCIDO'
-                        }">
-                      </div>
-                    </div>
-
-                    <span
-                      class="mt-1 block text-[10px] font-noto-sans"
-                      [ngClass]="{
-                        'text-tlalcalli-success-muted': calcularSemaforo(expediente).nivel === 'EN_TIEMPO',
-                        'text-tlalcalli-warning-muted': calcularSemaforo(expediente).nivel === 'ATENCION',
-                        'text-tlalcalli-error-muted': calcularSemaforo(expediente).nivel === 'URGENTE',
-                        'text-tlalcalli-dark': calcularSemaforo(expediente).nivel === 'VENCIDO'
-                      }">
-                      {{ formatearTiempo(calcularSemaforo(expediente)) }}
-                    </span>
-                  </div>
-                </td>
-
-                <td class="px-2 py-7 text-center">
-                  <div class="flex items-center justify-center gap-3">
-                    <button
-                    (click)="verDetalleExpediente(expediente)"
-                    class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
-                    title="Ver detalle">
-                      👁
-                    </button>
-
-                    <button
-                    (click)="abrirModalAtencion(expediente)"
-                    class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-success text-white transition hover:bg-tlalcalli-success-muted"
-                    title="Atender expediente">
-                      ✓
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            }
-
-@if (vistaActual === 'atendidos') {
-  <tr class="border-b border-tlalcalli-light-base bg-white">
-    <!-- <td class="px-2 py-6 text-center text-sm font-ubuntu-mono font-black text-black"> -->
-          <td class="px-2 py-6 text-center text-sm font-noto-sans font-black text-black">
-
-      <div class="flex flex-col items-center justify-center">
-        <span>{{ expediente.expediente || '-' }}</span>
-        <span class="text-[11px] font-semibold font-noto-sans">{{ expediente.oficio || '' }}</span>
-      </div>
-    </td>
-
-    <td class="px-2 py-6 text-center text-xs">
-      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-        <span class="inline-flex justify-center rounded-md bg-tlalcalli-light-lavender px-3 py-1.5 font-noto-sans text-tlalcalli-primary">
-          {{ getLabelTipoAccion(atencionData.atencion.tipo_accion) }}
-        </span>
-      } @else {
-        <span class="inline-flex justify-center rounded-md bg-tlalcalli-light-lavender px-3 py-1.5 font-noto-sans font-noto-sans">
-          Cargando...
-        </span>
-      }
-    </td>
-
-    <td class="px-2 py-6 text-center text-xs font-noto-sans font-noto-sans">
-      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-        {{ atencionData.atencion.prioridad || '—' }}
-      } @else {
-        —
-      }
-    </td>
-
-    <td class="px-2 py-6 text-center text-xs">
-      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-        @if (atencionData.especialistas && atencionData.especialistas.length > 0) {
-          <div class="flex flex-col items-center gap-1">
-            @for (esp of atencionData.especialistas; track esp.codigo_especialista) {
-              <span class="rounded-full bg-tlalcalli-light-lavender px-2 py-1 font-semibold text-tlalcalli-primary">
-                {{ esp.nombre_especialista }}
-              </span>
-            }
-          </div>
-        } @else {
-          <span class="italic font-noto-sans">Sin asignar</span>
+      <select [ngModel]="filtros.estatus || ''" (ngModelChange)="filtros.estatus = $event; aplicarFiltros()" class="tl-select lg:w-[230px]">
+        @for (opcion of opcionesEstatus; track opcion.value) {
+          <option [value]="opcion.value">{{ opcion.label }}</option>
         }
-      } @else {
-        <span class="italic font-noto-sans">—</span>
-      }
-    </td>
+      </select>
 
-    <td class="px-2 py-6 text-center text-xs font-semibold font-noto-sans">
-      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-        {{ atencionData.atencion.fecha_entrega || 'No definida' }}
-      } @else {
-        —
-      }
-    </td>
-
-    <td class="px-2 py-6 text-center text-xs font-noto-sans">
-      @if (getAtencionExpediente(expediente.id_expediente); as atencionData) {
-        <span class="mx-auto block max-w-[140px] truncate">
-          {{ atencionData.atencion.notas ? (atencionData.atencion.notas.length > 30 ? (atencionData.atencion.notas | slice:0:30) + '...' : atencionData.atencion.notas) : 'Sin notas' }}
-        </span>
-      } @else {
-        —
-      }
-    </td>
-
-    <td class="px-2 py-6 text-center">
-      <div class="flex items-center justify-center">
-        <button
-          (click)="verDetalleExpediente(expediente)"
-          class="flex h-7 w-7 items-center justify-center rounded-md bg-tlalcalli-light-lavender text-tlalcalli-primary transition hover:bg-tlalcalli-primary hover:text-white"
-          title="Ver detalle">
-          👁
+      <div class="flex gap-3">
+        <button type="button" (click)="limpiarFiltros()" class="tl-btn-secondary flex-1 lg:flex-none">Limpiar</button>
+        <button type="button" (click)="aplicarFiltros()" class="tl-btn-primary flex-1 lg:flex-none">
+          <span class="icon-font !text-[18px]">search</span>
+          Buscar
         </button>
       </div>
-    </td>
-  </tr>
-}
-          }
-        </tbody>
-      </table>
     </div>
 
-    @if (pagesExpedientes.length > 1 && expedientes.length > 0) {
-      <div class="mt-5 flex flex-col gap-3 border-t border-tlalcalli-light-base pt-4 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-xs font-noto-sans">
-          Mostrando
-          <strong>{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong>
-          a
-          <strong>{{ Math.min(pageSelected * itemsPerPage, expedientes.length) }}</strong>
-          de
-          <strong>{{ expedientes.length }}</strong>
-        </p>
+    <div class="mt-5 flex flex-col gap-5 border-t border-tlalcalli-light-base/70 pt-5 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <div class="flex items-center gap-3">
+          <span class="tl-section-icon">
+            <span class="icon-font !text-[22px]">{{ incluirTodosCapturas ? 'groups' : 'person' }}</span>
+          </span>
+          <div>
+            <span class="block font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-tlalcalli-gray">
+              {{ incluirTodosCapturas ? 'Vista' : 'Responsable' }}
+            </span>
+            <span class="block font-noto-sans text-sm font-semibold text-tlalcalli-deep">{{ responsable || 'Sin asignar' }}</span>
+          </div>
+        </div>
 
-        <div class="flex gap-2">
-          <button
-            (click)="pageSelected > 1 && (pageSelected = pageSelected - 1)"
-            [disabled]="pageSelected === 1"
-            class="rounded-lg border border-tlalcalli-light-muted px-4 py-2 text-xs font-noto-sans text-tlalcalli-primary disabled:opacity-50">
-            Anterior
+        <label class="flex cursor-pointer items-center gap-2 rounded-xl bg-tlalcalli-light-lavender px-3 py-2">
+          <mat-slide-toggle color="primary" [checked]="incluirTodosCapturas" (change)="onToggleIncluirTodos($event.checked)"></mat-slide-toggle>
+          <span class="font-noto-sans text-sm text-tlalcalli-primary">Ver todos los expedientes</span>
+        </label>
+      </div>
+
+      <div class="grid grid-cols-3 divide-x divide-tlalcalli-light-base/70 rounded-xl border border-tlalcalli-light-base/70 lg:min-w-[400px]">
+        <div class="px-4 py-2.5 text-center">
+          <span class="block font-noto-sans text-2xl font-bold leading-none text-tlalcalli-deep">{{ estadisticas.total || expedientes.length }}</span>
+          <span class="mt-1.5 block font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-tlalcalli-gray">Total</span>
+        </div>
+        <div class="px-4 py-2.5 text-center">
+          <span class="block font-noto-sans text-2xl font-bold leading-none text-tlalcalli-success-muted">{{ estadisticasSemaforo.en_tiempo }}</span>
+          <span class="mt-1.5 block font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-tlalcalli-gray">En tiempo</span>
+        </div>
+        <div class="px-4 py-2.5 text-center">
+          <span class="block font-noto-sans text-2xl font-bold leading-none text-tlalcalli-error-muted">{{ estadisticasSemaforo.urgente + estadisticasSemaforo.vencido }}</span>
+          <span class="mt-1.5 block font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-tlalcalli-gray">Críticos</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  @if (alertasCompromiso.length > 0) {
+    <section class="tl-card overflow-hidden border-l-4 border-l-tlalcalli-error bg-tlalcalli-error/[0.04] px-5 py-4 md:px-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="tl-stat-icon bg-tlalcalli-error/10 text-tlalcalli-error-muted">
+            <span class="icon-font !text-[22px]">notification_important</span>
+          </span>
+          <div>
+            <span class="block font-noto-sans text-sm font-semibold text-tlalcalli-error-muted">
+              {{ alertasCompromiso.length }} compromiso(s) de cierre vencido(s) en tickets / WOOS
+            </span>
+            <span class="block font-noto-sans text-xs text-tlalcalli-gray">Sujetos a penalización por incumplimiento de la fecha compromiso.</span>
+          </div>
+        </div>
+        <button type="button" (click)="mostrarDetalleAlertas = !mostrarDetalleAlertas" class="tl-btn-secondary tl-btn-sm">
+          <span class="icon-font !text-[16px]">{{ mostrarDetalleAlertas ? 'expand_less' : 'expand_more' }}</span>
+          {{ mostrarDetalleAlertas ? 'Ocultar detalle' : 'Ver detalle' }}
+        </button>
+      </div>
+      @if (mostrarDetalleAlertas) {
+        <ul class="m-0 mt-4 list-none divide-y divide-tlalcalli-light-base/70 rounded-xl bg-white p-0 px-4">
+          @for (alerta of alertasCompromiso; track alerta.id_expediente + alerta.tipo + alerta.numero) {
+            <li class="flex flex-wrap items-center justify-between gap-2 py-2.5 font-noto-sans text-xs text-tlalcalli-dark">
+              <span>
+                <strong class="text-tlalcalli-deep">{{ alerta.num_expediente }}</strong>
+                · {{ alerta.tipo === 'TICKET' ? 'Ticket' : 'WOOS' }} {{ alerta.numero }}
+                · compromiso {{ alerta.fecha_compromiso | date: 'dd/MM/yyyy' }}
+              </span>
+              <span class="flex items-center gap-3">
+                <span class="tl-chip tl-chip-error">{{ alerta.dias_vencido }} día(s) vencido</span>
+                <button type="button" (click)="abrirSeguimientoPorId(alerta.id_expediente)" class="tl-btn-secondary tl-btn-sm">Abrir</button>
+              </span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+
+  @if (cargando) {
+    <section class="tl-card tl-empty">
+      <div class="tl-spinner"></div>
+      <p class="mt-4 font-noto-sans text-sm text-tlalcalli-gray">Cargando expedientes...</p>
+    </section>
+  }
+
+  @if (!cargando && mostrarTabla) {
+    <section class="tl-card overflow-hidden">
+      <div class="flex flex-col gap-4 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-wrap items-center gap-3">
+          <h3 class="tl-section-heading">Expedientes</h3>
+          <span class="tl-chip tl-chip-primary">{{ expedientes.length }} registro(s)</span>
+          @if (filtroPrioridad) {
+            <span class="tl-chip tl-chip-neutral">
+              {{ filtroPrioridad === 'EN_TIEMPO' ? 'En tiempo' : filtroPrioridad === 'URGENTE' ? 'Urgente' : filtroPrioridad === 'VENCIDO' ? 'Vencido' : filtroPrioridad }}
+              <button type="button" (click)="filtroPrioridad = ''; aplicarFiltros()" class="icon-font !text-[14px] leading-none" title="Quitar filtro">close</button>
+            </span>
+          }
+        </div>
+
+        <div class="tl-segmented">
+          <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vistaActual === 'pendientes' }" (click)="cambiarVista('pendientes')">
+            Por atender
+            <span class="tl-count">{{ contadorPendientes }}</span>
           </button>
-
-          <button
-            (click)="pageSelected < pagesExpedientes.length && (pageSelected = pageSelected + 1)"
-            [disabled]="pageSelected >= pagesExpedientes.length"
-            class="rounded-lg border border-tlalcalli-light-muted px-4 py-2 text-xs font-noto-sans text-tlalcalli-primary disabled:opacity-50">
-            Siguiente
+          <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vistaActual === 'atendidos' }" (click)="cambiarVista('atendidos')">
+            Atendidos
+            <span class="tl-count">{{ contadorAtendidos }}</span>
           </button>
         </div>
       </div>
-    }
 
-    @if (expedientes.length === 0) {
-      <div class="py-12 text-center">
-        @if (vistaActual === 'pendientes') {
-          <h4 class="text-lg font-noto-sans text-tlalcalli-dark">🎉 ¡Excelente! No hay expedientes pendientes</h4>
-          <p class="mt-2 text-sm font-noto-sans">Todos los expedientes han sido atendidos</p>
-        } @else {
-          <h4 class="text-lg font-noto-sans text-tlalcalli-dark">No hay expedientes atendidos</h4>
-          <p class="mt-2 text-sm font-noto-sans">Aún no has procesado ningún expediente</p>
-        }
+      @if (expedientes.length > 0) {
+        <div class="w-full overflow-x-auto">
+          <table class="tl-table min-w-[980px] table-fixed">
+            <thead>
+              <tr>
+                <th class="w-[14%]">Tiempo</th>
+                <th class="w-[13%]">Expediente</th>
+                <th class="w-[12%]">Oficio</th>
+                <th class="w-[17%]">Remitente</th>
+                <th class="w-[17%]">Asunto</th>
+                <th class="w-[17%]">Estatus / seguimiento</th>
+                <th class="w-[10%] text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
+                <tr>
+                  <td>
+                    @let semaforo = calcularSemaforo(expediente);
+                    <div class="flex w-[124px] flex-col gap-1.5">
+                      <span class="tl-chip w-fit"
+                        [ngClass]="{
+                          'tl-chip-success': semaforo.nivel === 'EN_TIEMPO',
+                          'tl-chip-warning': semaforo.nivel === 'ATENCION',
+                          'tl-chip-error': semaforo.nivel === 'URGENTE',
+                          'tl-chip-dark': semaforo.nivel === 'VENCIDO'
+                        }">
+                        <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+                        {{ semaforo.label }}
+                      </span>
+                      <div class="tl-progress h-1">
+                        <div class="h-full rounded-full" [style.width.%]="semaforo.porcentaje"
+                          [ngClass]="{
+                            'bg-tlalcalli-success': semaforo.nivel === 'EN_TIEMPO',
+                            'bg-tlalcalli-warning': semaforo.nivel === 'ATENCION',
+                            'bg-tlalcalli-error': semaforo.nivel === 'URGENTE',
+                            'bg-tlalcalli-dark': semaforo.nivel === 'VENCIDO'
+                          }"></div>
+                      </div>
+                      <span class="text-[11px] text-tlalcalli-gray">{{ semaforo.horasTranscurridas }} h · {{ formatearTiempo(semaforo) }}</span>
+                    </div>
+                  </td>
 
-        @if (filtroPrioridad || filtros.estatus || filtros.oficio) {
-          <button
-            (click)="limpiarFiltros()"
-            class="mt-4 rounded-lg border border-tlalcalli-primary px-5 py-2 text-sm font-noto-sans text-tlalcalli-primary">
-            Limpiar filtros
-          </button>
+                  <td class="font-semibold text-tlalcalli-deep">{{ expediente.expediente || '-' }}</td>
+
+                  <td class="text-xs">
+                    <span class="block truncate" [title]="expediente.oficio || ''">{{ expediente.oficio || '-' }}</span>
+                  </td>
+
+                  <td class="text-xs">
+                    <span class="block truncate" [title]="expediente.remitente_area || ''">{{ expediente.remitente_area || '-' }}</span>
+                  </td>
+
+                  <td class="text-xs">
+                    <span class="block truncate" [title]="expediente.referencia_asunto || ''">{{ expediente.referencia_asunto || '-' }}</span>
+                  </td>
+
+                  <td>
+                    <span class="tl-chip tl-chip-primary inline-block max-w-full truncate align-middle" [title]="expediente.estatus || ''">{{ expediente.estatus || '-' }}</span>
+                    @if (getResumenSeguimiento(expediente.id_expediente); as resumen) {
+                      <span class="mt-1.5 block text-[11px] text-tlalcalli-gray">
+                        {{ resumen.acciones_registradas }} acción(es) · {{ resumen.tickets_abiertos + resumen.wos_abiertos }} abierto(s)
+                      </span>
+                      @if (resumen.analistas_asignados) {
+                        <span class="mt-1 flex items-center gap-1 text-[11px] font-semibold text-tlalcalli-primary" [title]="resumen.analistas_asignados">
+                          <span class="icon-font !text-[14px]">person</span>
+                          <span class="truncate">{{ resumen.analistas_asignados }}</span>
+                        </span>
+                      }
+                      @if (resumen.compromisos_vencidos > 0) {
+                        <span class="tl-chip tl-chip-error mt-1">
+                          <span class="icon-font !text-[12px]">warning</span>
+                          {{ resumen.compromisos_vencidos }} vencido(s)
+                        </span>
+                      }
+                    } @else {
+                      <span class="mt-1.5 block text-[11px] text-tlalcalli-gray">Sin seguimiento</span>
+                    }
+                  </td>
+
+                  <td>
+                    <div class="flex items-center justify-center gap-2">
+                      <button type="button" (click)="verDetalleExpediente(expediente)" class="tl-icon-btn-ghost" title="Ver detalle">
+                        <span class="icon-font !text-[18px]">visibility</span>
+                      </button>
+                      <button type="button" (click)="abrirModalSeguimiento(expediente)" class="tl-icon-btn-solid" title="Acciones a seguir">
+                        <span class="icon-font !text-[18px]">fact_check</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (pagesExpedientes.length > 1) {
+          <div class="flex flex-col gap-3 border-t border-tlalcalli-light-base/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p class="m-0 font-noto-sans text-xs text-tlalcalli-gray">
+              Mostrando
+              <strong class="text-tlalcalli-deep">{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong>
+              a
+              <strong class="text-tlalcalli-deep">{{ Math.min(pageSelected * itemsPerPage, expedientes.length) }}</strong>
+              de
+              <strong class="text-tlalcalli-deep">{{ expedientes.length }}</strong>
+            </p>
+            <div class="flex gap-2">
+              <button type="button" (click)="pageSelected > 1 && (pageSelected = pageSelected - 1)" [disabled]="pageSelected === 1" class="tl-btn-secondary tl-btn-sm">
+                <span class="icon-font !text-[16px]">chevron_left</span>
+                Anterior
+              </button>
+              <button type="button" (click)="pageSelected < pagesExpedientes.length && (pageSelected = pageSelected + 1)" [disabled]="pageSelected >= pagesExpedientes.length" class="tl-btn-secondary tl-btn-sm">
+                Siguiente
+                <span class="icon-font !text-[16px]">chevron_right</span>
+              </button>
+            </div>
+          </div>
         }
-      </div>
-    }
-  </section>
-}
+      } @else {
+        <div class="tl-empty border-t border-tlalcalli-light-base/70">
+          <span class="tl-empty-icon"><span class="icon-font !text-[30px]">{{ vistaActual === 'pendientes' ? 'task_alt' : 'inbox' }}</span></span>
+          @if (vistaActual === 'pendientes') {
+            <h4 class="m-0 font-noto-sans text-base font-semibold text-tlalcalli-deep">No hay expedientes pendientes</h4>
+            <p class="m-0 mt-1.5 font-noto-sans text-sm text-tlalcalli-gray">Todos los expedientes han sido atendidos.</p>
+          } @else {
+            <h4 class="m-0 font-noto-sans text-base font-semibold text-tlalcalli-deep">No hay expedientes atendidos</h4>
+            <p class="m-0 mt-1.5 font-noto-sans text-sm text-tlalcalli-gray">Aquí aparecen los expedientes con estatus Atendido, Conocimiento o Cancelado.</p>
+          }
+          @if (filtroPrioridad || filtros.estatus || filtros.oficio) {
+            <button type="button" (click)="limpiarFiltros()" class="tl-btn-secondary tl-btn-sm mt-4">Limpiar filtros</button>
+          }
+        </div>
+      }
+    </section>
+  }
+</div>

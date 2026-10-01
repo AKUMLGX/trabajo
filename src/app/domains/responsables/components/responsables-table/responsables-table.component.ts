@@ -5,13 +5,19 @@ import { MatIcon } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ResponsablesService, FiltrosResponsable } from '../../services/responsables.service';
-import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
+import {
+  AlertaCompromiso,
+  ResumenSeguimiento,
+  SeguimientoAsignacionService,
+} from '../../services/seguimiento-asignacion.service';
 import { ExpedienteTlalcalli } from '../../../capture/interfaces/expediente-tlalcalli.interface';
 import { ExpedienteDetalleModalComponent } from '../../../tracking/components/expediente-detalle-modal/expediente-detalle-modal.component';
-import { AtencionModalComponent } from '../atencion-modal/atencion-modal.component';
+import { SeguimientoAccionesModalComponent } from '../seguimiento-acciones-modal/seguimiento-acciones-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from '../../../../../environments/environment';
 import { ExpedienteTlalcalliService } from '../../../capture/services/expediente-tlalcalli.service';
+import { DateUtils } from '../../../capture/utils/date-utils';
+import { CatalogoReworkCacheService } from '../../../capture/services/catalogo-rework-cache.service';
 
 /**
  * Interfaz para el semáforo de prioridad basado en TIEMPO TRANSCURRIDO
@@ -45,7 +51,6 @@ export interface SemaforoPrioridad {
         NgxPaginationModule
     ],
     templateUrl: './responsables-table.component.html',
-    styleUrl: './responsables-table.component.css',
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ResponsablesTableComponent implements OnInit {
@@ -83,27 +88,20 @@ export class ResponsablesTableComponent implements OnInit {
     urgente: 0,    // 48-72h - Rojo
     vencido: 0     // +72h - Negro
   };
+
+  /** Promedio de horas transcurridas de los expedientes por atender. */
+  promedioHorasPendientes = 0;
   
   responsable = '';
   
   // Opciones de estatus para el filtro
-  opcionesEstatus = [
-    { value: '', label: 'Todos' },
-    { value: 'ASIGNADO', label: 'Asignado' },
-    { value: 'PENDIENTE', label: 'Pendiente' },
-    { value: 'EN_ATENCION', label: 'En Atención' },
-    { value: 'RECHAZADO', label: 'Rechazado' },
-    { value: 'ATENCION_PARCIAL', label: 'Atención Parcial' },
-    { value: 'ATENCION_TOTAL', label: 'Atención Total' },
-    { value: 'REVISION_LEGAL', label: 'Revisión Legal' }
-  ];
+  opcionesEstatus: { value: string; label: string }[] = [{ value: '', label: 'Todos' }];
 
   /**
-   * Si está activo, el backend devuelve todas las capturas sin filtrar por responsable
-   * (query incluir_todos). La vista Por atender / Análisis sigue aplicándose en el cliente.
-   * En local, env.js puede forzar el valor inicial con devIncluirTodasCapturasResponsables.
+   * Listado global rework (sin filtro `responsable` en data_busqueda).
+   * Por defecto true mientras negocio prueba; solo OAuth si `devCentroControlSoloMiBandeja` o el usuario desactiva el toggle.
    */
-  incluirTodosCapturas = environment.devIncluirTodasCapturasResponsables;
+  incluirTodosCapturas = ResponsablesTableComponent.resolverListadoGlobalInicial();
 
   /**
    * Mientras no haya roles: env.js con devVistaEquipoCentroControl envía vista_equipo (solo equipo de captura).
@@ -115,7 +113,7 @@ export class ResponsablesTableComponent implements OnInit {
   vistaActual: 'pendientes' | 'atendidos' = 'pendientes';
 
   // Estatus que significan "ya atendidos / en proceso de cierre" (lo demás aparece en "Por atender")
-  estatusAtendidos = ['EN_ATENCION', 'RECHAZADO', 'ATENCION_PARCIAL', 'ATENCION_TOTAL', 'REVISION_LEGAL'];
+  estatusAtendidos = ['ATENDIDO', 'CONOCIMIENTO', 'CANCELADO'];
 
   /** Subcadenas en `responsable` para modo "vista equipo" (filtro cliente sobre listado global). */
   private readonly RESPONSABLES_EQUIPO_SUBSTR = ['irma', 'karen', 'hector', 'carlos'];
@@ -139,71 +137,133 @@ export class ResponsablesTableComponent implements OnInit {
   
   @ViewChild('sectionTable') sectionTable!: ElementRef;
 
-  // Mapa para guardar las atenciones de cada expediente
-  atencionesMap: Map<number, AtencionConEspecialistas> = new Map();
+  resumenSeguimiento = new Map<number, ResumenSeguimiento>();
+  alertasCompromiso: AlertaCompromiso[] = [];
+  mostrarDetalleAlertas = false;
 
   constructor(
     private responsablesService: ResponsablesService,
     private expedienteService: ExpedienteTlalcalliService,
-    private atencionService: AtencionService,
-    private dialog: MatDialog
+    private seguimientoService: SeguimientoAsignacionService,
+    private dialog: MatDialog,
+    private catalogos: CatalogoReworkCacheService
   ) {}
 
+  /** true = todos los expedientes rework; false = solo el responsable mapeado del JWT. */
+  private static resolverListadoGlobalInicial(): boolean {
+    const winEnv = (window as { env?: Record<string, unknown> }).env;
+    const soloMi = winEnv?.['devCentroControlSoloMiBandeja'];
+    if (soloMi === true || soloMi === 'true' || soloMi === 1 || soloMi === '1') {
+      return false;
+    }
+    const todos = winEnv?.['devIncluirTodasCapturasResponsables'];
+    if (todos === true || todos === 'true' || todos === 1 || todos === '1') {
+      return true;
+    }
+    if (todos === false || todos === 'false' || todos === 0 || todos === '0') {
+      // Pilot: en Balam env.js traía false; ignorar hasta tener roles por bandeja.
+      return true;
+    }
+    return true;
+  }
+
   ngOnInit(): void {
+    this.catalogos.getCat(3).subscribe((items) => {
+      const opciones = items.map((i) => {
+        const valor = i.descripcion.trim().toUpperCase() === 'PEDIENTE' ? 'PENDIENTE' : i.descripcion.trim().toUpperCase();
+        return { value: valor, label: valor };
+      });
+      this.opcionesEstatus = [{ value: '', label: 'Todos' }, ...opciones];
+    });
     this.cargarExpedientes();
+  }
+
+  private cargarIndicadoresSeguimiento(): void {
+    this.seguimientoService.obtenerResumen().subscribe((filas) => {
+      this.resumenSeguimiento = new Map(filas.map((f) => [f.id_expediente, f]));
+    });
+    this.seguimientoService.obtenerAlertas().subscribe((alertas) => {
+      this.alertasCompromiso = alertas;
+    });
+  }
+
+  getResumenSeguimiento(idExpediente: number | undefined): ResumenSeguimiento | undefined {
+    return idExpediente ? this.resumenSeguimiento.get(idExpediente) : undefined;
   }
 
   // Variable para guardar todos los expedientes sin filtrar
   private todosLosExpedientes: ExpedienteTlalcalli[] = [];
 
   /**
-   * Cargar expedientes del responsable
+   * Cargar expedientes del responsable (rework, mismo origen que bandeja de seguimiento).
    */
   cargarExpedientes(): void {
     this.cargando = true;
     this.mostrarTabla = false;
+    this.cargarIndicadoresSeguimiento();
+
+    const filtrosConsulta = this.construirFiltrosConsultaCentroControl();
+
+    const procesarLista = (lista: ExpedienteTlalcalli[], responsableLabel = ''): void => {
+      let raw = lista || [];
+      if (this.vistaEquipoCentroControl && !this.incluirTodosCapturas) {
+        raw = raw.filter((exp) => this.esResponsableEquipoCaptura(exp));
+      }
+      raw = this.aplicarFiltrosConsultaLocales(raw);
+      const stats = this.estadisticasDesdeLista(raw);
+      const label =
+        responsableLabel ||
+        (this.incluirTodosCapturas ? 'Todos los responsables' : 'Equipo de captura');
+      this.finalizarCargaLista(raw, stats, label);
+      console.log('✅ Expedientes cargados (rework):', this.expedientes.length, '(Vista:', this.vistaActual, ')');
+    };
+
+    const onError = (error: Error, contexto: string): void => {
+      console.error(`❌ Error al cargar expedientes (${contexto}):`, error);
+      this.expedientes = [];
+      this.todosLosExpedientes = [];
+      this.mostrarTabla = false;
+      this.cargando = false;
+    };
 
     if (this.usarListadoGlobalExpedientes()) {
-      this.expedienteService.obtenerExpedientes().subscribe({
-        next: (lista) => {
-          let raw = lista || [];
-          if (this.vistaEquipoCentroControl && !this.incluirTodosCapturas) {
-            raw = raw.filter((exp) => this.esResponsableEquipoCaptura(exp));
-          }
-          raw = this.aplicarFiltrosConsultaLocales(raw);
-          const stats = this.estadisticasDesdeLista(raw);
-          const label = this.incluirTodosCapturas ? 'Todos los responsables' : 'Equipo de captura';
-          this.finalizarCargaLista(raw, stats, label);
-          console.log('✅ Expedientes cargados (listado global):', this.expedientes.length, '(Vista:', this.vistaActual, ')');
-        },
-        error: (error: Error) => {
-          console.error('❌ Error al obtener listado global de expedientes:', error);
-          this.expedientes = [];
-          this.todosLosExpedientes = [];
-          this.mostrarTabla = false;
-          this.cargando = false;
-        }
+      this.expedienteService.consultarExpedientes(filtrosConsulta).subscribe({
+        next: (lista) => procesarLista(lista),
+        error: (error: Error) => onError(error, 'listado global rework'),
       });
       return;
     }
 
-    this.responsablesService.obtenerMisExpedientes({ ...this.filtros }).subscribe({
+    // Vista por responsable OAuth: nombre desde mis-expedientes, datos desde rework.
+    this.responsablesService.obtenerMisExpedientes({}).subscribe({
       next: (response) => {
-        const raw = response.data || [];
-        this.finalizarCargaLista(raw, response.estadisticas, response.responsable || '');
-        console.log('✅ Expedientes cargados:', this.expedientes.length, '(Vista:', this.vistaActual, ')');
+        const responsable = response.responsable || '';
+        const filtrosConResponsable = responsable
+          ? { ...filtrosConsulta, responsable }
+          : filtrosConsulta;
+        this.expedienteService.consultarExpedientes(filtrosConResponsable).subscribe({
+          next: (lista) => procesarLista(lista, responsable),
+          error: (error: Error) => onError(error, 'rework por responsable'),
+        });
       },
-      error: (error: Error) => {
-        console.error('❌ Error al cargar expedientes:', error);
-        this.expedientes = [];
-        this.todosLosExpedientes = [];
-        this.mostrarTabla = false;
-        this.cargando = false;
-      }
+      error: (error: Error) => onError(error, 'mapeo responsable'),
     });
   }
 
-  /** `mis-expedientes` ignora incluir_todos/vista_equipo en server: usamos GET /expedientes y filtramos aquí. */
+  /** Filtros alineados con POST expedientes_rework/data_busqueda (misma API que seguimiento). */
+  private construirFiltrosConsultaCentroControl(): Record<string, unknown> {
+    const f = this.filtros;
+    const q = (f.oficio || f.expediente || '').trim();
+    return {
+      oficio: q,
+      expediente: q,
+      remitente_area: f.remitente_area || '',
+      fecha_creacion_desde: f.fecha_desde || '',
+      fecha_creacion_hasta: f.fecha_hasta || '',
+    };
+  }
+
+  /** Vista global (todas las capturas o equipo) vs solo el responsable del JWT. */
   private usarListadoGlobalExpedientes(): boolean {
     return this.incluirTodosCapturas || this.vistaEquipoCentroControl;
   }
@@ -260,10 +320,19 @@ export class ResponsablesTableComponent implements OnInit {
   }
 
   private fechaFiltroExpediente(e: ExpedienteTlalcalli): Date | null {
-    const s = e.fecha_creacion || e.fecha_asignacion;
-    if (!s) return null;
-    const d = new Date(s as string | Date);
-    return Number.isFinite(d.getTime()) ? d : null;
+    return this.fechaBaseSemaforo(e);
+  }
+
+  /** Rework devuelve fechas como DD/MM/YYYY; `new Date()` directo produce NaN. */
+  private fechaBaseSemaforo(e: ExpedienteTlalcalli): Date | null {
+    const candidatas = [e.fecha_creacion, e.fecha_recibido, e.fecha_asignacion];
+    for (const valor of candidatas) {
+      const fecha = DateUtils.parseFechaLocal(valor as string | Date | null | undefined);
+      if (fecha) {
+        return fecha;
+      }
+    }
+    return null;
   }
 
   private estadisticasDesdeLista(data: ExpedienteTlalcalli[]): {
@@ -319,18 +388,10 @@ export class ResponsablesTableComponent implements OnInit {
     const ahora = new Date();
     const LIMITE_TOTAL = 72; // 72 horas es el límite máximo
     
-    // Fecha base: cuando se capturó/finalizó el asunto
-    let fechaBase: Date;
-    if (expediente.fecha_creacion) {
-      fechaBase = new Date(expediente.fecha_creacion);
-    } else if (expediente.fecha_asignacion) {
-      fechaBase = new Date(expediente.fecha_asignacion);
-    } else {
-      fechaBase = new Date();
-    }
-    
-    // Calcular horas transcurridas desde la captura
-    const horasTranscurridas = Math.max(0, Math.floor((ahora.getTime() - fechaBase.getTime()) / (1000 * 60 * 60)));
+    const fechaBase = this.fechaBaseSemaforo(expediente) ?? ahora;
+
+    const horasCalculadas = Math.floor((ahora.getTime() - fechaBase.getTime()) / (1000 * 60 * 60));
+    const horasTranscurridas = Number.isFinite(horasCalculadas) ? Math.max(0, horasCalculadas) : 0;
     const horasRestantes = LIMITE_TOTAL - horasTranscurridas;
     const porcentaje = Math.min(100, Math.round((horasTranscurridas / LIMITE_TOTAL) * 100));
     
@@ -441,6 +502,14 @@ export class ResponsablesTableComponent implements OnInit {
     };
 
     const fuente = this.todosLosExpedientes.length ? this.todosLosExpedientes : this.expedientes;
+
+    const pendientes = fuente.filter((exp) => {
+      const s = (exp.estatus || '').toUpperCase();
+      return !s || !this.estatusAtendidos.includes(s);
+    });
+    const sumaHoras = pendientes.reduce((acc, exp) => acc + this.calcularSemaforo(exp).horasTranscurridas, 0);
+    this.promedioHorasPendientes = pendientes.length ? Math.round(sumaHoras / pendientes.length) : 0;
+
     fuente.forEach((exp) => {
       const semaforo = this.calcularSemaforo(exp);
       switch (semaforo.nivel) {
@@ -482,6 +551,15 @@ export class ResponsablesTableComponent implements OnInit {
       return `${dias}d restantes`;
     }
     return `${dias}d ${horasRest}h`;
+  }
+
+  formatearPromedioHoras(horas: number): string {
+    if (horas < 24) {
+      return `${horas} h`;
+    }
+    const dias = Math.floor(horas / 24);
+    const resto = horas % 24;
+    return resto ? `${dias}d ${resto}h` : `${dias}d`;
   }
 
   /**
@@ -540,11 +618,6 @@ export class ResponsablesTableComponent implements OnInit {
     this.vistaActual = vista;
     this.pageSelected = 1;
     this.cargarExpedientes();
-
-    // Si cambia a "atendidos", cargar las atenciones de esos expedientes
-    if (vista === 'atendidos') {
-      setTimeout(() => this.cargarAtencionesExpedientes(), 500);
-    }
   }
 
   /** Activa/desactiva carga de todas las capturas desde el backend (sin filtro por responsable). */
@@ -586,71 +659,6 @@ export class ResponsablesTableComponent implements OnInit {
   }
 
   /**
-   * Obtener el label del tipo de acción para mostrar en la tabla
-   */
-  getLabelTipoAccion(tipoAccion: string): string {
-    const labels: { [key: string]: string } = {
-      'RECHAZADO': 'Rechazado',
-      'PENDIENTE_INFO': 'Pendiente Info',
-      'ATENCION_INMEDIATA': 'Atención Inmediata',
-      'ADQUISICION_INFO': 'Adquisición Info',
-      'INVESTIGACION_FORENSE': 'Investigación Forense',
-      'ELABORACION_DICTAMENES': 'Elaboración Dictámenes',
-      'RECUPERACION_INFO': 'Recuperación Info',
-      'DESTRUCCION_DISPOSITIVOS': 'Destrucción Dispositivos'
-    };
-    return labels[tipoAccion] || tipoAccion;
-  }
-
-  /**
-   * Obtener el color del tipo de acción
-   */
-  getColorTipoAccion(tipoAccion: string): string {
-    const colores: { [key: string]: string } = {
-      'RECHAZADO': 'rechazado',
-      'PENDIENTE_INFO': 'pendiente',
-      'ATENCION_INMEDIATA': 'inmediata',
-      'ADQUISICION_INFO': 'adquisicion',
-      'INVESTIGACION_FORENSE': 'forense',
-      'ELABORACION_DICTAMENES': 'dictamen',
-      'RECUPERACION_INFO': 'recuperacion',
-      'DESTRUCCION_DISPOSITIVOS': 'destruccion'
-    };
-    return colores[tipoAccion] || 'default';
-  }
-
-  /**
-   * Cargar las atenciones de los expedientes en vista "atendidos"
-   */
-  cargarAtencionesExpedientes(): void {
-    const expedientesAtendidos = this.expedientes.filter(exp => 
-      exp.estatus && this.estatusAtendidos.includes(exp.estatus.toUpperCase())
-    );
-    
-    expedientesAtendidos.forEach(exp => {
-      if (exp.id_expediente && !this.atencionesMap.has(exp.id_expediente)) {
-        this.atencionService.obtenerAtencionesExpediente(exp.id_expediente).subscribe({
-          next: (atenciones) => {
-            if (atenciones && atenciones.length > 0) {
-              // Guardar la última atención (la más reciente)
-              this.atencionesMap.set(exp.id_expediente!, atenciones[0]);
-            }
-          },
-          error: (err) => console.error('Error cargando atención:', err)
-        });
-      }
-    });
-  }
-
-  /**
-   * Obtener la atención de un expediente
-   */
-  getAtencionExpediente(idExpediente: number | undefined): AtencionConEspecialistas | undefined {
-    if (!idExpediente) return undefined;
-    return this.atencionesMap.get(idExpediente);
-  }
-
-  /**
    * Ver detalle de expediente
    */
   verDetalleExpediente(expediente: ExpedienteTlalcalli): void {
@@ -669,27 +677,28 @@ export class ResponsablesTableComponent implements OnInit {
     });
   }
 
-  /**
-   * Abrir modal de atención para procesar el expediente
-   */
-  abrirModalAtencion(expediente: ExpedienteTlalcalli): void {
-    console.log('📋 [ResponsablesTable] Abriendo modal de atención para:', expediente.expediente);
-    
-    const dialogRef = this.dialog.open(AtencionModalComponent, {
+  abrirModalSeguimiento(expediente: ExpedienteTlalcalli): void {
+    const dialogRef = this.dialog.open(SeguimientoAccionesModalComponent, {
       maxWidth: '95vw',
       maxHeight: '95vh',
       panelClass: 'atencion-modal-panel',
       data: { expediente },
-      disableClose: false
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('📋 [ResponsablesTable] Modal de atención cerrado:', result);
-      if (result?.success) {
-        // Recargar expedientes si se guardó una atención
+      if (result?.estatusActualizado) {
         this.cargarExpedientes();
+      } else if (result?.success) {
+        this.cargarIndicadoresSeguimiento();
       }
     });
+  }
+
+  abrirSeguimientoPorId(idExpediente: number): void {
+    const expediente = this.todosLosExpedientes.find((e) => e.id_expediente === idExpediente);
+    if (expediente) {
+      this.abrirModalSeguimiento(expediente);
+    }
   }
 
   /**

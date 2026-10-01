@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,11 +18,12 @@ import {
 } from '../../../interfaces/expediente-tlalcalli.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ApiService } from '../../../services/api.service';
-import { firstValueFrom } from 'rxjs';
-import { TemporalInsertRequest } from '../../../interfaces/temporal.interface';
-import { TemporalInsertResponse } from '../../../interfaces/temporal.interface';
-import { TemporalRegistroRequest, TemporalRegistroResponse, TemporalEliminaRequest, TemporalEliminaResponse } from '../../../interfaces/temporal.interface';
+import { TemporalExpedienteService } from '../../../services/temporal-expediente.service';
+import { TemporalRegistroResponse } from '../../../interfaces/temporal.interface';
+import { DateUtils } from '../../../utils/date-utils';
+import { finalize, firstValueFrom, Subject, takeUntil } from 'rxjs';
+import { CatalogoReworkCacheService } from '../../../services/catalogo-rework-cache.service';
+import { SelectOption } from '../custom-select/custom-select.component';
 
 
 
@@ -42,11 +43,6 @@ type Paso1TemporalExtra = FormularioPaso1 & {
     unidad: string;
     es_urgente: boolean;
   };
-  usuarios?: Array<{
-    tipo_usuario: string;
-    nombre: string;
-    rfc: string;
-  }>;
 };
 
 type Paso2TemporalExtra = FormularioPaso2 & {
@@ -76,10 +72,9 @@ type Paso2TemporalExtra = FormularioPaso2 & {
         FirstStepTlalcalliComponent,
         SecondStepTlalcalliComponent
     ],
-    templateUrl: './stepper-tlalcalli.component.html',
-    styleUrls: ['./stepper-tlalcalli.component.css', './stepper-tlalcalli-global.css']
+    templateUrl: './stepper-tlalcalli.component.html'
 })
-export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
+export class StepperTlalcalliComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatStepper) stepper!: MatStepper;
   @ViewChild(FirstStepTlalcalliComponent) paso1Component!: FirstStepTlalcalliComponent;
   @ViewChild(SecondStepTlalcalliComponent) paso2Component!: SecondStepTlalcalliComponent;
@@ -88,6 +83,12 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   datosPaso2: FormularioPaso2 | null = null;
   documentoPasoFinal: FormularioPaso3 | null = null;
 
+  readonly pasos = [
+    { titulo: 'Información básica', descripcion: 'Datos del oficio y remitente' },
+    { titulo: 'Seguimiento y Documentación', descripcion: 'Responsables, estatus y archivos' },
+    { titulo: 'Resumen', descripcion: 'Confirmación del registro' },
+  ];
+
   pasoActual = 0;
   expedienteGuardado = false;
   expedienteId: number | null = null;
@@ -95,18 +96,172 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   isTransitioning = false;
   paso1Valido = false;
   paso2Valido = false;
+  borradorRecuperable = false;
+
+  /** Catálogo de prioridad en memoria: el paso 1 se destruye al avanzar al paso 2. */
+  private opcionesPrioridadCache: SelectOption[] = [];
+
+  private pendienteResetFormularios = false;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private expedienteService: ExpedienteTlalcalliService,
     private snackBar: MatSnackBar,
     private logger: LoggerService,
     private dialog: MatDialog,
-    private apiService: ApiService,
+    private temporalService: TemporalExpedienteService,
+    private catalogoCache: CatalogoReworkCacheService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.temporalService.bloquearAutoGuardado();
+    this.inicializarEstadoCaptura();
+    this.cargarCatalogoPrioridades();
+  }
+
+  private cargarCatalogoPrioridades(): void {
+    this.catalogoCache
+      .getCat(2)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((prioridades) => {
+        this.opcionesPrioridadCache = prioridades.map((item) => ({
+          value: item.id_exp,
+          label: item.descripcion,
+        }));
+      });
+  }
+
+  private inicializarEstadoCaptura(): void {
+    this.datosPaso1 = null;
+    this.datosPaso2 = null;
+    this.borradorRecuperable = this.temporalService.hayBorradorRecuperable();
+
+    if (this.temporalService.getStoredUuid()) {
+      this.temporalService.limpiarStorageBorradorCaptura(false);
+    }
+
+    this.limpiarEstadoInterno(false);
+    this.pendienteResetFormularios = true;
+  }
+
+  retomarBorrador(): void {
+    const uuid = this.temporalService.activarRetomarBorrador();
+    if (!uuid) {
+      this.borradorRecuperable = false;
+      return;
+    }
+
+    this.borradorRecuperable = false;
+    this.recuperarBorradorSiValido(uuid, true);
+  }
+
+  descartarBorradorPendiente(): void {
+    this.temporalService.descartarBorradorPendiente();
+    this.borradorRecuperable = false;
+    this.limpiarEstadoInterno(true);
+    this.temporalService.permitirAutoGuardado();
+    this.mostrarMensaje('Borrador descartado. Formulario limpio.', 'info');
+  }
+
+  private ignorarBorradorObsoleto(uuid: string): void {
+    void this.temporalService.eliminarRegistroTemporal(uuid);
+    this.temporalService.limpiarStorageBorradorCaptura(false);
+    this.limpiarEstadoInterno(false);
+    this.pendienteResetFormularios = true;
+  }
+
+  private recuperarBorradorSiValido(uuid: string, forzar = false): void {
+    if (!forzar && !this.temporalService.debeRecuperarBorradorAlEntrar()) {
+      return;
+    }
+
+    if (this.temporalService.isCapturaRecienCompletada()) {
+      this.ignorarBorradorObsoleto(uuid);
+      return;
+    }
+
+    this.guardando = true;
+
+    this.temporalService.recuperarBorradorSiExiste(uuid, forzar).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (registro) => {
+        this.guardando = false;
+
+        if (this.temporalService.isCapturaRecienCompletada()) {
+          this.ignorarBorradorObsoleto(uuid);
+          return;
+        }
+
+        if (!registro) {
+          this.limpiarEstadoInterno(false);
+          this.aplicarResetFormulariosCuandoListos();
+          return;
+        }
+
+        this.transicionarPaso(0);
+        setTimeout(() => {
+          this.cargarRegistroTemporalEnFormulario(registro);
+          this.mostrarMensaje(
+            'Información temporal recuperada correctamente',
+            'success'
+          );
+          this.temporalService.permitirAutoGuardado();
+        }, 0);
+      },
+      error: () => {
+        this.guardando = false;
+        this.temporalService.limpiarStorageBorradorCaptura(false);
+        this.limpiarEstadoInterno(false);
+        this.aplicarResetFormulariosCuandoListos();
+      },
+    });
+  }
+
+  private aplicarResetFormulariosCuandoListos(): void {
+    this.pendienteResetFormularios = true;
+    setTimeout(() => {
+      if (!this.pendienteResetFormularios) {
+        return;
+      }
+      this.resetearFormulariosHijos();
+      this.pendienteResetFormularios = false;
+      if (!this.expedienteGuardado && !this.borradorRecuperable) {
+        this.temporalService.permitirAutoGuardado();
+      }
+    }, 0);
+  }
+
+  private limpiarEstadoInterno(reiniciarFormulariosHijos: boolean): void {
+    this.datosPaso1 = null;
+    this.datosPaso2 = null;
+    this.documentoPasoFinal = null;
+    this.pasoActual = 0;
+    this.expedienteGuardado = false;
+    this.expedienteId = null;
+    this.paso1Valido = false;
+    this.paso2Valido = false;
+
+    if (reiniciarFormulariosHijos) {
+      this.resetearFormulariosHijos();
+    }
+  }
+
+  private resetearFormulariosHijos(): void {
+    this.paso1Component?.resetearFormulario?.();
+    this.paso2Component?.resetearFormulario?.();
+  }
 
   ngAfterViewInit(): void {
+    if (this.pendienteResetFormularios) {
+      setTimeout(() => {
+        this.resetearFormulariosHijos();
+        this.pendienteResetFormularios = false;
+
+        if (!this.expedienteGuardado && !this.borradorRecuperable) {
+          this.temporalService.permitirAutoGuardado();
+        }
+      }, 0);
+    }
+
     // Prevenir acceso a pasos sin completar
     if (this.stepper) {
       this.stepper.selectionChange.subscribe((event) => {
@@ -138,9 +293,22 @@ export class StepperTlalcalliComponent implements OnInit, AfterViewInit {
   }
 
 onPaso1Completado(datos: FormularioPaso1) {
+  if (this.paso1Component?.opcionesPrioridad?.length) {
+    this.opcionesPrioridadCache = [...this.paso1Component.opcionesPrioridad];
+  }
+
   this.datosPaso1 = datos;
   this.transicionarPaso(1);
   this.mostrarMensaje('Paso 1 completado correctamente', 'success');
+
+  const paso2Pendiente = this.datosPaso2;
+  if (paso2Pendiente) {
+    setTimeout(() => {
+      this.paso2Component?.precargarDatos?.(
+        paso2Pendiente as Parameters<SecondStepTlalcalliComponent['precargarDatos']>[0]
+      );
+    }, 300);
+  }
 }
 
   onPaso1Siguiente() {
@@ -192,7 +360,19 @@ onPaso1Completado(datos: FormularioPaso1) {
     if (confirmado) {
     this.finalizarExpediente();
   } else {
-    this.insertarTemporal(true);
+    const datosPaso2Actuales = this.construirDatosPaso2Actuales();
+    if (datosPaso2Actuales) {
+      this.datosPaso2 = datosPaso2Actuales;
+    }
+
+    this.guardarTemporalBestEffort(() => {
+      this.transicionarPaso(0);
+      setTimeout(() => {
+        if (this.datosPaso1) {
+          this.paso1Component?.precargarDatos?.(this.datosPaso1);
+        }
+      }, 300);
+    });
   }
   });
 
@@ -268,12 +448,13 @@ onPaso1Completado(datos: FormularioPaso1) {
       }
 
       if (this.datosPaso1.prioridad) {
+        const etiquetaPrioridad = this.etiquetaPrioridadLegible(this.datosPaso1.prioridad);
         camposFechas.push({
           etiqueta: 'Prioridad',
-          valor: this.datosPaso1.prioridad,
+          valor: etiquetaPrioridad,
           icono: 'priority_high',
           tipo: 'prioridad',
-          prioridadColor: this.obtenerColorPrioridad(this.datosPaso1.prioridad)
+          prioridadColor: this.obtenerColorPrioridad(etiquetaPrioridad)
         });
       }
 
@@ -377,14 +558,59 @@ onPaso1Completado(datos: FormularioPaso1) {
     return `${elementos[2]}-${elementos[1]}-${elementos[0]}`
   }
 
+  etiquetaPrioridadLegible(prioridad?: string | number | null): string {
+    if (prioridad === null || prioridad === undefined || prioridad === '') {
+      return 'Normal';
+    }
+
+    const id = Number(prioridad);
+    if (Number.isFinite(id)) {
+      const opciones =
+        this.opcionesPrioridadCache.length > 0
+          ? this.opcionesPrioridadCache
+          : this.paso1Component?.opcionesPrioridad ?? [];
+
+      const opcion = opciones.find((item) => Number(item.value) === id);
+      if (opcion?.label) {
+        return this.etiquetaPrioridadResumida(opcion.label);
+      }
+    }
+
+    return this.etiquetaPrioridadResumida(String(prioridad));
+  }
+
+  /** Texto corto para badge (ej. "Normal" en lugar del párrafo completo del catálogo). */
+  private etiquetaPrioridadResumida(etiqueta: string): string {
+    const parentesis = etiqueta.indexOf('(');
+    if (parentesis > 0) {
+      return etiqueta.slice(0, parentesis).trim();
+    }
+
+    return etiqueta.trim();
+  }
+
   private obtenerColorPrioridad(prioridad: string): string {
-    const colores: { [key: string]: string } = {
-      'URGENTE': 'red',
-      'ALTA': 'orange',
-      'MEDIA': 'yellow',
-      'BAJA': 'green'
+    const normalizado = prioridad.trim().toUpperCase();
+
+    if (normalizado.includes('EXTRA')) {
+      return 'red';
+    }
+
+    if (normalizado.includes('URGENTE')) {
+      return 'orange';
+    }
+
+    if (normalizado.includes('NORMAL')) {
+      return 'yellow';
+    }
+
+    const colores: Record<string, string> = {
+      ALTA: 'orange',
+      MEDIA: 'yellow',
+      BAJA: 'green',
     };
-    return colores[prioridad] || 'yellow';
+
+    return colores[normalizado] || 'yellow';
   }
 
   onPaso2Siguiente() {
@@ -394,18 +620,26 @@ onPaso1Completado(datos: FormularioPaso1) {
   }
 
 onPaso2Anterior(): void {
-  if (this.paso2Component?.formulario) {
-    this.datosPaso2 = {
-      ...(this.datosPaso2 || {}),
-      ...this.paso2Component.formulario.getRawValue()
-    } as FormularioPaso2;
+  const datosPaso2Actuales = this.construirDatosPaso2Actuales();
+  if (datosPaso2Actuales) {
+    this.datosPaso2 = datosPaso2Actuales;
   }
 
-  this.insertarTemporal(true);
+  this.guardarTemporalBestEffort(() => {
+    this.transicionarPaso(0);
+    setTimeout(() => {
+      if (this.datosPaso1) {
+        this.paso1Component?.precargarDatos?.(this.datosPaso1);
+      }
+    }, 300);
+  });
 }
 
-  // Finalizar expediente
   async finalizarExpediente() {
+    const uuidTemporal = this.temporalService.getStoredUuid();
+    this.temporalService.bloquearAutoGuardado();
+    this.temporalService.marcarCapturaCompletada();
+
     if (!this.datosPaso1 || !this.datosPaso2) {
       this.mostrarMensaje('Faltan datos en el formulario', 'error');
       return;
@@ -439,8 +673,9 @@ onPaso2Anterior(): void {
             );
           } else {
             this.documentoPasoFinal = {
-              ...(this.documentoPasoFinal || {}),
+              documento_pdf: pdfFile,
               documento_pdf_nombre: pdfFile.name,
+              campos_pospuestos: this.documentoPasoFinal?.campos_pospuestos ?? [],
             };
             this.mostrarMensaje(pdfResp.mensaje || 'PDF cargado correctamente', 'success');
           }
@@ -454,8 +689,11 @@ onPaso2Anterior(): void {
         }
       }
 
-      console.log('UUID antes de eliminar temporal:', localStorage.getItem('uuid_temporal_expediente'));
-      this.eliminarRegistroTemporal();
+      if (this.temporalService.isValidStoredUuid(uuidTemporal)) {
+        await this.temporalService.eliminarRegistroTemporal(uuidTemporal);
+      }
+
+      this.resetearFormulariosHijos();
       this.transicionarPaso(2);
       if (!pdfFile) {
         this.mostrarMensaje(respuesta?.mensaje || 'Expediente guardado exitosamente', 'success');
@@ -468,319 +706,135 @@ onPaso2Anterior(): void {
   }
 
 
-private insertarTemporal(regresarAPaso1: boolean = false): void {
+/** Guarda borrador temporal sin bloquear la navegación si el backend falla. */
+private guardarTemporalBestEffort(alContinuar: () => void): void {
   if (!this.datosPaso1 || !this.datosPaso2) {
-    this.mostrarMensaje('Faltan datos para guardar el registro temporal', 'warning');
+    alContinuar();
     return;
   }
 
-  const body = this.construirBodyTemporal();
-
-  this.guardando = true;
-
-  this.apiService
-    .postTemporal<TemporalInsertResponse>('temporal/insert', body)
-    .subscribe({
-      next: (response) => {
-        const uuid = response.body?.uuid;
-
-        if (!uuid) {
-          this.mostrarMensaje('El servicio no devolvió UUID', 'warning');
-          this.guardando = false;
-          return;
-        }
-
-        localStorage.setItem('uuid_temporal_expediente', uuid);
-
-        console.log('UUID temporal guardado:', uuid);
-
-        this.guardando = false;
-
-        if (regresarAPaso1) {
-          this.transicionarPaso(0);
-
-          setTimeout(() => {
-            this.paso1Component?.precargarDatos?.(this.datosPaso1);
-          }, 300);
-        }
-
-        this.mostrarMensaje(
-          'Registro temporal guardado correctamente. Puedes revisar los datos antes de guardar.',
-          'success',
-          4000
-        );
-      },
-      error: (error) => {
-        this.guardando = false;
-        this.manejarError(error);
-      }
-    });
-}
-
-private construirBodyTemporal(): TemporalInsertRequest {
-  const paso1 = this.datosPaso1 as Paso1TemporalExtra;
-  const paso2 = this.datosPaso2 as Paso2TemporalExtra;
-
-  const responsable =
-    paso2.responsable_fecha_asignacion ||
-    paso2.responsable ||
-    '';
-
-  const plazo =
-    Number(
-      paso1.plazo_vencimiento ??
-      paso1.plazo_vencimiento_prioridad?.valor ??
-      0
-    );
-
-  const usuarios = (paso1.usuarios ?? []).map((usuario) => ({
-    tipo_usuario: usuario.tipo_usuario,
-    nombre: usuario.nombre,
-    rfc: usuario.rfc
-  }));
-
-  return {
-    id_expediente: this.expedienteId ?? 0,
-    modo_expediente: paso1.modo_expediente || 'AUTOMATICO',
-    expediente: paso1.expediente || '',
-    mes_expediente: String(paso1.mes_expediente ?? ''),
-    tipo_medio_recepcion: paso1.tipo_medio_recepcion || '',
-    oficio: paso1.oficio || '',
-    servicio: Number(paso1.servicio ?? 0),
-    numero_entrada_central: paso1.numero_entrada_central || '',
-    remitente_general: paso1.remitente_general || '',
-    remitente_central: paso1.remitente_central || '',
-    remitente_identificador: paso1.remitente_identificador || '',
-    remitente_area: paso1.remitente_area || '',
-    fecha_documento: this.formatearFechaParaApi(paso1.fecha_documento),
-    fecha_recibido: this.formatearFechaParaApi(paso1.fecha_recibido),
-    fecha_requerimiento: this.formatearFechaParaApi(
-      paso1.fecha_recibido ?? paso1.fecha_documento
-    ),
-    prioridad: this.prioridadComoNumero(paso1.prioridad) ?? 1,
-    plazo_vencimiento_dias_habiles: Number.isFinite(plazo) && plazo > 0 ? plazo : 0,
-    fecha_vencimiento: this.formatearFechaParaApi(paso1.fecha_vencimiento),
-    referencia_asunto: paso1.referencia_asunto || '',
-    usuarios,
-    responsable,
-    sistema_aplicativo: paso2.sistema_aplicativo || '',
-    documento_pdf_nombre: this.documentoPasoFinal?.documento_pdf_nombre || '',
-    expediente_fisico_digital: paso2.expediente_fisico_digital || 'DIGITAL'
-  };
-}
-
-private prioridadComoNumero(prioridad: unknown): number | null {
-  if (prioridad === null || prioridad === undefined || prioridad === '') {
-    return null;
-  }
-
-  if (typeof prioridad === 'number' && Number.isFinite(prioridad)) {
-    return prioridad;
-  }
-
-  const texto = String(prioridad).trim().toLowerCase();
-  const porEtiqueta: Record<string, number> = {
-    normal: 1,
-    urgente: 2,
-    'extra urgente': 3,
-  };
-
-  if (porEtiqueta[texto] !== undefined) {
-    return porEtiqueta[texto];
-  }
-
-  const id = Number(prioridad);
-  return Number.isFinite(id) ? id : null;
-}
-
-private formatearFechaParaApi(fecha: Date | string | null | undefined): string {
-  if (!fecha) return '';
-
-  if (typeof fecha === 'string') {
-    return fecha.includes('T') ? fecha.split('T')[0] : fecha;
-  }
-
-  return fecha.toISOString().split('T')[0];
-}
-
-
-private obtenerRegistroTemporal(): void {
-  const uuid = localStorage.getItem('uuid_temporal_expediente');
-
-  if (!uuid) {
-    this.mostrarMensaje(
-      'No existe un registro temporal guardado',
-      'warning',
-      3000
-    );
-
-    this.transicionarPaso(0);
+  if (!this.temporalService.puedeGuardarBorrador(this.datosPaso1, this.datosPaso2)) {
+    alContinuar();
     return;
   }
 
-  const body: TemporalRegistroRequest = {
-    uuid
-  };
-
-  console.log('POST temporal/registro:', body);
-
-  this.guardando = true;
-
-  this.apiService
-    .postTemporal<TemporalRegistroResponse>(
-      'temporal/registro',
-      body
+  this.temporalService
+    .guardarBorradorCompleto(this.datosPaso1, this.datosPaso2)
+    .pipe(
+      finalize(() => alContinuar()),
+      takeUntil(this.destroy$)
     )
     .subscribe({
-next: (response) => {
-  const registro = response.body;
-
-  if (!registro) {
-    this.mostrarMensaje('No se encontró información temporal', 'warning');
-    this.guardando = false;
-    this.transicionarPaso(0);
-    return;
-  }
-
-  console.log('Registro temporal recuperado:', registro);
-
-  this.guardando = false;
-  this.transicionarPaso(0);
-
-  setTimeout(() => {
-    this.cargarRegistroTemporalEnFormulario(registro);
-  }, 300);
-
-  this.mostrarMensaje(
-    'Información temporal recuperada correctamente',
-    'success'
-  );
-},
-
+      next: (uuid) => {
+        if (uuid) {
+          this.logger.debug('Borrador temporal guardado al retroceder', uuid);
+        }
+      },
       error: (error) => {
-        console.error('ERROR temporal/registro:', error);
-
-        this.guardando = false;
-        this.manejarError(error);
-      }
+        this.logger.warn('Borrador temporal no guardado al retroceder', error);
+      },
     });
 }
+
+private construirDatosPaso2Actuales(): FormularioPaso2 | null {
+  if (!this.paso2Component?.formulario) {
+    return this.datosPaso2;
+  }
+
+  return this.paso2Component.obtenerValoresNormalizados() as FormularioPaso2;
+}
+
 
 private cargarRegistroTemporalEnFormulario(
   registro: TemporalRegistroResponse
 ): void {
+  const oficio = registro.num_oficio?.trim() ?? '';
+  const expediente = registro.num_expediente?.trim() ?? '';
+  if (!oficio && !expediente) {
+    this.limpiarEstadoInterno(false);
+    this.aplicarResetFormulariosCuandoListos();
+    return;
+  }
+
+  this.datosPaso1 = null;
+  this.datosPaso2 = null;
+
+  const plazo = DateUtils.contarDiasHabilesDesdeRecepcion(
+    registro.fecha_recepcion,
+    registro.fecha_vencimiento
+  );
+
   const datosPaso1 = {
-    oficio: registro.oficio,
-    expediente: registro.expediente,
-    numero_entrada_central: registro.numero_central,
-    remitente_area: registro.remitente_area,
-    remitente_general: registro.remitente_general,
-    remitente_central: registro.remitente_central,
-    remitente_identificador: registro.remitente_identificador,
-    modo_expediente: registro.modo_expediente ?? 'AUTOMATICO',
-    mes_expediente: registro.mes_expediente,
+    oficio: registro.num_oficio,
+    expediente: registro.num_expediente,
+    numero_entrada_central: registro.num_entrada,
+    remitente_area: registro.remitente,
     servicio: registro.servicio,
-    plazo_vencimiento: registro.dias_vencimiento,
+    plazo_vencimiento: plazo ?? undefined,
     plazo_vencimiento_prioridad: {
-      valor: registro.dias_vencimiento,
+      valor: plazo,
       unidad: 'dias_habiles' as const,
       es_urgente: registro.prioridad === 2 || registro.prioridad === 3
     },
-    usuarios: registro.usuarios ?? [],
-    fecha_documento:
-      this.convertirFechaApiADate(registro.fecha_documento),
-    fecha_recibido:
-      this.convertirFechaApiADate(registro.fecha_recibido),
-    fecha_vencimiento:
-      this.convertirFechaApiADate(registro.fecha_vencimiento),
-    referencia_asunto: registro.referencia_asunto,
-    tipo_medio_recepcion: registro.tipo_medio_recepcion,
+    fecha_documento: this.convertirFechaApiAInput(registro.fecha_documento),
+    fecha_recibido: this.convertirFechaApiAInput(registro.fecha_recepcion),
+    fecha_vencimiento: this.convertirFechaApiAInput(registro.fecha_vencimiento),
+    referencia_asunto: registro.asunto,
     prioridad: registro.prioridad
   };
 
   const datosPaso2: Partial<FormularioPaso2> = {
+    usuarios: this.expedienteService.parsearUsuariosCadena(registro.usuarios),
     responsable: registro.responsable ?? '',
-    sistema_aplicativo: registro.sistema_aplicativo ?? ''
+    sistema_aplicativo: registro.aplicativos ?? '',
+    status: registro.status,
+    estatus: String(registro.status),
+    ubicacion: registro.ubicacion,
+    observaciones_estatus: registro.observaciones ?? ''
   };
 
   this.datosPaso1 = {
-    ...(this.datosPaso1 || {}),
     ...datosPaso1
   } as unknown as FormularioPaso1;
 
   this.datosPaso2 = {
-    ...(this.datosPaso2 || {}),
     ...datosPaso2
   } as FormularioPaso2;
 
-  this.documentoPasoFinal = {
-    ...(this.documentoPasoFinal || {}),
-    documento_pdf_nombre:
-      registro.documento_pdf_nombre ?? undefined
-  };
-
-  this.expedienteId = registro.id_expediente;
   this.paso1Valido = true;
   this.paso2Valido = true;
 
   setTimeout(() => {
-    this.paso1Component?.precargarDatos?.(
-      datosPaso1
-    );
+    this.paso1Component?.precargarDatos?.(datosPaso1);
 
     this.paso2Component?.precargarDatos?.(
       datosPaso2 as Parameters<SecondStepTlalcalliComponent['precargarDatos']>[0]
     );
-    if (this.documentoPasoFinal?.documento_pdf_nombre) {
-      this.paso2Component?.precargarPdfNombre?.(this.documentoPasoFinal.documento_pdf_nombre);
-    }
   }, 100);
 }
 
-
-private convertirFechaApiADate(fecha: string | null | undefined): Date | undefined {
-  if (!fecha) return undefined;
-
-  return new Date(`${fecha}T00:00:00`);
-}
-
-
-private eliminarRegistroTemporal(): void {
-  const uuid = localStorage.getItem('uuid_temporal_expediente');
-  console.log('UUID para eliminar temporal:', uuid);
-
-  if (!uuid) {
-    console.log('No hay UUID temporal para eliminar');
-    return;
+private convertirFechaApiAInput(fecha: string | null | undefined): string | null {
+  if (!fecha) {
+    return null;
   }
 
-  const body: TemporalEliminaRequest = {
-    uuid
-  };
+  const latam = fecha.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (latam) {
+    return `${latam[3]}-${latam[2]}-${latam[1]}`;
+  }
 
-  console.log('DELETE temporal/elimina:', body);
+  const iso = fecha.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    return `${iso[1]}-${iso[2]}-${iso[3]}`;
+  }
 
-  this.apiService
-    .deleteTemporal<TemporalEliminaResponse>('temporal/elimina', body)
-    .subscribe({
-      next: (response) => {
-        console.log('Temporal eliminado correctamente:', response.body);
-
-        localStorage.removeItem('uuid_temporal_expediente');
-      },
-      error: (error) => {
-        console.error('Error al eliminar temporal:', error);
-
-        this.mostrarMensaje(
-          'El expediente se guardó, pero no se pudo eliminar el registro temporal',
-          'warning',
-          5000
-        );
-      }
-    });
+  return DateUtils.toInputDate(fecha);
 }
 
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   private manejarError(error: any) {
     this.logger.error('Error al guardar expediente:', error);
@@ -882,40 +936,16 @@ private eliminarRegistroTemporal(): void {
 
   reiniciarFormulario() {
     this.isTransitioning = true;
+    this.temporalService.bloquearAutoGuardado();
+    this.temporalService.consumirMarcaCapturaCompletada();
+    this.temporalService.descartarBorrador().subscribe();
+
     setTimeout(() => {
-      // Limpiar todos los datos
-      this.datosPaso1 = null;
-      this.datosPaso2 = null;
-      this.documentoPasoFinal = null;
-      this.pasoActual = 0;
-      this.expedienteGuardado = false;
-      this.expedienteId = null;
-      this.paso1Valido = false;
+      this.limpiarEstadoInterno(true);
+      this.transicionarPaso(0);
+      this.temporalService.permitirAutoGuardado();
       this.isTransitioning = false;
-
-      // Reiniciar componentes hijos si existen
-      if (this.paso1Component) {
-        this.paso1Component.reiniciarFormulario?.();
-      }
-      if (this.paso2Component) {
-        this.paso2Component.reiniciarFormulario?.();
-      }
-
       this.mostrarMensaje('Formulario reiniciado completamente', 'info');
     }, 300);
-  }
-
-  /**
-   * Crear nuevo registro con datos precargados
-   * Mantiene algunos datos del formulario anterior (remitente, tipo, etc.)
-   * pero genera un nuevo número de expediente
-   */
-crearNuevoRegistro(): void {
-  if (!this.datosPaso1 || !this.datosPaso2) {
-    this.mostrarMensaje('No hay datos para reutilizar', 'warning');
-    return;
-  }
-
-  this.insertarTemporal(true);
   }
 }

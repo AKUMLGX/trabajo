@@ -1,23 +1,20 @@
-<div class="relative mb-7 w-full">
+<div class="tl-field">
 
   <label
     [for]="fieldId"
-    class="mb-2.5 block text-[15px] font-noto-sans tracking-wide text-gray-800 transition-colors duration-300"
+    class="tl-label transition-colors"
     [ngClass]="{
-      'text-tlalcalli-primary': isFocused && !errorMessage,
-      'text-red-500': errorMessage,
-      'text-gray-400': disabled
+      '!text-tlalcalli-primary': isFocused && !errorMessage,
+      '!text-tlalcalli-error-muted': errorMessage,
+      '!text-tlalcalli-gray': disabled
     }">
-
     {{ label }}
-
     @if (required) {
-      <span class="ml-1 font-noto-sans text-red-500">*</span>
+      <span class="ml-0.5 text-tlalcalli-error">*</span>
     }
   </label>
 
-  <div class="relative w-full overflow-visible rounded-2xl">
-
+  <div class="relative w-full">
     <select
       [id]="fieldId"
       [value]="value"
@@ -25,12 +22,10 @@
       (change)="onSelectChange($event)"
       (focus)="onFocus()"
       (blur)="onBlur()"
-      class="w-full appearance-none rounded-2xl border-2 px-6 py-4 pr-[60px] text-base font-noto-sans tracking-wide text-gray-800 outline-none transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:opacity-70
-      [&>option]:bg-white [&>option]:text-gray-800 [&>option]:font-noto-sans
-      [&>option:disabled]:bg-gray-50 [&>option:disabled]:text-gray-400"
+      class="tl-input cursor-pointer appearance-none truncate !pr-10 disabled:cursor-not-allowed [&>option]:bg-white [&>option]:text-tlalcalli-dark [&>option:disabled]:text-tlalcalli-gray"
       [ngClass]="{
-        'border-transparent bg-gradient-to-br from-white to-slate-50 shadow-[0_4px_6px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] hover:border-tlalcalli-primary/20 hover:from-white hover:to-slate-100 hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)]': !isFocused && !errorMessage && !disabled,
-        'border-tlalcalli-primary bg-white shadow-[0_0_0_6px_rgba(48,38,76,0.10),0_8px_25px_rgba(0,0,0,0.15)]': isFocused && !errorMessage,        'border-red-500 bg-red-50 shadow-[0_0_0_6px_rgba(239,68,68,0.10),0_8px_25px_rgba(239,68,68,0.15)]': errorMessage
+        '!text-tlalcalli-gray': !hasValue,
+        '!border-tlalcalli-error bg-tlalcalli-error/[0.03] focus:!ring-tlalcalli-error/10': errorMessage
       }">
 
       <option value="">
@@ -47,49 +42,22 @@
       }
     </select>
 
-    <div
-      class="pointer-events-none absolute right-5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-300"
+    <span
+      class="icon-font pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 !text-[20px] transition-transform duration-200"
       [ngClass]="{
-        'bg-gradient-to-br from-slate-50 to-slate-200 text-gray-500 shadow': !isFocused && !hasValue && !disabled,
-        'rotate-180 scale-110 bg-tlalcalli-primary text-white shadow-[0_4px_8px_rgba(48,38,76,0.30)]': isFocused && !disabled,
-        'bg-gray-800 text-white': hasValue && !isFocused && !disabled,
-        'bg-gray-300 text-gray-400': disabled
-      }">
-
-      <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-        <path
-          d="M1 1.5L6 6.5L11 1.5"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round" />
-      </svg>
-    </div>
-
-    <div
-      class="pointer-events-none absolute bottom-0 left-0 h-[3px] rounded-full transition-all duration-300"
-      [ngClass]="{
-        'w-full bg-tlalcalli-primary shadow-[0_0_8px_rgba(48,38,76,0.30)]': isFocused && !errorMessage,
-        'w-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.30)]': errorMessage,
-        'w-0': !isFocused && !errorMessage
-      }">
-    </div>
-
+        'rotate-180 text-tlalcalli-primary': isFocused && !disabled,
+        'text-tlalcalli-dark-muted': !isFocused && !disabled,
+        'text-tlalcalli-gray/60': disabled
+      }">expand_more</span>
   </div>
 
   @if (hint && !errorMessage) {
-    <div
-      class="mt-2 text-[13px] font-noto-sans italic text-gray-500"
-    [ngClass]="{
-      'font-semibold text-tlalcalli-primary': isFocused
-    }">
-      {{ hint }}
-    </div>
+    <div class="tl-field-hint">{{ hint }}</div>
   }
 
   @if (errorMessage) {
-    <div
-      class="mt-2 text-[13px] font-noto-sans text-red-500">
+    <div class="tl-field-error">
+      <span class="icon-font !text-[14px]">error</span>
       {{ errorMessage }}
     </div>
   }

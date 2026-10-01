@@ -1,0 +1,91 @@
+<div class="tl-field">
+  <label
+    class="tl-label"
+    [class.text-tlalcalli-error-muted]="errorMessage"
+  >
+    {{ label }}
+    @if (required) {
+      <span class="ml-0.5 text-tlalcalli-error">*</span>
+    }
+  </label>
+
+  @if (seleccionados.length > 0) {
+    <div class="mb-3 flex flex-wrap gap-2">
+      @for (nombre of seleccionados; track nombre) {
+        <span
+          class="inline-flex max-w-full items-center gap-1 rounded-full bg-tlalcalli-primary/[0.07] py-1 pl-3 pr-1 font-noto-sans text-xs font-semibold text-tlalcalli-primary"
+        >
+          <span class="truncate">{{ nombre }}</span>
+          <button
+            type="button"
+            (click)="quitar(nombre)"
+            [disabled]="disabled"
+            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition hover:bg-tlalcalli-primary/20 disabled:cursor-not-allowed"
+            [attr.aria-label]="'Quitar ' + nombre"
+          >
+            <span class="icon-font !text-[16px]">close</span>
+          </button>
+        </span>
+      }
+    </div>
+  }
+
+  <div class="rms-fila flex flex-col gap-2">
+    <div class="rms-select w-full min-w-0">
+      <app-custom-select
+        label=""
+        placeholder="Seleccionar responsable SAT"
+        [options]="opciones"
+        [disabled]="disabled"
+        [ngModel]="catalogoSeleccionado"
+        (ngModelChange)="onCatalogoChange($event)"
+      >
+      </app-custom-select>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        (click)="agregarDesdeCatalogo()"
+        [disabled]="disabled || catalogoSeleccionado === null"
+        class="tl-btn-primary tl-btn-sm"
+      >
+        <span class="icon-font !text-[18px]">person_add</span>
+        Asignar
+      </button>
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <div class="mt-3 flex flex-col gap-2 md:flex-row md:items-center">
+    <input
+      type="text"
+      [(ngModel)]="nombreManual"
+      (keydown.enter)="agregarManual($event)"
+      [disabled]="disabled"
+      placeholder="Otra persona (escriba el nombre)"
+      autocomplete="off"
+      class="tl-input min-w-0 flex-1 disabled:cursor-not-allowed"
+    />
+    <button
+      type="button"
+      (click)="agregarManual()"
+      [disabled]="disabled || !nombreManual.trim()"
+      class="tl-btn-secondary"
+    >
+      <span class="icon-font !text-[18px]">add</span>
+      Agregar persona
+    </button>
+  </div>
+
+  <p class="tl-field-hint">
+    Puede asignar uno o varios responsables del catálogo y agregar otras personas.
+  </p>
+
+  @if (errorMessage) {
+    <div class="tl-field-error">
+      <span class="icon-font !text-[14px]">error</span>
+      {{ errorMessage }}
+    </div>
+  }
+</div>

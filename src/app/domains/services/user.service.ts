@@ -9,6 +9,7 @@ import {
 } from '../interfaces/oauth2.interfaces';
 import { CardsInfoBandejadeAtencionService } from './cards-info-bandejade-atencion.service';
 import { AdministracionResponse } from '../interfaces/datosCards.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -358,6 +359,13 @@ export class UserService {
     const usuarioActual = this.getUsuarioActual();
     if (!usuarioActual) {
       this.setLoading(false);
+      return;
+    }
+
+    // expedientes/buscar es placeholder legacy; en backend Tlalcalli cae en GET /expedientes/{id}
+    // con id="buscar" y falla al parsear i32.
+    if (environment.cardsInfo === 'expedientes/buscar') {
+      this.establecerAdministracionPorDefecto(usuarioActual);
       return;
     }
 

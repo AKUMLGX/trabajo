@@ -4,6 +4,12 @@ export interface ExpedienteTlalcalli {
   
   // Información básica del expediente
   tipo_medio_recepcion?: string | null; // 'ATENTA_NOTA' | 'OFICIO' | 'REQUERIMIENTO_VERBAL' | 'CORREO_ELECTRONICO'
+  /** Nombre del servicio (consulta rework: campo `servicio` de StructForSearch) */
+  servicio?: string | null;
+  /** Usuarios serializados (consulta rework: campo `usuarios` de StructForSearch) */
+  usuarios?: string | null;
+  /** Origen del registro en bandeja de consulta */
+  origen?: 'legacy' | 'rework';
   expediente: string; // Ej: "Exp.001-2025"
   oficio?: string; // Ej: "199 06 02 00 00 2025-01"
   numero_entrada_central?: string; // Puede estar vacío
@@ -78,8 +84,13 @@ export interface FormularioPaso2 {
   plazo_vencimiento_prioridad?: number; // Días de plazo
   fecha_vencimiento?: Date; // Fecha calculada
   dias_retraso?: number; // Calculado automáticamente
-  sistema_aplicativo?: string; // Ej: "No aplica"
-  responsable?: string;
+  sistema_aplicativo?: string; // Lista unida con "; "
+  responsable?: string; // Lista unida con "; "
+  usuarios?: Array<{
+    tipo_usuario: string;
+    nombre: string;
+    rfc: string;
+  }>;
   responsable_fecha_asignacion?: string; // Ej: "N/A" (flujos legacy)
   woos?: string; // Ej: "REQS00002058748"
   numero_solicitudes_reales?: number; // Número de solicitudes

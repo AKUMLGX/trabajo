@@ -1,212 +1,162 @@
-<div class="min-h-screen bg-tlalcalli-light-cream px-4 py-4">
+<div class="relative min-h-full bg-tlalcalli-light-cream">
 
-  <div class="bg-tlalcalli-primary px-8 py-8">
-    <div class="flex items-center gap-4">
-      <div class="h-[54px] w-[54px] rounded-xl bg-tlalcalli-lavender"></div>
-
-      <div>
-        <h1 class="m-0 text-[28px] font-noto-sans leading-none text-white">
-          Atención / Cierre
-        </h1>
-        <p class="mt-2 text-sm font-noto-sans text-white">
-          Gestión final de expedientes atendidos
-        </p>
-      </div>
-    </div>
-  </div>
-
-  @if (cargando) {
-    <div class="mt-5 flex min-h-[320px] flex-col items-center justify-center rounded-xl bg-white px-8 py-16 text-center">
-      <div class="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-tlalcalli-light-base border-t-tlalcalli-primary"></div>
-      <p class="text-base font-noto-sans text-tlalcalli-primary">
-        Cargando información de atenciones...
-      </p>
-    </div>
-  }
-
-  @if (!cargando && items.length === 0) {
-    <div class="mt-5 flex min-h-[360px] flex-col items-center justify-center rounded-xl bg-white px-8 py-16 text-center">
-      <div class="mb-8 h-[70px] w-[70px] rounded-full bg-tlalcalli-light-lavender"></div>
-
-      <h2 class="m-0 text-lg font-noto-sans text-tlalcalli-primary">
-        No hay atenciones registradas
-      </h2>
-
-      <p class="mt-4 max-w-[430px] text-sm leading-5 font-noto-sans">
-        Los expedientes aparecerán una vez que se registren atenciones
-        en el Centro de Control
-      </p>
-    </div>
-  }
-
-  @if (!cargando && items.length > 0) {
-
-    <section class="my-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
-        <span class="h-4 w-4 rounded-full bg-tlalcalli-success"></span>
+  <header class="tl-page-header">
+    <div class="tl-page-header-inner">
+      <div class="flex items-center gap-5">
+        <div class="tl-page-icon">
+          <span class="icon-font !text-[32px]">assignment_turned_in</span>
+        </div>
         <div>
-          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">En tiempo</span>
-          <span class="block text-xl font-black text-black">{{ totalVerde }}</span>
+          <h1 class="tl-page-title">Atención / Cierre</h1>
+          <p class="tl-page-subtitle">Evidencia de respuestas, notificaciones, acuse y estado del expediente</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
-        <span class="h-4 w-4 rounded-full bg-tlalcalli-warning"></span>
-        <div>
-          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">Hasta 5 días hábiles</span>
-          <span class="block text-xl font-black text-black">{{ totalNaranja }}</span>
+      @if (!cargando) {
+        <div class="tl-page-chip">
+          <span class="icon-font !text-[22px] text-tlalcalli-gold">inventory_2</span>
+          <span class="font-noto-sans text-sm text-white">{{ totalPendientes }} pendiente(s) de cierre</span>
         </div>
-      </div>
-
-      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
-        <span class="h-4 w-4 rounded-full bg-tlalcalli-error"></span>
-        <div>
-          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">Después de 6 días hábiles</span>
-          <span class="block text-xl font-black text-black">{{ totalRojo }}</span>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3 rounded-xl border border-tlalcalli-light-muted bg-white px-5 py-4">
-        <span class="h-4 w-4 rounded-full bg-tlalcalli-primary"></span>
-        <div>
-          <span class="block text-xs font-noto-sans uppercase tracking-wide font-noto-sans">Total de atenciones</span>
-          <span class="block text-xl font-black text-black">{{ items.length }}</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="overflow-hidden rounded-xl bg-white">
-      <div class="flex items-center justify-between border-b border-tlalcalli-light-base bg-tlalcalli-light-base px-5 py-4">
-        <div class="flex flex-wrap items-center gap-3">
-          <h3 class="m-0 text-base font-noto-sans text-black">
-            Expedientes con Atención Registrada
-          </h3>
-
-          <span class="rounded-full bg-tlalcalli-lavender px-3 py-1 text-xs font-noto-sans text-white">
-            {{ items.length }} registros
-          </span>
-        </div>
-      </div>
-
-<div class="w-full overflow-hidden">
-  <table class="w-full table-fixed border-collapse">
-    <colgroup>
-      <col class="w-[13%]" />
-      <col class="w-[15%]" />
-      <col class="w-[15%]" />
-      <col class="w-[16%]" />
-      <col class="w-[13%]" />
-      <col class="w-[11%]" />
-      <col class="w-[8%]" />
-      <col class="w-[10%]" />
-    </colgroup>
-
-    <thead>
-      <tr class="bg-tlalcalli-light-lavender">
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Prioridad</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Expediente</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Tipo de Atención</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Especialistas</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Usuario Registro</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Fecha Apertura</th>
-        <th class="px-2 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans">Días de atraso</th>
-        <th class="px-3 py-4 text-center text-[10px] font-black uppercase tracking-wide font-noto-sans whitespace-nowrap">Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      @for (item of items; track item.id) {
-        <tr class="border-b border-tlalcalli-light-base bg-white align-middle hover:bg-tlalcalli-light-lavender/60">
-
-          <td class="px-4 py-5 text-center align-middle">
-            <div
-              class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-noto-sans"
-              [ngClass]="{
-                'border-tlalcalli-success bg-tlalcalli-success/10 text-tlalcalli-success-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-verde',
-                'border-tlalcalli-warning bg-tlalcalli-warning/10 text-tlalcalli-warning-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-naranja',
-                'border-tlalcalli-error bg-tlalcalli-error/10 text-tlalcalli-error-muted': getSemaforoClass(item.diasAtraso) === 'semaforo-rojo'
-              }">
-              <span class="h-2.5 w-2.5 rounded-full bg-current"></span>
-              <span>{{ getSemaforoLabel(item.diasAtraso) }}</span>
-            </div>
-          </td>
-
-          <td class="px-2 py-5 text-center align-middle">
-            <div class="flex flex-col items-center gap-1">
-              <!-- <span class="whitespace-normal break-words text-sm font-ubuntu-mono font-noto-sans leading-5 text-center text-black"> -->
-                              <span class="whitespace-normal break-words text-sm font-noto-sans font-noto-sans leading-5 text-center text-black">
-
-                {{ item.expediente || '-' }}
-              </span>
-              <span class="text-center text-xs font-noto-sans">
-                ID {{ item.idExpediente }}
-              </span>
-            </div>
-          </td>
-
-          <td class="px-2 py-5 align-middle">
-            <span class="block w-full whitespace-normal break-words rounded-full bg-tlalcalli-primary/10 px-3 py-2 text-center text-xs font-noto-sans uppercase leading-4 text-tlalcalli-primary">
-              {{ item.tipoAccion }}
-            </span>
-          </td>
-
-          <td class="px-2 py-5 text-center align-middle">
-            @if (item.especialistas?.length) {
-              <div class="flex flex-col items-center gap-2">
-                @for (esp of item.especialistas; track esp) {
-                  <span class="block w-full rounded-lg bg-tlalcalli-light-lavender px-3 py-2 text-center text-xs font-semibold leading-4 text-tlalcalli-primary">
-                    {{ esp }}
-                  </span>
-                }
-              </div>
-            } @else {
-              <span class="block rounded-lg bg-tlalcalli-light-lavender px-3 py-2 text-xs font-semibold font-noto-sans">
-                Sin especialistas
-              </span>
-            }
-          </td>
-
-          <td class="px-4 py-5 text-center align-middle">
-            <span class="block whitespace-normal break-words text-sm font-noto-sans text-center">
-              {{ item.usuarioRegistro || '—' }}
-            </span>
-          </td>
-
-          <td class="px-2 py-5 text-center align-middle">
-            <span class="block text-sm font-noto-sans">
-              {{ formatearFecha(item.ticketFechaApertura) }}
-            </span>
-          </td>
-
-          <td class="px-2 py-5 text-center align-middle">
-            <span class="text-center inline-flex rounded-full bg-black/5 px-3 py-1.5 text-sm font-noto-sans text-black">
-              {{ item.diasAtraso }} días
-            </span>
-          </td>
-
-          <td class="px-3 py-5 text-center align-middle">
-            <div class="flex items-center justify-center gap-3">
-              <button
-                (click)="abrirModalDetalles(item)"
-                class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-teal-muted text-white transition hover:opacity-90"
-                matTooltip="Ver detalles completos de la atención">
-                <span class="icon-font !h-5 !w-5 !text-xl">visibility</span>
-              </button>
-
-              <button
-                (click)="abrirModalCierre(item)"
-                class="flex h-10 w-10 items-center justify-center rounded-lg bg-tlalcalli-primary text-white transition hover:opacity-90"
-                matTooltip="Abrir formularios de cierre">
-                <span class="icon-font !h-5 !w-5 !text-xl">assignment_turned_in</span>
-              </button>
-            </div>
-          </td>
-
-        </tr>
       }
-    </tbody>
-  </table>
-</div>
-    </section>
-  }
+    </div>
+  </header>
+
+  <main class="tl-page-body">
+    @if (cargando) {
+      <section class="tl-card tl-empty">
+        <div class="tl-spinner"></div>
+        <p class="mt-4 font-noto-sans text-sm text-tlalcalli-gray">Cargando expedientes...</p>
+      </section>
+    } @else {
+
+      <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        @for (estado of estados; track estado) {
+          @let estilo = estiloTarjeta(estado);
+          <div class="tl-stat">
+            <span class="tl-stat-accent" [ngClass]="estilo.acento"></span>
+            <div class="flex items-center justify-between">
+              <span class="tl-stat-label">{{ etiquetaEstado(estado) }}</span>
+              <span class="tl-stat-icon" [ngClass]="estilo.tinte"><span class="icon-font !text-[22px]">{{ estilo.icono }}</span></span>
+            </div>
+            <span class="tl-stat-value mt-3" [ngClass]="estilo.valor">{{ contar(estado) }}</span>
+            <span class="tl-stat-caption mt-2">de {{ filas.length }} expediente(s)</span>
+          </div>
+        }
+      </section>
+
+      <section class="tl-card overflow-hidden">
+        <div class="flex flex-col gap-4 px-5 py-4 xl:flex-row xl:items-center xl:justify-between">
+          <div class="flex flex-wrap items-center gap-3">
+            <h3 class="tl-section-heading">Expedientes</h3>
+            <span class="tl-chip tl-chip-primary">{{ filasVisibles.length }} registro(s)</span>
+          </div>
+          <div class="flex flex-col gap-3 md:flex-row md:items-center">
+            <div class="tl-search md:w-[340px]">
+              <span class="icon-font tl-search-icon">search</span>
+              <input type="text" [(ngModel)]="busqueda" placeholder="Buscar expediente, oficio, asunto o remitente..." class="tl-input pl-11" />
+            </div>
+            <div class="tl-segmented">
+              <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vista === 'PENDIENTES' }" (click)="vista = 'PENDIENTES'">
+                Pendientes
+                <span class="tl-count">{{ totalPendientes }}</span>
+              </button>
+              <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vista === 'CERRADOS' }" (click)="vista = 'CERRADOS'">
+                Cerrados
+                <span class="tl-count">{{ contar('COMPLETO') }}</span>
+              </button>
+              <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vista === 'TODOS' }" (click)="vista = 'TODOS'">
+                Todos
+                <span class="tl-count">{{ filas.length }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        @if (filasVisibles.length === 0) {
+          <div class="tl-empty border-t border-tlalcalli-light-base/70">
+            <span class="tl-empty-icon"><span class="icon-font !text-[30px]">inbox</span></span>
+            <h4 class="m-0 font-noto-sans text-base font-semibold text-tlalcalli-deep">Sin expedientes en esta vista</h4>
+            <p class="m-0 mt-1.5 max-w-[440px] font-noto-sans text-sm text-tlalcalli-gray">
+              Ajusta la búsqueda o cambia de vista. Los expedientes se registran en Captura y se les da seguimiento en Seguimiento y Asignación.
+            </p>
+          </div>
+        } @else {
+          <div class="w-full overflow-x-auto">
+            <table class="tl-table min-w-[1100px]">
+              <thead>
+                <tr>
+                  <th>Expediente</th>
+                  <th>Remitente</th>
+                  <th>Etapa</th>
+                  <th class="text-center">Resp. parciales</th>
+                  <th>Notificación total</th>
+                  <th>Acuse</th>
+                  <th>Expediente físico / digital</th>
+                  <th class="text-center">Estado de cierre</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (fila of filasVisibles; track fila.expediente.id_expediente) {
+                  @let e = fila.expediente;
+                  @let r = fila.resumen;
+                  <tr>
+                    <td>
+                      <span class="block font-semibold text-tlalcalli-deep">{{ e.expediente || '-' }}</span>
+                      <span class="block max-w-[200px] truncate text-xs text-tlalcalli-gray" [title]="e.oficio || ''">{{ e.oficio || '-' }}</span>
+                    </td>
+                    <td class="text-xs">
+                      <span class="block max-w-[190px] truncate" [title]="e.remitente_area || ''">{{ e.remitente_area || '-' }}</span>
+                    </td>
+                    <td>
+                      <span class="tl-chip tl-chip-primary">{{ e.estatus || '-' }}</span>
+                    </td>
+                    <td class="text-center text-xs">
+                      @if (r && r.respuestas_parciales > 0) {
+                        <span class="tl-chip tl-chip-warning">{{ r.respuestas_parciales }}</span>
+                        <span class="mt-1 block text-[11px] text-tlalcalli-gray">Últ. {{ formatearFecha(r.ultima_notificacion_parcial) }}</span>
+                      } @else {
+                        <span class="text-tlalcalli-gray">—</span>
+                      }
+                    </td>
+                    <td class="text-xs">
+                      @if (r?.respuesta_total) {
+                        <span class="flex items-center gap-1.5">
+                          <span class="w-12 text-[10px] font-semibold uppercase tracking-wider text-tlalcalli-gray">Física</span>
+                          {{ formatearFecha(r?.fecha_notif_total_fisica) }}
+                        </span>
+                        <span class="mt-0.5 flex items-center gap-1.5">
+                          <span class="w-12 text-[10px] font-semibold uppercase tracking-wider text-tlalcalli-gray">Correo</span>
+                          {{ formatearFecha(r?.fecha_notif_total_correo) }}
+                        </span>
+                      } @else {
+                        <span class="text-tlalcalli-gray">Sin respuesta total</span>
+                      }
+                    </td>
+                    <td class="text-xs">
+                      <span class="block max-w-[140px] truncate" [title]="r?.acuse || ''" [ngClass]="{ 'text-tlalcalli-gray': !r?.acuse }">{{ r?.acuse || '—' }}</span>
+                    </td>
+                    <td class="text-xs">
+                      <span class="block max-w-[200px]" [ngClass]="{ 'text-tlalcalli-gray': !r?.estado_expediente }">{{ r?.estado_expediente || '—' }}</span>
+                    </td>
+                    <td class="text-center">
+                      <span class="tl-chip" [ngClass]="claseEstado(fila.estado)">
+                        <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+                        {{ etiquetaEstado(fila.estado) }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <button type="button" (click)="abrirModalCierre(fila)" title="Registrar evidencia de cierre" class="tl-icon-btn-solid">
+                        <span class="icon-font !text-[18px]">assignment_turned_in</span>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    }
+  </main>
 </div>

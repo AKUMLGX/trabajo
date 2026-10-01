@@ -4,15 +4,20 @@ import { CommonModule } from '@angular/common';
 
 import { CustomSelectComponent, SelectOption } from '../custom-select/custom-select.component';
 import { CustomTextareaComponent } from '../custom-textarea/custom-textarea.component';
+import { SistemaAplicativoAutocompleteComponent } from '../sistema-aplicativo-autocomplete/sistema-aplicativo-autocomplete.component';
 import { LoggerService } from '../../../services/logger.service';
 import { FormHelperService } from '../../../services/form-helper.service';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
+import { TemporalExpedienteService } from '../../../services/temporal-expediente.service';
 import { HttpResponse } from '@angular/common/http';
 import { CatalogoResponsableResponse, CrearResponsableRequest, ActualizarResponsableRequest, MensajeResponsableResponse } from '../../../../interfaces/catalogos.interface';
-import { Aplicativo } from '../../../interfaces/aplicativo.interface';
 import { CatalogoReworkItem } from '../../../interfaces/expediente-rework.interface';
 import { CustomModalComponent2 } from "../../../../responsables/components/atencion-modal/custom-modal/custom-modal/custom-modal.component";
+import { ResponsablesMultiSelectComponent } from '../responsables-multi-select/responsables-multi-select.component';
+import { UsuariosRequerimientoComponent } from '../../usuarios-requerimiento/usuarios-requerimiento/usuarios-requerimiento.component';
+import { UsuarioRequerimiento } from '../../../../interfaces/usuarios-expediente.interface';
+import { unirListaTexto } from '../../../utils/lista-texto.utils';
 @Component({
     selector: 'app-second-step-tlalcalli',
     imports: [
@@ -20,13 +25,20 @@ import { CustomModalComponent2 } from "../../../../responsables/components/atenc
     ReactiveFormsModule,
     CustomSelectComponent,
     CustomTextareaComponent,
-    CustomModalComponent2
+    CustomModalComponent2,
+    SistemaAplicativoAutocompleteComponent,
+    ResponsablesMultiSelectComponent,
+    UsuariosRequerimientoComponent,
 ],
     templateUrl: './second-step-tlalcalli.component.html',
     styleUrl: './second-step-tlalcalli.component.css'
 })
 export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
+  private readonly temporalService = inject(TemporalExpedienteService);
+  private guardandoBorradorTemporal = false;
+  private restableciendoFormulario = false;
+  private skipAutoSaveUntil = 0;
 
 
   @Input() datosPaso1: any = {};
@@ -44,11 +56,11 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
 
   opcionesResponsables: SelectOption[] = [];
   responsablesData: CatalogoResponsableResponse[] = [];
-  opcionesAplicativos: SelectOption[] = [];
   opcionesEstatus: SelectOption[] = [];
   catalogoEstatus: CatalogoReworkItem[] = [];
 
   modalResponsableVisible = false;
+  responsableCatalogoId: number | string | null = null;
 
   modalResponsableTipo:
   | 'crear'
@@ -65,6 +77,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   pdfSeleccionado: File | null = null;
   pdfNombreMostrado = '';
   pdfError: string | null = null;
+  pdfArrastrando = false;
   readonly camposDocumentosPendientes = [
     'tipo_documento',
     'anexos',
@@ -80,8 +93,12 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   ) {
 
     this.formulario = this.fb.group({
-      responsable: [null, Validators.required],
+      usuarios: this.fb.control<UsuarioRequerimiento[]>([], {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(1)],
+      }),
       sistema_aplicativo: ['', Validators.required],
+      responsable: ['', Validators.required],
       status: [null, Validators.required],
       observaciones_estatus: [''],
       ubicacion: [null, Validators.required]
@@ -90,16 +107,22 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.skipAutoSaveUntil = Date.now() + 2000;
     this.cargarResponsables();
-    this.cargarAplicativos();
     this.cargarEstatus();
     this.cargarUbicacion();
-    this.camposTotales = Object.keys(this.formulario.controls).length;
     this.calcularProgreso();
     this.formulario.valueChanges
-      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .pipe(
+        debounceTime(1000),
+        distinctUntilChanged(
+          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+        ),
+        takeUntil(this.destroy$)
+      )
       .subscribe(() => {
         this.calcularProgreso();
+        this.guardarBorrador();
       });
   }
 
@@ -109,18 +132,50 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
   }
 
   calcularProgreso(): void {
-    let completados = 0;
-    Object.keys(this.formulario.controls).forEach(key => {
-      const control = this.formulario.get(key);
-      if (control && control.value !== null && control.value !== '' && control.value !== false) {
-        completados++;
+    const obligatorios = ['usuarios', 'sistema_aplicativo', 'responsable', 'status', 'ubicacion'];
+    const completados = obligatorios.filter((key) => {
+      const value = this.formulario.get(key)?.value;
+      if (Array.isArray(value)) {
+        return value.length > 0;
       }
-    });
+      return value !== null && value !== undefined && String(value).trim() !== '';
+    }).length;
+
+    this.camposTotales = obligatorios.length;
     this.camposCompletados = completados;
     this.progresoFormulario = Math.round((completados / this.camposTotales) * 100);
   }
 
-  private guardarBorrador(): void {}
+  private guardarBorrador(): void {
+    if (
+      this.restableciendoFormulario ||
+      Date.now() < this.skipAutoSaveUntil ||
+      !this.temporalService.isAutoGuardadoPermitido()
+    ) {
+      return;
+    }
+
+    if (!this.datosPaso1?.expediente || !this.datosPaso1?.oficio || this.guardandoBorradorTemporal) {
+      return;
+    }
+
+    const paso2 = this.obtenerValoresNormalizados();
+
+    this.guardandoBorradorTemporal = true;
+
+    this.temporalService.autoGuardarBorrador(this.datosPaso1, paso2).subscribe({
+      next: (uuid) => {
+        this.guardandoBorradorTemporal = false;
+        if (uuid) {
+          this.logger.debug('Borrador temporal paso 2 auto-guardado', uuid);
+        }
+      },
+      error: (error) => {
+        this.guardandoBorradorTemporal = false;
+        this.logger.debug('Auto-guardado temporal paso 2 falló', error);
+      },
+    });
+  }
 
 
   onSubmit() {
@@ -134,37 +189,94 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     }
 
     this.logger.debug('Paso 2 válido - Continuando');
-    const valores = this.formulario.getRawValue();
-    const responsableSeleccionado = this.responsablesData.find(
-      (responsable) => responsable.id_aplicativo === valores.responsable
-    );
-
-    const statusSeleccionado = this.catalogoEstatus.find(
-      (item) => item.id_exp === Number(valores.status)
-    );
 
     this.formularioCompletado.emit({
-      ...valores,
-      responsable:
-        responsableSeleccionado?.nombre ??
-        (valores.responsable != null ? String(valores.responsable) : ''),
-      status_descripcion: statusSeleccionado?.descripcion ?? '',
+      ...this.obtenerValoresNormalizados(),
       documento_pdf: this.pdfSeleccionado,
       documento_pdf_nombre: this.pdfNombreMostrado || undefined,
       campos_pospuestos: this.camposDocumentosPendientes
     });
   }
 
+  /** Valores listos para stepper/temporal: listas unidas con `; ` y usuarios sin id temporal. */
+  obtenerValoresNormalizados(): Record<string, unknown> {
+    const valores = this.formulario.getRawValue();
+    const statusSeleccionado = this.catalogoEstatus.find(
+      (item) => item.id_exp === Number(valores.status)
+    );
+    const usuarios = (valores.usuarios ?? []).map((usuario: UsuarioRequerimiento) => ({
+      tipo_usuario: usuario.tipo_usuario,
+      nombre: usuario.nombre,
+      rfc: usuario.rfc,
+    }));
+
+    return {
+      ...valores,
+      usuarios,
+      sistema_aplicativo: unirListaTexto(valores.sistema_aplicativo),
+      responsable: unirListaTexto(valores.responsable),
+      status_descripcion: statusSeleccionado?.descripcion ?? '',
+    };
+  }
+
+  actualizarUsuarios(usuarios: UsuarioRequerimiento[]): void {
+    const control = this.formulario.get('usuarios');
+    control?.setValue(usuarios, { emitEvent: true });
+    control?.markAsTouched();
+    control?.markAsDirty();
+    this.calcularProgreso();
+    this.validezCambiada.emit(this.formulario.valid);
+  }
+
+  get usuariosError(): string | null {
+    const control = this.formulario.get('usuarios');
+    if (control?.touched && control.invalid) {
+      return 'Debe agregar al menos un usuario o seleccionar N/A.';
+    }
+    return null;
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files && input.files.length > 0 ? input.files[0] : null;
+    this.asignarArchivoPdf(file);
+    input.value = '';
+  }
 
+  onPdfDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'copy';
+    }
+    this.pdfArrastrando = true;
+  }
+
+  onPdfDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.pdfArrastrando = false;
+  }
+
+  onPdfDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.pdfArrastrando = false;
+
+    const file = event.dataTransfer?.files?.[0] ?? null;
+    this.asignarArchivoPdf(file);
+  }
+
+  private asignarArchivoPdf(file: File | null): void {
     if (!file) {
-      this.limpiarArchivo();
       return;
     }
 
-    if (file.type !== 'application/pdf') {
+    const esPdf =
+      file.type === 'application/pdf' ||
+      file.name.toLowerCase().endsWith('.pdf');
+
+    if (!esPdf) {
       this.pdfError = 'Sólo se aceptan archivos PDF';
       this.pdfSeleccionado = null;
       this.pdfNombreMostrado = '';
@@ -180,6 +292,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
     this.pdfSeleccionado = null;
     this.pdfNombreMostrado = '';
     this.pdfError = null;
+    this.pdfArrastrando = false;
   }
 
   precargarPdfNombre(nombre?: string): void {
@@ -222,7 +335,7 @@ get responsableError(): string | null {
   const control = this.formulario.get('responsable');
 
   if (control?.touched && control.hasError('required')) {
-    return 'Debe seleccionar un responsable';
+    return 'Debe asignar al menos un responsable';
   }
 
   return null;
@@ -232,7 +345,7 @@ get sistemaAplicativoError(): string | null {
   const control = this.formulario.get('sistema_aplicativo');
 
   if (control?.touched && control.hasError('required')) {
-    return 'Debe seleccionar un aplicativo o sistema';
+    return 'Debe seleccionar al menos un aplicativo o sistema';
   }
 
   return null;
@@ -342,25 +455,40 @@ private obtenerUbicacionPorDefecto(): number | null {
   return (general?.value as number) ?? (this.opcionesUbicacion[0]?.value as number) ?? null;
 }
 
-  reiniciarFormulario(): void {
-    this.logger.debug('Reiniciando formulario del paso 2 completamente');
+  resetearFormulario(): void {
+    this.restableciendoFormulario = true;
+    this.skipAutoSaveUntil = Date.now() + 2000;
+    this.guardandoBorradorTemporal = false;
+    this.pdfSeleccionado = null;
+    this.pdfNombreMostrado = '';
+    this.pdfError = null;
+    this.limpiarArchivo();
 
+    this.responsableCatalogoId = null;
     this.formulario.reset({
-      responsable: null,
+      usuarios: [],
+      responsable: '',
       sistema_aplicativo: '',
       status: this.obtenerStatusPorDefecto(),
       observaciones_estatus: '',
-      ubicacion: this.obtenerUbicacionPorDefecto()
-    });
+      ubicacion: this.obtenerUbicacionPorDefecto(),
+    }, { emitEvent: false });
 
+    this.formulario.markAsPristine();
+    this.formulario.markAsUntouched();
     this.calcularProgreso();
+    this.validezCambiada.emit(this.formulario.valid);
+    this.restableciendoFormulario = false;
+  }
 
-    this.logger.debug('Formulario paso 2 reiniciado completamente');
+  reiniciarFormulario(): void {
+    this.resetearFormulario();
   }
 
 
 precargarDatos(
   datos: Partial<{
+    usuarios: Array<Partial<UsuarioRequerimiento>>;
     responsable: string;
     sistema_aplicativo: string;
     status: number;
@@ -369,18 +497,47 @@ precargarDatos(
     ubicacion: number;
   }>
 ): void {
+  const responsable = String(datos?.responsable ?? '').trim();
+  const aplicativo = String(datos?.sistema_aplicativo ?? '').trim();
+  const observaciones = String(datos?.observaciones_estatus ?? '').trim();
+  const usuarios: UsuarioRequerimiento[] = Array.isArray(datos?.usuarios)
+    ? datos.usuarios.map((usuario) => ({
+        id_temporal:
+          usuario.id_temporal ||
+          `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+        tipo_usuario: usuario.tipo_usuario ?? 'SERVIDOR_PUBLICO',
+        nombre: usuario.nombre ?? '',
+        rfc: usuario.rfc ?? '',
+      }))
+    : [];
+  if (
+    !responsable &&
+    !aplicativo &&
+    !observaciones &&
+    usuarios.length === 0 &&
+    datos?.status == null &&
+    datos?.ubicacion == null
+  ) {
+    return;
+  }
+
+  this.restableciendoFormulario = true;
+  this.skipAutoSaveUntil = Date.now() + 2000;
+
   this.formulario.patchValue(
     {
-      responsable: datos.responsable ?? '',
-      sistema_aplicativo: datos.sistema_aplicativo ?? '',
+      usuarios,
+      responsable: unirListaTexto(responsable),
+      sistema_aplicativo: unirListaTexto(aplicativo),
       status: datos.status ?? this.obtenerStatusPorDefecto(),
       observaciones_estatus: datos.observaciones_estatus ?? '',
       ubicacion: datos.ubicacion ?? this.obtenerUbicacionPorDefecto()
     },
     {
-      emitEvent: true
+      emitEvent: false
     }
   );
+  this.restableciendoFormulario = false;
 
   this.calcularProgreso();
 
@@ -389,28 +546,6 @@ precargarDatos(
     datos
   );
 }
-
-  private cargarAplicativos(): void {
-    this.apiService
-      .getData<Aplicativo[]>('catalogo/aplicativos', true)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response: HttpResponse<Aplicativo[]>) => {
-          const aplicativos = response.body ?? [];
-
-          this.opcionesAplicativos = aplicativos.map(
-            (aplicativo): SelectOption => ({
-              value: aplicativo.nombre,
-              label: aplicativo.nombre
-            })
-          );
-        },
-        error: (error: unknown) => {
-          this.logger.error('Error al cargar aplicativos:', error);
-          this.opcionesAplicativos = [];
-        }
-      });
-  }
 
   private cargarResponsables(): void {
   this.apiService
@@ -525,17 +660,13 @@ private actualizarResponsable(
           'Responsable actualizado correctamente'
         );
 
+        const nombreAnterior = this.responsablesData.find(
+          (item) => item.id_aplicativo === idAplicativo
+        )?.nombre;
+        this.reemplazarResponsableAsignado(nombreAnterior, nombreLimpio);
+
         this.cerrarModalResponsable();
         this.cargarResponsables();
-
-        this.formulario.patchValue(
-          {
-            responsable: idAplicativo
-          },
-          {
-            emitEvent: true
-          }
-        );
       },
       error: (error: unknown) => {
         this.logger.error(
@@ -569,14 +700,7 @@ private eliminarResponsable(
           'Responsable eliminado correctamente'
         );
 
-        this.formulario.patchValue(
-          {
-            responsable: null
-          },
-          {
-            emitEvent: true
-          }
-        );
+        this.responsableCatalogoId = null;
 
         this.cerrarModalResponsable();
         this.cargarResponsables();
@@ -627,10 +751,9 @@ private eliminarResponsable(
 
   private obtenerResponsableSeleccionado():
   CatalogoResponsableResponse | null {
-  const idSeleccionado =
-    this.formulario.get('responsable')?.value;
+  const idSeleccionado = this.responsableCatalogoId;
 
-  if (!idSeleccionado) {
+  if (idSeleccionado === null || idSeleccionado === '') {
     return null;
   }
 
@@ -639,6 +762,17 @@ private eliminarResponsable(
       responsable.id_aplicativo ===
       Number(idSeleccionado)
   ) ?? null;
+  }
+
+  private reemplazarResponsableAsignado(anterior: string | undefined, nuevo: string): void {
+    if (!anterior) {
+      return;
+    }
+    const control = this.formulario.get('responsable');
+    const actualizados = String(control?.value ?? '')
+      .split(';')
+      .map((nombre) => (nombre.trim() === anterior ? nuevo : nombre));
+    control?.setValue(unirListaTexto(actualizados));
   }
 
   agregarResponsable(): void {

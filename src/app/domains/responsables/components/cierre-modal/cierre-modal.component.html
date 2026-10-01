@@ -1,273 +1,150 @@
-<div class="flex max-h-[calc(100vh-60px)] w-[min(1000px,95vw)] flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_30px_100px_-20px_rgba(52,0,91,0.4)] max-md:h-screen max-md:w-screen max-md:max-h-screen max-md:rounded-none">
+<div class="tl-modal w-[min(980px,94vw)]">
 
-  <div class="relative flex items-center justify-between overflow-hidden bg-gradient-to-br from-[#34005b] via-[#3e0065] to-[#5c1a7a] px-8 py-10 text-white">
-    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(214,174,103,0.15)_0%,transparent_50%),radial-gradient(circle_at_80%_50%,rgba(219,184,114,0.1)_0%,transparent_50%)]"></div>
-
-    <div class="relative z-[1] flex items-center gap-5">
-     <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15">
-        <span class="icon-font !h-7 !w-7 !text-[28px] text-white">assignment_turned_in</span>
+  <header class="tl-modal-header">
+    <div class="flex items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div class="tl-modal-icon">
+          <span class="icon-font !text-[28px]">assignment_turned_in</span>
+        </div>
+        <div>
+          <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-[2px] text-tlalcalli-gold">Atención y cierre · Evidencia</p>
+          <h2 class="m-0 mt-1 font-noto-sans text-[22px] font-semibold leading-none text-white">{{ expediente.expediente }}</h2>
+          <p class="m-0 mt-1.5 font-noto-sans text-sm text-white/75">
+            {{ expediente.oficio || 'Sin oficio' }} · {{ expediente.remitente_area || 'Sin remitente' }}
+          </p>
+        </div>
       </div>
-
-      <div class="relative z-20 flex flex-col gap-2">
-        <p class="m-0 text-[11px] font-semibold uppercase tracking-[2px] text-[#d6ae67] opacity-90">
-          Formularios de Cierre
-        </p>
-
-        <h2 class="relative z-20 m-0 text-xl leading-tight font-noto-sans text-white">
-          Completar Información de Cierre
-        </h2>
-
-        <!-- <p class="m-0 font-ubuntu-mono font-black text-[13px] text-white/90"> -->
-        <p class="m-0 font-noto-sans font-black text-[13px] text-white/90">
-
-          Expediente: {{ data.expediente }}
-        </p>
-      </div>
+      <button type="button" (click)="cerrar()" [disabled]="guardando" class="tl-modal-close" title="Cerrar">
+        <span class="icon-font !text-[22px]">close</span>
+      </button>
     </div>
+  </header>
 
-    <!-- <button
-      type="button"
-      (click)="cerrar()"
-      [disabled]="guardando"
-      matTooltip="Cerrar"
-      class="relative z-[1] flex h-11 w-11 items-center justify-center rounded-xl border-2 border-white/20 bg-white/15 text-white transition duration-300 hover:scale-105 hover:rotate-90 hover:border-white/40 hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 disabled:hover:rotate-0">
-      <mat-icon>close</mat-icon>
-    </button> -->
-  </div>
-
-  <div
-    class="flex-1 overflow-y-auto bg-gradient-to-b from-[#f8f9fa] to-white p-8 max-md:p-5"
-    [ngClass]="{ 'flex min-h-[400px] items-center justify-center': cargando }">
-
-    @if (cargando) {
-      <div class="text-center">
-        <div class="mx-auto mb-4 h-[50px] w-[50px] animate-spin rounded-full border-4 border-[#34005b]/10 border-t-[#34005b]"></div>
-        <p class="font-semibold text-gray-600">
-          Cargando información...
-        </p>
-      </div>
-    } @else {
-      <form [formGroup]="formulario" class="flex flex-col gap-8">
-
-        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#34005b] before:to-[#3e0065] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
-          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
-            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
-              <span class="icon-font !h-7 !w-7 !text-[28px] text-white">confirmation_number</span>
-            </div>
-
-            <div class="flex-1">
-              <h3 class="m-0 mb-1 text-xl font-noto-sans tracking-[-0.3px] text-[#34005b]">Ticket MS-SAT</h3>
-              <p class="m-0 text-[13px] font-noto-sans text-[#666]">Información del ticket de seguimiento</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">tag</span>
-                Número de Ticket
-              </label>
-              <input type="text" formControlName="ticketNumero" placeholder="Ej: TKT-001-2025"
-                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">event</span>
-                Fecha de Apertura
-              </label>
-              <input type="date" formControlName="ticketFechaApertura"
-                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">check_circle</span>
-                Fecha de Resolución
-              </label>
-              <input type="date" formControlName="ticketFechaResolucion"
-                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-            </div>
-          </div>
-        </div>
-
-        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#3e0065] before:to-[#5c1a7a] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
-          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
-            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
-              <span class="icon-font !h-7 !w-7 !text-[28px] text-white">description</span>
-            </div>
-
-            <div class="flex-1">
-              <h3 class="m-0 mb-1 text-xl font-noto-sans tracking-[-0.3px] text-[#34005b]">Respuesta</h3>
-              <p class="m-0 text-[13px] font-noto-sans text-[#666]">Detalles de la respuesta generada</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">flag</span>
-                Estado
-              </label>
-              <select formControlName="respuestaEstado"
-                class="w-full cursor-pointer appearance-none rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 pr-10 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-                @for (estado of estadosRespuesta; track estado) {
-                  <option [value]="estado">{{ estado }}</option>
-                }
-              </select>
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">category</span>
-                Tipo
-              </label>
-              <select formControlName="respuestaTipo"
-                class="w-full cursor-pointer appearance-none rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 pr-10 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-                <option value="">Seleccione...</option>
-                @for (tipo of tiposRespuesta; track tipo) {
-                  <option [value]="tipo">{{ tipo }}</option>
-                }
-              </select>
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">tag</span>
-                Número
-              </label>
-              <input type="text" formControlName="respuestaNumero" placeholder="Ej: RES-001-2025"
-                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">event</span>
-                Fecha
-              </label>
-              <input type="date" formControlName="respuestaFecha"
-                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-            </div>
-          </div>
-        </div>
-
-        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#5c1a7a] before:to-[#d6ae67] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
-          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
-            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
-              <span class="icon-font !h-7 !w-7 !text-[28px] text-white">notifications</span>
-            </div>
-
-            <div class="flex-1">
-              <h3 class="m-0 mb-1 text-xl font-noto-sans tracking-[-0.3px] text-[#34005b]">Notificación</h3>
-              <p class="m-0 text-[13px] font-noto-sans text-[#666]">Información de notificación al remitente</p>
-            </div>
-          </div>
-
-<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
-
-  <div class="flex flex-col gap-2 max-w-[280px]">
-    <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-      <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">
-        event
-      </span>
-      Fecha de Notificación
-    </label>
-
-    <input
-      type="date"
-      formControlName="notificacionFecha"
-      class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333]
-      shadow-[0_2px_4px_rgba(0,0,0,0.02)]
-      transition duration-300
-      focus:-translate-y-px
-      focus:border-[#34005b]
-      focus:outline-none
-      focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
+  @if (cargando) {
+    <div class="flex min-h-[360px] items-center justify-center">
+      <div class="tl-spinner"></div>
     </div>
+  } @else {
+    <main class="tl-modal-body flex flex-col gap-5">
 
-</div>
+      <section class="tl-card p-6">
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="tl-section-title">
+            <span class="tl-section-icon"><span class="icon-font !text-[22px]">forward_to_inbox</span></span>
+            <div>
+              <h3 class="tl-section-heading">Respuestas parciales</h3>
+              <p class="tl-section-subtitle">Cada respuesta parcial con la fecha en que se notificó.</p>
+            </div>
+          </div>
+          <button type="button" (click)="agregarParcial()" class="tl-btn-secondary tl-btn-sm">
+            <span class="icon-font !text-[18px]">add</span>
+            Agregar respuesta parcial
+          </button>
         </div>
 
-        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#d6ae67] before:to-[#dbb872] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
-          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
-            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
-              <span class="icon-font !h-7 !w-7 !text-[28px] text-white">devices</span>
-            </div>
-
-            <div class="flex-1">
-              <h3 class="m-0 mb-1 text-xl font-noto-sans tracking-[-0.3px] text-[#34005b]">Dispositivo</h3>
-              <p class="m-0 text-[13px] font-noto-sans text-[#666]">Información del dispositivo involucrado</p>
-            </div>
+        @for (parcial of formulario.respuestas_parciales; track $index; let i = $index) {
+          <div class="mb-3 grid grid-cols-1 items-end gap-3 rounded-xl border border-tlalcalli-light-base/70 bg-tlalcalli-light-cream/40 p-4 last:mb-0 md:grid-cols-[auto_1fr_200px_auto]">
+            <span class="mb-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-tlalcalli-primary text-xs font-bold text-white">{{ i + 1 }}</span>
+            <label class="flex flex-col">
+              <span class="tl-label">Respuesta parcial</span>
+              <input type="text" [(ngModel)]="parcial.descripcion" placeholder="Oficio, atenta nota o descripción de la respuesta" class="tl-input" />
+            </label>
+            <label class="flex flex-col">
+              <span class="tl-label">Fecha de notificación</span>
+              <input type="date" [(ngModel)]="parcial.fecha_notificacion" class="tl-input" />
+            </label>
+            <button type="button" (click)="quitarParcial(i)" title="Quitar" class="tl-icon-btn-danger mb-1">
+              <span class="icon-font !text-[18px]">delete</span>
+            </button>
           </div>
+        } @empty {
+          <p class="m-0 rounded-xl border border-dashed border-tlalcalli-light-base px-4 py-5 text-center font-noto-sans text-sm text-tlalcalli-gray">
+            Sin respuestas parciales registradas.
+          </p>
+        }
+      </section>
 
-          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 max-md:grid-cols-1">
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">memory</span>
-                Serie del Dispositivo
-              </label>
-              <input type="text" formControlName="dispositivoSerie" placeholder="Ej: SER-001-2025"
-                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label class="mb-1 flex items-center gap-2 text-sm font-semibold text-[#34005b]">
-                <span class="icon-font !h-[18px] !w-[18px] !text-[18px] text-[#3e0065]">style</span>
-                Modelo del Dispositivo
-              </label>
-              <input type="text" formControlName="dispositivoModelo" placeholder="Ej: Modelo A, Modelo B"
-                class="w-full rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]">
-            </div>
-          </div>
+      <section class="tl-card p-6">
+        <div class="tl-section-title mb-4">
+          <span class="tl-section-icon"><span class="icon-font !text-[22px]">task</span></span>
+          <h3 class="tl-section-heading">Respuesta total</h3>
         </div>
+        <label class="mb-4 flex flex-col">
+          <span class="tl-label">Respuesta</span>
+          <textarea [(ngModel)]="formulario.respuesta_total" rows="2" placeholder="Oficio o descripción de la respuesta total" class="tl-input h-auto py-3"></textarea>
+        </label>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <label class="flex flex-col">
+            <span class="tl-label">Fecha de notificación física</span>
+            <input type="date" [(ngModel)]="formulario.fecha_notif_total_fisica" class="tl-input" />
+          </label>
+          <label class="flex flex-col">
+            <span class="tl-label">Fecha de notificación por correo</span>
+            <input type="date" [(ngModel)]="formulario.fecha_notif_total_correo" class="tl-input" />
+          </label>
+        </div>
+      </section>
 
-        <div class="relative overflow-hidden rounded-[20px] bg-white p-7 shadow-[0_4px_20px_rgba(52,0,91,0.08),0_1px_3px_rgba(0,0,0,0.05)] transition duration-300 before:absolute before:left-0 before:top-0 before:h-1 before:w-full before:bg-gradient-to-r before:from-[#34005b] before:to-[#d6ae67] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(52,0,91,0.12),0_2px_6px_rgba(0,0,0,0.08)]">
-          <div class="mb-6 flex items-center gap-4 border-b-2 border-[#34005b]/10 pb-5 max-md:flex-col max-md:items-start">
-            <div class="flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#34005b] to-[#3e0065] shadow-[0_4px_12px_rgba(52,0,91,0.2)]">
-              <span class="icon-font !h-7 !w-7 !text-[28px] text-white">comment</span>
-            </div>
-
-            <div class="flex-1">
-              <h3 class="m-0 mb-1 text-xl font-noto-sans tracking-[-0.3px] text-[#34005b]">Observaciones</h3>
-              <p class="m-0 text-[13px] font-noto-sans text-[#666]">Comentarios adicionales</p>
-            </div>
+      <section class="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div class="tl-card p-6">
+          <div class="tl-section-title mb-4">
+            <span class="tl-section-icon"><span class="icon-font !text-[22px]">mark_email_read</span></span>
+            <h3 class="tl-section-heading">Acuse</h3>
           </div>
-
+          <div class="flex flex-wrap gap-2">
+            @for (item of catalogoAcuse; track item.id_exp) {
+              <label class="tl-option" [ngClass]="{ 'tl-option-active': formulario.acuse === item.id_exp }">
+                <input type="radio" class="hidden" name="acuse" [value]="item.id_exp" [(ngModel)]="formulario.acuse" />
+                {{ item.descripcion }}
+              </label>
+            }
+          </div>
+          @if (advertenciaAcuse) {
+            <p class="m-0 mt-3 flex items-center gap-1 rounded-lg bg-tlalcalli-warning/10 px-3 py-2 font-noto-sans text-xs text-tlalcalli-warning-muted">
+              <span class="icon-font !text-[16px]">info</span>
+              {{ advertenciaAcuse }}
+            </p>
+          }
+        </div>
+        <div class="tl-card p-6">
+          <div class="tl-section-title mb-4">
+            <span class="tl-section-icon"><span class="icon-font !text-[22px]">folder_open</span></span>
+            <h3 class="tl-section-heading">Expediente</h3>
+          </div>
           <div class="flex flex-col gap-2">
-            <textarea
-              formControlName="observaciones"
-              rows="4"
-              placeholder="Ingrese observaciones generales..."
-              class="min-h-[100px] w-full resize-y rounded-xl border-2 border-[#e0e0e0] bg-white px-4 py-3.5 text-sm text-[#333] shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition duration-300 placeholder:text-[#999] focus:-translate-y-px focus:border-[#34005b] focus:outline-none focus:shadow-[0_0_0_4px_rgba(52,0,91,0.1),0_4px_12px_rgba(52,0,91,0.15)]"></textarea>
+            @for (item of catalogoExpediente; track item.id_exp) {
+              <label class="tl-option" [ngClass]="{ 'tl-option-active': formulario.expediente === item.id_exp }">
+                <input type="radio" class="hidden" name="estado_expediente" [value]="item.id_exp" [(ngModel)]="formulario.expediente" />
+                {{ item.descripcion }}
+              </label>
+            }
           </div>
         </div>
+      </section>
 
-      </form>
-    }
-  </div>
+      <section class="tl-card p-6">
+        <div class="tl-section-title mb-4">
+          <span class="tl-section-icon"><span class="icon-font !text-[22px]">notes</span></span>
+          <h3 class="tl-section-heading">Observaciones del expediente</h3>
+        </div>
+        <textarea [(ngModel)]="formulario.observaciones" rows="3" placeholder="Observaciones..." class="tl-input h-auto py-3"></textarea>
+      </section>
+    </main>
 
-  <div class="flex justify-end gap-3 border-t-2 border-[#34005b]/10 bg-gradient-to-t from-[#f8f9fa] to-white px-8 py-6">
-    <button
-      type="button"
-      (click)="cerrar()"
-      [disabled]="guardando"
-      class="flex items-center gap-2 rounded-xl border-2 border-[#34005b] bg-white px-7 py-3.5 text-[15px] font-semibold text-[#34005b] shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#f8f9fa] hover:shadow-[0_6px_16px_rgba(52,0,91,0.15)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0">
-      <!-- <mat-icon>close</mat-icon> -->
-      Cancelar
-    </button>
-
-    <button
-      type="button"
-      (click)="guardar()"
-      [disabled]="formulario.invalid || guardando"
-      class="flex items-center gap-2 rounded-xl bg-gradient-to-br from-[#34005b] to-[#3e0065] px-7 py-3.5 text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition duration-300 hover:-translate-y-0.5 hover:from-[#3e0065] hover:to-[#34005b] hover:shadow-[0_8px_20px_rgba(52,0,91,0.3)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0">
-      @if (!guardando) {
-        <span class="icon-font">save</span>
-      } @else {
-        <div class="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
-      }
-
-      {{ guardando ? 'Guardando...' : 'Guardar Cierre' }}
-    </button>
-  </div>
+    <footer class="tl-modal-footer justify-between">
+      <span class="font-noto-sans text-xs text-tlalcalli-gray">
+        @if (formulario.fecha_actualizacion) {
+          Última actualización: {{ formulario.fecha_actualizacion | date: 'dd/MM/yyyy HH:mm' }}
+          @if (formulario.usuario_actualizacion) { · {{ formulario.usuario_actualizacion }} }
+        }
+      </span>
+      <div class="flex gap-3">
+        <button type="button" (click)="cerrar()" [disabled]="guardando" class="tl-btn-secondary">Cancelar</button>
+        <button type="button" (click)="guardar()" [disabled]="guardando" class="tl-btn-primary">
+          <span class="icon-font !text-[18px]">save</span>
+          {{ guardando ? 'Guardando...' : 'Guardar cierre' }}
+        </button>
+      </div>
+    </footer>
+  }
 </div>

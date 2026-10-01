@@ -1,7 +1,7 @@
 export interface Aplicativo {
   id_aplicativo: number;
   nombre: string;
-  es_sistema: boolean;
+  es_sistema?: boolean;
   es_usuario?: boolean;
 }
 

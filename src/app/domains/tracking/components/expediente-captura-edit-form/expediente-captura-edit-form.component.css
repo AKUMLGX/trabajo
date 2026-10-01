@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.expediente-edit-form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid rgba(230, 227, 220, 0.7);
+  box-shadow: 0 1px 3px rgba(62, 0, 101, 0.06);
+  overflow: hidden;
+}
+
+.edit-form-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.edit-form-seccion {
+  margin-bottom: 1rem;
+  padding: 1.125rem 1.25rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid rgba(230, 227, 220, 0.7);
+  box-shadow: 0 1px 3px rgba(62, 0, 101, 0.06);
+}
+
+.edit-form-seccion:last-child {
+  margin-bottom: 0;
+}
+
+.detalle-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.expediente-edit-form--modal {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.expediente-edit-form--modal .edit-form-scroll {
+  padding: 0;
+  overflow: visible;
+}
+
+@media (min-width: 640px) {
+  .expediente-edit-form--modal .detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem 1rem;
+  }
+}
+
+.campo-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.campo-detalle--completo {
+  grid-column: 1 / -1;
+}
+
+.expediente-edit-form ::ng-deep app-custom-form-field,
+.expediente-edit-form ::ng-deep app-custom-select,
+.expediente-edit-form ::ng-deep app-custom-textarea {
+  display: block;
+}
+
+.expediente-edit-form ::ng-deep app-usuarios-requerimiento .mat-mdc-form-field,
+.expediente-edit-form ::ng-deep app-usuarios-requerimiento .form-field {
+  margin-bottom: 0.5rem;
+}

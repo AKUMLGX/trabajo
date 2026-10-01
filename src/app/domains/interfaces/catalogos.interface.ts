@@ -27,6 +27,11 @@ export interface ConsecutivoFechaResponse {
   data: number;
 }
 
+/** GET expediente/consecutivo — folio anual `EXP-2026-1`. */
+export interface ConsecutivoAnualResponse {
+  data: string;
+}
+
 
 //Estructura sobre el crud de responsables paso 2 del stepper.
 

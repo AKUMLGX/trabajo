@@ -15,6 +15,11 @@ import { MsgReaderComponent } from '../../../components/msg-reader/msg-reader.co
 import { SharedDataFormService } from '../../../shared/services/shared-data-form.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ExpedienteDetalleModalComponent } from '../expediente-detalle-modal/expediente-detalle-modal.component';
+import {
+  ExpedienteEdicionModalComponent,
+  ExpedienteEdicionModalResult,
+} from '../expediente-edicion-modal/expediente-edicion-modal.component';
+import { DateUtils } from '../../../../domains/capture/utils/date-utils';
 
 @Component({
     selector: 'app-tracking-table',
@@ -66,6 +71,9 @@ export class TrackingTableComponent implements OnInit {
   isExpanded = false;
 
   index = 0;
+
+  readonly LIMITE_TEXTO_TABLA = 100;
+  private textosExpandidosTabla = new Set<string>();
 
 
 
@@ -257,17 +265,42 @@ export class TrackingTableComponent implements OnInit {
   }
 
   verDetalleExpediente(expediente: ExpedienteTlalcalli): void {
-    console.log('👁️ Ver detalle de expediente:', expediente);
-    
-    // Abrir modal con el detalle del expediente
     this.dialog.open(ExpedienteDetalleModalComponent, {
       width: '96vw',
       maxWidth: '1400px',
       height: '92vh',
       maxHeight: '92vh',
       panelClass: 'expediente-detalle-dialog',
-      data: { expediente: expediente },
-      disableClose: false
+      data: { expediente },
+      disableClose: false,
+    });
+  }
+
+  editarExpediente(expediente: ExpedienteTlalcalli): void {
+    const dialogRef = this.dialog.open(ExpedienteEdicionModalComponent, {
+      width: '880px',
+      maxWidth: '94vw',
+      maxHeight: '90vh',
+      panelClass: 'expediente-edicion-dialog',
+      data: { expediente },
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result: ExpedienteEdicionModalResult | undefined) => {
+      if (result?.guardado) {
+        this.refrescarConsultaExpedientes();
+      }
+    });
+  }
+
+  private refrescarConsultaExpedientes(): void {
+    this.expedienteService.reconsultarExpedientes().subscribe({
+      next: (expedientes) => {
+        this.expedienteService.expedientesConsultados.emit(expedientes);
+      },
+      error: (error) => {
+        console.error('Error al refrescar consulta de expedientes:', error);
+      },
     });
   }
 
@@ -275,29 +308,115 @@ export class TrackingTableComponent implements OnInit {
    * Ver PDF directamente desde la tabla
    */
 
-  /**
-   * Formatear fecha que viene como string del backend (YYYY-MM-DD) a DD/MM/YYYY
-   */
   formatearFecha(fecha: string | Date | null | undefined): string {
-    if (!fecha) return '-';
-    
-    // Si ya es un Date, formatearlo
-    if (fecha instanceof Date) {
-      return fecha.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-    
-    // Si es string (formato YYYY-MM-DD del backend)
-    if (typeof fecha === 'string') {
-      const partes = fecha.split('-');
-      if (partes.length === 3) {
-        return `${partes[2]}/${partes[1]}/${partes[0]}`;
-      }
-      return fecha;
-    }
-    
-    return '-';
+    const display = DateUtils.formatearFechaDisplay(fecha);
+    return display === '—' ? '-' : display;
   }
 
+  claveTextoTabla(id: number | undefined, campo: string, indice: number): string {
+    return `${id ?? indice}-${campo}`;
+  }
+
+  necesitaTruncadoTabla(texto: string | null | undefined, limite = this.LIMITE_TEXTO_TABLA): boolean {
+    return Boolean(texto && texto.trim() && texto.length > limite);
+  }
+
+  truncarTextoTabla(texto: string, limite = this.LIMITE_TEXTO_TABLA): string {
+    if (texto.length <= limite) {
+      return texto;
+    }
+    return `${texto.substring(0, limite).trimEnd()}…`;
+  }
+
+  textoTablaVisible(clave: string, texto: string): string {
+    return this.estaExpandidoTabla(clave) || !this.necesitaTruncadoTabla(texto)
+      ? texto
+      : this.truncarTextoTabla(texto);
+  }
+
+  estaExpandidoTabla(clave: string): boolean {
+    return this.textosExpandidosTabla.has(clave);
+  }
+
+  toggleExpandidoTabla(clave: string): void {
+    if (this.textosExpandidosTabla.has(clave)) {
+      this.textosExpandidosTabla.delete(clave);
+      return;
+    }
+    this.textosExpandidosTabla.add(clave);
+  }
+
+  valorTabla(valor: string | null | undefined): string {
+    if (!valor?.trim()) {
+      return '-';
+    }
+    const vacios = new Set(['n/a', '-', '—', 'sin dato', 'no aplica']);
+    return vacios.has(valor.trim().toLowerCase()) ? '-' : valor.trim();
+  }
+
+  etiquetaCortaPrioridad(prioridad: string | null | undefined): string {
+    const valor = this.valorTabla(prioridad);
+    if (valor === '-') {
+      return valor;
+    }
+
+    if (valor.toLowerCase().startsWith('extra urgente')) {
+      return 'Extra urgente';
+    }
+
+    return valor.split('(')[0].trim();
+  }
+
+  tituloCelda(valor: string | null | undefined): string {
+    const texto = this.valorTabla(valor);
+    return texto === '-' ? '' : texto;
+  }
+
+  claseBadgePrioridad(prioridad: string | null | undefined): string {
+    const corta = this.etiquetaCortaPrioridad(prioridad).toLowerCase();
+
+    if (corta.includes('extra urgente')) {
+      return 'tl-chip tl-chip-error';
+    }
+    if (corta.includes('urgente')) {
+      return 'tl-chip tl-chip-warning';
+    }
+    if (corta.includes('normal')) {
+      return 'tl-chip tl-chip-primary';
+    }
+
+    return 'tl-chip tl-chip-neutral';
+  }
+
+  claseBadgeEstatus(estatus: string | null | undefined): string {
+    const valor = this.valorTabla(estatus).toLowerCase();
+
+    if (valor.includes('atendid') || valor.includes('conclu') || valor.includes('termin') || valor.includes('finaliz')) {
+      return 'tl-chip tl-chip-success';
+    }
+    if (valor.includes('proceso') || valor.includes('pendiente') || valor.includes('revis')) {
+      return 'tl-chip tl-chip-warning';
+    }
+    if (valor.includes('cancel') || valor.includes('rechaz')) {
+      return 'tl-chip tl-chip-error';
+    }
+
+    return 'tl-chip tl-chip-primary';
+  }
+
+  formatearFechaCorta(fecha: string | Date | null | undefined): string {
+    const completa = this.formatearFecha(fecha);
+    if (completa === '-') {
+      return completa;
+    }
+
+    const match = completa.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (match) {
+      return `${match[1]}/${match[2]}/${match[3].slice(-2)}`;
+    }
+
+    return completa;
+  }
 
   getRol(): string {
     const sessionInfo = localStorage.getItem('sessionInfo');

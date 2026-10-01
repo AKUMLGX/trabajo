@@ -1,441 +1,142 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
-import { ExpedienteTlalcalliService } from '../../../capture/services/expediente-tlalcalli.service';
-import { CierreService } from '../../services/cierre.service';
-import { CierreModalComponent } from '../cierre-modal/cierre-modal.component';
-import { DetalleAtencionModalComponent } from '../detalle-atencion-modal/detalle-atencion-modal.component';
-import { forkJoin, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
-export interface AtencionCierreItem {
-  id: number;
-  idAtencion: number;
-  idExpediente: number;
-  expediente: string; // Número de expediente
-  diasAtraso: number;
-  // Información del responsable
-  usuarioRegistro?: string;
-  tipoAccion?: string;
-  especialistas?: string[]; // Nombres de especialistas
-  // TICKET MS-SAT
-  ticketNumero: string;
-  ticketFechaApertura: Date;
-  ticketFechaResolucion: Date | null;
-  // RESPUESTA
-  respuestaEstado: string;
-  respuestaTipo: string;
-  respuestaNumero: string;
-  respuestaFecha: Date | null;
-  // NOTIFICACION (solo fecha)
-  notificacionFecha: Date | null;
-  // DISPOSITIVO (serie y modelo)
-  dispositivoSerie: string;
-  dispositivoModelo: string;
-  // OBSERVACIONES
-  observaciones: string;
+import { ExpedienteTlalcalli } from '../../../capture/interfaces/expediente-tlalcalli.interface';
+import { ExpedienteTlalcalliService } from '../../../capture/services/expediente-tlalcalli.service';
+import { CierreReworkService, EstadoCierre, ResumenCierre } from '../../services/cierre-rework.service';
+import { CierreModalComponent } from '../cierre-modal/cierre-modal.component';
+
+type VistaCierre = 'PENDIENTES' | 'CERRADOS' | 'TODOS';
+
+interface FilaCierre {
+  expediente: ExpedienteTlalcalli;
+  resumen: ResumenCierre | null;
+  estado: EstadoCierre;
 }
 
+const ETIQUETAS_ESTADO: Record<EstadoCierre, string> = {
+  SIN_REGISTRO: 'Sin evidencia',
+  PARCIAL: 'Respuesta parcial',
+  TOTAL: 'Respuesta total',
+  COMPLETO: 'Cierre completo',
+};
+
+const CLASES_ESTADO: Record<EstadoCierre, string> = {
+  SIN_REGISTRO: 'tl-chip-neutral',
+  PARCIAL: 'tl-chip-warning',
+  TOTAL: 'tl-chip-primary',
+  COMPLETO: 'tl-chip-success',
+};
+
+const ESTILOS_TARJETA: Record<EstadoCierre, { icono: string; acento: string; tinte: string; valor: string }> = {
+  SIN_REGISTRO: { icono: 'hourglass_empty', acento: 'bg-tlalcalli-light-muted', tinte: 'bg-tlalcalli-light-base/70 text-tlalcalli-dark-muted', valor: 'text-tlalcalli-dark-muted' },
+  PARCIAL: { icono: 'mark_email_read', acento: 'bg-tlalcalli-warning', tinte: 'bg-tlalcalli-warning/15 text-tlalcalli-warning-muted', valor: 'text-tlalcalli-warning-muted' },
+  TOTAL: { icono: 'task', acento: 'bg-tlalcalli-primary', tinte: 'bg-tlalcalli-light-lavender text-tlalcalli-primary', valor: 'text-tlalcalli-primary' },
+  COMPLETO: { icono: 'verified', acento: 'bg-tlalcalli-success', tinte: 'bg-tlalcalli-success/10 text-tlalcalli-success-muted', valor: 'text-tlalcalli-success-muted' },
+};
+
 @Component({
-    selector: 'app-atencion-cierre-table',
-    imports: [
-        CommonModule,
-        MatIconModule,
-        MatButtonModule,
-        MatSelectModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatTooltipModule,
-        FormsModule,
-        ReactiveFormsModule
-    ],
-    templateUrl: './atencion-cierre-table.component.html',
-    styleUrl: './atencion-cierre-table.component.css'
+  selector: 'app-atencion-cierre-table',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './atencion-cierre-table.component.html',
+  styleUrl: './atencion-cierre-table.component.css',
 })
 export class AtencionCierreTableComponent implements OnInit {
-  // Datos cargados del backend
-  items: AtencionCierreItem[] = [];
-  cargando: boolean = true;
+  cargando = true;
+  filas: FilaCierre[] = [];
+  vista: VistaCierre = 'PENDIENTES';
+  busqueda = '';
 
-  // Formulario para edición
-  editForm: FormGroup;
-  editingItemId: number | null = null;
-
-  // Opciones para dropdowns
-  estadosRespuesta = ['Pendiente', 'En Proceso', 'Completado', 'Cancelado'];
-  tiposRespuesta = ['Oficio', 'Email', 'Telefónica', 'Presencial'];
+  readonly estados: EstadoCierre[] = ['SIN_REGISTRO', 'PARCIAL', 'TOTAL', 'COMPLETO'];
 
   constructor(
-    private fb: FormBuilder,
-    private atencionService: AtencionService,
     private expedienteService: ExpedienteTlalcalliService,
-    private cierreService: CierreService,
+    private cierreService: CierreReworkService,
     private dialog: MatDialog
-  ) {
-    this.editForm = this.fb.group({
-      ticketNumero: [''],
-      ticketFechaApertura: [''],
-      ticketFechaResolucion: [''],
-      respuestaEstado: [''],
-      respuestaTipo: [''],
-      respuestaNumero: [''],
-      respuestaFecha: [''],
-      notificacionFecha: [''],
-      dispositivoModelo: [''],
-      dispositivoSerie: [''],
-      observaciones: ['']
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.cargarDatos();
   }
 
-  // === Contadores de semáforo para la vista resumen ===
-  get totalVerde(): number {
-    return this.items.filter(i => this.getSemaforoClass(i.diasAtraso) === 'semaforo-verde').length;
-  }
-
-  get totalNaranja(): number {
-    return this.items.filter(i => this.getSemaforoClass(i.diasAtraso) === 'semaforo-naranja').length;
-  }
-
-  get totalRojo(): number {
-    return this.items.filter(i => this.getSemaforoClass(i.diasAtraso) === 'semaforo-rojo').length;
-  }
-
-  /**
-   * Cargar todas las atenciones de todos los responsables
-   */
   cargarDatos(): void {
     this.cargando = true;
-    this.items = []; // Limpiar items anteriores
-    console.log('📋 [AtencionCierre] Cargando todas las atenciones...');
-
-    this.atencionService.obtenerTodasAtenciones().subscribe({
-      next: (atenciones: AtencionConEspecialistas[]) => {
-        console.log('✅ [AtencionCierre] Atenciones recibidas:', atenciones.length);
-        
-        if (atenciones.length === 0) {
-          this.items = [];
-          this.cargando = false;
-          console.log('ℹ️ [AtencionCierre] No hay atenciones registradas');
-          return;
-        }
-        
-        // Mapear atenciones a items de la tabla y cargar datos de cierre
-        const itemsPromises = atenciones.map((atencion, index) => {
-          const fechaRegistro = atencion.atencion.fecha_registro 
-            ? new Date(atencion.atencion.fecha_registro) 
-            : new Date();
-          
-          const item: AtencionCierreItem = {
-            id: index + 1,
-            idAtencion: atencion.atencion.id_atencion,
-            idExpediente: atencion.atencion.id_expediente,
-            expediente: `EXP-${atencion.atencion.id_expediente}`, // Se actualizará si se obtiene el expediente
-            diasAtraso: 0,
-            usuarioRegistro: atencion.atencion.usuario_registro || undefined,
-            tipoAccion: atencion.atencion.tipo_accion,
-            especialistas: atencion.especialistas.map(esp => esp.nombre_especialista),
-            // TICKET MS-SAT - Inicializar con valores vacíos (se llenarán con los 4 formularios)
-            ticketNumero: '',
-            ticketFechaApertura: fechaRegistro,
-            ticketFechaResolucion: null,
-            // RESPUESTA
-            respuestaEstado: 'Pendiente',
-            respuestaTipo: '',
-            respuestaNumero: '',
-            respuestaFecha: null,
-            // NOTIFICACION
-            notificacionFecha: null,
-            dispositivoModelo: '',
-            // DISPOSITIVO
-            dispositivoSerie: '',
-            // OBSERVACIONES
-            observaciones: ''
-          };
-          
-          // Calcular días de atraso
-          item.diasAtraso = this.calcularDiasAtraso(item.ticketFechaApertura);
-          
-          // Obtener datos de cierre si existen (sin bloquear si no hay)
-          return this.cierreService.obtenerCierrePorAtencion(atencion.atencion.id_atencion).pipe(
-            map(cierreResponse => {
-              if (cierreResponse.success && cierreResponse.data) {
-                const cierre = cierreResponse.data;
-                // Actualizar item con datos de cierre
-                item.ticketNumero = cierre.ticket_numero || '';
-                if (cierre.ticket_fecha_apertura) {
-                  item.ticketFechaApertura = new Date(cierre.ticket_fecha_apertura);
-                }
-                if (cierre.ticket_fecha_resolucion) {
-                  item.ticketFechaResolucion = new Date(cierre.ticket_fecha_resolucion);
-                }
-                item.respuestaEstado = cierre.respuesta_estado || 'Pendiente';
-                item.respuestaTipo = cierre.respuesta_tipo || '';
-                item.respuestaNumero = cierre.respuesta_numero || '';
-                if (cierre.respuesta_fecha) {
-                  item.respuestaFecha = new Date(cierre.respuesta_fecha);
-                }
-                if (cierre.notificacion_fecha) {
-                  item.notificacionFecha = new Date(cierre.notificacion_fecha);
-                }
-                item.dispositivoSerie = cierre.dispositivo_serie || '';
-                item.dispositivoModelo = cierre.dispositivo_modelo || '';
-                item.observaciones = cierre.observaciones || '';
-                
-                // Recalcular días de atraso con fecha actualizada
-                item.diasAtraso = this.calcularDiasAtraso(item.ticketFechaApertura);
-              }
-              return item;
-            }),
-            catchError((error) => {
-              console.log('ℹ️ [AtencionCierre] No hay cierre para atención', atencion.atencion.id_atencion);
-              return of(item);
-            })
-          );
-        });
-        
-        // Esperar a que todas las promesas se resuelvan
-        forkJoin(itemsPromises).subscribe({
-          next: (items) => {
-            console.log('✅ [AtencionCierre] Items procesados:', items.length);
-            this.items = items;
-            
-            // Intentar obtener números de expediente (opcional, no bloquea)
-            items.forEach((item) => {
-              this.expedienteService.obtenerExpedientePorId(item.idExpediente).pipe(
-                catchError(() => of(null))
-              ).subscribe(expediente => {
-                if (expediente?.expediente) {
-                  const itemIndex = this.items.findIndex(i => i.idAtencion === item.idAtencion);
-                  if (itemIndex !== -1) {
-                    this.items[itemIndex].expediente = expediente.expediente;
-                  }
-                }
-              });
-            });
-            
-            this.cargando = false;
-            console.log('✅ [AtencionCierre] Items cargados exitosamente:', this.items.length);
-          },
-          error: (error) => {
-            console.error('❌ [AtencionCierre] Error al cargar items:', error);
-            this.cargando = false;
-            this.items = [];
-          }
-        });
-      },
-      error: (error) => {
-        console.error('❌ [AtencionCierre] Error al cargar atenciones:', error);
+    forkJoin({
+      expedientes: this.expedienteService.consultarExpedientes({}),
+      resumen: this.cierreService.obtenerResumen(),
+    }).subscribe({
+      next: ({ expedientes, resumen }) => {
+        const porExpediente = new Map(resumen.map((r) => [r.id_expediente, r]));
+        this.filas = expedientes
+          .filter((e) => !!e.id_expediente)
+          .map((expediente) => {
+            const r = porExpediente.get(expediente.id_expediente!) ?? null;
+            return { expediente, resumen: r, estado: r?.estado_cierre ?? 'SIN_REGISTRO' };
+          });
         this.cargando = false;
-        this.items = [];
-      }
-    });
-  }
-
-  calcularDiasAtraso(fechaApertura: Date): number {
-    const hoy = new Date();
-    const diferencia = hoy.getTime() - fechaApertura.getTime();
-    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-    return dias;
-  }
-
-  getSemaforoClass(diasAtraso: number): string {
-    if (diasAtraso <= 0) {
-      return 'semaforo-verde';
-    } else if (diasAtraso <= 5) {
-      return 'semaforo-naranja';
-    } else {
-      return 'semaforo-rojo';
-    }
-  }
-
-  getSemaforoLabel(diasAtraso: number): string {
-    if (diasAtraso <= 0) {
-      return 'Hasta 0 Días Hábiles';
-    } else if (diasAtraso <= 5) {
-      return 'Hasta 5 Días Hábiles';
-    } else {
-      return 'Después de 6 Días Hábiles';
-    }
-  }
-
-  editarItem(item: AtencionCierreItem): void {
-    this.editingItemId = item.id;
-    this.editForm.patchValue({
-      ticketNumero: item.ticketNumero,
-      ticketFechaApertura: item.ticketFechaApertura,
-      ticketFechaResolucion: item.ticketFechaResolucion,
-      respuestaEstado: item.respuestaEstado,
-      respuestaTipo: item.respuestaTipo,
-      respuestaNumero: item.respuestaNumero,
-      respuestaFecha: item.respuestaFecha,
-      notificacionFecha: item.notificacionFecha,
-      dispositivoModelo: item.dispositivoModelo,
-      dispositivoSerie: item.dispositivoSerie,
-      observaciones: item.observaciones
-    });
-  }
-
-  guardarItem(): void {
-    if (this.editingItemId && this.editForm.valid) {
-      const index = this.items.findIndex(item => item.id === this.editingItemId);
-      if (index !== -1) {
-        const formValue = this.editForm.value;
-        this.items[index] = {
-          ...this.items[index],
-          ...formValue
-        };
-        this.editingItemId = null;
-        this.editForm.reset();
-      }
-    }
-  }
-
-  cancelarEdicion(): void {
-    this.editingItemId = null;
-    this.editForm.reset();
-  }
-
-  formatearFecha(fecha: Date | null): string {
-    if (!fecha) return '-';
-    return new Date(fecha).toLocaleDateString('es-MX', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-  }
-
-  // Getters para FormControls con tipo correcto
-  get ticketNumeroControl(): FormControl {
-    return this.editForm.get('ticketNumero') as FormControl;
-  }
-
-  get ticketFechaAperturaControl(): FormControl {
-    return this.editForm.get('ticketFechaApertura') as FormControl;
-  }
-
-  get ticketFechaResolucionControl(): FormControl {
-    return this.editForm.get('ticketFechaResolucion') as FormControl;
-  }
-
-  get respuestaEstadoControl(): FormControl {
-    return this.editForm.get('respuestaEstado') as FormControl;
-  }
-
-  get respuestaTipoControl(): FormControl {
-    return this.editForm.get('respuestaTipo') as FormControl;
-  }
-
-  get respuestaNumeroControl(): FormControl {
-    return this.editForm.get('respuestaNumero') as FormControl;
-  }
-
-  get respuestaFechaControl(): FormControl {
-    return this.editForm.get('respuestaFecha') as FormControl;
-  }
-
-  get notificacionFechaControl(): FormControl {
-    return this.editForm.get('notificacionFecha') as FormControl;
-  }
-
-  get dispositivoModeloControl(): FormControl {
-    return this.editForm.get('dispositivoModelo') as FormControl;
-  }
-
-  get dispositivoSerieControl(): FormControl {
-    return this.editForm.get('dispositivoSerie') as FormControl;
-  }
-
-
-  get observacionesControl(): FormControl {
-    return this.editForm.get('observaciones') as FormControl;
-  }
-
-  /**
-   * Abrir modal de cierre para llenar los 4 formularios
-   */
-  abrirModalCierre(item: AtencionCierreItem): void {
-    console.log('📋 [AtencionCierre] Abriendo modal de cierre para:', item.expediente);
-    
-    // Obtener datos de cierre existente si hay
-    this.cierreService.obtenerCierrePorAtencion(item.idAtencion).subscribe({
-      next: (response) => {
-        const dialogRef = this.dialog.open(CierreModalComponent, {
-          maxWidth: '95vw',
-          maxHeight: '95vh',
-          panelClass: 'cierre-modal-panel',
-          data: {
-            idAtencion: item.idAtencion,
-            idExpediente: item.idExpediente,
-            expediente: item.expediente,
-            cierreExistente: response.success ? response.data : undefined
-          },
-          disableClose: false
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-          console.log('📋 [AtencionCierre] Modal de cierre cerrado:', result);
-          if (result?.success) {
-            // Recargar datos si se guardó un cierre
-            this.cargarDatos();
-          }
-        });
       },
-      error: (error) => {
-        // Si no existe cierre, abrir modal vacío
-        const dialogRef = this.dialog.open(CierreModalComponent, {
-          maxWidth: '95vw',
-          maxHeight: '95vh',
-          panelClass: 'cierre-modal-panel',
-          data: {
-            idAtencion: item.idAtencion,
-            idExpediente: item.idExpediente,
-            expediente: item.expediente
-          },
-          disableClose: false
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-          console.log('📋 [AtencionCierre] Modal de cierre cerrado:', result);
-          if (result?.success) {
-            this.cargarDatos();
-          }
-        });
-      }
+      error: () => {
+        this.filas = [];
+        this.cargando = false;
+      },
     });
   }
 
-  /**
-   * Abrir modal para ver detalles completos de la atención
-   */
-  abrirModalDetalles(item: AtencionCierreItem): void {
-    console.log('👁️ [AtencionCierre] Abriendo modal de detalles para:', item.expediente);
-    
-    this.dialog.open(DetalleAtencionModalComponent, {
-      maxWidth: '95vw',
-      maxHeight: '95vh',
-      panelClass: 'detalle-modal-panel',
-      data: {
-        idAtencion: item.idAtencion,
-        idExpediente: item.idExpediente,
-        expediente: item.expediente
-      }
+  contar(estado: EstadoCierre): number {
+    return this.filas.filter((f) => f.estado === estado).length;
+  }
+
+  get totalPendientes(): number {
+    return this.filas.length - this.contar('COMPLETO');
+  }
+
+  get filasVisibles(): FilaCierre[] {
+    const q = this.busqueda.trim().toLowerCase();
+    return this.filas.filter((f) => {
+      if (this.vista === 'PENDIENTES' && f.estado === 'COMPLETO') return false;
+      if (this.vista === 'CERRADOS' && f.estado !== 'COMPLETO') return false;
+      if (!q) return true;
+      const e = f.expediente;
+      return [e.expediente, e.oficio, e.referencia_asunto, e.remitente_area]
+        .some((v) => (v || '').toLowerCase().includes(q));
     });
+  }
+
+  etiquetaEstado(estado: EstadoCierre): string {
+    return ETIQUETAS_ESTADO[estado];
+  }
+
+  claseEstado(estado: EstadoCierre): string {
+    return CLASES_ESTADO[estado];
+  }
+
+  estiloTarjeta(estado: EstadoCierre) {
+    return ESTILOS_TARJETA[estado];
+  }
+
+  /** Fechas YYYY-MM-DD del back → DD/MM/YYYY sin pasar por Date (evita desfase de zona horaria). */
+  formatearFecha(valor?: string | null): string {
+    if (!valor) return '—';
+    const [anio, mes, dia] = valor.split('-');
+    return dia && mes && anio ? `${dia}/${mes}/${anio}` : valor;
+  }
+
+  abrirModalCierre(fila: FilaCierre): void {
+    this.dialog
+      .open(CierreModalComponent, {
+        data: { expediente: fila.expediente },
+        maxWidth: '95vw',
+        maxHeight: '95vh',
+        panelClass: 'atencion-modal-panel',
+      })
+      .afterClosed()
+      .subscribe((resultado) => {
+        if (resultado?.success) {
+          this.cargarDatos();
+        }
+      });
   }
 }
-

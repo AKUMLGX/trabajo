@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import {
+  normalizarTextoAPdfBlob,
+  registrarErrorPdf,
+} from '../capture/utils/pdf-bytes.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -79,13 +83,13 @@ export class FileService {
     this.httpClient
       .get(environment.baseUrl + environment.getPdfEndpoint, { params: params, responseType: 'text' })
       .subscribe((data) => {
-        const byteCharacters = atob(data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        let blob: Blob;
+        try {
+          blob = normalizarTextoAPdfBlob(data);
+        } catch (error) {
+          registrarErrorPdf('Descarga getPdf no devolvió un PDF válido', error);
+          return;
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
         const blobURL = URL.createObjectURL(blob);
 
         const link = document.createElement('a');
@@ -106,13 +110,13 @@ export class FileService {
     this.httpClient
       .get(environment.baseUrl + environment.getPdfEndpoint, { params: params, responseType: 'text' })
       .subscribe((data) => {
-        const byteCharacters = atob(data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        let blob: Blob;
+        try {
+          blob = normalizarTextoAPdfBlob(data);
+        } catch (error) {
+          registrarErrorPdf('Impresión getPdf no devolvió un PDF válido', error);
+          return;
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
         const blobURL = URL.createObjectURL(blob);
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';

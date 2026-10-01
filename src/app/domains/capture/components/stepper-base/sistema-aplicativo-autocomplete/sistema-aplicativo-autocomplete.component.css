@@ -1,0 +1,14 @@
+.saa-option-label {
+  color: #27262c !important;
+  -webkit-text-fill-color: #27262c !important;
+}
+
+.saa-option-btn--selected .saa-option-label {
+  color: #3e0065 !important;
+  -webkit-text-fill-color: #3e0065 !important;
+}
+
+.saa-dropdown-item:hover .saa-option-label {
+  color: #3e0065 !important;
+  -webkit-text-fill-color: #3e0065 !important;
+}

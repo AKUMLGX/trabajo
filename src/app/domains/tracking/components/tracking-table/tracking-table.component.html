@@ -1,447 +1,291 @@
 @if ((documents.length > 0 || expedientesTlalcalli.length > 0) && !fileIsOpen && mostrarTabla ) {
-  <div class="mx-4 mb-4">
-    <div class="bg-white rounded-lg shadow-md px-6 py-4 border-l-4" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'border-[#34005b]' : 'border-[#235B4E]'">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="p-2 rounded-lg" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'bg-[#34005b]/10' : 'bg-[#235B4E]/10'">
-            <svg class="w-6 h-6" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-          </div>
-          <div>
-            <h2 class="text-xl font-semibold text-gray-800">Resultados de Búsqueda</h2>
-            <p class="text-sm text-gray-600">
-              <span class="font-noto-sans" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
-                {{ tipoBusqueda === 'Tlalcalli' ? 'Sistema Tlálcalli' : 'Sistema Tlálcalli' }}
-              </span>
-            </p>
-          </div>
-        </div>
-        <div class="text-right">
-          <div class="text-2xl font-noto-sans" [ngClass]="tipoBusqueda === 'Tlalcalli' ? 'text-[#34005b]' : 'text-[#235B4E]'">
-            {{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}
-          </div>
-          <div class="text-xs text-gray-500 uppercase tracking-wide">Expedientes</div>
+  <section class="tl-card overflow-hidden" id="sectionTable">
+    <div class="flex flex-wrap items-center justify-between gap-4 px-5 py-4">
+      <div class="tl-section-title">
+        <span class="tl-section-icon"><span class="icon-font !text-[22px]">table_rows</span></span>
+        <div>
+          <h2 class="tl-section-heading">Resultados de búsqueda</h2>
+          <p class="tl-section-subtitle">Sistema Tlálcalli</p>
         </div>
       </div>
-    </div>
-  </div>
-
-  <section class="py-1 bg-gray-50" id="sectionTable">
-    <div class="w-full mx-auto px-4">
-      <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-xl bg-white border border-gray-200">
-        <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-          <div class="relative w-full hover:after:opacity-100 after:pointer-events-none after:absolute after:right-0 after:top-0 after:z-[1] after:h-full after:w-10 after:bg-gradient-to-l after:from-[#34005b]/15 after:to-transparent after:opacity-0 after:transition-opacity">
-            <div class="max-h-[70vh] overflow-x-auto overflow-y-auto pb-2.5 [scrollbar-color:#34005b_#f3f4f6] [scrollbar-width:thin]">
-              @if (tipoBusqueda === 'Tlalcalli' && expedientesTlalcalli.length > 0) {
-                <table class="min-w-full table-fixed border-collapse">
-                  <thead class="bg-gradient-to-r from-[#34005b] to-[#3e0065]">
-                    <tr>
-                      <th class="w-[90px] px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
-                        Ver
-                      </th>
-
-                      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
-                        Expediente
-                      </th>
-
-                      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
-                        N° Entrada
-                      </th>
-
-                      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
-                        Oficio
-                      </th>
-
-                      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white min-w-[220px]">
-                        Asunto
-                      </th>
-
-                      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
-                        Remitente
-                      </th>
-
-                      <th class="px-4 py-4 text-center text-xs font-semibold tracking-wider text-white">
-                        Fecha Doc.
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody class="divide-y divide-gray-200 bg-white">
-                    @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente) {
-                      <tr class="transition-colors duration-200 hover:bg-gray-50">
-
-                        <td class="px-4 py-4 text-center align-middle">
-                          <div class="flex justify-center">
-                            <button
-                              class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#34005b]/10 text-[#34005b] transition-all duration-200 hover:bg-[#34005b] hover:text-white hover:shadow-md"
-                              (click)="verDetalleExpediente(expediente)"
-                              title="Ver detalle completo">
-                              <span class="icon-font !h-5 !w-5 !text-base">visibility</span>
-                            </button>
-                          </div>
-                        </td>
-
-                        <td class="px-4 py-4 text-center align-middle">
-                          <div class="whitespace-normal break-words text-sm font-semibold text-[#34005b]">
-                            {{ expediente.expediente || '-' }}
-                          </div>
-                        </td>
-
-                        <td class="px-4 py-4 text-center align-middle">
-                          <div class="whitespace-normal break-words text-sm text-gray-700">
-                            {{ expediente.numero_entrada_central || '-' }}
-                          </div>
-                        </td>
-
-                        <td class="px-4 py-4 text-center align-middle">
-                          <div class="whitespace-normal break-words text-sm text-gray-700">
-                            {{ expediente.oficio || '-' }}
-                          </div>
-                        </td>
-
-                        <td class="px-4 py-4 text-center align-middle">
-                          <div
-                            class="mx-auto max-w-xs whitespace-normal break-words text-sm text-gray-700 line-clamp-2"
-                            [title]="expediente.referencia_asunto || ''">
-                            {{ expediente.referencia_asunto || '-' }}
-                          </div>
-                        </td>
-
-                        <td class="px-4 py-4 text-center align-middle">
-                          <div
-                            class="mx-auto max-w-xs whitespace-normal break-words text-sm text-gray-700"
-                            [title]="expediente.remitente_area">
-                            {{ expediente.remitente_area || '-' }}
-                          </div>
-                        </td>
-
-                        <td class="px-4 py-4 text-center align-middle">
-                          <div class="whitespace-nowrap text-sm text-gray-700">
-                            {{ expediente.fecha_documento ? (formatearFecha(expediente.fecha_documento)) : '-' }}
-                          </div>
-                        </td>
-
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              }
-
-              <!-- TABLA PARA ASUNTOS AKAMBA (original) -->
-              @if (tipoBusqueda !== 'Tlalcalli' && documents.length > 0) {
-                <table class="min-w-full border-collapse bg-white">
-                  <thead>
-                    <tr>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "VER" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Folio Interno" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Carpeta de Investigación" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Oficio" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Persona Relacionada" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Documento" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Atención" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Administración" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Fecha Recepción" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Fecha Captura" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Descripción" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Autoridad Remitente" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Tipo" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Turno Jefatura" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Folio Scanner" }}
-                      </th>
-                      <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 tracking-wider">
-                        {{ "Plazo de Atención" }}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (document of pages[pageSelected - 1]; track $index) {
-                      <tr>
-                        <td class="px-2 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
-                          <div>
-                            <div class="flex justify-evenly gap-2">
-                              @if(document.documento_escaneado !== null) {
-                                @if(getExtension(document.documento_escaneado) === 'pdf')
-                                  {
-                                  <button mat-button (click)="openPdfViewer(document.folio_interno, document.documento_escaneado)"
-                                    class="text-wine leading-5">
-                                    <span class="icon-font">remove_red_eye</span>
-                                  </button>
-                                } @else if (getExtension(document.documento_escaneado) ===
-                                  'msg') {
-                                  <button mat-button (click)="openMsgReader(document.folio_interno, document.documento_escaneado)"
-                                    class="text-wine leading-5">
-                                    <span class="icon-font">remove_red_eye</span>
-                                  </button>
-                                  } @if(getExtension(document.documento_escaneado) ===
-                                  'pdf') {
-                                  <button mat-button (click)="printPdf(document.folio_interno, document.documento_escaneado)"
-                                    class="text-wine leading-5">
-                                    <span class="icon-font" style="margin-left: 5px">print</span>
-                                  </button>
-                                }
-                              }
-                              @if (getRol() === "SIAT_AKAMBA_002_SUPERVISA"){
-                                <button mat-button class="text-wine leading-5" (click)="updateTable(document)"
-                                  (click)="seleccionarFila(document)">
-                                  <span class="icon-font" style="margin-left: 5px;">edit_note</span>
-                                </button>
-                              }
-
-                              @if (getRol() === "SIAT_AKAMBA_001_CAPTURA") {
-                                <button mat-button class="text-wine leading-5" (click)="updateTable(document)"
-                                  (click)="seleccionarFila(document)">
-                                  <span class="icon-font">info</span>
-                                </button>
-                              }
-                            </div>
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.folio_interno }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.carpeta_investigacion }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left ">
-                            {{ document.oficio }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.persona_relacionada }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine  text-left">
-                            {{ document.documento }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm  leading-5 text-wine text-left">
-                            {{ document.atencion }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.administracion }}
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.fecha_recepcion }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.fecha_captura }}
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 ">
-                          <div class="text-sm leading-5 text-wine text-left ">
-                            <p>
-                              @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
-                                {{document.descripcion | slice: 0 : 25}}
-                                <button
-                                  class="font-semibold text-[#34005b] underline decoration-[#34005b] transition hover:text-[#d6ae67]"
-                                  (click)="toggleExpansion($index) "> Leer más
-                                  <strong class="points ">...</strong> </button>
-                                  }@else if (document.descripcion !== null && document.descripcion.length <= 24){ <p>
-                                  {{document.descripcion}}
-                                </p>
-                              }
-                            </p>
-                            @if ( document.descripcion !== null && document.descripcion.length >= 24 && index === $index){
-                              <p [ngClass]="{'h-20 w-[30rem]': isExpanded, 'hidden': !isExpanded} "
-                                [ngStyle]="{'overflow-y': isExpanded ? 'auto' : 'visible', 'height': isExpanded ? '200px' : 'auto'}">
-                                {{document.descripcion}}
-                              </p>
-                              <button class="button-read-more  font-semibold " (click)="closeExpansion(-1)">Leer menos</button>
-                            }
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.autoridad_remitente }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine  text-left">
-                            {{ document.tipo }}
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.turno_jefatura }}
-                          </div>
-                        </td>
-                        <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine">
-                            {{ document.folio_scanner }}
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                          <div class="text-sm leading-5 text-wine text-left">
-                            {{ document.plazo_atencion }}
-                          </div>
-                        </td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              }
-            </div>
-          </div>
-          <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-4 work-sans">
-            <div>
-              @if ((tipoBusqueda === 'Tlalcalli' && pagesExpedientes.length > 0) || (tipoBusqueda !== 'Tlalcalli' && pages.length > 0)) {
-                <ul>
-                  @if (tipoBusqueda === 'Tlalcalli') {
-                    @for (
-                      item of expedientesTlalcalli
-                      | paginate
-                      : {
-                      itemsPerPage: itemsPerPage,
-                      currentPage: pageSelected
-                    }
-                    ; track
-                    item) {
-                    <li></li>
-                  }
-                } @else {
-                  @for (
-                    item of documents
-                    | paginate
-                    : {
-                    itemsPerPage: itemsPerPage,
-                    currentPage: pageSelected
-                  }
-                  ; track
-                  item) {
-                  <li></li>
-                }
-              }
-            </ul>
-            <div
-              class="text-center
-              [&_.ngx-pagination_.current]:!rounded-[10px]
-              [&_.ngx-pagination_.current]:!bg-gradient-to-br
-            [&_.ngx-pagination_.current]:!from-[#34005b]
-            [&_.ngx-pagination_.current]:!to-[#3e0065]
-              [&_.ngx-pagination_.current]:!font-noto-sans
-            [&_.ngx-pagination_.current]:!text-white
-              [&_.ngx-pagination_.current]:!shadow-[0_4px_12px_rgba(52,0,91,0.3)]
-              [&_.ngx-pagination_li_a]:!rounded-lg
-            [&_.ngx-pagination_li_a]:!text-[#34005b]
-              [&_.ngx-pagination_li_a]:!transition-all
-              [&_.ngx-pagination_li:hover_a]:!rounded-[10px]
-              [&_.ngx-pagination_li:hover_a]:!bg-gradient-to-br
-            [&_.ngx-pagination_li:hover_a]:!from-[#34005b]
-            [&_.ngx-pagination_li:hover_a]:!to-[#3e0065]
-            [&_.ngx-pagination_li:hover_a]:!text-white">
-              <pagination-controls
-                (pageChange)="pageSelected = $event"
-                [nextLabel]="labels.nextLabel"
-                [previousLabel]="labels.previousLabel">
-              </pagination-controls>
-            </div>
-          }
-        </div>
-      </div>
-      <div class="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4 px-4">
-        <div class="flex items-center gap-3 bg-gradient-to-r from-[#34005b]/10 to-[#3e0065]/10 px-6 py-3 rounded-lg border border-[#34005b]/20">
-          <svg class="w-5 h-5 text-[#34005b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          <p class="text-sm text-gray-700">
-            Mostrando
-            <span class="font-noto-sans text-[#34005b]">{{ (pageSelected - 1) * itemsPerPage + 1 }}</span>
-            a
-            <span class="font-noto-sans text-[#34005b]">{{
-              tipoBusqueda === 'Tlalcalli'
-              ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlalcalli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlalcalli.length)
-              : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
-            }}</span>
-            de
-            <span class="font-noto-sans text-[#34005b]">{{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}</span>
-            expedientes
-          </p>
-        </div>
-
-        <button
-          (click)="getDownloadExcel()"
-          class="flex items-center gap-2 bg-gradient-to-r from-[#34005b] to-[#3e0065] text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:from-[#d6ae67] hover:to-[#dbb872] hover:text-[#34005b]">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          <span>Descargar Excel</span>
+      <div class="flex items-center gap-3">
+        <span class="tl-chip tl-chip-primary">
+          {{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }} expediente(s)
+        </span>
+        <button type="button" (click)="getDownloadExcel()" class="tl-btn-secondary tl-btn-sm">
+          <span class="icon-font !text-[18px]">download</span>
+          Descargar Excel
         </button>
       </div>
     </div>
-  </div>
-  {{ scrollToTable() }}
-</div>
-</section>
-}@else if(!fileIsOpen && mostrarTabla) {
-<div class="flex flex-col items-center justify-center py-16 px-4">
-  <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-12 max-w-md w-full shadow-lg border border-gray-200">
-    <div class="flex flex-col items-center text-center">
-      <div class="mb-6 p-4 bg-white rounded-full shadow-md">
-        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-        </svg>
-      </div>
-      <h3 class="text-xl font-noto-sans text-gray-800 mb-2">
-        No se encontraron resultados
-      </h3>
-      <p class="text-gray-600 mb-6">
-        No hay expedientes que coincidan con los criterios de búsqueda especificados.
-      </p>
-      <div class="bg-blue-50 rounded-lg p-4 w-full border border-blue-100">
-        <p class="text-sm text-blue-800 font-noto-sans mb-2">💡 Sugerencias:</p>
-        <ul class="text-xs text-blue-700 text-left space-y-1">
-          <li>• Verifica los filtros aplicados</li>
-          <li>• Intenta con criterios más amplios</li>
-          <li>• Revisa la ortografía de la búsqueda</li>
-        </ul>
-      </div>
+
+    <div class="tl-table-scroll">
+      @if (tipoBusqueda === 'Tlalcalli' && expedientesTlalcalli.length > 0) {
+        <table class="tl-table tl-table-consulta">
+          <thead>
+            <tr>
+              <th class="tl-col-acciones text-center">Acc.</th>
+              <th class="tl-col-expediente">Expediente</th>
+              <th class="tl-col-entrada">N° Ent.</th>
+              <th class="tl-col-oficio">Oficio</th>
+              <th class="tl-col-servicio">Servicio</th>
+              <th class="tl-col-asunto">Asunto</th>
+              <th class="tl-col-remitente">Remitente</th>
+              <th class="tl-col-fecha" title="Fecha documento">Doc.</th>
+              <th class="tl-col-fecha" title="Fecha recepción">Rec.</th>
+              <th class="tl-col-fecha" title="Fecha vencimiento">Venc.</th>
+              <th class="tl-col-prioridad">Prioridad</th>
+              <th class="tl-col-estatus">Estatus</th>
+              <th class="tl-col-responsable">Responsable</th>
+              <th class="tl-col-ubicacion">Ubicación</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (expediente of (pagesExpedientes[pageSelected - 1] || []); track expediente.id_expediente + '-' + expediente.oficio) {
+              <tr>
+                <td>
+                  <div class="flex items-center justify-center gap-1.5">
+                    <button type="button" class="tl-icon-btn-ghost h-8 w-8" (click)="verDetalleExpediente(expediente)" title="Ver detalle completo">
+                      <span class="icon-font !text-[16px]">visibility</span>
+                    </button>
+                    <button type="button" class="tl-icon-btn h-8 w-8 bg-tlalcalli-gold/20 text-tlalcalli-primary hover:bg-tlalcalli-gold" (click)="editarExpediente(expediente)" title="Editar expediente">
+                      <span class="icon-font !text-[16px]">edit</span>
+                    </button>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="tl-ellipsis font-semibold text-tlalcalli-deep" [title]="tituloCelda(expediente.expediente)">
+                    {{ valorTabla(expediente.expediente) }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="tl-ellipsis" [title]="tituloCelda(expediente.numero_entrada_central)">{{ valorTabla(expediente.numero_entrada_central) }}</span>
+                </td>
+
+                <td>
+                  <span class="tl-ellipsis" [title]="tituloCelda(expediente.oficio)">{{ valorTabla(expediente.oficio) }}</span>
+                </td>
+
+                <td>
+                  <span class="tl-ellipsis" [title]="tituloCelda(expediente.servicio)">{{ valorTabla(expediente.servicio) }}</span>
+                </td>
+
+                <td>
+                  @if (expediente.referencia_asunto?.trim()) {
+                    <span class="tl-ellipsis" [title]="expediente.referencia_asunto!">{{ valorTabla(expediente.referencia_asunto) }}</span>
+                  } @else {
+                    <span class="text-tlalcalli-gray">-</span>
+                  }
+                </td>
+
+                <td>
+                  @if (expediente.remitente_area?.trim()) {
+                    <span class="tl-ellipsis" [title]="expediente.remitente_area!">{{ valorTabla(expediente.remitente_area) }}</span>
+                  } @else {
+                    <span class="text-tlalcalli-gray">-</span>
+                  }
+                </td>
+
+                <td>
+                  <span class="tl-fecha" [title]="formatearFecha(expediente.fecha_documento)">
+                    {{ expediente.fecha_documento ? formatearFechaCorta(expediente.fecha_documento) : '-' }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="tl-fecha" [title]="formatearFecha(expediente.fecha_recibido)">
+                    {{ expediente.fecha_recibido ? formatearFechaCorta(expediente.fecha_recibido) : '-' }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="tl-fecha" [title]="formatearFecha(expediente.fecha_vencimiento)">
+                    {{ expediente.fecha_vencimiento ? formatearFechaCorta(expediente.fecha_vencimiento) : '-' }}
+                  </span>
+                </td>
+
+                <td>
+                  @if (expediente.prioridad?.trim()) {
+                    <span [class]="claseBadgePrioridad(expediente.prioridad) + ' inline-block max-w-full truncate align-middle'" [title]="tituloCelda(expediente.prioridad)">
+                      {{ etiquetaCortaPrioridad(expediente.prioridad) }}
+                    </span>
+                  } @else {
+                    <span class="text-tlalcalli-gray">-</span>
+                  }
+                </td>
+
+                <td>
+                  @if (expediente.estatus?.trim()) {
+                    <span [class]="claseBadgeEstatus(expediente.estatus) + ' inline-block max-w-full truncate align-middle'" [title]="tituloCelda(expediente.estatus)">
+                      {{ valorTabla(expediente.estatus) }}
+                    </span>
+                  } @else {
+                    <span class="text-tlalcalli-gray">-</span>
+                  }
+                </td>
+
+                <td>
+                  <span class="tl-ellipsis" [title]="tituloCelda(expediente.responsable)">{{ valorTabla(expediente.responsable) }}</span>
+                </td>
+
+                <td>
+                  <span class="tl-ellipsis" [title]="tituloCelda(expediente.ubicacion)">{{ valorTabla(expediente.ubicacion) }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
+      <!-- TABLA PARA ASUNTOS AKAMBA (original) -->
+      @if (tipoBusqueda !== 'Tlalcalli' && documents.length > 0) {
+        <table class="tl-table min-w-[1600px]">
+          <thead>
+            <tr>
+              <th>Ver</th>
+              <th>Folio Interno</th>
+              <th>Carpeta de Investigación</th>
+              <th>Oficio</th>
+              <th>Persona Relacionada</th>
+              <th>Documento</th>
+              <th>Atención</th>
+              <th>Administración</th>
+              <th>Fecha Recepción</th>
+              <th>Fecha Captura</th>
+              <th>Descripción</th>
+              <th>Autoridad Remitente</th>
+              <th>Tipo</th>
+              <th>Turno Jefatura</th>
+              <th>Folio Scanner</th>
+              <th>Plazo de Atención</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (document of pages[pageSelected - 1]; track $index) {
+              <tr>
+                <td>
+                  <div class="flex justify-evenly gap-2">
+                    @if(document.documento_escaneado !== null) {
+                      @if(getExtension(document.documento_escaneado) === 'pdf') {
+                        <button type="button" (click)="openPdfViewer(document.folio_interno, document.documento_escaneado)" class="tl-icon-btn-ghost h-8 w-8" title="Ver documento">
+                          <span class="icon-font !text-[16px]">visibility</span>
+                        </button>
+                      } @else if (getExtension(document.documento_escaneado) === 'msg') {
+                        <button type="button" (click)="openMsgReader(document.folio_interno, document.documento_escaneado)" class="tl-icon-btn-ghost h-8 w-8" title="Ver correo">
+                          <span class="icon-font !text-[16px]">visibility</span>
+                        </button>
+                      }
+                      @if(getExtension(document.documento_escaneado) === 'pdf') {
+                        <button type="button" (click)="printPdf(document.folio_interno, document.documento_escaneado)" class="tl-icon-btn-ghost h-8 w-8" title="Imprimir">
+                          <span class="icon-font !text-[16px]">print</span>
+                        </button>
+                      }
+                    }
+                    @if (getRol() === "SIAT_AKAMBA_002_SUPERVISA"){
+                      <button type="button" class="tl-icon-btn-ghost h-8 w-8" (click)="updateTable(document)" (click)="seleccionarFila(document)" title="Editar">
+                        <span class="icon-font !text-[16px]">edit_note</span>
+                      </button>
+                    }
+                    @if (getRol() === "SIAT_AKAMBA_001_CAPTURA") {
+                      <button type="button" class="tl-icon-btn-ghost h-8 w-8" (click)="updateTable(document)" (click)="seleccionarFila(document)" title="Información">
+                        <span class="icon-font !text-[16px]">info</span>
+                      </button>
+                    }
+                  </div>
+                </td>
+                <td class="font-semibold text-tlalcalli-deep">{{ document.folio_interno }}</td>
+                <td>{{ document.carpeta_investigacion }}</td>
+                <td>{{ document.oficio }}</td>
+                <td>{{ document.persona_relacionada }}</td>
+                <td>{{ document.documento }}</td>
+                <td>{{ document.atencion }}</td>
+                <td>{{ document.administracion }}</td>
+                <td>{{ document.fecha_recepcion }}</td>
+                <td>{{ document.fecha_captura }}</td>
+                <td>
+                  @if (document.descripcion !==null && document.descripcion.length >= 24 && $index !== index ){
+                    {{document.descripcion | slice: 0 : 25}}
+                    <button type="button" class="font-semibold text-tlalcalli-primary underline hover:text-tlalcalli-dark-gold" (click)="toggleExpansion($index)">Leer más...</button>
+                  } @else if (document.descripcion !== null && document.descripcion.length <= 24) {
+                    {{document.descripcion}}
+                  }
+                  @if ( document.descripcion !== null && document.descripcion.length >= 24 && index === $index){
+                    <p [ngClass]="{'h-20 w-[30rem]': isExpanded, 'hidden': !isExpanded}"
+                      [ngStyle]="{'overflow-y': isExpanded ? 'auto' : 'visible', 'height': isExpanded ? '200px' : 'auto'}">
+                      {{document.descripcion}}
+                    </p>
+                    <button type="button" class="font-semibold text-tlalcalli-primary underline" (click)="closeExpansion(-1)">Leer menos</button>
+                  }
+                </td>
+                <td>{{ document.autoridad_remitente }}</td>
+                <td>{{ document.tipo }}</td>
+                <td>{{ document.turno_jefatura }}</td>
+                <td>{{ document.folio_scanner }}</td>
+                <td>{{ document.plazo_atencion }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
     </div>
-  </div>
-</div>
+
+    <div class="flex flex-col items-center justify-between gap-3 border-t border-tlalcalli-light-base/70 px-5 py-4 sm:flex-row">
+      <p class="m-0 font-noto-sans text-xs text-tlalcalli-gray">
+        Mostrando
+        <strong class="text-tlalcalli-deep">{{ (pageSelected - 1) * itemsPerPage + 1 }}</strong>
+        a
+        <strong class="text-tlalcalli-deep">{{
+          tipoBusqueda === 'Tlalcalli'
+          ? ((pageSelected - 1) * itemsPerPage + itemsPerPage < expedientesTlalcalli.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : expedientesTlalcalli.length)
+          : ((pageSelected - 1) * itemsPerPage + itemsPerPage < documents.length ? (pageSelected - 1) * itemsPerPage + itemsPerPage : documents.length)
+        }}</strong>
+        de
+        <strong class="text-tlalcalli-deep">{{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}</strong>
+        expedientes
+      </p>
+
+      @if ((tipoBusqueda === 'Tlalcalli' && pagesExpedientes.length > 0) || (tipoBusqueda !== 'Tlalcalli' && pages.length > 0)) {
+        <ul class="hidden">
+          @if (tipoBusqueda === 'Tlalcalli') {
+            @for (item of expedientesTlalcalli | paginate : { itemsPerPage: itemsPerPage, currentPage: pageSelected }; track item) {
+              <li></li>
+            }
+          } @else {
+            @for (item of documents | paginate : { itemsPerPage: itemsPerPage, currentPage: pageSelected }; track item) {
+              <li></li>
+            }
+          }
+        </ul>
+        <div class="font-noto-sans text-sm
+          [&_.ngx-pagination]:!m-0
+          [&_.ngx-pagination_.current]:!rounded-lg
+          [&_.ngx-pagination_.current]:!bg-tlalcalli-primary
+          [&_.ngx-pagination_.current]:!text-white
+          [&_.ngx-pagination_li_a]:!rounded-lg
+          [&_.ngx-pagination_li_a]:!text-tlalcalli-primary
+          [&_.ngx-pagination_li_a]:!transition-colors
+          [&_.ngx-pagination_li:hover_a]:!bg-tlalcalli-light-lavender">
+          <pagination-controls
+            (pageChange)="pageSelected = $event"
+            [nextLabel]="labels.nextLabel"
+            [previousLabel]="labels.previousLabel">
+          </pagination-controls>
+        </div>
+      }
+    </div>
+    {{ scrollToTable() }}
+  </section>
+} @else if (!fileIsOpen && mostrarTabla) {
+  <section class="tl-card tl-empty">
+    <span class="tl-empty-icon"><span class="icon-font !text-[30px]">search_off</span></span>
+    <h3 class="m-0 font-noto-sans text-base font-semibold text-tlalcalli-deep">No se encontraron resultados</h3>
+    <p class="m-0 mt-1.5 max-w-[420px] font-noto-sans text-sm text-tlalcalli-gray">
+      No hay expedientes que coincidan con los criterios de búsqueda. Verifica los filtros, intenta con criterios más amplios o revisa la ortografía.
+    </p>
+  </section>
 }
 @if (visualizarPdf) {
   <app-pdf-viewer id="sectionPDF" (showTablePDF)="mostrarTable()" />

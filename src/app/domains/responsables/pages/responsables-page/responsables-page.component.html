@@ -1,51 +1,25 @@
-<div class="relative min-h-screen bg-tlalcalli-light-cream">
+<div class="relative min-h-full bg-tlalcalli-light-cream">
 
-  <header class="relative overflow-hidden bg-tlalcalli-primary">
-    <div class="mx-auto max-w-[1400px] px-6 pb-12 pt-9 md:px-9 md:pb-14">
-      <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-
-        <div class="flex items-center gap-5 md:gap-6">
-          <div class="flex h-[60px] w-[60px] items-center justify-center rounded-2xl border border-white/20 bg-tlalcalli-lavender text-white shadow-lg md:h-[72px] md:w-[72px] md:rounded-[20px]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-8 w-8 md:h-9 md:w-9">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 6v6l4 2" />
-              <path d="M4.93 4.93l14.14 14.14" opacity="0" />
-            </svg>
-          </div>
-
-          <div>
-            <h1 class="m-0 text-[26px] font-noto-sans tracking-[-0.5px] text-white md:text-[32px]">
-              Centro de Control
-            </h1>
-            <p class="mt-2 text-sm font-noto-sans text-white/80 md:text-base">
-              Monitoreo y atención de expedientes asignados
-            </p>
-          </div>
+  <header class="tl-page-header">
+    <div class="tl-page-header-inner">
+      <div class="flex items-center gap-5">
+        <div class="tl-page-icon">
+          <span class="icon-font !text-[32px]">pending_actions</span>
         </div>
-
-        <div class="flex w-full items-center gap-4 rounded-2xl bg-tlalcalli-lavender px-5 py-4 shadow-md md:w-auto md:px-6">
-          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-tlalcalli-light-2 text-tlalcalli-deep">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6">
-              <rect x="3" y="4" width="18" height="18" rx="2" />
-              <path d="M16 2v4M8 2v4M3 10h18" />
-            </svg>
-          </div>
-
-          <div class="flex flex-col">
-            <!-- <span class="text-[11px] font-noto-sans uppercase tracking-[1px] text-tlalcalli-light-base">
-              Hoy
-            </span> -->
-            <span class="mt-1 text-sm font-noto-sans text-white md:text-[15px]">
-              {{ fechaActual }}
-            </span>
-          </div>
+        <div>
+          <h1 class="tl-page-title">Seguimiento y Asignación</h1>
+          <p class="tl-page-subtitle">Seguimiento puntual del proceso de atención de cada requerimiento</p>
         </div>
+      </div>
 
+      <div class="tl-page-chip">
+        <span class="icon-font !text-[22px] text-tlalcalli-gold">calendar_month</span>
+        <span class="font-noto-sans text-sm text-white">{{ fechaActual }}</span>
       </div>
     </div>
   </header>
 
-  <main class="relative z-[1] mx-auto -mt-7 max-w-[1400px] px-5 pb-9 md:px-7 md:pb-14">
+  <main class="tl-page-body">
     <app-responsables-table></app-responsables-table>
   </main>
 

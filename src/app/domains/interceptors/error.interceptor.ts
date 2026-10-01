@@ -30,6 +30,9 @@ export const errorInterceptor: HttpInterceptorFn = (
       // No mostrar modal para POST/PUT de expedientes - el componente maneja los errores
       const isExpedienteRequest = request.url.includes('expedientes') && 
                                    (request.method === 'POST' || request.method === 'PUT');
+
+      // Borradores temporales: el servicio/stepper manejan UUID obsoleto sin modal global
+      const isTemporalRequest = request.url.includes('temporal/');
       
       if (err.status !== 401) {
         // Solo mostrar modal si no es una petición especial
@@ -37,6 +40,7 @@ export const errorInterceptor: HttpInterceptorFn = (
                                 !isTlalcalli404 && 
                                 !is409Conflict &&
                                 !isExpedienteRequest &&
+                                !isTemporalRequest &&
                                 !(isFileCheckRequest && err.status === 404);
         
         if (shouldShowModal) {
@@ -83,7 +87,7 @@ export const errorInterceptor: HttpInterceptorFn = (
             })
           );
       }
-      return throwError(() => new Error(err.statusText));
+      return throwError(() => err);
     })
   );
 };

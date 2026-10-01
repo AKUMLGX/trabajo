@@ -1,0 +1,153 @@
+.oficio-adjunto-form {
+  margin: 1rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid rgba(230, 227, 220, 0.7);
+  box-shadow: 0 1px 3px rgba(62, 0, 101, 0.06);
+  display: flex;
+  flex-direction: column;
+  min-height: min-content;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.oficio-adjunto-form--edicion {
+  border-left: 3px solid #d6ae67;
+}
+
+.aviso {
+  margin: 0 0 0.875rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 164, 0, 0.12);
+  color: #a86c00;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.aviso--ok {
+  background: rgba(0, 179, 122, 0.1);
+  color: #00805a;
+}
+
+.aviso--info {
+  background: #f9f5fb;
+  color: #5d337c;
+}
+
+.oficio-seccion {
+  margin-bottom: 1.125rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(230, 227, 220, 0.8);
+}
+
+.oficio-seccion:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.oficio-seccion-titulo {
+  margin: 0 0 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #977dab;
+}
+
+.oficio-adjunto-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .oficio-adjunto-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .span-completo {
+    grid-column: 1 / -1;
+  }
+}
+
+.input-invalido {
+  border-color: #f41b1d !important;
+}
+
+.campo-error {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #b81416;
+}
+
+.pdf-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  border: 2px dashed #e6e3dc;
+  border-radius: 1rem;
+  background: #fff;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.pdf-dropzone:hover,
+.pdf-dropzone--activo {
+  border-color: #977dab;
+  background: #f9f5fb;
+}
+
+.pdf-dropzone-texto {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #27262c;
+  text-align: center;
+}
+
+.pdf-dropzone-link {
+  cursor: pointer;
+  font-weight: 600;
+  color: #3e0065;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pdf-dropzone-ayuda {
+  font-size: 0.6875rem;
+  color: #7f7d7b;
+}
+
+.pdf-seleccionado {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  background: rgba(214, 174, 103, 0.12);
+}
+
+.pdf-seleccionado-nombre {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #230142;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pdf-seleccionado small {
+  font-size: 0.6875rem;
+  color: #7f7d7b;
+}
+
+.pdf-seleccionado--existente {
+  background: #f9f5fb;
+}

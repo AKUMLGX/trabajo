@@ -1,0 +1,139 @@
+<form class="oficio-adjunto-form" [class.oficio-adjunto-form--edicion]="esEdicion" [formGroup]="formulario" (ngSubmit)="onSubmit()">
+  <header class="mb-4 flex items-start justify-between gap-3">
+    <div class="tl-section-title">
+      <span class="tl-section-icon"><span class="icon-font !text-[20px]">{{ esEdicion ? 'edit_document' : 'note_add' }}</span></span>
+      <div>
+        <h4 class="tl-section-heading">{{ tituloFormulario }}</h4>
+        <p class="tl-section-subtitle">{{ subtituloFormulario }}</p>
+      </div>
+    </div>
+    @if (esEdicion) {
+      <span class="tl-chip tl-chip-warning">Modo edición</span>
+    }
+  </header>
+
+  @if (mensajeApi) {
+    <p class="aviso" [class.aviso--ok]="mensajeApi.includes('servidor') || mensajeApi.includes('actualiz')">
+      {{ mensajeApi }}
+    </p>
+  }
+
+  @if (esEdicion && enServidor) {
+    <p class="aviso aviso--info">
+      Los cambios de texto se guardan en servidor. Para cambiar el PDF, seleccione un archivo nuevo.
+    </p>
+  }
+
+  <div class="mb-2">
+    <section class="oficio-seccion">
+      <h5 class="oficio-seccion-titulo">Datos del oficio</h5>
+      <div class="oficio-adjunto-grid">
+        <div class="span-completo">
+          <label for="num_oficio" class="tl-label">Oficio / Atenta nota</label>
+          <input
+            id="num_oficio"
+            type="text"
+            class="tl-input"
+            [class.input-invalido]="campoInvalido('num_oficio')"
+            formControlName="num_oficio"
+            placeholder="Ej. COM-2026-001"
+            autocomplete="off" />
+          @if (campoInvalido('num_oficio')) {
+            <span class="campo-error">Ingrese el oficio / atenta nota</span>
+          }
+        </div>
+
+        <div>
+          <label for="fecha_documento" class="tl-label">Fecha del documento</label>
+          <input id="fecha_documento" type="date" class="tl-input" formControlName="fecha_documento" aria-label="Fecha del documento" />
+        </div>
+
+        <div>
+          <label for="fecha_recepcion" class="tl-label">Fecha de recepción</label>
+          <input id="fecha_recepcion" type="date" class="tl-input" formControlName="fecha_recepcion" aria-label="Fecha de recepción" />
+        </div>
+
+        <div>
+          <label for="fecha_vencimiento" class="tl-label">Fecha de vencimiento</label>
+          <input id="fecha_vencimiento" type="date" class="tl-input" formControlName="fecha_vencimiento" aria-label="Fecha de vencimiento" />
+        </div>
+
+        <div class="span-completo">
+          <label for="asunto" class="tl-label">Asunto / Referencia</label>
+          <textarea
+            id="asunto"
+            class="tl-input !h-auto min-h-[84px] resize-y py-2.5"
+            formControlName="asunto"
+            rows="3"
+            placeholder="Asunto o referencia del oficio"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="oficio-seccion">
+      <h5 class="oficio-seccion-titulo">Documento PDF</h5>
+      <div>
+        <label class="tl-label">Archivo PDF @if (esEdicion) { <span class="font-medium text-tlalcalli-gray">(opcional al editar)</span> }</label>
+        <div
+          class="pdf-dropzone"
+          [class.pdf-dropzone--activo]="pdfArrastrando"
+          (dragover)="onPdfDragOver($event)"
+          (dragleave)="onPdfDragLeave($event)"
+          (drop)="onPdfDrop($event)"
+        >
+          <span class="tl-section-icon"><span class="icon-font !text-[22px]">upload_file</span></span>
+          <p class="pdf-dropzone-texto">
+            @if (pdfArrastrando) {
+              Suelta el PDF aquí
+            } @else {
+              Arrastra el PDF aquí o
+              <label class="pdf-dropzone-link">
+                haz clic para seleccionar
+                <input type="file" class="hidden" accept="application/pdf,.pdf" (change)="onArchivoSeleccionado($event)" />
+              </label>
+            }
+          </p>
+          <small class="pdf-dropzone-ayuda">
+            @if (esEdicion) {
+              Deje el PDF actual o seleccione uno nuevo para reemplazarlo.
+            } @else {
+              Sólo PDF. Obligatorio.
+            }
+          </small>
+        </div>
+
+        @if (pdfNombreMostrado) {
+          <div class="pdf-seleccionado" [class.pdf-seleccionado--existente]="pdfExistente && !pdfSeleccionado">
+            <span class="icon-font !text-[20px] text-tlalcalli-primary">picture_as_pdf</span>
+            <div class="min-w-0 flex-1">
+              <p class="pdf-seleccionado-nombre">{{ pdfNombreMostrado }}</p>
+              <small>
+                @if (pdfExistente && !pdfSeleccionado) {
+                  PDF actual del oficio
+                } @else {
+                  Listo para agregar al expediente
+                }
+              </small>
+            </div>
+            @if (pdfSeleccionado || !esEdicion) {
+              <button type="button" class="tl-btn-danger tl-btn-sm !h-8" (click)="limpiarArchivo()">Quitar</button>
+            }
+          </div>
+        }
+
+        @if (pdfError) {
+          <span class="campo-error">{{ pdfError }}</span>
+        }
+      </div>
+    </section>
+  </div>
+
+  <div class="flex shrink-0 justify-end gap-2.5 border-t border-tlalcalli-light-base pt-4">
+    <button type="button" class="tl-btn-secondary tl-btn-sm" (click)="onCancelar()" [disabled]="guardando">
+      Cancelar
+    </button>
+    <button type="submit" class="tl-btn-primary tl-btn-sm" [disabled]="guardando">
+      {{ textoBotonGuardar }}
+    </button>
+  </div>
+</form>

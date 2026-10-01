@@ -1,16 +1,17 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterModule } from '@angular/router';
-import { NgApexchartsModule, ChartComponent, ApexChart, ApexNonAxisChartSeries, ApexAxisChartSeries, ApexXAxis, ApexYAxis, ApexPlotOptions, ApexFill, ApexStroke, ApexDataLabels, ApexLegend, ApexResponsive, ApexTitleSubtitle, ApexGrid, ApexTooltip } from 'ng-apexcharts';
+import { RouterLink } from '@angular/router';
+import { NgApexchartsModule, ApexChart, ApexNonAxisChartSeries, ApexAxisChartSeries, ApexXAxis, ApexYAxis, ApexPlotOptions, ApexFill, ApexStroke, ApexDataLabels, ApexLegend, ApexResponsive, ApexTitleSubtitle, ApexGrid, ApexTooltip } from 'ng-apexcharts';
 import { interval, Subscription } from 'rxjs';
-import { DashboardService, DashboardCompleto, ExpedienteCritico } from '../../services/dashboard.service';
-import { FolioCardsComponent } from '../../../responsables/components/folio-cards/folio-cards/folio-cards.component';
-import { FolioCard, EstadisticoAtencionResponse } from '../../../interfaces/foliocard.interface';
-import { ApiService } from '../../../capture/services/api.service';
-import { HttpResponse } from '@angular/common/http';
+import { DashboardService } from '../../services/dashboard.service';
+import { DashboardPanelFacade } from '../../services/dashboard-panel.facade';
+import { PanelDatos, formatearDuracion } from '../../services/dashboard-panel.utils';
+import { PermissionsService } from '../../../services/permissions.service';
+import { DashboardBandejaCardsComponent } from '../../components/dashboard-bandeja-cards/dashboard-bandeja-cards.component';
+import { DashboardCriticosAlertasComponent } from '../../components/dashboard-criticos-alertas/dashboard-criticos-alertas.component';
+import { DashboardReportesBarComponent } from '../../components/dashboard-reportes-bar/dashboard-reportes-bar.component';
 // Tipos para los gráficos
 export type ChartOptions = {
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -34,44 +35,40 @@ export type ChartOptions = {
     selector: 'app-dashboard-page',
     imports: [
         CommonModule,
-        MatIconModule,
-        MatProgressSpinnerModule,
         MatTooltipModule,
-        RouterModule,
+        RouterLink,
         NgApexchartsModule,
-        FolioCardsComponent
+        DashboardBandejaCardsComponent,
+        DashboardCriticosAlertasComponent,
+        DashboardReportesBarComponent
     ],
-    templateUrl: './dashboard-page.component.html',
-    styleUrl: './dashboard-page.component.css'
+    templateUrl: './dashboard-page.component.html'
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {
-  @ViewChild('chartEstatus') chartEstatus!: ChartComponent;
-  @ViewChild('chartResponsables') chartResponsables!: ChartComponent;
-  @ViewChild('chartTendencia') chartTendencia!: ChartComponent;
-  @ViewChild('chartSemaforo') chartSemaforo!: ChartComponent;
+  readonly panel = signal<PanelDatos | null>(null);
+  readonly cargando = signal(true);
+  readonly error = signal<string | null>(null);
 
-  dashboard: DashboardCompleto | null = null;
-  cargando = true;
-  error: string | null = null;
-  ultimaActualizacion: Date = new Date();
+  readonly puedeExportar = toSignal(inject(PermissionsService).canAccessBandeja('reportes'), { initialValue: false });
 
   // Opciones de los gráficos
   chartEstatusOptions!: Partial<ChartOptions>;
   chartResponsablesOptions!: Partial<ChartOptions>;
   chartTendenciaOptions!: Partial<ChartOptions>;
   chartSemaforoOptions!: Partial<ChartOptions>;
-  chartTipoAccionOptions!: Partial<ChartOptions>;
-
-  foliosCards: FolioCard[] = [];
+  chartTipoAccionOptions?: Partial<ChartOptions>;
+  tendenciaConAtendidos = false;
 
   private refreshSubscription?: Subscription;
+  private cargaSubscription?: Subscription;
 
-  constructor(private dashboardService: DashboardService, private apiService: ApiService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private panelFacade: DashboardPanelFacade
+  ) {}
 
   ngOnInit(): void {
-    this.cargarEstadisticosAtencion();
     this.cargarDatos();
-    // Auto-refresh cada 60 segundos
     this.refreshSubscription = interval(60000).subscribe(() => {
       this.cargarDatos(true);
     });
@@ -79,39 +76,41 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.refreshSubscription?.unsubscribe();
+    this.cargaSubscription?.unsubscribe();
   }
 
   cargarDatos(silencioso = false): void {
     if (!silencioso) {
-      this.cargando = true;
+      this.cargando.set(true);
     }
 
-    this.dashboardService.obtenerEstadisticas().subscribe({
-      next: (data) => {
-        this.dashboard = data;
-        this.ultimaActualizacion = new Date();
-        this.configurarGraficos();
-        this.cargando = false;
-        this.error = null;
+    this.cargaSubscription?.unsubscribe();
+    this.cargaSubscription = this.panelFacade.cargarPanel().subscribe({
+      next: (datos) => {
+        this.configurarGraficos(datos);
+        this.panel.set(datos);
+        this.error.set(null);
+        this.cargando.set(false);
       },
       error: (err) => {
-        console.error('Error cargando dashboard:', err);
-        this.error = 'Error al cargar las estadísticas';
-        this.cargando = false;
+        console.error('Error cargando panel estadístico:', err);
+        this.error.set('Error al cargar las estadísticas');
+        this.cargando.set(false);
       }
     });
   }
 
-  private configurarGraficos(): void {
-    if (!this.dashboard) return;
+  private configurarGraficos(p: PanelDatos): void {
+    const g = p.graficas;
+    const semaforo = p.kpis.semaforo;
 
     // Gráfico de Estatus (Donut)
     this.chartEstatusOptions = {
-      series: this.dashboard.por_estatus.map(e => e.cantidad),
+      series: g.porEstatus.map(e => e.cantidad),
       chart: {
         type: 'donut',
-        height: 320,
-        fontFamily: 'Montserrat, sans-serif',
+        height: 360,
+        fontFamily: 'Noto Sans, sans-serif',
         animations: {
           enabled: true,
           speed: 800
@@ -124,8 +123,8 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           opacity: 0.2
         }
       },
-      labels: this.dashboard.por_estatus.map(e => this.dashboardService.getLabelEstatus(e.estatus)),
-      colors: ['#691C32', '#8B2A44', '#C9A227', '#235B4E', '#10B981', '#6366F1', '#F59E0B'],
+      labels: g.porEstatus.map(e => this.dashboardService.getLabelEstatus(e.estatus)),
+      colors: ['#3E0065', '#977DAB', '#D6AE67', '#5D337C', '#00B37A', '#8540B9', '#FFA400'],
       plotOptions: {
         pie: {
           donut: {
@@ -141,14 +140,14 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
                 show: true,
                 fontSize: '24px',
                 fontWeight: 700,
-                color: '#1a1a1a'
+                color: '#230142'
               },
               total: {
                 show: true,
                 label: 'Total',
                 fontSize: '14px',
                 fontWeight: 600,
-                color: '#6b7280'
+                color: '#7F7D7B'
               }
             }
           }
@@ -161,6 +160,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         position: 'bottom',
         fontSize: '13px',
         fontWeight: 500,
+        height: 56,
         markers: {
         }
       },
@@ -181,16 +181,16 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     this.chartResponsablesOptions = {
       series: [{
         name: 'Pendientes',
-        data: this.dashboard.por_responsable.slice(0, 6).map(r => r.pendientes)
+        data: g.porResponsable.slice(0, 6).map(r => r.pendientes)
       }, {
         name: 'Atendidos',
-        data: this.dashboard.por_responsable.slice(0, 6).map(r => r.atendidos)
+        data: g.porResponsable.slice(0, 6).map(r => r.atendidos)
       }],
       chart: {
         type: 'bar',
         height: 320,
         stacked: true,
-        fontFamily: 'Montserrat, sans-serif',
+        fontFamily: 'Noto Sans, sans-serif',
         toolbar: { show: false },
         animations: {
           enabled: true,
@@ -213,7 +213,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           }
         }
       },
-      colors: ['#F59E0B', '#10B981'],
+      colors: ['#FFA400', '#00B37A'],
       dataLabels: {
         enabled: false
       },
@@ -222,7 +222,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         colors: ['#fff']
       },
       xaxis: {
-        categories: this.dashboard.por_responsable.slice(0, 6).map(r => 
+        categories: g.porResponsable.slice(0, 6).map(r => 
           r.responsable.length > 15 ? r.responsable.substring(0, 15) + '...' : r.responsable
         ),
         labels: {
@@ -244,7 +244,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         fontSize: '12px'
       },
       grid: {
-        borderColor: '#f0f0f0',
+        borderColor: '#E6E3DC',
         strokeDashArray: 4
       },
       tooltip: {
@@ -255,19 +255,18 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     };
 
     // Gráfico de Tendencia (Area)
-    const tendenciaData = this.dashboard.tendencia_semanal.reverse();
+    const tendenciaData = g.tendencia;
+    this.tendenciaConAtendidos = tendenciaData.some(t => t.atendidos > 0);
+    const seriesTendencia = [{ name: 'Capturados', data: tendenciaData.map(t => t.creados) }];
+    if (this.tendenciaConAtendidos) {
+      seriesTendencia.push({ name: 'Atendidos', data: tendenciaData.map(t => t.atendidos) });
+    }
     this.chartTendenciaOptions = {
-      series: [{
-        name: 'Creados',
-        data: tendenciaData.map(t => t.creados)
-      }, {
-        name: 'Atendidos',
-        data: tendenciaData.map(t => t.atendidos)
-      }],
+      series: seriesTendencia,
       chart: {
         type: 'area',
         height: 300,
-        fontFamily: 'Montserrat, sans-serif',
+        fontFamily: 'Noto Sans, sans-serif',
         toolbar: { show: false },
         zoom: { enabled: false },
         animations: {
@@ -275,7 +274,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           speed: 800
         }
       },
-      colors: ['#691C32', '#10B981'],
+      colors: ['#3E0065', '#00B37A'],
       dataLabels: {
         enabled: false
       },
@@ -301,6 +300,9 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         }
       },
       yaxis: {
+        min: 0,
+        forceNiceScale: true,
+        decimalsInFloat: 0,
         labels: {
           style: {
             fontSize: '11px'
@@ -313,7 +315,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         fontSize: '12px'
       },
       grid: {
-        borderColor: '#f0f0f0',
+        borderColor: '#E6E3DC',
         strokeDashArray: 4
       },
       tooltip: {
@@ -324,19 +326,14 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     };
 
     // Gráfico de Semáforo (Radial)
-    const totalSemaforo = this.dashboard.semaforo.en_tiempo + this.dashboard.semaforo.atencion + 
-                          this.dashboard.semaforo.urgente + this.dashboard.semaforo.vencido;
+    const valoresSemaforo = [semaforo.en_tiempo, semaforo.atencion, semaforo.urgente, semaforo.vencido];
+    const totalSemaforo = valoresSemaforo.reduce((acc, v) => acc + v, 0);
     this.chartSemaforoOptions = {
-      series: [
-        totalSemaforo > 0 ? Math.round((this.dashboard.semaforo.en_tiempo / totalSemaforo) * 100) : 0,
-        totalSemaforo > 0 ? Math.round((this.dashboard.semaforo.atencion / totalSemaforo) * 100) : 0,
-        totalSemaforo > 0 ? Math.round((this.dashboard.semaforo.urgente / totalSemaforo) * 100) : 0,
-        totalSemaforo > 0 ? Math.round((this.dashboard.semaforo.vencido / totalSemaforo) * 100) : 0
-      ],
+      series: valoresSemaforo.map(v => totalSemaforo > 0 ? Math.round((v / totalSemaforo) * 100) : 0),
       chart: {
         type: 'radialBar',
         height: 320,
-        fontFamily: 'Montserrat, sans-serif',
+        fontFamily: 'Noto Sans, sans-serif',
         animations: {
           enabled: true,
           speed: 800
@@ -362,8 +359,8 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           }
         }
       },
-      colors: ['#10B981', '#F59E0B', '#EF4444', '#1F2937'],
-      labels: ['En Tiempo', 'Atención', 'Urgente', 'Vencido'],
+      colors: ['#00B37A', '#FFA400', '#F41B1D', '#27262C'],
+      labels: ['En tiempo (0-24 h)', 'Atención (24-48 h)', 'Urgente (48-72 h)', 'Vencido (+72 h)'],
       legend: {
         show: true,
         position: 'bottom',
@@ -371,16 +368,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         fontWeight: 500,
         markers: {
         },
-        formatter: (seriesName: string, opts: any) => {
-          const idx = opts.seriesIndex;
-          const valores = [
-            this.dashboard?.semaforo.en_tiempo || 0,
-            this.dashboard?.semaforo.atencion || 0,
-            this.dashboard?.semaforo.urgente || 0,
-            this.dashboard?.semaforo.vencido || 0
-          ];
-          return `${seriesName}: ${valores[idx]}`;
-        }
+        formatter: (seriesName: string, opts: any) => `${seriesName}: ${valoresSemaforo[opts.seriesIndex] ?? 0}`
       },
       responsive: [{
         breakpoint: 480,
@@ -391,19 +379,20 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     };
 
     // Gráfico de Tipo de Acción (Bar vertical)
-    if (this.dashboard.por_tipo_accion.length > 0) {
+    this.chartTipoAccionOptions = undefined;
+    if (g.porTipoAccion.length > 0) {
       this.chartTipoAccionOptions = {
         series: [{
           name: 'Total',
-          data: this.dashboard.por_tipo_accion.map(t => t.cantidad)
+          data: g.porTipoAccion.map(t => t.cantidad)
         }, {
           name: 'Urgentes',
-          data: this.dashboard.por_tipo_accion.map(t => t.urgentes)
+          data: g.porTipoAccion.map(t => t.urgentes)
         }],
         chart: {
           type: 'bar',
           height: 280,
-          fontFamily: 'Montserrat, sans-serif',
+          fontFamily: 'Noto Sans, sans-serif',
           toolbar: { show: false },
           animations: {
             enabled: true,
@@ -419,18 +408,18 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
             }
           }
         },
-        colors: ['#691C32', '#EF4444'],
+        colors: ['#3E0065', '#F41B1D'],
         dataLabels: {
           enabled: true,
           offsetY: -20,
           style: {
             fontSize: '11px',
             fontWeight: 700,
-            colors: ['#1a1a1a']
+            colors: ['#230142']
           }
         },
         xaxis: {
-          categories: this.dashboard.por_tipo_accion.map(t => 
+          categories: g.porTipoAccion.map(t => 
             this.dashboardService.getLabelTipoAccion(t.tipo_accion)
           ),
           labels: {
@@ -454,28 +443,15 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           fontSize: '12px'
         },
         grid: {
-          borderColor: '#f0f0f0',
+          borderColor: '#E6E3DC',
           strokeDashArray: 4
         }
       };
     }
   }
 
-  // Helpers para la vista
-  getColorEstatus(estatus: string): string {
-    const colores: { [key: string]: string } = {
-      'ASIGNADO': 'asignado',
-      'PENDIENTE': 'pendiente',
-      'EN_ATENCION': 'en-atencion',
-      'RECHAZADO': 'rechazado',
-      'ATENCION_TOTAL': 'atendido',
-      'REVISION_LEGAL': 'revision'
-    };
-    return colores[estatus] || 'default';
-  }
-
   formatearHoras(horas: number): string {
-    return this.dashboardService.formatearHoras(horas);
+    return formatearDuracion(horas);
   }
 
   getLabelEstatus(estatus: string): string {
@@ -486,108 +462,9 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     this.cargarDatos();
   }
 
-
-cargarEstadisticosAtencion(): void {
-  this.apiService
-    .getEstadisticosAtencion<EstadisticoAtencionResponse[]>()
-    .subscribe({
-      next: (response: HttpResponse<EstadisticoAtencionResponse[]>) => {
-        const data = response.body ?? [];
-        this.foliosCards = this.mapearFoliosCards(data);
-      },
-      error: (error: unknown) => {
-        console.error('ERROR ESTADÍSTICOS ATENCIÓN:', error);
-        this.foliosCards = [];
-      }
-    });
-}
-
-private mapearFoliosCards(data: EstadisticoAtencionResponse[]): FolioCard[] {
-  const mapa = new Map<string, FolioCard>();
-
-  data.forEach(item => {
-    const actual = mapa.get(item.acronimo);
-
-    if (!actual) {
-      mapa.set(item.acronimo, {
-        acronimo: item.acronimo,
-        titulo: this.obtenerTituloPorAcronimo(item.acronimo),
-        total: item.consecutivo,
-        ultimo_folio: item.ultimo_folio,
-        descripcion: this.obtenerDescripcionPorAcronimo(item.acronimo),
-        icono: this.obtenerIconoPorAcronimo(item.acronimo)
-      });
-
-      return;
-    }
-
-    if (item.consecutivo > actual.total) {
-      actual.total = item.consecutivo;
-    }
-
-    if (this.obtenerNumeroFolio(item.ultimo_folio) > this.obtenerNumeroFolio(actual.ultimo_folio || '')) {
-      actual.ultimo_folio = item.ultimo_folio;
-    }
-  });
-
-  return Array.from(mapa.values());
-}
-
-private obtenerNumeroFolio(folio: string): number {
-  const partes = folio.split('-');
-  return Number(partes[2]) || 0;
-}
-
-private obtenerTituloPorAcronimo(acronimo: string): string {
-  const titulos: Record<string, string> = {
-    AI: 'Adquisición de Información',
-    RIF: 'Reporte de Investigación Forense',
-    DAF: 'Dictamen de Análisis Forense',
-    DPA: 'Dictamen Pericial Auxiliar',
-    DJN: 'Dictamen Jurídico Normativo',
-    DFP: 'Dictamen Forense Pericial',
-    RG: 'Reporte General',
-    RR: 'Reporte de Recuperación',
-    RDD: 'Reporte de Destrucción de Dispositivos'
-  };
-
-  return titulos[acronimo] || acronimo;
-}
-
-private obtenerDescripcionPorAcronimo(acronimo: string): string {
-  const descripciones: Record<string, string> = {
-    AI: 'Acta de Hechos, Cadena de Custodia, Memoria Técnica y No Aplica',
-    RIF: 'Reporte de Investigación Forense',
-    DAF: 'Dictamen de Análisis Forense',
-    DPA: 'Dictamen Pericial Auxiliar',
-    DJN: 'Dictamen Jurídico Normativo',
-    DFP: 'Dictamen Forense Pericial',
-    RG: 'Reporte General',
-    RR: 'Reporte de Recuperación',
-    RDD: 'Reporte de Destrucción de Dispositivos'
-  };
-
-  return descripciones[acronimo] || 'Sin descripción';
-}
-
-private obtenerIconoPorAcronimo(acronimo: string): string {
-  const iconos: Record<string, string> = {
-    AI: 'assignment',
-    RIF: 'manage_search',
-    DAF: 'description',
-    DPA: 'fact_check',
-    DJN: 'gavel',
-    DFP: 'policy',
-    RG: 'summarize',
-    RR: 'restore_page',
-    RDD: 'delete_sweep'
-  };
-
-  return iconos[acronimo] || 'confirmation_number';
-}
-
-
-
+  porcentaje(valor: number, total: number): string {
+    return total > 0 ? `${Math.round((valor / total) * 100)}%` : '0%';
+  }
 }
 
 

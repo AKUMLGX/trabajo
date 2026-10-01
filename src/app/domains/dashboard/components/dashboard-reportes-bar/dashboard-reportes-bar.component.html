@@ -1,0 +1,39 @@
+<section class="tl-card p-5">
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div class="tl-section-title">
+      <span class="tl-section-icon bg-tlalcalli-gold/20 text-tlalcalli-dark-gold"><span class="icon-font !text-[22px]">summarize</span></span>
+      <div>
+        <h2 class="tl-section-heading">Reportes</h2>
+        <p class="tl-section-subtitle">
+          @if (puedeExportar) {
+            Descarga el detalle de expedientes o el resumen de este panel con la fecha y hora de generación
+          } @else {
+            Tu rol no tiene permiso para generar reportes; solicita el acceso al administrador
+          }
+        </p>
+      </div>
+    </div>
+
+    @if (puedeExportar) {
+      <div class="flex flex-wrap gap-3">
+        <button type="button" class="tl-btn-secondary" (click)="descargarResumen()">
+          <span class="icon-font !text-[18px]">table_view</span>
+          Resumen del panel (CSV)
+        </button>
+        <button type="button" class="tl-btn-primary" (click)="descargarExcel()" [disabled]="descargandoExcel()">
+          <span class="icon-font !text-[18px]" [class.animate-spin]="descargandoExcel()">{{ descargandoExcel() ? 'progress_activity' : 'download' }}</span>
+          Expedientes (Excel)
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (mensaje(); as m) {
+    <p class="m-0 mt-4 flex items-center gap-1.5 font-noto-sans text-xs font-medium"
+      [class.text-tlalcalli-success-muted]="m.tipo === 'ok'"
+      [class.text-tlalcalli-error-muted]="m.tipo === 'error'">
+      <span class="icon-font !text-[16px]">{{ m.tipo === 'ok' ? 'check_circle' : 'error' }}</span>
+      {{ m.texto }}
+    </p>
+  }
+</section>

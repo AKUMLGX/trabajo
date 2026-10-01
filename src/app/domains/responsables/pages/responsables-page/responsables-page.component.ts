@@ -7,8 +7,7 @@ import { ResponsablesTableComponent } from '../../components/responsables-table/
     imports: [
     ResponsablesTableComponent
 ],
-    templateUrl: './responsables-page.component.html',
-    styleUrl: './responsables-page.component.css'
+    templateUrl: './responsables-page.component.html'
 })
 export class ResponsablesPageComponent implements OnInit {
   fechaActual: string = '';

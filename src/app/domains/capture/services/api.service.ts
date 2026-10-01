@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -15,27 +15,35 @@ export class ApiService {
   return `${base.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
 }
 
-  getData<T>(endpoint: string,useCatalogos = false): Observable<HttpResponse<T>> {
-    return this.http.get<T>(
-      this.buildUrl(endpoint, useCatalogos),
-      {
-        observe: 'response',
-      }
-    );
+  getData<T>(
+    endpoint: string,
+    useCatalogos = false,
+    skipLoader = false
+  ): Observable<HttpResponse<T>> {
+    const headers = skipLoader
+      ? new HttpHeaders({ 'X-Skip-Loader': 'true' })
+      : undefined;
+
+    return this.http.get<T>(this.buildUrl(endpoint, useCatalogos), {
+      observe: 'response',
+      headers,
+    });
   }
 
 postData<T>(
   endpoint: string,
   body: object,
-  useCatalogos = false
+  useCatalogos = false,
+  skipLoader = false
 ): Observable<HttpResponse<T>> {
-  return this.http.post<T>(
-    this.buildUrl(endpoint, useCatalogos),
-    body,
-    {
-      observe: 'response'
-    }
-  );
+  const headers = skipLoader
+    ? new HttpHeaders({ 'X-Skip-Loader': 'true' })
+    : undefined;
+
+  return this.http.post<T>(this.buildUrl(endpoint, useCatalogos), body, {
+    observe: 'response',
+    headers,
+  });
 }
 
   postDataForBase64(
@@ -113,19 +121,47 @@ postData<T>(
   }
 
   //ENDPOINTS MODULO DE CAPTURA STEPPER
-  postTemporal<T>(endpoint: string, body: object): Observable<HttpResponse<T>> {
+  private temporalHeaders(skipErrorHandler = true): HttpHeaders {
+    let headers = new HttpHeaders({ 'X-Skip-Loader': 'true' });
+
+    if (skipErrorHandler) {
+      headers = headers.set('X-Skip-Error-Handler', 'true');
+    }
+
+    return headers;
+  }
+
+  postTemporal<T>(
+    endpoint: string,
+    body: object,
+    skipErrorHandler = true
+  ): Observable<HttpResponse<T>> {
     return this.http.post<T>(this.buildUrl(endpoint), body, {
       observe: 'response',
+      headers: this.temporalHeaders(skipErrorHandler),
     });
   }
 
   deleteTemporal<T>(
     endpoint: string,
     body: object,
+    skipErrorHandler = true
   ): Observable<HttpResponse<T>> {
     return this.http.delete<T>(this.buildUrl(endpoint), {
       body,
       observe: 'response',
+      headers: this.temporalHeaders(skipErrorHandler),
+    });
+  }
+
+  putTemporal<T>(
+    endpoint: string,
+    body: object,
+    skipErrorHandler = true
+  ): Observable<HttpResponse<T>> {
+    return this.http.put<T>(this.buildUrl(endpoint), body, {
+      observe: 'response',
+      headers: this.temporalHeaders(skipErrorHandler),
     });
   }
 

@@ -1,279 +1,557 @@
-<div class="detalle-modal">
+<div class="tl-modal detalle-modal">
 
-  <header class="detalle-header">
-    <div class="detalle-header-main">
-      <p class="detalle-eyebrow">Expediente 360</p>
-      <div class="detalle-titulo-row">
-        <h2>{{ detalle?.expediente || data.expediente.expediente || 'Expediente' }}</h2>
-        @if (detalle) {
-          <span class="chip chip-estatus">{{ detalle.estatus }}</span>
-          <span class="chip chip-prioridad">{{ detalle.prioridad }}</span>
-        }
+  <header class="tl-modal-header !py-4">
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex min-w-0 items-center gap-4">
+        <span class="tl-modal-icon"><span class="icon-font !text-[24px]">folder_open</span></span>
+        <div class="min-w-0">
+          <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-white/70">Número de expediente</p>
+          <h2 class="m-0 break-words font-noto-sans text-lg font-semibold leading-tight">{{ numeroExpedienteHeader() }}</h2>
+        </div>
       </div>
-      @if (detalle && detalle.oficio !== 'N/A') {
-        <span class="detalle-badge">Oficio: {{ detalle.oficio }}</span>
-      }
-      @if (detalle?.asunto) {
-        <p class="detalle-asunto">{{ detalle!.asunto }}</p>
-      }
+      <button type="button" class="tl-modal-close" (click)="cerrar()" aria-label="Cerrar">
+        <span class="icon-font !text-[20px]">close</span>
+      </button>
     </div>
-    <button type="button" class="btn-icono" (click)="cerrar()" aria-label="Cerrar">✕</button>
   </header>
 
   @if (cargando) {
     <div class="detalle-estado">
-      <div class="spinner"></div>
+      <div class="tl-spinner"></div>
       <p>Cargando información del expediente...</p>
     </div>
   } @else if (errorCarga || !detalle) {
     <div class="detalle-estado">
+      <span class="tl-empty-icon !mb-0 bg-tlalcalli-error/10 text-tlalcalli-error-muted"><span class="icon-font !text-[28px]">error</span></span>
       <p>No se pudo cargar el detalle del expediente.</p>
     </div>
   } @else {
 
     <div class="detalle-split">
 
-      <!-- Columna izquierda: toda la información capturada -->
       <aside class="detalle-panel detalle-panel-datos">
         <div class="panel-datos-titulo">
+          <span class="tl-section-icon !h-8 !w-8 !rounded-lg"><span class="icon-font !text-[18px]">description</span></span>
           <h3>Información del expediente</h3>
         </div>
 
         <div class="panel-datos-scroll">
-          <section class="detalle-seccion">
-            <div class="detalle-grid">
-              <div class="campo-detalle">
-                <span class="label">Expediente</span>
-                <span class="valor valor-destacado">{{ detalle.expediente }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Oficio</span>
-                <span class="valor">{{ detalle.oficio }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Tipo de medio de recepción</span>
-                <span class="valor">{{ detalle.tipo_medio_recepcion }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Servicio</span>
-                <span class="valor">{{ detalle.servicio }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Número entrada central</span>
-                <span class="valor">{{ detalle.numero_entrada_central }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Remitente</span>
-                <span class="valor">{{ detalle.remitente }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Fecha del documento</span>
-                <span class="valor">{{ detalle.fecha_documento }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Fecha de recepción</span>
-                <span class="valor">{{ detalle.fecha_recepcion }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Fecha de vencimiento</span>
-                <span class="valor">{{ detalle.fecha_vencimiento }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Prioridad</span>
-                <span class="valor">{{ detalle.prioridad }}</span>
-              </div>
-              <div class="campo-detalle campo-completo">
-                <span class="label">Asunto / Referencia</span>
-                <span class="valor valor-multilinea">{{ detalle.asunto }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Sistema / Aplicativo</span>
-                <span class="valor">{{ detalle.aplicativos }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Responsable</span>
-                <span class="valor">{{ detalle.responsable }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Estatus</span>
-                <span class="valor">{{ detalle.estatus }}</span>
-              </div>
-              <div class="campo-detalle">
-                <span class="label">Ubicación</span>
-                <span class="valor">{{ detalle.ubicacion }}</span>
-              </div>
-              <div class="campo-detalle campo-completo">
-                <span class="label">Observaciones</span>
-                <span class="valor valor-multilinea">{{ detalle.observaciones }}</span>
-              </div>
+          <section class="detalle-seccion detalle-seccion-oficio">
+            <div class="seccion-oficio-header">
+              <h4 class="seccion-oficio-titulo">Oficio y fechas</h4>
+              @if (esExpedienteRework && !editandoOficioPrincipal) {
+                <button
+                  type="button"
+                  class="tl-btn-secondary tl-btn-sm !h-8"
+                  (click)="iniciarEditarOficioPrincipal()"
+                  aria-label="Editar oficio del expediente">
+                  <span class="icon-font !text-[16px]">edit</span>
+                  Editar oficio
+                </button>
+              }
             </div>
+
+            @if (mensajeOficioPrincipal && !editandoOficioPrincipal) {
+              <p
+                class="aviso-oficio-principal"
+                [class.aviso-oficio-principal--exito]="mensajeOficioPrincipalTipo === 'exito'"
+                [class.aviso-oficio-principal--error]="mensajeOficioPrincipalTipo === 'error'">
+                {{ mensajeOficioPrincipal }}
+              </p>
+            }
+
+            @if (editandoOficioPrincipal) {
+              <form
+                class="oficio-principal-form"
+                [formGroup]="formOficioPrincipal"
+                (ngSubmit)="guardarOficioPrincipal()">
+                @if (mensajeOficioPrincipal) {
+                  <p
+                    class="aviso-oficio-principal"
+                    [class.aviso-oficio-principal--exito]="mensajeOficioPrincipalTipo === 'exito'"
+                    [class.aviso-oficio-principal--error]="mensajeOficioPrincipalTipo === 'error'">
+                    {{ mensajeOficioPrincipal }}
+                  </p>
+                }
+
+                <div class="campo-detalle campo-detalle--contexto">
+                  <span class="label">Número de expediente</span>
+                  <span class="valor valor-contexto">{{ valorMostrar(detalle.expediente) }}</span>
+                </div>
+
+                <div class="oficio-principal-form-grid">
+                  <div class="campo-detalle campo-detalle--completo">
+                    <app-custom-form-field
+                      label="Oficio / Atenta nota"
+                      formControlName="num_oficio"
+                      [required]="true"
+                      [errorMessage]="oficioPrincipalInvalido ? 'Ingrese el oficio / atenta nota' : null">
+                    </app-custom-form-field>
+                  </div>
+
+                  <div class="campo-detalle">
+                    <app-custom-form-field
+                      label="Fecha del documento"
+                      type="date"
+                      formControlName="fecha_documento">
+                    </app-custom-form-field>
+                  </div>
+
+                  <div class="campo-detalle">
+                    <app-custom-form-field
+                      label="Fecha de recepción"
+                      type="date"
+                      formControlName="fecha_recepcion">
+                    </app-custom-form-field>
+                  </div>
+
+                  <div class="campo-detalle">
+                    <app-custom-form-field
+                      label="Fecha de vencimiento"
+                      type="date"
+                      formControlName="fecha_vencimiento">
+                    </app-custom-form-field>
+                  </div>
+
+                  <div class="campo-detalle campo-detalle--completo">
+                    <app-custom-textarea
+                      label="Asunto / Referencia"
+                      formControlName="asunto"
+                      [rows]="3">
+                    </app-custom-textarea>
+                  </div>
+                </div>
+
+                <div class="oficio-principal-acciones">
+                  <button
+                    type="button"
+                    class="tl-btn-secondary tl-btn-sm"
+                    (click)="cancelarEditarOficioPrincipal()"
+                    [disabled]="guardandoOficioPrincipal">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="tl-btn-primary tl-btn-sm" [disabled]="guardandoOficioPrincipal">
+                    {{ guardandoOficioPrincipal ? 'Guardando...' : 'Guardar' }}
+                  </button>
+                </div>
+              </form>
+            } @else {
+              <div class="detalle-grid">
+                <div class="campo-detalle">
+                  <span class="label">Oficio / Atenta nota</span>
+                  <span class="valor">{{ valorMostrar(detalle.oficio) }}</span>
+                </div>
+                <div class="campo-detalle">
+                  <span class="label">Fecha del documento</span>
+                  <span class="valor">{{ formatearFechaDetalle(detalle.fecha_documento) }}</span>
+                </div>
+                <div class="campo-detalle">
+                  <span class="label">Fecha de recepción</span>
+                  <span class="valor">{{ formatearFechaDetalle(detalle.fecha_recepcion) }}</span>
+                </div>
+                <div class="campo-detalle">
+                  <span class="label">Fecha de vencimiento</span>
+                  <span class="valor">{{ formatearFechaDetalle(detalle.fecha_vencimiento) }}</span>
+                </div>
+                <div class="campo-detalle">
+                  <span class="label">Asunto / Referencia</span>
+                  @if (tieneValor(detalle.asunto)) {
+                    <span class="valor valor-multilinea">{{ textoVisible('asunto', detalle.asunto) }}</span>
+                    @if (necesitaTruncado(detalle.asunto)) {
+                      <button type="button" class="btn-ver-mas" (click)="toggleExpandido('asunto')">
+                        {{ estaExpandido('asunto') ? 'Ver menos' : 'Ver más' }}
+                      </button>
+                    }
+                  } @else {
+                    <span class="valor">-</span>
+                  }
+                </div>
+              </div>
+            }
           </section>
 
           <section class="detalle-seccion">
-            <h4 class="subseccion-titulo">Usuarios del requerimiento</h4>
-            @if (detalle.usuarios.length === 0) {
-              <p class="sin-datos">Sin usuarios registrados</p>
-            } @else {
-              <div class="tabla-usuarios">
-                <div class="tabla-usuarios-head">
-                  <span>Nombre</span>
-                  <span>RFC</span>
-                  <span>Tipo</span>
-                </div>
-                @for (usuario of detalle.usuarios; track $index) {
-                  <div class="tabla-usuarios-row">
-                    <span>{{ usuario.nombre || 'N/A' }}</span>
-                    <span>{{ usuario.rfc || 'N/A' }}</span>
-                    <span>{{ usuario.tipo_usuario || 'N/A' }}</span>
-                  </div>
+            <div class="detalle-grid">
+              <div class="campo-detalle">
+                <span class="label">Servicio</span>
+                <span class="valor">{{ valorMostrar(detalle.servicio) }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">No. de entrada</span>
+                <span class="valor">{{ valorMostrar(detalle.numero_entrada_central) }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Remitente (Área)</span>
+                @if (tieneValor(detalle.remitente)) {
+                  <span class="valor">{{ textoVisible('remitente', detalle.remitente) }}</span>
+                  @if (necesitaTruncado(detalle.remitente)) {
+                    <button type="button" class="btn-ver-mas" (click)="toggleExpandido('remitente')">
+                      {{ estaExpandido('remitente') ? 'Ver menos' : 'Ver más' }}
+                    </button>
+                  }
+                } @else {
+                  <span class="valor">-</span>
                 }
               </div>
-            }
+              <div class="campo-detalle">
+                <span class="label">Prioridad</span>
+                @if (tieneValor(detalle.prioridad)) {
+                  <span class="tl-chip tl-chip-neutral w-fit">{{ valorMostrar(detalle.prioridad) }}</span>
+                } @else {
+                  <span class="valor">-</span>
+                }
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Plazo de vencimiento (días hábiles)</span>
+                <span class="valor">{{ valorMostrar(detalle.plazo_vencimiento) }}</span>
+              </div>
+              <div class="campo-detalle campo-usuarios">
+                <span class="label">Usuarios</span>
+                <div class="tabla-usuarios">
+                  <div class="tabla-usuarios-head">
+                    <span>Nombre</span>
+                    <span>RFC</span>
+                    <span>Tipo</span>
+                  </div>
+                  @if (detalle.usuarios.length > 0) {
+                    @for (usuario of detalle.usuarios; track $index) {
+                      <div class="tabla-usuarios-row">
+                        <span>{{ valorMostrar(usuario.nombre) }}</span>
+                        <span>{{ valorMostrar(usuario.rfc) }}</span>
+                        <span>{{ valorMostrar(usuario.tipo_usuario) }}</span>
+                      </div>
+                    }
+                  } @else {
+                    <div class="tabla-usuarios-row tabla-usuarios-vacio">
+                      <span>-</span>
+                      <span>-</span>
+                      <span>-</span>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Aplicativo/Sistema</span>
+                <span class="valor">{{ valorMostrar(detalle.aplicativos) }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Personal responsable</span>
+                <span class="valor">{{ valorMostrar(detalle.responsable) }}</span>
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Estatus</span>
+                @if (tieneValor(detalle.estatus)) {
+                  <span class="tl-chip tl-chip-primary w-fit">{{ valorMostrar(detalle.estatus) }}</span>
+                } @else {
+                  <span class="valor">-</span>
+                }
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Observaciones del estatus</span>
+                @if (tieneValor(detalle.observaciones)) {
+                  <span class="valor valor-multilinea">{{ textoVisible('observaciones', detalle.observaciones) }}</span>
+                  @if (necesitaTruncado(detalle.observaciones)) {
+                    <button type="button" class="btn-ver-mas" (click)="toggleExpandido('observaciones')">
+                      {{ estaExpandido('observaciones') ? 'Ver menos' : 'Ver más' }}
+                    </button>
+                  }
+                } @else {
+                  <span class="valor">-</span>
+                }
+              </div>
+              <div class="campo-detalle">
+                <span class="label">Ubicación</span>
+                <span class="valor">{{ valorMostrar(detalle.ubicacion) }}</span>
+              </div>
+            </div>
           </section>
         </div>
       </aside>
 
-      <!-- Columna derecha: documentos -->
       <main class="detalle-panel detalle-panel-docs">
         <div class="docs-toolbar">
-          <nav class="tabs-docs" aria-label="Documentos del expediente">
-            <button type="button" [class.activo]="tabDocs === 'inicial'" (click)="cambiarTabDocs('inicial')">
+          <nav class="tl-segmented" aria-label="Documentos del expediente">
+            <button type="button" class="tl-segmented-item" [class.tl-segmented-item-active]="tabDocs === 'inicial'" (click)="cambiarTabDocs('inicial')">
+              <span class="icon-font !text-[18px]">article</span>
               Oficio inicial
             </button>
-            <button type="button" [class.activo]="tabDocs === 'adjuntos'" (click)="cambiarTabDocs('adjuntos')">
+            <button type="button" class="tl-segmented-item" [class.tl-segmented-item-active]="tabDocs === 'adjuntos'" (click)="cambiarTabDocs('adjuntos')">
+              <span class="icon-font !text-[18px]">attach_file</span>
               Oficios adjuntos
               @if (oficiosAdjuntos.length > 0) {
-                <span class="badge-count">{{ oficiosAdjuntos.length }}</span>
+                <span class="tl-count">{{ oficiosAdjuntos.length }}</span>
               }
             </button>
           </nav>
-          <button type="button" class="btn-agregar-oficio" (click)="toggleFormularioOficio()">
-            + Agregar oficio
-          </button>
+          @if (tabDocs === 'adjuntos') {
+            <button
+              type="button"
+              class="tl-btn-primary tl-btn-sm ring-tlalcalli-primary/20"
+              [class.ring-4]="modoPanelAdjuntos === 'agregar'"
+              (click)="iniciarAgregarOficio()">
+              <span class="icon-font !text-[18px]">add</span>
+              Agregar oficio
+            </button>
+          }
         </div>
 
-        @if (mostrarFormularioOficio) {
-          <div class="form-oficio-adjunto">
-            <h4>Nuevo oficio adjunto</h4>
-            @if (mensajeOficioApi) {
-              <p class="aviso-api">{{ mensajeOficioApi }}</p>
-            }
-            <div class="form-oficio-grid">
-              <label>
-                <span>Tipo de oficio</span>
-                <select [(ngModel)]="nuevoOficio.tipo">
-                  <option value="SOLICITUD_INFO">Solicitud de información</option>
-                  <option value="COMISION_APOYO">Comisión de apoyo</option>
-                  <option value="OTRO">Otro</option>
-                </select>
-              </label>
-              <label>
-                <span>Número de oficio</span>
-                <input type="text" [(ngModel)]="nuevoOficio.num_oficio" placeholder="Ej. COM-2026-001" />
-              </label>
-              <label>
-                <span>Fecha del documento</span>
-                <input type="date" [(ngModel)]="nuevoOficio.fecha_documento" />
-              </label>
-              <label class="span-completo">
-                <span>Descripción breve</span>
-                <input type="text" [(ngModel)]="nuevoOficio.descripcion" placeholder="Opcional" />
-              </label>
-              <label class="span-completo">
-                <span>Archivo PDF</span>
-                <input type="file" accept="application/pdf,.pdf" (change)="onArchivoOficioSeleccionado($event)" />
-                @if (nuevoOficio.nombre_archivo) {
-                  <small class="archivo-seleccionado">{{ nuevoOficio.nombre_archivo }}</small>
-                }
-              </label>
-            </div>
-            <div class="form-oficio-acciones">
-              <button type="button" class="btn-secundario" (click)="cancelarFormularioOficio()">Cancelar</button>
-              <button type="button" class="btn-primario" (click)="guardarOficioAdjunto()" [disabled]="guardandoOficio">
-                {{ guardandoOficio ? 'Guardando...' : 'Guardar oficio' }}
-              </button>
-            </div>
-          </div>
-        }
-
-        <div class="docs-lista">
-          @if (tabDocs === 'inicial') {
+        @if (tabDocs === 'inicial') {
+          <div class="inicial-layout">
             @if (detalle.tiene_pdf) {
-              <button
-                type="button"
-                class="doc-item"
-                [class.doc-item-activo]="documentoActivo === 'inicial'"
-                (click)="seleccionarDocumentoInicial()">
-                <span class="doc-icono">📄</span>
-                <span class="doc-info">
+              <div class="inicial-doc-banner">
+                <span class="inicial-doc-icono" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </span>
+                <div class="inicial-doc-info">
                   <strong>{{ detalle.documento_pdf_nombre }}</strong>
                   <small>Oficio inicial · Captura</small>
-                </span>
-              </button>
+                </div>
+              </div>
             } @else {
-              <div class="docs-vacio">
-                <span class="pdf-icono">📄</span>
+              <div class="docs-empty-state docs-empty-state--compact">
+                <div class="docs-empty-ilustracion" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" fill="none">
+                    <rect x="16" y="10" width="48" height="60" rx="6" stroke="currentColor" stroke-width="2"/>
+                    <path d="M26 28h28M26 38h20M26 48h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
                 <p>Sin oficio inicial adjunto</p>
                 <small>El PDF de captura aparecerá aquí cuando esté disponible.</small>
               </div>
             }
-          }
 
-          @if (tabDocs === 'adjuntos') {
-            @if (oficiosAdjuntos.length === 0) {
-              <div class="docs-vacio">
-                <span class="pdf-icono">📎</span>
-                <p>Sin oficios adjuntos</p>
-                <small>Use «Agregar oficio» para anexar documentación al expediente.</small>
-              </div>
-            } @else {
-              @for (oficio of oficiosAdjuntos; track $index) {
-                <button
-                  type="button"
-                  class="doc-item"
-                  [class.doc-item-activo]="documentoActivo === $index"
-                  (click)="seleccionarOficioAdjunto($index)">
-                  <span class="doc-icono">📎</span>
-                  <span class="doc-info">
-                    <strong>{{ oficio.num_oficio }}</strong>
-                    <small>{{ etiquetaTipoOficio(oficio.tipo) }} · {{ oficio.nombre_archivo }}</small>
-                  </span>
-                </button>
+            <div class="visor-pdf-panel visor-pdf-panel--inicial">
+              @if (cargandoPdf) {
+                <div class="visor-estado">
+                  <div class="tl-spinner"></div>
+                  <p>Cargando documento...</p>
+                </div>
+              } @else if (mostrarPdf && pdfUrl) {
+                <div class="pdf-viewer-wrap">
+                  <div class="visor-acciones">
+                    <button type="button" class="tl-btn-secondary tl-btn-sm" (click)="descargarDocumentoActivo()"><span class="icon-font !text-[16px]">download</span>Descargar</button>
+                  </div>
+                  <pdf-viewer
+                    [src]="pdfUrl"
+                    [render-text]="true"
+                    [original-size]="false"
+                    (error)="onErrorVisor($event)"
+                    style="width: 100%; height: 100%;">
+                  </pdf-viewer>
+                  @if (errorVisorPdf) {
+                    <p class="visor-error">No se pudo mostrar el PDF: {{ errorVisorPdf }}</p>
+                  }
+                </div>
+              } @else if (detalle.tiene_pdf) {
+                <div class="visor-estado">
+                  <div class="tl-spinner"></div>
+                  <p>Preparando visor...</p>
+                </div>
               }
-            }
-          }
-        </div>
+            </div>
+          </div>
+        }
 
-        <div class="visor-pdf-panel">
-          @if (cargandoPdf) {
-            <div class="visor-estado">
-              <div class="spinner"></div>
-              <p>Cargando documento...</p>
-            </div>
-          } @else if (mostrarPdf && pdfUrl) {
-            <div class="pdf-viewer-wrap">
-              <div class="visor-acciones">
-                <button type="button" class="btn-secundario" (click)="descargarDocumentoActivo()">Descargar</button>
+        @if (tabDocs === 'adjuntos') {
+          <div class="adjuntos-layout">
+            <aside class="adjuntos-sidebar">
+              <div class="adjuntos-sidebar-header">
+                <h4>Lista de oficios</h4>
+                <span class="badge-count-sidebar">{{ oficiosAdjuntos.length }}</span>
               </div>
-              <pdf-viewer
-                [src]="pdfUrl"
-                [render-text]="true"
-                [original-size]="false"
-                style="width: 100%; height: 100%;">
-              </pdf-viewer>
+
+              <div class="adjuntos-lista-scroll">
+                @if (cargandoOficios) {
+                  <div class="adjuntos-empty-sidebar">
+                    <p>Cargando oficios desde servidor...</p>
+                  </div>
+                } @else if (oficiosAdjuntos.length === 0) {
+                  <div class="adjuntos-empty-sidebar">
+                    <span class="adjuntos-empty-icono" aria-hidden="true"><span class="icon-font !text-[26px]">attach_file</span></span>
+                    <p>Sin oficios adjuntos</p>
+                    <small>Use «Agregar oficio» para anexar documentación.</small>
+                  </div>
+                } @else {
+                  @for (oficio of oficiosAdjuntos; track oficio.localId; let i = $index) {
+                    <article
+                      class="adjunto-item"
+                      [class.adjunto-item-activo]="adjuntoSeleccionadoId === oficio.localId && modoPanelAdjuntos === 'ver'">
+                      <button
+                        type="button"
+                        class="adjunto-item-main"
+                        (click)="seleccionarOficioAdjuntoPorId(oficio.localId!)">
+                        <span class="adjunto-item-numero">{{ i + 1 }}</span>
+                        <span class="adjunto-item-icono" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                          </svg>
+                        </span>
+                        <span class="adjunto-item-texto">
+                          <strong>{{ oficio.num_oficio }}</strong>
+                          <small class="adjunto-item-fechas">{{ resumenFechasOficio(oficio) }}</small>
+                          @if (asuntoOficio(oficio)) {
+                            <small class="adjunto-item-asunto">{{ asuntoOficio(oficio) }}</small>
+                          }
+                          @if (oficio.pendiente_endpoint) {
+                            <span class="tl-chip tl-chip-warning w-fit !px-2 !text-[10px] !leading-4">Local</span>
+                          }
+                        </span>
+                      </button>
+                      <div class="adjunto-item-acciones">
+                        <button
+                          type="button"
+                          class="btn-adjunto-accion"
+                          (click)="iniciarEditarOficio(oficio.localId!, $event)"
+                          aria-label="Editar oficio {{ oficio.num_oficio }}">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          class="btn-adjunto-accion btn-adjunto-accion--eliminar"
+                          (click)="eliminarOficioAdjunto(oficio.localId!, $event)"
+                          aria-label="Eliminar oficio {{ oficio.num_oficio }}">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    </article>
+                  }
+                }
+              </div>
+            </aside>
+
+            <div class="adjuntos-contenido">
+              @if (mostrarFormularioOficio) {
+                <app-oficio-adjunto-form
+                  [guardando]="guardandoOficio"
+                  [mensajeApi]="mensajeOficioApi"
+                  [modo]="modoPanelAdjuntos === 'editar' ? 'editar' : 'crear'"
+                  [localIdEdicion]="editandoLocalId"
+                  [enServidor]="editandoOficioEnServidor"
+                  (guardar)="onOficioAdjuntoGuardado($event)"
+                  (cancelar)="cancelarFormularioOficio()">
+                </app-oficio-adjunto-form>
+              } @else if (oficioAdjuntoSeleccionado; as oficio) {
+                <div class="adjunto-detalle-wrap">
+                  <div class="adjunto-detalle-card adjunto-detalle-card--scroll">
+                    <div class="adjunto-detalle-header">
+                      <div>
+                        <p class="adjunto-detalle-etiqueta">Oficio adjunto · #{{ indiceOficioPorLocalId(oficio.localId!) }}</p>
+                        <h3>{{ oficio.num_oficio }}</h3>
+                      </div>
+                      <button
+                        type="button"
+                        class="tl-btn-secondary tl-btn-sm"
+                        (click)="iniciarEditarOficio(oficio.localId!)">
+                        <span class="icon-font !text-[16px]">edit</span>
+                        Editar
+                      </button>
+                    </div>
+
+                    @if (mensajeOficioApi) {
+                      <p class="aviso-sesion">{{ mensajeOficioApi }}</p>
+                    }
+
+                    <section class="adjunto-detalle-seccion">
+                      <div class="adjunto-detalle-grid">
+                        <div class="adjunto-campo">
+                          <span class="label">Oficio / Atenta nota</span>
+                          <span class="valor">{{ valorMostrar(oficio.num_oficio) }}</span>
+                        </div>
+                        <div class="adjunto-campo">
+                          <span class="label">Fecha del documento</span>
+                          <span class="valor">{{ formatearFechaOficio(oficio.fecha_documento) }}</span>
+                        </div>
+                        <div class="adjunto-campo">
+                          <span class="label">Fecha de recepción</span>
+                          <span class="valor">{{ formatearFechaOficio(oficio.fecha_recepcion) }}</span>
+                        </div>
+                        <div class="adjunto-campo">
+                          <span class="label">Fecha de vencimiento</span>
+                          <span class="valor">{{ formatearFechaOficio(oficio.fecha_vencimiento) }}</span>
+                        </div>
+                        <div class="adjunto-campo adjunto-campo--completo">
+                          <span class="label">Asunto / Referencia</span>
+                          <span class="valor valor-multilinea">{{ valorMostrar(asuntoOficio(oficio)) }}</span>
+                        </div>
+                        <div class="adjunto-campo adjunto-campo--completo">
+                          <span class="label">PDF</span>
+                          <span class="valor valor-archivo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            {{ valorMostrar(oficio.nombre_archivo) }}
+                          </span>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+
+                  <div class="visor-pdf-panel visor-pdf-panel--adjunto">
+                    @if (cargandoPdf) {
+                      <div class="visor-estado">
+                        <div class="tl-spinner"></div>
+                        <p>Cargando documento...</p>
+                      </div>
+                    } @else if (mostrarPdf && pdfUrl) {
+                      <div class="pdf-viewer-wrap">
+                        <div class="visor-acciones">
+                          <button type="button" class="tl-btn-secondary tl-btn-sm" (click)="descargarDocumentoActivo()"><span class="icon-font !text-[16px]">download</span>Descargar</button>
+                        </div>
+                        <pdf-viewer
+                          [src]="pdfUrl"
+                          [render-text]="true"
+                          [original-size]="false"
+                          (error)="onErrorVisor($event)"
+                          style="width: 100%; height: 100%;">
+                        </pdf-viewer>
+                        @if (errorVisorPdf) {
+                          <p class="visor-error">No se pudo mostrar el PDF: {{ errorVisorPdf }}</p>
+                        }
+                      </div>
+                    } @else {
+                      <div class="visor-estado">
+                        <span class="pdf-icono"><span class="icon-font !text-[32px]">visibility_off</span></span>
+                        <p>PDF no disponible en esta sesión</p>
+                        <small>Sólo se visualizan archivos agregados localmente.</small>
+                      </div>
+                    }
+                  </div>
+                </div>
+              } @else {
+                <div class="docs-empty-state">
+                  <div class="docs-empty-ilustracion" aria-hidden="true">
+                    <svg viewBox="0 0 96 96" fill="none">
+                      <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="2" opacity="0.25"/>
+                      <path d="M34 48h28M48 34v28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                      <rect x="28" y="58" width="40" height="22" rx="4" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  <p>Seleccione un oficio o agregue uno nuevo</p>
+                  <small>Los oficios adjuntos se listan a la izquierda. Use «Agregar oficio» para capturar datos y PDF.</small>
+                  <button type="button" class="tl-btn-primary tl-btn-sm mt-4" (click)="iniciarAgregarOficio()"><span class="icon-font !text-[18px]">add</span>
+                    Agregar oficio
+                  </button>
+                </div>
+              }
             </div>
-          } @else {
-            <div class="visor-estado">
-              <span class="pdf-icono">👁</span>
-              <p>Seleccione un documento de la lista para visualizarlo</p>
-            </div>
-          }
-        </div>
+          </div>
+        }
       </main>
     </div>
 
-    <footer class="detalle-footer">
-      <button type="button" class="btn-cerrar" (click)="cerrar()">Cerrar</button>
+    <footer class="tl-modal-footer !py-3">
+      <button type="button" class="tl-btn-secondary" (click)="cerrar()">Cerrar</button>
     </footer>
   }
 

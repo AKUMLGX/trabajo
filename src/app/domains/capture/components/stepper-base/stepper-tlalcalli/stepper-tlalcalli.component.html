@@ -1,113 +1,96 @@
-<div class="h-[calc(100vh-64px)] w-full bg-white p-4 overflow-hidden">
-  <div class="h-full w-full overflow-y-auto rounded-2xl border border-tlalcalli-light-muted bg-white">
+<div class="relative min-h-full bg-tlalcalli-light-cream">
 
-<header class="bg-tlalcalli-primary px-8 py-8">
-  <div class="flex items-center justify-between gap-4">
-
-    <div class="flex items-center gap-4">
-      <div class="flex h-[54px] w-[54px] items-center justify-center rounded-xl bg-tlalcalli-lavender text-white">
-        <span class="icon-font !m-0 !h-7 !w-7 !text-[28px] !leading-7">
-          description
-        </span>
+  <header class="tl-page-header">
+    <div class="tl-page-header-inner">
+      <div class="flex items-center gap-5">
+        <div class="tl-page-icon">
+          <span class="icon-font !text-[32px]">description</span>
+        </div>
+        <div>
+          <h1 class="tl-page-title">Captura de expedientes</h1>
+          <p class="tl-page-subtitle">Registro de nuevos expedientes en tres pasos</p>
+        </div>
       </div>
-      <div>
-        <h1 class="m-0 text-[24px] font-noto-sans leading-none text-white">
-          Captura de expedientes
-        </h1>
 
-        <p class="mt-2 text-sm font-noto-sans text-white">
-          Sistema de Registro
-        </p>
-      </div>
-    </div>
-
-    <div class="hidden items-center gap-3 md:flex">
-      <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-noto-sans text-white">
-        {{ pasoActual + 1 }} de 3 pasos
-      </span>
-
-      <div class="h-2 w-36 overflow-hidden rounded-full bg-white/20">
-        <div
-          class="h-full rounded-full bg-tlalcalli-gold transition-all duration-300"
-          [style.width.%]="((pasoActual + 1) / 3) * 100">
+      <div class="tl-page-chip">
+        <span class="font-noto-sans text-sm text-white">Paso {{ pasoActual + 1 }} de 3</span>
+        <div class="h-2 w-32 overflow-hidden rounded-full bg-white/20">
+          <div
+            class="h-full rounded-full bg-tlalcalli-gold transition-all duration-300"
+            [style.width.%]="((pasoActual + 1) / 3) * 100">
+          </div>
         </div>
       </div>
     </div>
+  </header>
 
-  </div>
-</header>
+  <main class="tl-page-body">
 
-    <section class="mx-5 mt-6 overflow-hidden rounded-t-2xl bg-tlalcalli-primary px-8 py-8">
+    @if (borradorRecuperable) {
+      <div class="tl-card mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-4 border-tlalcalli-warning/30 bg-tlalcalli-warning/[0.06] px-5 py-4">
+        <div class="flex items-center gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-tlalcalli-warning/15 text-tlalcalli-warning-muted">
+            <span class="icon-font !text-[22px]">history</span>
+          </span>
+          <p class="m-0 font-noto-sans text-sm text-tlalcalli-dark">
+            Hay un borrador sin terminar guardado en una sesión anterior.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" (click)="retomarBorrador()" class="tl-btn-primary tl-btn-sm">
+            Retomar borrador
+          </button>
+          <button type="button" (click)="descartarBorradorPendiente()" class="tl-btn-danger tl-btn-sm">
+            Descartar borrador
+          </button>
+        </div>
+      </div>
+    }
 
-    <div class="flex items-center">
+    <nav class="tl-card mx-auto w-full max-w-5xl px-6 py-5" aria-label="Pasos de la captura">
+      <ol class="m-0 flex list-none items-center gap-3 p-0">
+        @for (paso of pasos; track paso.titulo; let i = $index; let ultimo = $last) {
+          <li class="flex min-w-0 items-center gap-3" [class.flex-1]="!ultimo" [attr.aria-current]="pasoActual === i ? 'step' : null">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-noto-sans text-sm font-bold transition"
+              [ngClass]="pasoActual === i
+                ? 'bg-tlalcalli-primary text-white ring-4 ring-tlalcalli-primary/10'
+                : pasoActual > i
+                  ? 'bg-tlalcalli-success text-white'
+                  : 'bg-tlalcalli-light-base text-tlalcalli-dark-muted'">
+              @if (pasoActual > i) {
+                <span class="icon-font !text-[20px]">check</span>
+              } @else {
+                {{ i + 1 }}
+              }
+            </span>
+            <span class="hidden min-w-0 flex-col sm:flex">
+              <span
+                class="truncate font-noto-sans text-sm font-semibold"
+                [ngClass]="pasoActual === i ? 'text-tlalcalli-deep' : pasoActual > i ? 'text-tlalcalli-success-muted' : 'text-tlalcalli-gray'">
+                {{ paso.titulo }}
+              </span>
+              <span class="truncate font-noto-sans text-xs text-tlalcalli-gray">{{ paso.descripcion }}</span>
+            </span>
+            @if (!ultimo) {
+              <span class="mx-2 h-0.5 min-w-6 flex-1 rounded-full" [ngClass]="pasoActual > i ? 'bg-tlalcalli-success' : 'bg-tlalcalli-light-base'"></span>
+            }
+          </li>
+        }
+      </ol>
+    </nav>
 
-    <button
-      type="button"
-      class="relative z-[1] mx-auto w-full max-w-[220px] rounded-xl border px-5 py-4 text-center"
-      [ngClass]="pasoActual === 0
-        ? 'border-tlalcalli-gold bg-tlalcalli-purple-muted text-white'
-        : 'border-white/30 bg-white/10 text-white/80'">
-
-      <span class="absolute -top-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-tlalcalli-gold text-xs font-black text-tlalcalli-primary">
-        1
-      </span>
-
-      <span class="block text-center text-xs font-noto-sans">
-        Información básica
-      </span>
-    </button>
-    <div class="mx-4 h-px flex-1 bg-tlalcalli-gold/40"></div>
-
-    <button
-      type="button"
-      class="relative z-[1] mx-auto w-full max-w-[240px] rounded-xl border px-5 py-4 text-center"
-      [ngClass]="pasoActual === 1
-        ? 'border-tlalcalli-gold bg-tlalcalli-purple-muted text-white'
-        : 'border-white/30 bg-white/10 text-white/80'">
-
-      <span class="absolute -top-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-tlalcalli-gold text-xs font-black text-tlalcalli-primary">
-        2
-      </span>
-
-      <span class="block text-center text-xs font-noto-sans leading-4">
-        Seguimiento y Documentación
-      </span>
-    </button>
-    <div class="mx-4 h-px flex-1 bg-tlalcalli-gold/40"></div>
-
-    <button
-      type="button"
-      class="relative z-[1] mx-auto w-full max-w-[220px] rounded-xl border px-5 py-4 text-center"
-      [ngClass]="pasoActual === 2
-        ? 'border-tlalcalli-gold bg-tlalcalli-purple-muted text-white'
-        : 'border-white/30 bg-white/10 text-white/80'">
-
-      <span class="absolute -top-3 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-tlalcalli-gold text-xs font-black text-tlalcalli-primary">
-        3
-      </span>
-
-      <span class="block text-center text-xs font-noto-sans">
-        Resumen
-      </span>
-    </button>
-
-  </div>
-</section>
-
-    <div class="mx-5 bg-white">
+    <div>
       @switch (pasoActual) {
         @case (0) {
           <div>
-            <div class="sticky top-0 z-50 flex justify-end rounded-b-xl bg-tlalcalli-light-cream px-5 py-4 shadow-md">
+            <div class="sticky top-3 z-50 mx-auto mb-5 flex w-full max-w-5xl justify-end rounded-2xl border border-tlalcalli-light-base/70 bg-white/90 px-5 py-3 shadow-purple-sm backdrop-blur">
               <button
                 type="button"
                 (click)="onPaso1Siguiente()"
                 [disabled]="!puedeAvanzarPaso1"
-                class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-noto-sans text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
-                [ngClass]="puedeAvanzarPaso1
-                ? 'bg-tlalcalli-primary hover:bg-tlalcalli-deep'
-                : 'bg-tlalcalli-lavender'">
-                  Siguiente
+                class="tl-btn-primary">
+                Siguiente
                 <span class="icon-font !text-[18px]">arrow_forward</span>
               </button>
             </div>
@@ -121,93 +104,81 @@
 
         @case (1) {
           <div>
-            <div class="sticky top-0 z-50 flex justify-between rounded-b-xl bg-tlalcalli-light-cream px-5 py-4 shadow-md">              <button
+            <div class="sticky top-3 z-50 mx-auto mb-5 flex w-full max-w-5xl justify-between rounded-2xl border border-tlalcalli-light-base/70 bg-white/90 px-5 py-3 shadow-purple-sm backdrop-blur">
+              <button
                 type="button"
                 (click)="onPaso2Anterior()"
-                class="rounded-lg border border-tlalcalli-primary px-6 py-2.5 text-sm font-noto-sans text-tlalcalli-primary">
+                class="tl-btn-secondary">
+                <span class="icon-font !text-[18px]">arrow_back</span>
                 Anterior
               </button>
 
-<button
-  type="button"
-  (click)="onPaso2Siguiente()"
-  [disabled]="!puedeAvanzarPaso2"
-  class="flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-noto-sans text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
-  [ngClass]="puedeAvanzarPaso2
-    ? 'bg-tlalcalli-primary hover:bg-tlalcalli-deep'
-    : 'bg-tlalcalli-lavender'">
-  Siguiente
-  <span class="icon-font !text-[18px]">arrow_forward</span>
-</button>
+              <button
+                type="button"
+                (click)="onPaso2Siguiente()"
+                [disabled]="!puedeAvanzarPaso2"
+                class="tl-btn-primary">
+                Siguiente
+                <span class="icon-font !text-[18px]">arrow_forward</span>
+              </button>
             </div>
 
-            <!-- <app-second-step-tlalcalli
+            <app-second-step-tlalcalli
               [datosPaso1]="datosPaso1"
               (formularioCompletado)="onPaso2Completado($event)"
               (pasoAnterior)="onPaso2Anterior()">
-            </app-second-step-tlalcalli> -->
-          <app-second-step-tlalcalli
-            [datosPaso1]="datosPaso1"
-            (formularioCompletado)="onPaso2Completado($event)"
-            (pasoAnterior)="onPaso2Anterior()">
-          </app-second-step-tlalcalli>
+            </app-second-step-tlalcalli>
           </div>
         }
 
         @case (2) {
-          <div class="p-6">
-            <div class="rounded-xl border border-tlalcalli-success/30 bg-tlalcalli-success/10 p-6 text-center">
-              <span class="icon-font !h-16 !w-16 !text-6xl !text-tlalcalli-success">check_circle</span>
+          <section class="tl-card mx-auto max-w-5xl p-8 text-center">
+            <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-tlalcalli-success/10 text-tlalcalli-success">
+              <span class="icon-font !text-[40px]">check_circle</span>
+            </span>
 
-              <h3 class="mt-4 text-2xl font-noto-sans text-tlalcalli-success-muted">
-                ¡Expediente creado exitosamente!
-              </h3>
+            <h3 class="m-0 mt-4 font-noto-sans text-2xl font-semibold text-tlalcalli-deep">
+              ¡Expediente creado exitosamente!
+            </h3>
 
-              <p class="mt-2 text-sm font-noto-sans">
-                El expediente <strong>{{ datosPaso1?.expediente }}</strong> fue guardado correctamente.
-              </p>
+            <p class="m-0 mt-2 font-noto-sans text-sm text-tlalcalli-gray">
+              El expediente <strong class="text-tlalcalli-primary">{{ datosPaso1?.expediente }}</strong> fue guardado correctamente.
+            </p>
 
-              <div class="mt-6 rounded-xl bg-white p-5 text-left">
-                <h4 class="mb-4 text-base font-noto-sans text-tlalcalli-dark">
-                  Resumen del expediente
-                </h4>
+            <div class="mt-6 rounded-2xl border border-tlalcalli-light-base/70 bg-tlalcalli-light-lavender/50 p-5 text-left">
+              <div class="tl-section-title mb-4">
+                <span class="tl-section-icon !bg-white"><span class="icon-font !text-[20px]">summarize</span></span>
+                <h4 class="tl-section-heading">Resumen del expediente</h4>
+              </div>
 
-                <div class="grid grid-cols-1 gap-3 text-sm font-noto-sans md:grid-cols-2">
-                  <p><strong>Expediente:</strong> {{ datosPaso1?.expediente }}</p>
-                  <p><strong>Oficio:</strong> {{ datosPaso1?.oficio || 'N/A' }}</p>
-                  <p><strong>Remitente:</strong> {{ datosPaso1?.remitente_area || 'N/A' }}</p>
-                  <p><strong>Prioridad:</strong> {{ datosPaso1?.prioridad || 'Normal' }}</p>
-                  <p><strong>Responsable:</strong> {{ datosPaso2?.responsable || 'N/A' }}</p>
-                  <p><strong>Aplicativo:</strong> {{ datosPaso2?.sistema_aplicativo || 'N/A' }}</p>
-                  <p><strong>Estatus:</strong> {{ datosPaso2?.status_descripcion || datosPaso2?.estatus || 'N/A' }}</p>
-                  <p><strong>Ubicación:</strong> {{ datosPaso2?.ubicacion === 2 ? 'Individual' : 'Carpeta general' }}</p>
-                  <p class="md:col-span-2">
-                    <strong>Asunto:</strong>
+              <dl class="m-0 grid grid-cols-1 gap-4 font-noto-sans text-sm md:grid-cols-2">
+                <div><dt class="tl-label !mb-0.5">Expediente</dt><dd class="m-0 text-tlalcalli-dark">{{ datosPaso1?.expediente }}</dd></div>
+                <div><dt class="tl-label !mb-0.5">Oficio</dt><dd class="m-0 text-tlalcalli-dark">{{ datosPaso1?.oficio || 'N/A' }}</dd></div>
+                <div><dt class="tl-label !mb-0.5">Remitente</dt><dd class="m-0 text-tlalcalli-dark">{{ datosPaso1?.remitente_area || 'N/A' }}</dd></div>
+                <div><dt class="tl-label !mb-0.5">Prioridad</dt><dd class="m-0 text-tlalcalli-dark">{{ etiquetaPrioridadLegible(datosPaso1?.prioridad) }}</dd></div>
+                <div><dt class="tl-label !mb-0.5">Responsable</dt><dd class="m-0 text-tlalcalli-dark">{{ datosPaso2?.responsable || 'N/A' }}</dd></div>
+                <div><dt class="tl-label !mb-0.5">Aplicativo</dt><dd class="m-0 text-tlalcalli-dark">{{ datosPaso2?.sistema_aplicativo || 'N/A' }}</dd></div>
+                <div><dt class="tl-label !mb-0.5">Estatus</dt><dd class="m-0 text-tlalcalli-dark">{{ datosPaso2?.status_descripcion || datosPaso2?.estatus || 'N/A' }}</dd></div>
+                <div><dt class="tl-label !mb-0.5">Ubicación</dt><dd class="m-0 text-tlalcalli-dark">{{ datosPaso2?.ubicacion === 2 ? 'Individual' : 'Carpeta general' }}</dd></div>
+                <div class="md:col-span-2">
+                  <dt class="tl-label !mb-0.5">Asunto</dt>
+                  <dd class="m-0 text-tlalcalli-dark">
                     {{ (datosPaso1?.referencia_asunto | slice:0:120) || 'N/A' }}
                     {{ (datosPaso1?.referencia_asunto?.length || 0) > 120 ? '...' : '' }}
-                  </p>
+                  </dd>
                 </div>
-              </div>
-
-              <div class="mt-6 flex flex-wrap justify-center gap-3">
-                <button
-                  type="button"
-                  (click)="crearNuevoRegistro()"
-                  class="rounded-xl bg-tlalcalli-success px-6 py-3 text-sm font-noto-sans text-white">
-                  Reutilizar datos
-                </button>
-
-                <button
-                  type="button"
-                  (click)="reiniciarFormulario()"
-                  class="rounded-xl border border-tlalcalli-error px-6 py-3 text-sm font-noto-sans text-tlalcalli-error">
-                  Empezar desde cero
-                </button>
-              </div>
+              </dl>
             </div>
-          </div>
+
+            <div class="mt-6 flex flex-wrap justify-center gap-3">
+              <button type="button" (click)="reiniciarFormulario()" class="tl-btn-danger">
+                <span class="icon-font !text-[18px]">restart_alt</span>
+                Empezar desde cero
+              </button>
+            </div>
+          </section>
         }
       }
     </div>
-  </div>
+  </main>
 </div>

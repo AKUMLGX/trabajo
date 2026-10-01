@@ -1,0 +1,73 @@
+<div class="rounded-xl border border-tlalcalli-light-base/70 bg-tlalcalli-light-cream/50 p-4">
+  <div class="mb-4 grid grid-cols-1 items-end gap-3 md:grid-cols-[1.4fr_1fr_1fr_auto]">
+    <label class="flex flex-col">
+      <span class="tl-label">Nombre</span>
+      <input type="text" [(ngModel)]="nuevo.nombre_completo" maxlength="100" placeholder="Nombre del analista o QA"
+        (keydown.enter)="agregar()" class="tl-input" />
+    </label>
+    <label class="flex flex-col">
+      <span class="tl-label">Grupo</span>
+      <select [(ngModel)]="nuevo.grupo" class="tl-select">
+        @for (g of grupos; track g.grupo) {
+          <option [ngValue]="g.grupo">{{ g.titulo }}</option>
+        }
+      </select>
+    </label>
+    <label class="flex flex-col">
+      <span class="tl-label">Etiqueta (opcional)</span>
+      <input type="text" [(ngModel)]="nuevo.etiqueta" maxlength="40" placeholder="Ej: Perfil" class="tl-input" />
+    </label>
+    <button type="button" (click)="agregar()" [disabled]="procesando || !nuevo.nombre_completo.trim()" class="tl-btn-primary">
+      <span class="icon-font !text-[18px]">person_add</span>
+      Agregar
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    @for (g of grupos; track g.grupo) {
+      <div class="tl-card p-3 shadow-none">
+        <span class="tl-group-title px-2">{{ g.titulo }}</span>
+        @for (e of delGrupo(g.grupo); track e.id_especialista) {
+          @if (enEdicion === e.id_especialista) {
+            <div class="mb-2 flex flex-col gap-2 rounded-xl border border-tlalcalli-primary/40 bg-tlalcalli-light-lavender p-3">
+              <input type="text" [(ngModel)]="edicion.nombre_completo" maxlength="100" class="tl-input h-9" />
+              <div class="flex gap-2">
+                <select [(ngModel)]="edicion.grupo" class="tl-select h-9 flex-1">
+                  @for (op of grupos; track op.grupo) {
+                    <option [ngValue]="op.grupo">{{ op.titulo }}</option>
+                  }
+                </select>
+                <input type="text" [(ngModel)]="edicion.etiqueta" maxlength="40" placeholder="Etiqueta" class="tl-input h-9 w-28" />
+              </div>
+              <div class="flex justify-end gap-2">
+                <button type="button" (click)="descartarEdicion()" class="tl-btn-secondary tl-btn-sm">Volver</button>
+                <button type="button" (click)="guardarEdicion(e)" [disabled]="procesando || !edicion.nombre_completo.trim()" class="tl-btn-primary tl-btn-sm">Guardar</button>
+              </div>
+            </div>
+          } @else {
+            <div class="mb-1 flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 transition hover:bg-tlalcalli-light-lavender/60">
+              <span class="flex items-center gap-2 font-noto-sans text-sm" [ngClass]="e.activo ? 'text-tlalcalli-dark' : 'text-tlalcalli-gray line-through'">
+                {{ e.nombre_completo }}
+                @if (e.etiqueta) {
+                  <span class="tl-chip tl-chip-primary">{{ e.etiqueta }}</span>
+                }
+              </span>
+              <span class="flex items-center gap-1">
+                <button type="button" (click)="editar(e)" title="Editar" class="tl-icon-btn h-8 w-8 text-tlalcalli-primary hover:bg-tlalcalli-light-lavender">
+                  <span class="icon-font !text-[16px]">edit</span>
+                </button>
+                <button type="button" (click)="alternarActivo(e)" [disabled]="procesando" [title]="e.activo ? 'Desactivar' : 'Reactivar'"
+                  class="tl-icon-btn h-8 w-8"
+                  [ngClass]="e.activo ? 'text-tlalcalli-error-muted hover:bg-tlalcalli-error/10' : 'text-tlalcalli-success-muted hover:bg-tlalcalli-success/10'">
+                  <span class="icon-font !text-[16px]">{{ e.activo ? 'person_off' : 'how_to_reg' }}</span>
+                </button>
+              </span>
+            </div>
+          }
+        } @empty {
+          <p class="m-0 px-2 py-1 font-noto-sans text-xs text-tlalcalli-gray">Sin registros.</p>
+        }
+      </div>
+    }
+  </div>
+</div>
