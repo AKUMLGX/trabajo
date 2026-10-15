@@ -40,6 +40,106 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Fuera de @layer: gana sobre .icon-font global y asegura la caja 48×48 en captura y bandejas */
+.tl-section-icon {
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background-color: #f9f5fb;
+  color: #3e0065;
+}
+.tl-section-icon > .icon-font,
+.tl-section-icon .icon-font {
+  font-size: 21px;
+}
+.tl-section-icon > svg,
+.tl-section-icon svg {
+  height: 1.75rem;
+  width: 1.75rem;
+  flex-shrink: 0;
+}
+
+/* Fuera de @layer: caja cuadrada fija para iconos en empty states (evita compresión en flex) */
+.tl-empty-icon {
+  display: flex;
+  aspect-ratio: 1 / 1;
+  height: 3rem;
+  width: 3rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+.tl-empty-icon svg {
+  height: 1.75rem;
+  width: 1.75rem;
+  flex-shrink: 0;
+}
+.tl-empty-icon > .icon-font,
+.tl-empty-icon .icon-font {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  line-height: normal;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Fuera de @layer: mismo beige que ítem activo del sidenav (tlalcalli-gold #D6AE67) */
+button.tl-btn-secondary,
+.tl-btn-secondary {
+  background-color: #D6AE67 !important;
+  background-image: none !important;
+  color: #3E0065 !important;
+  border-color: rgb(62 0 101 / 0.3) !important;
+}
+button.tl-btn-secondary:hover,
+button.tl-btn-secondary:focus-visible,
+button.tl-btn-secondary:active,
+.tl-btn-secondary:hover,
+.tl-btn-secondary:focus-visible,
+.tl-btn-secondary:active {
+  background-color: #c9a050 !important;
+  background-image: none !important;
+  color: #3E0065 !important;
+  border-color: rgb(62 0 101 / 0.3) !important;
+}
+
+/* Fuera de @layer: énfasis morado solo en select de etapa (modal seguimiento) */
+.tl-select.tl-select-emphasis {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #E9DDF3 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233E0065' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 1rem;
+  border: 2px solid rgb(62 0 101 / 0.45) !important;
+  border-left: 4px solid #D6AE67 !important;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgb(62 0 101 / 0.12) !important;
+  color: #3E0065 !important;
+  font-weight: 700 !important;
+  padding-right: 2.5rem !important;
+}
+.tl-select.tl-select-emphasis:hover {
+  background-color: #DFCDEE !important;
+  border-color: rgb(62 0 101 / 0.6) !important;
+}
+.tl-select.tl-select-emphasis:focus {
+  border-color: #3E0065 !important;
+  outline: none;
+  box-shadow: 0 2px 8px rgb(62 0 101 / 0.12), 0 0 0 4px rgb(62 0 101 / 0.15) !important;
+}
+.tl-select.tl-select-emphasis option {
+  background: #fff;
+  color: #3E0065;
+  font-weight: 500;
+}
 
 .font-noto-sans {
   font-family: 'Noto Sans';
@@ -138,6 +238,36 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
 }
 
 .expediente-modal-panel .mat-mdc-dialog-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+}
+
+/* Modales de captura (pre-confirmación, expedientes, confirmación) */
+.pre-confirmacion-dialog .mat-mdc-dialog-container,
+.expedientes-modal-container .mat-mdc-dialog-container,
+.confirmacion-modal-container .mat-mdc-dialog-container {
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+.pre-confirmacion-dialog .mat-mdc-dialog-surface,
+.pre-confirmacion-dialog .mdc-dialog__surface,
+.expedientes-modal-container .mat-mdc-dialog-surface,
+.expedientes-modal-container .mdc-dialog__surface,
+.confirmacion-modal-container .mat-mdc-dialog-surface,
+.confirmacion-modal-container .mdc-dialog__surface {
+  padding: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  box-shadow: 0 25px 80px rgba(52, 0, 91, 0.25) !important;
+}
+
+.pre-confirmacion-dialog .mat-mdc-dialog-content,
+.expedientes-modal-container .mat-mdc-dialog-content,
+.confirmacion-modal-container .mat-mdc-dialog-content {
   padding: 0 !important;
   margin: 0 !important;
   max-height: none !important;
@@ -330,7 +460,6 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
 
   .tl-card { @apply rounded-2xl border border-tlalcalli-light-base/70 bg-white shadow-purple-sm; }
   .tl-section-title { @apply flex items-center gap-3; }
-  .tl-section-icon { @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-tlalcalli-light-lavender text-tlalcalli-primary; }
   .tl-section-heading { @apply m-0 font-noto-sans text-base font-semibold leading-tight text-tlalcalli-deep; }
   .tl-section-subtitle { @apply m-0 mt-0.5 font-noto-sans text-xs text-tlalcalli-gray; }
   .tl-label { @apply mb-1.5 block font-noto-sans text-xs font-semibold text-tlalcalli-dark-muted; }
@@ -339,13 +468,15 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
   .tl-field-error { @apply mt-1.5 flex items-center gap-1 font-noto-sans text-xs font-medium text-tlalcalli-error-muted; }
 
   .tl-input { @apply h-11 w-full rounded-xl border border-tlalcalli-light-base bg-white px-3.5 font-noto-sans text-sm text-tlalcalli-dark outline-none transition placeholder:text-tlalcalli-gray/70 focus:border-tlalcalli-primary focus:ring-4 focus:ring-tlalcalli-primary/10 disabled:bg-tlalcalli-light-cream disabled:text-tlalcalli-gray; }
-  .tl-select { @apply tl-input pr-8 font-medium text-tlalcalli-primary; }
+  .tl-select {
+    @apply tl-input cursor-pointer border-tlalcalli-primary/20 bg-tlalcalli-light-lavender pr-8 font-semibold text-tlalcalli-primary shadow-purple-sm transition hover:border-tlalcalli-primary/35;
+  }
   .tl-search { @apply relative; }
   .tl-search-icon { @apply pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 !text-[20px] text-tlalcalli-gray; }
 
   .tl-btn { @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-5 font-noto-sans text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50; }
   .tl-btn-primary { @apply tl-btn bg-tlalcalli-primary text-white shadow-purple-sm hover:bg-tlalcalli-deep; }
-  .tl-btn-secondary { @apply tl-btn border border-tlalcalli-light-base bg-white text-tlalcalli-primary hover:border-tlalcalli-lavender hover:bg-tlalcalli-light-lavender; }
+  .tl-btn-secondary { @apply tl-btn border border-tlalcalli-primary/30 bg-tlalcalli-gold text-tlalcalli-primary hover:border-tlalcalli-primary/30 hover:bg-gold-dark hover:text-tlalcalli-primary focus-visible:border-tlalcalli-primary/30 focus-visible:bg-gold-dark focus-visible:text-tlalcalli-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-tlalcalli-primary/10 active:border-tlalcalli-primary/30 active:bg-gold-dark active:text-tlalcalli-primary; }
   .tl-btn-danger { @apply tl-btn bg-tlalcalli-error/10 text-tlalcalli-error-muted hover:bg-tlalcalli-error hover:text-white; }
   .tl-btn-sm { @apply h-9 rounded-lg px-3.5 text-xs; }
 
@@ -355,10 +486,13 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
   .tl-icon-btn-danger { @apply tl-icon-btn bg-tlalcalli-error/10 text-tlalcalli-error-muted hover:bg-tlalcalli-error hover:text-white; }
 
   .tl-segmented { @apply inline-flex gap-1 rounded-xl bg-tlalcalli-light-lavender p-1 ring-1 ring-tlalcalli-light-base/70; }
-  .tl-segmented-item { @apply inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3.5 font-noto-sans text-sm font-medium text-tlalcalli-dark-muted transition hover:text-tlalcalli-primary; }
-  .tl-segmented-item-active { @apply bg-white text-tlalcalli-primary shadow-sm; }
+  .tl-segmented-item { @apply inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3.5 font-noto-sans text-sm font-medium text-tlalcalli-dark-muted transition; }
+  .tl-segmented-item:not(.tl-segmented-item-active):not(.tl-segmented-item-static):hover { @apply bg-tlalcalli-light-lavender text-tlalcalli-primary; }
+  .tl-segmented-item-active { @apply bg-tlalcalli-primary font-semibold text-white shadow-purple-sm; }
+  .tl-segmented-item-static { @apply bg-white text-tlalcalli-primary shadow-sm; }
   .tl-count { @apply inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-tlalcalli-light-base px-1.5 text-[11px] font-bold text-tlalcalli-dark-muted; }
-  .tl-segmented-item-active .tl-count { @apply bg-tlalcalli-primary text-white; }
+  .tl-segmented-item-active .tl-count { @apply bg-white text-tlalcalli-primary; }
+  .tl-segmented-item-static .tl-count { @apply bg-tlalcalli-primary text-white; }
 
   .tl-option { @apply inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-tlalcalli-light-base bg-white px-3.5 py-2 font-noto-sans text-sm text-tlalcalli-dark transition hover:border-tlalcalli-lavender hover:text-tlalcalli-primary; }
   .tl-option-active { @apply border-tlalcalli-primary bg-tlalcalli-light-lavender font-semibold text-tlalcalli-primary ring-1 ring-tlalcalli-primary; }
@@ -392,8 +526,8 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
   .tl-stat-caption { @apply font-noto-sans text-xs text-tlalcalli-gray; }
   .tl-progress { @apply h-1.5 w-full overflow-hidden rounded-full bg-tlalcalli-light-base/70; }
 
-  .tl-empty { @apply flex flex-col items-center justify-center px-8 py-14 text-center; }
-  .tl-empty-icon { @apply mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-tlalcalli-light-lavender text-tlalcalli-primary; }
+  .tl-empty { @apply flex min-h-0 flex-col items-center justify-center px-8 py-14 text-center; }
+  .tl-empty-icon { @apply mb-4 shrink-0 rounded-2xl bg-tlalcalli-light-lavender text-tlalcalli-primary; }
   .tl-spinner { @apply h-10 w-10 animate-spin rounded-full border-4 border-tlalcalli-light-base border-t-tlalcalli-primary; }
 
   .tl-modal { @apply flex max-h-[calc(100vh-28px)] flex-col overflow-hidden rounded-[24px] bg-tlalcalli-light-cream shadow-purple-lg; }
@@ -402,6 +536,27 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
   .tl-modal-close { @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/15 transition hover:bg-white/20 disabled:opacity-50; }
   .tl-modal-body { @apply flex-1 overflow-y-auto px-7 py-6; }
   .tl-modal-footer { @apply flex shrink-0 flex-wrap items-center justify-end gap-3 border-t border-tlalcalli-light-base bg-white px-7 py-4; }
+}
+
+/* Fuera de @layer: segmented activo morado (gana con important: true en utilidades) */
+button.tl-segmented-item.tl-segmented-item-active,
+.tl-segmented-item.tl-segmented-item-active {
+  background-color: #3E0065 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgb(52 0 91 / 0.15) !important;
+}
+button.tl-segmented-item.tl-segmented-item-active:hover,
+button.tl-segmented-item.tl-segmented-item-active:focus-visible,
+.tl-segmented-item.tl-segmented-item-active:hover,
+.tl-segmented-item.tl-segmented-item-active:focus-visible {
+  background-color: #3E0065 !important;
+  color: #ffffff !important;
+}
+button.tl-segmented-item.tl-segmented-item-active .tl-count,
+.tl-segmented-item.tl-segmented-item-active .tl-count {
+  background-color: #ffffff !important;
+  color: #3E0065 !important;
 }
 
 .expediente-detalle-dialog .mat-mdc-dialog-container,
@@ -419,4 +574,32 @@ app-stepper-tlalcalli .mat-stroked-button:hover {
   overflow: hidden !important;
   background: transparent !important;
   box-shadow: 0 30px 100px rgba(52, 0, 91, 0.3) !important;
+}
+
+/* Pie blanco del modal + preflight (button transparent): forzar beige en Cancelar/Cerrar */
+.tl-modal footer.tl-modal-footer button.tl-btn-secondary,
+.atencion-modal-panel footer.tl-modal-footer button.tl-btn-secondary,
+.expediente-edicion-dialog footer.tl-modal-footer button.tl-btn-secondary,
+.expediente-detalle-dialog footer.tl-modal-footer button.tl-btn-secondary {
+  background-color: #D6AE67 !important;
+  background-image: none !important;
+  color: #3E0065 !important;
+  border-color: rgb(62 0 101 / 0.3) !important;
+}
+.tl-modal footer.tl-modal-footer button.tl-btn-secondary:hover,
+.tl-modal footer.tl-modal-footer button.tl-btn-secondary:focus-visible,
+.tl-modal footer.tl-modal-footer button.tl-btn-secondary:active,
+.atencion-modal-panel footer.tl-modal-footer button.tl-btn-secondary:hover,
+.atencion-modal-panel footer.tl-modal-footer button.tl-btn-secondary:focus-visible,
+.atencion-modal-panel footer.tl-modal-footer button.tl-btn-secondary:active,
+.expediente-edicion-dialog footer.tl-modal-footer button.tl-btn-secondary:hover,
+.expediente-edicion-dialog footer.tl-modal-footer button.tl-btn-secondary:focus-visible,
+.expediente-edicion-dialog footer.tl-modal-footer button.tl-btn-secondary:active,
+.expediente-detalle-dialog footer.tl-modal-footer button.tl-btn-secondary:hover,
+.expediente-detalle-dialog footer.tl-modal-footer button.tl-btn-secondary:focus-visible,
+.expediente-detalle-dialog footer.tl-modal-footer button.tl-btn-secondary:active {
+  background-color: #c9a050 !important;
+  background-image: none !important;
+  color: #3E0065 !important;
+  border-color: rgb(62 0 101 / 0.3) !important;
 }

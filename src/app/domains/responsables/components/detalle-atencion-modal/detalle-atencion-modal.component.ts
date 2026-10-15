@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AtencionService, AtencionConEspecialistas } from '../../services/atencion.service';
 import { ExpedienteTlalcalliService } from '../../../capture/services/expediente-tlalcalli.service';
+import { EtiquetaEstatusPipe } from '../../../shared/pipes/etiqueta-estatus.pipe';
 
 export interface DetalleAtencionData {
   idAtencion: number;
@@ -37,7 +38,7 @@ interface DetalleCompleto {
 
 @Component({
     selector: 'app-detalle-atencion-modal',
-    imports: [
+    imports: [EtiquetaEstatusPipe, 
         CommonModule,
         MatDialogModule,
         MatButtonModule,

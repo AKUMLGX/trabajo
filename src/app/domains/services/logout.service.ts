@@ -10,6 +10,7 @@ export class LogoutService {
     // Preservar claves funcionales antes de limpiar
     const aprobados = localStorage.getItem('akamba_asuntos_aprobados');
     const enviados = localStorage.getItem('akamba_asuntos_enviados');
+    const rolLocal = localStorage.getItem('tlalcalli.rolLocal');
 
     localStorage.clear();
 
@@ -19,9 +20,11 @@ export class LogoutService {
     if (enviados) {
       localStorage.setItem('akamba_asuntos_enviados', enviados);
     }
-    window.location.href = environment.logoutUrl;
+    if (rolLocal) {
+      localStorage.setItem('tlalcalli.rolLocal', rolLocal);
+    }
+
+    // Sin IdP no hay sesión que cerrar en NetIQ: se vuelve al login de la app (respeta el base href).
+    window.location.href = environment.devOAuthBypass ? `${document.baseURI}login` : environment.logoutUrl;
   }     
 }
-
-
-

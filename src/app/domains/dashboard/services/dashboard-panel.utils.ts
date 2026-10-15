@@ -1,147 +1,268 @@
 import { ExpedienteTlalcalli } from '../../capture/interfaces/expediente-tlalcalli.interface';
 import { DateUtils } from '../../capture/utils/date-utils';
-import { EstadoCierre, ResumenCierre } from '../../responsables/services/cierre-rework.service';
-import { AlertaCompromiso, ResumenSeguimiento } from '../../responsables/services/seguimiento-asignacion.service';
+import { EstadisticasPorEstatus } from './dashboard.service';
+import { MetricasServidor } from './metricas-panel.service';
 import {
-  DashboardCompleto,
-  EstadisticasPorEstatus,
-  EstadisticasPorResponsable,
-  EstadisticasPorTipoAccion,
-  ExpedienteCritico,
-  SemaforoPrioridades,
-  TendenciaSemanal,
-} from './dashboard.service';
+  BUCKETS_ESTATUS,
+  BucketEstatus,
+  ETIQUETAS_BUCKET_ESTATUS,
+  bucketEstatus,
+  normalizarTextoCatalogo,
+} from './dashboard-estatus-negocio.utils';
+import {
+  CatalogoRemitenteAdmin,
+  ETIQUETA_SIN_DATO_ADMIN,
+  etiquetaAdministracionCentral,
+  etiquetaAdministracionGeneral,
+} from './dashboard-remitente-admin.utils';
+
+export type VistaAdministracionRemitente = 'general' | 'central';
 
 /** Mismas reglas que la bandeja de Seguimiento y Asignación. */
 export const ESTATUS_ATENDIDOS = ['ATENDIDO', 'CONOCIMIENTO', 'CANCELADO'];
-export const LIMITE_HORAS_SEMAFORO = 72;
 
-export const ETIQUETAS_CIERRE: Record<EstadoCierre, string> = {
-  SIN_REGISTRO: 'Sin evidencia',
-  PARCIAL: 'Respuesta parcial',
-  TOTAL: 'Respuesta total',
-  COMPLETO: 'Cierre completo',
-};
+export const UMBRAL_DIAS_SIN_ATENDER = 90;
 
-export const ESTADOS_CIERRE: EstadoCierre[] = ['SIN_REGISTRO', 'PARCIAL', 'TOTAL', 'COMPLETO'];
+/** Fechas en formato YYYY-MM-DD (hora local). */
+export interface RangoFechas {
+  desde: string;
+  hasta: string;
+}
 
-export type OrigenDatos = 'bandejas' | 'estadisticas';
-
-export interface PanelKpis {
+export interface AreaPeriodo {
+  area: string;
   total: number;
+  porBucket: Record<BucketEstatus, number>;
+}
+
+export interface ServicioDetalle {
+  servicio: string;
+  cantidad: number;
+}
+
+export const ETIQUETA_SIN_SERVICIO = 'Sin servicio';
+
+/** Indicadores de las solicitudes cuya fecha del documento cae en el rango seleccionado. */
+export interface PanelPeriodo {
+  rango: RangoFechas;
+  capturadas: number;
   porAtender: number;
   atendidos: number;
-  criticos: number;
-  responsables: number;
-  promedioHorasPendientes: number;
-  semaforo: SemaforoPrioridades;
+  cancelados: number;
+  sinFechaDocumento: number;
+  porBucketEstatus: Record<BucketEstatus, number>;
+  porEstatusDetalle: EstadisticasPorEstatus[];
+  porAdministracionGeneral: AreaPeriodo[];
+  porAdministracionCentral: AreaPeriodo[];
+  /** Un renglón por servicio del catálogo (incluye los que tienen 0) más cualquier valor capturado fuera de él. */
+  porServicio: ServicioDetalle[];
+  /** Días desde la fecha del documento hasta hoy, promedio de las atendidas (estimado). */
+  promedioDiasAtencion: number | null;
+  atendidasConFecha: number;
+  expedientes: ExpedienteTlalcalli[];
 }
 
-export interface PanelGraficas {
-  porEstatus: EstadisticasPorEstatus[];
-  porResponsable: EstadisticasPorResponsable[];
-  tendencia: TendenciaSemanal[];
-  porTipoAccion: EstadisticasPorTipoAccion[];
+export interface ExpedienteSinAtender {
+  id_expediente: number;
+  expediente: string;
+  oficio: string;
+  remitente: string;
+  servicio: string;
+  estatus: string;
+  responsable: string;
+  fecha_documento: string;
+  dias: number;
 }
 
-export interface PanelCaptura {
-  total: number;
-  hoy: number;
-  ultimos7: number;
-  ultimos30: number;
-}
-
-export interface PanelConsulta {
-  total: number;
-  topEstatus: EstadisticasPorEstatus[];
-}
-
-export interface PanelSeguimiento {
-  conSeguimiento: number;
-  ticketsAbiertos: number;
-  wosAbiertos: number;
-  compromisosVencidos: number;
-  alertas: number;
-  urgentes: number;
-  vencidos: number;
-}
-
-export interface PanelCierre {
-  total: number;
-  pendientes: number;
-  conteos: Record<EstadoCierre, number>;
+export interface PanelSinAtender {
+  umbralDias: number;
+  items: ExpedienteSinAtender[];
 }
 
 export interface PanelDatos {
-  origen: OrigenDatos;
-  kpis: PanelKpis;
-  graficas: PanelGraficas;
-  captura: PanelCaptura;
-  consulta: PanelConsulta;
-  seguimiento: PanelSeguimiento;
-  cierre: PanelCierre;
-  criticos: ExpedienteCritico[];
-  alertas: AlertaCompromiso[];
+  /** Catálogo usado para etiquetas de administración en gráficas y exportación. */
+  catalogoRemitente?: CatalogoRemitenteAdmin | null;
+  periodo: PanelPeriodo;
+  sinAtender: PanelSinAtender;
+  /** Indicadores de todo el universo desde `GET metricas`; null si el back no respondió. */
+  metricas: MetricasServidor | null;
   generado: Date;
 }
 
 export interface FuentesPanel {
-  estadisticas: DashboardCompleto;
   expedientes: ExpedienteTlalcalli[];
-  resumenSeguimiento: ResumenSeguimiento[];
-  alertas: AlertaCompromiso[];
-  resumenCierre: ResumenCierre[];
+  /** Nombres vigentes de cat_servicio, en el orden del catálogo. */
+  serviciosCatalogo: string[];
+  metricas: MetricasServidor | null;
 }
 
-const MS_HORA = 1000 * 60 * 60;
-const MS_DIA = MS_HORA * 24;
+const MS_DIA = 1000 * 60 * 60 * 24;
 
-function fechaBase(e: ExpedienteTlalcalli): Date | null {
-  for (const valor of [e.fecha_creacion, e.fecha_recibido, e.fecha_asignacion]) {
-    const fecha = DateUtils.parseFechaLocal(valor as string | Date | null | undefined);
-    if (fecha) {
-      return fecha;
-    }
+export function fechaDocumento(e: ExpedienteTlalcalli): Date | null {
+  return DateUtils.parseFechaLocal(e.fecha_documento as string | Date | null | undefined);
+}
+
+export function fechaIso(fecha: Date): string {
+  const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+  const dia = String(fecha.getDate()).padStart(2, '0');
+  return `${fecha.getFullYear()}-${mes}-${dia}`;
+}
+
+export function rangoHoy(ahora = new Date()): RangoFechas {
+  const hoy = fechaIso(ahora);
+  return { desde: hoy, hasta: hoy };
+}
+
+export function rangoAnioActual(ahora = new Date()): RangoFechas {
+  return {
+    desde: fechaIso(new Date(ahora.getFullYear(), 0, 1)),
+    hasta: fechaIso(ahora),
+  };
+}
+
+export function etiquetaRango(rango: RangoFechas): string {
+  const formato = (iso: string) => {
+    const f = DateUtils.parseFechaLocal(iso);
+    return f ? f.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) : iso;
+  };
+  return rango.desde === rango.hasta ? formato(rango.desde) : `${formato(rango.desde)} al ${formato(rango.hasta)}`;
+}
+
+/** Ambos extremos incluidos; si el rango viene invertido se corrige. */
+export function filtrarPorFechaDocumento(lista: ExpedienteTlalcalli[], rango: RangoFechas): ExpedienteTlalcalli[] {
+  let desde = DateUtils.parseFechaLocal(rango.desde);
+  let hasta = DateUtils.parseFechaLocal(rango.hasta);
+  if (!desde || !hasta) {
+    return [];
   }
-  return null;
+  if (desde.getTime() > hasta.getTime()) {
+    [desde, hasta] = [hasta, desde];
+  }
+  return lista.filter((e) => {
+    const f = fechaDocumento(e);
+    return !!f && f.getTime() >= desde!.getTime() && f.getTime() <= hasta!.getTime();
+  });
 }
 
-export function horasDesdeCaptura(e: ExpedienteTlalcalli, ahora: Date): number {
-  const base = fechaBase(e) ?? ahora;
-  const horas = Math.floor((ahora.getTime() - base.getTime()) / MS_HORA);
-  return Number.isFinite(horas) ? Math.max(0, horas) : 0;
+function diasEntre(desde: Date, hasta: Date): number {
+  const inicio = new Date(hasta.getFullYear(), hasta.getMonth(), hasta.getDate()).getTime();
+  return Math.max(0, Math.floor((inicio - desde.getTime()) / MS_DIA));
+}
+
+function bucketsEstatusVacios(): Record<BucketEstatus, number> {
+  return Object.fromEntries(BUCKETS_ESTATUS.map((b) => [b, 0])) as Record<BucketEstatus, number>;
+}
+
+function etiquetaAgrupacionAdministracion(
+  e: ExpedienteTlalcalli,
+  vista: VistaAdministracionRemitente,
+  catalogo: CatalogoRemitenteAdmin | null
+): string {
+  const etiqueta =
+    vista === 'general'
+      ? etiquetaAdministracionGeneral(e, catalogo)
+      : etiquetaAdministracionCentral(e, catalogo);
+  return etiqueta.replace(/\s+/g, ' ').trim() || ETIQUETA_SIN_DATO_ADMIN;
+}
+
+function porAdministracionDesdeLista(
+  lista: ExpedienteTlalcalli[],
+  vista: VistaAdministracionRemitente,
+  catalogo: CatalogoRemitenteAdmin | null
+): AreaPeriodo[] {
+  const mapa = new Map<string, AreaPeriodo>();
+  for (const e of lista) {
+    const area = etiquetaAgrupacionAdministracion(e, vista, catalogo);
+    const fila = mapa.get(area) ?? { area, total: 0, porBucket: bucketsEstatusVacios() };
+    fila.total++;
+    fila.porBucket[bucketEstatus(e.estatus)]++;
+    mapa.set(area, fila);
+  }
+  return Array.from(mapa.values()).sort((a, b) => b.total - a.total);
+}
+
+function porServicioDesdeLista(lista: ExpedienteTlalcalli[], serviciosCatalogo: string[]): ServicioDetalle[] {
+  const mapa = new Map<string, ServicioDetalle>();
+  for (const servicio of serviciosCatalogo) {
+    const clave = normalizarTextoCatalogo(servicio);
+    if (clave && !mapa.has(clave)) mapa.set(clave, { servicio: servicio.trim(), cantidad: 0 });
+  }
+  for (const e of lista) {
+    const servicio = (e.servicio || '').trim() || ETIQUETA_SIN_SERVICIO;
+    const clave = normalizarTextoCatalogo(servicio);
+    const fila = mapa.get(clave) ?? { servicio, cantidad: 0 };
+    fila.cantidad++;
+    mapa.set(clave, fila);
+  }
+  return Array.from(mapa.values()).sort((a, b) => b.cantidad - a.cantidad);
+}
+
+function periodoDesdeLista(
+  todos: ExpedienteTlalcalli[],
+  rango: RangoFechas,
+  ahora: Date,
+  catalogoRemitente: CatalogoRemitenteAdmin | null = null,
+  serviciosCatalogo: string[] = []
+): PanelPeriodo {
+  const lista = filtrarPorFechaDocumento(todos, rango);
+  const pendientes = lista.filter((e) => !estaAtendido(e));
+  const porBucketEstatus = bucketsEstatusVacios();
+  for (const e of lista) {
+    porBucketEstatus[bucketEstatus(e.estatus)]++;
+  }
+
+  const diasAtendidas = lista
+    .filter((e) => bucketEstatus(e.estatus) === 'ATENDIDA')
+    .map((e) => fechaDocumento(e))
+    .filter((f): f is Date => !!f)
+    .map((f) => diasEntre(f, ahora));
+
+  return {
+    rango,
+    capturadas: lista.length,
+    porAtender: pendientes.length,
+    atendidos: lista.length - pendientes.length,
+    cancelados: porBucketEstatus.CANCELADO,
+    sinFechaDocumento: todos.filter((e) => !fechaDocumento(e)).length,
+    porBucketEstatus,
+    porEstatusDetalle: porEstatusDesdeLista(lista),
+    porAdministracionGeneral: porAdministracionDesdeLista(lista, 'general', catalogoRemitente),
+    porAdministracionCentral: porAdministracionDesdeLista(lista, 'central', catalogoRemitente),
+    porServicio: porServicioDesdeLista(lista, serviciosCatalogo),
+    promedioDiasAtencion: diasAtendidas.length
+      ? Math.round(diasAtendidas.reduce((acc, d) => acc + d, 0) / diasAtendidas.length)
+      : null,
+    atendidasConFecha: diasAtendidas.length,
+    expedientes: lista,
+  };
+}
+
+/** Pendientes de todo el universo cuya fecha del documento supera el umbral, del más antiguo al más reciente. */
+function sinAtenderDesdeLista(todos: ExpedienteTlalcalli[], ahora: Date): PanelSinAtender {
+  const items = todos
+    .filter((e) => !estaAtendido(e))
+    .map((e) => ({ e, f: fechaDocumento(e) }))
+    .filter((x): x is { e: ExpedienteTlalcalli; f: Date } => !!x.f)
+    .map(({ e, f }) => ({ e, f, dias: diasEntre(f, ahora) }))
+    .filter(({ dias }) => dias >= UMBRAL_DIAS_SIN_ATENDER)
+    .sort((a, b) => b.dias - a.dias)
+    .map(({ e, f, dias }) => ({
+      id_expediente: e.id_expediente ?? 0,
+      expediente: e.expediente,
+      oficio: e.oficio || '',
+      remitente: e.remitente_area || '',
+      servicio: e.servicio || '',
+      estatus: e.estatus || 'SIN ESTATUS',
+      responsable: e.responsable || 'Sin responsable',
+      fecha_documento: fechaIso(f),
+      dias,
+    }));
+  return { umbralDias: UMBRAL_DIAS_SIN_ATENDER, items };
 }
 
 export function estaAtendido(e: ExpedienteTlalcalli): boolean {
   const s = (e.estatus || '').toUpperCase();
   return !!s && ESTATUS_ATENDIDOS.includes(s);
-}
-
-function responsablesDe(e: ExpedienteTlalcalli): string[] {
-  return (e.responsable || '')
-    .split(';')
-    .map((r) => r.trim())
-    .filter(Boolean);
-}
-
-/** Clave de semana igual a `TO_CHAR(fecha, 'YYYY-WW')` de PostgreSQL. */
-function claveSemana(fecha: Date): string {
-  const inicioAnio = new Date(fecha.getFullYear(), 0, 1);
-  const diaDelAnio = Math.floor((fecha.getTime() - inicioAnio.getTime()) / MS_DIA) + 1;
-  const semana = Math.floor((diaDelAnio - 1) / 7) + 1;
-  return `${fecha.getFullYear()}-${String(semana).padStart(2, '0')}`;
-}
-
-function calcularSemaforo(lista: ExpedienteTlalcalli[], ahora: Date): SemaforoPrioridades {
-  const semaforo: SemaforoPrioridades = { en_tiempo: 0, atencion: 0, urgente: 0, vencido: 0 };
-  for (const e of lista) {
-    const horas = horasDesdeCaptura(e, ahora);
-    if (horas >= LIMITE_HORAS_SEMAFORO) semaforo.vencido++;
-    else if (horas >= 48) semaforo.urgente++;
-    else if (horas >= 24) semaforo.atencion++;
-    else semaforo.en_tiempo++;
-  }
-  return semaforo;
 }
 
 function porEstatusDesdeLista(lista: ExpedienteTlalcalli[]): EstadisticasPorEstatus[] {
@@ -159,232 +280,120 @@ function porEstatusDesdeLista(lista: ExpedienteTlalcalli[]): EstadisticasPorEsta
     .sort((a, b) => b.cantidad - a.cantidad);
 }
 
-function porResponsableDesdeLista(lista: ExpedienteTlalcalli[]): EstadisticasPorResponsable[] {
-  const mapa = new Map<string, EstadisticasPorResponsable>();
-  for (const e of lista) {
-    const atendido = estaAtendido(e);
-    for (const nombre of responsablesDe(e)) {
-      const fila = mapa.get(nombre) ?? { responsable: nombre, total: 0, pendientes: 0, atendidos: 0 };
-      fila.total++;
-      if (atendido) fila.atendidos++;
-      else fila.pendientes++;
-      mapa.set(nombre, fila);
-    }
-  }
-  return Array.from(mapa.values()).sort((a, b) => b.total - a.total);
-}
-
-function tendenciaDesdeLista(
-  lista: ExpedienteTlalcalli[],
-  api: TendenciaSemanal[],
-  ahora: Date
-): TendenciaSemanal[] {
-  const atendidosApi = new Map(api.map((t) => [t.semana, t.atendidos]));
-  const semanas: TendenciaSemanal[] = [];
-  for (let i = 3; i >= 0; i--) {
-    const semana = claveSemana(new Date(ahora.getTime() - i * 7 * MS_DIA));
-    if (!semanas.some((s) => s.semana === semana)) {
-      semanas.push({ semana, creados: 0, atendidos: atendidosApi.get(semana) ?? 0 });
-    }
-  }
-  for (const e of lista) {
-    const base = fechaBase(e);
-    if (!base) continue;
-    const fila = semanas.find((s) => s.semana === claveSemana(base));
-    if (fila) fila.creados++;
-  }
-  return semanas;
-}
-
-function criticosDesdeLista(pendientes: ExpedienteTlalcalli[], ahora: Date): ExpedienteCritico[] {
-  return pendientes
-    .map((e) => ({ e, horas: horasDesdeCaptura(e, ahora) }))
-    .filter(({ horas }) => horas >= 48)
-    .sort((a, b) => b.horas - a.horas)
-    .slice(0, 10)
-    .map(({ e, horas }) => ({
-      id_expediente: e.id_expediente ?? 0,
-      expediente: e.expediente,
-      oficio: e.oficio ?? null,
-      responsable: e.responsable || 'Sin responsable',
-      estatus: e.estatus || 'SIN ESTATUS',
-      horas_transcurridas: horas,
-    }));
-}
-
-function capturaDesdeLista(lista: ExpedienteTlalcalli[], ahora: Date): PanelCaptura {
-  const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate()).getTime();
-  const resultado: PanelCaptura = { total: lista.length, hoy: 0, ultimos7: 0, ultimos30: 0 };
-  for (const e of lista) {
-    const base = fechaBase(e);
-    if (!base) continue;
-    const dias = Math.floor((hoy - base.getTime()) / MS_DIA);
-    if (dias <= 0) resultado.hoy++;
-    if (dias < 7) resultado.ultimos7++;
-    if (dias < 30) resultado.ultimos30++;
-  }
-  return resultado;
-}
-
-function seguimientoDesdeFuentes(
-  resumen: ResumenSeguimiento[],
-  alertas: AlertaCompromiso[],
-  semaforo: SemaforoPrioridades
-): PanelSeguimiento {
+/**
+ * Indicadores y gráficas usan solo las solicitudes del rango (fecha del documento);
+ * la alerta de 90 días revisa todo el universo de pendientes.
+ */
+export function construirPanel(
+  fuentes: FuentesPanel,
+  ahora = new Date(),
+  rango = rangoHoy(ahora),
+  catalogoRemitente: CatalogoRemitenteAdmin | null = null
+): PanelDatos {
+  const todos = fuentes.expedientes;
   return {
-    conSeguimiento: resumen.filter((r) => r.acciones_registradas > 0).length,
-    ticketsAbiertos: resumen.reduce((acc, r) => acc + (r.tickets_abiertos || 0), 0),
-    wosAbiertos: resumen.reduce((acc, r) => acc + (r.wos_abiertos || 0), 0),
-    compromisosVencidos: resumen.reduce((acc, r) => acc + (r.compromisos_vencidos || 0), 0),
-    alertas: alertas.length,
-    urgentes: semaforo.urgente,
-    vencidos: semaforo.vencido,
-  };
-}
-
-function cierreDesdeFuentes(lista: ExpedienteTlalcalli[], resumen: ResumenCierre[]): PanelCierre {
-  const porExpediente = new Map(resumen.map((r) => [r.id_expediente, r]));
-  const conteos: Record<EstadoCierre, number> = { SIN_REGISTRO: 0, PARCIAL: 0, TOTAL: 0, COMPLETO: 0 };
-  const conId = lista.filter((e) => !!e.id_expediente);
-  for (const e of conId) {
-    conteos[porExpediente.get(e.id_expediente!)?.estado_cierre ?? 'SIN_REGISTRO']++;
-  }
-  return { total: conId.length, pendientes: conId.length - conteos.COMPLETO, conteos };
-}
-
-/** Panel calculado con el listado rework, el mismo que usan las bandejas. */
-function panelDesdeBandejas(f: FuentesPanel, ahora: Date): PanelDatos {
-  const lista = f.expedientes;
-  const pendientes = lista.filter((e) => !estaAtendido(e));
-  const semaforo = calcularSemaforo(lista, ahora);
-  const sumaHoras = pendientes.reduce((acc, e) => acc + horasDesdeCaptura(e, ahora), 0);
-  const porEstatus = porEstatusDesdeLista(lista);
-  const porResponsable = porResponsableDesdeLista(lista);
-
-  return {
-    origen: 'bandejas',
-    kpis: {
-      total: lista.length,
-      porAtender: pendientes.length,
-      atendidos: lista.length - pendientes.length,
-      criticos: semaforo.urgente + semaforo.vencido,
-      responsables: porResponsable.length,
-      promedioHorasPendientes: pendientes.length ? Math.round(sumaHoras / pendientes.length) : 0,
-      semaforo,
-    },
-    graficas: {
-      porEstatus,
-      porResponsable,
-      tendencia: tendenciaDesdeLista(lista, f.estadisticas.tendencia_semanal, ahora),
-      porTipoAccion: f.estadisticas.por_tipo_accion,
-    },
-    captura: capturaDesdeLista(lista, ahora),
-    consulta: { total: lista.length, topEstatus: porEstatus.slice(0, 3) },
-    seguimiento: seguimientoDesdeFuentes(f.resumenSeguimiento, f.alertas, semaforo),
-    cierre: cierreDesdeFuentes(lista, f.resumenCierre),
-    criticos: criticosDesdeLista(pendientes, ahora),
-    alertas: ordenarAlertas(f.alertas),
+    catalogoRemitente,
+    periodo: periodoDesdeLista(todos, rango, ahora, catalogoRemitente, fuentes.serviciosCatalogo),
+    sinAtender: sinAtenderDesdeLista(todos, ahora),
+    metricas: fuentes.metricas,
     generado: ahora,
   };
 }
 
-/** Respaldo cuando el listado de bandejas no devuelve registros. */
-function panelDesdeEstadisticas(f: FuentesPanel, ahora: Date): PanelDatos {
-  const d = f.estadisticas;
-  const g = d.generales;
-  const atendidos = g.en_atencion + g.atendidos_total + g.rechazados;
-  return {
-    origen: 'estadisticas',
-    kpis: {
-      total: g.total_expedientes,
-      porAtender: Math.max(0, g.total_expedientes - atendidos),
-      atendidos,
-      criticos: d.semaforo.urgente + d.semaforo.vencido,
-      responsables: g.responsables_activos,
-      promedioHorasPendientes: g.promedio_horas_atencion,
-      semaforo: d.semaforo,
-    },
-    graficas: {
-      porEstatus: d.por_estatus,
-      porResponsable: d.por_responsable,
-      tendencia: [...d.tendencia_semanal].reverse(),
-      porTipoAccion: d.por_tipo_accion,
-    },
-    captura: { total: g.total_expedientes, hoy: 0, ultimos7: 0, ultimos30: 0 },
-    consulta: { total: g.total_expedientes, topEstatus: d.por_estatus.slice(0, 3) },
-    seguimiento: seguimientoDesdeFuentes(f.resumenSeguimiento, f.alertas, d.semaforo),
-    cierre: cierreDesdeFuentes([], f.resumenCierre),
-    criticos: d.expedientes_criticos,
-    alertas: ordenarAlertas(f.alertas),
-    generado: ahora,
-  };
-}
-
-function ordenarAlertas(alertas: AlertaCompromiso[]): AlertaCompromiso[] {
-  return [...alertas].sort((a, b) => b.dias_vencido - a.dias_vencido);
-}
-
-/** Mismo formato que el "Tiempo promedio" de la bandeja de Seguimiento. */
-export function formatearDuracion(horas: number): string {
-  const h = Math.max(0, Math.round(horas));
-  if (h < 24) {
-    return `${h} h`;
+/** Mensaje cuando los indicadores del servidor faltan completos o en parte; null si llegaron bien. */
+export function avisoMetricasServidor(metricas: MetricasServidor | null): string | null {
+  if (!metricas) {
+    return 'No se pudieron cargar los indicadores del servidor (GET metricas). El resto del panel se calcula con las solicitudes consultadas.';
   }
-  const dias = Math.floor(h / 24);
-  const resto = h % 24;
-  return resto ? `${dias}d ${resto}h` : `${dias}d`;
+  if (!metricas.vencidos) {
+    return 'Vencidos y expedientes críticos no están disponibles: hay expedientes con la fecha de recepción en un formato distinto a DD/MM/AAAA.';
+  }
+  return null;
 }
 
-export function construirPanel(fuentes: FuentesPanel, ahora = new Date()): PanelDatos {
-  return fuentes.expedientes.length > 0
-    ? panelDesdeBandejas(fuentes, ahora)
-    : panelDesdeEstadisticas(fuentes, ahora);
+export function formatearHoras(horas: number | null | undefined): string {
+  if (horas === null || horas === undefined || Number.isNaN(horas)) {
+    return '—';
+  }
+  if (horas < 48) {
+    return `${Math.round(horas)} h`;
+  }
+  const dias = Math.floor(horas / 24);
+  return dias === 1 ? '1 día' : `${dias} días`;
 }
 
-function celdaCsv(valor: string | number): string {
-  const texto = String(valor ?? '');
-  return /[",\n;]/.test(texto) ? `"${texto.replace(/"/g, '""')}"` : texto;
+/** Filas de los críticos del servidor para Excel / PDF. */
+export function filasCriticosServidor(metricas: MetricasServidor | null): (string | number)[][] {
+  return (metricas?.criticos ?? []).map((c) => [
+    c.expediente,
+    c.oficio,
+    c.responsable,
+    c.estatus,
+    Math.round(c.horas),
+    formatearHoras(c.horas),
+  ]);
 }
 
-export function panelACsv(p: PanelDatos): string {
+export function agrupacionAdministracionPeriodo(
+  per: PanelPeriodo,
+  vista: VistaAdministracionRemitente
+): AreaPeriodo[] {
+  return vista === 'general' ? per.porAdministracionGeneral : per.porAdministracionCentral;
+}
+
+export function formatearDias(dias: number | null): string {
+  if (dias === null) {
+    return '—';
+  }
+  return dias === 1 ? '1 día' : `${dias} días`;
+}
+
+/** Columnas de estatus con al menos una solicitud en el periodo (para tablas y reportes). */
+export function bucketsEstatusActivosEnPeriodo(per: PanelPeriodo): BucketEstatus[] {
+  return BUCKETS_ESTATUS.filter((b) => per.porBucketEstatus[b] > 0);
+}
+
+/** Filas del desglose administración × grupo de estatus (Excel / PDF / PPTX). */
+export function filasTablaPorAdministracionEstatus(
+  p: PanelDatos,
+  vista: VistaAdministracionRemitente
+): { encabezados: string[]; filas: (string | number)[][] } {
+  const per = p.periodo;
+  const buckets = BUCKETS_ESTATUS;
+  const tituloCol = vista === 'general' ? 'Administración General' : 'Administración Central';
+  const encabezados = [tituloCol, 'Total', ...buckets.map((b) => ETIQUETAS_BUCKET_ESTATUS[b])];
+  const agrupacion = agrupacionAdministracionPeriodo(per, vista);
+  const filas = agrupacion.map((a) => [a.area, a.total, ...buckets.map((b) => a.porBucket[b])]);
+  return { encabezados, filas };
+}
+
+export function soloAdministracionSinDato(per: PanelPeriodo, vista: VistaAdministracionRemitente): boolean {
+  const agrupacion = agrupacionAdministracionPeriodo(per, vista);
+  return (
+    per.capturadas > 0 &&
+    agrupacion.length > 0 &&
+    agrupacion.every((a) => a.area === ETIQUETA_SIN_DATO_ADMIN)
+  );
+}
+
+/** Filas de resumen compartidas por Excel, PDF y presentación. */
+export function filasResumenPeriodo(p: PanelDatos): (string | number)[][] {
+  const per = p.periodo;
   const filas: (string | number)[][] = [
-    ['Panel Estadístico Tlálcalli'],
-    ['Generado', p.generado.toLocaleString('es-MX')],
-    ['Origen de datos', p.origen === 'bandejas' ? 'Bandejas operativas' : 'Servicio de estadísticas'],
-    [],
-    ['Sección', 'Indicador', 'Valor'],
-    ['General', 'Total expedientes', p.kpis.total],
-    ['General', 'Por atender', p.kpis.porAtender],
-    ['General', 'Atendidos', p.kpis.atendidos],
-    ['General', 'Críticos (urgentes + vencidos)', p.kpis.criticos],
-    ['General', 'Responsables', p.kpis.responsables],
-    ['General', 'Tiempo promedio pendientes (h)', p.kpis.promedioHorasPendientes],
-    ['Captura', 'Capturados hoy', p.captura.hoy],
-    ['Captura', 'Últimos 7 días', p.captura.ultimos7],
-    ['Captura', 'Últimos 30 días', p.captura.ultimos30],
-    ...p.consulta.topEstatus.map((e) => ['Consulta', `Estatus ${e.estatus}`, e.cantidad]),
-    ['Seguimiento', 'En tiempo (0-24 h)', p.kpis.semaforo.en_tiempo],
-    ['Seguimiento', 'Atención (24-48 h)', p.kpis.semaforo.atencion],
-    ['Seguimiento', 'Urgente (48-72 h)', p.kpis.semaforo.urgente],
-    ['Seguimiento', 'Vencido (+72 h)', p.kpis.semaforo.vencido],
-    ['Seguimiento', 'Expedientes con seguimiento', p.seguimiento.conSeguimiento],
-    ['Seguimiento', 'Tickets abiertos', p.seguimiento.ticketsAbiertos],
-    ['Seguimiento', 'WO abiertos', p.seguimiento.wosAbiertos],
-    ['Seguimiento', 'Compromisos vencidos', p.seguimiento.compromisosVencidos],
-    ...ESTADOS_CIERRE.map((e) => ['Atención / cierre', ETIQUETAS_CIERRE[e], p.cierre.conteos[e]]),
-    ['Atención / cierre', 'Pendientes de cierre', p.cierre.pendientes],
-    [],
-    ['Carga por responsable'],
-    ['Responsable', 'Total', 'Pendientes', 'Atendidos'],
-    ...p.graficas.porResponsable.map((r) => [r.responsable, r.total, r.pendientes, r.atendidos]),
-    [],
-    ['Expedientes críticos'],
-    ['Expediente', 'Oficio', 'Responsable', 'Estatus', 'Horas desde captura'],
-    ...p.criticos.map((c) => [c.expediente, c.oficio ?? '', c.responsable, c.estatus, Math.round(c.horas_transcurridas)]),
-    [],
-    ['Alertas de compromiso'],
-    ['Expediente', 'Tipo', 'Número', 'Fecha compromiso', 'Días vencido'],
-    ...p.alertas.map((a) => [a.num_expediente, a.tipo, a.numero, a.fecha_compromiso, a.dias_vencido]),
+    ['Solicitudes capturadas (fecha del documento)', per.capturadas],
+    ['Por atender', per.porAtender],
+    ['Atendidas (incluye conocimiento y canceladas)', per.atendidos],
+    ['Canceladas', per.cancelados],
+    ['Tiempo promedio de atención (estimado)', formatearDias(per.promedioDiasAtencion)],
+    [`Sin atender ${p.sinAtender.umbralDias}+ días (todo el universo)`, p.sinAtender.items.length],
   ];
-  return '\uFEFF' + filas.map((fila) => fila.map(celdaCsv).join(',')).join('\r\n');
+  const vencidos = p.metricas?.vencidos;
+  if (p.metricas && vencidos) {
+    filas.push(
+      ['Vencidos (servidor, todo el universo)', vencidos.vencidos],
+      ['Antigüedad promedio de vencidos (servidor)', formatearHoras(vencidos.promedioHoras)],
+      ['Expedientes críticos (servidor)', p.metricas.criticos.length],
+    );
+  }
+  return filas;
 }

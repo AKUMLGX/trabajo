@@ -1,0 +1,18 @@
+/* Mismo morado tenue que tl-segmented-item (hover) en dashboard-page — pestaña Administración Central */
+:host button.reportes-action-btn {
+  border: 1px solid rgb(62 0 101 / 0.2) !important;
+  background-color: #f9f5fb !important;
+  background-image: none !important;
+  color: #3e0065 !important;
+  box-shadow: 0 2px 8px rgba(52, 0, 91, 0.15);
+}
+
+:host button.reportes-action-btn:hover:not(:disabled),
+:host button.reportes-action-btn:focus-visible:not(:disabled) {
+  border-color: rgb(62 0 101 / 0.35) !important;
+  background-color: #ede4f4 !important;
+  background-image: none !important;
+  color: #3e0065 !important;
+  outline: none;
+  box-shadow: 0 0 0 4px rgb(62 0 101 / 0.1);
+}

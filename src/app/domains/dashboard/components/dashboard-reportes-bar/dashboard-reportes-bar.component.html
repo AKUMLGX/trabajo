@@ -1,31 +1,29 @@
 <section class="tl-card p-5">
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-    <div class="tl-section-title">
-      <span class="tl-section-icon bg-tlalcalli-gold/20 text-tlalcalli-dark-gold"><span class="icon-font !text-[22px]">summarize</span></span>
-      <div>
+  <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <div class="tl-section-title min-w-0 flex-1">
+      <span class="tl-section-icon shrink-0 bg-tlalcalli-gold/20 text-tlalcalli-dark-gold"><span class="icon-font !text-[22px]">summarize</span></span>
+      <div class="min-w-0 flex-1">
         <h2 class="tl-section-heading">Reportes</h2>
-        <p class="tl-section-subtitle">
-          @if (puedeExportar) {
-            Descarga el detalle de expedientes o el resumen de este panel con la fecha y hora de generación
-          } @else {
-            Tu rol no tiene permiso para generar reportes; solicita el acceso al administrador
-          }
+        <p class="tl-section-subtitle text-balance">
+          Descarga el periodo seleccionado en Excel, las gráficas en PDF o una presentación lista para compartir
         </p>
       </div>
     </div>
 
-    @if (puedeExportar) {
-      <div class="flex flex-wrap gap-3">
-        <button type="button" class="tl-btn-secondary" (click)="descargarResumen()">
-          <span class="icon-font !text-[18px]">table_view</span>
-          Resumen del panel (CSV)
+    <div class="flex w-full shrink-0 flex-wrap gap-2 sm:flex-nowrap xl:w-auto xl:gap-3">
+        <button type="button" class="tl-btn reportes-action-btn shrink-0 whitespace-nowrap !px-4" (click)="generar('excel')" [disabled]="!!generando()">
+          <span class="icon-font !text-[18px]" [class.animate-spin]="generando() === 'excel'">{{ generando() === 'excel' ? 'progress_activity' : 'grid_on' }}</span>
+          Excel del periodo
         </button>
-        <button type="button" class="tl-btn-primary" (click)="descargarExcel()" [disabled]="descargandoExcel()">
-          <span class="icon-font !text-[18px]" [class.animate-spin]="descargandoExcel()">{{ descargandoExcel() ? 'progress_activity' : 'download' }}</span>
-          Expedientes (Excel)
+        <button type="button" class="tl-btn reportes-action-btn shrink-0 whitespace-nowrap !px-4" (click)="generar('pdf')" [disabled]="!!generando()">
+          <span class="icon-font !text-[18px]" [class.animate-spin]="generando() === 'pdf'">{{ generando() === 'pdf' ? 'progress_activity' : 'picture_as_pdf' }}</span>
+          PDF de gráficas
+        </button>
+        <button type="button" class="tl-btn tl-btn-primary shrink-0 whitespace-nowrap !px-4" (click)="generar('pptx')" [disabled]="!!generando()">
+          <span class="icon-font !text-[18px]" [class.animate-spin]="generando() === 'pptx'">{{ generando() === 'pptx' ? 'progress_activity' : 'slideshow' }}</span>
+          Presentación
         </button>
       </div>
-    }
   </div>
 
   @if (mensaje(); as m) {

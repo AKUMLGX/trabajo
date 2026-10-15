@@ -2,55 +2,82 @@ import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
+import { ApiService } from '../../capture/services/api.service';
+import { CatalogoReworkCacheService } from '../../capture/services/catalogo-rework-cache.service';
 import { ExpedienteTlalcalliService } from '../../capture/services/expediente-tlalcalli.service';
-import { CierreReworkService } from '../../responsables/services/cierre-rework.service';
-import { SeguimientoAsignacionService } from '../../responsables/services/seguimiento-asignacion.service';
-import { DashboardService } from './dashboard.service';
-import { PanelDatos, construirPanel, panelACsv } from './dashboard-panel.utils';
+import {
+  CatalogoGeneralResponse,
+  CatalogoGeneralesCentralResponse,
+} from '../../interfaces/first-step-catalogos.interface';
+import {
+  CatalogoRemitenteAdmin,
+  construirCatalogoRemitenteAdmin,
+  enriquecerExpedientesRemitenteAdmin,
+} from './dashboard-remitente-admin.utils';
+import { FuentesPanel, PanelDatos, RangoFechas, construirPanel } from './dashboard-panel.utils';
+import { MetricasPanelService } from './metricas-panel.service';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardPanelFacade {
+  private catalogoRemitente: CatalogoRemitenteAdmin | null = null;
+
   constructor(
-    private dashboardService: DashboardService,
     private expedienteService: ExpedienteTlalcalliService,
-    private seguimientoService: SeguimientoAsignacionService,
-    private cierreService: CierreReworkService
+    private apiService: ApiService,
+    private catalogoReworkCache: CatalogoReworkCacheService,
+    private metricasService: MetricasPanelService
   ) {}
 
-  /** Carga en paralelo las fuentes de las cuatro bandejas; una fuente caída no bloquea el panel. */
-  cargarPanel(): Observable<PanelDatos> {
+  /** Catálogo usado para etiquetas de administración general/central en el panel. */
+  getCatalogoRemitente(): CatalogoRemitenteAdmin | null {
+    return this.catalogoRemitente;
+  }
+
+  /** El catálogo y las métricas del servidor son opcionales; si falla el listado, el panel muestra el error en vez de ceros. */
+  cargarFuentes(): Observable<FuentesPanel> {
     return forkJoin({
-      estadisticas: this.dashboardService.obtenerEstadisticas(),
-      expedientes: this.expedienteService.consultarExpedientes({}).pipe(catchError(() => of([]))),
-      resumenSeguimiento: this.seguimientoService.obtenerResumen().pipe(catchError(() => of([]))),
-      alertas: this.seguimientoService.obtenerAlertas().pipe(catchError(() => of([]))),
-      resumenCierre: this.cierreService.obtenerResumen().pipe(catchError(() => of([]))),
-    }).pipe(map((fuentes) => construirPanel(fuentes)));
+      expedientes: this.expedienteService.consultarExpedientes({}),
+      catalogoRemitente: this.cargarCatalogoRemitente().pipe(catchError(() => of(null))),
+      servicios: this.catalogoReworkCache.getCat(1),
+      metricas: this.metricasService.obtener(),
+    }).pipe(
+      map(({ expedientes, catalogoRemitente, servicios, metricas }) => {
+        this.catalogoRemitente = catalogoRemitente;
+        return {
+          expedientes: enriquecerExpedientesRemitenteAdmin(expedientes, catalogoRemitente),
+          serviciosCatalogo: servicios.filter((s) => !s.eliminado).map((s) => s.descripcion),
+          metricas,
+        };
+      })
+    );
   }
 
-  descargarExcelExpedientes(): Observable<Blob> {
-    return this.expedienteService.descargarExcelExpedientes({});
+  cargarPanel(rango?: RangoFechas): Observable<PanelDatos> {
+    return this.cargarFuentes().pipe(
+      map((fuentes) => construirPanel(fuentes, new Date(), rango, this.catalogoRemitente))
+    );
   }
 
-  descargarResumenCsv(panel: PanelDatos): void {
-    const blob = new Blob([panelACsv(panel)], { type: 'text/csv;charset=utf-8' });
-    this.descargarBlob(blob, `panel_estadistico_${this.fechaArchivo(panel.generado)}.csv`);
+  /** Prefijo de archivo con el periodo consultado, p. ej. panel_estadistico_2026-10-01_al_2026-10-07. */
+  nombreBase(panel: PanelDatos): string {
+    const { desde, hasta } = panel.periodo.rango;
+    return desde === hasta ? `panel_estadistico_${desde}` : `panel_estadistico_${desde}_al_${hasta}`;
   }
 
-  descargarBlob(blob: Blob, nombre: string): void {
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = nombre;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  }
-
-  fechaArchivo(fecha = new Date()): string {
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    const dia = String(fecha.getDate()).padStart(2, '0');
-    return `${fecha.getFullYear()}-${mes}-${dia}`;
+  private cargarCatalogoRemitente(): Observable<CatalogoRemitenteAdmin | null> {
+    return forkJoin({
+      generales: this.apiService.getData<CatalogoGeneralResponse[]>('catalogo/generales', true).pipe(
+        map((r) => r.body ?? []),
+        catchError(() => of([] as CatalogoGeneralResponse[]))
+      ),
+      generalesXCentral: this.apiService
+        .getData<CatalogoGeneralesCentralResponse>('catalogo/generales_x_central', true)
+        .pipe(
+          map((r) => r.body ?? {}),
+          catchError(() => of({} as CatalogoGeneralesCentralResponse))
+        ),
+    }).pipe(
+      map(({ generales, generalesXCentral }) => construirCatalogoRemitenteAdmin(generales, generalesXCentral))
+    );
   }
 }

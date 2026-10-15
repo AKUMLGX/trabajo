@@ -1,0 +1,356 @@
+<div class="tl-modal w-[min(1200px,96vw)]">
+
+  <header class="tl-modal-header">
+    <div class="flex min-w-0 items-center gap-4">
+      <div class="tl-modal-icon">
+        <span class="icon-font !text-[28px]">timeline</span>
+      </div>
+      <div class="min-w-0">
+        <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-[2px] text-tlalcalli-gold">Seguimiento del expediente · Solo lectura</p>
+        <h2 class="m-0 mt-1 font-noto-sans text-[22px] font-semibold leading-none text-white">{{ expediente.expediente || 'Sin número' }}</h2>
+        <p class="m-0 mt-1.5 truncate font-noto-sans text-sm text-white/75">
+          {{ oficiosPrincipales.join(', ') || 'Sin oficio' }} · {{ remitente.principal }}
+        </p>
+      </div>
+    </div>
+  </header>
+
+  @if (cargando) {
+    <div class="flex min-h-[420px] flex-col items-center justify-center">
+      <div class="tl-spinner"></div>
+      <p class="mt-4 font-noto-sans text-sm text-tlalcalli-gray">Reuniendo el seguimiento del expediente...</p>
+    </div>
+  } @else {
+    <main class="tl-modal-body grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
+
+      <div class="flex min-w-0 flex-col gap-5">
+
+        <section class="tl-card p-6">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">search</span></span>
+              <div>
+                <h3 class="tl-section-heading">Consulta</h3>
+                <p class="tl-section-subtitle">Datos capturados del expediente y sus oficios.</p>
+              </div>
+            </div>
+            <button type="button" (click)="verDocumentos()" class="tl-btn-secondary tl-btn-sm">
+              <span class="icon-font !text-[18px]">picture_as_pdf</span>
+              Ver documentos
+            </button>
+          </div>
+
+          @if (errorConsulta) {
+            <p class="m-0 mb-4 flex items-center gap-2 rounded-lg bg-tlalcalli-warning/10 px-3 py-2 font-noto-sans text-xs text-tlalcalli-warning-muted">
+              <span class="icon-font !text-[16px]">info</span>
+              No se pudo cargar el detalle de captura; se muestran los datos de la bandeja.
+            </p>
+          }
+
+          <dl class="m-0 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div>
+              <dt class="tl-label">Remitente</dt>
+              <dd class="m-0 font-noto-sans text-sm font-semibold text-tlalcalli-deep">{{ remitente.principal }}</dd>
+              @if (remitente.detalle) {
+                <dd class="m-0 mt-0.5 font-noto-sans text-xs text-tlalcalli-gray">{{ remitente.detalle }}</dd>
+              }
+            </div>
+            <div>
+              <dt class="tl-label">Servicio</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(detalle?.servicio) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Prioridad</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(detalle?.prioridad) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Estatus</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(detalle?.estatus || expediente.estatus) | etiquetaEstatus }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Ubicación</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(detalle?.ubicacion) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Responsable</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(detalle?.responsable) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Fecha de recepción</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ fecha(detalle?.fecha_recepcion) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Fecha de vencimiento</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ fecha(detalle?.fecha_vencimiento) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">No. de entrada central</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(detalle?.numero_entrada_central) }}</dd>
+            </div>
+            <div class="sm:col-span-2 xl:col-span-3">
+              <dt class="tl-label">Asunto</dt>
+              <dd class="m-0 whitespace-pre-line font-noto-sans text-sm text-tlalcalli-dark">{{ texto(detalle?.asunto || expediente.referencia_asunto) }}</dd>
+            </div>
+          </dl>
+
+          <div class="tl-group mt-5">
+            <span class="tl-group-title">Oficios</span>
+            <ul class="m-0 flex list-none flex-col gap-2 p-0">
+              @for (oficio of oficiosPrincipales; track $index) {
+                <li class="flex flex-wrap items-center gap-2 font-noto-sans text-sm">
+                  <span class="tl-chip tl-chip-primary">Principal</span>
+                  <span class="font-semibold text-tlalcalli-deep">{{ oficio }}</span>
+                </li>
+              }
+              @for (adjunto of adjuntos; track adjunto.id_archivo ?? $index) {
+                <li class="flex flex-wrap items-center gap-2 font-noto-sans text-sm">
+                  <span class="tl-chip tl-chip-neutral">Adjunto</span>
+                  <span class="font-semibold text-tlalcalli-deep">{{ adjunto.num_oficio }}</span>
+                  <span class="text-xs text-tlalcalli-gray">Recepción {{ fecha(adjunto.fecha_recepcion) }}</span>
+                  @if (adjunto.asunto) {
+                    <span class="w-full truncate text-xs text-tlalcalli-gray" [title]="adjunto.asunto">{{ adjunto.asunto }}</span>
+                  }
+                </li>
+              }
+              @if (!oficiosPrincipales.length && !adjuntos.length) {
+                <li class="font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</li>
+              }
+            </ul>
+          </div>
+        </section>
+
+        <section class="tl-card p-6">
+          <div class="tl-section-title mb-4">
+            <span class="tl-section-icon"><span class="icon-font !text-[22px]">group_add</span></span>
+            <div>
+              <h3 class="tl-section-heading">Seguimiento y asignación</h3>
+              <p class="tl-section-subtitle">
+                @if (seguimiento?.fecha_actualizacion) {
+                  Actualizado el {{ fecha(seguimiento?.fecha_actualizacion) }}
+                  @if (seguimiento?.usuario_actualizacion) { · {{ seguimiento?.usuario_actualizacion }} }
+                } @else {
+                  Responsables, folios y acciones registradas.
+                }
+              </p>
+            </div>
+          </div>
+
+          @if (errorSeguimiento) {
+            <p class="m-0 mb-4 flex items-center gap-2 rounded-lg bg-tlalcalli-warning/10 px-3 py-2 font-noto-sans text-xs text-tlalcalli-warning-muted">
+              <span class="icon-font !text-[16px]">info</span>
+              No se pudo cargar el seguimiento de este expediente.
+            </p>
+          }
+
+          @if (fechaCorreoAsignacion !== undefined) {
+            <div class="mb-4 flex items-center gap-2 font-noto-sans text-sm">
+              <span class="icon-font !text-[18px] text-tlalcalli-primary">forward_to_inbox</span>
+              <span class="text-tlalcalli-dark-muted">Correo de asignación:</span>
+              @if (fechaCorreoAsignacion) {
+                <span class="tl-chip tl-chip-success">Enviado el {{ fecha(fechaCorreoAsignacion) }}</span>
+              } @else {
+                <span class="tl-chip tl-chip-neutral">No enviado</span>
+              }
+            </div>
+          }
+
+          <div class="tl-group">
+            <span class="tl-group-title">Responsables asignados</span>
+            @if (tieneAsignados) {
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                @for (grupo of gruposAsignados; track grupo.titulo) {
+                  @if (grupo.nombres.length) {
+                    <div>
+                      <span class="block font-noto-sans text-xs font-semibold text-tlalcalli-dark-muted">{{ grupo.titulo }}</span>
+                      <div class="mt-1 flex flex-wrap gap-1.5">
+                        @for (nombre of grupo.nombres; track nombre) {
+                          <span class="tl-chip tl-chip-primary">{{ nombre }}</span>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            } @else {
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</p>
+            }
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div class="tl-group">
+              <span class="tl-group-title">Folios de entregables</span>
+              @for (folio of folios; track folio.folio) {
+                <div class="mb-2 flex flex-wrap items-center gap-2 font-noto-sans text-sm last:mb-0">
+                  <span class="font-semibold" [ngClass]="folio.estado === 'CANCELADO' ? 'text-tlalcalli-gray line-through' : 'text-tlalcalli-deep'">{{ folio.folio }}</span>
+                  <span class="tl-chip" [ngClass]="folio.estado === 'ACTIVO' ? 'tl-chip-success' : 'tl-chip-neutral'">{{ folio.estado === 'ACTIVO' ? 'Activo' : 'Cancelado' }}</span>
+                  <span class="w-full text-xs text-tlalcalli-gray">{{ folio.tipo }} · {{ fecha(folio.fecha) }}</span>
+                  @if (folio.motivo) {
+                    <span class="w-full text-xs text-tlalcalli-error-muted">Motivo: {{ folio.motivo }}</span>
+                  }
+                </div>
+              } @empty {
+                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</p>
+              }
+            </div>
+
+            <div class="tl-group">
+              <span class="tl-group-title">Acciones registradas</span>
+              @for (accion of accionesRegistradas; track accion.titulo) {
+                <div class="mb-2 last:mb-0">
+                  <span class="block font-noto-sans text-xs font-semibold text-tlalcalli-dark-muted">{{ accion.titulo }}</span>
+                  <div class="mt-1 flex flex-wrap gap-1.5">
+                    @for (valor of accion.valores; track valor) {
+                      <span class="tl-chip tl-chip-neutral">{{ valor }}</span>
+                    }
+                  </div>
+                </div>
+              } @empty {
+                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</p>
+              }
+            </div>
+          </div>
+
+          <div class="tl-group mt-4">
+            <span class="tl-group-title">Tickets y WOOS</span>
+            @for (c of compromisos; track c.tipo + c.item.numero) {
+              <div class="mb-2 flex flex-wrap items-center gap-2 font-noto-sans text-sm last:mb-0">
+                <span class="tl-chip tl-chip-dark">{{ c.tipo }}</span>
+                <span class="font-semibold text-tlalcalli-deep">{{ c.item.numero }}</span>
+                <span class="text-xs text-tlalcalli-gray">Apertura {{ fecha(c.item.fecha_apertura) }} · Compromiso {{ fecha(c.item.fecha_compromiso) }}</span>
+                @if (c.item.cerrado) {
+                  <span class="tl-chip tl-chip-success">Cerrado {{ c.item.fecha_cierre ? fecha(c.item.fecha_cierre) : '' }}</span>
+                } @else if (vencido(c.item)) {
+                  <span class="tl-chip tl-chip-error">Vencido</span>
+                } @else {
+                  <span class="tl-chip tl-chip-warning">Abierto</span>
+                }
+              </div>
+            } @empty {
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</p>
+            }
+          </div>
+
+          @if (notaAnexos) {
+            <div class="tl-group mt-4">
+              <span class="tl-group-title">Anexos</span>
+              <p class="m-0 whitespace-pre-line font-noto-sans text-sm text-tlalcalli-dark">{{ notaAnexos }}</p>
+            </div>
+          }
+        </section>
+
+        <section class="tl-card p-6">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">assignment_turned_in</span></span>
+              <div>
+                <h3 class="tl-section-heading">Atención y cierre</h3>
+                <p class="tl-section-subtitle">
+                  @if (cierre?.fecha_actualizacion) {
+                    Actualizado el {{ fecha(cierre?.fecha_actualizacion) }}
+                    @if (cierre?.usuario_actualizacion) { · {{ cierre?.usuario_actualizacion }} }
+                  } @else {
+                    Respuestas, acuse y evidencia de cierre.
+                  }
+                </p>
+              </div>
+            </div>
+            @if (etapa; as etapaActual) {
+              <span class="tl-chip" [ngClass]="etapaActual.clase">
+                <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+                Etapa: {{ etapaActual.etiqueta }}
+              </span>
+            } @else {
+              <span class="tl-chip tl-chip-neutral">Sin etapa</span>
+            }
+          </div>
+
+          @if (errorCierre) {
+            <p class="m-0 mb-4 flex items-center gap-2 rounded-lg bg-tlalcalli-warning/10 px-3 py-2 font-noto-sans text-xs text-tlalcalli-warning-muted">
+              <span class="icon-font !text-[16px]">info</span>
+              No se pudo cargar la evidencia de cierre.
+            </p>
+          }
+
+          <div class="tl-group">
+            <span class="tl-group-title">Respuestas parciales</span>
+            @for (parcial of cierre?.respuestas_parciales ?? []; track $index; let i = $index) {
+              <div class="mb-2 flex items-start gap-3 font-noto-sans text-sm last:mb-0">
+                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-tlalcalli-warning/15 text-[11px] font-bold text-tlalcalli-warning-muted">{{ i + 1 }}</span>
+                <div class="min-w-0">
+                  <span class="block text-tlalcalli-dark">{{ texto(parcial.descripcion) }}</span>
+                  <span class="block text-xs text-tlalcalli-gray">Notificada {{ fecha(parcial.fecha_notificacion) }}</span>
+                </div>
+              </div>
+            } @empty {
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</p>
+            }
+          </div>
+
+          <div class="tl-group mt-4">
+            <span class="tl-group-title">Respuesta total</span>
+            <p class="m-0 whitespace-pre-line font-noto-sans text-sm text-tlalcalli-dark">{{ texto(cierre?.respuesta_total) }}</p>
+            <div class="mt-2 flex flex-wrap gap-x-6 gap-y-1 font-noto-sans text-xs text-tlalcalli-gray">
+              <span>Notificación física: <strong class="text-tlalcalli-dark">{{ fecha(cierre?.fecha_notif_total_fisica) }}</strong></span>
+              <span>Notificación por correo: <strong class="text-tlalcalli-dark">{{ fecha(cierre?.fecha_notif_total_correo) }}</strong></span>
+            </div>
+          </div>
+
+          <dl class="m-0 mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-3">
+            <div>
+              <dt class="tl-label">Acuse</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(acuse) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Expediente físico / digital</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-dark">{{ texto(estadoExpediente) }}</dd>
+            </div>
+            <div>
+              <dt class="tl-label">Archivos de evidencia</dt>
+              <dd class="m-0 font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</dd>
+            </div>
+            <div class="sm:col-span-3">
+              <dt class="tl-label">Observaciones</dt>
+              <dd class="m-0 whitespace-pre-line font-noto-sans text-sm text-tlalcalli-dark">{{ texto(cierre?.observaciones) }}</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+
+      <aside class="tl-card p-6 lg:sticky lg:top-0">
+        <div class="tl-section-title mb-5">
+          <span class="tl-section-icon"><span class="icon-font !text-[22px]">history</span></span>
+          <div>
+            <h3 class="tl-section-heading">Línea de tiempo</h3>
+            <p class="tl-section-subtitle">{{ eventos.length }} evento(s) con fecha</p>
+          </div>
+        </div>
+
+        @if (eventos.length) {
+          <ol class="relative m-0 list-none border-l-2 border-tlalcalli-light-base p-0 pl-6">
+            @for (evento of eventos; track $index) {
+              @let origen = origenes[evento.origen];
+              <li class="relative mb-5 last:mb-0">
+                <span class="absolute -left-[33px] top-0.5 flex h-4 w-4 items-center justify-center rounded-full ring-4 ring-white" [ngClass]="origen.punto"></span>
+                <span class="block font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-tlalcalli-gray">{{ fecha(evento.fecha) }}</span>
+                <span class="mt-0.5 flex items-center gap-1.5 font-noto-sans text-sm font-semibold text-tlalcalli-deep">
+                  <span class="icon-font !text-[16px] text-tlalcalli-dark-muted">{{ evento.icono }}</span>
+                  {{ evento.titulo }}
+                </span>
+                @if (evento.detalle) {
+                  <span class="mt-0.5 block truncate font-noto-sans text-xs text-tlalcalli-gray" [title]="evento.detalle">{{ evento.detalle }}</span>
+                }
+                <span class="tl-chip mt-1.5" [ngClass]="origen.chip">{{ origen.etiqueta }}</span>
+              </li>
+            }
+          </ol>
+        } @else {
+          <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">{{ sinRegistro }}</p>
+        }
+      </aside>
+    </main>
+
+    <footer class="tl-modal-footer">
+      <button type="button" (click)="cerrar()" class="tl-btn-secondary">Cerrar</button>
+    </footer>
+  }
+</div>

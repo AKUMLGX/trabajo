@@ -8,7 +8,7 @@
         </div>
         <div>
           <h1 class="tl-page-title">Panel Estadístico</h1>
-          <p class="tl-page-subtitle">Visión ejecutiva de Captura, Consulta, Seguimiento y Cierre</p>
+          <p class="tl-page-subtitle">Monitoreo de solicitudes capturadas por periodo</p>
         </div>
       </div>
 
@@ -47,104 +47,113 @@
     }
 
     @if (panel(); as p) {
-      @let k = p.kpis;
+      @let per = p.periodo;
+      @let urgentes = p.sinAtender.items.length;
 
-      <app-dashboard-reportes-bar [panel]="p" [puedeExportar]="puedeExportar()" />
-
-      @if (p.origen === 'estadisticas') {
-        <div class="tl-card flex items-start gap-3 border-l-4 border-l-tlalcalli-warning bg-tlalcalli-warning/10 p-4">
-          <span class="icon-font !text-[22px] text-tlalcalli-warning-muted">info</span>
-          <p class="m-0 font-noto-sans text-sm text-tlalcalli-dark">
-            El listado de las bandejas no devolvió expedientes; se muestran los datos del servicio de estadísticas.
-          </p>
+      <div class="relative flex flex-col gap-6">
+      @if (recalculandoPeriodo()) {
+        <div
+          class="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center rounded-lg bg-white/75 backdrop-blur-[1px]"
+          aria-live="polite"
+          aria-busy="true"
+          role="status">
+          <div class="tl-spinner"></div>
+          <p class="mt-3 font-noto-sans text-sm text-tlalcalli-gray">Recalculando indicadores del periodo…</p>
         </div>
       }
 
-      <app-dashboard-bandeja-cards [panel]="p" />
+      <app-dashboard-filtro-periodo
+        [rango]="rango()"
+        [capturadas]="per.capturadas"
+        [sinFechaDocumento]="per.sinFechaDocumento"
+        (rangoChange)="cambiarRango($event)" />
 
-      <section class="flex flex-col gap-4">
-        <div class="tl-section-title">
-          <span class="tl-section-icon bg-white"><span class="icon-font !text-[22px]">monitoring</span></span>
-          <div>
-            <h2 class="tl-section-heading">Indicadores generales</h2>
-            <p class="tl-section-subtitle">Semáforo con las mismas reglas de la bandeja de Seguimiento (límite de 72 h desde la captura)</p>
+      <app-dashboard-reportes-bar [panel]="p" />
+
+      <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5" data-export-chart="Resumen del periodo">
+        <div class="relative flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-tlalcalli-primary via-tlalcalli-purple-muted to-tlalcalli-deep p-5 text-white shadow-purple-sm sm:col-span-2 xl:col-span-1">
+          <div class="flex items-center gap-3">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15"><span class="icon-font !text-[22px]">inbox</span></span>
+            <span class="min-w-0 font-noto-sans text-[11px] font-semibold uppercase leading-tight tracking-wider text-white/75">Solicitudes capturadas</span>
+          </div>
+          <span class="mt-3 font-noto-sans text-5xl font-extrabold leading-none tabular-nums">{{ per.capturadas }}</span>
+          <div class="mt-4">
+            <div class="flex items-center justify-between font-noto-sans text-xs text-white/80">
+              <span>Avance de atención</span>
+              <span class="font-semibold text-white">{{ porcentaje(per.atendidos, per.capturadas) }}</span>
+            </div>
+            <div class="mt-1.5 h-2 overflow-hidden rounded-full bg-white/20">
+              <div class="h-full rounded-full bg-tlalcalli-gold transition-all duration-700" [style.width.%]="porcentajeNumero(per.atendidos, per.capturadas)"></div>
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          <div class="tl-stat">
-            <span class="tl-stat-accent bg-tlalcalli-primary"></span>
-            <div class="flex items-center justify-between">
-              <span class="tl-stat-label">Total expedientes</span>
-              <span class="tl-stat-icon bg-tlalcalli-light-lavender text-tlalcalli-primary"><span class="icon-font !text-[22px]">folder_copy</span></span>
-            </div>
-            <span class="tl-stat-value mt-3 text-tlalcalli-primary">{{ k.total }}</span>
-            <span class="tl-chip tl-chip-primary mt-3 w-fit">{{ k.responsables }} responsable(s)</span>
+        <div class="tl-stat">
+          <span class="tl-stat-accent bg-tlalcalli-warning"></span>
+          <div class="flex items-center gap-3">
+            <span class="tl-stat-icon shrink-0 bg-tlalcalli-warning/15 text-tlalcalli-warning-muted"><span class="icon-font !text-[22px]">pending_actions</span></span>
+            <span class="tl-stat-label min-w-0 leading-tight">Por atender</span>
           </div>
-
-          <div class="tl-stat">
-            <span class="tl-stat-accent bg-tlalcalli-lavender"></span>
-            <div class="flex items-center justify-between">
-              <span class="tl-stat-label">Por atender</span>
-              <span class="tl-stat-icon bg-tlalcalli-light-lavender text-tlalcalli-purple-muted"><span class="icon-font !text-[22px]">pending_actions</span></span>
-            </div>
-            <span class="tl-stat-value mt-3 text-tlalcalli-purple-muted">{{ k.porAtender }}</span>
-            <span class="tl-chip tl-chip-primary mt-3 w-fit">{{ porcentaje(k.porAtender, k.total) }} del total</span>
-          </div>
-
-          <div class="tl-stat">
-            <span class="tl-stat-accent bg-tlalcalli-success"></span>
-            <div class="flex items-center justify-between">
-              <span class="tl-stat-label">Atendidos</span>
-              <span class="tl-stat-icon bg-tlalcalli-success/10 text-tlalcalli-success-muted"><span class="icon-font !text-[22px]">task_alt</span></span>
-            </div>
-            <span class="tl-stat-value mt-3 text-tlalcalli-success-muted">{{ k.atendidos }}</span>
-            <span class="tl-chip tl-chip-success mt-3 w-fit">{{ porcentaje(k.atendidos, k.total) }} del total</span>
-          </div>
-
-          <div class="tl-stat">
-            <span class="tl-stat-accent bg-tlalcalli-warning"></span>
-            <div class="flex items-center justify-between">
-              <span class="tl-stat-label">24-48 h</span>
-              <span class="tl-stat-icon bg-tlalcalli-warning/15 text-tlalcalli-warning-muted"><span class="icon-font !text-[22px]">schedule</span></span>
-            </div>
-            <span class="tl-stat-value mt-3 text-tlalcalli-warning-muted">{{ k.semaforo.atencion }}</span>
-            <span class="tl-chip tl-chip-warning mt-3 w-fit">Requieren atención</span>
-          </div>
-
-          <div class="tl-stat">
-            <span class="tl-stat-accent bg-tlalcalli-error"></span>
-            <div class="flex items-center justify-between">
-              <span class="tl-stat-label">Críticos</span>
-              <span class="tl-stat-icon bg-tlalcalli-error/10 text-tlalcalli-error-muted"><span class="icon-font !text-[22px]">priority_high</span></span>
-            </div>
-            <span class="tl-stat-value mt-3 text-tlalcalli-error-muted">{{ k.criticos }}</span>
-            <span class="tl-chip tl-chip-error mt-3 w-fit">Urgentes y vencidos</span>
-          </div>
-
-          <div class="tl-stat">
-            <span class="tl-stat-accent bg-tlalcalli-gold"></span>
-            <div class="flex items-center justify-between">
-              <span class="tl-stat-label">Tiempo promedio</span>
-              <span class="tl-stat-icon bg-tlalcalli-gold/15 text-tlalcalli-dark-gold"><span class="icon-font !text-[22px]">timelapse</span></span>
-            </div>
-            <span class="tl-stat-value mt-3 text-tlalcalli-dark-gold">{{ formatearHoras(k.promedioHorasPendientes) }}</span>
-            <span class="tl-chip mt-3 w-fit bg-tlalcalli-gold/15 text-tlalcalli-dark-gold">Pendientes desde captura</span>
-          </div>
+          <span class="tl-stat-value mt-3 tabular-nums text-tlalcalli-warning-muted">{{ per.porAtender }}</span>
+          <span class="tl-chip tl-chip-warning mt-3 w-fit">{{ porcentaje(per.porAtender, per.capturadas) }} del periodo</span>
         </div>
+
+        <div class="tl-stat">
+          <span class="tl-stat-accent bg-tlalcalli-success"></span>
+          <div class="flex items-center gap-3">
+            <span class="tl-stat-icon shrink-0 bg-tlalcalli-success/10 text-tlalcalli-success-muted"><span class="icon-font !text-[22px]">task_alt</span></span>
+            <span class="tl-stat-label min-w-0 leading-tight">Atendidas</span>
+          </div>
+          <span class="tl-stat-value mt-3 tabular-nums text-tlalcalli-success-muted">{{ per.atendidos }}</span>
+          <span class="tl-chip tl-chip-success mt-3 w-fit">{{ per.cancelados }} cancelada(s)</span>
+        </div>
+
+        <div class="tl-stat" matTooltip="Promedio estimado: días desde la fecha del documento hasta hoy de las solicitudes atendidas. Para precisión se requiere la fecha de atención en BD.">
+          <span class="tl-stat-accent bg-tlalcalli-gold"></span>
+          <div class="flex items-center gap-3">
+            <span class="tl-stat-icon shrink-0 bg-tlalcalli-gold/15 text-tlalcalli-dark-gold"><span class="icon-font !text-[22px]">timelapse</span></span>
+            <span class="tl-stat-label min-w-0 leading-tight">Promedio de atención</span>
+          </div>
+          <span class="tl-stat-value mt-3 text-tlalcalli-dark-gold">{{ formatearDias(per.promedioDiasAtencion) }}</span>
+          <span class="tl-chip mt-3 w-fit bg-tlalcalli-gold/15 text-tlalcalli-dark-gold">
+            Estimado · {{ per.atendidasConFecha }} atendida(s)
+            <span class="icon-font !text-[14px]">info</span>
+          </span>
+        </div>
+
+        <button type="button" (click)="irASinAtender()"
+          class="tl-stat cursor-pointer text-left hover:-translate-y-0.5 hover:shadow-md"
+          [ngClass]="urgentes > 0 ? 'border-tlalcalli-error/40 bg-tlalcalli-error/[0.05]' : ''"
+          matTooltip="Pendientes de cualquier fecha con {{ p.sinAtender.umbralDias }} días o más desde la fecha del documento">
+          <span class="tl-stat-accent" [ngClass]="urgentes > 0 ? 'bg-tlalcalli-error' : 'bg-tlalcalli-success'"></span>
+          <div class="flex items-center gap-3">
+            <span class="tl-stat-icon shrink-0" [ngClass]="urgentes > 0 ? 'bg-tlalcalli-error/10 text-tlalcalli-error-muted' : 'bg-tlalcalli-success/10 text-tlalcalli-success-muted'">
+              <span class="icon-font !text-[22px]" [class.animate-pulse]="urgentes > 0">{{ urgentes > 0 ? 'running_with_errors' : 'verified' }}</span>
+            </span>
+            <span class="tl-stat-label min-w-0 leading-tight">Urgentes {{ p.sinAtender.umbralDias }}+ días</span>
+          </div>
+          <span class="tl-stat-value mt-3 tabular-nums" [ngClass]="urgentes > 0 ? 'text-tlalcalli-error-muted' : 'text-tlalcalli-success-muted'">{{ urgentes }}</span>
+          <span class="tl-chip mt-3 w-fit" [ngClass]="urgentes > 0 ? 'tl-chip-error' : 'tl-chip-success'">
+            {{ urgentes > 0 ? 'Ver asuntos' : 'Sin rezago' }}
+            @if (urgentes > 0) { <span class="icon-font !text-[14px]">arrow_downward</span> }
+          </span>
+        </button>
       </section>
 
       <section class="grid grid-cols-1 gap-5 xl:grid-cols-2">
-        <div class="tl-card overflow-hidden">
+        <div class="tl-card overflow-hidden" data-export-chart="Solicitudes por estatus">
           <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
             <div class="tl-section-title">
               <span class="tl-section-icon"><span class="icon-font !text-[22px]">donut_large</span></span>
-              <h3 class="tl-section-heading">Distribución por estatus</h3>
+              <div>
+                <h3 class="tl-section-heading">Por estatus</h3>
+                <p class="tl-section-subtitle">Pendiente, atendido, en proceso, en espera de firma y cancelado</p>
+              </div>
             </div>
             <a routerLink="/layout/tracking" class="tl-chip tl-chip-neutral no-underline hover:bg-tlalcalli-light-lavender">Ver en Consulta</a>
           </div>
-          <div class="flex min-h-[300px] items-center justify-center p-6">
-            @if (p.graficas.porEstatus.length > 0) {
+          @if (per.capturadas > 0) {
+            <div class="px-6 pb-2 pt-6">
               <apx-chart
                 class="w-full"
                 [series]="chartEstatusOptions.series!"
@@ -155,140 +164,191 @@
                 [dataLabels]="chartEstatusOptions.dataLabels!"
                 [legend]="chartEstatusOptions.legend!"
                 [stroke]="chartEstatusOptions.stroke!"
-                [responsive]="chartEstatusOptions.responsive!">
+                [tooltip]="chartEstatusOptions.tooltip!">
               </apx-chart>
-            } @else {
-              <div class="tl-empty py-8">
-                <span class="tl-empty-icon"><span class="icon-font !text-[28px]">donut_large</span></span>
-                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin expedientes para distribuir</p>
+            </div>
+            <details class="group border-t border-tlalcalli-light-base/70 px-5 py-3">
+              <summary class="flex cursor-pointer list-none items-center gap-1 font-noto-sans text-xs font-semibold text-tlalcalli-primary">
+                <span class="icon-font !text-[18px] transition-transform group-open:rotate-90">chevron_right</span>
+                Ver estatus tal como se capturan ({{ per.porEstatusDetalle.length }})
+              </summary>
+              <div class="mt-3 flex flex-wrap gap-2">
+                @for (e of per.porEstatusDetalle; track e.estatus) {
+                  <span class="tl-chip tl-chip-neutral">{{ e.estatus | etiquetaEstatus }} · {{ e.cantidad }}</span>
+                }
               </div>
-            }
-          </div>
-        </div>
-
-        <div class="tl-card overflow-hidden">
-          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
-            <div class="tl-section-title">
-              <span class="tl-section-icon"><span class="icon-font !text-[22px]">traffic</span></span>
-              <h3 class="tl-section-heading">Semáforo de atención</h3>
-            </div>
-            <a routerLink="/layout/responsables" class="tl-chip tl-chip-neutral no-underline hover:bg-tlalcalli-light-lavender">Ver en Seguimiento</a>
-          </div>
-          <div class="flex min-h-[300px] items-center justify-center p-6">
-            <apx-chart
-              class="w-full"
-              [series]="chartSemaforoOptions.series!"
-              [chart]="chartSemaforoOptions.chart!"
-              [plotOptions]="chartSemaforoOptions.plotOptions!"
-              [colors]="chartSemaforoOptions.colors!"
-              [labels]="chartSemaforoOptions.labels!"
-              [legend]="chartSemaforoOptions.legend!"
-              [responsive]="chartSemaforoOptions.responsive!">
-            </apx-chart>
-          </div>
-        </div>
-
-        <div class="tl-card overflow-hidden">
-          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
-            <div class="tl-section-title">
-              <span class="tl-section-icon"><span class="icon-font !text-[22px]">show_chart</span></span>
-              <h3 class="tl-section-heading">Tendencia semanal</h3>
-            </div>
-            <span class="tl-chip tl-chip-neutral">{{ tendenciaConAtendidos ? 'Capturados vs. atendidos' : 'Capturados' }}, últimas 4 semanas</span>
-          </div>
-          <div class="flex min-h-[300px] items-center justify-center p-6">
-            @if (p.graficas.tendencia.length > 0) {
-              <apx-chart
-                class="w-full"
-                [series]="chartTendenciaOptions.series!"
-                [chart]="chartTendenciaOptions.chart!"
-                [xaxis]="chartTendenciaOptions.xaxis!"
-                [yaxis]="chartTendenciaOptions.yaxis!"
-                [colors]="chartTendenciaOptions.colors!"
-                [stroke]="chartTendenciaOptions.stroke!"
-                [fill]="chartTendenciaOptions.fill!"
-                [dataLabels]="chartTendenciaOptions.dataLabels!"
-                [legend]="chartTendenciaOptions.legend!"
-                [grid]="chartTendenciaOptions.grid!"
-                [tooltip]="chartTendenciaOptions.tooltip!">
-              </apx-chart>
-            } @else {
-              <div class="tl-empty py-8">
-                <span class="tl-empty-icon"><span class="icon-font !text-[28px]">show_chart</span></span>
-                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin datos de tendencia disponibles</p>
-              </div>
-            }
-          </div>
-        </div>
-
-        <div class="tl-card overflow-hidden">
-          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
-            <div class="tl-section-title">
-              <span class="tl-section-icon"><span class="icon-font !text-[22px]">bar_chart</span></span>
-              <h3 class="tl-section-heading">Carga por responsable</h3>
-            </div>
-            <span class="tl-chip tl-chip-neutral">Top 6 de {{ k.responsables }}</span>
-          </div>
-          <div class="flex min-h-[300px] items-center justify-center p-6">
-            @if (p.graficas.porResponsable.length > 0) {
-              <apx-chart
-                class="w-full"
-                [series]="chartResponsablesOptions.series!"
-                [chart]="chartResponsablesOptions.chart!"
-                [xaxis]="chartResponsablesOptions.xaxis!"
-                [yaxis]="chartResponsablesOptions.yaxis!"
-                [plotOptions]="chartResponsablesOptions.plotOptions!"
-                [colors]="chartResponsablesOptions.colors!"
-                [stroke]="chartResponsablesOptions.stroke!"
-                [dataLabels]="chartResponsablesOptions.dataLabels!"
-                [legend]="chartResponsablesOptions.legend!"
-                [grid]="chartResponsablesOptions.grid!"
-                [tooltip]="chartResponsablesOptions.tooltip!">
-              </apx-chart>
-            } @else {
-              <div class="tl-empty py-8">
-                <span class="tl-empty-icon"><span class="icon-font !text-[28px]">groups</span></span>
-                <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin datos de responsables</p>
-              </div>
-            }
-          </div>
-        </div>
-      </section>
-
-      <section class="tl-card overflow-hidden">
-        <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
-          <div class="tl-section-title">
-            <span class="tl-section-icon"><span class="icon-font !text-[22px]">category</span></span>
-            <div>
-              <h3 class="tl-section-heading">Acciones por tipo</h3>
-              <p class="tl-section-subtitle">Acciones de atención registradas y cuántas son urgentes</p>
-            </div>
-          </div>
-        </div>
-        <div class="flex min-h-[260px] items-center justify-center p-6">
-          @if (chartTipoAccionOptions) {
-            <apx-chart
-              class="w-full"
-              [series]="chartTipoAccionOptions.series!"
-              [chart]="chartTipoAccionOptions.chart!"
-              [xaxis]="chartTipoAccionOptions.xaxis!"
-              [yaxis]="chartTipoAccionOptions.yaxis!"
-              [plotOptions]="chartTipoAccionOptions.plotOptions!"
-              [colors]="chartTipoAccionOptions.colors!"
-              [dataLabels]="chartTipoAccionOptions.dataLabels!"
-              [legend]="chartTipoAccionOptions.legend!"
-              [grid]="chartTipoAccionOptions.grid!">
-            </apx-chart>
+            </details>
           } @else {
-            <div class="tl-empty py-8">
+            <div class="tl-empty min-h-[360px] py-8">
+              <span class="tl-empty-icon"><span class="icon-font !text-[28px]">donut_large</span></span>
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin solicitudes en el periodo</p>
+            </div>
+          }
+        </div>
+
+        <div class="tl-card overflow-hidden" data-export-chart="Solicitudes por tipo de servicio">
+          <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">category</span></span>
+              <div>
+                <h3 class="tl-section-heading">Por tipo de servicio</h3>
+                <p class="tl-section-subtitle">Cada servicio del catálogo con su conteo exacto</p>
+              </div>
+            </div>
+          </div>
+          @if (per.capturadas > 0) {
+            <div class="px-4 pb-2 pt-4">
+              <apx-chart
+                class="w-full"
+                [series]="chartServicioOptions.series!"
+                [chart]="chartServicioOptions.chart!"
+                [xaxis]="chartServicioOptions.xaxis!"
+                [yaxis]="chartServicioOptions.yaxis!"
+                [colors]="chartServicioOptions.colors!"
+                [plotOptions]="chartServicioOptions.plotOptions!"
+                [dataLabels]="chartServicioOptions.dataLabels!"
+                [legend]="chartServicioOptions.legend!"
+                [stroke]="chartServicioOptions.stroke!"
+                [grid]="chartServicioOptions.grid!"
+                [tooltip]="chartServicioOptions.tooltip!">
+              </apx-chart>
+            </div>
+            <p class="m-0 border-t border-tlalcalli-light-base/70 px-5 py-3 font-noto-sans text-xs text-tlalcalli-gray">
+              Total {{ per.capturadas }} solicitudes · los porcentajes suman 100 % del periodo
+            </p>
+          } @else {
+            <div class="tl-empty min-h-[360px] py-8">
               <span class="tl-empty-icon"><span class="icon-font !text-[28px]">category</span></span>
-              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Aún no hay acciones de atención registradas</p>
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin solicitudes en el periodo</p>
             </div>
           }
         </div>
       </section>
 
-      <app-dashboard-criticos-alertas [panel]="p" />
+        <div class="tl-card overflow-hidden" [attr.data-export-chart]="vistaAdministracionRemitente() === 'general' ? 'Por Administración General' : 'Por Administración Central'">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+            <div class="tl-section-title">
+              <span class="tl-section-icon"><span class="icon-font !text-[22px]">account_tree</span></span>
+              <div>
+                <h3 class="tl-section-heading">Por administración remitente</h3>
+                <p class="tl-section-subtitle">Solicitudes del periodo agrupadas por Administración General o Central (paso Remitente en captura)</p>
+              </div>
+            </div>
+            <div class="tl-segmented" role="tablist" aria-label="Agrupar por administración">
+              <button type="button" role="tab" class="tl-segmented-item"
+                [class.tl-segmented-item-active]="vistaAdministracionRemitente() === 'general'"
+                [attr.aria-selected]="vistaAdministracionRemitente() === 'general'"
+                (click)="cambiarVistaAdministracion('general')">
+                Administración General
+              </button>
+              <button type="button" role="tab" class="tl-segmented-item"
+                [class.tl-segmented-item-active]="vistaAdministracionRemitente() === 'central'"
+                [attr.aria-selected]="vistaAdministracionRemitente() === 'central'"
+                (click)="cambiarVistaAdministracion('central')">
+                Administración Central
+              </button>
+            </div>
+            @if (agrupacionActiva(per).length > maxAreasGrafica) {
+              <span class="tl-chip tl-chip-neutral">Top {{ maxAreasGrafica }} de {{ agrupacionActiva(per).length }} · detalle completo en Excel</span>
+            }
+          </div>
+          @if (todoSinDatoAdministracion(per)) {
+            <div class="mx-5 mt-4 flex items-start gap-3 rounded-lg border border-tlalcalli-warning/50 bg-tlalcalli-warning/10 p-3">
+              <span class="icon-font !text-[20px] text-tlalcalli-warning-muted">warning_amber</span>
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-dark">
+                Todas las solicitudes del periodo aparecen como <strong>Sin dato</strong> en
+                @if (vistaAdministracionRemitente() === 'general') { Administración General } @else { Administración Central }:
+                estos expedientes se guardaron solo con el identificador del remitente, sin clave de administración. Los expedientes capturados a partir de ahora guardan General y Central y sí se agrupan aquí.
+              </p>
+            </div>
+          }
+          @if (per.capturadas > 0 && agrupacionActiva(per).length > 0) {
+            <div class="p-6">
+              @if (vistaAdministracionRemitente() === 'general') {
+                <apx-chart
+                  class="w-full"
+                  [series]="chartAdminGeneralOptions.series!"
+                  [chart]="chartAdminGeneralOptions.chart!"
+                  [xaxis]="chartAdminGeneralOptions.xaxis!"
+                  [yaxis]="chartAdminGeneralOptions.yaxis!"
+                  [plotOptions]="chartAdminGeneralOptions.plotOptions!"
+                  [colors]="chartAdminGeneralOptions.colors!"
+                  [stroke]="chartAdminGeneralOptions.stroke!"
+                  [dataLabels]="chartAdminGeneralOptions.dataLabels!"
+                  [legend]="chartAdminGeneralOptions.legend!"
+                  [grid]="chartAdminGeneralOptions.grid!"
+                  [tooltip]="chartAdminGeneralOptions.tooltip!">
+                </apx-chart>
+              } @else {
+                <apx-chart
+                  class="w-full"
+                  [series]="chartAdminCentralOptions.series!"
+                  [chart]="chartAdminCentralOptions.chart!"
+                  [xaxis]="chartAdminCentralOptions.xaxis!"
+                  [yaxis]="chartAdminCentralOptions.yaxis!"
+                  [plotOptions]="chartAdminCentralOptions.plotOptions!"
+                  [colors]="chartAdminCentralOptions.colors!"
+                  [stroke]="chartAdminCentralOptions.stroke!"
+                  [dataLabels]="chartAdminCentralOptions.dataLabels!"
+                  [legend]="chartAdminCentralOptions.legend!"
+                  [grid]="chartAdminCentralOptions.grid!"
+                  [tooltip]="chartAdminCentralOptions.tooltip!">
+                </apx-chart>
+              }
+            </div>
+            <div class="border-t border-tlalcalli-light-base/70 px-5 py-3">
+              <span class="tl-group-title">
+                @if (vistaAdministracionRemitente() === 'general') { Detalle por Administración General } @else { Detalle por Administración Central }
+              </span>
+              <div class="mt-2 flex flex-wrap gap-2">
+                @for (a of agrupacionActiva(per); track a.area) {
+                  <span class="tl-chip tl-chip-neutral" [title]="a.area">{{ etiquetaAdministracion(a.area) }} · {{ a.total }}</span>
+                }
+              </div>
+            </div>
+            <div class="border-t border-tlalcalli-light-base/70 px-5 py-4">
+              <span class="tl-group-title">Desglose por administración y estatus</span>
+                            <div class="mt-3 max-h-[320px] overflow-auto">
+                <table class="tl-table min-w-[720px]">
+                  <thead>
+                    <tr>
+                      <th>
+                        @if (vistaAdministracionRemitente() === 'general') { Administración General } @else { Administración Central }
+                      </th>
+                      <th class="text-right">Total</th>
+                      @for (b of bucketsEstatus; track b) {
+                        <th class="whitespace-nowrap text-right">{{ etiquetasBucketEstatus[b] }}</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (a of agrupacionActiva(per); track a.area) {
+                      <tr>
+                        <td><span class="block max-w-[280px] truncate font-medium text-tlalcalli-deep" [title]="a.area">{{ etiquetaAdministracion(a.area) }}</span></td>
+                        <td class="text-right font-semibold text-tlalcalli-primary">{{ a.total }}</td>
+                        @for (b of bucketsEstatus; track b) {
+                          <td class="text-right tabular-nums text-tlalcalli-deep">{{ a.porBucket[b] || '—' }}</td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          } @else {
+            <div class="tl-empty min-h-[220px] py-8">
+              <span class="tl-empty-icon"><span class="icon-font !text-[28px]">account_tree</span></span>
+              <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin solicitudes en el periodo</p>
+            </div>
+          }
+        </div>
+
+      <app-dashboard-metricas-servidor [metricas]="p.metricas" />
+
+      <div id="sin-atender" class="scroll-mt-6">
+        <app-dashboard-sin-atender [sinAtender]="p.sinAtender" />
+      </div>
+      </div>
     }
 
   </main>

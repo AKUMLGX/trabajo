@@ -1,0 +1,214 @@
+<section class="flex flex-col gap-5">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="tl-section-title">
+      <span class="tl-section-icon"><span class="icon-font !text-[22px]">dns</span></span>
+      <div>
+        <h3 class="tl-section-heading">Indicadores generales</h3>
+        <p class="tl-section-subtitle">Consideran todos los expedientes registrados, sin importar el periodo seleccionado</p>
+      </div>
+    </div>
+    @if (metricas; as m) {
+      <span
+        class="tl-chip inline-flex !h-11 !px-4 !text-sm items-center font-medium leading-none !bg-tlalcalli-light-lavender !text-tlalcalli-dark-muted ring-1 ring-tlalcalli-light-base/70"
+        aria-label="Total de expedientes en BD">
+        {{ m.totalUniverso }} expediente(s) en BD
+      </span>
+    }
+  </div>
+
+  @if (aviso) {
+    <div class="flex items-start gap-3 rounded-xl border border-tlalcalli-warning/40 bg-tlalcalli-warning/10 px-4 py-3">
+      <span class="icon-font !text-[20px] text-tlalcalli-warning-muted">warning</span>
+      <p class="m-0 font-noto-sans text-sm text-tlalcalli-deep">{{ aviso }}</p>
+    </div>
+  }
+
+  @if (metricas; as m) {
+    @if (m.vencidos; as v) {
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" data-export-chart="Indicadores del servidor">
+        <div class="tl-stat" matTooltip="Expedientes sin atender que ya pasaron su fecha de vencimiento.">
+          <span class="tl-stat-accent" [ngClass]="v.vencidos > 0 ? 'bg-tlalcalli-error' : 'bg-tlalcalli-success'"></span>
+          <div class="flex items-center gap-3">
+            <span class="tl-stat-icon shrink-0" [ngClass]="v.vencidos > 0 ? 'bg-tlalcalli-error/10 text-tlalcalli-error-muted' : 'bg-tlalcalli-success/10 text-tlalcalli-success-muted'">
+              <span class="icon-font !text-[22px]">event_busy</span>
+            </span>
+            <span class="tl-stat-label min-w-0 leading-tight">Vencidos</span>
+          </div>
+          <span class="tl-stat-value mt-3 tabular-nums" [ngClass]="v.vencidos > 0 ? 'text-tlalcalli-error-muted' : 'text-tlalcalli-success-muted'">{{ v.vencidos }}</span>
+        </div>
+
+        <div class="tl-stat" matTooltip="Promedio de horas desde la fecha de recepción de los expedientes vencidos.">
+          <span class="tl-stat-accent bg-tlalcalli-gold"></span>
+          <div class="flex items-center gap-3">
+            <span class="tl-stat-icon shrink-0 bg-tlalcalli-gold/15 text-tlalcalli-dark-gold"><span class="icon-font !text-[22px]">hourglass_bottom</span></span>
+            <span class="tl-stat-label min-w-0 leading-tight">Antigüedad promedio</span>
+          </div>
+          <span class="tl-stat-value mt-3 text-tlalcalli-dark-gold">{{ formatearHoras(v.promedioHoras) }}</span>
+        </div>
+      </div>
+    }
+
+    <div class="grid grid-cols-1 gap-5 xl:grid-cols-2">
+      <div class="tl-card overflow-hidden" data-export-chart="Carga por responsable (servidor)">
+        <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+          <div class="tl-section-title">
+            <span class="tl-section-icon"><span class="icon-font !text-[22px]">groups</span></span>
+            <div>
+              <h3 class="tl-section-heading">Carga por responsable</h3>
+              <p class="tl-section-subtitle">
+                Pendientes, atendidos y otros estatus
+                @if (m.porResponsable.length > maxResponsablesGrafica) {
+                  · top {{ maxResponsablesGrafica }} de {{ m.porResponsable.length }}
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+        @if (chartResponsable; as c) {
+          <div class="px-4 pb-2 pt-4">
+            <apx-chart
+              class="w-full"
+              [series]="c.series"
+              [chart]="c.chart"
+              [xaxis]="c.xaxis"
+              [yaxis]="c.yaxis"
+              [plotOptions]="c.plotOptions"
+              [colors]="c.colors"
+              [dataLabels]="c.dataLabels"
+              [legend]="c.legend"
+              [stroke]="c.stroke"
+              [grid]="c.grid"
+              [tooltip]="c.tooltip">
+            </apx-chart>
+          </div>
+        } @else {
+          <div class="tl-empty min-h-[260px] py-8">
+            <span class="tl-empty-icon"><span class="icon-font !text-[28px]">groups</span></span>
+            <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin datos por responsable</p>
+          </div>
+        }
+      </div>
+
+      <div class="tl-card overflow-hidden" data-export-chart="Expedientes por prioridad (servidor)">
+        <div class="flex items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4">
+          <div class="tl-section-title">
+            <span class="tl-section-icon"><span class="icon-font !text-[22px]">priority_high</span></span>
+            <div>
+              <h3 class="tl-section-heading">Por prioridad</h3>
+              <p class="tl-section-subtitle">Expedientes registrados en cada nivel de prioridad</p>
+            </div>
+          </div>
+        </div>
+        @if (chartPrioridad; as c) {
+          <div class="px-4 pb-2 pt-4">
+            <apx-chart
+              class="w-full"
+              [series]="c.series"
+              [chart]="c.chart"
+              [xaxis]="c.xaxis"
+              [yaxis]="c.yaxis"
+              [plotOptions]="c.plotOptions"
+              [colors]="c.colors"
+              [dataLabels]="c.dataLabels"
+              [legend]="c.legend"
+              [stroke]="c.stroke"
+              [grid]="c.grid"
+              [tooltip]="c.tooltip">
+            </apx-chart>
+          </div>
+        } @else {
+          <div class="tl-empty min-h-[220px] py-8">
+            <span class="tl-empty-icon"><span class="icon-font !text-[28px]">priority_high</span></span>
+            <p class="m-0 font-noto-sans text-sm text-tlalcalli-gray">Sin datos por prioridad</p>
+          </div>
+        }
+        @if (m.porEstatus.length > 0) {
+          <details class="group border-t border-tlalcalli-light-base/70 px-5 py-3">
+            <summary class="flex cursor-pointer list-none items-center gap-1 font-noto-sans text-xs font-semibold text-tlalcalli-primary">
+              <span class="icon-font !text-[18px] transition-transform group-open:rotate-90">chevron_right</span>
+              Ver cuántos expedientes hay en cada estatus
+            </summary>
+            <div class="mt-3 flex flex-wrap gap-2">
+              @for (e of m.porEstatus; track e.estatus) {
+                <span class="tl-chip tl-chip-neutral">{{ e.estatus | etiquetaEstatus }} · {{ e.cantidad }}</span>
+              }
+            </div>
+          </details>
+        }
+      </div>
+    </div>
+
+    <app-dashboard-remitentes-servidor [porGeneral]="m.porGeneral" [porCentral]="m.porCentral" />
+
+    @if (m.vencidos) {
+      <div id="criticos-servidor" class="tl-card scroll-mt-6 overflow-hidden" data-export-chart="Expedientes críticos (servidor)">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4 lg:flex-nowrap"
+          [ngClass]="{ 'bg-tlalcalli-error/[0.06]': m.criticos.length > 0 }">
+          <div class="tl-section-title min-w-0 flex-1">
+            <span class="tl-section-icon bg-tlalcalli-error/10 text-tlalcalli-error-muted">
+              <span class="icon-font !text-[22px]">crisis_alert</span>
+            </span>
+            <div>
+              <h3 class="tl-section-heading">Expedientes críticos</h3>
+              <p class="tl-section-subtitle">Los asuntos pendientes con más tiempo sin atender</p>
+            </div>
+          </div>
+          <div class="flex shrink-0 flex-wrap items-center gap-3 lg:flex-nowrap">
+            <span
+              class="tl-chip !h-11 !px-4 !text-sm items-center font-semibold leading-none whitespace-nowrap"
+              [class.tl-chip-error]="m.criticos.length > 0"
+              [class.tl-chip-success]="m.criticos.length === 0">
+              {{ m.criticos.length }} expediente(s)
+            </span>
+            @if (m.criticos.length > 0) {
+              <button type="button" class="tl-btn-secondary inline-flex h-11 items-center gap-1 whitespace-nowrap"
+                [disabled]="descargandoCriticos" (click)="descargarCriticos()"
+                matTooltip="Descarga todos los expedientes críticos en Excel">
+                <span class="icon-font !text-[18px]">download</span>
+                {{ descargandoCriticos ? 'Descargando…' : 'Descargar Excel' }}
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (m.criticos.length > 0) {
+          <div class="overflow-x-auto">
+            <table class="tl-table">
+              <thead>
+                <tr>
+                  <th>Expediente</th>
+                  <th>Oficio</th>
+                  <th>Responsable</th>
+                  <th>Estatus</th>
+                  <th class="text-right">Antigüedad</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (c of criticosVisibles; track c.expediente + '-' + c.oficio) {
+                  <tr>
+                    <td class="whitespace-nowrap">
+                      <a [routerLink]="['/layout/tracking']" [queryParams]="{ expediente: c.expediente }"
+                        class="font-semibold text-tlalcalli-deep hover:text-tlalcalli-primary">{{ c.expediente }}</a>
+                    </td>
+                    <td><span class="block max-w-[220px] truncate" [title]="c.oficio">{{ c.oficio || '—' }}</span></td>
+                    <td><span class="block max-w-[220px] truncate" [title]="c.responsable">{{ c.responsable || '—' }}</span></td>
+                    <td><span class="tl-chip tl-chip-primary inline-block max-w-[180px] truncate align-middle" [title]="c.estatus | etiquetaEstatus">{{ c.estatus | etiquetaEstatus }}</span></td>
+                    <td class="whitespace-nowrap text-right">
+                      <span class="tl-chip" [class.tl-chip-dark]="esExtremo(c.horas)" [class.tl-chip-error]="!esExtremo(c.horas)">{{ formatearHoras(c.horas) }}</span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <app-tabla-paginador [total]="m.criticos.length" [tamano]="tamanoPagina" [(pagina)]="paginaCriticos" />
+        } @else {
+          <div class="tl-empty py-10">
+            <span class="tl-empty-icon bg-tlalcalli-success/10 text-tlalcalli-success-muted"><span class="icon-font !text-[28px]">verified</span></span>
+            <p class="m-0 font-noto-sans text-sm font-semibold text-tlalcalli-deep">Sin expedientes críticos</p>
+          </div>
+        }
+      </div>
+    }
+  }
+</section>

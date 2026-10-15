@@ -15,6 +15,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   border-bottom: 3px solid #DDC9A4;
 }
 

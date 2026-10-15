@@ -125,6 +125,7 @@ export class UserService {
       fechaExpiracion,
       fechaEmision,
       rolesArray,
+      especialista: sessionInfo.especialista ?? null,
       
       // Información de administración (se cargará después)
       administracion: null,

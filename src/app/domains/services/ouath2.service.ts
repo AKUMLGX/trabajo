@@ -1,5 +1,6 @@
-import { HttpClient, HttpHandlerFn } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import {
   Oauth2Code,
@@ -8,7 +9,7 @@ import {
 } from '../interfaces/oauth2.interfaces';
 import { LogoutService } from './logout.service';
 import { UserService } from './user.service';
-import { BehaviorSubject, from } from 'rxjs';
+import { rutaInicialDeRoles } from '../auth/config/roles.config';
 
 
 @Injectable({
@@ -18,7 +19,8 @@ export class Oauth2Service {
   constructor(
     private httpClient: HttpClient, 
     private logoutService: LogoutService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   getToken(oauth2Code: Oauth2Code): void {
@@ -32,6 +34,7 @@ export class Oauth2Service {
           localStorage.setItem('sessionInfo', JSON.stringify(data));
           // Notificar al UserService que la información ha cambiado
           this.userService.actualizarUsuario();
+          void this.router.navigate([rutaInicialDeRoles((data.roles || '').split(','))], { replaceUrl: true });
         },
         error: () => {
           this.logoutService.logout();

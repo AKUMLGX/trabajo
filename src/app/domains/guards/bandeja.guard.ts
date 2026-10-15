@@ -1,78 +1,50 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { ModuloTlalcalli } from '../auth/config/roles.config';
 import { PermissionsService } from '../services/permissions.service';
 import { UserService } from '../services/user.service';
 import { map, take } from 'rxjs/operators';
 
-function esSesionDemoLocal(userService: UserService): boolean {
-  const token = userService.getToken();
-  return (
-    token === 'MOCK_ACCESS_TOKEN' ||
-    (!!token && token.includes('MOCK_ACCESS_TOKEN'))
-  );
-}
-
 /**
- * Guard que protege el acceso a las bandejas basado en permisos de roles
- * @param bandeja - Nombre de la bandeja a verificar (captura, atencion, dictaminador, seguimiento, reportes, revisionFinal)
+ * Protege un módulo de Tlálcalli según la matriz de `roles.config.ts`.
+ * También aplica en modo local: la sesión de prueba lleva el rol elegido en el login.
  */
-
-export const bandejaGuard = (bandeja: string): CanActivateFn => {
-  return (route, state) => {
+export const moduloGuard = (modulo: ModuloTlalcalli): CanActivateFn => {
+  return () => {
     const permissionsService = inject(PermissionsService);
     const userService = inject(UserService);
     const router = inject(Router);
 
     if (!userService.isAuthenticated()) {
-      void router.navigate(['/login']);
-      return false;
-    }
-
-    // Demo sin OAuth: una sola sesión local → todas las bandejas permitidas.
-    if (esSesionDemoLocal(userService)) {
-      return true;
-    }
-
-    // OAuth real: captura y seguimiento para cualquier sesión (Centro de Control, etc.)
-    if (bandeja === 'captura' || bandeja === 'seguimiento') {
-      return true;
+      return router.createUrlTree(['/login']);
     }
 
     return permissionsService.getUserPermissions().pipe(
       take(1),
-      map((perms) => {
-        // Acceso directo por permiso
-        if ((perms as any)[bandeja]) {
+      map((permisos) => {
+        if (permisos[modulo]) {
           return true;
         }
 
-        // Excepción controlada: permitir acceso a Seguimiento SOLO si viene con query param de búsqueda
-        // y el usuario tiene permisos de Atención o Dictaminador (no abre toda la bandeja, solo permite búsqueda directa)
-        const hasDirectSearchParam =
-          !!route?.queryParamMap?.get('folio') ||
-          !!route?.queryParamMap?.get('folio_interno') ||
-          !!route?.queryParamMap?.get('folioInterno') ||
-          !!route?.queryParamMap?.get('oficio');
-
-        // Permitir a cualquier usuario hacer una búsqueda directa en Seguimiento
-        // cuando venga con query param de búsqueda (no expone la bandeja completa)
-        if (bandeja === 'seguimiento' && hasDirectSearchParam) {
-          return true;
-        }
-
-        // Denegar y enviar a Access Denied
-        console.warn(`Acceso denegado a bandeja: ${bandeja}`);
-        router.navigate(['/layout/access-denied']);
-        return false;
+        console.warn(`Acceso denegado al módulo: ${modulo}`);
+        return router.createUrlTree(['/layout/access-denied']);
       })
     );
   };
 };
 
-/** Guards específicos **/
-export const capturaGuard = bandejaGuard('captura');
-export const atencionGuard = bandejaGuard('atencion');
-export const dictaminadorGuard = bandejaGuard('dictaminador');
-export const seguimientoGuard = bandejaGuard('seguimiento');
-export const reportesGuard = bandejaGuard('reportes');
-export const revisionFinalGuard = bandejaGuard('revisionFinal');
+/** Pantallas heredadas de Akamba fuera del menú de Tlálcalli: solo navegables en modo local. */
+export const legadoAkambaGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  if (!inject(UserService).isAuthenticated()) {
+    return router.createUrlTree(['/login']);
+  }
+  return environment.devOAuthBypass ? true : router.createUrlTree(['/layout/access-denied']);
+};
+
+export const capturaGuard = moduloGuard('captura');
+export const consultaGuard = moduloGuard('consulta');
+export const asignacionGuard = moduloGuard('asignacion');
+export const atencionCierreGuard = moduloGuard('atencionCierre');
+export const estadisticosGuard = moduloGuard('estadisticos');

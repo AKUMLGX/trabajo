@@ -1,9 +1,25 @@
 <div class="rounded-xl border border-tlalcalli-light-base/70 bg-tlalcalli-light-cream/50 p-4">
-  <div class="mb-4 grid grid-cols-1 items-end gap-3 md:grid-cols-[1.4fr_1fr_1fr_auto]">
+  <div class="mb-4 grid grid-cols-1 items-start gap-3 md:grid-cols-2 xl:grid-cols-[1.2fr_1.2fr_0.9fr_1fr_1fr_auto]">
     <label class="flex flex-col">
       <span class="tl-label">Nombre</span>
       <input type="text" [(ngModel)]="nuevo.nombre_completo" maxlength="100" placeholder="Nombre del analista o QA"
         (keydown.enter)="agregar()" class="tl-input" />
+    </label>
+    <label class="flex flex-col">
+      <span class="tl-label">RFC</span>
+      <input type="text" [(ngModel)]="nuevo.rfc" maxlength="13" placeholder="GACR800101ABC"
+        (keydown.enter)="agregar()" class="tl-input uppercase" />
+      @if (errorRfc(nuevo.rfc); as error) {
+        <span class="mt-1 font-noto-sans text-xs text-tlalcalli-error-muted">{{ error }}</span>
+      }
+    </label>
+    <label class="flex flex-col">
+      <span class="tl-label">Correo</span>
+      <input type="email" [(ngModel)]="nuevo.email" [maxlength]="longitudMaximaCorreo" placeholder="usuario@sat.gob.mx"
+        (keydown.enter)="agregar()" class="tl-input" />
+      @if (errorCorreo(nuevo.email); as error) {
+        <span class="mt-1 font-noto-sans text-xs text-tlalcalli-error-muted">{{ error }}</span>
+      }
     </label>
     <label class="flex flex-col">
       <span class="tl-label">Grupo</span>
@@ -17,7 +33,7 @@
       <span class="tl-label">Etiqueta (opcional)</span>
       <input type="text" [(ngModel)]="nuevo.etiqueta" maxlength="40" placeholder="Ej: Perfil" class="tl-input" />
     </label>
-    <button type="button" (click)="agregar()" [disabled]="procesando || !nuevo.nombre_completo.trim()" class="tl-btn-primary">
+    <button type="button" (click)="agregar()" [disabled]="procesando || !esValido(nuevo)" class="tl-btn-primary md:mt-[22px]">
       <span class="icon-font !text-[18px]">person_add</span>
       Agregar
     </button>
@@ -31,6 +47,14 @@
           @if (enEdicion === e.id_especialista) {
             <div class="mb-2 flex flex-col gap-2 rounded-xl border border-tlalcalli-primary/40 bg-tlalcalli-light-lavender p-3">
               <input type="text" [(ngModel)]="edicion.nombre_completo" maxlength="100" class="tl-input h-9" />
+              <input type="text" [(ngModel)]="edicion.rfc" maxlength="13" placeholder="RFC" class="tl-input h-9 uppercase" />
+              @if (errorRfc(edicion.rfc); as error) {
+                <span class="font-noto-sans text-xs text-tlalcalli-error-muted">{{ error }}</span>
+              }
+              <input type="email" [(ngModel)]="edicion.email" [maxlength]="longitudMaximaCorreo" placeholder="usuario@sat.gob.mx" class="tl-input h-9" />
+              @if (errorCorreo(edicion.email); as error) {
+                <span class="font-noto-sans text-xs text-tlalcalli-error-muted">{{ error }}</span>
+              }
               <div class="flex gap-2">
                 <select [(ngModel)]="edicion.grupo" class="tl-select h-9 flex-1">
                   @for (op of grupos; track op.grupo) {
@@ -41,16 +65,21 @@
               </div>
               <div class="flex justify-end gap-2">
                 <button type="button" (click)="descartarEdicion()" class="tl-btn-secondary tl-btn-sm">Volver</button>
-                <button type="button" (click)="guardarEdicion(e)" [disabled]="procesando || !edicion.nombre_completo.trim()" class="tl-btn-primary tl-btn-sm">Guardar</button>
+                <button type="button" (click)="guardarEdicion(e)" [disabled]="procesando || !esValido(edicion)" class="tl-btn-primary tl-btn-sm">Guardar</button>
               </div>
             </div>
           } @else {
             <div class="mb-1 flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 transition hover:bg-tlalcalli-light-lavender/60">
-              <span class="flex items-center gap-2 font-noto-sans text-sm" [ngClass]="e.activo ? 'text-tlalcalli-dark' : 'text-tlalcalli-gray line-through'">
-                {{ e.nombre_completo }}
-                @if (e.etiqueta) {
-                  <span class="tl-chip tl-chip-primary">{{ e.etiqueta }}</span>
-                }
+              <span class="flex min-w-0 flex-col">
+                <span class="flex items-center gap-2 font-noto-sans text-sm" [ngClass]="e.activo ? 'text-tlalcalli-dark' : 'text-tlalcalli-gray line-through'">
+                  {{ e.nombre_completo }}
+                  @if (e.etiqueta) {
+                    <span class="tl-chip tl-chip-primary">{{ e.etiqueta }}</span>
+                  }
+                </span>
+                <span class="truncate font-noto-sans text-xs" [ngClass]="e.email ? 'text-tlalcalli-gray' : 'text-tlalcalli-error-muted'">
+                  {{ e.email || 'Sin correo' }}
+                </span>
               </span>
               <span class="flex items-center gap-1">
                 <button type="button" (click)="editar(e)" title="Editar" class="tl-icon-btn h-8 w-8 text-tlalcalli-primary hover:bg-tlalcalli-light-lavender">

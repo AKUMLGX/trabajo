@@ -13,11 +13,13 @@ import { TemporalExpedienteService } from '../../../services/temporal-expediente
 import { HttpResponse } from '@angular/common/http';
 import { CatalogoResponsableResponse, CrearResponsableRequest, ActualizarResponsableRequest, MensajeResponsableResponse } from '../../../../interfaces/catalogos.interface';
 import { CatalogoReworkItem } from '../../../interfaces/expediente-rework.interface';
+import { sinRegistroNulo } from '../../../services/catalogo-rework-cache.service';
 import { CustomModalComponent2 } from "../../../../responsables/components/atencion-modal/custom-modal/custom-modal/custom-modal.component";
 import { ResponsablesMultiSelectComponent } from '../responsables-multi-select/responsables-multi-select.component';
 import { UsuariosRequerimientoComponent } from '../../usuarios-requerimiento/usuarios-requerimiento/usuarios-requerimiento.component';
 import { UsuarioRequerimiento } from '../../../../interfaces/usuarios-expediente.interface';
 import { unirListaTexto } from '../../../utils/lista-texto.utils';
+import { estatusSeleccionables, etiquetaEstatus } from '../../../../shared/utils/catalogo-estatus.utils';
 @Component({
     selector: 'app-second-step-tlalcalli',
     imports: [
@@ -215,7 +217,7 @@ export class SecondStepTlalcalliComponent implements OnInit, OnDestroy {
       usuarios,
       sistema_aplicativo: unirListaTexto(valores.sistema_aplicativo),
       responsable: unirListaTexto(valores.responsable),
-      status_descripcion: statusSeleccionado?.descripcion ?? '',
+      status_descripcion: etiquetaEstatus(statusSeleccionado?.descripcion),
     };
   }
 
@@ -377,12 +379,12 @@ private cargarEstatus(): void {
     .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (response: HttpResponse<CatalogoReworkItem[]>) => {
-        const estatus = response.body ?? [];
+        const estatus = sinRegistroNulo(response.body);
         this.catalogoEstatus = estatus;
-        this.opcionesEstatus = estatus.map(
+        this.opcionesEstatus = estatusSeleccionables(estatus).map(
           (item): SelectOption => ({
             value: item.id_exp,
-            label: item.descripcion
+            label: etiquetaEstatus(item.descripcion)
           })
         );
 
@@ -418,7 +420,7 @@ private cargarUbicacion(): void {
     .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (response: HttpResponse<CatalogoReworkItem[]>) => {
-        const ubicaciones = response.body ?? [];
+        const ubicaciones = sinRegistroNulo(response.body);
 
         this.opcionesUbicacion = ubicaciones.map(
           (item): SelectOption => ({

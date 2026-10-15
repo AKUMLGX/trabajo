@@ -22,7 +22,7 @@
           <div class="h-32 w-32 sm:h-[140px] sm:w-[140px] rounded-2xl p-3">
             <img
               src="/assets/images/TLALCALLI2.svg"
-              alt="Tlálcalli Logo"
+              alt="Tlālcalli Logo"
               class="h-full w-full object-contain"
             />
           </div>
@@ -39,11 +39,46 @@
         <button
           (click)="login()"
           type="button"
-          class="flex w-full items-center justify-center gap-3 rounded-xl border-0 bg-gradient-to-br from-[#d6ae67] via-[#c9a45d] to-[#dbb872] px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-noto-sans uppercase tracking-[1.5px] text-[#2a0047] shadow-[0_8px_25px_rgba(214,174,103,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_35px_rgba(214,174,103,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] active:translate-y-0 active:shadow-[0_4px_15px_rgba(214,174,103,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]">
+          [disabled]="!puedeEntrar()"
+          [title]="puedeEntrar() ? '' : 'Elige el especialista en «Entrar como»'"
+          class="disabled:cursor-not-allowed disabled:opacity-50 flex w-full items-center justify-center gap-3 rounded-xl border-0 bg-gradient-to-br from-[#d6ae67] via-[#c9a45d] to-[#dbb872] px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-noto-sans uppercase tracking-[1.5px] text-[#2a0047] shadow-[0_8px_25px_rgba(214,174,103,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_35px_rgba(214,174,103,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] active:translate-y-0 active:shadow-[0_4px_15px_rgba(214,174,103,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]">
           INICIAR SESIÓN
         </button>
 
       </div>
     </div>
   </div>
+
+  @if (modoLocal) {
+    <div class="absolute bottom-5 right-5 z-20 w-[220px] rounded-2xl border border-white/15 bg-white/[0.07] p-3 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-md"
+      role="radiogroup" aria-label="Entrar como (modo local)">
+      <p class="mb-2 flex items-center gap-1.5 px-1 font-noto-sans text-[10px] font-semibold uppercase tracking-[1.5px] text-white/55">
+        <span class="h-1.5 w-1.5 rounded-full bg-[#d6ae67]"></span>
+        Modo local · Entrar como
+      </p>
+      @for (r of roles; track r.id) {
+        <button
+          type="button"
+          role="radio"
+          [attr.aria-checked]="rolSeleccionado() === r.id"
+          [title]="r.descripcion"
+          (click)="seleccionarRol(r.id)"
+          class="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left font-noto-sans text-xs transition"
+          [class]="rolSeleccionado() === r.id ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white/85'">
+          <span class="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border"
+            [class]="rolSeleccionado() === r.id ? 'border-[#d6ae67]' : 'border-white/35'">
+            @if (rolSeleccionado() === r.id) {
+              <span class="h-1.5 w-1.5 rounded-full bg-[#d6ae67]"></span>
+            }
+          </span>
+          {{ r.etiqueta }}
+        </button>
+      }
+      @if (esRolEspecialista()) {
+        <app-selector-especialista-local
+          [seleccionado]="especialistaSeleccionado()"
+          (seleccionadoChange)="seleccionarEspecialista($event)" />
+      }
+    </div>
+  }
 </div>

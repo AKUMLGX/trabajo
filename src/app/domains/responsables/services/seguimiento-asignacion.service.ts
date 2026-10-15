@@ -28,7 +28,7 @@ export interface ItemCompromiso {
   fecha_cierre?: string | null;
 }
 
-export type GrupoEspecialista = 'ANALISTA' | 'QA_TECNICO' | 'QA_LEGAL' | 'QA_INTERNO';
+export type GrupoEspecialista = 'ANALISTA' | 'QA_TECNICO' | 'QA_LEGAL' | 'QA_INTERNO' | 'CORRELACION';
 
 export interface Especialista {
   id_especialista: number;
@@ -37,6 +37,9 @@ export interface Especialista {
   grupo: GrupoEspecialista;
   etiqueta?: string | null;
   activo: boolean;
+  email?: string | null;
+  /** El GET aún no siempre lo devuelve; obligatorio en POST/PUT (`b12f73f`). */
+  rfc?: string | null;
 }
 
 export interface EspecialistaPayload {
@@ -44,6 +47,10 @@ export interface EspecialistaPayload {
   grupo: GrupoEspecialista;
   etiqueta?: string | null;
   activo?: boolean;
+  /** Obligatorio en el back: minúsculas, `@sat.gob.mx`, máximo 100 caracteres. */
+  email: string;
+  /** Obligatorio: persona física o moral en mayúsculas (validación del back). */
+  rfc: string;
 }
 
 /** Ids de especialistas asignados por grupo. */
@@ -52,6 +59,7 @@ export interface AsignacionesSeguimiento {
   qa_tecnico: number[];
   qa_legal: number[];
   qa_interno: number[];
+  correlacion: number[];
 }
 
 export const GRUPOS_ESPECIALISTA: { grupo: GrupoEspecialista; clave: keyof AsignacionesSeguimiento; titulo: string }[] = [
@@ -59,6 +67,7 @@ export const GRUPOS_ESPECIALISTA: { grupo: GrupoEspecialista; clave: keyof Asign
   { grupo: 'QA_TECNICO', clave: 'qa_tecnico', titulo: 'QA Técnico' },
   { grupo: 'QA_LEGAL', clave: 'qa_legal', titulo: 'QA Legal' },
   { grupo: 'QA_INTERNO', clave: 'qa_interno', titulo: 'QA Interno' },
+  { grupo: 'CORRELACION', clave: 'correlacion', titulo: 'Correlación' },
 ];
 
 export interface SeguimientoAcciones {
@@ -84,6 +93,37 @@ export interface ResumenSeguimiento {
   compromisos_vencidos: number;
   entregable: string;
   analistas_asignados: string;
+  /** Solo en resumen rol 001 (supervisión); el 003 no los recibe. */
+  qa_legal_asignados?: string;
+  qa_tecnico_asignados?: string;
+  qa_interno_asignados?: string;
+  correlacion_asignados?: string;
+  /** Marca que el asunto ya se notificó y pasó a Atención y cierre. */
+  fecha_notificacion_asignacion?: string | null;
+}
+
+export interface DestinatarioAsignacion {
+  id_especialista: number;
+  nombre: string;
+  correo: string;
+  grupos: GrupoEspecialista[];
+}
+
+export interface NotificacionAsignacionPayload {
+  id_expediente: number;
+  num_expediente: string;
+  num_oficio: string;
+  destinatarios: DestinatarioAsignacion[];
+  adjuntar_archivo: boolean;
+  id_archivo?: number | null;
+  nombre_archivo?: string | null;
+}
+
+export interface NotificacionAsignacionRespuesta {
+  id_expediente: number;
+  mensaje: string;
+  fecha_notificacion_asignacion?: string | null;
+  destinatarios_enviados?: number;
 }
 
 export interface AlertaCompromiso {
@@ -118,6 +158,15 @@ export function compromisoVencido(item: ItemCompromiso, hoy = new Date()): boole
   return compromiso.getTime() < inicioHoy.getTime();
 }
 
+/** El back manda timestamptz como `2026-10-08 19:36:36.102306+00`; no todos los navegadores lo leen sin `T` ni minutos en la zona. */
+function fechaServidorIso(valor: string | null | undefined): string | null {
+  const texto = valor?.trim();
+  if (!texto) {
+    return null;
+  }
+  return texto.replace(' ', 'T').replace(/([+-]\d{2})$/, '$1:00');
+}
+
 @Injectable({ providedIn: 'root' })
 export class SeguimientoAsignacionService {
   constructor(private http: HttpClient) {}
@@ -142,21 +191,6 @@ export class SeguimientoAsignacionService {
     return this.http
       .get<{ data: FolioEntregable[] }>(`${BASE_URL}/folios/expediente/${idExpediente}`, { withCredentials: true })
       .pipe(map((r) => r.data ?? []));
-  }
-
-  /** Devuelve el folio activo del tipo o genera el siguiente consecutivo. */
-  reservarFolio(idExpediente: number, tipo: string): Observable<{ data: FolioEntregable; nuevo: boolean }> {
-    return this.http.post<{ data: FolioEntregable; nuevo: boolean }>(
-      `${BASE_URL}/folios`,
-      { id_expediente: idExpediente, tipo },
-      { withCredentials: true }
-    );
-  }
-
-  cancelarFolio(idFolio: number, motivo: string): Observable<FolioEntregable> {
-    return this.http
-      .patch<{ data: FolioEntregable }>(`${BASE_URL}/folios/${idFolio}/cancelar`, { motivo }, { withCredentials: true })
-      .pipe(map((r) => r.data));
   }
 
   actualizarEstatus(idExpediente: number, status: number): Observable<{ mensaje: string }> {
@@ -192,9 +226,20 @@ export class SeguimientoAsignacionService {
     return this.http
       .get<{ data: ResumenSeguimiento[] }>(`${BASE_URL}/resumen`, { withCredentials: true })
       .pipe(
-        map((r) => r.data ?? []),
+        map((r) =>
+          (r.data ?? []).map((fila) => ({
+            ...fila,
+            fecha_notificacion_asignacion: fechaServidorIso(fila.fecha_notificacion_asignacion),
+          }))
+        ),
         catchError(() => of([]))
       );
+  }
+
+  notificarAsignacion(datos: NotificacionAsignacionPayload): Observable<NotificacionAsignacionRespuesta> {
+    return this.http.post<NotificacionAsignacionRespuesta>(`${BASE_URL}/notificar_asignacion`, datos, {
+      withCredentials: true,
+    });
   }
 
   obtenerAlertas(): Observable<AlertaCompromiso[]> {

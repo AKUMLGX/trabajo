@@ -13,7 +13,11 @@ export interface ExpedienteTlalcalli {
   expediente: string; // Ej: "Exp.001-2025"
   oficio?: string; // Ej: "199 06 02 00 00 2025-01"
   numero_entrada_central?: string; // Puede estar vacío
-  remitente_area?: string; // Ej: "AGSC"
+  remitente_area?: string; // Identificador libre o valor legacy de bandeja
+  /** Clave de Administración General (captura); pendiente en StructForSearch de data_busqueda. */
+  remitente_general?: string;
+  /** Clave de Administración Central (captura); pendiente en StructForSearch de data_busqueda. */
+  remitente_central?: string;
   referencia_asunto?: string; // Descripción larga del asunto
   
   // Fechas y plazos (vienen como strings del backend: "YYYY-MM-DD")
@@ -70,7 +74,11 @@ export interface FormularioPaso1 {
   expediente: string; // Ej: "Exp.001" - OBLIGATORIO
   oficio?: string; // Ej: "199 06 02 00 00 2025-01"
   numero_entrada_central?: string; // Puede estar vacío
-  remitente_area?: string; // Ej: "AGSC"
+  remitente_area?: string; // Identificador libre o valor legacy de bandeja
+  /** Clave de Administración General (captura); pendiente en StructForSearch de data_busqueda. */
+  remitente_general?: string;
+  /** Clave de Administración Central (captura); pendiente en StructForSearch de data_busqueda. */
+  remitente_central?: string;
   referencia_asunto?: string; // Descripción del asunto
   fecha_documento?: Date; // Formato DD/MM/YYYY
   mes_documento?: number; // Número del mes (1-12)

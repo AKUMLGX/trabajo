@@ -100,7 +100,7 @@
     'bg-yellow-50 border-yellow-200 text-yellow-700': getEstatusClass(detalle.estatus) === 'estatus-pendiente',
     'bg-red-50 border-red-200 text-red-600': getEstatusClass(detalle.estatus) === 'estatus-rechazado'
   }">
-  {{ detalle.estatus || 'N/A' }}
+  {{ (detalle.estatus | etiquetaEstatus) || 'N/A' }}
 </span>
 </div>
         </div>

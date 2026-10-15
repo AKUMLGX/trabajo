@@ -1,17 +1,33 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { NgApexchartsModule, ApexChart, ApexNonAxisChartSeries, ApexAxisChartSeries, ApexXAxis, ApexYAxis, ApexPlotOptions, ApexFill, ApexStroke, ApexDataLabels, ApexLegend, ApexResponsive, ApexTitleSubtitle, ApexGrid, ApexTooltip } from 'ng-apexcharts';
 import { interval, Subscription } from 'rxjs';
-import { DashboardService } from '../../services/dashboard.service';
 import { DashboardPanelFacade } from '../../services/dashboard-panel.facade';
-import { PanelDatos, formatearDuracion } from '../../services/dashboard-panel.utils';
-import { PermissionsService } from '../../../services/permissions.service';
-import { DashboardBandejaCardsComponent } from '../../components/dashboard-bandeja-cards/dashboard-bandeja-cards.component';
-import { DashboardCriticosAlertasComponent } from '../../components/dashboard-criticos-alertas/dashboard-criticos-alertas.component';
+import {
+  FuentesPanel,
+  PanelDatos,
+  RangoFechas,
+  AreaPeriodo,
+  VistaAdministracionRemitente,
+  agrupacionAdministracionPeriodo,
+  construirPanel,
+  formatearDias,
+  soloAdministracionSinDato,
+  rangoHoy,
+  ServicioDetalle,
+} from '../../services/dashboard-panel.utils';
+import {
+  BUCKETS_ESTATUS,
+  COLORES_BUCKET_ESTATUS,
+  ETIQUETAS_BUCKET_ESTATUS,
+} from '../../services/dashboard-estatus-negocio.utils';
 import { DashboardReportesBarComponent } from '../../components/dashboard-reportes-bar/dashboard-reportes-bar.component';
+import { DashboardFiltroPeriodoComponent } from '../../components/dashboard-filtro-periodo/dashboard-filtro-periodo.component';
+import { DashboardSinAtenderComponent } from '../../components/dashboard-sin-atender/dashboard-sin-atender.component';
+import { DashboardMetricasServidorComponent } from '../../components/dashboard-metricas-servidor/dashboard-metricas-servidor.component';
+import { EtiquetaEstatusPipe } from '../../../shared/pipes/etiqueta-estatus.pipe';
 // Tipos para los gráficos
 export type ChartOptions = {
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -33,39 +49,41 @@ export type ChartOptions = {
 
 @Component({
     selector: 'app-dashboard-page',
-    imports: [
+    imports: [EtiquetaEstatusPipe, 
         CommonModule,
         MatTooltipModule,
         RouterLink,
         NgApexchartsModule,
-        DashboardBandejaCardsComponent,
-        DashboardCriticosAlertasComponent,
-        DashboardReportesBarComponent
+        DashboardReportesBarComponent,
+        DashboardFiltroPeriodoComponent,
+        DashboardSinAtenderComponent,
+        DashboardMetricasServidorComponent
     ],
     templateUrl: './dashboard-page.component.html'
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {
   readonly panel = signal<PanelDatos | null>(null);
   readonly cargando = signal(true);
+  readonly recalculandoPeriodo = signal(false);
   readonly error = signal<string | null>(null);
+  readonly rango = signal<RangoFechas>(rangoHoy());
 
-  readonly puedeExportar = toSignal(inject(PermissionsService).canAccessBandeja('reportes'), { initialValue: false });
+  readonly bucketsEstatus = BUCKETS_ESTATUS;
+  readonly etiquetasBucketEstatus = ETIQUETAS_BUCKET_ESTATUS;
+  readonly maxAreasGrafica = 12;
 
   // Opciones de los gráficos
   chartEstatusOptions!: Partial<ChartOptions>;
-  chartResponsablesOptions!: Partial<ChartOptions>;
-  chartTendenciaOptions!: Partial<ChartOptions>;
-  chartSemaforoOptions!: Partial<ChartOptions>;
-  chartTipoAccionOptions?: Partial<ChartOptions>;
-  tendenciaConAtendidos = false;
+  chartServicioOptions!: Partial<ChartOptions>;
+  chartAdminGeneralOptions!: Partial<ChartOptions>;
+  chartAdminCentralOptions!: Partial<ChartOptions>;
+  readonly vistaAdministracionRemitente = signal<VistaAdministracionRemitente>('general');
 
+  private fuentes: FuentesPanel | null = null;
   private refreshSubscription?: Subscription;
   private cargaSubscription?: Subscription;
 
-  constructor(
-    private dashboardService: DashboardService,
-    private panelFacade: DashboardPanelFacade
-  ) {}
+  constructor(private panelFacade: DashboardPanelFacade) {}
 
   ngOnInit(): void {
     this.cargarDatos();
@@ -85,10 +103,10 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     }
 
     this.cargaSubscription?.unsubscribe();
-    this.cargaSubscription = this.panelFacade.cargarPanel().subscribe({
-      next: (datos) => {
-        this.configurarGraficos(datos);
-        this.panel.set(datos);
+    this.cargaSubscription = this.panelFacade.cargarFuentes().subscribe({
+      next: (fuentes) => {
+        this.fuentes = fuentes;
+        this.recalcular();
         this.error.set(null);
         this.cargando.set(false);
       },
@@ -100,362 +118,208 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  private configurarGraficos(p: PanelDatos): void {
-    const g = p.graficas;
-    const semaforo = p.kpis.semaforo;
+  /** Cambiar el periodo no vuelve a consultar el back: recalcula con las fuentes ya cargadas. */
+  cambiarRango(rango: RangoFechas): void {
+    this.recalculandoPeriodo.set(true);
+    this.rango.set(rango);
+    const inicio = Date.now();
+    this.recalcular();
+    const restante = Math.max(0, 200 - (Date.now() - inicio));
+    setTimeout(() => this.recalculandoPeriodo.set(false), restante);
+  }
 
-    // Gráfico de Estatus (Donut)
-    this.chartEstatusOptions = {
-      series: g.porEstatus.map(e => e.cantidad),
+  private recalcular(): void {
+    if (!this.fuentes) {
+      return;
+    }
+    const datos = construirPanel(
+      this.fuentes,
+      new Date(),
+      this.rango(),
+      this.panelFacade.getCatalogoRemitente()
+    );
+    this.configurarGraficos(datos);
+    this.panel.set(datos);
+  }
+
+  private configurarGraficos(p: PanelDatos): void {
+    const per = p.periodo;
+
+    const estatusDonut = this.seriesDonut(BUCKETS_ESTATUS.map((b) => ({ clave: b, valor: per.porBucketEstatus[b], etiqueta: ETIQUETAS_BUCKET_ESTATUS[b], color: COLORES_BUCKET_ESTATUS[b] })));
+
+    this.chartEstatusOptions = this.construirDonut(estatusDonut);
+    this.chartServicioOptions = this.construirChartServicio(per.porServicio, per.capturadas);
+
+    this.chartAdminGeneralOptions = this.construirChartAdministracion(
+      per.porAdministracionGeneral.slice(0, this.maxAreasGrafica)
+    );
+    this.chartAdminCentralOptions = this.construirChartAdministracion(
+      per.porAdministracionCentral.slice(0, this.maxAreasGrafica)
+    );
+  }
+
+  /** Donut con total al centro y porcentaje sobre cada segmento; misma altura para ambas gráficas. */
+  private construirDonut(datos: { valores: number[]; etiquetas: string[]; colores: string[] }): Partial<ChartOptions> {
+    return {
+      series: datos.valores,
       chart: {
         type: 'donut',
         height: 360,
         fontFamily: 'Noto Sans, sans-serif',
-        animations: {
-          enabled: true,
-          speed: 800
-        },
-        dropShadow: {
-          enabled: true,
-          top: 3,
-          left: 0,
-          blur: 10,
-          opacity: 0.2
-        }
+        animations: { enabled: true, speed: 700 },
       },
-      labels: g.porEstatus.map(e => this.dashboardService.getLabelEstatus(e.estatus)),
-      colors: ['#3E0065', '#977DAB', '#D6AE67', '#5D337C', '#00B37A', '#8540B9', '#FFA400'],
+      labels: datos.etiquetas,
+      colors: datos.colores,
       plotOptions: {
         pie: {
+          expandOnClick: false,
           donut: {
-            size: '65%',
+            size: '62%',
             labels: {
               show: true,
-              name: {
-                show: true,
-                fontSize: '14px',
-                fontWeight: 600
-              },
-              value: {
-                show: true,
-                fontSize: '24px',
-                fontWeight: 700,
-                color: '#230142'
-              },
-              total: {
-                show: true,
-                label: 'Total',
-                fontSize: '14px',
-                fontWeight: 600,
-                color: '#7F7D7B'
-              }
-            }
-          }
-        }
+              name: { show: true, fontSize: '13px', fontWeight: 600, color: '#7F7D7B' },
+              value: { show: true, fontSize: '30px', fontWeight: 800, color: '#230142' },
+              total: { show: true, label: 'Solicitudes', fontSize: '13px', fontWeight: 600, color: '#7F7D7B' },
+            },
+          },
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: true,
+        formatter: (val: number) => (val >= 4 ? `${Math.round(val)}%` : ''),
+        style: { fontSize: '12px', fontWeight: 700 },
+        dropShadow: { enabled: false },
       },
       legend: {
         position: 'bottom',
         fontSize: '13px',
         fontWeight: 500,
-        height: 56,
-        markers: {
-        }
+        itemMargin: { horizontal: 10, vertical: 4 },
+        formatter: (nombre: string, opts: { seriesIndex: number }) =>
+          `${nombre}: ${datos.valores[opts.seriesIndex] ?? 0}`,
       },
-      stroke: {
-        width: 2,
-        colors: ['#fff']
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: { height: 280 },
-          legend: { position: 'bottom' }
-        }
-      }]
+      stroke: { width: 3, colors: ['#fff'] },
+      tooltip: { y: { formatter: (val: number) => `${val} solicitud(es)` } },
     };
+  }
 
-    // Gráfico de Responsables (Bar horizontal)
-    this.chartResponsablesOptions = {
+  /** Una barra por servicio del catálogo; los que no tienen solicitudes se muestran en 0 y en gris. */
+  private construirChartServicio(servicios: ServicioDetalle[], total: number): Partial<ChartOptions> {
+    return {
+      series: [{ name: 'Solicitudes', data: servicios.map((s) => s.cantidad) }],
+      chart: {
+        type: 'bar',
+        height: Math.max(300, servicios.length * 34 + 60),
+        fontFamily: 'Noto Sans, sans-serif',
+        toolbar: { show: false },
+        animations: { enabled: true, speed: 700 },
+      },
+      plotOptions: {
+        bar: { horizontal: true, borderRadius: 5, barHeight: '68%', distributed: true, dataLabels: { position: 'top' } },
+      },
+      colors: servicios.map((s) => (s.cantidad > 0 ? '#3E0065' : '#D9D4E3')),
+      dataLabels: {
+        enabled: true,
+        offsetX: 30,
+        formatter: (val: number) => (val > 0 ? `${val} · ${this.porcentaje(val, total)}` : '0'),
+        style: { fontSize: '12px', fontWeight: 700, colors: ['#230142'] },
+      },
+      stroke: { width: 0 },
+      xaxis: {
+        categories: servicios.map((s) => s.servicio),
+        labels: { show: false },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        max: Math.max(...servicios.map((s) => s.cantidad), 1) * 1.25,
+      },
+      yaxis: { labels: { style: { fontSize: '12px', fontWeight: 500, colors: ['#230142'] }, maxWidth: 200 } },
+      legend: { show: false },
+      grid: { show: false, padding: { left: 4, right: 16 } },
+      tooltip: { y: { formatter: (val: number) => `${val} solicitud(es)` } },
+    };
+  }
+
+  cambiarVistaAdministracion(vista: VistaAdministracionRemitente): void {
+    this.vistaAdministracionRemitente.set(vista);
+  }
+
+  agrupacionActiva(per: PanelDatos['periodo']): AreaPeriodo[] {
+    return agrupacionAdministracionPeriodo(per, this.vistaAdministracionRemitente());
+  }
+
+  private construirChartAdministracion(areas: AreaPeriodo[]): Partial<ChartOptions> {
+    const etiquetaCorta = (nombre: string) => (nombre.length > 32 ? `${nombre.substring(0, 32)}…` : nombre);
+    return {
       series: [{
-        name: 'Pendientes',
-        data: g.porResponsable.slice(0, 6).map(r => r.pendientes)
-      }, {
-        name: 'Atendidos',
-        data: g.porResponsable.slice(0, 6).map(r => r.atendidos)
+        name: 'Solicitudes',
+        data: areas.map((a) => a.total),
       }],
       chart: {
         type: 'bar',
-        height: 320,
-        stacked: true,
+        height: Math.max(280, areas.length * 42 + 100),
         fontFamily: 'Noto Sans, sans-serif',
         toolbar: { show: false },
-        animations: {
-          enabled: true,
-          speed: 800
-        }
+        animations: { enabled: true, speed: 800 },
       },
       plotOptions: {
         bar: {
           horizontal: true,
           borderRadius: 6,
-          barHeight: '60%',
-          dataLabels: {
-            total: {
-              enabled: true,
-              style: {
-                fontSize: '12px',
-                fontWeight: 700
-              }
-            }
-          }
-        }
+          barHeight: '70%',
+          distributed: true,
+        },
       },
-      colors: ['#FFA400', '#00B37A'],
+      colors: ['#3E0065', '#5A1A7A', '#7A3D9A', '#9B5FBA', '#B88AD0', '#D4B8E8', '#3E0065', '#5A1A7A', '#7A3D9A', '#9B5FBA', '#B88AD0', '#D4B8E8'],
       dataLabels: {
-        enabled: false
+        enabled: true,
+        offsetX: 24,
+        style: { fontSize: '12px', fontWeight: 700, colors: ['#230142'] },
       },
-      stroke: {
-        width: 1,
-        colors: ['#fff']
-      },
+      stroke: { width: 0 },
       xaxis: {
-        categories: g.porResponsable.slice(0, 6).map(r => 
-          r.responsable.length > 15 ? r.responsable.substring(0, 15) + '...' : r.responsable
-        ),
-        labels: {
-          style: {
-            fontSize: '11px'
-          }
-        }
+        categories: areas.map((a) => etiquetaCorta(a.area)),
+        labels: { style: { fontSize: '11px' } },
+        tickAmount: undefined,
       },
       yaxis: {
         labels: {
-          style: {
-            fontSize: '11px'
-          }
-        }
+          style: { fontSize: '12px', fontWeight: 500, colors: ['#230142'] },
+          maxWidth: 240,
+        },
       },
-      legend: {
-        position: 'top',
-        horizontalAlign: 'right',
-        fontSize: '12px'
-      },
-      grid: {
-        borderColor: '#E6E3DC',
-        strokeDashArray: 4
-      },
+      legend: { show: false },
+      grid: { borderColor: '#E6E3DC', strokeDashArray: 4, padding: { left: 8, right: 24 } },
       tooltip: {
-        y: {
-          formatter: (val: number) => `${val} expedientes`
-        }
-      }
+        y: { formatter: (val: number) => `${val} solicitud(es)` },
+        x: { formatter: (_: number, opts: { dataPointIndex: number }) => areas[opts.dataPointIndex]?.area ?? '' },
+      },
     };
-
-    // Gráfico de Tendencia (Area)
-    const tendenciaData = g.tendencia;
-    this.tendenciaConAtendidos = tendenciaData.some(t => t.atendidos > 0);
-    const seriesTendencia = [{ name: 'Capturados', data: tendenciaData.map(t => t.creados) }];
-    if (this.tendenciaConAtendidos) {
-      seriesTendencia.push({ name: 'Atendidos', data: tendenciaData.map(t => t.atendidos) });
-    }
-    this.chartTendenciaOptions = {
-      series: seriesTendencia,
-      chart: {
-        type: 'area',
-        height: 300,
-        fontFamily: 'Noto Sans, sans-serif',
-        toolbar: { show: false },
-        zoom: { enabled: false },
-        animations: {
-          enabled: true,
-          speed: 800
-        }
-      },
-      colors: ['#3E0065', '#00B37A'],
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth',
-        width: 3
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.5,
-          opacityTo: 0.1,
-          stops: [0, 90, 100]
-        }
-      },
-      xaxis: {
-        categories: tendenciaData.map(t => `Sem ${t.semana.split('-')[1]}`),
-        labels: {
-          style: {
-            fontSize: '11px'
-          }
-        }
-      },
-      yaxis: {
-        min: 0,
-        forceNiceScale: true,
-        decimalsInFloat: 0,
-        labels: {
-          style: {
-            fontSize: '11px'
-          }
-        }
-      },
-      legend: {
-        position: 'top',
-        horizontalAlign: 'right',
-        fontSize: '12px'
-      },
-      grid: {
-        borderColor: '#E6E3DC',
-        strokeDashArray: 4
-      },
-      tooltip: {
-        x: {
-          format: 'Semana'
-        }
-      }
-    };
-
-    // Gráfico de Semáforo (Radial)
-    const valoresSemaforo = [semaforo.en_tiempo, semaforo.atencion, semaforo.urgente, semaforo.vencido];
-    const totalSemaforo = valoresSemaforo.reduce((acc, v) => acc + v, 0);
-    this.chartSemaforoOptions = {
-      series: valoresSemaforo.map(v => totalSemaforo > 0 ? Math.round((v / totalSemaforo) * 100) : 0),
-      chart: {
-        type: 'radialBar',
-        height: 320,
-        fontFamily: 'Noto Sans, sans-serif',
-        animations: {
-          enabled: true,
-          speed: 800
-        }
-      },
-      plotOptions: {
-        radialBar: {
-          offsetY: 0,
-          startAngle: 0,
-          endAngle: 270,
-          hollow: {
-            margin: 5,
-            size: '30%',
-            background: 'transparent'
-          },
-          dataLabels: {
-            name: {
-              show: false
-            },
-            value: {
-              show: false
-            }
-          }
-        }
-      },
-      colors: ['#00B37A', '#FFA400', '#F41B1D', '#27262C'],
-      labels: ['En tiempo (0-24 h)', 'Atención (24-48 h)', 'Urgente (48-72 h)', 'Vencido (+72 h)'],
-      legend: {
-        show: true,
-        position: 'bottom',
-        fontSize: '13px',
-        fontWeight: 500,
-        markers: {
-        },
-        formatter: (seriesName: string, opts: any) => `${seriesName}: ${valoresSemaforo[opts.seriesIndex] ?? 0}`
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: { height: 280 }
-        }
-      }]
-    };
-
-    // Gráfico de Tipo de Acción (Bar vertical)
-    this.chartTipoAccionOptions = undefined;
-    if (g.porTipoAccion.length > 0) {
-      this.chartTipoAccionOptions = {
-        series: [{
-          name: 'Total',
-          data: g.porTipoAccion.map(t => t.cantidad)
-        }, {
-          name: 'Urgentes',
-          data: g.porTipoAccion.map(t => t.urgentes)
-        }],
-        chart: {
-          type: 'bar',
-          height: 280,
-          fontFamily: 'Noto Sans, sans-serif',
-          toolbar: { show: false },
-          animations: {
-            enabled: true,
-            speed: 800
-          }
-        },
-        plotOptions: {
-          bar: {
-            borderRadius: 6,
-            columnWidth: '60%',
-            dataLabels: {
-              position: 'top'
-            }
-          }
-        },
-        colors: ['#3E0065', '#F41B1D'],
-        dataLabels: {
-          enabled: true,
-          offsetY: -20,
-          style: {
-            fontSize: '11px',
-            fontWeight: 700,
-            colors: ['#230142']
-          }
-        },
-        xaxis: {
-          categories: g.porTipoAccion.map(t => 
-            this.dashboardService.getLabelTipoAccion(t.tipo_accion)
-          ),
-          labels: {
-            style: {
-              fontSize: '10px'
-            },
-            rotate: -45,
-            rotateAlways: true
-          }
-        },
-        yaxis: {
-          labels: {
-            style: {
-              fontSize: '11px'
-            }
-          }
-        },
-        legend: {
-          position: 'top',
-          horizontalAlign: 'right',
-          fontSize: '12px'
-        },
-        grid: {
-          borderColor: '#E6E3DC',
-          strokeDashArray: 4
-        }
-      };
-    }
   }
 
-  formatearHoras(horas: number): string {
-    return formatearDuracion(horas);
+  todoSinDatoAdministracion(per: PanelDatos['periodo']): boolean {
+    return soloAdministracionSinDato(per, this.vistaAdministracionRemitente());
   }
 
-  getLabelEstatus(estatus: string): string {
-    return this.dashboardService.getLabelEstatus(estatus);
+  private seriesDonut(
+    puntos: { clave: string; valor: number; etiqueta: string; color: string }[]
+  ): { valores: number[]; etiquetas: string[]; colores: string[] } {
+    const activos = puntos.filter((p) => p.valor > 0);
+    const lista = activos.length ? activos : puntos;
+    return {
+      valores: lista.map((p) => p.valor),
+      etiquetas: lista.map((p) => p.etiqueta),
+      colores: lista.map((p) => p.color),
+    };
+  }
+
+  /** Etiqueta corta para chips y leyendas de administración. */
+  etiquetaAdministracion(area: string): string {
+    const texto = (area || '').trim();
+    return texto.length > 40 ? `${texto.substring(0, 40)}…` : texto;
+  }
+
+  formatearDias(dias: number | null): string {
+    return formatearDias(dias);
   }
 
   refrescar(): void {
@@ -463,7 +327,15 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   }
 
   porcentaje(valor: number, total: number): string {
-    return total > 0 ? `${Math.round((valor / total) * 100)}%` : '0%';
+    return `${this.porcentajeNumero(valor, total)}%`;
+  }
+
+  porcentajeNumero(valor: number, total: number): number {
+    return total > 0 ? Math.round((valor / total) * 100) : 0;
+  }
+
+  irASinAtender(): void {
+    document.getElementById('sin-atender')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 

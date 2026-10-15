@@ -1,0 +1,47 @@
+<section class="tl-card p-5">
+  <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <div class="tl-section-title">
+      <span class="tl-section-icon"><span class="icon-font !text-[22px]">date_range</span></span>
+      <div>
+        <h2 class="tl-section-heading">Periodo: {{ etiqueta }}</h2>
+        <p class="tl-section-subtitle">
+          {{ capturadas }} solicitud(es) con fecha del documento en el periodo
+          @if (sinFechaDocumento > 0) {
+            · {{ sinFechaDocumento }} registro(s) sin fecha del documento no entran al filtro
+          }
+        </p>
+      </div>
+    </div>
+
+    <div class="tl-segmented" role="group" aria-label="Atajos de periodo por fecha del documento">
+      @for (p of presets; track p.id) {
+        <button
+          type="button"
+          class="tl-segmented-item"
+          [class.tl-segmented-item-active]="preset === p.id"
+          [attr.aria-pressed]="preset === p.id"
+          [attr.aria-label]="'Periodo: ' + p.etiqueta"
+          (click)="elegirPreset(p.id)">
+          {{ p.etiqueta }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (preset === 'PERSONALIZADO') {
+    <div class="mt-4 flex flex-wrap items-end justify-end gap-3 border-t border-tlalcalli-light-base/70 pt-4">
+      <label class="flex flex-col gap-1 font-noto-sans text-xs font-semibold text-tlalcalli-gray">
+        Desde
+        <input type="date" class="tl-input h-10 w-[170px]" [(ngModel)]="desde" [max]="hasta" />
+      </label>
+      <label class="flex flex-col gap-1 font-noto-sans text-xs font-semibold text-tlalcalli-gray">
+        Hasta
+        <input type="date" class="tl-input h-10 w-[170px]" [(ngModel)]="hasta" [min]="desde" />
+      </label>
+      <button type="button" class="tl-btn-primary h-10" [disabled]="rangoInvalido" (click)="aplicarPersonalizado()">
+        <span class="icon-font !text-[18px]">filter_alt</span>
+        Aplicar
+      </button>
+    </div>
+  }
+</section>

@@ -29,87 +29,113 @@
       </section>
     } @else {
 
-      <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        @for (estado of estados; track estado) {
+      <section class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        @for (estado of estadosTarjeta; track estado) {
           @let estilo = estiloTarjeta(estado);
           <div class="tl-stat">
             <span class="tl-stat-accent" [ngClass]="estilo.acento"></span>
-            <div class="flex items-center justify-between">
-              <span class="tl-stat-label">{{ etiquetaEstado(estado) }}</span>
-              <span class="tl-stat-icon" [ngClass]="estilo.tinte"><span class="icon-font !text-[22px]">{{ estilo.icono }}</span></span>
+            <div class="flex items-start gap-4">
+              <span class="tl-stat-icon !h-12 !w-12" [ngClass]="estilo.tinte"><span class="icon-font !text-[26px]">{{ estilo.icono }}</span></span>
+              <div class="min-w-0 flex-1">
+                <span class="tl-stat-label block">{{ etiquetaEstado(estado) }}</span>
+                <span class="tl-stat-caption mt-1 block">{{ estilo.descripcion }}</span>
+              </div>
             </div>
-            <span class="tl-stat-value mt-3" [ngClass]="estilo.valor">{{ contar(estado) }}</span>
-            <span class="tl-stat-caption mt-2">de {{ filas.length }} expediente(s)</span>
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <div class="flex items-baseline gap-2">
+                <span class="tl-stat-value" [ngClass]="estilo.valor">{{ contar(estado) }}</span>
+                <span class="tl-stat-caption">de {{ filas.length }} expediente(s)</span>
+              </div>
+              <span class="font-noto-sans text-sm font-semibold" [ngClass]="estilo.valor">{{ porcentaje(estado) }}%</span>
+            </div>
+            <div class="tl-progress mt-3">
+              <div class="h-full rounded-full transition-all duration-500" [ngClass]="estilo.acento" [style.width.%]="porcentaje(estado)"></div>
+            </div>
           </div>
         }
       </section>
 
       <section class="tl-card overflow-hidden">
-        <div class="flex flex-col gap-4 px-5 py-4 xl:flex-row xl:items-center xl:justify-between">
+        <div class="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between">
           <div class="flex flex-wrap items-center gap-3">
             <h3 class="tl-section-heading">Expedientes</h3>
-            <span class="tl-chip tl-chip-primary">{{ filasVisibles.length }} registro(s)</span>
+            <div class="tl-segmented h-11 items-center" aria-label="Total de registros visibles">
+              <span class="tl-segmented-item tl-segmented-item-static cursor-default select-none">
+                registro(s)
+                <span class="tl-count">{{ filasVisibles.length }}</span>
+              </span>
+            </div>
           </div>
-          <div class="flex flex-col gap-3 md:flex-row md:items-center">
-            <div class="tl-search md:w-[340px]">
-              <span class="icon-font tl-search-icon">search</span>
-              <input type="text" [(ngModel)]="busqueda" placeholder="Buscar expediente, oficio, asunto o remitente..." class="tl-input pl-11" />
-            </div>
-            <div class="tl-segmented">
-              <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vista === 'PENDIENTES' }" (click)="vista = 'PENDIENTES'">
-                Pendientes
-                <span class="tl-count">{{ totalPendientes }}</span>
-              </button>
-              <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vista === 'CERRADOS' }" (click)="vista = 'CERRADOS'">
-                Cerrados
-                <span class="tl-count">{{ contar('COMPLETO') }}</span>
-              </button>
-              <button type="button" class="tl-segmented-item" [ngClass]="{ 'tl-segmented-item-active': vista === 'TODOS' }" (click)="vista = 'TODOS'">
-                Todos
-                <span class="tl-count">{{ filas.length }}</span>
-              </button>
-            </div>
+          <div class="tl-search w-full md:w-[380px]">
+            <span class="icon-font tl-search-icon">search</span>
+            <input type="text" [ngModel]="busqueda" (ngModelChange)="buscar($event)" placeholder="Buscar expediente, oficio, asunto o remitente..." class="tl-input pl-11" />
           </div>
         </div>
 
         @if (filasVisibles.length === 0) {
           <div class="tl-empty border-t border-tlalcalli-light-base/70">
             <span class="tl-empty-icon"><span class="icon-font !text-[30px]">inbox</span></span>
-            <h4 class="m-0 font-noto-sans text-base font-semibold text-tlalcalli-deep">Sin expedientes en esta vista</h4>
+            <h4 class="m-0 font-noto-sans text-base font-semibold text-tlalcalli-deep">Sin expedientes en la bandeja</h4>
             <p class="m-0 mt-1.5 max-w-[440px] font-noto-sans text-sm text-tlalcalli-gray">
-              Ajusta la búsqueda o cambia de vista. Los expedientes se registran en Captura y se les da seguimiento en Seguimiento y Asignación.
+              Ajusta la búsqueda. Los expedientes se registran en Captura y se les da seguimiento en Seguimiento y Asignación.
             </p>
           </div>
         } @else {
           <div class="w-full overflow-x-auto">
-            <table class="tl-table min-w-[1100px]">
+            <table class="tl-table min-w-[980px] table-fixed">
+              <colgroup>
+                <col class="w-[14%]" />
+                <col class="w-[16%]" />
+                <col class="w-[17%]" />
+                <col class="w-[15%]" />
+                <col class="w-[11%]" />
+                <col class="w-[15%]" />
+                <col class="w-[12%]" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Expediente</th>
+                  <th>Oficio</th>
                   <th>Remitente</th>
                   <th>Etapa</th>
-                  <th class="text-center">Resp. parciales</th>
-                  <th>Notificación total</th>
-                  <th>Acuse</th>
-                  <th>Expediente físico / digital</th>
-                  <th class="text-center">Estado de cierre</th>
+                  <th class="text-center">Respuesta parcial</th>
+                  <th>Respuesta total</th>
                   <th class="text-center">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                @for (fila of filasVisibles; track fila.expediente.id_expediente) {
+                @for (fila of filasPagina; track fila.expediente.id_expediente) {
                   @let e = fila.expediente;
                   @let r = fila.resumen;
+                  @let oficiosFila = oficios(e);
+                  @let remitenteFila = remitente(e);
+                  @let etapaFila = etapa(e);
                   <tr>
                     <td>
-                      <span class="block font-semibold text-tlalcalli-deep">{{ e.expediente || '-' }}</span>
-                      <span class="block max-w-[200px] truncate text-xs text-tlalcalli-gray" [title]="e.oficio || ''">{{ e.oficio || '-' }}</span>
+                      <span class="block truncate font-semibold text-tlalcalli-deep" [title]="e.expediente || ''">{{ e.expediente || '—' }}</span>
                     </td>
-                    <td class="text-xs">
-                      <span class="block max-w-[190px] truncate" [title]="e.remitente_area || ''">{{ e.remitente_area || '-' }}</span>
+                    <td class="text-xs" [title]="oficiosFila.join(', ')">
+                      @for (oficio of oficiosFila; track $index) {
+                        <span class="block truncate">{{ oficio }}</span>
+                      } @empty {
+                        <span class="text-tlalcalli-gray">—</span>
+                      }
+                    </td>
+                    <td class="text-xs" [title]="e.remitente_area || ''">
+                      <span class="block truncate font-semibold text-tlalcalli-deep">{{ remitenteFila.principal }}</span>
+                      @if (remitenteFila.detalle) {
+                        <span class="mt-0.5 block truncate text-[11px] text-tlalcalli-gray">{{ remitenteFila.detalle }}</span>
+                      }
                     </td>
                     <td>
-                      <span class="tl-chip tl-chip-primary">{{ e.estatus || '-' }}</span>
+                      @if (etapaFila) {
+                        <span class="tl-chip max-w-full" [ngClass]="etapaFila.clase" [title]="etapaFila.etiqueta">
+                          <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+                          <span class="truncate">{{ etapaFila.etiqueta }}</span>
+                        </span>
+                      } @else {
+                        <span class="text-xs text-tlalcalli-gray">Sin etapa</span>
+                      }
                     </td>
                     <td class="text-center text-xs">
                       @if (r && r.respuestas_parciales > 0) {
@@ -133,28 +159,22 @@
                         <span class="text-tlalcalli-gray">Sin respuesta total</span>
                       }
                     </td>
-                    <td class="text-xs">
-                      <span class="block max-w-[140px] truncate" [title]="r?.acuse || ''" [ngClass]="{ 'text-tlalcalli-gray': !r?.acuse }">{{ r?.acuse || '—' }}</span>
-                    </td>
-                    <td class="text-xs">
-                      <span class="block max-w-[200px]" [ngClass]="{ 'text-tlalcalli-gray': !r?.estado_expediente }">{{ r?.estado_expediente || '—' }}</span>
-                    </td>
-                    <td class="text-center">
-                      <span class="tl-chip" [ngClass]="claseEstado(fila.estado)">
-                        <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
-                        {{ etiquetaEstado(fila.estado) }}
-                      </span>
-                    </td>
-                    <td class="text-center">
-                      <button type="button" (click)="abrirModalCierre(fila)" title="Registrar evidencia de cierre" class="tl-icon-btn-solid">
-                        <span class="icon-font !text-[18px]">assignment_turned_in</span>
-                      </button>
+                    <td>
+                      <div class="flex items-center justify-center gap-2">
+                        <button type="button" (click)="verSeguimiento(fila)" title="Ver seguimiento" class="tl-icon-btn-ghost">
+                          <span class="icon-font !text-[18px]">timeline</span>
+                        </button>
+                        <button type="button" (click)="abrirModalCierre(fila)" title="Registrar evidencia de cierre" class="tl-icon-btn-solid">
+                          <span class="icon-font !text-[18px]">assignment_turned_in</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 }
               </tbody>
             </table>
           </div>
+          <app-tabla-paginador [total]="filasVisibles.length" [(pagina)]="pagina" [(tamano)]="tamanoPagina" [opcionesTamano]="opcionesTamanoPagina" />
         }
       </section>
     }

@@ -75,11 +75,7 @@
   class="w-fit max-w-[95vw]"
   (click)="$event.stopPropagation()">
 
-      <app-user-profile
-        [compact]="false"
-        [showAdvancedInfo]="true"
-        (closeProfile)="closeUserInfoModal()">
-      </app-user-profile>
+      <app-user-profile (closeProfile)="closeUserInfoModal()" />
 
     </div>
   </div>

@@ -36,6 +36,10 @@ import {
 } from '../utils/pdf-bytes.utils';
 import { extraerMensajeErrorHttp } from '../utils/http-error.utils';
 import { CatalogoReworkCacheService } from './catalogo-rework-cache.service';
+import {
+  parsearRemitenteCompuesto,
+  serializarRemitenteRework,
+} from '../../dashboard/services/dashboard-remitente-admin.utils';
 
 // URL base del backend: environment.baseUrl = https://balam.sat.gob.mx/tlalcalli/api/v1/
 const TLALCALLI_BASE = environment.baseUrl.endsWith('/') ? environment.baseUrl : `${environment.baseUrl}/`;
@@ -118,7 +122,10 @@ export class ExpedienteTlalcalliService {
     const responsableFiltro = String(filtros['responsable'] ?? '').trim().toLowerCase();
     return this.consultarExpedientesRework(filtros).pipe(
       map((rework) => {
-        const lista = rework.map((row) => this.mapReworkConsultaToLegacy(row));
+        // id 0 es el registro "SIN-ESPECIFICAR" que el back usa como valor nulo.
+        const lista = rework
+          .filter((row) => Number(row.id) !== 0)
+          .map((row) => this.mapReworkConsultaToLegacy(row));
         if (!responsableFiltro) {
           return lista;
         }
@@ -157,9 +164,14 @@ export class ExpedienteTlalcalliService {
     prioridad: number;
     estatus: number;
     responsable: string;
+    fecha_registro_inicio: string;
+    fecha_registro_fin: string;
   } {
     const prioridadId = Number(filtros['prioridad_id'] ?? 0);
     const estatusId = Number(filtros['estatus_id'] ?? 0);
+    const fechaInicio =
+      String(filtros['fecha_registro_inicio'] ?? filtros['fecha_creacion_desde'] ?? '').trim();
+    const fechaFin = String(filtros['fecha_registro_fin'] ?? filtros['fecha_creacion_hasta'] ?? '').trim();
 
     return {
       expediente: String(filtros['expediente'] ?? ''),
@@ -167,6 +179,8 @@ export class ExpedienteTlalcalliService {
       prioridad: Number.isFinite(prioridadId) ? prioridadId : 0,
       estatus: Number.isFinite(estatusId) ? estatusId : 0,
       responsable: String(filtros['responsable'] ?? ''),
+      fecha_registro_inicio: fechaInicio,
+      fecha_registro_fin: fechaFin,
     };
   }
 
@@ -199,6 +213,9 @@ export class ExpedienteTlalcalliService {
   }
 
   private mapReworkConsultaToLegacy(row: ExpedienteReworkConsultaRow): ExpedienteTlalcalli {
+    // StructForSearch solo trae `remitente` hoy; remitente_general/remitente_central cuando Max los agregue.
+    const remitenteGeneral = row.remitente_general?.trim() || undefined;
+    const remitenteCentral = row.remitente_central?.trim() || undefined;
     return {
       id_expediente: row.id,
       origen: 'rework',
@@ -206,6 +223,8 @@ export class ExpedienteTlalcalliService {
       oficio: row.num_oficio,
       servicio: row.servicio,
       numero_entrada_central: row.num_entrada,
+      remitente_general: remitenteGeneral,
+      remitente_central: remitenteCentral,
       remitente_area: row.remitente,
       fecha_documento: row.fecha_documento,
       fecha_recibido: row.fecha_recepcion,
@@ -575,7 +594,7 @@ export class ExpedienteTlalcalliService {
       num_oficio: valores.oficio.trim(),
       servicio: this.comoIdCatalogo(valores.servicio, 0),
       num_entrada: valores.numero_entrada_central.trim(),
-      remitente: valores.remitente.trim(),
+      remitente: this.remitenteReworkDesdeEdicion(valores.remitente, detalle.remitente),
       fecha_documento: this.formatearFechaRework(valores.fecha_documento),
       fecha_recepcion: this.formatearFechaRework(valores.fecha_recepcion),
       prioridad: this.comoIdCatalogo(valores.prioridad ?? detalle.prioridad_id, 1),
@@ -1078,9 +1097,9 @@ export class ExpedienteTlalcalliService {
 
     return {
       num_oficio: ordenados.map((o) => this.valorParaConcatenar(o.num_oficio)).join('|'),
-      fecha_documento: ordenados.map((o) => this.valorParaConcatenar(o.fecha_documento)).join('|'),
-      fecha_recepcion: ordenados.map((o) => this.valorParaConcatenar(o.fecha_recepcion)).join('|'),
-      fecha_vencimiento: ordenados.map((o) => this.valorParaConcatenar(o.fecha_vencimiento)).join('|'),
+      fecha_documento: ordenados.map((o) => this.fechaParaConcatenar(o.fecha_documento)).join('|'),
+      fecha_recepcion: ordenados.map((o) => this.fechaParaConcatenar(o.fecha_recepcion)).join('|'),
+      fecha_vencimiento: ordenados.map((o) => this.fechaParaConcatenar(o.fecha_vencimiento)).join('|'),
       asunto: ordenados.map((o) => this.valorParaConcatenar(o.asunto)).join('|'),
     };
   }
@@ -1103,17 +1122,17 @@ export class ExpedienteTlalcalliService {
     // Extraer valores existentes de cada oficio
     const valoresExistentes = {
       num_oficio: ordenados.map((o) => this.valorParaConcatenar(o.num_oficio)),
-      fecha_documento: ordenados.map((o) => this.valorParaConcatenar(o.fecha_documento)),
-      fecha_recepcion: ordenados.map((o) => this.valorParaConcatenar(o.fecha_recepcion)),
-      fecha_vencimiento: ordenados.map((o) => this.valorParaConcatenar(o.fecha_vencimiento)),
+      fecha_documento: ordenados.map((o) => this.fechaParaConcatenar(o.fecha_documento)),
+      fecha_recepcion: ordenados.map((o) => this.fechaParaConcatenar(o.fecha_recepcion)),
+      fecha_vencimiento: ordenados.map((o) => this.fechaParaConcatenar(o.fecha_vencimiento)),
       asunto: ordenados.map((o) => this.valorParaConcatenar(o.asunto)),
     };
 
     // Agregar valores del nuevo oficio al final
     valoresExistentes.num_oficio.push(this.valorParaConcatenar(nuevoOficio.num_oficio));
-    valoresExistentes.fecha_documento.push(this.valorParaConcatenar(nuevoOficio.fecha_documento));
-    valoresExistentes.fecha_recepcion.push(this.valorParaConcatenar(nuevoOficio.fecha_recepcion));
-    valoresExistentes.fecha_vencimiento.push(this.valorParaConcatenar(nuevoOficio.fecha_vencimiento));
+    valoresExistentes.fecha_documento.push(this.fechaParaConcatenar(nuevoOficio.fecha_documento));
+    valoresExistentes.fecha_recepcion.push(this.fechaParaConcatenar(nuevoOficio.fecha_recepcion));
+    valoresExistentes.fecha_vencimiento.push(this.fechaParaConcatenar(nuevoOficio.fecha_vencimiento));
     valoresExistentes.asunto.push(this.valorParaConcatenar(nuevoOficio.asunto));
 
     // Concatenar con separador `|`
@@ -1134,6 +1153,12 @@ export class ExpedienteTlalcalliService {
       return '';
     }
     return valor.trim();
+  }
+
+  /** El back calcula vencidos con TO_DATE(…, 'DD/MM/YYYY'); un segmento ISO rompe la consulta. */
+  private fechaParaConcatenar(valor: string | null | undefined): string {
+    const limpio = this.valorParaConcatenar(valor);
+    return limpio ? this.formatearFechaRework(limpio) : '';
   }
 
   private agregarCampoFormData(formData: FormData, clave: string, valor: string | undefined): void {
@@ -1159,6 +1184,18 @@ export class ExpedienteTlalcalliService {
     return this.parsearUsuarios(cadena);
   }
 
+  /** Conserva GENERAL,CENTRAL al editar solo el identificador en Consulta. */
+  private remitenteReworkDesdeEdicion(identificadorForm: string, remitenteBd: string): string {
+    const identificador = identificadorForm.trim();
+    const compuesto = parsearRemitenteCompuesto(remitenteBd);
+    if (compuesto) {
+      const id =
+        identificador.length > 50 ? identificador.substring(0, 50) : identificador;
+      return `${compuesto.generalClave},${compuesto.centralClave},${id}`;
+    }
+    return serializarRemitenteRework({ remitente_area: identificador });
+  }
+
   private construirPayloadReworkInicial(paso1: any, paso2: any): ExpedienteReworkInicialPayload {
     const usuarios = Array.isArray(paso2?.usuarios)
       ? paso2.usuarios
@@ -1171,7 +1208,12 @@ export class ExpedienteTlalcalliService {
       num_oficio: paso1.oficio || '',
       servicio: this.comoIdCatalogo(paso1.servicio ?? paso1.id_servicio, 0),
       num_entrada: paso1.numero_entrada_central || '',
-      remitente: paso1.remitente_area || paso1.remitente_identificador || '',
+      remitente: serializarRemitenteRework({
+        remitente_general: paso1.remitente_general,
+        remitente_central: paso1.remitente_central,
+        remitente_identificador: paso1.remitente_identificador,
+        remitente_area: paso1.remitente_area,
+      }),
       fecha_documento: this.formatearFechaRework(paso1.fecha_documento),
       fecha_recepcion: this.formatearFechaRework(paso1.fecha_recibido),
       prioridad: this.comoIdCatalogo(paso1.prioridad ?? paso1.id_prioridad, 1),
@@ -1212,6 +1254,13 @@ export class ExpedienteTlalcalliService {
     }
 
     if (typeof fecha === 'string') {
+      if (fecha.includes('|')) {
+        return fecha
+          .split('|')
+          .map((segmento) => (segmento.trim() ? this.formatearFechaRework(segmento.trim()) : ''))
+          .join('|');
+      }
+
       const iso = fecha.match(/^(\d{4})-(\d{2})-(\d{2})/);
       if (iso) {
         return `${iso[3]}/${iso[2]}/${iso[1]}`;

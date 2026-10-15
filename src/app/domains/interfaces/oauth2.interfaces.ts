@@ -19,6 +19,14 @@ export interface SessionInfo {
     roles: string;
     token: string;
     exp: number;
+    /** Especialista del catálogo que corresponde al usuario (rol 003). En local se elige al entrar; después se resolverá por RFC. */
+    especialista?: EspecialistaSesion | null;
+}
+
+export interface EspecialistaSesion {
+    nombre: string;
+    /** Una persona puede estar en varios grupos (analista, QA, correlación) con un id por grupo. */
+    ids: number[];
 }
 
 // Nueva interfaz para los claims completos del JWT
@@ -51,6 +59,7 @@ export interface UsuarioCompleto {
     fechaExpiracion: Date;
     fechaEmision: Date;
     rolesArray: string[];
+    especialista?: EspecialistaSesion | null;
     
     // Información de administración SAT
     administracion: number | null;

@@ -48,47 +48,14 @@ export class CustomSidenavComponent implements OnInit, OnDestroy {
    */
   private cargarMenuConPermisos(): void {
     this.subscription.add(
-      this.permissionsService.getUserPermissions().subscribe(permissions => {
-        const menuItems: MenuItem[] = [];
-
-        // Captura y seguimiento: visibles para todos los usuarios autenticados (el layout ya exige login).
-        // Antes dependían del mapa de roles y usuarios solo de Centro de Control no las veían.
-        menuItems.push({
-          icon: 'dvr',
-          label: 'Captura',
-          route: '/layout/capture',
-        });
-        menuItems.push({
-          icon: 'analytics',
-          label: 'Consulta',
-          route: '/layout/tracking',
-        });
-
-        menuItems.push({
-          icon: 'pending_actions',
-          label: 'Seguimiento y Asignación',
-          route: '/layout/responsables',
-        });
-
-        // Bandeja de Atención/Cierre - Última parte del flujo
-        menuItems.push({
-          icon: 'check_circle',
-          label: 'Atención / cierre',
-          route: '/layout/atencion-cierre',
-        });
-
-        // Dashboard de Estadísticas - Vista ejecutiva para administradores
-        menuItems.push({
-          icon: 'insights',
-          label: 'Panel Estadístico',
-          route: '/layout/dashboard',
-        });
+      this.permissionsService.getModulosAccesibles().subscribe(modulos => {
+        const menuItems: MenuItem[] = modulos.map((m) => ({ icon: m.icono, label: m.titulo, route: m.ruta }));
 
         if (menuItems.length === 0) {
           menuItems.push({
             icon: 'warning',
             label: 'No tienes bandejas disponibles',
-            route: '/layout',
+            route: '/layout/access-denied',
           });
         }
 

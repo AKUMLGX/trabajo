@@ -115,6 +115,9 @@ export interface ExpedienteReworkConsultaRow {
   servicio: string;
   num_entrada: string;
   remitente: string;
+  /** Cuando Max los exponga en StructForSearch / data_busqueda. */
+  remitente_general?: string;
+  remitente_central?: string;
   fecha_documento: string;
   fecha_recepcion: string;
   prioridad: string;

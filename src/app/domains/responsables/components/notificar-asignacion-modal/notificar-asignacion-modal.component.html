@@ -1,0 +1,103 @@
+<div class="tl-modal w-[min(640px,94vw)]">
+
+  <header class="tl-modal-header">
+    <div class="flex items-center gap-4">
+      <div class="tl-modal-icon">
+        <span class="icon-font !text-[28px]">forward_to_inbox</span>
+      </div>
+      <div>
+        <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-[2px] text-tlalcalli-gold">Enviar correo de asignación</p>
+        <h2 class="m-0 mt-1 font-noto-sans text-[22px] font-semibold leading-none text-white">{{ expediente.expediente || 'Sin expediente' }}</h2>
+        <p class="m-0 mt-1.5 font-noto-sans text-sm text-white/75">
+          {{ expediente.oficio || 'Sin oficio' }} · {{ expediente.remitente_area || 'Sin remitente' }}
+        </p>
+      </div>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <div class="flex min-h-[260px] items-center justify-center">
+      <div class="tl-spinner"></div>
+    </div>
+  } @else {
+    <main class="tl-modal-body flex flex-col gap-5">
+
+      <div class="flex items-start gap-3 rounded-xl border-l-4 border-tlalcalli-primary bg-tlalcalli-light-lavender px-5 py-3.5 font-noto-sans text-sm text-tlalcalli-primary">
+        <span class="icon-font !text-[20px]">move_down</span>
+        <span>Al enviar el correo, el asunto pasará a la bandeja de <strong>Atención y cierre</strong>.</span>
+      </div>
+
+      <section class="tl-card grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
+        <div>
+          <span class="tl-group-title !mb-0">Número de expediente</span>
+          <p class="m-0 mt-1 font-noto-sans text-sm font-semibold text-tlalcalli-deep">{{ expediente.expediente || '-' }}</p>
+        </div>
+        <div>
+          <span class="tl-group-title !mb-0">Número de oficio</span>
+          <p class="m-0 mt-1 break-words font-noto-sans text-sm font-semibold text-tlalcalli-deep">{{ expediente.oficio || '-' }}</p>
+        </div>
+        <div class="sm:col-span-2">
+          <span class="tl-group-title !mb-0">Archivo adjunto</span>
+          @if (archivo(); as adjunto) {
+            <p class="m-0 mt-1 flex items-center gap-2 font-noto-sans text-sm text-tlalcalli-dark">
+              <span class="icon-font !text-[18px] text-tlalcalli-primary">picture_as_pdf</span>
+              <span class="truncate" [title]="adjunto.nombre">{{ adjunto.nombre }}</span>
+            </p>
+          } @else {
+            <p class="m-0 mt-1 font-noto-sans text-sm text-tlalcalli-gray">Sin archivo</p>
+          }
+        </div>
+      </section>
+
+      <section class="tl-card p-6">
+        <div class="tl-section-title mb-4">
+          <span class="tl-section-icon"><span class="icon-font !text-[22px]">group</span></span>
+          <div>
+            <h3 class="tl-section-heading">Destinatarios</h3>
+            <p class="tl-section-subtitle">{{ destinatarios().length }} persona(s) asignada(s) al expediente.</p>
+          </div>
+        </div>
+
+        @if (destinatarios().length) {
+          <ul class="m-0 list-none divide-y divide-tlalcalli-light-base/70 rounded-xl border border-tlalcalli-light-base/70 p-0">
+            @for (d of destinatarios(); track d.id_especialista ?? d.nombre) {
+              <li class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 font-noto-sans text-sm">
+                <span class="flex min-w-0 flex-col">
+                  <span class="font-semibold text-tlalcalli-deep">{{ d.nombre }}</span>
+                  @if (tieneCorreo(d)) {
+                    <span class="text-xs text-tlalcalli-gray">{{ d.correo }}</span>
+                  } @else {
+                    <span class="text-xs text-tlalcalli-error-muted">Sin correo en el catálogo · no recibirá el aviso</span>
+                  }
+                </span>
+                <span class="tl-chip tl-chip-primary">{{ tituloGrupos(d) }}</span>
+              </li>
+            }
+          </ul>
+          @if (sinCorreo() > 0) {
+            <p class="m-0 mt-3 font-noto-sans text-xs text-tlalcalli-gray">
+              {{ sinCorreo() }} persona(s) sin correo. Agrégalo en «Administrar catálogo» de Acciones a seguir.
+            </p>
+          }
+        } @else {
+          <p class="m-0 rounded-xl border border-dashed border-tlalcalli-light-base px-4 py-5 text-center font-noto-sans text-sm text-tlalcalli-gray">
+            No hay especialistas asignados. Asígnalos en «Acciones a seguir» antes de enviar el correo.
+          </p>
+        }
+      </section>
+    </main>
+
+    <footer class="tl-modal-footer">
+      <button type="button" (click)="cancelar()" [disabled]="enviando()" class="tl-btn-secondary">Cancelar</button>
+      <button type="button" (click)="enviar()" [disabled]="enviando() || !enviables().length" class="tl-btn-primary">
+        @if (enviando()) {
+          <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"></span>
+          Enviando...
+        } @else {
+          <span class="icon-font !text-[18px]">send</span>
+          Enviar correo ({{ enviables().length }})
+        }
+      </button>
+    </footer>
+  }
+</div>

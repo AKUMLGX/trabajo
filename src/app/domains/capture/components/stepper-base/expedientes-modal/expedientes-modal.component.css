@@ -18,6 +18,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   border-bottom: 3px solid #d6ae67;
   box-shadow: 0 4px 12px rgba(52, 0, 91, 0.2);
 }
@@ -404,6 +406,31 @@
   color: #34005b;
   border-color: #34005b;
   font-weight: 600;
+}
+
+.btn-cancelar .mdc-button__label,
+.btn-seleccionar .mdc-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-cancelar .icon-font {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-seleccionar .icon-font {
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .btn-cancelar:hover {

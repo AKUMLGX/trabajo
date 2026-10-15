@@ -1,91 +1,50 @@
-import { Component } from '@angular/core';
-
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
+import { map } from 'rxjs';
+import { PermissionsService } from '../../../services/permissions.service';
+import { UserService } from '../../../services/user.service';
+import { etiquetaRolPrincipal } from '../../../auth/config/roles.config';
 
 @Component({
     selector: 'app-access-denied',
-    imports: [MatIconModule, MatButtonModule],
+    imports: [RouterLink],
     template: `
-    <div class="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center p-4">
-      <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+    <div class="flex min-h-full items-center justify-center p-6">
+      <div class="tl-card w-full max-w-md p-8 text-center">
+        <span class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-tlalcalli-error-muted/10 text-tlalcalli-error-muted">
+          <span class="icon-font !text-[32px]">block</span>
+        </span>
 
-        <!-- Icono de acceso denegado -->
-        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <span class="icon-font text-red-600 text-4xl">block</span>
-        </div>
-
-        <!-- Título y mensaje -->
-        <h1 class="text-2xl font-noto-sans text-gray-900 mb-4">
-          Acceso Denegado
-        </h1>
-
-        <p class="text-gray-600 mb-6">
-          No tienes permisos para acceder a esta sección del sistema.
-          Contacta a tu administrador si consideras que esto es un error.
+        <h1 class="tl-section-heading mb-2 text-xl">Acceso denegado</h1>
+        <p class="m-0 mb-6 font-noto-sans text-sm text-tlalcalli-gray">
+          Tu rol no tiene acceso a esta sección. Si consideras que es un error, solicita el permiso al administrador.
         </p>
 
-        <!-- Botones de acción -->
-        <div class="space-y-3">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="volverInicio()"
-            class="w-full">
-            <span class="icon-font mr-2">home</span>
-            Volver al Inicio
-          </button>
+        @if (modulos().length) {
+          <div class="flex flex-col gap-2">
+            @for (m of modulos(); track m.clave) {
+              <a [routerLink]="m.ruta" class="tl-btn-secondary justify-center">
+                <span class="icon-font !text-[18px]">{{ m.icono }}</span>
+                {{ m.titulo }}
+              </a>
+            }
+          </div>
+        }
 
-          <button
-            mat-stroked-button
-            (click)="irBandejasDisponibles()"
-            class="w-full">
-            <span class="icon-font mr-2">list</span>
-            Ver Bandejas Disponibles
-          </button>
-        </div>
-
-        <!-- Información adicional -->
-        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-          <p class="text-sm text-gray-500">
-            <span class="icon-font text-gray-400 text-sm mr-1">info</span>
-            Tu rol actual: <span class="font-noto-sans font-medium">{{ obtenerRolUsuario() }}</span>
-          </p>
-        </div>
+        <p class="m-0 mt-6 font-noto-sans text-xs text-tlalcalli-gray">
+          Rol actual: <strong class="text-tlalcalli-deep">{{ rol() }}</strong>
+        </p>
       </div>
     </div>
   `,
-    styles: [`
-    :host {
-      display: block;
-      height: 100vh;
-    }
-  `]
 })
 export class AccessDeniedComponent {
-
-  constructor(private router: Router) {}
-
-  /**
-   * Vuelve a la página principal del layout
-   */
-  volverInicio(): void {
-    this.router.navigate(['/layout']);
-  }
-
-  /**
-   * Navega a las bandejas disponibles para el usuario
-   */
-  irBandejasDisponibles(): void {
-    this.router.navigate(['/layout']);
-  }
-
-  /**
-   * Obtiene el rol del usuario actual (placeholder)
-   */
-  obtenerRolUsuario(): string {
-    // TODO: Implementar obtención del rol del usuario actual
-    return 'Usuario';
-  }
+  readonly modulos = toSignal(inject(PermissionsService).getModulosAccesibles(), { initialValue: [] });
+  readonly rol = toSignal(
+    inject(UserService).getUsuario$().pipe(
+      map((u) => (u ? etiquetaRolPrincipal(u.rolesArray) ?? 'Sin rol de Tlālcalli' : 'Sin sesión'))
+    ),
+    { initialValue: 'Sin sesión' }
+  );
 }

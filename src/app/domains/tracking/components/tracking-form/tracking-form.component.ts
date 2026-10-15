@@ -19,6 +19,7 @@ import { ExpedienteTlalcalliService } from '../../../../domains/capture/services
 import { ApiService } from '../../../../domains/capture/services/api.service';
 import { CatalogoResponsableResponse } from '../../../../domains/interfaces/catalogos.interface';
 import { CatalogoReworkItem } from '../../../../domains/capture/interfaces/expediente-rework.interface';
+import { sinRegistroNulo } from '../../../../domains/capture/services/catalogo-rework-cache.service';
 
 interface OpcionSelect {
   value: number;
@@ -264,7 +265,7 @@ export class TrackingFormComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: HttpResponse<CatalogoReworkItem[]>) => {
-          onSuccess(response.body ?? []);
+          onSuccess(sinRegistroNulo(response.body));
         },
         error: () => onSuccess([]),
       });

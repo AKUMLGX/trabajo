@@ -28,17 +28,20 @@ import {
   normalizarTextoAPdfBlob,
   registrarErrorPdf,
 } from '../../../../domains/capture/utils/pdf-bytes.utils';
+import { EtiquetaEstatusPipe } from '../../../shared/pipes/etiqueta-estatus.pipe';
 
 type DocumentoActivo = 'inicial' | string | null;
 type ModoPanelAdjuntos = 'ver' | 'agregar' | 'editar';
 
 export interface ExpedienteDetalleModalData {
   expediente: ExpedienteTlalcalli;
+  /** Solo ver y descargar: Consulta sin permiso de edición o Seguimiento con el rol 003. */
+  soloLectura?: boolean;
 }
 
 @Component({
   selector: 'app-expediente-detalle-modal',
-  imports: [
+  imports: [EtiquetaEstatusPipe, 
     CommonModule,
     ReactiveFormsModule,
     MatDialogModule,
@@ -283,7 +286,7 @@ export class ExpedienteDetalleModalComponent implements OnInit, OnDestroy {
   }
 
   iniciarEditarOficioPrincipal(): void {
-    if (!this.detalle || !this.esExpedienteRework) {
+    if (this.soloLectura || !this.detalle || !this.esExpedienteRework) {
       return;
     }
 
@@ -444,7 +447,14 @@ export class ExpedienteDetalleModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  get soloLectura(): boolean {
+    return this.data.soloLectura === true;
+  }
+
   iniciarAgregarOficio(): void {
+    if (this.soloLectura) {
+      return;
+    }
     this.tabDocs = 'adjuntos';
     this.modoPanelAdjuntos = 'agregar';
     this.editandoLocalId = null;
@@ -455,6 +465,9 @@ export class ExpedienteDetalleModalComponent implements OnInit, OnDestroy {
 
   iniciarEditarOficio(localId: string, event?: Event): void {
     event?.stopPropagation();
+    if (this.soloLectura) {
+      return;
+    }
 
     const oficio = this.oficiosAdjuntos.find((o) => o.localId === localId);
     if (!oficio) {
@@ -472,6 +485,9 @@ export class ExpedienteDetalleModalComponent implements OnInit, OnDestroy {
 
   eliminarOficioAdjunto(localId: string, event?: Event): void {
     event?.stopPropagation();
+    if (this.soloLectura) {
+      return;
+    }
 
     const oficio = this.oficiosAdjuntos.find((o) => o.localId === localId);
     if (!oficio) {

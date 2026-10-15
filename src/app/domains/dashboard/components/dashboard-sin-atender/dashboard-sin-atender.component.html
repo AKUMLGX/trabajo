@@ -1,0 +1,75 @@
+<section class="tl-card overflow-hidden" data-export-chart="Asuntos sin atender">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-tlalcalli-light-base/70 px-5 py-4 lg:flex-nowrap"
+    [ngClass]="{ 'bg-tlalcalli-error/[0.06]': sinAtender.items.length > 0 }">
+    <div class="tl-section-title min-w-0 flex-1">
+      <span class="tl-section-icon bg-tlalcalli-error/10 text-tlalcalli-error-muted">
+        <span class="icon-font !text-[22px]" [class.animate-pulse]="sinAtender.items.length > 0">running_with_errors</span>
+      </span>
+      <div>
+        <h3 class="tl-section-heading">Urgente: asuntos sin atender con {{ sinAtender.umbralDias }}+ días</h3>
+        <p class="tl-section-subtitle">Documentos que tienen 3 meses o más</p>
+      </div>
+    </div>
+    <div class="flex shrink-0 flex-wrap items-center gap-3 lg:flex-nowrap">
+      <span
+        class="tl-chip !h-11 !px-4 !text-sm items-center font-semibold leading-none whitespace-nowrap"
+        [class.tl-chip-error]="sinAtender.items.length > 0"
+        [class.tl-chip-success]="sinAtender.items.length === 0">
+        {{ sinAtender.items.length }} asunto(s)
+      </span>
+      @if (sinAtender.items.length > 0) {
+        <button type="button" class="tl-btn-secondary inline-flex h-11 items-center gap-1 whitespace-nowrap"
+          [disabled]="descargando" (click)="descargarExcel()"
+          matTooltip="Descarga todos los asuntos de esta lista en Excel">
+          <span class="icon-font !text-[18px]">download</span>
+          {{ descargando ? 'Descargando…' : 'Descargar Excel' }}
+        </button>
+      }
+      <a routerLink="/layout/responsables" class="tl-btn-secondary inline-flex h-11 items-center gap-1 whitespace-nowrap no-underline">
+        Atender en Seguimiento
+        <span class="icon-font !text-[16px]">arrow_forward</span>
+      </a>
+    </div>
+  </div>
+
+  @if (sinAtender.items.length > 0) {
+    <div class="overflow-x-auto">
+      <table class="tl-table">
+        <thead>
+          <tr>
+            <th>Expediente</th>
+            <th>Oficio</th>
+            <th>Remitente</th>
+            <th>Servicio</th>
+            <th>Estatus</th>
+            <th>Responsable</th>
+            <th>Fecha documento</th>
+            <th class="text-right">Antigüedad</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of filas; track s.id_expediente + '-' + s.expediente) {
+            <tr>
+              <td class="whitespace-nowrap font-semibold text-tlalcalli-deep">{{ s.expediente }}</td>
+              <td><span class="block max-w-[200px] truncate" [title]="s.oficio">{{ s.oficio || '—' }}</span></td>
+              <td><span class="block max-w-[180px] truncate" [title]="s.remitente">{{ s.remitente || '—' }}</span></td>
+              <td><span class="block max-w-[160px] truncate" [title]="s.servicio">{{ s.servicio || '—' }}</span></td>
+              <td><span class="tl-chip tl-chip-primary inline-block max-w-[160px] truncate align-middle" [title]="s.estatus | etiquetaEstatus">{{ s.estatus | etiquetaEstatus }}</span></td>
+              <td><span class="block max-w-[180px] truncate" [title]="s.responsable">{{ s.responsable }}</span></td>
+              <td class="whitespace-nowrap">{{ s.fecha_documento | date: 'dd/MM/yyyy' }}</td>
+              <td class="whitespace-nowrap text-right">
+                <span class="tl-chip" [class.tl-chip-dark]="esExtremo(s.dias)" [class.tl-chip-error]="!esExtremo(s.dias)">{{ s.dias }} días</span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-tabla-paginador [total]="sinAtender.items.length" [tamano]="tamanoPagina" [(pagina)]="pagina" />
+  } @else {
+    <div class="tl-empty py-10">
+      <span class="tl-empty-icon bg-tlalcalli-success/10 text-tlalcalli-success-muted"><span class="icon-font !text-[28px]">verified</span></span>
+      <p class="m-0 font-noto-sans text-sm font-semibold text-tlalcalli-deep">Sin asuntos con más de {{ sinAtender.umbralDias }} días sin atender</p>
+    </div>
+  }
+</section>

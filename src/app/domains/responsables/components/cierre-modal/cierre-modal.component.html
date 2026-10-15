@@ -1,22 +1,17 @@
 <div class="tl-modal w-[min(980px,94vw)]">
 
   <header class="tl-modal-header">
-    <div class="flex items-center justify-between gap-6">
-      <div class="flex items-center gap-4">
-        <div class="tl-modal-icon">
-          <span class="icon-font !text-[28px]">assignment_turned_in</span>
-        </div>
-        <div>
-          <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-[2px] text-tlalcalli-gold">Atención y cierre · Evidencia</p>
-          <h2 class="m-0 mt-1 font-noto-sans text-[22px] font-semibold leading-none text-white">{{ expediente.expediente }}</h2>
-          <p class="m-0 mt-1.5 font-noto-sans text-sm text-white/75">
-            {{ expediente.oficio || 'Sin oficio' }} · {{ expediente.remitente_area || 'Sin remitente' }}
-          </p>
-        </div>
+    <div class="flex items-center gap-4">
+      <div class="tl-modal-icon">
+        <span class="icon-font !text-[28px]">assignment_turned_in</span>
       </div>
-      <button type="button" (click)="cerrar()" [disabled]="guardando" class="tl-modal-close" title="Cerrar">
-        <span class="icon-font !text-[22px]">close</span>
-      </button>
+      <div>
+        <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-[2px] text-tlalcalli-gold">Atención y cierre · Evidencia</p>
+        <h2 class="m-0 mt-1 font-noto-sans text-[22px] font-semibold leading-none text-white">{{ expediente.expediente }}</h2>
+        <p class="m-0 mt-1.5 font-noto-sans text-sm text-white/75">
+          {{ expediente.oficio || 'Sin oficio' }} · {{ expediente.remitente_area || 'Sin remitente' }}
+        </p>
+      </div>
     </div>
   </header>
 
@@ -26,6 +21,22 @@
     </div>
   } @else {
     <main class="tl-modal-body flex flex-col gap-5">
+
+      <section class="tl-card grid grid-cols-1 items-center gap-5 p-6 md:grid-cols-[1fr_1.3fr]">
+        <div class="tl-section-title">
+          <span class="tl-section-icon"><span class="icon-font !text-[22px]">timeline</span></span>
+          <div>
+            <h3 class="tl-section-heading">Etapa del proceso de atención</h3>
+            <p class="tl-section-subtitle">En qué punto de la atención y cierre va el expediente.</p>
+          </div>
+        </div>
+        <select [(ngModel)]="etapaSeleccionada" class="tl-select" [disabled]="guardando">
+          <option [ngValue]="null" disabled>Selecciona la etapa</option>
+          @for (opcion of opcionesEtapa; track opcion.id) {
+            <option [ngValue]="opcion.id">{{ opcion.etiqueta }}</option>
+          }
+        </select>
+      </section>
 
       <section class="tl-card p-6">
         <div class="mb-4 flex flex-wrap items-center justify-between gap-3">

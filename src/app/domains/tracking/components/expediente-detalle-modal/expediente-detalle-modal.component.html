@@ -1,17 +1,12 @@
 <div class="tl-modal detalle-modal">
 
   <header class="tl-modal-header !py-4">
-    <div class="flex items-center justify-between gap-4">
-      <div class="flex min-w-0 items-center gap-4">
-        <span class="tl-modal-icon"><span class="icon-font !text-[24px]">folder_open</span></span>
-        <div class="min-w-0">
-          <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-white/70">Número de expediente</p>
-          <h2 class="m-0 break-words font-noto-sans text-lg font-semibold leading-tight">{{ numeroExpedienteHeader() }}</h2>
-        </div>
+    <div class="flex min-w-0 items-center gap-4">
+      <span class="tl-modal-icon"><span class="icon-font !text-[24px]">folder_open</span></span>
+      <div class="min-w-0">
+        <p class="m-0 font-noto-sans text-[11px] font-semibold uppercase tracking-wider text-white/70">Número de expediente</p>
+        <h2 class="m-0 break-words font-noto-sans text-lg font-semibold leading-tight">{{ numeroExpedienteHeader() }}</h2>
       </div>
-      <button type="button" class="tl-modal-close" (click)="cerrar()" aria-label="Cerrar">
-        <span class="icon-font !text-[20px]">close</span>
-      </button>
     </div>
   </header>
 
@@ -39,7 +34,7 @@
           <section class="detalle-seccion detalle-seccion-oficio">
             <div class="seccion-oficio-header">
               <h4 class="seccion-oficio-titulo">Oficio y fechas</h4>
-              @if (esExpedienteRework && !editandoOficioPrincipal) {
+              @if (esExpedienteRework && !editandoOficioPrincipal && !soloLectura) {
                 <button
                   type="button"
                   class="tl-btn-secondary tl-btn-sm !h-8"
@@ -241,7 +236,7 @@
               <div class="campo-detalle">
                 <span class="label">Estatus</span>
                 @if (tieneValor(detalle.estatus)) {
-                  <span class="tl-chip tl-chip-primary w-fit">{{ valorMostrar(detalle.estatus) }}</span>
+                  <span class="tl-chip tl-chip-primary w-fit">{{ valorMostrar(detalle.estatus) | etiquetaEstatus }}</span>
                 } @else {
                   <span class="valor">-</span>
                 }
@@ -283,7 +278,7 @@
               }
             </button>
           </nav>
-          @if (tabDocs === 'adjuntos') {
+          @if (tabDocs === 'adjuntos' && !soloLectura) {
             <button
               type="button"
               class="tl-btn-primary tl-btn-sm ring-tlalcalli-primary/20"
@@ -401,28 +396,30 @@
                           }
                         </span>
                       </button>
-                      <div class="adjunto-item-acciones">
-                        <button
-                          type="button"
-                          class="btn-adjunto-accion"
-                          (click)="iniciarEditarOficio(oficio.localId!, $event)"
-                          aria-label="Editar oficio {{ oficio.num_oficio }}">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </button>
-                        <button
-                          type="button"
-                          class="btn-adjunto-accion btn-adjunto-accion--eliminar"
-                          (click)="eliminarOficioAdjunto(oficio.localId!, $event)"
-                          aria-label="Eliminar oficio {{ oficio.num_oficio }}">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
+                      @if (!soloLectura) {
+                        <div class="adjunto-item-acciones">
+                          <button
+                            type="button"
+                            class="btn-adjunto-accion"
+                            (click)="iniciarEditarOficio(oficio.localId!, $event)"
+                            aria-label="Editar oficio {{ oficio.num_oficio }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn-adjunto-accion btn-adjunto-accion--eliminar"
+                            (click)="eliminarOficioAdjunto(oficio.localId!, $event)"
+                            aria-label="Eliminar oficio {{ oficio.num_oficio }}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
+                      }
                     </article>
                   }
                 }
@@ -448,13 +445,15 @@
                         <p class="adjunto-detalle-etiqueta">Oficio adjunto · #{{ indiceOficioPorLocalId(oficio.localId!) }}</p>
                         <h3>{{ oficio.num_oficio }}</h3>
                       </div>
-                      <button
-                        type="button"
-                        class="tl-btn-secondary tl-btn-sm"
-                        (click)="iniciarEditarOficio(oficio.localId!)">
-                        <span class="icon-font !text-[16px]">edit</span>
-                        Editar
-                      </button>
+                      @if (!soloLectura) {
+                        <button
+                          type="button"
+                          class="tl-btn-secondary tl-btn-sm"
+                          (click)="iniciarEditarOficio(oficio.localId!)">
+                          <span class="icon-font !text-[16px]">edit</span>
+                          Editar
+                        </button>
+                      }
                     </div>
 
                     @if (mensajeOficioApi) {
@@ -537,11 +536,16 @@
                       <rect x="28" y="58" width="40" height="22" rx="4" stroke="currentColor" stroke-width="2"/>
                     </svg>
                   </div>
-                  <p>Seleccione un oficio o agregue uno nuevo</p>
-                  <small>Los oficios adjuntos se listan a la izquierda. Use «Agregar oficio» para capturar datos y PDF.</small>
-                  <button type="button" class="tl-btn-primary tl-btn-sm mt-4" (click)="iniciarAgregarOficio()"><span class="icon-font !text-[18px]">add</span>
-                    Agregar oficio
-                  </button>
+                  @if (soloLectura) {
+                    <p>Seleccione un oficio</p>
+                    <small>Los oficios adjuntos se listan a la izquierda.</small>
+                  } @else {
+                    <p>Seleccione un oficio o agregue uno nuevo</p>
+                    <small>Los oficios adjuntos se listan a la izquierda. Use «Agregar oficio» para capturar datos y PDF.</small>
+                    <button type="button" class="tl-btn-primary tl-btn-sm mt-4" (click)="iniciarAgregarOficio()"><span class="icon-font !text-[18px]">add</span>
+                      Agregar oficio
+                    </button>
+                  }
                 </div>
               }
             </div>

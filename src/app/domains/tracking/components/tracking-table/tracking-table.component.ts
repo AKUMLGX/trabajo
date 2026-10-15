@@ -20,10 +20,13 @@ import {
   ExpedienteEdicionModalResult,
 } from '../expediente-edicion-modal/expediente-edicion-modal.component';
 import { DateUtils } from '../../../../domains/capture/utils/date-utils';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { PermissionsService } from '../../../services/permissions.service';
+import { EtiquetaEstatusPipe } from '../../../shared/pipes/etiqueta-estatus.pipe';
 
 @Component({
     selector: 'app-tracking-table',
-    imports: [
+    imports: [EtiquetaEstatusPipe, 
         PdfViewerModule,
         MatIcon,
         NgxPaginationModule,
@@ -271,12 +274,15 @@ export class TrackingTableComponent implements OnInit {
       height: '92vh',
       maxHeight: '92vh',
       panelClass: 'expediente-detalle-dialog',
-      data: { expediente },
+      data: { expediente, soloLectura: !this.puedeEditar() },
       disableClose: false,
     });
   }
 
   editarExpediente(expediente: ExpedienteTlalcalli): void {
+    if (!this.puedeEditar()) {
+      return;
+    }
     const dialogRef = this.dialog.open(ExpedienteEdicionModalComponent, {
       width: '880px',
       maxWidth: '94vw',
@@ -489,6 +495,8 @@ export class TrackingTableComponent implements OnInit {
 
   private sharedDataService = inject(SharedDataFormService);
   datos = computed(()=> this.sharedDataService.formData())
+
+  readonly puedeEditar = toSignal(inject(PermissionsService).puedeEditarConsulta(), { initialValue: false });
 
 
 

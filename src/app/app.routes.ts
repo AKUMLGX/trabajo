@@ -6,7 +6,14 @@ import { CapturePageComponent } from './domains/capture/pages/capture-page/captu
 import { TrackingPageComponent } from './domains/tracking/pages/tracking-page/tracking-page.component';
 import { AssistancePageComponent } from './domains/assistance/pages/assistance-page/assistance-page.component';
 import { loginGuard } from './domains/guards/login.guard';
-import { capturaGuard, atencionGuard, dictaminadorGuard, seguimientoGuard, revisionFinalGuard } from './domains/guards/bandeja.guard';
+import {
+  capturaGuard,
+  consultaGuard,
+  asignacionGuard,
+  atencionCierreGuard,
+  estadisticosGuard,
+  legadoAkambaGuard,
+} from './domains/guards/bandeja.guard';
 import { AccessDeniedComponent } from './domains/shared/pages/access-denied/access-denied.component';
 import { PdfViewerComponent } from './domains/components/pdf-viewer/pdf-viewer.component';
 import { TramitePageComponent } from './domains/assistance/pages/tramite-page/tramite-page.component';
@@ -50,7 +57,7 @@ export const routes: Routes = [
       {
         path: 'assistance',
         component: AssistancePageComponent,
-        canActivate: [atencionGuard],
+        canActivate: [legadoAkambaGuard],
       },
       {
         path: "tramite-card",
@@ -87,7 +94,7 @@ export const routes: Routes = [
       {
         path: 'tracking',
         component: TrackingPageComponent,
-        canActivate: [seguimientoGuard]
+        canActivate: [consultaGuard]
       },
       {
         path: 'reports',
@@ -101,6 +108,7 @@ export const routes: Routes = [
       {
         path: 'tracking',
         component: TrackingPageComponent,
+        canActivate: [consultaGuard],
         children: [
           {
             path: 'pdfViewer',
@@ -115,17 +123,17 @@ export const routes: Routes = [
       {
         path: 'dictaminador',
         component: DictaminadorPageComponent,
-        canActivate: [dictaminadorGuard],
+        canActivate: [legadoAkambaGuard],
       },
       {
         path: 'dictaminador/detalle/:id',
         component: DictaminadorDetalleComponent,
-        canActivate: [dictaminadorGuard],
+        canActivate: [legadoAkambaGuard],
       },
       {
         path: 'revision-final',
         component: RevisionFinalComponent,
-        canActivate: [revisionFinalGuard],
+        canActivate: [legadoAkambaGuard],
       },
       {
         path: 'access-denied',
@@ -133,15 +141,18 @@ export const routes: Routes = [
       },
       {
         path: 'responsables',
-        component: ResponsablesPageComponent
+        component: ResponsablesPageComponent,
+        canActivate: [asignacionGuard],
       },
       {
         path: 'atencion-cierre',
-        component: AtencionCierrePageComponent
+        component: AtencionCierrePageComponent,
+        canActivate: [atencionCierreGuard],
       },
       {
         path: 'dashboard',
-        component: DashboardPageComponent
+        component: DashboardPageComponent,
+        canActivate: [estadisticosGuard],
       },
       {
         path: '**',

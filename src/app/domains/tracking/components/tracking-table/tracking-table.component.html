@@ -5,13 +5,16 @@
         <span class="tl-section-icon"><span class="icon-font !text-[22px]">table_rows</span></span>
         <div>
           <h2 class="tl-section-heading">Resultados de búsqueda</h2>
-          <p class="tl-section-subtitle">Sistema Tlálcalli</p>
+          <p class="tl-section-subtitle">Sistema Tlālcalli</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <span class="tl-chip tl-chip-primary">
-          {{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }} expediente(s)
-        </span>
+        <div class="tl-segmented h-11 items-center" aria-label="Total de registros visibles">
+          <span class="tl-segmented-item tl-segmented-item-static cursor-default select-none">
+            expediente(s)
+            <span class="tl-count">{{ tipoBusqueda === 'Tlalcalli' ? expedientesTlalcalli.length : documents.length }}</span>
+          </span>
+        </div>
         <button type="button" (click)="getDownloadExcel()" class="tl-btn-secondary tl-btn-sm">
           <span class="icon-font !text-[18px]">download</span>
           Descargar Excel
@@ -49,9 +52,11 @@
                     <button type="button" class="tl-icon-btn-ghost h-8 w-8" (click)="verDetalleExpediente(expediente)" title="Ver detalle completo">
                       <span class="icon-font !text-[16px]">visibility</span>
                     </button>
-                    <button type="button" class="tl-icon-btn h-8 w-8 bg-tlalcalli-gold/20 text-tlalcalli-primary hover:bg-tlalcalli-gold" (click)="editarExpediente(expediente)" title="Editar expediente">
-                      <span class="icon-font !text-[16px]">edit</span>
-                    </button>
+                    @if (puedeEditar()) {
+                      <button type="button" class="tl-icon-btn h-8 w-8 bg-tlalcalli-gold/20 text-tlalcalli-primary hover:bg-tlalcalli-gold" (click)="editarExpediente(expediente)" title="Editar expediente">
+                        <span class="icon-font !text-[16px]">edit</span>
+                      </button>
+                    }
                   </div>
                 </td>
 
@@ -120,7 +125,7 @@
                 <td>
                   @if (expediente.estatus?.trim()) {
                     <span [class]="claseBadgeEstatus(expediente.estatus) + ' inline-block max-w-full truncate align-middle'" [title]="tituloCelda(expediente.estatus)">
-                      {{ valorTabla(expediente.estatus) }}
+                      {{ valorTabla(expediente.estatus) | etiquetaEstatus }}
                     </span>
                   } @else {
                     <span class="text-tlalcalli-gray">-</span>

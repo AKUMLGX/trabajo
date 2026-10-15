@@ -82,11 +82,11 @@ export interface PreConfirmacionModalData {
                   class="campo-row"
                   [class.campo-destacado]="campo.tipo === 'destacado'"
                   [class.campo-prioridad]="campo.tipo === 'prioridad'">
-                  @if (campo.icono) {
-                    <div class="campo-icono">
+                  <div class="campo-icono" [class.campo-icono-vacio]="!campo.icono">
+                    @if (campo.icono) {
                       <span class="icon-font">{{ campo.icono }}</span>
-                    </div>
-                  }
+                    }
+                  </div>
                   <div class="campo-etiqueta">{{ campo.etiqueta }}</div>
                   <div class="campo-valor"
                     [class.prioridad-urgente]="campo.prioridadColor === 'red'"
@@ -113,7 +113,7 @@ export interface PreConfirmacionModalData {
           <div class="campos-legacy">
             @for (campo of campos; track campo) {
               <div class="campo-item">
-                <span class="campo-etiqueta">{{ campo.etiqueta }}:</span>
+                <span class="campo-etiqueta">{{ campo.etiqueta }}</span>
                 <span class="campo-valor">{{ campo.valor || 'N/A' }}</span>
               </div>
             }
@@ -167,6 +167,8 @@ export interface PreConfirmacionModalData {
       gap: 16px;
       padding: 24px;
       background: linear-gradient(135deg, #34005b 0%, #4a0080 50%, #34005b 100%);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
       position: relative;
       overflow: hidden;
     }
@@ -325,13 +327,18 @@ export interface PreConfirmacionModalData {
     }
 
     .seccion-campos {
-      padding: 8px 0;
+      display: grid;
+      grid-template-columns: 32px 12rem minmax(0, 1fr);
+      column-gap: 1rem;
+      padding: 8px 16px;
     }
 
     .campo-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-column: 1 / -1;
       align-items: center;
-      padding: 10px 16px;
+      padding: 10px 0;
       border-bottom: 1px solid #f3f4f6;
       transition: background 0.15s;
     }
@@ -356,7 +363,10 @@ export interface PreConfirmacionModalData {
       justify-content: center;
       background: #f3f4f6;
       border-radius: 8px;
-      margin-right: 12px;
+    }
+
+    .campo-icono.campo-icono-vacio {
+      visibility: hidden;
     }
 
     .campo-icono mat-icon {
@@ -365,17 +375,49 @@ export interface PreConfirmacionModalData {
     }
 
     .campo-etiqueta {
-      min-width: 130px;
       font-size: 0.85rem;
       color: #6b7280;
       font-weight: 500;
+      line-height: 1.35;
     }
 
     .campo-valor {
-      flex: 1;
+      min-width: 0;
       font-size: 0.95rem;
       color: #1f2937;
       font-weight: 600;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    @media (max-width: 520px) {
+      .seccion-campos {
+        grid-template-columns: 28px minmax(0, 1fr);
+        column-gap: 0.75rem;
+        row-gap: 0;
+      }
+
+      .campo-row {
+        grid-template-columns: subgrid;
+        grid-template-rows: auto auto;
+        align-items: start;
+        padding: 12px 0;
+      }
+
+      .campo-icono {
+        grid-row: 1 / span 2;
+        width: 28px;
+        height: 28px;
+      }
+
+      .campo-etiqueta {
+        grid-column: 2;
+      }
+
+      .campo-valor {
+        grid-column: 2;
+        margin-top: 2px;
+      }
     }
 
     /* Badges de prioridad */
@@ -415,17 +457,47 @@ export interface PreConfirmacionModalData {
 
     /* Campos legacy */
     .campos-legacy {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: 12rem minmax(0, 1fr);
+      column-gap: 1rem;
+      row-gap: 8px;
+      padding: 0 16px;
     }
 
-    .campo-item {
-      display: flex;
+    .campos-legacy .campo-item {
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-column: 1 / -1;
+      align-items: start;
       padding: 12px 16px;
       background: white;
       border-radius: 8px;
       border-left: 3px solid #34005b;
+    }
+
+    .campos-legacy .campo-etiqueta {
+      font-size: 0.85rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .campos-legacy .campo-valor {
+      min-width: 0;
+      font-size: 0.95rem;
+      color: #1f2937;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    @media (max-width: 520px) {
+      .campos-legacy {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .campos-legacy .campo-item {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+      }
     }
 
     /* Advertencia mejorada */

@@ -19,6 +19,7 @@ import {
 } from '../../interfaces/expediente-detalle-captura.interface';
 import { UsuarioRequerimiento } from '../../../interfaces/usuarios-expediente.interface';
 import { DateUtils } from '../../../capture/utils/date-utils';
+import { estatusSeleccionables, etiquetaEstatus, normalizarTextoCatalogo } from '../../../shared/utils/catalogo-estatus.utils';
 
 @Component({
   selector: 'app-expediente-captura-edit-form',
@@ -123,7 +124,12 @@ export class ExpedienteCapturaEditFormComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (respuestas) => {
           this.opcionesServicio = this.mapearCatalogo(respuestas.servicios);
-          this.opcionesEstatus = this.mapearCatalogo(respuestas.estatus);
+          const idEstatusActual =
+            this.detalle.status_id ??
+            respuestas.estatus.find((i) => normalizarTextoCatalogo(i.descripcion) === normalizarTextoCatalogo(this.detalle.estatus))?.id_exp;
+          this.opcionesEstatus = this.mapearCatalogo(
+            estatusSeleccionables(respuestas.estatus, idEstatusActual).map((i) => ({ ...i, descripcion: etiquetaEstatus(i.descripcion) }))
+          );
           this.opcionesUbicacion = this.mapearCatalogo(respuestas.ubicaciones);
 
           this.responsablesData = respuestas.responsables;
@@ -153,7 +159,7 @@ export class ExpedienteCapturaEditFormComponent implements OnInit, OnDestroy {
       numero_entrada_central: this.valorFormulario(this.detalle.numero_entrada_central),
       aplicativos: unirListaTexto(this.valorFormulario(this.detalle.aplicativos)),
       responsable: unirListaTexto(this.valorFormulario(this.detalle.responsable)),
-      status: this.detalle.status_id ?? this.resolverIdCatalogo(this.opcionesEstatus, this.detalle.estatus),
+      status: this.detalle.status_id ?? this.resolverIdCatalogo(this.opcionesEstatus, etiquetaEstatus(this.detalle.estatus)),
       observaciones: this.valorFormulario(this.detalle.observaciones),
       ubicacion: this.detalle.ubicacion_id ?? this.resolverIdCatalogo(this.opcionesUbicacion, this.detalle.ubicacion),
     });

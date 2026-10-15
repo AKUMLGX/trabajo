@@ -9,6 +9,8 @@ import { ExpedienteTlalcalli } from '../../../capture/interfaces/expediente-tlal
 import { CatalogoReworkItem } from '../../../capture/interfaces/expediente-rework.interface';
 import { CatalogoReworkCacheService } from '../../../capture/services/catalogo-rework-cache.service';
 import { CierreRework, CierreReworkService } from '../../services/cierre-rework.service';
+import { SeguimientoAsignacionService } from '../../services/seguimiento-asignacion.service';
+import { OpcionEtapa, idEtapaAtencion, opcionesEtapaAtencion } from '../../utils/etapa-atencion.utils';
 
 export interface CierreModalData {
   expediente: ExpedienteTlalcalli;
@@ -27,11 +29,17 @@ export class CierreModalComponent implements OnInit {
   formulario: CierreRework;
   catalogoAcuse: CatalogoReworkItem[] = [];
   catalogoExpediente: CatalogoReworkItem[] = [];
+  opcionesEtapa: OpcionEtapa[] = [];
+  etapaSeleccionada: number | null = null;
+  private etapaInicial: number | null = null;
+  /** El cierre ya quedó en servidor aunque falle la etapa: al cerrar se refresca la bandeja. */
+  private cierreGuardado = false;
 
   constructor(
     public dialogRef: MatDialogRef<CierreModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CierreModalData,
     private cierreService: CierreReworkService,
+    private seguimientoService: SeguimientoAsignacionService,
     private catalogos: CatalogoReworkCacheService,
     private snackBar: MatSnackBar
   ) {
@@ -42,6 +50,11 @@ export class CierreModalComponent implements OnInit {
   ngOnInit(): void {
     this.catalogos.getCat(4).subscribe((items) => (this.catalogoAcuse = items));
     this.catalogos.getCat(5).subscribe((items) => (this.catalogoExpediente = items));
+    this.catalogos.getCat(3).subscribe((items) => {
+      this.opcionesEtapa = opcionesEtapaAtencion(items);
+      this.etapaSeleccionada = idEtapaAtencion(this.opcionesEtapa, items, this.expediente.estatus);
+      this.etapaInicial = this.etapaSeleccionada;
+    });
 
     const id = this.expediente.id_expediente;
     if (!id) {
@@ -126,9 +139,9 @@ export class CierreModalComponent implements OnInit {
     this.guardando = true;
     this.cierreService.guardarCierre(this.formulario).subscribe({
       next: () => {
-        this.guardando = false;
-        this.snackBar.open('Evidencia de cierre guardada.', 'Cerrar', { duration: 3000 });
-        this.dialogRef.close({ success: true });
+        this.cierreGuardado = true;
+        this.dialogRef.disableClose = true;
+        this.guardarEtapa();
       },
       error: (err: HttpErrorResponse) => {
         this.guardando = false;
@@ -137,7 +150,36 @@ export class CierreModalComponent implements OnInit {
     });
   }
 
+  private guardarEtapa(): void {
+    const id = this.expediente.id_expediente;
+    if (!id || this.etapaSeleccionada === null || this.etapaSeleccionada === this.etapaInicial) {
+      this.terminarGuardado();
+      return;
+    }
+    this.seguimientoService.actualizarEstatus(id, this.etapaSeleccionada).subscribe({
+      next: () => {
+        this.etapaInicial = this.etapaSeleccionada;
+        this.terminarGuardado();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.guardando = false;
+        const detalle = err.error?.mensaje ? ` (${err.error.mensaje})` : '';
+        this.snackBar.open(
+          `La evidencia de cierre se guardó, pero no se pudo actualizar la etapa${detalle}. Intenta guardar de nuevo.`,
+          'Cerrar',
+          { duration: 7000 }
+        );
+      },
+    });
+  }
+
+  private terminarGuardado(): void {
+    this.guardando = false;
+    this.snackBar.open('Evidencia de cierre guardada.', 'Cerrar', { duration: 3000 });
+    this.dialogRef.close({ success: true });
+  }
+
   cerrar(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.cierreGuardado ? { success: true } : undefined);
   }
 }

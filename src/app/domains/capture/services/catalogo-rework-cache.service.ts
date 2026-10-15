@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, of } from 'rxjs';
-import { catchError, shareReplay } from 'rxjs/operators';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { CatalogoReworkItem } from '../interfaces/expediente-rework.interface';
 import { CatalogoResponsableResponse } from '../../interfaces/catalogos.interface';
@@ -9,6 +9,11 @@ import { CatalogoResponsableResponse } from '../../interfaces/catalogos.interfac
 const TLALCALLI_BASE = environment.baseUrl.endsWith('/')
   ? environment.baseUrl
   : `${environment.baseUrl}/`;
+
+/** El back guarda un registro "SIN ESPECIFICAR" con id 0 como valor nulo; no es una opción seleccionable. */
+export function sinRegistroNulo<T extends { id_exp: number }>(items: T[] | null | undefined): T[] {
+  return (items ?? []).filter((i) => Number(i.id_exp) !== 0);
+}
 
 /**
  * Caché en memoria (singleton) para catálogos rework usados en modales de seguimiento.
@@ -32,6 +37,7 @@ export class CatalogoReworkCacheService {
         withCredentials: true,
       })
       .pipe(
+        map(sinRegistroNulo),
         catchError(() => of([])),
         shareReplay(1)
       );

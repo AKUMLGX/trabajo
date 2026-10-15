@@ -1,4 +1,4 @@
-<div class="tl-field">
+<div class="tl-field min-w-0">
   <label
     class="tl-label"
     [class.text-tlalcalli-error-muted]="errorMessage"
@@ -30,8 +30,8 @@
     </div>
   }
 
-  <div class="rms-fila flex flex-col gap-2">
-    <div class="rms-select w-full min-w-0">
+  <div class="rms-block min-w-0">
+    <div class="rms-select w-full min-w-[12rem]">
       <app-custom-select
         label=""
         placeholder="Seleccionar responsable SAT"
@@ -43,39 +43,39 @@
       </app-custom-select>
     </div>
 
-    <div class="flex flex-wrap items-center gap-2">
+    <div class="rms-actions mt-2 flex min-w-0 flex-wrap items-center gap-2">
       <button
         type="button"
         (click)="agregarDesdeCatalogo()"
         [disabled]="disabled || catalogoSeleccionado === null"
-        class="tl-btn-primary tl-btn-sm"
+        class="tl-btn-primary rms-btn-accion h-11"
       >
         <span class="icon-font !text-[18px]">person_add</span>
         Asignar
       </button>
       <ng-content></ng-content>
     </div>
-  </div>
 
-  <div class="mt-3 flex flex-col gap-2 md:flex-row md:items-center">
-    <input
-      type="text"
-      [(ngModel)]="nombreManual"
-      (keydown.enter)="agregarManual($event)"
-      [disabled]="disabled"
-      placeholder="Otra persona (escriba el nombre)"
-      autocomplete="off"
-      class="tl-input min-w-0 flex-1 disabled:cursor-not-allowed"
-    />
-    <button
-      type="button"
-      (click)="agregarManual()"
-      [disabled]="disabled || !nombreManual.trim()"
-      class="tl-btn-secondary"
-    >
-      <span class="icon-font !text-[18px]">add</span>
-      Agregar persona
-    </button>
+    <div class="rms-manual mt-3 min-w-0">
+      <input
+        type="text"
+        [(ngModel)]="nombreManual"
+        (keydown.enter)="agregarManual($event)"
+        [disabled]="disabled"
+        placeholder="Otra persona (escriba el nombre)"
+        autocomplete="off"
+        class="tl-input rms-manual-input h-11 min-w-0 w-full disabled:cursor-not-allowed"
+      />
+      <button
+        type="button"
+        (click)="agregarManual()"
+        [disabled]="disabled || !nombreManual.trim()"
+        class="tl-btn-secondary rms-btn-catalogo-ancho h-11 w-full justify-center"
+      >
+        <span class="icon-font !text-[18px]">add</span>
+        Agregar persona
+      </button>
+    </div>
   </div>
 
   <p class="tl-field-hint">

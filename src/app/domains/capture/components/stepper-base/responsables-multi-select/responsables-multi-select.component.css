@@ -5,3 +5,70 @@
 .rms-select ::ng-deep > app-custom-select > .tl-field > label {
   display: none;
 }
+
+.rms-select ::ng-deep select.tl-input {
+  @apply h-11 min-w-[12rem] w-full;
+}
+
+.rms-select ::ng-deep > app-custom-select > .tl-field {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Fila manual: input + botón alineados con columna fija (mismo ancho que «Nuevo en catálogo») */
+.rms-manual {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 360px) {
+  .rms-manual {
+    grid-template-columns: minmax(0, 1fr) var(--rms-btn-catalogo-width, 11rem);
+    align-items: center;
+  }
+}
+
+:host {
+  --rms-btn-accion-width: 7.5rem;
+}
+
+.rms-btn-catalogo-ancho {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (min-width: 360px) {
+  .rms-btn-catalogo-ancho {
+    width: var(--rms-btn-catalogo-width, 11rem);
+  }
+}
+
+.rms-btn-accion {
+  width: var(--rms-btn-accion-width);
+  justify-content: center;
+}
+
+.rms-actions ::ng-deep .rms-btn-accion {
+  width: var(--rms-btn-accion-width);
+  justify-content: center;
+}
+
+/* Hijo directo proyectado = «Nuevo en catálogo» (no Eliminar/Editar en wrapper) */
+.rms-actions ::ng-deep > .responsable-action-btn {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  justify-content: center;
+}
+
+@media (min-width: 360px) {
+  .rms-actions ::ng-deep > .responsable-action-btn {
+    width: var(--rms-btn-catalogo-width, 11rem);
+  }
+}
+
+.rms-actions ::ng-deep .responsable-action-btn {
+  white-space: nowrap;
+}

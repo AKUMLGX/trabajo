@@ -1,0 +1,34 @@
+@if (hayDatos()) {
+  <div class="tl-card overflow-hidden">
+    <div class="border-b border-tlalcalli-light-base/70 px-5 py-4">
+      <div class="tl-section-title">
+        <span class="tl-section-icon"><span class="icon-font !text-[22px]">domain</span></span>
+        <div>
+          <h3 class="tl-section-heading">Por administración remitente</h3>
+          <p class="tl-section-subtitle">Expedientes registrados por administración general y central</p>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-6 p-5 md:grid-cols-2">
+      @for (lista of listas(); track lista.titulo) {
+        <div>
+          <span class="tl-group-title flex items-center gap-1.5">
+            <span class="icon-font !text-[16px]">{{ lista.icono }}</span>
+            {{ lista.titulo }}
+          </span>
+          @for (r of lista.items; track r.clave) {
+            <div class="mb-2 flex items-center gap-3 font-noto-sans text-sm">
+              <span class="w-20 shrink-0 truncate font-semibold text-tlalcalli-deep" [title]="r.clave">{{ r.clave }}</span>
+              <span class="h-2.5 flex-1 overflow-hidden rounded-full bg-tlalcalli-light-base/50">
+                <span class="block h-full rounded-full bg-tlalcalli-primary" [style.width.%]="ancho(r.total, lista.maximo)"></span>
+              </span>
+              <span class="w-8 shrink-0 text-right font-semibold text-tlalcalli-dark">{{ r.total }}</span>
+            </div>
+          } @empty {
+            <p class="m-0 font-noto-sans text-xs text-tlalcalli-gray">Sin expedientes.</p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}
