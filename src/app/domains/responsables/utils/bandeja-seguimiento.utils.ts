@@ -42,7 +42,7 @@ export function esResponsableEquipoCaptura(expediente: ExpedienteTlalcalli): boo
   return !!responsable && RESPONSABLES_EQUIPO_SUBSTR.some((n) => responsable.includes(n));
 }
 
-/** Cuerpo para POST expedientes_rework/data_busqueda. */
+/** Filtros intermedios para consultarExpedientes; fechas ISO se normalizan a dd/MM/yyyy en el servicio. */
 export function construirFiltrosConsulta(filtros: FiltrosResponsable): Record<string, unknown> {
   const texto = (filtros.oficio || filtros.expediente || '').trim();
   return {

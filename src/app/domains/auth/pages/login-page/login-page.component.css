@@ -13,7 +13,7 @@
   position: absolute;
   inset: 0;
   background-image: url('/assets/images/tlalcalli-background.svg');
-  background-size: cover;
+  background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
   width: 100%;
@@ -154,28 +154,15 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: #2a0047;
-  background: linear-gradient(145deg, #d6ae67 0%, #c9a45d 50%, #dbb872 100%);
+  background: #d6ae67;
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 8px 25px rgba(214, 174, 103, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: background-color 0.2s ease;
 }
 
 .login-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 35px rgba(214, 174, 103, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.login-button:active {
-  transform: translateY(0);
-  box-shadow: 
-    0 4px 15px rgba(214, 174, 103, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: #c9a050;
 }
 
 .button-icon {

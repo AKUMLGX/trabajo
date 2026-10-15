@@ -169,9 +169,12 @@ export class ExpedienteTlalcalliService {
   } {
     const prioridadId = Number(filtros['prioridad_id'] ?? 0);
     const estatusId = Number(filtros['estatus_id'] ?? 0);
-    const fechaInicio =
-      String(filtros['fecha_registro_inicio'] ?? filtros['fecha_creacion_desde'] ?? '').trim();
-    const fechaFin = String(filtros['fecha_registro_fin'] ?? filtros['fecha_creacion_hasta'] ?? '').trim();
+    const fechaInicioRaw = String(
+      filtros['fecha_registro_inicio'] ?? filtros['fecha_creacion_desde'] ?? ''
+    ).trim();
+    const fechaFinRaw = String(
+      filtros['fecha_registro_fin'] ?? filtros['fecha_creacion_hasta'] ?? ''
+    ).trim();
 
     return {
       expediente: String(filtros['expediente'] ?? ''),
@@ -179,8 +182,9 @@ export class ExpedienteTlalcalliService {
       prioridad: Number.isFinite(prioridadId) ? prioridadId : 0,
       estatus: Number.isFinite(estatusId) ? estatusId : 0,
       responsable: String(filtros['responsable'] ?? ''),
-      fecha_registro_inicio: fechaInicio,
-      fecha_registro_fin: fechaFin,
+      // Contrato Max: dd/MM/yyyy o '' (inputs type=date envían yyyy-MM-dd).
+      fecha_registro_inicio: fechaInicioRaw ? this.formatearFechaRework(fechaInicioRaw) : '',
+      fecha_registro_fin: fechaFinRaw ? this.formatearFechaRework(fechaFinRaw) : '',
     };
   }
 
@@ -1248,39 +1252,9 @@ export class ExpedienteTlalcalliService {
     return defecto;
   }
 
+  /** Delega en DateUtils.formatearFechaReworkPayload (contrato Max: dd/MM/yyyy). */
   private formatearFechaRework(fecha: Date | string | undefined | null): string {
-    if (!fecha) {
-      return '';
-    }
-
-    if (typeof fecha === 'string') {
-      if (fecha.includes('|')) {
-        return fecha
-          .split('|')
-          .map((segmento) => (segmento.trim() ? this.formatearFechaRework(segmento.trim()) : ''))
-          .join('|');
-      }
-
-      const iso = fecha.match(/^(\d{4})-(\d{2})-(\d{2})/);
-      if (iso) {
-        return `${iso[3]}/${iso[2]}/${iso[1]}`;
-      }
-
-      const latam = fecha.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
-      if (latam) {
-        return fecha;
-      }
-    }
-
-    const d = fecha instanceof Date ? fecha : new Date(fecha);
-    if (Number.isNaN(d.getTime())) {
-      return '';
-    }
-
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;
+    return DateUtils.formatearFechaReworkPayload(fecha);
   }
 
   private serializarUsuarios(

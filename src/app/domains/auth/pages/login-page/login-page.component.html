@@ -1,25 +1,28 @@
-<div class="relative min-h-screen w-full flex items-center justify-center bg-[#34005b] overflow-hidden">
+<div class="relative flex min-h-screen h-screen w-full items-center justify-center overflow-hidden bg-[#34005b]">
 
-  <div
-    class="absolute inset-0 w-full h-full bg-[url('/assets/images/tlalcalli-background.svg')] bg-cover bg-center bg-no-repeat">
-  </div>
+  <img
+    src="/assets/images/tlalcalli-background.svg"
+    alt=""
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 h-full w-full select-none object-contain object-center"
+  />
 
-  <div class="absolute top-1/2 left-1/2 z-10 w-full max-w-[360px] -translate-x-1/2 -translate-y-1/2 px-4">
+  <div class="absolute top-1/2 left-1/2 z-10 w-full max-w-[408px] -translate-x-1/2 -translate-y-1/2 px-4">
 
-    <div class="w-full max-w-[320px] mx-auto overflow-hidden rounded-3xl backdrop-blur-[10px] shadow-[0_25px_80px_rgba(0,0,0,0.4),0_0_60px_rgba(74,0,128,0.3)]">
+    <div class="mx-auto w-full max-w-[376px] overflow-hidden rounded-3xl bg-[#2a0047] shadow-[0_25px_80px_rgba(0,0,0,0.45),0_0_48px_rgba(0,0,0,0.25)]">
 
-      <div class="flex items-center justify-center border-b border-black/5 bg-gradient-to-b from-white to-[#f8f9fa] px-8 py-6">
-        <img
-          src="/assets/images/imagotipos_hacienda_sat_color.png"
-          alt="Hacienda SAT"
-          class="h-12 w-auto object-contain"
-        />
-      </div>
+      <div class="px-8 pb-10 pt-8 text-center sm:px-10 sm:pb-12 sm:pt-10">
 
-      <div class="bg-tlalcalli-primary px-6 py-8 text-center sm:px-10 sm:py-12">
+        <div class="mb-8 flex justify-center">
+          <img
+            src="/assets/images/logo-sat-shcp-blanco.png"
+            alt="SAT — Servicio de Administración Tributaria"
+            class="h-11 max-w-full w-auto object-contain sm:h-12"
+          />
+        </div>
 
-        <div class="mb-6 flex justify-center">
-          <div class="h-32 w-32 sm:h-[140px] sm:w-[140px] rounded-2xl p-3">
+        <div class="mb-5 flex justify-center">
+          <div class="h-[148px] w-[148px] sm:h-[160px] sm:w-[160px]">
             <img
               src="/assets/images/TLALCALLI2.svg"
               alt="Tlālcalli Logo"
@@ -28,11 +31,11 @@
           </div>
         </div>
 
-        <h1 class="mb-2 text-[30px] font-noto-sans font-bold tracking-[-0.5px] text-white drop-shadow-[0_3px_15px_rgba(0,0,0,0.3)]">
+        <h1 class="mb-3 font-noto-sans text-[28px] font-bold tracking-[-0.5px] text-white sm:text-[32px]">
           Tlālcalli
         </h1>
 
-        <p class="mb-8 text-xs sm:text-sm font-noto-sans uppercase tracking-[1.5px] sm:tracking-[2px] text-white/70">
+        <p class="mb-10 font-noto-sans text-base font-normal text-white/75 sm:mb-12">
           Bienvenido
         </p>
 
@@ -41,8 +44,8 @@
           type="button"
           [disabled]="!puedeEntrar()"
           [title]="puedeEntrar() ? '' : 'Elige el especialista en «Entrar como»'"
-          class="disabled:cursor-not-allowed disabled:opacity-50 flex w-full items-center justify-center gap-3 rounded-xl border-0 bg-gradient-to-br from-[#d6ae67] via-[#c9a45d] to-[#dbb872] px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-noto-sans uppercase tracking-[1.5px] text-[#2a0047] shadow-[0_8px_25px_rgba(214,174,103,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_35px_rgba(214,174,103,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] active:translate-y-0 active:shadow-[0_4px_15px_rgba(214,174,103,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]">
-          INICIAR SESIÓN
+          class="mx-auto flex h-[88px] w-full max-w-[344px] items-center justify-center rounded-2xl border-0 bg-[#D6AE67] px-2 py-4 font-noto-sans text-lg font-semibold normal-case tracking-normal text-[#34005B] transition-colors hover:bg-[#c9a050] disabled:cursor-not-allowed disabled:opacity-50 sm:h-[100px] sm:text-xl">
+          Iniciar sesión
         </button>
 
       </div>

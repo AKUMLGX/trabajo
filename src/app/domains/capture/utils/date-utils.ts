@@ -241,6 +241,25 @@ export class DateUtils {
   }
 
   /**
+   * Contrato Max (API rework): fechas en payload como dd/MM/yyyy o string vacío (nunca ISO yyyy-MM-dd).
+   * Soporta cadenas concatenadas con `|` (oficios adjuntos): formatea cada segmento.
+   */
+  static formatearFechaReworkPayload(fecha: Date | string | null | undefined): string {
+    if (fecha == null || fecha === '') {
+      return '';
+    }
+
+    if (typeof fecha === 'string' && fecha.includes('|')) {
+      return fecha
+        .split('|')
+        .map((segmento) => (segmento.trim() ? this.formatearFechaReworkPayload(segmento.trim()) : ''))
+        .join('|');
+    }
+
+    return this.formatearFecha(fecha);
+  }
+
+  /**
    * Formatear fecha a DD/MM/YYYY
    * @param fecha Fecha a formatear
    * @returns String en formato DD/MM/YYYY
